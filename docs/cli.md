@@ -24,3 +24,9 @@ Every command returns:
 
 Errors use `issues`; GeoJSON import issues include `featureId`, `sourcePath`, and
 `repairSuggestion` when available.
+
+`territory import` recomputes `manifest.geometryHash` before printing the imported dataset,
+even when the manifest flag used `import-pending`.
+
+`territory generate` rejects invalid grid dimensions, invalid cell sizes, invalid levels, and
+unordered weighted-voronoi bounds using the same JSON-first error shape.

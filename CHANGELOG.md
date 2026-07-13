@@ -4,6 +4,11 @@ All notable changes will be tracked here until Changesets generates release note
 
 ## Unreleased
 
+- Hardened dataset validation for bbox/center drift and reciprocal neighbor warnings.
+- Hardened GeoJSON import for invalid hierarchy array properties with repair suggestions.
+- Hardened core lookup, viewport, and logical adjacency behavior for invalid inputs.
+- Hardened CLI/generator contracts with deterministic import hashes and option validation.
+- Hardened MapLibre initial state/lifecycle and NestJS request parsing/PostGIS row mapping.
 - Added GeoJSON FeatureCollection import hardening with feature-aware validation issues.
 - Added core debug brute-force lookup, `polygonToZones`, viewport cache keys, transition
   payloads, and typed adjacency connections.

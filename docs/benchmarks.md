@@ -23,13 +23,13 @@ larger smoke runs, but it should not be committed as static data.
 
 ## Latest Smoke Run
 
-Recorded on 2026-07-13 with `pnpm bench`:
+Recorded on 2026-07-14 with `pnpm bench`:
 
 | Benchmark                        |        Mean |         p99 |        p995 |
 | -------------------------------- | ----------: | ----------: | ----------: |
-| `latLngToZone`, 10K polygons     | `0.0003 ms` | `0.0006 ms` | `0.0008 ms` |
-| `getZonesInBounds`, 10K polygons | `0.0583 ms` | `0.0647 ms` | `0.0665 ms` |
-| `latLngToZone`, 100K polygons    | `0.0003 ms` | `0.0004 ms` | `0.0006 ms` |
+| `latLngToZone`, 10K polygons     | `0.0003 ms` | `0.0005 ms` | `0.0009 ms` |
+| `getZonesInBounds`, 10K polygons | `0.0601 ms` | `0.0661 ms` | `0.0695 ms` |
+| `latLngToZone`, 100K polygons    | `0.0004 ms` | `0.0005 ms` | `0.0006 ms` |
 
 Vitest reports p99/p995 instead of p95. Since p99 is below the p95 target, the p95 gate is
 treated as satisfied for this smoke run.

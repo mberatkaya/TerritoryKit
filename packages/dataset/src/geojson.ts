@@ -77,11 +77,19 @@ export function createTerritoryDatasetFromGeoJson(
     );
     const childIds = readStringArrayProperty(
       properties,
-      options.childIdsProperty ?? DEFAULT_CHILD_IDS_PROPERTY
+      options.childIdsProperty ?? DEFAULT_CHILD_IDS_PROPERTY,
+      `${path}.properties`,
+      options,
+      featureId,
+      importIssues
     );
     const neighborIds = readStringArrayProperty(
       properties,
-      options.neighborIdsProperty ?? DEFAULT_NEIGHBOR_IDS_PROPERTY
+      options.neighborIdsProperty ?? DEFAULT_NEIGHBOR_IDS_PROPERTY,
+      `${path}.properties`,
+      options,
+      featureId,
+      importIssues
     );
 
     if (!featureId || !geometry || level === undefined) {
@@ -273,7 +281,11 @@ function readOptionalStringProperty(
 
 function readStringArrayProperty(
   properties: Record<string, unknown>,
-  key: string
+  key: string,
+  path: string,
+  options: TerritoryGeoJsonImportOptions,
+  featureId: string | undefined,
+  issues: TerritoryValidationIssue[]
 ): string[] | undefined {
   const value = properties[key];
 
@@ -285,6 +297,15 @@ function readStringArrayProperty(
     return [...value];
   }
 
+  issues.push({
+    code: "ZONE_FIELD",
+    message: `Feature properties.${key} must be an array of non-empty strings when present.`,
+    path: `${path}.${key}`,
+    severity: "error",
+    ...(featureId ? { featureId } : {}),
+    ...(options.sourcePath ? { sourcePath: options.sourcePath } : {}),
+    repairSuggestion: `Store properties.${key} as string ids, or remove it.`
+  });
   return undefined;
 }
 

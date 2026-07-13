@@ -153,6 +153,34 @@ describe("createTerritoryDatasetFromGeoJson", () => {
       })
     );
   });
+
+  it("reports invalid hierarchy array properties during import", () => {
+    const result = createTerritoryDatasetFromGeoJson(
+      {
+        type: "FeatureCollection",
+        features: [
+          {
+            ...squareFeature("bad-neighbors", 0, 0, 0, 1, 1),
+            properties: {
+              level: 0,
+              neighborIds: ["ok", ""]
+            }
+          }
+        ]
+      },
+      { manifest, sourcePath: "fixtures/bad-neighbors.geojson" }
+    );
+
+    expect(result.ok).toBe(false);
+    expect(result.issues).toContainEqual(
+      expect.objectContaining({
+        code: "ZONE_FIELD",
+        featureId: "bad-neighbors",
+        path: "$.features[0].properties.neighborIds",
+        repairSuggestion: expect.stringContaining("string ids")
+      })
+    );
+  });
 });
 
 function squareFeature(
@@ -162,7 +190,7 @@ function squareFeature(
   south: number,
   east: number,
   north: number
-): unknown {
+): Record<string, unknown> {
   return {
     type: "Feature",
     id,

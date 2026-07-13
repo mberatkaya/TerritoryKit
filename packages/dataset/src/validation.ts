@@ -1,6 +1,6 @@
 import type { MultiPolygon, Polygon } from "geojson";
 import { TerritoryDatasetValidationError } from "./errors.js";
-import { hasRingSelfIntersection } from "./geometry.js";
+import { computeGeometryBBox, hasRingSelfIntersection } from "./geometry.js";
 import { TERRITORY_SCHEMA_VERSION } from "./schema.js";
 import type {
   LngLat,
@@ -237,6 +237,8 @@ function readZones(
       return;
     }
 
+    validateZoneGeometryMetadata({ id, geometry, center, bbox, path }, issues);
+
     zones.push({
       id,
       datasetId,
@@ -267,7 +269,8 @@ function validateZoneGraph(zones: TerritoryZone[], issues: TerritoryValidationIs
           message: `Parent zone '${zone.parentId}' does not exist.`,
           path: `$.zones[?(@.id=="${zone.id}")].parentId`,
           severity: "error",
-          zoneId: zone.id
+          zoneId: zone.id,
+          repairSuggestion: "Point parentId at an existing lower-level zone or remove it."
         });
       } else if (parent.level >= zone.level) {
         issues.push({
@@ -275,7 +278,8 @@ function validateZoneGraph(zones: TerritoryZone[], issues: TerritoryValidationIs
           message: `Parent zone '${parent.id}' must have a lower level than child '${zone.id}'.`,
           path: `$.zones[?(@.id=="${zone.id}")].parentId`,
           severity: "error",
-          zoneId: zone.id
+          zoneId: zone.id,
+          repairSuggestion: "Set parent levels lower than their children before import."
         });
       }
     }
@@ -289,7 +293,8 @@ function validateZoneGraph(zones: TerritoryZone[], issues: TerritoryValidationIs
           message: `Child zone '${childId}' does not exist.`,
           path: `$.zones[?(@.id=="${zone.id}")].childIds`,
           severity: "error",
-          zoneId: zone.id
+          zoneId: zone.id,
+          repairSuggestion: "Remove the missing child id or add the referenced child zone."
         });
       } else if (child.parentId !== zone.id) {
         issues.push({
@@ -297,19 +302,32 @@ function validateZoneGraph(zones: TerritoryZone[], issues: TerritoryValidationIs
           message: `Child zone '${child.id}' does not point back to parent '${zone.id}'.`,
           path: `$.zones[?(@.id=="${zone.id}")].childIds`,
           severity: "error",
-          zoneId: zone.id
+          zoneId: zone.id,
+          repairSuggestion: `Set '${child.id}'.parentId to '${zone.id}' or remove it from childIds.`
         });
       }
     }
 
     for (const neighborId of zone.neighborIds) {
-      if (!zonesById.has(neighborId)) {
+      const neighbor = zonesById.get(neighborId);
+
+      if (!neighbor) {
         issues.push({
           code: "NEIGHBOR_MISSING",
           message: `Neighbor zone '${neighborId}' does not exist.`,
           path: `$.zones[?(@.id=="${zone.id}")].neighborIds`,
           severity: "error",
-          zoneId: zone.id
+          zoneId: zone.id,
+          repairSuggestion: "Remove the missing neighbor id or add the referenced zone."
+        });
+      } else if (!neighbor.neighborIds.includes(zone.id)) {
+        issues.push({
+          code: "NEIGHBOR_NOT_RECIPROCAL",
+          message: `Neighbor relationship '${zone.id}' -> '${neighbor.id}' is not reciprocal.`,
+          path: `$.zones[?(@.id=="${zone.id}")].neighborIds`,
+          severity: "warning",
+          zoneId: zone.id,
+          repairSuggestion: `Add '${zone.id}' to '${neighbor.id}'.neighborIds when the zones are adjacent.`
         });
       }
     }
@@ -333,7 +351,9 @@ function validateParentCycle(
         message: `Hierarchy cycle detected from zone '${zone.id}'.`,
         path: `$.zones[?(@.id=="${zone.id}")].parentId`,
         severity: "error",
-        zoneId: zone.id
+        zoneId: zone.id,
+        repairSuggestion:
+          "Remove one parentId link from the cycle so the hierarchy forms a tree or DAG."
       });
       return;
     }
@@ -341,6 +361,59 @@ function validateParentCycle(
     visited.add(current.id);
     current = current.parentId ? zonesById.get(current.parentId) : undefined;
   }
+}
+
+function validateZoneGeometryMetadata(
+  zone: {
+    id: string;
+    geometry: TerritoryGeometry;
+    center: LngLat;
+    bbox: TerritoryBBox;
+    path: string;
+  },
+  issues: TerritoryValidationIssue[]
+): void {
+  const computedBBox = computeGeometryBBox(zone.geometry);
+
+  if (!bboxesEqual(zone.bbox, computedBBox)) {
+    issues.push({
+      code: "BBOX_MISMATCH",
+      message: "Zone bbox does not match geometry extent.",
+      path: `${zone.path}.bbox`,
+      severity: "error",
+      zoneId: zone.id,
+      featureId: zone.id,
+      repairSuggestion: `Recompute bbox from geometry coordinates as [${computedBBox.join(", ")}].`
+    });
+  }
+
+  if (!pointWithinBBox(zone.center, computedBBox)) {
+    issues.push({
+      code: "CENTER_OUT_OF_BOUNDS",
+      message: "Zone center must fall inside the geometry bbox.",
+      path: `${zone.path}.center`,
+      severity: "error",
+      zoneId: zone.id,
+      featureId: zone.id,
+      repairSuggestion:
+        "Recompute the center from the zone geometry or provide a point within the bbox."
+    });
+  }
+}
+
+function bboxesEqual(left: TerritoryBBox, right: TerritoryBBox): boolean {
+  return left.every((value, index) => nearlyEqual(value, right[index] ?? Number.NaN));
+}
+
+function pointWithinBBox(point: LngLat, bbox: TerritoryBBox): boolean {
+  const [longitude, latitude] = point;
+  const [west, south, east, north] = bbox;
+
+  return longitude >= west && longitude <= east && latitude >= south && latitude <= north;
+}
+
+function nearlyEqual(left: number, right: number): boolean {
+  return Math.abs(left - right) <= 1e-9;
 }
 
 function readGeometry(

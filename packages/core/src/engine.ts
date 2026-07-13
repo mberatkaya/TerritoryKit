@@ -35,7 +35,11 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
   );
   const levelStrategy = options.levelStrategy ?? defaultZoomLevelStrategy;
   const indexesByLevel = buildIndexesByLevel(dataset);
-  const adjacencyConnections = normalizeAdjacencyConnections(options.adjacencyConnections ?? []);
+  const adjacencyConnections = normalizeAdjacencyConnections(
+    options.adjacencyConnections ?? []
+  ).filter(
+    (connection) => zonesById.has(connection.fromZoneId) && zonesById.has(connection.toZoneId)
+  );
   const connectionsByZoneId = buildConnectionsByZoneId(adjacencyConnections);
   const debugBruteForceLookup = options.debug?.bruteForceLookup === true;
   const viewportCacheRevision = options.viewportCacheRevision ?? "0";
@@ -55,11 +59,18 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
     level?: number,
     lookupMode: "index" | "brute-force" = "index"
   ): TerritoryZone[] {
+    const normalizedBounds = normalizeQueryBounds(bounds);
+
+    if (!normalizedBounds || (level !== undefined && !isValidLevel(level))) {
+      return [];
+    }
+
     if (lookupMode === "brute-force") {
       return sortZones(
         dataset.zones.filter(
           (zone) =>
-            (level === undefined || zone.level === level) && bboxIntersectsBounds(zone.bbox, bounds)
+            (level === undefined || zone.level === level) &&
+            bboxIntersectsBounds(zone.bbox, normalizedBounds)
         )
       );
     }
@@ -76,15 +87,15 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
       }
 
       for (const indexId of entry.index.search(
-        bounds.west,
-        bounds.south,
-        bounds.east,
-        bounds.north
+        normalizedBounds.west,
+        normalizedBounds.south,
+        normalizedBounds.east,
+        normalizedBounds.north
       )) {
         const zoneId = entry.zoneIds[indexId];
         const zone = zoneId ? zonesById.get(zoneId) : undefined;
 
-        if (zone && bboxIntersectsBounds(zone.bbox, bounds)) {
+        if (zone && bboxIntersectsBounds(zone.bbox, normalizedBounds)) {
           zones.push(zone);
         }
       }
@@ -125,6 +136,13 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
   }
 
   function locate(coordinate: LatLng, options: LocateOptions = {}): string | null {
+    if (
+      !isValidCoordinate(coordinate) ||
+      (options.level !== undefined && !isValidLevel(options.level))
+    ) {
+      return null;
+    }
+
     const lngLat: LngLat = [coordinate.lng, coordinate.lat];
     const boundaryMode = options.boundaryMode ?? "covers";
     const level = options.level;
@@ -374,6 +392,10 @@ function normalizeAdjacencyConnections(
   const normalized: TerritoryAdjacencyConnection[] = [];
 
   for (const connection of connections) {
+    if (!connection.fromZoneId || !connection.toZoneId) {
+      continue;
+    }
+
     normalized.push(connection);
 
     if (connection.bidirectional !== false) {
@@ -430,6 +452,39 @@ function compareConnections(
     left.toZoneId.localeCompare(right.toZoneId) ||
     left.type.localeCompare(right.type)
   );
+}
+
+function normalizeQueryBounds(bounds: TerritoryBounds): TerritoryBounds | undefined {
+  if (
+    !Number.isFinite(bounds.west) ||
+    !Number.isFinite(bounds.south) ||
+    !Number.isFinite(bounds.east) ||
+    !Number.isFinite(bounds.north)
+  ) {
+    return undefined;
+  }
+
+  return {
+    west: Math.min(bounds.west, bounds.east),
+    south: Math.min(bounds.south, bounds.north),
+    east: Math.max(bounds.west, bounds.east),
+    north: Math.max(bounds.south, bounds.north)
+  };
+}
+
+function isValidCoordinate(coordinate: LatLng): boolean {
+  return (
+    Number.isFinite(coordinate.lat) &&
+    Number.isFinite(coordinate.lng) &&
+    coordinate.lat >= -90 &&
+    coordinate.lat <= 90 &&
+    coordinate.lng >= -180 &&
+    coordinate.lng <= 180
+  );
+}
+
+function isValidLevel(level: number): boolean {
+  return Number.isInteger(level) && level >= 0;
 }
 
 function normalizeBoundsForCache(bounds: TerritoryBounds): TerritoryBounds {

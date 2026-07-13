@@ -12,6 +12,8 @@
 | Complex polygon lookup latency      | High   | Medium     | Spatial index, benchmarks, simplification guidance      |
 | Antimeridian/projection assumptions | Medium | Medium     | Document RFC 7946 limits and defer geodesic engine work |
 | Documentation drifting from code    | Medium | Medium     | Checklist, API docs, and examples as release gates      |
+| Invalid API input reaching storage  | High   | Medium     | NestJS request validation before repository calls       |
+| Stale generated geometry metadata   | Medium | Medium     | Dataset bbox/center checks and deterministic CLI hashes |
 
 ## Review Cadence
 

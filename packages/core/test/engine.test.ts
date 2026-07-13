@@ -19,6 +19,8 @@ describe("createTerritoryEngine", () => {
     expect(engine.latLngToZone({ lat: 41.01, lng: 28.95 }, { level: 3 })).toBe("tr:34:fatih");
     expect(engine.latLngToZone({ lat: 39, lng: 35 }, { level: 1 })).toBe("tr");
     expect(engine.latLngToZone({ lat: 10, lng: 10 }, { level: 1 })).toBeNull();
+    expect(engine.latLngToZone({ lat: Number.NaN, lng: 28.95 }, { level: 3 })).toBeNull();
+    expect(engine.latLngToZone({ lat: 41.01, lng: 28.95 }, { level: -1 })).toBeNull();
   });
 
   it("supports a debug brute-force spatial lookup path", () => {
@@ -68,6 +70,21 @@ describe("createTerritoryEngine", () => {
     ]);
   });
 
+  it("ignores logical adjacency connections that reference unknown zones", () => {
+    const engine = createTerritoryEngine({
+      dataset: createSampleTerritoryDataset(),
+      adjacencyConnections: [
+        {
+          fromZoneId: "tr:34:fatih",
+          toZoneId: "missing",
+          type: "manual"
+        }
+      ]
+    });
+
+    expect(engine.zoneNeighbors("tr:34:fatih", { connectionTypes: ["manual"] })).toEqual([]);
+  });
+
   it("filters viewport queries by bbox and zoom-selected level", () => {
     const engine = createTerritoryEngine({ dataset: createSampleTerritoryDataset() });
 
@@ -82,6 +99,28 @@ describe("createTerritoryEngine", () => {
         })
         .map((zone) => zone.id)
     ).toEqual(["tr:34:fatih", "tr:34:kadikoy"]);
+
+    expect(
+      engine
+        .getZonesInBounds({
+          west: 29.02,
+          south: 41.05,
+          east: 28.94,
+          north: 41,
+          level: 3
+        })
+        .map((zone) => zone.id)
+    ).toEqual(["tr:34:fatih", "tr:34:kadikoy"]);
+
+    expect(
+      engine.getZonesInBounds({
+        west: Number.NaN,
+        south: 41,
+        east: 29.02,
+        north: 41.05,
+        level: 3
+      })
+    ).toEqual([]);
 
     expect(
       engine

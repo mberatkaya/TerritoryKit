@@ -9,19 +9,19 @@ independent from map renderers, backend frameworks, and game-specific state.
 The repository starts at `0.0.1` and follows the sprint roadmap from the technical sprint
 document:
 
-| Product version | Sprint range | Status                         |
-| --------------- | ------------ | ------------------------------ |
-| `0.0.1`         | Sprint 0     | Complete                       |
-| `0.1.0-alpha.1` | Sprint 1     | Started, hardening pending     |
-| `0.1.0`         | Sprint 2     | Started, hardening pending     |
-| `0.2.0-alpha.1` | Sprint 3     | Baseline started               |
-| `0.2.0`         | Sprint 4     | Baseline started               |
-| `0.3.0`         | Sprint 5     | Baseline started               |
-| `0.4.0`         | Sprint 6     | Package baseline started       |
-| `0.5.0`         | Sprint 7     | Package baseline started       |
-| `0.6.0`         | Sprint 8     | CLI/generator baseline started |
-| `0.9.0-rc.1`    | Sprint 9     | Docs baseline started          |
-| `1.0.0`         | Sprint 10    | Planned                        |
+| Product version | Sprint range | Status                     |
+| --------------- | ------------ | -------------------------- |
+| `0.0.1`         | Sprint 0     | Complete                   |
+| `0.1.0-alpha.1` | Sprint 1     | Hardened on roadmap branch |
+| `0.1.0`         | Sprint 2     | Hardened on roadmap branch |
+| `0.2.0-alpha.1` | Sprint 3     | Hardened on roadmap branch |
+| `0.2.0`         | Sprint 4     | Hardened on roadmap branch |
+| `0.3.0`         | Sprint 5     | Hardened on roadmap branch |
+| `0.4.0`         | Sprint 6     | Hardened on roadmap branch |
+| `0.5.0`         | Sprint 7     | Hardened on roadmap branch |
+| `0.6.0`         | Sprint 8     | Hardened on roadmap branch |
+| `0.9.0-rc.1`    | Sprint 9     | Verified on roadmap branch |
+| `1.0.0`         | Sprint 10    | Release gates defined      |
 
 ## Packages
 
@@ -55,3 +55,4 @@ TypeScript 7 will be evaluated in a later ADR before adoption.
 - [Roadmap](./docs/roadmap.md)
 - [Dataset compatibility](./docs/dataset-compatibility.md)
 - [Benchmarks](./docs/benchmarks.md)
+- [Remaining sprint checklist](./docs/sprint-checklist.md)

@@ -62,6 +62,13 @@ export function createSyntheticGridDataset(
   const cellSize = options.cellSize ?? 0.01;
   const zones: TerritoryZone[] = [];
 
+  assertPositiveInteger(options.rows, "rows");
+  assertPositiveInteger(options.columns, "columns");
+  assertNonNegativeInteger(level, "level");
+  assertFiniteNumber(originLng, "originLng");
+  assertFiniteNumber(originLat, "originLat");
+  assertPositiveFiniteNumber(cellSize, "cellSize");
+
   for (let row = 0; row < options.rows; row += 1) {
     for (let column = 0; column < options.columns; column += 1) {
       const west = originLng + column * cellSize;
@@ -99,6 +106,18 @@ export function createWeightedVoronoiDataset(
   }
 
   const level = options.level ?? 0;
+  assertNonNegativeInteger(level, "level");
+  assertBounds(options.bounds);
+
+  for (const seed of options.seeds) {
+    assertFiniteNumber(seed.lng, `seed '${seed.id}' longitude`);
+    assertFiniteNumber(seed.lat, `seed '${seed.id}' latitude`);
+
+    if (seed.weight !== undefined) {
+      assertPositiveFiniteNumber(seed.weight, `seed '${seed.id}' weight`);
+    }
+  }
+
   const seeds = [...options.seeds].sort(
     (left, right) => left.lng - right.lng || left.id.localeCompare(right.id)
   );
@@ -288,4 +307,39 @@ function rangesOverlap(
 
 function nearlyEqual(left: number, right: number, tolerance: number): boolean {
   return Math.abs(left - right) <= tolerance;
+}
+
+function assertBounds(bounds: WeightedVoronoiDatasetOptions["bounds"]): void {
+  assertFiniteNumber(bounds.west, "bounds.west");
+  assertFiniteNumber(bounds.south, "bounds.south");
+  assertFiniteNumber(bounds.east, "bounds.east");
+  assertFiniteNumber(bounds.north, "bounds.north");
+
+  if (bounds.west >= bounds.east || bounds.south >= bounds.north) {
+    throw new Error("bounds must be ordered west < east and south < north.");
+  }
+}
+
+function assertPositiveInteger(value: number, field: string): void {
+  if (!Number.isInteger(value) || value < 1) {
+    throw new Error(`${field} must be a positive integer.`);
+  }
+}
+
+function assertNonNegativeInteger(value: number, field: string): void {
+  if (!Number.isInteger(value) || value < 0) {
+    throw new Error(`${field} must be a non-negative integer.`);
+  }
+}
+
+function assertPositiveFiniteNumber(value: number, field: string): void {
+  if (!Number.isFinite(value) || value <= 0) {
+    throw new Error(`${field} must be a positive finite number.`);
+  }
+}
+
+function assertFiniteNumber(value: number, field: string): void {
+  if (!Number.isFinite(value)) {
+    throw new Error(`${field} must be a finite number.`);
+  }
 }
