@@ -1,4 +1,8 @@
-import { createSampleTerritoryDataset } from "@territory-kit/shared-testkit";
+import {
+  createSampleTerritoryDataset,
+  createSyntheticGridDataset
+} from "@territory-kit/shared-testkit";
+import fc from "fast-check";
 import { describe, expect, it } from "vitest";
 import { createTerritoryEngine, TerritoryZoneNotFoundError } from "../src/index.js";
 
@@ -21,6 +25,28 @@ describe("createTerritoryEngine", () => {
     expect(engine.latLngToZone({ lat: 10, lng: 10 }, { level: 1 })).toBeNull();
     expect(engine.latLngToZone({ lat: Number.NaN, lng: 28.95 }, { level: 3 })).toBeNull();
     expect(engine.latLngToZone({ lat: 41.01, lng: 28.95 }, { level: -1 })).toBeNull();
+  });
+
+  it("resolves synthetic grid center points to their generated zones", () => {
+    const rows = 12;
+    const columns = 14;
+    const cellSize = 0.01;
+    const dataset = createSyntheticGridDataset({ rows, columns, cellSize });
+    const engine = createTerritoryEngine({ dataset });
+
+    fc.assert(
+      fc.property(
+        fc.integer({ min: 0, max: rows - 1 }),
+        fc.integer({ min: 0, max: columns - 1 }),
+        (row, column) => {
+          const lat = row * cellSize + cellSize / 2;
+          const lng = column * cellSize + cellSize / 2;
+
+          expect(engine.latLngToZone({ lat, lng }, { level: 0 })).toBe(`z:${row}:${column}`);
+        }
+      ),
+      { numRuns: 100 }
+    );
   });
 
   it("supports a debug brute-force spatial lookup path", () => {

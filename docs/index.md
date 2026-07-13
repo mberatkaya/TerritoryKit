@@ -12,6 +12,9 @@ package boundaries required for MapLibre, NestJS/PostGIS, generators, and CLI to
 - [H3 comparison](./h3-comparison.md)
 - [Risk register](./risk-register.md)
 - [Roadmap](./roadmap.md)
+- [Benchmarks](./benchmarks.md)
+- [NestJS and PostGIS](./nestjs-postgis.md)
+- [Release readiness](./release-readiness.md)
 
 The public roadmap documents major milestones; completion status is tracked by maintainers.
 
