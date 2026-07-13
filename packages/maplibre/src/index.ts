@@ -25,6 +25,7 @@ export interface TerritoryMapLibreLayerOptions {
   fillOpacity?: number;
   lineColor?: string;
   lineWidth?: number;
+  stateByZoneId?: ReadonlyMap<string, TerritoryMapLibreState>;
 }
 
 export interface TerritoryMapLibreTheme {
@@ -128,7 +129,7 @@ export function createTerritoryMapLibreLayers(
       id: sourceId,
       spec: {
         type: "geojson",
-        data: zonesToFeatureCollection(zones),
+        data: zonesToFeatureCollection(zones, options.stateByZoneId),
         promoteId: "id"
       }
     },
@@ -189,11 +190,34 @@ export function createTerritoryMapLibreAdapter(
       sourceId,
       fillLayerId,
       lineLayerId,
+      stateByZoneId,
       ...(options.fillColor === undefined ? {} : { fillColor: options.fillColor }),
       ...(options.fillOpacity === undefined ? {} : { fillOpacity: options.fillOpacity }),
       ...(options.lineColor === undefined ? {} : { lineColor: options.lineColor }),
       ...(options.lineWidth === undefined ? {} : { lineWidth: options.lineWidth })
     });
+  }
+
+  function detachCurrentMap(): void {
+    if (!map) {
+      return;
+    }
+
+    map.off?.("click", fillLayerId, clickListener);
+    map.off?.("mousemove", fillLayerId, hoverListener);
+    map.off?.("mouseleave", fillLayerId, leaveListener);
+
+    for (const layerId of [lineLayerId, fillLayerId]) {
+      if (map.getLayer(layerId)) {
+        map.removeLayer(layerId);
+      }
+    }
+
+    if (map.getSource(sourceId)) {
+      map.removeSource(sourceId);
+    }
+
+    map = undefined;
   }
 
   function dispatchZoneEvent(
@@ -220,6 +244,7 @@ export function createTerritoryMapLibreAdapter(
 
   return {
     attach(nextMap) {
+      detachCurrentMap();
       map = nextMap;
       const bundle = currentBundle();
 
@@ -241,25 +266,7 @@ export function createTerritoryMapLibreAdapter(
     },
 
     detach() {
-      if (!map) {
-        return;
-      }
-
-      map.off?.("click", fillLayerId, clickListener);
-      map.off?.("mousemove", fillLayerId, hoverListener);
-      map.off?.("mouseleave", fillLayerId, leaveListener);
-
-      for (const layerId of [lineLayerId, fillLayerId]) {
-        if (map.getLayer(layerId)) {
-          map.removeLayer(layerId);
-        }
-      }
-
-      if (map.getSource(sourceId)) {
-        map.removeSource(sourceId);
-      }
-
-      map = undefined;
+      detachCurrentMap();
     },
 
     updateData(nextZones, nextStateByZoneId = stateByZoneId) {

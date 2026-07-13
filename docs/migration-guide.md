@@ -5,6 +5,10 @@
 Public APIs may still change during prerelease sprint work. Breaking changes must be recorded
 in `CHANGELOG.md`, and dataset schema changes must be documented in Schema Migrations.
 
+Before the stable release, additive API changes must include TypeScript exports, API docs,
+tests, and a changelog note. Breaking API changes require a new migration section and should
+not be mixed with release-hardening fixes.
+
 ## Dataset Schema
 
 `territory-schema@1` is the current schema. Geometry updates should change `datasetVersion`,

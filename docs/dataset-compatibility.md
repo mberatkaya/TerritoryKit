@@ -21,3 +21,7 @@ must be normalized to EPSG:4326 before import.
 
 Validation issues expose `featureId`, `sourcePath`, and `repairSuggestion` where possible so
 CLI and import pipelines can point back to the dirty source feature.
+
+Load-time validation rejects stale `bbox` and `center` metadata when they no longer match the
+geometry. Non-reciprocal `neighborIds` are warnings so legacy datasets can still load while
+import pipelines repair adjacency lists.

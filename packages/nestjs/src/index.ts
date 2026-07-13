@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -140,13 +141,7 @@ export class TerritoryKitController {
   @ApiBody({ type: TerritoryLocateBodyDto })
   @ApiResponse({ status: 200, description: "Locate response." })
   async locateTerritory(@Body() body: TerritoryLocateBodyDto): Promise<TerritoryLocateResponse> {
-    const request: TerritoryLocateRequest = {
-      coordinate: {
-        lat: Number(body.lat),
-        lng: Number(body.lng)
-      },
-      ...(body.level === undefined ? {} : { level: Number(body.level) })
-    };
+    const request = parseLocateBody(body);
     const zoneId = this.repository
       ? await this.repository.locateZone(request)
       : this.engine.latLngToZone(
@@ -257,14 +252,89 @@ limit 1;
 `;
 
 function parseViewportQuery(query: TerritoryViewportQueryDto): TerritoryViewportRequest {
+  const west = readFiniteNumber(query.west, "west");
+  const south = readFiniteNumber(query.south, "south");
+  const east = readFiniteNumber(query.east, "east");
+  const north = readFiniteNumber(query.north, "north");
+  const level = readOptionalNonNegativeInteger(query.level, "level");
+  const zoom = readOptionalFiniteNumber(query.zoom, "zoom");
+
+  assertRange("west", west, -180, 180);
+  assertRange("east", east, -180, 180);
+  assertRange("south", south, -90, 90);
+  assertRange("north", north, -90, 90);
+
+  if (west > east || south > north) {
+    throw new BadRequestException(
+      "Viewport bounds must be ordered west <= east and south <= north."
+    );
+  }
+
   return {
-    west: Number(query.west),
-    south: Number(query.south),
-    east: Number(query.east),
-    north: Number(query.north),
-    ...(query.level === undefined ? {} : { level: Number(query.level) }),
-    ...(query.zoom === undefined ? {} : { zoom: Number(query.zoom) })
+    west,
+    south,
+    east,
+    north,
+    ...(level === undefined ? {} : { level }),
+    ...(zoom === undefined ? {} : { zoom })
   };
+}
+
+function parseLocateBody(body: TerritoryLocateBodyDto): TerritoryLocateRequest {
+  const lat = readFiniteNumber(body.lat, "lat");
+  const lng = readFiniteNumber(body.lng, "lng");
+  const level = readOptionalNonNegativeInteger(body.level, "level");
+
+  assertRange("lat", lat, -90, 90);
+  assertRange("lng", lng, -180, 180);
+
+  return {
+    coordinate: { lat, lng },
+    ...(level === undefined ? {} : { level })
+  };
+}
+
+function readOptionalFiniteNumber(input: unknown, field: string): number | undefined {
+  if (input === undefined || input === null || input === "") {
+    return undefined;
+  }
+
+  return readFiniteNumber(input, field);
+}
+
+function readOptionalNonNegativeInteger(input: unknown, field: string): number | undefined {
+  const value = readOptionalFiniteNumber(input, field);
+
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (!Number.isInteger(value) || value < 0) {
+    throw new BadRequestException(`${field} must be a non-negative integer.`);
+  }
+
+  return value;
+}
+
+function readFiniteNumber(input: unknown, field: string): number {
+  const value =
+    typeof input === "number"
+      ? input
+      : typeof input === "string" && input.trim().length > 0
+        ? Number(input)
+        : Number.NaN;
+
+  if (!Number.isFinite(value)) {
+    throw new BadRequestException(`${field} must be a finite number.`);
+  }
+
+  return value;
+}
+
+function assertRange(field: string, value: number, min: number, max: number): void {
+  if (value < min || value > max) {
+    throw new BadRequestException(`${field} must be between ${min} and ${max}.`);
+  }
 }
 
 function resolveInMemoryViewport(

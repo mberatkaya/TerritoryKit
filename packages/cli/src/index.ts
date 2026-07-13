@@ -9,6 +9,7 @@ import {
   validateTerritoryDataset
 } from "@territory-kit/dataset";
 import type {
+  TerritoryDataset,
   TerritoryDatasetManifest,
   TerritoryGeoJsonImportOptions
 } from "@territory-kit/dataset";
@@ -167,11 +168,12 @@ async function runImport(filePath: string, flags: Map<string, string | true>): P
   }
 
   const result = createTerritoryDatasetFromGeoJson(input, importOptions);
+  const dataset = result.dataset ? withDeterministicGeometryHash(result.dataset) : undefined;
 
   printJson({
     ok: result.ok,
     command: "import",
-    ...(result.ok ? { data: result.dataset } : { issues: result.issues })
+    ...(result.ok ? { data: dataset } : { issues: result.issues })
   });
   return result.ok ? 0 : 1;
 }
@@ -184,10 +186,10 @@ function runGenerate(args: string[]): number {
   if (kind === "grid") {
     const gridOptions = {
       datasetId,
-      rows: getNumberFlag(flags, "rows", 10),
-      columns: getNumberFlag(flags, "columns", 10),
-      cellSize: getNumberFlag(flags, "cell-size", 0.01),
-      level: getNumberFlag(flags, "level", 0)
+      rows: getPositiveIntegerFlag(flags, "rows", 10),
+      columns: getPositiveIntegerFlag(flags, "columns", 10),
+      cellSize: getPositiveNumberFlag(flags, "cell-size", 0.01),
+      level: getNonNegativeIntegerFlag(flags, "level", 0)
     };
     const datasetVersion = getFlag(flags, "dataset-version");
     const sourceDate = getFlag(flags, "source-date");
@@ -209,13 +211,8 @@ function runGenerate(args: string[]): number {
     const dataset = createWeightedVoronoiDataset({
       datasetId,
       seeds,
-      bounds: {
-        west: getNumberFlag(flags, "west", 0),
-        south: getNumberFlag(flags, "south", 0),
-        east: getNumberFlag(flags, "east", 1),
-        north: getNumberFlag(flags, "north", 1)
-      },
-      level: getNumberFlag(flags, "level", 0),
+      bounds: readBounds(flags),
+      level: getNonNegativeIntegerFlag(flags, "level", 0),
       ...(datasetVersion ? { datasetVersion } : {}),
       ...(sourceDate ? { sourceDate } : {})
     });
@@ -244,6 +241,16 @@ function createManifestFromFlags(
     geometryHash: getFlag(flags, "geometry-hash") ?? "import-pending",
     license: getFlag(flags, "license") ?? "Apache-2.0",
     name: getFlag(flags, "name") ?? "Imported TerritoryKit dataset"
+  };
+}
+
+function withDeterministicGeometryHash(dataset: TerritoryDataset): TerritoryDataset {
+  return {
+    ...dataset,
+    manifest: {
+      ...dataset.manifest,
+      geometryHash: createDatasetGeometryHash(dataset)
+    }
   };
 }
 
@@ -282,6 +289,68 @@ function getNumberFlag(flags: Map<string, string | true>, key: string, fallback:
   const parsed = value === undefined ? Number.NaN : Number(value);
 
   return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function getPositiveIntegerFlag(
+  flags: Map<string, string | true>,
+  key: string,
+  fallback: number
+): number {
+  const value = getNumberFlag(flags, key, fallback);
+
+  if (!Number.isInteger(value) || value < 1) {
+    throw new Error(`--${key} must be a positive integer.`);
+  }
+
+  return value;
+}
+
+function getNonNegativeIntegerFlag(
+  flags: Map<string, string | true>,
+  key: string,
+  fallback: number
+): number {
+  const value = getNumberFlag(flags, key, fallback);
+
+  if (!Number.isInteger(value) || value < 0) {
+    throw new Error(`--${key} must be a non-negative integer.`);
+  }
+
+  return value;
+}
+
+function getPositiveNumberFlag(
+  flags: Map<string, string | true>,
+  key: string,
+  fallback: number
+): number {
+  const value = getNumberFlag(flags, key, fallback);
+
+  if (!Number.isFinite(value) || value <= 0) {
+    throw new Error(`--${key} must be a positive number.`);
+  }
+
+  return value;
+}
+
+function readBounds(flags: Map<string, string | true>): {
+  west: number;
+  south: number;
+  east: number;
+  north: number;
+} {
+  const bounds = {
+    west: getNumberFlag(flags, "west", 0),
+    south: getNumberFlag(flags, "south", 0),
+    east: getNumberFlag(flags, "east", 1),
+    north: getNumberFlag(flags, "north", 1)
+  };
+
+  if (bounds.west >= bounds.east || bounds.south >= bounds.north) {
+    throw new Error("--west/--east and --south/--north must define ordered bounds.");
+  }
+
+  return bounds;
 }
 
 function parseSeeds(

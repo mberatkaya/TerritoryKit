@@ -43,6 +43,24 @@ describe("generators", () => {
     expect(dataset.manifest.geometryHash).toBe(createDatasetGeometryHash(dataset));
   });
 
+  it("rejects invalid generator options before emitting malformed datasets", () => {
+    expect(() =>
+      createSyntheticGridDataset({
+        datasetId: "bad-grid",
+        rows: 0,
+        columns: 1
+      })
+    ).toThrow("rows must be a positive integer");
+
+    expect(() =>
+      createWeightedVoronoiDataset({
+        datasetId: "bad-voronoi",
+        bounds: { west: 1, south: 0, east: 0, north: 1 },
+        seeds: [{ id: "a", lng: 0, lat: 0 }]
+      })
+    ).toThrow("bounds must be ordered");
+  });
+
   it("creates a deterministic weighted Voronoi MVP dataset", () => {
     const dataset = createWeightedVoronoiDataset({
       datasetId: "voronoi-demo",

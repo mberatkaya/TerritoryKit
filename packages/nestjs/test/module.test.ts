@@ -1,5 +1,6 @@
 import { createSampleTerritoryDataset } from "@territory-kit/shared-testkit";
-import { describe, expect, it } from "vitest";
+import { BadRequestException } from "@nestjs/common";
+import { describe, expect, it, vi } from "vitest";
 import {
   POSTGIS_LOCATE_SQL,
   POSTGIS_VIEWPORT_SQL,
@@ -45,6 +46,32 @@ describe("TerritoryKitModule", () => {
     expect(locate.zoneId).toBe("tr:34:fatih");
   });
 
+  it("rejects invalid controller input before repository calls", async () => {
+    const repository = {
+      findVisibleZones: vi.fn(),
+      locateZone: vi.fn()
+    };
+    const controller = new TerritoryKitController(
+      createTerritoryEngine({ dataset: createSampleTerritoryDataset() }),
+      repository
+    );
+
+    await expect(
+      controller.getTerritories({
+        west: "bad",
+        south: "40",
+        east: "30",
+        north: "42"
+      })
+    ).rejects.toThrow(BadRequestException);
+    await expect(controller.locateTerritory({ lat: 91, lng: 28.95 })).rejects.toThrow(
+      BadRequestException
+    );
+
+    expect(repository.findVisibleZones).not.toHaveBeenCalled();
+    expect(repository.locateZone).not.toHaveBeenCalled();
+  });
+
   it("exposes PostGIS SQL using ST_Intersects, ST_Covers, and bbox index prefilters", async () => {
     const repository = createPostgisTerritoryRepository(
       {
@@ -65,5 +92,64 @@ describe("TerritoryKitModule", () => {
     expect(POSTGIS_VIEWPORT_SQL).toContain("ST_Intersects");
     expect(POSTGIS_VIEWPORT_SQL).toContain("&& ST_MakeEnvelope");
     expect(POSTGIS_LOCATE_SQL).toContain("ST_Covers");
+  });
+
+  it("maps PostGIS rows into TerritoryKit zones", async () => {
+    const geometry = {
+      type: "Polygon" as const,
+      coordinates: [
+        [
+          [0, 0],
+          [1, 0],
+          [1, 1],
+          [0, 1],
+          [0, 0]
+        ]
+      ]
+    };
+    const repository = createPostgisTerritoryRepository(
+      {
+        async query<Row>(sql: string, values: unknown[]): Promise<{ rows: Row[] }> {
+          expect(values.length).toBeGreaterThan(0);
+
+          if (sql === POSTGIS_LOCATE_SQL) {
+            return { rows: [{ id: "pg:1" } as Row] };
+          }
+
+          return {
+            rows: [
+              {
+                id: "pg:1",
+                dataset_id: "territorykit-sample",
+                level: 3,
+                parent_id: "pg",
+                child_ids: null,
+                neighbor_ids: ["pg:2"],
+                properties: { name: "PostGIS zone" },
+                geometry
+              } as Row
+            ]
+          };
+        }
+      },
+      { datasetId: "territorykit-sample" }
+    );
+
+    await expect(
+      repository.findVisibleZones({ west: 0, south: 0, east: 1, north: 1, level: 3 })
+    ).resolves.toEqual([
+      expect.objectContaining({
+        id: "pg:1",
+        datasetId: "territorykit-sample",
+        parentId: "pg",
+        neighborIds: ["pg:2"],
+        center: [0.5, 0.5],
+        bbox: [0, 0, 1, 1],
+        properties: { name: "PostGIS zone" }
+      })
+    ]);
+    await expect(
+      repository.locateZone({ coordinate: { lat: 0.5, lng: 0.5 }, level: 3 })
+    ).resolves.toBe("pg:1");
   });
 });

@@ -18,9 +18,14 @@ describe("maplibre adapter", () => {
 
   it("creates source and fill/line layer specs", () => {
     const dataset = createSampleTerritoryDataset();
-    const bundle = createTerritoryMapLibreLayers(dataset.zones, { sourceId: "zones" });
+    const bundle = createTerritoryMapLibreLayers(dataset.zones, {
+      sourceId: "zones",
+      stateByZoneId: new Map([["tr:34", { selected: true }]])
+    });
+    const istanbul = bundle.source.spec.data.features.find((feature) => feature.id === "tr:34");
 
     expect(bundle.source.id).toBe("zones");
+    expect(istanbul?.properties).toMatchObject({ selected: true });
     expect(bundle.layers.map((layer) => layer.type)).toEqual(["fill", "line"]);
   });
 
@@ -30,12 +35,14 @@ describe("maplibre adapter", () => {
     const layers = new Set<string>();
     const sources = new Set<string>();
     const listeners = new Map<string, (event: unknown) => void>();
+    const addedSources: Record<string, Record<string, unknown>> = {};
     const map: TerritoryMapLibreMap = {
       addLayer(layer) {
         layers.add(String(layer.id));
       },
-      addSource(id) {
+      addSource(id, spec) {
         sources.add(id);
+        addedSources[id] = spec;
       },
       getLayer(id) {
         return layers.has(id) ? { id } : undefined;
@@ -63,11 +70,13 @@ describe("maplibre adapter", () => {
       sourceId: "zones",
       fillLayerId: "zones-fill",
       lineLayerId: "zones-line",
+      stateByZoneId: new Map([["tr:34", { selected: true }]]),
       onZoneClick(event) {
         clicked.push(event.zoneId);
       }
     });
 
+    adapter.attach(map);
     adapter.attach(map);
     adapter.updateData(dataset.zones.slice(0, 1));
     adapter.updateTheme({ fillColor: "#ff0000" });
@@ -77,6 +86,16 @@ describe("maplibre adapter", () => {
     adapter.detach();
 
     expect(source.setData).toHaveBeenCalledOnce();
+    expect(addedSources.zones).toMatchObject({
+      data: {
+        features: expect.arrayContaining([
+          expect.objectContaining({
+            id: "tr:34",
+            properties: expect.objectContaining({ selected: true })
+          })
+        ])
+      }
+    });
     expect(map.setPaintProperty).toHaveBeenCalledWith("zones-fill", "fill-color", "#ff0000");
     expect(clicked).toEqual(["tr:34"]);
     expect(layers.size).toBe(0);

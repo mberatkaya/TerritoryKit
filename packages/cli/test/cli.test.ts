@@ -2,7 +2,7 @@ import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createSampleTerritoryDataset } from "@territory-kit/shared-testkit";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { runCli } from "../src/index.js";
 
 describe("territory cli", () => {
@@ -13,8 +13,21 @@ describe("territory cli", () => {
     await writeFile(filePath, JSON.stringify(createSampleTerritoryDataset()), "utf8");
 
     try {
-      await expect(runCli(["validate", filePath])).resolves.toBe(0);
-      await expect(runCli(["index", filePath])).resolves.toBe(0);
+      await expect(captureCli(["validate", filePath])).resolves.toMatchObject({
+        code: 0,
+        payload: { ok: true, command: "validate" }
+      });
+      await expect(captureCli(["index", filePath])).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "index",
+          data: {
+            datasetId: "territorykit-sample",
+            zoneCount: 5
+          }
+        }
+      });
     } finally {
       await rm(tempDir, { force: true, recursive: true });
     }
@@ -52,11 +65,33 @@ describe("territory cli", () => {
     );
 
     try {
+      const imported = await captureCli([
+        "import",
+        geojsonPath,
+        "--dataset-id",
+        "cli-import",
+        "--source-date",
+        "2026-07"
+      ]);
+
+      expect(imported).toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "import",
+          data: {
+            manifest: {
+              datasetId: "cli-import",
+              sourceDate: "2026-07"
+            }
+          }
+        }
+      });
+      expect(readPayload(imported.payload, "$.data.manifest.geometryHash")).not.toBe(
+        "import-pending"
+      );
       await expect(
-        runCli(["import", geojsonPath, "--dataset-id", "cli-import", "--source-date", "2026-07"])
-      ).resolves.toBe(0);
-      await expect(
-        runCli([
+        captureCli([
           "generate",
           "--kind",
           "grid",
@@ -67,12 +102,66 @@ describe("territory cli", () => {
           "--columns",
           "2"
         ])
-      ).resolves.toBe(0);
+      ).resolves.toMatchObject({ code: 0, payload: { ok: true, command: "generate" } });
       await expect(
-        runCli(["generate", "--kind", "weighted-voronoi", "--dataset-id", "cli-voronoi"])
-      ).resolves.toBe(0);
+        captureCli(["generate", "--kind", "weighted-voronoi", "--dataset-id", "cli-voronoi"])
+      ).resolves.toMatchObject({ code: 0, payload: { ok: true, command: "generate" } });
     } finally {
       await rm(tempDir, { force: true, recursive: true });
     }
   });
+
+  it("keeps JSON-first error output for invalid commands", async () => {
+    await expect(captureCli(["generate", "--kind", "unknown"])).resolves.toMatchObject({
+      code: 1,
+      payload: {
+        ok: false,
+        command: "generate",
+        issues: [expect.objectContaining({ code: "CLI_USAGE" })]
+      }
+    });
+    await expect(
+      captureCli(["generate", "--kind", "grid", "--rows", "0", "--columns", "1"])
+    ).resolves.toMatchObject({
+      code: 1,
+      payload: {
+        ok: false,
+        command: "generate",
+        issues: [expect.objectContaining({ message: expect.stringContaining("rows") })]
+      }
+    });
+  });
 });
+
+async function captureCli(args: string[]): Promise<{ code: number; payload: unknown }> {
+  const logs: string[] = [];
+  const spy = vi.spyOn(console, "log").mockImplementation((message: unknown) => {
+    logs.push(String(message));
+  });
+
+  try {
+    const code = await runCli(args);
+    const payload = JSON.parse(logs.at(-1) ?? "{}") as unknown;
+
+    return { code, payload };
+  } finally {
+    spy.mockRestore();
+  }
+}
+
+function readPayload(payload: unknown, path: string): unknown {
+  if (path !== "$.data.manifest.geometryHash") {
+    throw new Error(`Unsupported test payload path '${path}'.`);
+  }
+
+  return isRecord(payload) &&
+    isRecord(payload.data) &&
+    isRecord(payload.data.manifest) &&
+    typeof payload.data.manifest.geometryHash === "string"
+    ? payload.data.manifest.geometryHash
+    : undefined;
+}
+
+function isRecord(input: unknown): input is Record<string, unknown> {
+  return typeof input === "object" && input !== null && !Array.isArray(input);
+}
