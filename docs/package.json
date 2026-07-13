@@ -1,0 +1,17 @@
+{
+  "name": "@territory-kit/docs",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vitepress build .",
+    "clean": "rimraf .vitepress/cache .vitepress/dist",
+    "dev": "vitepress dev .",
+    "lint": "prettier --check . --ignore-path ../.prettierignore",
+    "test": "vitest run --passWithNoTests",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  }
+}

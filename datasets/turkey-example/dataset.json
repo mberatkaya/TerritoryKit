@@ -1,0 +1,86 @@
+{
+  "manifest": {
+    "datasetId": "territorykit-turkey-example",
+    "datasetVersion": "0.1.0-alpha.1",
+    "schemaVersion": "territory-schema@1",
+    "sourceDate": "2026-07",
+    "geometryHash": "turkey-example-v1",
+    "license": "Example data for development only",
+    "name": "Turkey Example"
+  },
+  "zones": [
+    {
+      "id": "tr",
+      "datasetId": "territorykit-turkey-example",
+      "level": 1,
+      "childIds": ["tr:34"],
+      "neighborIds": [],
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [25, 36],
+            [45, 36],
+            [45, 42],
+            [25, 42],
+            [25, 36]
+          ]
+        ]
+      },
+      "center": [35, 39],
+      "bbox": [25, 36, 45, 42],
+      "properties": {
+        "name": "Turkiye"
+      }
+    },
+    {
+      "id": "tr:34",
+      "datasetId": "territorykit-turkey-example",
+      "level": 2,
+      "parentId": "tr",
+      "childIds": ["tr:34:fatih"],
+      "neighborIds": [],
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [28, 40],
+            [30, 40],
+            [30, 42],
+            [28, 42],
+            [28, 40]
+          ]
+        ]
+      },
+      "center": [29, 41],
+      "bbox": [28, 40, 30, 42],
+      "properties": {
+        "name": "Istanbul"
+      }
+    },
+    {
+      "id": "tr:34:fatih",
+      "datasetId": "territorykit-turkey-example",
+      "level": 3,
+      "parentId": "tr:34",
+      "neighborIds": [],
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [28.93, 41],
+            [29, 41],
+            [29, 41.05],
+            [28.93, 41.05],
+            [28.93, 41]
+          ]
+        ]
+      },
+      "center": [28.965, 41.025],
+      "bbox": [28.93, 41, 29, 41.05],
+      "properties": {
+        "name": "Fatih"
+      }
+    }
+  ]
+}

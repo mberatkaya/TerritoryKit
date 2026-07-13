@@ -1,0 +1,12 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+.turbo/
+coverage/
+dist/
+node_modules/
+docs/.vitepress/cache/
+docs/.vitepress/dist/
+playwright-report/
+test-results/

@@ -1,0 +1,40 @@
+{
+  "name": "@territory-kit/maplibre",
+  "version": "0.4.0-alpha.0",
+  "description": "MapLibre GL JS adapter utilities for TerritoryKit.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "peerDependencies": {
+    "maplibre-gl": ">=5"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "clean": "rimraf dist coverage .turbo",
+    "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\" --no-error-on-unmatched-pattern",
+    "test": "vitest run --passWithNoTests",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@territory-kit/core": "workspace:*",
+    "@territory-kit/dataset": "workspace:*",
+    "@types/geojson": "^7946.0.16"
+  },
+  "devDependencies": {
+    "@territory-kit/shared-testkit": "workspace:*",
+    "maplibre-gl": "^5.24.0"
+  }
+}

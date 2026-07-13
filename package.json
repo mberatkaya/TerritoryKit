@@ -1,0 +1,49 @@
+{
+  "name": "territory-kit",
+  "version": "0.0.1",
+  "private": true,
+  "description": "TypeScript-first geospatial territory engine for hierarchical polygon datasets.",
+  "license": "Apache-2.0",
+  "packageManager": "pnpm@11.7.0",
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=11"
+  },
+  "scripts": {
+    "bench": "turbo run bench",
+    "build": "turbo run build",
+    "bundle:size": "node scripts/check-bundle-size.mjs",
+    "clean": "turbo run clean && rimraf node_modules",
+    "changeset": "changeset",
+    "coverage": "vitest run --coverage",
+    "docs:build": "pnpm --filter @territory-kit/docs build",
+    "docs:dev": "pnpm --filter @territory-kit/docs dev",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "turbo run lint",
+    "release": "pnpm build && changeset publish",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm bundle:size"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.31.0",
+    "@eslint/js": "^10.0.1",
+    "@types/geojson": "^7946.0.16",
+    "@types/node": "^26.1.1",
+    "@vitest/coverage-v8": "^4.1.10",
+    "eslint": "^10.7.0",
+    "fast-check": "^4.9.0",
+    "prettier": "^3.9.5",
+    "rimraf": "^6.0.1",
+    "tinybench": "^6.0.2",
+    "tsdown": "^0.22.7",
+    "turbo": "^2.10.4",
+    "typedoc": "^0.28.20",
+    "typescript": "6.0.3",
+    "typescript-eslint": "^8.63.0",
+    "vite": "^8.1.4",
+    "vitepress": "^1.6.4",
+    "vitest": "^4.1.10"
+  }
+}

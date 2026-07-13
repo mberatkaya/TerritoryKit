@@ -1,0 +1,26 @@
+name: Sprint task
+description: Track work from the public roadmap.
+title: "[Sprint]: "
+labels: ["sprint", "triage"]
+body:
+  - type: input
+    id: sprint
+    attributes:
+      label: Sprint / version
+      placeholder: "Sprint 3 / 0.2.0-alpha.1"
+    validations:
+      required: true
+  - type: textarea
+    id: checklist
+    attributes:
+      label: Checklist items
+      description: Link or paste the checklist items this task completes.
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Definition of done
+      description: Tests, docs, benchmarks, examples, or ADR required before ticking the checklist.
+    validations:
+      required: true

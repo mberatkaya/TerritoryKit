@@ -1,0 +1,85 @@
+{
+  "manifest": {
+    "datasetId": "territorykit-fatih-example",
+    "datasetVersion": "0.1.0-alpha.1",
+    "schemaVersion": "territory-schema@1",
+    "sourceDate": "2026-07",
+    "geometryHash": "fatih-example-v1",
+    "license": "Example data for development only",
+    "name": "Fatih Example"
+  },
+  "zones": [
+    {
+      "id": "tr:34:fatih",
+      "datasetId": "territorykit-fatih-example",
+      "level": 3,
+      "childIds": ["tr:34:fatih:micro-1", "tr:34:fatih:micro-2"],
+      "neighborIds": [],
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [28.93, 41],
+            [29, 41],
+            [29, 41.05],
+            [28.93, 41.05],
+            [28.93, 41]
+          ]
+        ]
+      },
+      "center": [28.965, 41.025],
+      "bbox": [28.93, 41, 29, 41.05],
+      "properties": {
+        "name": "Fatih"
+      }
+    },
+    {
+      "id": "tr:34:fatih:micro-1",
+      "datasetId": "territorykit-fatih-example",
+      "level": 5,
+      "parentId": "tr:34:fatih",
+      "neighborIds": ["tr:34:fatih:micro-2"],
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [28.93, 41],
+            [28.965, 41],
+            [28.965, 41.05],
+            [28.93, 41.05],
+            [28.93, 41]
+          ]
+        ]
+      },
+      "center": [28.9475, 41.025],
+      "bbox": [28.93, 41, 28.965, 41.05],
+      "properties": {
+        "name": "Fatih West"
+      }
+    },
+    {
+      "id": "tr:34:fatih:micro-2",
+      "datasetId": "territorykit-fatih-example",
+      "level": 5,
+      "parentId": "tr:34:fatih",
+      "neighborIds": ["tr:34:fatih:micro-1"],
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [28.965, 41],
+            [29, 41],
+            [29, 41.05],
+            [28.965, 41.05],
+            [28.965, 41]
+          ]
+        ]
+      },
+      "center": [28.9825, 41.025],
+      "bbox": [28.965, 41, 29, 41.05],
+      "properties": {
+        "name": "Fatih East"
+      }
+    }
+  ]
+}

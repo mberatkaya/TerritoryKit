@@ -1,0 +1,57 @@
+# TerritoryKit
+
+TerritoryKit is a TypeScript-first geospatial SDK for hierarchical, irregular polygon
+territories. It aims for an H3-like developer experience while keeping the core engine
+independent from map renderers, backend frameworks, and game-specific state.
+
+## Current Version Track
+
+The repository starts at `0.0.1` and follows the sprint roadmap from the technical sprint
+document:
+
+| Product version | Sprint range | Status                         |
+| --------------- | ------------ | ------------------------------ |
+| `0.0.1`         | Sprint 0     | Complete                       |
+| `0.1.0-alpha.1` | Sprint 1     | Started, hardening pending     |
+| `0.1.0`         | Sprint 2     | Started, hardening pending     |
+| `0.2.0-alpha.1` | Sprint 3     | Baseline started               |
+| `0.2.0`         | Sprint 4     | Baseline started               |
+| `0.3.0`         | Sprint 5     | Baseline started               |
+| `0.4.0`         | Sprint 6     | Package baseline started       |
+| `0.5.0`         | Sprint 7     | Package baseline started       |
+| `0.6.0`         | Sprint 8     | CLI/generator baseline started |
+| `0.9.0-rc.1`    | Sprint 9     | Docs baseline started          |
+| `1.0.0`         | Sprint 10    | Planned                        |
+
+## Packages
+
+- `@territory-kit/dataset`: dataset manifest, schema, validation, and loading.
+- `@territory-kit/core`: engine APIs, spatial lookup, hierarchy, adjacency, viewport queries.
+- `@territory-kit/maplibre`: first map adapter boundary for MapLibre GL JS.
+- `@territory-kit/nestjs`: NestJS integration boundary and PostGIS repository contracts.
+- `@territory-kit/generators`: deterministic dataset helper and generator utilities.
+- `@territory-kit/cli`: `territory validate`, `territory index`, and related tools.
+- `@territory-kit/shared-testkit`: private fixtures for tests and examples.
+
+## Development
+
+```bash
+pnpm install
+pnpm build
+pnpm test
+pnpm typecheck
+pnpm lint
+pnpm bundle:size
+```
+
+Node.js `>=22` and pnpm `>=11` are required. The current TypeScript baseline is `6.0.3`;
+TypeScript 7 will be evaluated in a later ADR before adoption.
+
+## Planning Docs
+
+- [Product requirements](./docs/prd.md)
+- [H3 comparison](./docs/h3-comparison.md)
+- [Risk register](./docs/risk-register.md)
+- [Roadmap](./docs/roadmap.md)
+- [Dataset compatibility](./docs/dataset-compatibility.md)
+- [Benchmarks](./docs/benchmarks.md)

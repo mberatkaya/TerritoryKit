@@ -1,0 +1,36 @@
+{
+  "name": "@territory-kit/core",
+  "version": "0.1.0",
+  "description": "Core TerritoryKit zone engine, hierarchy, adjacency, and spatial queries.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "bench": "vitest bench --run",
+    "build": "tsdown",
+    "clean": "rimraf dist coverage .turbo",
+    "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\" --no-error-on-unmatched-pattern",
+    "test": "vitest run --passWithNoTests",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@territory-kit/dataset": "workspace:*",
+    "flatbush": "^4.6.2"
+  },
+  "devDependencies": {
+    "@territory-kit/shared-testkit": "workspace:*"
+  }
+}

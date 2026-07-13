@@ -1,0 +1,6 @@
+dist
+coverage
+node_modules
+.turbo
+docs/.vitepress/dist
+pnpm-lock.yaml

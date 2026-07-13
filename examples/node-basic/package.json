@@ -1,0 +1,17 @@
+{
+  "name": "@territory-kit/example-node-basic",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json --outDir dist",
+    "clean": "rimraf dist .turbo",
+    "lint": "eslint src --ext .ts",
+    "test": "vitest run --passWithNoTests",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@territory-kit/core": "workspace:*",
+    "@territory-kit/shared-testkit": "workspace:*"
+  }
+}
