@@ -1,6 +1,6 @@
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { sha256Hex } from "@territory-kit/generators";
 import { createSampleTerritoryDataset } from "@territory-kit/shared-testkit";
 import { describe, expect, it, vi } from "vitest";
@@ -27,6 +27,109 @@ describe("territory cli", () => {
             datasetId: "territorykit-sample",
             zoneCount: 5
           }
+        }
+      });
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
+
+  it("builds a registry and installs dataset artifacts from local files", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-cli-registry-"));
+    const artifactRoot = join(tempDir, "artifacts", "sample");
+    const registryPath = join(tempDir, "registry.json");
+    const cacheDir = join(tempDir, "cache");
+
+    try {
+      await mkdir(join(artifactRoot, "levels", "ADM0"), { recursive: true });
+      const dataset = createSampleTerritoryDataset();
+      const files = new Map([
+        [
+          "manifest.json",
+          `${JSON.stringify(
+            {
+              manifestVersion: "1",
+              datasetId: "sample-cli",
+              datasetVersion: "1.0.0",
+              schemaVersion: "territory-schema@1",
+              country: { alpha2: "SC", alpha3: "SCL", name: "Sample CLI" },
+              sourceProvider: "fixture",
+              supportedLevels: ["ADM0"],
+              license: "Apache-2.0",
+              attribution: "fixture"
+            },
+            null,
+            2
+          )}\n`
+        ],
+        ["levels/ADM0/dataset.json", `${JSON.stringify(dataset, null, 2)}\n`]
+      ]);
+      files.set(
+        "checksums.json",
+        `${JSON.stringify(
+          {
+            files: Object.fromEntries(
+              [...files.entries()].map(([path, content]) => [path, sha256Hex(content)])
+            )
+          },
+          null,
+          2
+        )}\n`
+      );
+
+      for (const [relativePath, content] of files.entries()) {
+        const target = join(artifactRoot, relativePath);
+        await mkdir(dirname(target), { recursive: true });
+        await writeFile(target, content, "utf8");
+      }
+
+      await expect(
+        captureCli([
+          "registry",
+          "build",
+          "--input",
+          join(tempDir, "artifacts"),
+          "--output",
+          registryPath,
+          "--base-url",
+          `file://${join(tempDir, "artifacts")}/`,
+          "--force"
+        ])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: { ok: true, command: "registry build" }
+      });
+      await expect(captureCli(["registry", "validate", registryPath])).resolves.toMatchObject({
+        code: 0,
+        payload: { ok: true, command: "registry validate" }
+      });
+      await expect(
+        captureCli([
+          "dataset",
+          "install",
+          "sample-cli",
+          "--registry",
+          registryPath,
+          "--cache-dir",
+          cacheDir,
+          "--levels",
+          "ADM0"
+        ])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "dataset install",
+          data: { datasetId: "sample-cli", artifactCount: 3 }
+        }
+      });
+      await expect(
+        captureCli(["dataset", "list-installed", "--cache-dir", cacheDir])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          data: [expect.objectContaining({ datasetId: "sample-cli" })]
         }
       });
     } finally {
@@ -192,6 +295,130 @@ describe("territory cli", () => {
             zoneId: "a",
             neighbors: ["c"],
             relations: [expect.objectContaining({ from: "a", to: "c", type: "point-touch" })]
+          }
+        }
+      });
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
+
+  it("builds, validates, inspects, and compares render artifacts", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-cli-render-"));
+    const datasetPath = join(tempDir, "dataset.json");
+    const outputPath = join(tempDir, "render");
+
+    await writeFile(datasetPath, JSON.stringify(createSampleTerritoryDataset()), "utf8");
+
+    try {
+      await expect(
+        captureCli([
+          "render",
+          "build",
+          datasetPath,
+          "--output",
+          outputPath,
+          "--format",
+          "mvt",
+          "--min-zoom",
+          "0",
+          "--max-zoom",
+          "0",
+          "--build-date",
+          "2026-01-01T00:00:00.000Z"
+        ])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: { ok: true, command: "render build", data: { format: "mvt" } }
+      });
+      await expect(captureCli(["render", "validate", outputPath])).resolves.toMatchObject({
+        code: 0,
+        payload: { ok: true, command: "render validate", data: { format: "mvt" } }
+      });
+      await expect(captureCli(["render", "inspect", outputPath])).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "render inspect",
+          data: { tileTemplate: "tiles/{z}/{x}/{y}.mvt" }
+        }
+      });
+      await expect(
+        captureCli(["render", "compare", datasetPath, outputPath])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: { ok: true, command: "render compare", issues: [] }
+      });
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
+
+  it("runs and compares benchmark smoke results", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-cli-benchmark-"));
+    const currentPath = join(tempDir, "current.json");
+    const baselinePath = join(tempDir, "baseline.json");
+
+    try {
+      const run = await captureCli([
+        "benchmark",
+        "run",
+        "--rows",
+        "2",
+        "--columns",
+        "2",
+        "--iterations",
+        "10",
+        "--build-date",
+        "2026-01-01T00:00:00.000Z"
+      ]);
+
+      expect(run).toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "benchmark run",
+          data: {
+            schemaVersion: "territorykit-benchmark-result@1",
+            inputs: { featureCount: 4 }
+          }
+        }
+      });
+
+      const data = isRecord(run.payload) ? run.payload.data : undefined;
+      await writeFile(currentPath, JSON.stringify(data), "utf8");
+      await writeFile(
+        baselinePath,
+        JSON.stringify({
+          schemaVersion: "territorykit-benchmark-baseline@1",
+          mode: "fixture",
+          scenario: "smoke",
+          minimumFeatureCount: 4,
+          budgets: {
+            datasetValidationMs: 1_000,
+            engineConstructionMs: 1_000,
+            getZoneByIdMeanMs: 1,
+            latLngToZoneMeanMs: 1,
+            getZonesInBoundsMeanMs: 10
+          }
+        }),
+        "utf8"
+      );
+
+      await expect(
+        captureCli(["benchmark", "compare", "--baseline", baselinePath, "--current", currentPath])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: { ok: true, command: "benchmark compare" }
+      });
+      await expect(
+        captureCli(["benchmark", "run", "--mode", "local-real", "--allow-skip"])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          data: {
+            skipped: [expect.stringContaining("No local real-world dataset path")]
           }
         }
       });

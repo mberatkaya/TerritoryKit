@@ -73,6 +73,20 @@ export {
   writeTerritoryDatasetOutput
 } from "./geometry-quality.js";
 export {
+  buildTerritoryRenderArtifactPath,
+  buildTerritoryRenderArtifacts,
+  compareTerritoryQueryRenderArtifacts,
+  inspectTerritoryRenderArtifactPath,
+  sha256RenderFile,
+  validateTerritoryRenderArtifactPath
+} from "./render-artifacts.js";
+export type {
+  TerritoryRenderBuildOptions,
+  TerritoryRenderBuildResult,
+  TerritoryRenderPathBuildOptions,
+  TerritoryRenderValidateResult
+} from "./render-artifacts.js";
+export {
   applyTerritoryAdjacencyOverrides,
   applyTerritoryAdjacencyOverridesForBuild,
   buildTerritoryAdjacency,

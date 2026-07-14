@@ -1,5 +1,7 @@
 import type { Feature, FeatureCollection } from "geojson";
-import type { TerritoryZone } from "@territory-kit/dataset";
+import { loadTerritoryDataset } from "@territory-kit/dataset";
+import type { TerritoryAdminLevel, TerritoryZone } from "@territory-kit/dataset";
+import type { TerritoryRegistryClient } from "@territory-kit/core";
 
 export interface TerritoryMapLibreState {
   faction?: string;
@@ -87,6 +89,56 @@ export interface TerritoryMapLibreLayerBundle {
   layers: Array<Record<string, unknown>>;
 }
 
+export interface TerritoryMapLibreRegistrySourceOptions {
+  registry: Pick<TerritoryRegistryClient, "resolveArtifact">;
+  datasetId: string;
+  levels?: readonly TerritoryAdminLevel[];
+  sourceId?: string;
+  sourceLayer?: string;
+  formatPreference?: readonly ["mvt" | "geojson", ...Array<"mvt" | "geojson">];
+}
+
+export interface TerritoryMapLibreRegistrySourceBundle {
+  source: {
+    id: string;
+    spec: Record<string, unknown>;
+  };
+  sourceLayer: string;
+  artifact: unknown;
+}
+
+export interface TerritoryMapLibreRegistryLayerOptions {
+  sourceId?: string;
+  sourceLayer?: string;
+  fillLayerId?: string;
+  lineLayerId?: string;
+  fillColor?: string;
+  fillOpacity?: number;
+  lineColor?: string;
+  lineWidth?: number;
+  minZoom?: number;
+  maxZoom?: number;
+}
+
+export interface TerritoryMapLibreControllerOptions {
+  registry: Pick<TerritoryRegistryClient, "installDataset">;
+  datasetId: string;
+  levels?: readonly TerritoryAdminLevel[];
+}
+
+export interface TerritoryMapLibreTerritoryEvent {
+  territoryId: string;
+  feature?: Feature;
+  originalEvent: unknown;
+}
+
+export interface TerritoryMapLibreController {
+  resolveTerritory(territoryId: string): Promise<TerritoryZone | undefined>;
+  onTerritoryClick(
+    callback: (event: TerritoryMapLibreTerritoryEvent) => void
+  ): (event: unknown) => void;
+}
+
 export function zonesToFeatureCollection(
   zones: TerritoryZone[],
   stateByZoneId: ReadonlyMap<string, TerritoryMapLibreState> = new Map()
@@ -162,6 +214,148 @@ export function createTerritoryMapLibreLayers(
         }
       }
     ]
+  };
+}
+
+export async function createTerritoryMapLibreSource(
+  options: TerritoryMapLibreRegistrySourceOptions
+): Promise<TerritoryMapLibreRegistrySourceBundle> {
+  const sourceId = options.sourceId ?? "territory-kit-render";
+  const sourceLayer = options.sourceLayer ?? "territory";
+  const resolved = await options.registry.resolveArtifact({
+    datasetId: options.datasetId,
+    purpose: "render",
+    ...(options.levels ? { levels: options.levels } : {}),
+    formatPreference: options.formatPreference ?? ["mvt", "geojson"]
+  });
+  const artifact = resolved.artifact as { format?: string; tileUrlTemplate?: unknown };
+
+  if (artifact.format === "geojson") {
+    return {
+      source: {
+        id: sourceId,
+        spec: {
+          type: "geojson",
+          data: resolved.url,
+          promoteId: "territoryId"
+        }
+      },
+      sourceLayer,
+      artifact: resolved.artifact
+    };
+  }
+
+  const tileTemplate =
+    typeof artifact.tileUrlTemplate === "string"
+      ? resolveTileTemplateUrl(artifact.tileUrlTemplate, resolved.url)
+      : resolveTileTemplateUrl("tiles/{z}/{x}/{y}.mvt", resolved.url);
+
+  return {
+    source: {
+      id: sourceId,
+      spec: {
+        type: "vector",
+        tiles: [tileTemplate],
+        promoteId: "territoryId"
+      }
+    },
+    sourceLayer,
+    artifact: resolved.artifact
+  };
+}
+
+export function createTerritoryMapLibreLayer(
+  options: TerritoryMapLibreRegistryLayerOptions = {}
+): Array<Record<string, unknown>> {
+  const sourceId = options.sourceId ?? "territory-kit-render";
+  const sourceLayer = options.sourceLayer ?? "territory";
+  const fillLayerId = options.fillLayerId ?? "territory-kit-render-fill";
+  const lineLayerId = options.lineLayerId ?? "territory-kit-render-line";
+  const zoomRange = {
+    ...(options.minZoom !== undefined ? { minzoom: options.minZoom } : {}),
+    ...(options.maxZoom !== undefined ? { maxzoom: options.maxZoom } : {})
+  };
+
+  return [
+    {
+      id: fillLayerId,
+      type: "fill",
+      source: sourceId,
+      "source-layer": sourceLayer,
+      ...zoomRange,
+      paint: {
+        "fill-color": options.fillColor ?? "#1f8a70",
+        "fill-opacity": options.fillOpacity ?? 0.35
+      }
+    },
+    {
+      id: lineLayerId,
+      type: "line",
+      source: sourceId,
+      "source-layer": sourceLayer,
+      ...zoomRange,
+      paint: {
+        "line-color": options.lineColor ?? "#0f172a",
+        "line-width": options.lineWidth ?? 1.25
+      }
+    }
+  ];
+}
+
+export function createTerritoryMapLibreController(
+  options: TerritoryMapLibreControllerOptions
+): TerritoryMapLibreController {
+  let zonesById: Map<string, TerritoryZone> | undefined;
+
+  async function loadZones(): Promise<Map<string, TerritoryZone>> {
+    if (zonesById) {
+      return zonesById;
+    }
+
+    const installed = await options.registry.installDataset({
+      datasetId: options.datasetId,
+      ...(options.levels ? { levels: options.levels } : {})
+    });
+    const nextZones = new Map<string, TerritoryZone>();
+
+    for (const artifact of installed.installedArtifacts) {
+      const path = artifact.artifact.path;
+
+      if (!path?.startsWith("levels/") || !path.endsWith("/dataset.json")) {
+        continue;
+      }
+
+      const dataset = loadTerritoryDataset(JSON.parse(await installed.readText(path)) as unknown);
+
+      for (const zone of dataset.zones) {
+        nextZones.set(zone.id, zone);
+      }
+    }
+
+    zonesById = nextZones;
+    return nextZones;
+  }
+
+  return {
+    async resolveTerritory(territoryId) {
+      return (await loadZones()).get(territoryId);
+    },
+    onTerritoryClick(callback) {
+      return (event: unknown): void => {
+        const feature = readFirstFeature(event);
+        const territoryId = readFeatureTerritoryId(feature);
+
+        if (!territoryId) {
+          return;
+        }
+
+        callback({
+          territoryId,
+          ...(feature ? { feature } : {}),
+          originalEvent: event
+        });
+      };
+    }
   };
 }
 
@@ -325,6 +519,43 @@ function readFeatureZoneId(feature: Feature | undefined): string | undefined {
   }
 
   return undefined;
+}
+
+function readFeatureTerritoryId(feature: Feature | undefined): string | undefined {
+  if (!feature) {
+    return undefined;
+  }
+
+  if (isRecord(feature.properties)) {
+    const territoryId = feature.properties.territoryId;
+
+    if (typeof territoryId === "string" || typeof territoryId === "number") {
+      return String(territoryId);
+    }
+  }
+
+  return readFeatureZoneId(feature);
+}
+
+function resolveTileTemplateUrl(template: string, baseUrl: string): string {
+  const tokens = new Map([
+    ["{z}", "__TERRITORY_KIT_Z__"],
+    ["{x}", "__TERRITORY_KIT_X__"],
+    ["{y}", "__TERRITORY_KIT_Y__"]
+  ]);
+  let safeTemplate = template;
+
+  for (const [placeholder, token] of tokens) {
+    safeTemplate = safeTemplate.replaceAll(placeholder, token);
+  }
+
+  let resolved = new URL(safeTemplate, baseUrl).toString();
+
+  for (const [placeholder, token] of tokens) {
+    resolved = resolved.replaceAll(token, placeholder);
+  }
+
+  return resolved;
 }
 
 function isRecord(input: unknown): input is Record<string, unknown> {

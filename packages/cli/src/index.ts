@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
+import { performance } from "node:perf_hooks";
 import { pathToFileURL } from "node:url";
 import { createTerritoryEngine } from "@territory-kit/core";
 import {
@@ -44,13 +45,24 @@ import {
   readTerritoryCountrySourceLockPath,
   readTerritoryAdjacencyArtifactPath,
   repairTerritoryDatasetPath,
+  buildTerritoryRenderArtifactPath,
+  compareTerritoryQueryRenderArtifacts,
   runTerritorySourcePipeline,
+  inspectTerritoryRenderArtifactPath,
   validateTerritoryCountryDatasetPath,
   verifyTerritoryCountrySourceLock,
   validateTerritoryAdjacencyPath,
   validateTerritoryDatasetPath,
+  validateTerritoryRenderArtifactPath,
   writeGeometryQualityReport
 } from "@territory-kit/generators";
+import { validateTerritoryDatasetRegistry } from "@territory-kit/registry";
+import {
+  buildTerritoryDatasetRegistryFromArtifacts,
+  createNodeTerritoryRegistryCache,
+  createNodeTerritoryRegistryClient,
+  readRegistryFile
+} from "@territory-kit/registry/node";
 import type {
   GenericGeoJsonSourceOptions,
   GeoBoundariesSourceOptions,
@@ -84,6 +96,27 @@ interface JsonLineIndex {
   findLineForIssue(issue: TerritoryValidationIssue): number | undefined;
 }
 
+interface CliBenchmarkResult {
+  schemaVersion: "territorykit-benchmark-result@1";
+  mode: "fixture" | "local-real";
+  scenario: string;
+  generatedAt: string;
+  runtime: {
+    node: string;
+    platform: string;
+    arch: string;
+  };
+  source: Record<string, unknown>;
+  inputs: {
+    datasetId?: string;
+    datasetVersion?: string;
+    featureCount: number;
+    iterations?: number;
+  };
+  metrics: Record<string, number>;
+  skipped?: string[];
+}
+
 export async function runCli(argv: string[] = process.argv.slice(2)): Promise<number> {
   const [command] = argv;
 
@@ -95,6 +128,14 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
   try {
     if (command === "dataset") {
       return runDataset(argv.slice(1));
+    }
+
+    if (command === "registry") {
+      return runRegistry(argv.slice(1));
+    }
+
+    if (command === "cache") {
+      return runCache(argv.slice(1));
     }
 
     if (command === "source") {
@@ -111,6 +152,14 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
 
     if (command === "adjacency") {
       return runAdjacency(argv.slice(1));
+    }
+
+    if (command === "render") {
+      return runRender(argv.slice(1));
+    }
+
+    if (command === "benchmark") {
+      return runBenchmark(argv.slice(1));
     }
 
     if (command === "country") {
@@ -859,6 +908,34 @@ async function runDataset(args: string[]): Promise<number> {
     return 0;
   }
 
+  if (subcommand === "search") {
+    return runDatasetSearch(args.slice(1));
+  }
+
+  if (subcommand === "info") {
+    return runDatasetInfo(args.slice(1));
+  }
+
+  if (subcommand === "install") {
+    return runDatasetInstall(args.slice(1));
+  }
+
+  if (subcommand === "update") {
+    return runDatasetInstall(args.slice(1), { update: true });
+  }
+
+  if (subcommand === "verify") {
+    return runDatasetVerify(args.slice(1));
+  }
+
+  if (subcommand === "remove") {
+    return runDatasetRemove(args.slice(1));
+  }
+
+  if (subcommand === "list-installed") {
+    return runDatasetListInstalled(args.slice(1));
+  }
+
   if (subcommand !== "build") {
     printJson({
       ok: false,
@@ -952,6 +1029,521 @@ async function runDataset(args: string[]): Promise<number> {
       : { issues: result.issues })
   });
   return result.ok ? 0 : 1;
+}
+
+async function runRender(args: string[]): Promise<number> {
+  const [subcommand] = args;
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printRenderHelp();
+    return 0;
+  }
+
+  if (subcommand === "build") {
+    const [datasetPath] = args.slice(1).filter((value) => !value.startsWith("--"));
+    const flags = parseFlags(args.slice(1));
+    const outputPath = getFlag(flags, "output");
+    const format = getFlag(flags, "format") ?? "mvt";
+
+    if (!datasetPath || !outputPath) {
+      printJson({
+        ok: false,
+        command: "render build",
+        issues: [createCliIssue("Dataset path and --output are required.")]
+      });
+      return 1;
+    }
+
+    if (format !== "mvt" && format !== "geojson") {
+      printJson({
+        ok: false,
+        command: "render build",
+        issues: [createCliIssue("--format must be mvt or geojson.")]
+      });
+      return 1;
+    }
+
+    const layerId = getFlag(flags, "layer");
+    const minZoom = getOptionalNumberFlag(flags, "min-zoom");
+    const maxZoom = getOptionalNumberFlag(flags, "max-zoom");
+    const buildDate = getFlag(flags, "build-date");
+    const result = await buildTerritoryRenderArtifactPath({
+      inputPath: datasetPath,
+      outputPath,
+      format,
+      ...(layerId ? { layerId } : {}),
+      ...(minZoom !== undefined ? { minZoom } : {}),
+      ...(maxZoom !== undefined ? { maxZoom } : {}),
+      ...(buildDate ? { buildDate } : {}),
+      ...(flags.has("force") ? { force: true } : {})
+    });
+
+    printJson({
+      ok: true,
+      command: "render build",
+      data: {
+        format: result.manifest.format,
+        datasetId: result.manifest.datasetId,
+        outputPath,
+        fileCount: result.files.size,
+        layers: result.manifest.layers
+      }
+    });
+    return 0;
+  }
+
+  if (subcommand === "validate") {
+    const [artifactPath] = args.slice(1).filter((value) => !value.startsWith("--"));
+
+    if (!artifactPath) {
+      printJson({
+        ok: false,
+        command: "render validate",
+        issues: [createCliIssue("Render artifact path is required.")]
+      });
+      return 1;
+    }
+
+    const result = await validateTerritoryRenderArtifactPath(artifactPath);
+    printJson({
+      ok: result.ok,
+      command: "render validate",
+      ...(result.manifest ? { data: result.manifest } : {}),
+      issues: result.issues
+    });
+    return result.ok ? 0 : 1;
+  }
+
+  if (subcommand === "inspect") {
+    const [artifactPath] = args.slice(1).filter((value) => !value.startsWith("--"));
+
+    if (!artifactPath) {
+      printJson({
+        ok: false,
+        command: "render inspect",
+        issues: [createCliIssue("Render artifact path is required.")]
+      });
+      return 1;
+    }
+
+    printJson({
+      ok: true,
+      command: "render inspect",
+      data: await inspectTerritoryRenderArtifactPath(artifactPath)
+    });
+    return 0;
+  }
+
+  if (subcommand === "compare") {
+    const [queryDatasetPath, renderArtifactPath] = args
+      .slice(1)
+      .filter((value) => !value.startsWith("--"));
+
+    if (!queryDatasetPath || !renderArtifactPath) {
+      printJson({
+        ok: false,
+        command: "render compare",
+        issues: [createCliIssue("Query dataset path and render artifact path are required.")]
+      });
+      return 1;
+    }
+
+    const result = await compareTerritoryQueryRenderArtifacts({
+      queryDatasetPath,
+      renderArtifactPath
+    });
+    printJson({
+      ok: result.ok,
+      command: "render compare",
+      issues: result.issues
+    });
+    return result.ok ? 0 : 1;
+  }
+
+  printJson({
+    ok: false,
+    command: "render",
+    issues: [createCliIssue(`Unsupported render command '${subcommand}'.`)]
+  });
+  return 1;
+}
+
+async function runBenchmark(args: string[]): Promise<number> {
+  const [subcommand] = args;
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printBenchmarkHelp();
+    return 0;
+  }
+
+  if (subcommand === "run") {
+    const flags = parseFlags(args.slice(1));
+    const mode = getFlag(flags, "mode") ?? "fixture";
+
+    if (mode !== "fixture" && mode !== "local-real") {
+      printJson({
+        ok: false,
+        command: "benchmark run",
+        issues: [createCliIssue("--mode must be fixture or local-real.")]
+      });
+      return 2;
+    }
+
+    const datasetPath = getFlag(flags, "dataset") ?? getPositionalArgs(args.slice(1)).find(Boolean);
+
+    if (mode === "local-real" && !datasetPath) {
+      const skipped = [
+        "No local real-world dataset path was provided. Pass --dataset <dataset.json> to run this mode."
+      ];
+      printJson({
+        ok: flags.has("allow-skip"),
+        command: "benchmark run",
+        data: createSkippedBenchmarkResult(flags, skipped),
+        ...(flags.has("allow-skip")
+          ? {}
+          : { issues: skipped.map((message) => createCliIssue(message)) })
+      });
+      return flags.has("allow-skip") ? 0 : 2;
+    }
+
+    const result =
+      mode === "fixture"
+        ? createFixtureBenchmarkResult(flags)
+        : createDatasetBenchmarkResult(loadTerritoryDataset(await readJson(datasetPath!)), {
+            mode,
+            scenario: getFlag(flags, "scenario") ?? "smoke",
+            generatedAt: getBenchmarkGeneratedAt(flags),
+            iterations: getPositiveIntegerFlag(flags, "iterations", 5_000),
+            source: {
+              type: "local-real",
+              datasetPath
+            }
+          });
+
+    printJson({
+      ok: true,
+      command: "benchmark run",
+      data: result
+    });
+    return 0;
+  }
+
+  if (subcommand === "compare") {
+    const flags = parseFlags(args.slice(1));
+    const positional = getPositionalArgs(args.slice(1));
+    const baselinePath = getFlag(flags, "baseline") ?? positional[0];
+    const currentPath = getFlag(flags, "current") ?? positional[1];
+
+    if (!baselinePath || !currentPath) {
+      printJson({
+        ok: false,
+        command: "benchmark compare",
+        issues: [createCliIssue("--baseline and --current are required.")]
+      });
+      return 2;
+    }
+
+    const comparison = compareCliBenchmarkResult(
+      await readJson(currentPath),
+      await readJson(baselinePath)
+    );
+
+    printJson({
+      ok: comparison.ok,
+      command: "benchmark compare",
+      data: comparison
+    });
+    return comparison.ok ? 0 : 1;
+  }
+
+  printJson({
+    ok: false,
+    command: "benchmark",
+    issues: [createCliIssue(`Unsupported benchmark command '${subcommand}'.`)]
+  });
+  return 2;
+}
+
+async function runRegistry(args: string[]): Promise<number> {
+  const [subcommand] = args;
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printRegistryHelp();
+    return 0;
+  }
+
+  if (subcommand === "build") {
+    const flags = parseFlags(args.slice(1));
+    const inputPath = getFlag(flags, "input");
+    const outputPath = getFlag(flags, "output");
+    const baseUrl = getFlag(flags, "base-url");
+
+    if (!inputPath || !outputPath || !baseUrl) {
+      printJson({
+        ok: false,
+        command: "registry build",
+        issues: [createCliIssue("--input, --output, and --base-url are required.")]
+      });
+      return 1;
+    }
+
+    const generatedAt =
+      getFlag(flags, "build-date") ??
+      (process.env.SOURCE_DATE_EPOCH
+        ? new Date(Number(process.env.SOURCE_DATE_EPOCH) * 1000).toISOString()
+        : new Date(0).toISOString());
+    const registry = await buildTerritoryDatasetRegistryFromArtifacts({
+      inputPath,
+      baseUrl,
+      generatedAt
+    });
+    await writeJsonOutput(outputPath, registry, flags.has("force"));
+    printJson({
+      ok: true,
+      command: "registry build",
+      data: {
+        outputPath,
+        datasetCount: registry.datasets.length,
+        artifactCount: registry.datasets.reduce((sum, dataset) => sum + dataset.artifacts.length, 0)
+      }
+    });
+    return 0;
+  }
+
+  if (subcommand === "validate") {
+    const [registryPath] = args.slice(1).filter((value) => !value.startsWith("--"));
+
+    if (!registryPath) {
+      printJson({
+        ok: false,
+        command: "registry validate",
+        issues: [createCliIssue("Registry path is required.")]
+      });
+      return 1;
+    }
+
+    const input = JSON.parse(await readFile(registryPath, "utf8")) as unknown;
+    const validation = validateTerritoryDatasetRegistry(input);
+    printJson({
+      ok: validation.ok,
+      command: "registry validate",
+      ...(validation.ok
+        ? { data: { datasetCount: validation.registry?.datasets.length ?? 0 } }
+        : {}),
+      issues: validation.issues
+    });
+    return validation.ok ? 0 : 1;
+  }
+
+  if (subcommand === "inspect" || subcommand === "list") {
+    const flags = parseFlags(args.slice(1));
+    const registryPath =
+      getFlag(flags, "registry") ?? args.slice(1).find((value) => !value.startsWith("--"));
+
+    if (!registryPath) {
+      printJson({
+        ok: false,
+        command: `registry ${subcommand}`,
+        issues: [createCliIssue("--registry is required.")]
+      });
+      return 1;
+    }
+
+    const registry = await readRegistryFile(registryPath);
+    printJson({
+      ok: true,
+      command: `registry ${subcommand}`,
+      data: {
+        registryVersion: registry.registryVersion,
+        generatedAt: registry.generatedAt,
+        baseUrl: registry.baseUrl,
+        datasets: registry.datasets.map((dataset) => ({
+          id: dataset.id,
+          version: dataset.version,
+          displayName: dataset.displayName,
+          levels: dataset.levels,
+          artifactCount: dataset.artifacts.length
+        }))
+      }
+    });
+    return 0;
+  }
+
+  printJson({
+    ok: false,
+    command: "registry",
+    issues: [createCliIssue(`Unsupported registry command '${subcommand}'.`)]
+  });
+  return 1;
+}
+
+async function runDatasetSearch(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const query = args.find((value) => !value.startsWith("--")) ?? "";
+  const client = createCliRegistryClient(flags);
+  const datasets = query ? await client.searchDatasets(query) : await client.listDatasets();
+
+  printJson({
+    ok: true,
+    command: "dataset search",
+    data: datasets.map((dataset) => ({
+      id: dataset.id,
+      version: dataset.version,
+      displayName: dataset.displayName,
+      levels: dataset.levels
+    }))
+  });
+  return 0;
+}
+
+async function runDatasetInfo(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const datasetId = args.find((value) => !value.startsWith("--"));
+
+  if (!datasetId) {
+    printJson({
+      ok: false,
+      command: "dataset info",
+      issues: [createCliIssue("Dataset id is required.")]
+    });
+    return 1;
+  }
+
+  const client = createCliRegistryClient(flags);
+  const dataset = await client.getDatasetInfo(datasetId, getFlag(flags, "version"));
+  printJson({
+    ok: true,
+    command: "dataset info",
+    data: dataset
+  });
+  return 0;
+}
+
+async function runDatasetInstall(
+  args: string[],
+  options: { update?: boolean } = {}
+): Promise<number> {
+  const flags = parseFlags(args);
+  const datasetId = args.find((value) => !value.startsWith("--"));
+
+  if (!datasetId) {
+    printJson({
+      ok: false,
+      command: options.update ? "dataset update" : "dataset install",
+      issues: [createCliIssue("Dataset id is required.")]
+    });
+    return 1;
+  }
+
+  const client = createCliRegistryClient(flags);
+  const levels = parseLevelsFlag(getFlag(flags, "levels"));
+  const detail = getFlag(flags, "detail");
+  const version = getFlag(flags, "version");
+  const handle = await client.installDataset({
+    datasetId,
+    ...(levels ? { levels } : {}),
+    ...(detail ? { detail } : {}),
+    ...(version ? { version } : {}),
+    ...(flags.has("allow-prerelease") ? { allowPrerelease: true } : {}),
+    ...(flags.has("load-adjacency") ? { loadAdjacency: true } : {}),
+    ...(flags.has("refresh-registry") || flags.has("refresh") ? { refreshRegistry: true } : {}),
+    ...(flags.has("remove-old") ? { removeOld: true } : {})
+  });
+
+  printJson({
+    ok: true,
+    command: options.update ? "dataset update" : "dataset install",
+    data: handle.manifest
+  });
+  return 0;
+}
+
+async function runDatasetVerify(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const datasetId = args.find((value) => !value.startsWith("--"));
+
+  if (!datasetId) {
+    printJson({
+      ok: false,
+      command: "dataset verify",
+      issues: [createCliIssue("Dataset id is required.")]
+    });
+    return 1;
+  }
+
+  const summary = await createCliRegistryClient(flags).verifyInstalledDataset(
+    datasetId,
+    getFlag(flags, "version")
+  );
+  printJson({ ok: true, command: "dataset verify", data: summary });
+  return 0;
+}
+
+async function runDatasetRemove(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const datasetId = args.find((value) => !value.startsWith("--"));
+
+  if (!datasetId) {
+    printJson({
+      ok: false,
+      command: "dataset remove",
+      issues: [createCliIssue("Dataset id is required.")]
+    });
+    return 1;
+  }
+
+  await createCliRegistryClient(flags).removeInstalledDataset(datasetId, getFlag(flags, "version"));
+  printJson({ ok: true, command: "dataset remove", data: { datasetId } });
+  return 0;
+}
+
+async function runDatasetListInstalled(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const data = await createCliRegistryClient(flags).listInstalledDatasets();
+  printJson({ ok: true, command: "dataset list-installed", data });
+  return 0;
+}
+
+async function runCache(args: string[]): Promise<number> {
+  const [subcommand] = args;
+  const flags = parseFlags(args.slice(1));
+  const cacheDir = getFlag(flags, "cache-dir");
+  const cache = createNodeTerritoryRegistryCache({
+    ...(cacheDir ? { rootDir: cacheDir } : {})
+  });
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printCacheHelp();
+    return 0;
+  }
+
+  if (subcommand === "list" || subcommand === "verify") {
+    const data = await cache.listInstalledDatasets();
+    printJson({ ok: true, command: `cache ${subcommand}`, data });
+    return 0;
+  }
+
+  if (subcommand === "clear") {
+    if (!flags.has("force")) {
+      printJson({
+        ok: false,
+        command: "cache clear",
+        issues: [createCliIssue("--force is required to clear the cache.")]
+      });
+      return 1;
+    }
+
+    await cache.clear?.();
+    printJson({ ok: true, command: "cache clear", data: { cleared: true } });
+    return 0;
+  }
+
+  printJson({
+    ok: false,
+    command: "cache",
+    issues: [createCliIssue(`Unsupported cache command '${subcommand}'.`)]
+  });
+  return 1;
 }
 
 async function runSource(args: string[]): Promise<number> {
@@ -1255,6 +1847,230 @@ async function runSourceImport(
 async function readJson(filePath: string): Promise<unknown> {
   const content = await readFile(filePath, "utf8");
   return JSON.parse(content) as unknown;
+}
+
+function createFixtureBenchmarkResult(flags: Map<string, string | true>): CliBenchmarkResult {
+  const rows = getPositiveIntegerFlag(flags, "rows", 50);
+  const columns = getPositiveIntegerFlag(flags, "columns", 50);
+  const cellSize = getPositiveNumberFlag(flags, "cell-size", 0.01);
+  const dataset = createSyntheticGridDataset({
+    datasetId: getFlag(flags, "dataset-id") ?? "territorykit-fixture-benchmark",
+    rows,
+    columns,
+    cellSize
+  });
+
+  return createDatasetBenchmarkResult(dataset, {
+    mode: "fixture",
+    scenario: getFlag(flags, "scenario") ?? "smoke",
+    generatedAt: getBenchmarkGeneratedAt(flags),
+    iterations: getPositiveIntegerFlag(flags, "iterations", 5_000),
+    source: {
+      type: "synthetic-grid",
+      rows,
+      columns,
+      cellSize
+    }
+  });
+}
+
+function createDatasetBenchmarkResult(
+  dataset: TerritoryDataset,
+  options: {
+    mode: "fixture" | "local-real";
+    scenario: string;
+    generatedAt: string;
+    iterations: number;
+    source: Record<string, unknown>;
+  }
+): CliBenchmarkResult {
+  const validation = measureOnce(() => loadTerritoryDataset(dataset));
+  const engineConstruction = measureOnce(() => createTerritoryEngine({ dataset }));
+  const engine = engineConstruction.value;
+  const lookupZone = dataset.zones[Math.floor(dataset.zones.length / 2)];
+
+  if (!lookupZone) {
+    throw new Error("Benchmark dataset must contain at least one zone.");
+  }
+
+  const [lng, lat] = lookupZone.center;
+  const bbox = lookupZone.bbox;
+  const bounds = {
+    west: Math.max(-180, bbox[0] - 0.01),
+    south: Math.max(-90, bbox[1] - 0.01),
+    east: Math.min(180, bbox[2] + 0.01),
+    north: Math.min(90, bbox[3] + 0.01),
+    level: lookupZone.level
+  };
+  const getZoneById = measureRepeated(options.iterations, () => engine.getZoneById(lookupZone.id));
+  const latLngToZone = measureRepeated(options.iterations, () =>
+    engine.latLngToZone({ lat, lng }, { level: lookupZone.level })
+  );
+  const getZonesInBounds = measureRepeated(options.iterations, () =>
+    engine.getZonesInBounds(bounds)
+  );
+
+  return {
+    schemaVersion: "territorykit-benchmark-result@1",
+    mode: options.mode,
+    scenario: options.scenario,
+    generatedAt: options.generatedAt,
+    runtime: {
+      node: process.version,
+      platform: process.platform,
+      arch: process.arch
+    },
+    source: options.source,
+    inputs: {
+      datasetId: dataset.manifest.datasetId,
+      datasetVersion: dataset.manifest.datasetVersion,
+      featureCount: dataset.zones.length,
+      iterations: options.iterations
+    },
+    metrics: {
+      datasetValidationMs: roundMetric(validation.durationMs),
+      engineConstructionMs: roundMetric(engineConstruction.durationMs),
+      getZoneByIdMeanMs: roundMetric(getZoneById.meanMs),
+      latLngToZoneMeanMs: roundMetric(latLngToZone.meanMs),
+      getZonesInBoundsMeanMs: roundMetric(getZonesInBounds.meanMs)
+    }
+  };
+}
+
+function createSkippedBenchmarkResult(
+  flags: Map<string, string | true>,
+  skipped: string[]
+): CliBenchmarkResult {
+  return {
+    schemaVersion: "territorykit-benchmark-result@1",
+    mode: "local-real",
+    scenario: getFlag(flags, "scenario") ?? "smoke",
+    generatedAt: getBenchmarkGeneratedAt(flags),
+    runtime: {
+      node: process.version,
+      platform: process.platform,
+      arch: process.arch
+    },
+    source: {
+      type: "local-real"
+    },
+    inputs: {
+      featureCount: 0
+    },
+    metrics: {},
+    skipped
+  };
+}
+
+function compareCliBenchmarkResult(
+  current: unknown,
+  baseline: unknown
+): {
+  ok: boolean;
+  issues: string[];
+} {
+  const issues: string[] = [];
+
+  if (!isRecordValue(current) || current.schemaVersion !== "territorykit-benchmark-result@1") {
+    issues.push("Current benchmark result must use territorykit-benchmark-result@1.");
+  }
+
+  if (!isRecordValue(baseline) || baseline.schemaVersion !== "territorykit-benchmark-baseline@1") {
+    issues.push("Benchmark baseline must use territorykit-benchmark-baseline@1.");
+  }
+
+  if (issues.length > 0 || !isRecordValue(current) || !isRecordValue(baseline)) {
+    return { ok: false, issues };
+  }
+
+  if (typeof baseline.mode === "string" && current.mode !== baseline.mode) {
+    issues.push(`Expected mode '${baseline.mode}', got '${String(current.mode)}'.`);
+  }
+
+  if (typeof baseline.scenario === "string" && current.scenario !== baseline.scenario) {
+    issues.push(`Expected scenario '${baseline.scenario}', got '${String(current.scenario)}'.`);
+  }
+
+  const inputs = isRecordValue(current.inputs) ? current.inputs : {};
+  const featureCount = Number(inputs.featureCount ?? 0);
+
+  if (
+    typeof baseline.minimumFeatureCount === "number" &&
+    featureCount < baseline.minimumFeatureCount
+  ) {
+    issues.push(`Expected at least ${baseline.minimumFeatureCount} features, got ${featureCount}.`);
+  }
+
+  const metrics = isRecordValue(current.metrics) ? current.metrics : {};
+  const budgets = isRecordValue(baseline.budgets) ? baseline.budgets : {};
+
+  for (const [metric, budget] of Object.entries(budgets)) {
+    const maxValue = Number(budget);
+    const value = Number(metrics[metric]);
+
+    if (!Number.isFinite(maxValue)) {
+      continue;
+    }
+
+    if (!Number.isFinite(value)) {
+      issues.push(`Missing numeric benchmark metric '${metric}'.`);
+      continue;
+    }
+
+    if (value > maxValue) {
+      issues.push(`Metric '${metric}' exceeded budget ${maxValue}; got ${value}.`);
+    }
+  }
+
+  return {
+    ok: issues.length === 0,
+    issues
+  };
+}
+
+function measureOnce<T>(callback: () => T): { value: T; durationMs: number } {
+  const start = performance.now();
+  const value = callback();
+
+  return {
+    value,
+    durationMs: performance.now() - start
+  };
+}
+
+function measureRepeated(iterations: number, callback: () => unknown): { meanMs: number } {
+  const start = performance.now();
+  let guard = 0;
+
+  for (let index = 0; index < iterations; index += 1) {
+    const value = callback();
+
+    if (Array.isArray(value)) {
+      guard += value.length;
+    } else if (value) {
+      guard += 1;
+    }
+  }
+
+  if (guard < 0) {
+    throw new Error("Benchmark guard overflowed.");
+  }
+
+  return {
+    meanMs: (performance.now() - start) / iterations
+  };
+}
+
+function getBenchmarkGeneratedAt(flags: Map<string, string | true>): string {
+  return getFlag(flags, "build-date") ?? new Date().toISOString();
+}
+
+function roundMetric(value: number): number {
+  return Number(value.toFixed(6));
+}
+
+function isRecordValue(input: unknown): input is Record<string, unknown> {
+  return typeof input === "object" && input !== null && !Array.isArray(input);
 }
 
 async function readJsonSource(filePath: string): Promise<JsonSource> {
@@ -1893,6 +2709,32 @@ function parseFlags(args: string[]): Map<string, string | true> {
   return flags;
 }
 
+function getPositionalArgs(args: string[]): string[] {
+  const positional: string[] = [];
+
+  for (let index = 0; index < args.length; index += 1) {
+    const value = args[index];
+
+    if (!value) {
+      continue;
+    }
+
+    if (value.startsWith("--")) {
+      const next = args[index + 1];
+
+      if (next && !next.startsWith("--")) {
+        index += 1;
+      }
+
+      continue;
+    }
+
+    positional.push(value);
+  }
+
+  return positional;
+}
+
 function getFlag(flags: Map<string, string | true>, key: string): string | undefined {
   const value = flags.get(key);
   return typeof value === "string" ? value : undefined;
@@ -1903,6 +2745,57 @@ function getNumberFlag(flags: Map<string, string | true>, key: string, fallback:
   const parsed = value === undefined ? Number.NaN : Number(value);
 
   return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function getOptionalNumberFlag(flags: Map<string, string | true>, key: string): number | undefined {
+  const value = getFlag(flags, key);
+
+  if (value === undefined) {
+    return undefined;
+  }
+
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : undefined;
+}
+
+function createCliRegistryClient(flags: Map<string, string | true>) {
+  const registryUrl = getFlag(flags, "registry");
+  const cacheDir = getFlag(flags, "cache-dir");
+
+  return createNodeTerritoryRegistryClient({
+    ...(registryUrl ? { registryUrl } : {}),
+    ...(cacheDir ? { cacheDir } : {}),
+    ...(flags.has("offline") ? { offline: true } : {}),
+    ...(flags.has("no-verify") ? { verifyChecksums: false } : {}),
+    ...(flags.has("allow-http") ? { allowHttp: true } : {})
+  });
+}
+
+function parseLevelsFlag(input: string | undefined): TerritoryAdminLevel[] | undefined {
+  if (!input) {
+    return undefined;
+  }
+
+  return input
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean) as TerritoryAdminLevel[];
+}
+
+async function writeJsonOutput(path: string, payload: unknown, force: boolean): Promise<void> {
+  if (!force) {
+    try {
+      await readFile(path);
+      throw new Error(`Output path '${path}' already exists. Pass --force to overwrite.`);
+    } catch (error) {
+      if (error instanceof Error && error.message.includes("already exists")) {
+        throw error;
+      }
+    }
+  }
+
+  await mkdir(dirname(path), { recursive: true });
+  await writeFile(path, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
 }
 
 function readOptionalNonNegativeNumberFlag(
@@ -2116,15 +3009,34 @@ function printHelp(): void {
 
 Commands:
   validate   Validate a TerritoryKit dataset
+  registry   Build, validate, inspect, and list dataset registries
   geometry   Validate or safely repair dataset geometry
   index      Build a spatial-index metadata summary
   adjacency  Build, validate, inspect, or legacy-infer territory adjacency
+  render     Build, validate, inspect, or compare render artifacts
+  benchmark  Run or compare fixture/local-real benchmark results
   country    Build and inspect pilot country dataset artifacts
   import     Import a GeoJSON file or source adapter artifact
   source     List and inspect source adapters
-  dataset    Build curated dataset artifacts, including world-countries
+  dataset    Build curated datasets and install registry artifacts
+  cache      List, verify, or clear installed dataset cache artifacts
   simplify   Emit a deterministic no-op simplification result for pipeline wiring
   generate   Generate grid or weighted-voronoi MVP datasets as JSON`);
+}
+
+function printRegistryHelp(): void {
+  console.log(`territory registry <command>
+
+Commands:
+  build --input <artifact-dir> --output <registry.json> --base-url <url>
+  validate <registry.json>
+  inspect --registry <registry.json>
+  list --registry <registry.json>
+
+Options:
+  --build-date <iso-date>
+  --force
+  --json`);
 }
 
 function printCountryHelp(): void {
@@ -2272,6 +3184,44 @@ Options:
   --json`);
 }
 
+function printRenderHelp(): void {
+  console.log(`territory render <command>
+
+Commands:
+  build <dataset.json> --output <dir>       Build render artifacts
+  validate <artifact-dir>                   Validate render artifact structure
+  inspect <artifact-dir>                    Print render manifest
+  compare <dataset.json> <artifact-dir>     Compare query identity with render metadata
+
+Options:
+  --format mvt|geojson
+  --layer <source-layer>
+  --min-zoom <number>
+  --max-zoom <number>
+  --build-date <iso-date>
+  --force
+  --json`);
+}
+
+function printBenchmarkHelp(): void {
+  console.log(`territory benchmark <command>
+
+Commands:
+  run                         Run a fixture or local-real benchmark smoke
+  compare --baseline <json> --current <json>
+
+Options:
+  --mode fixture|local-real
+  --dataset <dataset.json>
+  --allow-skip
+  --rows <number>
+  --columns <number>
+  --cell-size <number>
+  --iterations <number>
+  --build-date <iso-date>
+  --json`);
+}
+
 function printSourceHelp(): void {
   console.log(`territory source <command>
 
@@ -2307,7 +3257,14 @@ function printDatasetHelp(): void {
   console.log(`territory dataset <command>
 
 Commands:
-  build  Build a curated TerritoryKit dataset artifact`);
+  build            Build a curated TerritoryKit dataset artifact
+  search           Search registry datasets
+  info             Show registry dataset metadata
+  install          Install dataset artifacts into the local cache
+  update           Refresh or switch installed dataset artifacts
+  verify           Verify an installed dataset
+  remove           Remove an installed dataset
+  list-installed   List installed datasets`);
 }
 
 function printDatasetBuildHelp(): void {
@@ -2320,6 +3277,19 @@ Options:
   --source-sha256 <sha256>
   --build-date <iso-date>
   --strict
+  --force`);
+}
+
+function printCacheHelp(): void {
+  console.log(`territory cache <command>
+
+Commands:
+  list       List installed dataset cache entries
+  verify     Verify installed cache metadata
+  clear      Clear the dataset artifact cache
+
+Options:
+  --cache-dir <dir>
   --force`);
 }
 

@@ -9,8 +9,10 @@ describe("public API compatibility", () => {
       "TerritoryZoneNotFoundError",
       "createTerritoryCountryDatasetDescriptor",
       "createTerritoryEngine",
+      "createTerritoryRegistryClient",
       "defaultZoomLevelStrategy",
       "loadTerritoryCountryDataset",
+      "loadTerritoryQueryDataset",
       "zoomToDefaultLevel"
     ]);
   });

@@ -10,9 +10,14 @@ const sourceRules = [
     description: "@territory-kit/dataset must stay independent from other workspace packages"
   },
   {
-    packageDir: "packages/core",
+    packageDir: "packages/registry",
     allowed: new Set(["@territory-kit/dataset"]),
-    description: "@territory-kit/core may depend only on dataset workspace APIs"
+    description: "@territory-kit/registry may depend only on dataset workspace APIs"
+  },
+  {
+    packageDir: "packages/core",
+    allowed: new Set(["@territory-kit/dataset", "@territory-kit/registry"]),
+    description: "@territory-kit/core may depend only on dataset and registry workspace APIs"
   },
   {
     packageDir: "packages/generators",
@@ -39,9 +44,11 @@ const sourceRules = [
     allowed: new Set([
       "@territory-kit/core",
       "@territory-kit/dataset",
-      "@territory-kit/generators"
+      "@territory-kit/generators",
+      "@territory-kit/registry",
+      "@territory-kit/registry/node"
     ]),
-    description: "@territory-kit/cli may depend on core, dataset, and generators only"
+    description: "@territory-kit/cli may depend on core, dataset, generators, and registry only"
   },
   {
     packageDir: "packages/shared-testkit",

@@ -48,7 +48,8 @@
   "dependencies": {
     "@territory-kit/core": "workspace:*",
     "@territory-kit/dataset": "workspace:*",
-    "@territory-kit/generators": "workspace:*"
+    "@territory-kit/generators": "workspace:*",
+    "@territory-kit/registry": "workspace:*"
   },
   "devDependencies": {
     "@territory-kit/shared-testkit": "workspace:*"

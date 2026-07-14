@@ -27,6 +27,8 @@ document:
 
 - `@territory-kit/dataset`: dataset manifest, schema, validation, and loading.
 - `@territory-kit/core`: engine APIs, spatial lookup, hierarchy, adjacency, viewport queries.
+- `@territory-kit/registry`: registry discovery, artifact resolution, verified cache, and Node
+  download helpers.
 - `@territory-kit/maplibre`: first map adapter boundary for MapLibre GL JS.
 - `@territory-kit/nestjs`: NestJS integration boundary and PostGIS repository contracts.
 - `@territory-kit/generators`: deterministic dataset helper, source, and adjacency utilities.
@@ -54,6 +56,8 @@ territory geometry validate ./dist/regions --checks full --report ./geometry-rep
 territory adjacency build ./dist/regions --output ./dist/regions-adjacency
 territory country source lock TR --output ./dist/tr/sources.lock.json
 territory country build TR --source-lock ./dist/tr/sources.lock.json --output ./dist/tr --build-adjacency --strict
+territory registry build --input ./dist --output ./dist/registry.json --base-url https://cdn.example.test/datasets/
+territory dataset install territory-kit-tr --registry ./dist/registry.json --levels ADM0,ADM1 --load-adjacency
 ```
 
 Generated world-country artifacts are documented in
@@ -71,6 +75,7 @@ pnpm test
 pnpm typecheck
 pnpm lint
 pnpm bundle:size
+pnpm release:check
 ```
 
 Node.js `>=22` and pnpm `>=11` are required. The current TypeScript baseline is `6.0.3`;
@@ -92,6 +97,7 @@ items.
 - [Risk register](./docs/risk-register.md)
 - [Release governance](./docs/release-governance.md)
 - [Roadmap](./docs/roadmap.md)
+- [Release check](./docs/release-check.md)
 - [Dataset compatibility](./docs/dataset-compatibility.md)
 - [Source adapters](./docs/source-adapters.md)
 - [Source pipeline](./docs/source-pipeline.md)
@@ -99,6 +105,18 @@ items.
 - [Country datasets](./docs/country-datasets.md)
 - [Country source locks](./docs/country-source-locks.md)
 - [Country loaders](./docs/country-loaders.md)
+- [Dataset registry](./docs/dataset-registry.md)
+- [Dataset installation](./docs/dataset-installation.md)
+- [Dataset cache](./docs/dataset-cache.md)
+- [Registry hosting](./docs/registry-hosting.md)
+- [Offline datasets](./docs/offline-datasets.md)
+- [Dataset versioning](./docs/dataset-versioning.md)
+- [Query artifacts](./docs/query-artifacts.md)
+- [Render artifacts](./docs/render-artifacts.md)
+- [Vector tile pipeline](./docs/vector-tile-pipeline.md)
+- [MapLibre registry integration](./docs/maplibre-registry-integration.md)
+- [Render/query compatibility](./docs/render-query-compatibility.md)
+- [Mobile map loading](./docs/mobile-map-loading.md)
 - [Adjacency artifacts](./docs/adjacency.md)
 - [Geometry quality](./docs/geometry-quality.md)
 - [Geometry validation](./docs/geometry-validation.md)
@@ -106,6 +124,7 @@ items.
 - [Geometry backends](./docs/geometry-backends.md)
 - [World countries ADM0 dataset](./docs/datasets/world-countries.md)
 - [Benchmarks](./docs/benchmarks.md)
+- [Real-world benchmarks](./docs/real-world-benchmarks.md)
 - [NestJS and PostGIS](./docs/nestjs-postgis.md)
 - [Release readiness](./docs/release-readiness.md)
 - [Master sprint checklist](./docs/sprint-checklist.md)

@@ -41,6 +41,7 @@ pnpm typecheck
 pnpm test
 pnpm build
 pnpm bundle:size
+pnpm release:check
 pnpm bench
 ```
 
@@ -52,6 +53,8 @@ pnpm test:visual:maplibre
 ```
 
 Record benchmark deltas in [benchmarks](./benchmarks.md) before creating a release candidate.
+Use [release check](./release-check.md) for the full network-free package, registry, fixture,
+documentation, and benchmark smoke gate.
 
 ## Branch Verification
 

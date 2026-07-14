@@ -4,7 +4,7 @@ export default defineConfig({
   clean: true,
   dts: true,
   entry: ["src/index.ts"],
-  external: ["@territory-kit/dataset", "flatbush"],
+  external: ["@territory-kit/dataset", "@territory-kit/registry", "flatbush"],
   format: ["esm", "cjs"],
   sourcemap: true,
   treeshake: true
