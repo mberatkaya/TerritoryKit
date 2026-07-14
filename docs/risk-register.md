@@ -19,3 +19,6 @@
 
 - Update this register whenever a sprint introduces a new public API, dataset source, adapter, generator, or backend integration.
 - Do not mark a sprint complete until all high-impact risks introduced by that sprint have an explicit mitigation or follow-up checklist item.
+- Use [release governance](./release-governance.md) for package-boundary, dataset/license,
+  world-scale roadmap, validator-rule, and feedback-channel review before marking checklist items
+  complete.

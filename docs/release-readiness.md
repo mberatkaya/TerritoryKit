@@ -5,6 +5,7 @@ repository for a stable release without publishing packages automatically.
 
 The master sprint checklist is the ongoing source of truth for completed evidence, repo-owned
 hardening branches, external release handoff, and post-1.0 roadmap work.
+Release governance checks are tracked in [release governance](./release-governance.md).
 
 ## Branch Scope
 

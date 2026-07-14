@@ -61,6 +61,7 @@ items.
 - [Product requirements](./docs/prd.md)
 - [H3 comparison](./docs/h3-comparison.md)
 - [Risk register](./docs/risk-register.md)
+- [Release governance](./docs/release-governance.md)
 - [Roadmap](./docs/roadmap.md)
 - [Dataset compatibility](./docs/dataset-compatibility.md)
 - [Benchmarks](./docs/benchmarks.md)
