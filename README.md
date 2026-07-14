@@ -52,7 +52,9 @@ TypeScript 7 will be evaluated in a later ADR before adoption.
 The `1.0.0` release branch freezes the current public API surface and keeps
 `territory-schema@1` unchanged. It prepares package versions, release notes, benchmark
 evidence, and verification gates for a stable PR, but publishing, tagging, and GitHub release
-creation remain post-merge maintainer actions.
+creation remain post-merge maintainer actions. The master sprint checklist separates completed
+repo evidence from repo-owned hardening work, external release handoff, and post-1.0 roadmap
+items.
 
 ## Planning Docs
 
@@ -64,4 +66,4 @@ creation remain post-merge maintainer actions.
 - [Benchmarks](./docs/benchmarks.md)
 - [NestJS and PostGIS](./docs/nestjs-postgis.md)
 - [Release readiness](./docs/release-readiness.md)
-- [Remaining sprint checklist](./docs/sprint-checklist.md)
+- [Master sprint checklist](./docs/sprint-checklist.md)
