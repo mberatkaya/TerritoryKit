@@ -71,6 +71,18 @@ Recorded on 2026-07-14 after PR #3 merged:
 - npm registry checks returned `E404` for the six public packages, so publishing has not
   happened yet.
 
+## Final Checklist Closure Verification
+
+Recorded on 2026-07-14 for `release/final-checklist-closure`:
+
+- `pnpm format:check` passed.
+- `pnpm verify` passed.
+- `pnpm bench` passed.
+- `pnpm test:visual:maplibre` passed.
+- `npm pack --dry-run --json` passed for `@territory-kit/dataset`, `@territory-kit/core`,
+  `@territory-kit/maplibre`, `@territory-kit/nestjs`, `@territory-kit/generators`, and
+  `@territory-kit/cli` at `1.0.0`.
+
 ## Triage And Security
 
 - New release blockers are tracked as GitHub issues or PR review comments and triaged before a
