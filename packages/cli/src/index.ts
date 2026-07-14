@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
+import { performance } from "node:perf_hooks";
 import { pathToFileURL } from "node:url";
 import { createTerritoryEngine } from "@territory-kit/core";
 import {
@@ -95,6 +96,27 @@ interface JsonLineIndex {
   findLineForIssue(issue: TerritoryValidationIssue): number | undefined;
 }
 
+interface CliBenchmarkResult {
+  schemaVersion: "territorykit-benchmark-result@1";
+  mode: "fixture" | "local-real";
+  scenario: string;
+  generatedAt: string;
+  runtime: {
+    node: string;
+    platform: string;
+    arch: string;
+  };
+  source: Record<string, unknown>;
+  inputs: {
+    datasetId?: string;
+    datasetVersion?: string;
+    featureCount: number;
+    iterations?: number;
+  };
+  metrics: Record<string, number>;
+  skipped?: string[];
+}
+
 export async function runCli(argv: string[] = process.argv.slice(2)): Promise<number> {
   const [command] = argv;
 
@@ -134,6 +156,10 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
 
     if (command === "render") {
       return runRender(argv.slice(1));
+    }
+
+    if (command === "benchmark") {
+      return runBenchmark(argv.slice(1));
     }
 
     if (command === "country") {
@@ -1142,6 +1168,102 @@ async function runRender(args: string[]): Promise<number> {
   return 1;
 }
 
+async function runBenchmark(args: string[]): Promise<number> {
+  const [subcommand] = args;
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printBenchmarkHelp();
+    return 0;
+  }
+
+  if (subcommand === "run") {
+    const flags = parseFlags(args.slice(1));
+    const mode = getFlag(flags, "mode") ?? "fixture";
+
+    if (mode !== "fixture" && mode !== "local-real") {
+      printJson({
+        ok: false,
+        command: "benchmark run",
+        issues: [createCliIssue("--mode must be fixture or local-real.")]
+      });
+      return 2;
+    }
+
+    const datasetPath = getFlag(flags, "dataset") ?? getPositionalArgs(args.slice(1)).find(Boolean);
+
+    if (mode === "local-real" && !datasetPath) {
+      const skipped = [
+        "No local real-world dataset path was provided. Pass --dataset <dataset.json> to run this mode."
+      ];
+      printJson({
+        ok: flags.has("allow-skip"),
+        command: "benchmark run",
+        data: createSkippedBenchmarkResult(flags, skipped),
+        ...(flags.has("allow-skip")
+          ? {}
+          : { issues: skipped.map((message) => createCliIssue(message)) })
+      });
+      return flags.has("allow-skip") ? 0 : 2;
+    }
+
+    const result =
+      mode === "fixture"
+        ? createFixtureBenchmarkResult(flags)
+        : createDatasetBenchmarkResult(loadTerritoryDataset(await readJson(datasetPath!)), {
+            mode,
+            scenario: getFlag(flags, "scenario") ?? "smoke",
+            generatedAt: getBenchmarkGeneratedAt(flags),
+            iterations: getPositiveIntegerFlag(flags, "iterations", 5_000),
+            source: {
+              type: "local-real",
+              datasetPath
+            }
+          });
+
+    printJson({
+      ok: true,
+      command: "benchmark run",
+      data: result
+    });
+    return 0;
+  }
+
+  if (subcommand === "compare") {
+    const flags = parseFlags(args.slice(1));
+    const positional = getPositionalArgs(args.slice(1));
+    const baselinePath = getFlag(flags, "baseline") ?? positional[0];
+    const currentPath = getFlag(flags, "current") ?? positional[1];
+
+    if (!baselinePath || !currentPath) {
+      printJson({
+        ok: false,
+        command: "benchmark compare",
+        issues: [createCliIssue("--baseline and --current are required.")]
+      });
+      return 2;
+    }
+
+    const comparison = compareCliBenchmarkResult(
+      await readJson(currentPath),
+      await readJson(baselinePath)
+    );
+
+    printJson({
+      ok: comparison.ok,
+      command: "benchmark compare",
+      data: comparison
+    });
+    return comparison.ok ? 0 : 1;
+  }
+
+  printJson({
+    ok: false,
+    command: "benchmark",
+    issues: [createCliIssue(`Unsupported benchmark command '${subcommand}'.`)]
+  });
+  return 2;
+}
+
 async function runRegistry(args: string[]): Promise<number> {
   const [subcommand] = args;
 
@@ -1725,6 +1847,230 @@ async function runSourceImport(
 async function readJson(filePath: string): Promise<unknown> {
   const content = await readFile(filePath, "utf8");
   return JSON.parse(content) as unknown;
+}
+
+function createFixtureBenchmarkResult(flags: Map<string, string | true>): CliBenchmarkResult {
+  const rows = getPositiveIntegerFlag(flags, "rows", 50);
+  const columns = getPositiveIntegerFlag(flags, "columns", 50);
+  const cellSize = getPositiveNumberFlag(flags, "cell-size", 0.01);
+  const dataset = createSyntheticGridDataset({
+    datasetId: getFlag(flags, "dataset-id") ?? "territorykit-fixture-benchmark",
+    rows,
+    columns,
+    cellSize
+  });
+
+  return createDatasetBenchmarkResult(dataset, {
+    mode: "fixture",
+    scenario: getFlag(flags, "scenario") ?? "smoke",
+    generatedAt: getBenchmarkGeneratedAt(flags),
+    iterations: getPositiveIntegerFlag(flags, "iterations", 5_000),
+    source: {
+      type: "synthetic-grid",
+      rows,
+      columns,
+      cellSize
+    }
+  });
+}
+
+function createDatasetBenchmarkResult(
+  dataset: TerritoryDataset,
+  options: {
+    mode: "fixture" | "local-real";
+    scenario: string;
+    generatedAt: string;
+    iterations: number;
+    source: Record<string, unknown>;
+  }
+): CliBenchmarkResult {
+  const validation = measureOnce(() => loadTerritoryDataset(dataset));
+  const engineConstruction = measureOnce(() => createTerritoryEngine({ dataset }));
+  const engine = engineConstruction.value;
+  const lookupZone = dataset.zones[Math.floor(dataset.zones.length / 2)];
+
+  if (!lookupZone) {
+    throw new Error("Benchmark dataset must contain at least one zone.");
+  }
+
+  const [lng, lat] = lookupZone.center;
+  const bbox = lookupZone.bbox;
+  const bounds = {
+    west: Math.max(-180, bbox[0] - 0.01),
+    south: Math.max(-90, bbox[1] - 0.01),
+    east: Math.min(180, bbox[2] + 0.01),
+    north: Math.min(90, bbox[3] + 0.01),
+    level: lookupZone.level
+  };
+  const getZoneById = measureRepeated(options.iterations, () => engine.getZoneById(lookupZone.id));
+  const latLngToZone = measureRepeated(options.iterations, () =>
+    engine.latLngToZone({ lat, lng }, { level: lookupZone.level })
+  );
+  const getZonesInBounds = measureRepeated(options.iterations, () =>
+    engine.getZonesInBounds(bounds)
+  );
+
+  return {
+    schemaVersion: "territorykit-benchmark-result@1",
+    mode: options.mode,
+    scenario: options.scenario,
+    generatedAt: options.generatedAt,
+    runtime: {
+      node: process.version,
+      platform: process.platform,
+      arch: process.arch
+    },
+    source: options.source,
+    inputs: {
+      datasetId: dataset.manifest.datasetId,
+      datasetVersion: dataset.manifest.datasetVersion,
+      featureCount: dataset.zones.length,
+      iterations: options.iterations
+    },
+    metrics: {
+      datasetValidationMs: roundMetric(validation.durationMs),
+      engineConstructionMs: roundMetric(engineConstruction.durationMs),
+      getZoneByIdMeanMs: roundMetric(getZoneById.meanMs),
+      latLngToZoneMeanMs: roundMetric(latLngToZone.meanMs),
+      getZonesInBoundsMeanMs: roundMetric(getZonesInBounds.meanMs)
+    }
+  };
+}
+
+function createSkippedBenchmarkResult(
+  flags: Map<string, string | true>,
+  skipped: string[]
+): CliBenchmarkResult {
+  return {
+    schemaVersion: "territorykit-benchmark-result@1",
+    mode: "local-real",
+    scenario: getFlag(flags, "scenario") ?? "smoke",
+    generatedAt: getBenchmarkGeneratedAt(flags),
+    runtime: {
+      node: process.version,
+      platform: process.platform,
+      arch: process.arch
+    },
+    source: {
+      type: "local-real"
+    },
+    inputs: {
+      featureCount: 0
+    },
+    metrics: {},
+    skipped
+  };
+}
+
+function compareCliBenchmarkResult(
+  current: unknown,
+  baseline: unknown
+): {
+  ok: boolean;
+  issues: string[];
+} {
+  const issues: string[] = [];
+
+  if (!isRecordValue(current) || current.schemaVersion !== "territorykit-benchmark-result@1") {
+    issues.push("Current benchmark result must use territorykit-benchmark-result@1.");
+  }
+
+  if (!isRecordValue(baseline) || baseline.schemaVersion !== "territorykit-benchmark-baseline@1") {
+    issues.push("Benchmark baseline must use territorykit-benchmark-baseline@1.");
+  }
+
+  if (issues.length > 0 || !isRecordValue(current) || !isRecordValue(baseline)) {
+    return { ok: false, issues };
+  }
+
+  if (typeof baseline.mode === "string" && current.mode !== baseline.mode) {
+    issues.push(`Expected mode '${baseline.mode}', got '${String(current.mode)}'.`);
+  }
+
+  if (typeof baseline.scenario === "string" && current.scenario !== baseline.scenario) {
+    issues.push(`Expected scenario '${baseline.scenario}', got '${String(current.scenario)}'.`);
+  }
+
+  const inputs = isRecordValue(current.inputs) ? current.inputs : {};
+  const featureCount = Number(inputs.featureCount ?? 0);
+
+  if (
+    typeof baseline.minimumFeatureCount === "number" &&
+    featureCount < baseline.minimumFeatureCount
+  ) {
+    issues.push(`Expected at least ${baseline.minimumFeatureCount} features, got ${featureCount}.`);
+  }
+
+  const metrics = isRecordValue(current.metrics) ? current.metrics : {};
+  const budgets = isRecordValue(baseline.budgets) ? baseline.budgets : {};
+
+  for (const [metric, budget] of Object.entries(budgets)) {
+    const maxValue = Number(budget);
+    const value = Number(metrics[metric]);
+
+    if (!Number.isFinite(maxValue)) {
+      continue;
+    }
+
+    if (!Number.isFinite(value)) {
+      issues.push(`Missing numeric benchmark metric '${metric}'.`);
+      continue;
+    }
+
+    if (value > maxValue) {
+      issues.push(`Metric '${metric}' exceeded budget ${maxValue}; got ${value}.`);
+    }
+  }
+
+  return {
+    ok: issues.length === 0,
+    issues
+  };
+}
+
+function measureOnce<T>(callback: () => T): { value: T; durationMs: number } {
+  const start = performance.now();
+  const value = callback();
+
+  return {
+    value,
+    durationMs: performance.now() - start
+  };
+}
+
+function measureRepeated(iterations: number, callback: () => unknown): { meanMs: number } {
+  const start = performance.now();
+  let guard = 0;
+
+  for (let index = 0; index < iterations; index += 1) {
+    const value = callback();
+
+    if (Array.isArray(value)) {
+      guard += value.length;
+    } else if (value) {
+      guard += 1;
+    }
+  }
+
+  if (guard < 0) {
+    throw new Error("Benchmark guard overflowed.");
+  }
+
+  return {
+    meanMs: (performance.now() - start) / iterations
+  };
+}
+
+function getBenchmarkGeneratedAt(flags: Map<string, string | true>): string {
+  return getFlag(flags, "build-date") ?? new Date().toISOString();
+}
+
+function roundMetric(value: number): number {
+  return Number(value.toFixed(6));
+}
+
+function isRecordValue(input: unknown): input is Record<string, unknown> {
+  return typeof input === "object" && input !== null && !Array.isArray(input);
 }
 
 async function readJsonSource(filePath: string): Promise<JsonSource> {
@@ -2363,6 +2709,32 @@ function parseFlags(args: string[]): Map<string, string | true> {
   return flags;
 }
 
+function getPositionalArgs(args: string[]): string[] {
+  const positional: string[] = [];
+
+  for (let index = 0; index < args.length; index += 1) {
+    const value = args[index];
+
+    if (!value) {
+      continue;
+    }
+
+    if (value.startsWith("--")) {
+      const next = args[index + 1];
+
+      if (next && !next.startsWith("--")) {
+        index += 1;
+      }
+
+      continue;
+    }
+
+    positional.push(value);
+  }
+
+  return positional;
+}
+
 function getFlag(flags: Map<string, string | true>, key: string): string | undefined {
   const value = flags.get(key);
   return typeof value === "string" ? value : undefined;
@@ -2642,6 +3014,7 @@ Commands:
   index      Build a spatial-index metadata summary
   adjacency  Build, validate, inspect, or legacy-infer territory adjacency
   render     Build, validate, inspect, or compare render artifacts
+  benchmark  Run or compare fixture/local-real benchmark results
   country    Build and inspect pilot country dataset artifacts
   import     Import a GeoJSON file or source adapter artifact
   source     List and inspect source adapters
@@ -2827,6 +3200,25 @@ Options:
   --max-zoom <number>
   --build-date <iso-date>
   --force
+  --json`);
+}
+
+function printBenchmarkHelp(): void {
+  console.log(`territory benchmark <command>
+
+Commands:
+  run                         Run a fixture or local-real benchmark smoke
+  compare --baseline <json> --current <json>
+
+Options:
+  --mode fixture|local-real
+  --dataset <dataset.json>
+  --allow-skip
+  --rows <number>
+  --columns <number>
+  --cell-size <number>
+  --iterations <number>
+  --build-date <iso-date>
   --json`);
 }
 

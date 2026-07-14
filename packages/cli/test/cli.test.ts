@@ -354,6 +354,79 @@ describe("territory cli", () => {
     }
   });
 
+  it("runs and compares benchmark smoke results", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-cli-benchmark-"));
+    const currentPath = join(tempDir, "current.json");
+    const baselinePath = join(tempDir, "baseline.json");
+
+    try {
+      const run = await captureCli([
+        "benchmark",
+        "run",
+        "--rows",
+        "2",
+        "--columns",
+        "2",
+        "--iterations",
+        "10",
+        "--build-date",
+        "2026-01-01T00:00:00.000Z"
+      ]);
+
+      expect(run).toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "benchmark run",
+          data: {
+            schemaVersion: "territorykit-benchmark-result@1",
+            inputs: { featureCount: 4 }
+          }
+        }
+      });
+
+      const data = isRecord(run.payload) ? run.payload.data : undefined;
+      await writeFile(currentPath, JSON.stringify(data), "utf8");
+      await writeFile(
+        baselinePath,
+        JSON.stringify({
+          schemaVersion: "territorykit-benchmark-baseline@1",
+          mode: "fixture",
+          scenario: "smoke",
+          minimumFeatureCount: 4,
+          budgets: {
+            datasetValidationMs: 1_000,
+            engineConstructionMs: 1_000,
+            getZoneByIdMeanMs: 1,
+            latLngToZoneMeanMs: 1,
+            getZonesInBoundsMeanMs: 10
+          }
+        }),
+        "utf8"
+      );
+
+      await expect(
+        captureCli(["benchmark", "compare", "--baseline", baselinePath, "--current", currentPath])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: { ok: true, command: "benchmark compare" }
+      });
+      await expect(
+        captureCli(["benchmark", "run", "--mode", "local-real", "--allow-skip"])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          data: {
+            skipped: [expect.stringContaining("No local real-world dataset path")]
+          }
+        }
+      });
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
+
   it("imports GeoJSON and generates deterministic datasets", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-"));
     const geojsonPath = join(tempDir, "zones.geojson");
