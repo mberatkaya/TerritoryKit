@@ -29,11 +29,11 @@ Recorded on 2026-07-14 with `pnpm bench`:
 
 | Benchmark                             |        Mean |          p99 |         p995 |
 | ------------------------------------- | ----------: | -----------: | -----------: |
-| `latLngToZone`, 10K polygons          | `0.0003 ms` |  `0.0007 ms` |  `0.0007 ms` |
-| `getZonesInBounds`, 10K polygons      | `0.0599 ms` |  `0.0666 ms` |  `0.0688 ms` |
+| `latLngToZone`, 10K polygons          | `0.0003 ms` |  `0.0005 ms` |  `0.0006 ms` |
+| `getZonesInBounds`, 10K polygons      | `0.0606 ms` |  `0.0665 ms` |  `0.0693 ms` |
 | `getZoneById`, 10K polygons           | `0.0000 ms` |  `0.0000 ms` |  `0.0000 ms` |
-| Engine construction, 10K polygons     | `9.0370 ms` | `17.5312 ms` | `17.5312 ms` |
-| Dataset validation load, 10K polygons | `7.4328 ms` | `22.8594 ms` | `22.8594 ms` |
+| Engine construction, 10K polygons     | `9.6710 ms` | `24.7328 ms` | `24.7328 ms` |
+| Dataset validation load, 10K polygons | `7.8126 ms` | `15.7765 ms` | `15.7765 ms` |
 | `latLngToZone`, 100K polygons         | `0.0004 ms` |  `0.0005 ms` |  `0.0006 ms` |
 
 Vitest reports p99/p995 instead of p95. Since p99 is below the p95 target, the p95 gate is
@@ -45,7 +45,7 @@ Recorded on 2026-07-14 with `pnpm bench:memory`:
 
 | Fixture                  | Features | Dataset heap delta |  Engine heap delta |   Total heap delta |
 | ------------------------ | -------: | -----------------: | -----------------: | -----------------: |
-| `100x100` synthetic grid | `10,000` | `11,069,576 bytes` | `11,390,032 bytes` | `22,459,608 bytes` |
+| `100x100` synthetic grid | `10,000` | `11,060,496 bytes` | `11,399,240 bytes` | `22,459,736 bytes` |
 
 The memory benchmark uses `node --expose-gc` and records heap deltas after deterministic fixture
 creation and engine index construction. It is kept separate from `pnpm bench` so the regular
