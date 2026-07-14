@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { createTerritoryEngine } from "@territory-kit/core";
 import {
@@ -51,6 +51,13 @@ import {
   validateTerritoryDatasetPath,
   writeGeometryQualityReport
 } from "@territory-kit/generators";
+import { validateTerritoryDatasetRegistry } from "@territory-kit/registry";
+import {
+  buildTerritoryDatasetRegistryFromArtifacts,
+  createNodeTerritoryRegistryCache,
+  createNodeTerritoryRegistryClient,
+  readRegistryFile
+} from "@territory-kit/registry/node";
 import type {
   GenericGeoJsonSourceOptions,
   GeoBoundariesSourceOptions,
@@ -95,6 +102,14 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
   try {
     if (command === "dataset") {
       return runDataset(argv.slice(1));
+    }
+
+    if (command === "registry") {
+      return runRegistry(argv.slice(1));
+    }
+
+    if (command === "cache") {
+      return runCache(argv.slice(1));
     }
 
     if (command === "source") {
@@ -859,6 +874,34 @@ async function runDataset(args: string[]): Promise<number> {
     return 0;
   }
 
+  if (subcommand === "search") {
+    return runDatasetSearch(args.slice(1));
+  }
+
+  if (subcommand === "info") {
+    return runDatasetInfo(args.slice(1));
+  }
+
+  if (subcommand === "install") {
+    return runDatasetInstall(args.slice(1));
+  }
+
+  if (subcommand === "update") {
+    return runDatasetInstall(args.slice(1), { update: true });
+  }
+
+  if (subcommand === "verify") {
+    return runDatasetVerify(args.slice(1));
+  }
+
+  if (subcommand === "remove") {
+    return runDatasetRemove(args.slice(1));
+  }
+
+  if (subcommand === "list-installed") {
+    return runDatasetListInstalled(args.slice(1));
+  }
+
   if (subcommand !== "build") {
     printJson({
       ok: false,
@@ -952,6 +995,288 @@ async function runDataset(args: string[]): Promise<number> {
       : { issues: result.issues })
   });
   return result.ok ? 0 : 1;
+}
+
+async function runRegistry(args: string[]): Promise<number> {
+  const [subcommand] = args;
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printRegistryHelp();
+    return 0;
+  }
+
+  if (subcommand === "build") {
+    const flags = parseFlags(args.slice(1));
+    const inputPath = getFlag(flags, "input");
+    const outputPath = getFlag(flags, "output");
+    const baseUrl = getFlag(flags, "base-url");
+
+    if (!inputPath || !outputPath || !baseUrl) {
+      printJson({
+        ok: false,
+        command: "registry build",
+        issues: [createCliIssue("--input, --output, and --base-url are required.")]
+      });
+      return 1;
+    }
+
+    const generatedAt =
+      getFlag(flags, "build-date") ??
+      (process.env.SOURCE_DATE_EPOCH
+        ? new Date(Number(process.env.SOURCE_DATE_EPOCH) * 1000).toISOString()
+        : new Date(0).toISOString());
+    const registry = await buildTerritoryDatasetRegistryFromArtifacts({
+      inputPath,
+      baseUrl,
+      generatedAt
+    });
+    await writeJsonOutput(outputPath, registry, flags.has("force"));
+    printJson({
+      ok: true,
+      command: "registry build",
+      data: {
+        outputPath,
+        datasetCount: registry.datasets.length,
+        artifactCount: registry.datasets.reduce((sum, dataset) => sum + dataset.artifacts.length, 0)
+      }
+    });
+    return 0;
+  }
+
+  if (subcommand === "validate") {
+    const [registryPath] = args.slice(1).filter((value) => !value.startsWith("--"));
+
+    if (!registryPath) {
+      printJson({
+        ok: false,
+        command: "registry validate",
+        issues: [createCliIssue("Registry path is required.")]
+      });
+      return 1;
+    }
+
+    const input = JSON.parse(await readFile(registryPath, "utf8")) as unknown;
+    const validation = validateTerritoryDatasetRegistry(input);
+    printJson({
+      ok: validation.ok,
+      command: "registry validate",
+      ...(validation.ok
+        ? { data: { datasetCount: validation.registry?.datasets.length ?? 0 } }
+        : {}),
+      issues: validation.issues
+    });
+    return validation.ok ? 0 : 1;
+  }
+
+  if (subcommand === "inspect" || subcommand === "list") {
+    const flags = parseFlags(args.slice(1));
+    const registryPath =
+      getFlag(flags, "registry") ?? args.slice(1).find((value) => !value.startsWith("--"));
+
+    if (!registryPath) {
+      printJson({
+        ok: false,
+        command: `registry ${subcommand}`,
+        issues: [createCliIssue("--registry is required.")]
+      });
+      return 1;
+    }
+
+    const registry = await readRegistryFile(registryPath);
+    printJson({
+      ok: true,
+      command: `registry ${subcommand}`,
+      data: {
+        registryVersion: registry.registryVersion,
+        generatedAt: registry.generatedAt,
+        baseUrl: registry.baseUrl,
+        datasets: registry.datasets.map((dataset) => ({
+          id: dataset.id,
+          version: dataset.version,
+          displayName: dataset.displayName,
+          levels: dataset.levels,
+          artifactCount: dataset.artifacts.length
+        }))
+      }
+    });
+    return 0;
+  }
+
+  printJson({
+    ok: false,
+    command: "registry",
+    issues: [createCliIssue(`Unsupported registry command '${subcommand}'.`)]
+  });
+  return 1;
+}
+
+async function runDatasetSearch(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const query = args.find((value) => !value.startsWith("--")) ?? "";
+  const client = createCliRegistryClient(flags);
+  const datasets = query ? await client.searchDatasets(query) : await client.listDatasets();
+
+  printJson({
+    ok: true,
+    command: "dataset search",
+    data: datasets.map((dataset) => ({
+      id: dataset.id,
+      version: dataset.version,
+      displayName: dataset.displayName,
+      levels: dataset.levels
+    }))
+  });
+  return 0;
+}
+
+async function runDatasetInfo(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const datasetId = args.find((value) => !value.startsWith("--"));
+
+  if (!datasetId) {
+    printJson({
+      ok: false,
+      command: "dataset info",
+      issues: [createCliIssue("Dataset id is required.")]
+    });
+    return 1;
+  }
+
+  const client = createCliRegistryClient(flags);
+  const dataset = await client.getDatasetInfo(datasetId, getFlag(flags, "version"));
+  printJson({
+    ok: true,
+    command: "dataset info",
+    data: dataset
+  });
+  return 0;
+}
+
+async function runDatasetInstall(
+  args: string[],
+  options: { update?: boolean } = {}
+): Promise<number> {
+  const flags = parseFlags(args);
+  const datasetId = args.find((value) => !value.startsWith("--"));
+
+  if (!datasetId) {
+    printJson({
+      ok: false,
+      command: options.update ? "dataset update" : "dataset install",
+      issues: [createCliIssue("Dataset id is required.")]
+    });
+    return 1;
+  }
+
+  const client = createCliRegistryClient(flags);
+  const levels = parseLevelsFlag(getFlag(flags, "levels"));
+  const detail = getFlag(flags, "detail");
+  const version = getFlag(flags, "version");
+  const handle = await client.installDataset({
+    datasetId,
+    ...(levels ? { levels } : {}),
+    ...(detail ? { detail } : {}),
+    ...(version ? { version } : {}),
+    ...(flags.has("allow-prerelease") ? { allowPrerelease: true } : {}),
+    ...(flags.has("load-adjacency") ? { loadAdjacency: true } : {}),
+    ...(flags.has("refresh-registry") || flags.has("refresh") ? { refreshRegistry: true } : {}),
+    ...(flags.has("remove-old") ? { removeOld: true } : {})
+  });
+
+  printJson({
+    ok: true,
+    command: options.update ? "dataset update" : "dataset install",
+    data: handle.manifest
+  });
+  return 0;
+}
+
+async function runDatasetVerify(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const datasetId = args.find((value) => !value.startsWith("--"));
+
+  if (!datasetId) {
+    printJson({
+      ok: false,
+      command: "dataset verify",
+      issues: [createCliIssue("Dataset id is required.")]
+    });
+    return 1;
+  }
+
+  const summary = await createCliRegistryClient(flags).verifyInstalledDataset(
+    datasetId,
+    getFlag(flags, "version")
+  );
+  printJson({ ok: true, command: "dataset verify", data: summary });
+  return 0;
+}
+
+async function runDatasetRemove(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const datasetId = args.find((value) => !value.startsWith("--"));
+
+  if (!datasetId) {
+    printJson({
+      ok: false,
+      command: "dataset remove",
+      issues: [createCliIssue("Dataset id is required.")]
+    });
+    return 1;
+  }
+
+  await createCliRegistryClient(flags).removeInstalledDataset(datasetId, getFlag(flags, "version"));
+  printJson({ ok: true, command: "dataset remove", data: { datasetId } });
+  return 0;
+}
+
+async function runDatasetListInstalled(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const data = await createCliRegistryClient(flags).listInstalledDatasets();
+  printJson({ ok: true, command: "dataset list-installed", data });
+  return 0;
+}
+
+async function runCache(args: string[]): Promise<number> {
+  const [subcommand] = args;
+  const flags = parseFlags(args.slice(1));
+  const cacheDir = getFlag(flags, "cache-dir");
+  const cache = createNodeTerritoryRegistryCache({
+    ...(cacheDir ? { rootDir: cacheDir } : {})
+  });
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printCacheHelp();
+    return 0;
+  }
+
+  if (subcommand === "list" || subcommand === "verify") {
+    const data = await cache.listInstalledDatasets();
+    printJson({ ok: true, command: `cache ${subcommand}`, data });
+    return 0;
+  }
+
+  if (subcommand === "clear") {
+    if (!flags.has("force")) {
+      printJson({
+        ok: false,
+        command: "cache clear",
+        issues: [createCliIssue("--force is required to clear the cache.")]
+      });
+      return 1;
+    }
+
+    await cache.clear?.();
+    printJson({ ok: true, command: "cache clear", data: { cleared: true } });
+    return 0;
+  }
+
+  printJson({
+    ok: false,
+    command: "cache",
+    issues: [createCliIssue(`Unsupported cache command '${subcommand}'.`)]
+  });
+  return 1;
 }
 
 async function runSource(args: string[]): Promise<number> {
@@ -1905,6 +2230,46 @@ function getNumberFlag(flags: Map<string, string | true>, key: string, fallback:
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
+function createCliRegistryClient(flags: Map<string, string | true>) {
+  const registryUrl = getFlag(flags, "registry");
+  const cacheDir = getFlag(flags, "cache-dir");
+
+  return createNodeTerritoryRegistryClient({
+    ...(registryUrl ? { registryUrl } : {}),
+    ...(cacheDir ? { cacheDir } : {}),
+    ...(flags.has("offline") ? { offline: true } : {}),
+    ...(flags.has("no-verify") ? { verifyChecksums: false } : {}),
+    ...(flags.has("allow-http") ? { allowHttp: true } : {})
+  });
+}
+
+function parseLevelsFlag(input: string | undefined): TerritoryAdminLevel[] | undefined {
+  if (!input) {
+    return undefined;
+  }
+
+  return input
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean) as TerritoryAdminLevel[];
+}
+
+async function writeJsonOutput(path: string, payload: unknown, force: boolean): Promise<void> {
+  if (!force) {
+    try {
+      await readFile(path);
+      throw new Error(`Output path '${path}' already exists. Pass --force to overwrite.`);
+    } catch (error) {
+      if (error instanceof Error && error.message.includes("already exists")) {
+        throw error;
+      }
+    }
+  }
+
+  await mkdir(dirname(path), { recursive: true });
+  await writeFile(path, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+}
+
 function readOptionalNonNegativeNumberFlag(
   flags: Map<string, string | true>,
   key: string,
@@ -2116,15 +2481,32 @@ function printHelp(): void {
 
 Commands:
   validate   Validate a TerritoryKit dataset
+  registry   Build, validate, inspect, and list dataset registries
   geometry   Validate or safely repair dataset geometry
   index      Build a spatial-index metadata summary
   adjacency  Build, validate, inspect, or legacy-infer territory adjacency
   country    Build and inspect pilot country dataset artifacts
   import     Import a GeoJSON file or source adapter artifact
   source     List and inspect source adapters
-  dataset    Build curated dataset artifacts, including world-countries
+  dataset    Build curated datasets and install registry artifacts
+  cache      List, verify, or clear installed dataset cache artifacts
   simplify   Emit a deterministic no-op simplification result for pipeline wiring
   generate   Generate grid or weighted-voronoi MVP datasets as JSON`);
+}
+
+function printRegistryHelp(): void {
+  console.log(`territory registry <command>
+
+Commands:
+  build --input <artifact-dir> --output <registry.json> --base-url <url>
+  validate <registry.json>
+  inspect --registry <registry.json>
+  list --registry <registry.json>
+
+Options:
+  --build-date <iso-date>
+  --force
+  --json`);
 }
 
 function printCountryHelp(): void {
@@ -2307,7 +2689,14 @@ function printDatasetHelp(): void {
   console.log(`territory dataset <command>
 
 Commands:
-  build  Build a curated TerritoryKit dataset artifact`);
+  build            Build a curated TerritoryKit dataset artifact
+  search           Search registry datasets
+  info             Show registry dataset metadata
+  install          Install dataset artifacts into the local cache
+  update           Refresh or switch installed dataset artifacts
+  verify           Verify an installed dataset
+  remove           Remove an installed dataset
+  list-installed   List installed datasets`);
 }
 
 function printDatasetBuildHelp(): void {
@@ -2320,6 +2709,19 @@ Options:
   --source-sha256 <sha256>
   --build-date <iso-date>
   --strict
+  --force`);
+}
+
+function printCacheHelp(): void {
+  console.log(`territory cache <command>
+
+Commands:
+  list       List installed dataset cache entries
+  verify     Verify installed cache metadata
+  clear      Clear the dataset artifact cache
+
+Options:
+  --cache-dir <dir>
   --force`);
 }
 

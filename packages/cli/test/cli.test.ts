@@ -1,6 +1,6 @@
 import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { sha256Hex } from "@territory-kit/generators";
 import { createSampleTerritoryDataset } from "@territory-kit/shared-testkit";
 import { describe, expect, it, vi } from "vitest";
@@ -27,6 +27,109 @@ describe("territory cli", () => {
             datasetId: "territorykit-sample",
             zoneCount: 5
           }
+        }
+      });
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
+
+  it("builds a registry and installs dataset artifacts from local files", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-cli-registry-"));
+    const artifactRoot = join(tempDir, "artifacts", "sample");
+    const registryPath = join(tempDir, "registry.json");
+    const cacheDir = join(tempDir, "cache");
+
+    try {
+      await mkdir(join(artifactRoot, "levels", "ADM0"), { recursive: true });
+      const dataset = createSampleTerritoryDataset();
+      const files = new Map([
+        [
+          "manifest.json",
+          `${JSON.stringify(
+            {
+              manifestVersion: "1",
+              datasetId: "sample-cli",
+              datasetVersion: "1.0.0",
+              schemaVersion: "territory-schema@1",
+              country: { alpha2: "SC", alpha3: "SCL", name: "Sample CLI" },
+              sourceProvider: "fixture",
+              supportedLevels: ["ADM0"],
+              license: "Apache-2.0",
+              attribution: "fixture"
+            },
+            null,
+            2
+          )}\n`
+        ],
+        ["levels/ADM0/dataset.json", `${JSON.stringify(dataset, null, 2)}\n`]
+      ]);
+      files.set(
+        "checksums.json",
+        `${JSON.stringify(
+          {
+            files: Object.fromEntries(
+              [...files.entries()].map(([path, content]) => [path, sha256Hex(content)])
+            )
+          },
+          null,
+          2
+        )}\n`
+      );
+
+      for (const [relativePath, content] of files.entries()) {
+        const target = join(artifactRoot, relativePath);
+        await mkdir(dirname(target), { recursive: true });
+        await writeFile(target, content, "utf8");
+      }
+
+      await expect(
+        captureCli([
+          "registry",
+          "build",
+          "--input",
+          join(tempDir, "artifacts"),
+          "--output",
+          registryPath,
+          "--base-url",
+          `file://${join(tempDir, "artifacts")}/`,
+          "--force"
+        ])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: { ok: true, command: "registry build" }
+      });
+      await expect(captureCli(["registry", "validate", registryPath])).resolves.toMatchObject({
+        code: 0,
+        payload: { ok: true, command: "registry validate" }
+      });
+      await expect(
+        captureCli([
+          "dataset",
+          "install",
+          "sample-cli",
+          "--registry",
+          registryPath,
+          "--cache-dir",
+          cacheDir,
+          "--levels",
+          "ADM0"
+        ])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "dataset install",
+          data: { datasetId: "sample-cli", artifactCount: 3 }
+        }
+      });
+      await expect(
+        captureCli(["dataset", "list-installed", "--cache-dir", cacheDir])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          data: [expect.objectContaining({ datasetId: "sample-cli" })]
         }
       });
     } finally {
