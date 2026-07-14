@@ -27,6 +27,8 @@ document:
 
 - `@territory-kit/dataset`: dataset manifest, schema, validation, and loading.
 - `@territory-kit/core`: engine APIs, spatial lookup, hierarchy, adjacency, viewport queries.
+- `@territory-kit/registry`: registry discovery, artifact resolution, verified cache, and Node
+  download helpers.
 - `@territory-kit/maplibre`: first map adapter boundary for MapLibre GL JS.
 - `@territory-kit/nestjs`: NestJS integration boundary and PostGIS repository contracts.
 - `@territory-kit/generators`: deterministic dataset helper, source, and adjacency utilities.
@@ -54,6 +56,8 @@ territory geometry validate ./dist/regions --checks full --report ./geometry-rep
 territory adjacency build ./dist/regions --output ./dist/regions-adjacency
 territory country source lock TR --output ./dist/tr/sources.lock.json
 territory country build TR --source-lock ./dist/tr/sources.lock.json --output ./dist/tr --build-adjacency --strict
+territory registry build --input ./dist --output ./dist/registry.json --base-url https://cdn.example.test/datasets/
+territory dataset install territory-kit-tr --registry ./dist/registry.json --levels ADM0,ADM1 --load-adjacency
 ```
 
 Generated world-country artifacts are documented in
@@ -99,6 +103,12 @@ items.
 - [Country datasets](./docs/country-datasets.md)
 - [Country source locks](./docs/country-source-locks.md)
 - [Country loaders](./docs/country-loaders.md)
+- [Dataset registry](./docs/dataset-registry.md)
+- [Dataset installation](./docs/dataset-installation.md)
+- [Dataset cache](./docs/dataset-cache.md)
+- [Registry hosting](./docs/registry-hosting.md)
+- [Offline datasets](./docs/offline-datasets.md)
+- [Dataset versioning](./docs/dataset-versioning.md)
 - [Adjacency artifacts](./docs/adjacency.md)
 - [Geometry quality](./docs/geometry-quality.md)
 - [Geometry validation](./docs/geometry-validation.md)
