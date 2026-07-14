@@ -3,6 +3,15 @@
 This page is the final verification gate for Sprint 9-10 release hardening. It prepares the
 repository for a stable release without publishing packages automatically.
 
+## Branch Scope
+
+- The release-readiness branch is `release/1.0.0-readiness`.
+- Sprint 10 freezes the current public API and keeps `territory-schema@1` unchanged.
+- The branch may update package versions, changesets, release notes, benchmark evidence, and
+  verification records.
+- Publishing, tagging, and GitHub release creation stay out of scope for the branch and remain
+  post-merge maintainer actions.
+
 ## Workflow Behavior
 
 - Pull requests and `main` pushes must keep the CI matrix green on Node.js 22 and 24.
