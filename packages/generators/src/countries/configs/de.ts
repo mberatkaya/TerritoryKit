@@ -12,5 +12,10 @@ export const germanyCountryConfig: TerritoryCountryDatasetConfig = createPilotCo
     ADM0: ["country"],
     ADM1: ["state", "administrative-unit"],
     ADM2: ["district-or-equivalent", "administrative-unit"]
+  },
+  semanticTypes: {
+    ADM0: "country",
+    ADM1: "state",
+    ADM2: "district"
   }
 });

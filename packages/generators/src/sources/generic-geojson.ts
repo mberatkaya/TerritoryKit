@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import {
   TERRITORY_SCHEMA_VERSION,
+  TERRITORY_SEMANTIC_ADMIN_TYPES,
   computeGeometryBBox,
   computeGeometryCenter,
   createTerritoryGlobalId,
@@ -14,6 +15,7 @@ import type {
   TerritoryGeometry,
   TerritoryGlobalDatasetManifest,
   TerritoryGlobalMetadata,
+  TerritorySemanticAdminType,
   TerritoryZone
 } from "@territory-kit/dataset";
 import { TerritorySourceError, createSourceIssue } from "./errors.js";
@@ -222,7 +224,11 @@ export function transformGenericGeoJson(
       return {
         id: feature.id,
         datasetId,
+        countryCode: countryCode.toUpperCase(),
         level: adminLevelToNumber(adminLevel),
+        sourceAdminLevel: adminLevel,
+        semanticType: semanticTypeForGenericFeature(adminLevel, options.localType),
+        name: feature.name,
         ...(parentId ? { parentId } : {}),
         neighborIds: [],
         geometry: feature.geometry,
@@ -293,6 +299,25 @@ export function transformGenericGeoJson(
     },
     manifest: dataset.manifest as TerritoryGlobalDatasetManifest
   };
+}
+
+function semanticTypeForGenericFeature(
+  adminLevel: TerritoryAdminLevel,
+  localType: string | undefined
+): TerritorySemanticAdminType {
+  if (adminLevel === "ADM0") {
+    return "country";
+  }
+
+  if (localType) {
+    const normalized = localType.trim().toLowerCase().replace(/_/g, "-");
+
+    if (TERRITORY_SEMANTIC_ADMIN_TYPES.includes(normalized as TerritorySemanticAdminType)) {
+      return normalized as TerritorySemanticAdminType;
+    }
+  }
+
+  return "unknown";
 }
 
 export function finalizeSourceDataset(options: {

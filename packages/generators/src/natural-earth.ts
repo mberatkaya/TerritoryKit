@@ -769,7 +769,12 @@ function createZoneForDetail(
   return {
     id: record.id,
     datasetId: WORLD_COUNTRIES_DATASET_ID,
+    countryCode: record.iso3166_1.toUpperCase(),
     level: 0,
+    sourceAdminLevel: "ADM0",
+    semanticType: "country",
+    name: record.name,
+    ...(record.englishName && record.englishName !== record.name ? { localName: record.name } : {}),
     neighborIds: [],
     geometry,
     center: computeGeometryCenter(geometry),

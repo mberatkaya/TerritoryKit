@@ -12,5 +12,10 @@ export const unitedStatesCountryConfig: TerritoryCountryDatasetConfig = createPi
     ADM0: ["country"],
     ADM1: ["state-or-equivalent", "administrative-unit"],
     ADM2: ["county-or-equivalent", "administrative-unit"]
+  },
+  semanticTypes: {
+    ADM0: "country",
+    ADM1: "state",
+    ADM2: "county"
   }
 });

@@ -8,10 +8,12 @@ import type {
   TerritoryDataset,
   TerritoryDatasetManifest,
   TerritoryGeometry,
+  TerritorySemanticAdminType,
   TerritoryValidationIssue,
   TerritoryValidationResult,
   TerritoryZone
 } from "./types.js";
+import { TERRITORY_SEMANTIC_ADMIN_TYPES } from "./global.js";
 
 export function validateTerritoryDataset(input: unknown): TerritoryValidationResult {
   const issues: TerritoryValidationIssue[] = [];
@@ -177,7 +179,20 @@ function readZones(
 
     const id = readRequiredString(rawZone.id, `${path}.id`, issues);
     const datasetId = readRequiredString(rawZone.datasetId, `${path}.datasetId`, issues);
+    const countryCode = readOptionalString(rawZone.countryCode, `${path}.countryCode`, issues);
     const level = readLevel(rawZone.level, `${path}.level`, issues);
+    const sourceAdminLevel = readOptionalString(
+      rawZone.sourceAdminLevel,
+      `${path}.sourceAdminLevel`,
+      issues
+    );
+    const semanticType = readSemanticAdminType(
+      rawZone.semanticType,
+      `${path}.semanticType`,
+      issues
+    );
+    const name = readOptionalString(rawZone.name, `${path}.name`, issues);
+    const localName = readOptionalString(rawZone.localName, `${path}.localName`, issues);
     const parentId = readOptionalString(rawZone.parentId, `${path}.parentId`, issues);
     const childIds = readOptionalStringArray(rawZone.childIds, `${path}.childIds`, issues);
     const neighborIds = readRequiredStringArray(rawZone.neighborIds, `${path}.neighborIds`, issues);
@@ -242,7 +257,12 @@ function readZones(
     zones.push({
       id,
       datasetId,
+      ...(countryCode ? { countryCode } : {}),
       level,
+      ...(sourceAdminLevel ? { sourceAdminLevel } : {}),
+      ...(semanticType ? { semanticType } : {}),
+      ...(name ? { name } : {}),
+      ...(localName ? { localName } : {}),
       ...(parentId ? { parentId } : {}),
       ...(childIds ? { childIds } : {}),
       neighborIds,
@@ -583,6 +603,31 @@ function readOptionalString(
   issues.push({
     code: "ZONE_FIELD",
     message: "Expected a non-empty string when present.",
+    path,
+    severity: "error"
+  });
+  return undefined;
+}
+
+function readSemanticAdminType(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[]
+): TerritorySemanticAdminType | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (
+    typeof input === "string" &&
+    TERRITORY_SEMANTIC_ADMIN_TYPES.includes(input as TerritorySemanticAdminType)
+  ) {
+    return input as TerritorySemanticAdminType;
+  }
+
+  issues.push({
+    code: "ZONE_FIELD",
+    message: "Expected a known semantic administrative type when present.",
     path,
     severity: "error"
   });

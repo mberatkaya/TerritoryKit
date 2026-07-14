@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import {
+  TERRITORY_SEMANTIC_ADMIN_TYPES,
   computeGeometryBBox,
   computeGeometryCenter,
   normalizeTerritoryAdminLevel,
@@ -10,6 +11,7 @@ import type {
   TerritoryGeometry,
   TerritoryGlobalDatasetManifest,
   TerritoryGlobalMetadata,
+  TerritorySemanticAdminType,
   TerritoryZone
 } from "@territory-kit/dataset";
 import { TerritorySourceError, createSourceIssue } from "./errors.js";
@@ -199,7 +201,11 @@ export function transformGeoBoundaries(
       return {
         id: feature.id,
         datasetId,
+        countryCode: countryCode.toUpperCase(),
         level: Number(adminLevel.slice(3)),
+        sourceAdminLevel: adminLevel,
+        semanticType: semanticTypeForGeoBoundariesFeature(adminLevel, feature.shapeType),
+        name: feature.name,
         neighborIds: [],
         geometry: feature.geometry,
         center: computeGeometryCenter(feature.geometry),
@@ -250,6 +256,25 @@ export function transformGeoBoundaries(
     },
     manifest: dataset.manifest as TerritoryGlobalDatasetManifest
   };
+}
+
+function semanticTypeForGeoBoundariesFeature(
+  adminLevel: TerritoryAdminLevel,
+  shapeType: string | undefined
+): TerritorySemanticAdminType {
+  if (adminLevel === "ADM0") {
+    return "country";
+  }
+
+  if (shapeType) {
+    const normalized = shapeType.trim().toLowerCase().replace(/_/g, "-");
+
+    if (TERRITORY_SEMANTIC_ADMIN_TYPES.includes(normalized as TerritorySemanticAdminType)) {
+      return normalized as TerritorySemanticAdminType;
+    }
+  }
+
+  return "unknown";
 }
 
 function readGeoBoundariesFeatures(

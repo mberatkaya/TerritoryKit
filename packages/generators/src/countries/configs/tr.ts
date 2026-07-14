@@ -12,5 +12,10 @@ export const turkeyCountryConfig: TerritoryCountryDatasetConfig = createPilotCou
     ADM0: ["country"],
     ADM1: ["province", "administrative-unit"],
     ADM2: ["district", "administrative-unit"]
+  },
+  semanticTypes: {
+    ADM0: "country",
+    ADM1: "province",
+    ADM2: "district"
   }
 });

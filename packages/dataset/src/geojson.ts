@@ -1,12 +1,14 @@
 import type { Feature, FeatureCollection } from "geojson";
 import { TerritoryDatasetValidationError } from "./errors.js";
 import { computeGeometryBBox, computeGeometryCenter, geometryToPolygons } from "./geometry.js";
+import { TERRITORY_SEMANTIC_ADMIN_TYPES } from "./global.js";
 import { validateTerritoryDataset } from "./validation.js";
 import type {
   LngLat,
   TerritoryDataset,
   TerritoryGeoJsonImportOptions,
   TerritoryGeometry,
+  TerritorySemanticAdminType,
   TerritoryValidationIssue,
   TerritoryValidationResult,
   TerritoryZone
@@ -91,6 +93,45 @@ export function createTerritoryDatasetFromGeoJson(
       featureId,
       importIssues
     );
+    const countryCode = readOptionalStringProperty(
+      properties,
+      "countryCode",
+      `${path}.properties`,
+      options,
+      featureId,
+      importIssues
+    );
+    const sourceAdminLevel = readOptionalStringProperty(
+      properties,
+      "sourceAdminLevel",
+      `${path}.properties`,
+      options,
+      featureId,
+      importIssues
+    );
+    const semanticType = readSemanticAdminTypeProperty(
+      properties,
+      `${path}.properties`,
+      options,
+      featureId,
+      importIssues
+    );
+    const name = readOptionalStringProperty(
+      properties,
+      "name",
+      `${path}.properties`,
+      options,
+      featureId,
+      importIssues
+    );
+    const localName = readOptionalStringProperty(
+      properties,
+      "localName",
+      `${path}.properties`,
+      options,
+      featureId,
+      importIssues
+    );
 
     if (!featureId || !geometry || level === undefined) {
       return;
@@ -99,7 +140,12 @@ export function createTerritoryDatasetFromGeoJson(
     zones.push({
       id: featureId,
       datasetId: options.manifest.datasetId,
+      ...(countryCode ? { countryCode } : {}),
       level,
+      ...(sourceAdminLevel ? { sourceAdminLevel } : {}),
+      ...(semanticType ? { semanticType } : {}),
+      ...(name ? { name } : {}),
+      ...(localName ? { localName } : {}),
       ...(parentId ? { parentId } : {}),
       ...(childIds ? { childIds } : {}),
       neighborIds: neighborIds ?? [],
@@ -126,6 +172,39 @@ export function createTerritoryDatasetFromGeoJson(
     issues,
     dataset: validationResult.dataset
   };
+}
+
+function readSemanticAdminTypeProperty(
+  properties: Record<string, unknown>,
+  path: string,
+  options: TerritoryGeoJsonImportOptions,
+  featureId: string | undefined,
+  issues: TerritoryValidationIssue[]
+): TerritorySemanticAdminType | undefined {
+  const value = properties.semanticType;
+
+  if (value === undefined || value === null || value === "") {
+    return undefined;
+  }
+
+  if (
+    typeof value === "string" &&
+    TERRITORY_SEMANTIC_ADMIN_TYPES.includes(value as TerritorySemanticAdminType)
+  ) {
+    return value as TerritorySemanticAdminType;
+  }
+
+  issues.push({
+    code: "ZONE_FIELD",
+    message: "Feature properties.semanticType must be a known semantic administrative type.",
+    path: `${path}.semanticType`,
+    severity: "error",
+    ...(featureId ? { featureId } : {}),
+    ...(options.sourcePath ? { sourcePath: options.sourcePath } : {}),
+    repairSuggestion:
+      "Use a supported semantic type such as country, province, district, or unknown."
+  });
+  return undefined;
 }
 
 export function loadTerritoryDatasetFromGeoJson(

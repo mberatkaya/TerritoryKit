@@ -1,4 +1,4 @@
-import type { TerritoryAdminLevel } from "@territory-kit/dataset";
+import type { TerritoryAdminLevel, TerritorySemanticAdminType } from "@territory-kit/dataset";
 import type { TerritoryCountryDatasetConfig } from "../types.js";
 
 const DEFAULT_LEVELS: readonly TerritoryAdminLevel[] = ["ADM0", "ADM1", "ADM2"];
@@ -11,6 +11,7 @@ export function createPilotCountryConfig(input: {
   loaderPackageName: string;
   defaultLocale: string;
   localTypes: Partial<Record<TerritoryAdminLevel, readonly string[]>>;
+  semanticTypes: Partial<Record<TerritoryAdminLevel, TerritorySemanticAdminType>>;
 }): TerritoryCountryDatasetConfig {
   return {
     datasetId: input.datasetId,
@@ -28,6 +29,8 @@ export function createPilotCountryConfig(input: {
         {
           adminLevel,
           expectedLocalTypes: input.localTypes[adminLevel] ?? ["administrative-unit"],
+          semanticType: input.semanticTypes[adminLevel] ?? "unknown",
+          label: adminLevel === "ADM0" ? "Country" : adminLevel,
           sourceNameProperty: "shapeName",
           sourceIdProperty: "shapeID",
           sourceCodeProperties: ["officialCode", "shapeISO", "shapeID"],
@@ -68,6 +71,8 @@ export function createPilotCountryConfig(input: {
       requireAttribution: true,
       rejectUnknownLicense: true,
       allowNonRedistributableSource: false
-    }
+    },
+    reviewRequired: false,
+    notes: ["Pilot country config with reviewed ADM0/ADM1/ADM2 semantic mappings."]
   };
 }

@@ -6,6 +6,26 @@ export type TerritoryAdminLevel = "ADM0" | "ADM1" | "ADM2" | "ADM3" | "ADM4";
 
 export type TerritoryGeometryDetailLevel = "low" | "medium" | "high" | "source";
 
+export type TerritorySemanticAdminType =
+  | "world"
+  | "country"
+  | "state"
+  | "province"
+  | "region"
+  | "governorate"
+  | "prefecture"
+  | "county"
+  | "district"
+  | "city"
+  | "municipality"
+  | "borough"
+  | "ward"
+  | "neighbourhood"
+  | "village"
+  | "local"
+  | "game-region"
+  | "unknown";
+
 export type LngLat = [longitude: number, latitude: number];
 
 export type TerritoryBBox = [west: number, south: number, east: number, north: number];
@@ -59,7 +79,12 @@ export interface TerritoryDatasetCompatibility {
 export interface TerritoryZone {
   id: string;
   datasetId: string;
+  countryCode?: string;
   level: number;
+  sourceAdminLevel?: string;
+  semanticType?: TerritorySemanticAdminType;
+  name?: string;
+  localName?: string;
   parentId?: string;
   childIds?: string[];
   neighborIds: string[];

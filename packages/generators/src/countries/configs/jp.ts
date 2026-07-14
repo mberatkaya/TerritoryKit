@@ -12,5 +12,10 @@ export const japanCountryConfig: TerritoryCountryDatasetConfig = createPilotCoun
     ADM0: ["country"],
     ADM1: ["prefecture-or-equivalent", "administrative-unit"],
     ADM2: ["second-level-administrative-unit", "administrative-unit"]
+  },
+  semanticTypes: {
+    ADM0: "country",
+    ADM1: "prefecture",
+    ADM2: "unknown"
   }
 });
