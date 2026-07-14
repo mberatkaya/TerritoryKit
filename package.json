@@ -25,7 +25,7 @@
     "lint": "turbo run lint",
     "package:boundaries": "node scripts/check-package-boundaries.mjs",
     "prepublishOnly": "node -e \"throw new Error('Root workspace must not be published. Publish packages from packages/* only.')\"",
-    "release": "pnpm build && changeset publish",
+    "release": "pnpm build && node scripts/publish-packages.mjs",
     "test": "turbo run test",
     "test:visual:maplibre": "pnpm --filter @territory-kit/example-web-maplibre test:visual",
     "typecheck": "turbo run typecheck",
