@@ -431,6 +431,286 @@ describe("territory cli", () => {
       await rm(tempDir, { force: true, recursive: true });
     }
   });
+
+  it("lists and inspects source adapters", async () => {
+    await expect(captureCliRaw(["source", "list"])).resolves.toMatchObject({
+      code: 0,
+      output: expect.stringContaining("natural-earth")
+    });
+    await expect(captureCli(["source", "list", "--json"])).resolves.toMatchObject({
+      code: 0,
+      payload: {
+        ok: true,
+        command: "source list",
+        data: expect.arrayContaining([
+          expect.objectContaining({ id: "geoboundaries" }),
+          expect.objectContaining({ id: "geojson" }),
+          expect.objectContaining({ id: "natural-earth" })
+        ])
+      }
+    });
+    await expect(captureCliRaw(["source", "info", "natural-earth"])).resolves.toMatchObject({
+      code: 0,
+      output: expect.stringContaining("Natural Earth")
+    });
+    await expect(captureCli(["source", "info", "unknown"])).resolves.toMatchObject({
+      code: 1,
+      payload: {
+        ok: false,
+        issues: [expect.objectContaining({ code: "SOURCE_ADAPTER_NOT_FOUND" })]
+      }
+    });
+  });
+
+  it("imports Natural Earth through the source pipeline", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-cli-source-"));
+    const sourcePath = join(tempDir, "natural-earth.geojson");
+    const outputPath = join(tempDir, "world-countries");
+    const source = JSON.stringify(createNaturalEarthCliFixture());
+    await writeFile(sourcePath, source, "utf8");
+
+    try {
+      const result = await captureCli([
+        "import",
+        "natural-earth",
+        "--input",
+        sourcePath,
+        "--output",
+        outputPath,
+        "--source-version",
+        "fixture-1",
+        "--source-sha256",
+        sha256Hex(source),
+        "--detail",
+        "low,high",
+        "--build-date",
+        "2026-01-01T00:00:00.000Z"
+      ]);
+
+      expect(result).toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "import natural-earth",
+          data: {
+            provider: "natural-earth",
+            datasetId: "world-countries"
+          }
+        }
+      });
+      await expect(readFile(join(outputPath, "low", "dataset.json"), "utf8")).resolves.toContain(
+        "world-countries"
+      );
+      await expect(readFile(join(outputPath, "high", "dataset.json"), "utf8")).resolves.toContain(
+        "world-countries"
+      );
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
+
+  it("imports generic GeoJSON and geoBoundaries source fixtures", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-cli-source-"));
+    const geojsonPath = join(tempDir, "regions.geojson");
+    const geojsonOutput = join(tempDir, "regions");
+    const geoBoundariesPath = join(tempDir, "geoBoundaries-TUR-ADM1.geojson");
+    const geoBoundariesOutput = join(tempDir, "tr-adm1");
+    await writeFile(geojsonPath, JSON.stringify(createGenericGeoJsonCliFixture()), "utf8");
+    await writeFile(geoBoundariesPath, JSON.stringify(createGeoBoundariesCliFixture()), "utf8");
+
+    try {
+      await expect(
+        captureCli([
+          "import",
+          "geojson",
+          "--input",
+          geojsonPath,
+          "--output",
+          geojsonOutput,
+          "--country",
+          "TR",
+          "--admin-level",
+          "ADM2",
+          "--id-property",
+          "region.code",
+          "--name-property",
+          "region.name",
+          "--parent-property",
+          "region.parent",
+          "--license",
+          "CC BY 4.0",
+          "--attribution",
+          "Synthetic fixture",
+          "--build-date",
+          "2026-01-01T00:00:00.000Z"
+        ])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "import geojson",
+          data: { datasetId: "geojson-tr-adm2", zoneCount: 2 }
+        }
+      });
+      await expect(readFile(join(geojsonOutput, "dataset.json"), "utf8")).resolves.toContain(
+        "tr:adm2:kadikoy"
+      );
+      await expect(
+        captureCli([
+          "import",
+          "geoboundaries",
+          "--input",
+          geoBoundariesPath,
+          "--output",
+          geoBoundariesOutput,
+          "--country",
+          "TR",
+          "--admin-level",
+          "ADM1",
+          "--release-type",
+          "gbOpen",
+          "--build-date",
+          "2026-01-01T00:00:00.000Z"
+        ])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "import geoboundaries",
+          data: { datasetId: "geoboundaries-tr-adm1", zoneCount: 2 }
+        }
+      });
+      await expect(readFile(join(geoBoundariesOutput, "dataset.json"), "utf8")).resolves.toContain(
+        "CC BY 4.0"
+      );
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
+
+  it("reports source import errors with non-zero exit codes", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-cli-source-"));
+    const geojsonPath = join(tempDir, "regions.geojson");
+    await writeFile(geojsonPath, JSON.stringify(createGenericGeoJsonCliFixture()), "utf8");
+
+    try {
+      await expect(
+        captureCli(["import", "unknown", "--input", geojsonPath, "--output", join(tempDir, "out")])
+      ).resolves.toMatchObject({
+        code: 1,
+        payload: {
+          ok: false,
+          issues: [expect.objectContaining({ code: "SOURCE_ADAPTER_NOT_FOUND" })]
+        }
+      });
+      await expect(
+        captureCli(["import", "geojson", "--input", geojsonPath])
+      ).resolves.toMatchObject({
+        code: 1,
+        payload: {
+          ok: false,
+          issues: [expect.objectContaining({ message: expect.stringContaining("--output") })]
+        }
+      });
+      await expect(
+        captureCli([
+          "import",
+          "geojson",
+          "--input",
+          geojsonPath,
+          "--output",
+          join(tempDir, "invalid-country"),
+          "--country",
+          "TUR",
+          "--admin-level",
+          "ADM2",
+          "--name-property",
+          "region.name"
+        ])
+      ).resolves.toMatchObject({
+        code: 1,
+        payload: {
+          ok: false,
+          issues: [expect.objectContaining({ code: "SOURCE_OPTIONS_INVALID" })]
+        }
+      });
+      await expect(
+        captureCli([
+          "import",
+          "geojson",
+          "--url",
+          "ftp://example.com/regions.geojson",
+          "--output",
+          join(tempDir, "ftp"),
+          "--country",
+          "TR",
+          "--admin-level",
+          "ADM2",
+          "--name-property",
+          "region.name"
+        ])
+      ).resolves.toMatchObject({
+        code: 1,
+        payload: {
+          ok: false,
+          issues: [expect.objectContaining({ code: "SOURCE_PROTOCOL_UNSUPPORTED" })]
+        }
+      });
+      await expect(
+        captureCli([
+          "import",
+          "geojson",
+          "--input",
+          geojsonPath,
+          "--output",
+          join(tempDir, "checksum"),
+          "--country",
+          "TR",
+          "--admin-level",
+          "ADM2",
+          "--name-property",
+          "region.name",
+          "--source-sha256",
+          "wrong"
+        ])
+      ).resolves.toMatchObject({
+        code: 1,
+        payload: {
+          ok: false,
+          issues: [expect.objectContaining({ code: "SOURCE_CHECKSUM_MISMATCH" })]
+        }
+      });
+      await expect(
+        captureCli([
+          "import",
+          "geojson",
+          "--input",
+          geojsonPath,
+          "--output",
+          join(tempDir, "strict"),
+          "--country",
+          "TR",
+          "--admin-level",
+          "ADM2",
+          "--id-property",
+          "missing",
+          "--name-property",
+          "region.name",
+          "--strict"
+        ])
+      ).resolves.toMatchObject({
+        code: 1,
+        payload: {
+          ok: false,
+          issues: expect.arrayContaining([
+            expect.objectContaining({ code: "STRICT_SOURCE_ID_FALLBACK" })
+          ])
+        }
+      });
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
 });
 
 async function captureCli(args: string[]): Promise<{ code: number; payload: unknown }> {
@@ -562,6 +842,70 @@ function createNaturalEarthCliFixture(): unknown {
           ]
         }
       }
+    ]
+  };
+}
+
+function createGenericGeoJsonCliFixture(): unknown {
+  return {
+    type: "FeatureCollection",
+    features: [
+      genericCliFeature("b", "USKUDAR", "Uskudar", "IST"),
+      genericCliFeature("a", "KADIKOY", "Kadikoy", "IST")
+    ]
+  };
+}
+
+function genericCliFeature(id: string, code: string, name: string, parent: string): unknown {
+  return {
+    type: "Feature",
+    id,
+    properties: { region: { code, name, parent } },
+    geometry: squareCli(29, 40)
+  };
+}
+
+function createGeoBoundariesCliFixture(): unknown {
+  return {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        id: "gb-2",
+        properties: {
+          shapeID: "TUR-ADM1-2",
+          shapeName: "Ankara",
+          shapeGroup: "TR",
+          shapeType: "ADM1"
+        },
+        geometry: squareCli(32, 39)
+      },
+      {
+        type: "Feature",
+        id: "gb-1",
+        properties: {
+          shapeID: "TUR-ADM1-1",
+          shapeName: "Istanbul",
+          shapeGroup: "TR",
+          shapeType: "ADM1"
+        },
+        geometry: squareCli(28, 40)
+      }
+    ]
+  };
+}
+
+function squareCli(west: number, south: number): unknown {
+  return {
+    type: "Polygon",
+    coordinates: [
+      [
+        [west, south],
+        [west + 1, south],
+        [west + 1, south + 1],
+        [west, south + 1],
+        [west, south]
+      ]
     ]
   };
 }
