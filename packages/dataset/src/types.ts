@@ -2,6 +2,10 @@ import type { MultiPolygon, Polygon } from "geojson";
 
 export type TerritorySchemaVersion = "territory-schema@1";
 
+export type TerritoryAdminLevel = "ADM0" | "ADM1" | "ADM2" | "ADM3" | "ADM4";
+
+export type TerritoryGeometryDetailLevel = "low" | "medium" | "high" | "source";
+
 export type LngLat = [longitude: number, latitude: number];
 
 export type TerritoryBBox = [west: number, south: number, east: number, north: number];
@@ -14,10 +18,36 @@ export interface TerritoryDatasetManifest {
   schemaVersion: TerritorySchemaVersion;
   sourceDate: string;
   geometryHash: string;
+  adminLevels?: TerritoryAdminLevel[];
+  artifactChecksum?: string;
+  attribution?: string;
+  boundaryPolicy?: string;
+  buildDate?: string;
   compatibility?: TerritoryDatasetCompatibility;
+  countryCodes?: string[];
+  crs?: string;
+  disputedAreaPolicy?: string;
+  geometryDetail?: TerritoryGeometryDetailLevel;
   license?: string;
   name?: string;
   description?: string;
+  sourceProvider?: string;
+  worldview?: string;
+}
+
+export interface TerritoryGlobalDatasetManifest extends TerritoryDatasetManifest {
+  adminLevels: TerritoryAdminLevel[];
+  artifactChecksum: string;
+  attribution: string;
+  boundaryPolicy: string;
+  buildDate: string;
+  countryCodes: string[];
+  crs: string;
+  disputedAreaPolicy: string;
+  geometryDetail: TerritoryGeometryDetailLevel;
+  license: string;
+  sourceProvider: string;
+  worldview: string;
 }
 
 export interface TerritoryDatasetCompatibility {
@@ -42,6 +72,36 @@ export interface TerritoryZone {
 export interface TerritoryDataset {
   manifest: TerritoryDatasetManifest;
   zones: TerritoryZone[];
+}
+
+export interface TerritoryCodes {
+  iso3166_1?: string;
+  iso3166_2?: string;
+  official?: string;
+  source?: string;
+}
+
+export interface TerritoryNames {
+  default: string;
+  [locale: string]: string;
+}
+
+export interface TerritorySourceMetadata {
+  provider: string;
+  sourceId?: string;
+  sourceUrl?: string;
+  sourceDate?: string;
+  importedAt?: string;
+  license?: string;
+  attribution?: string;
+}
+
+export interface TerritoryGlobalMetadata {
+  adminLevel?: TerritoryAdminLevel;
+  localType?: string;
+  codes?: TerritoryCodes;
+  names?: TerritoryNames;
+  source?: TerritorySourceMetadata;
 }
 
 export type TerritoryValidationSeverity = "error" | "warning";

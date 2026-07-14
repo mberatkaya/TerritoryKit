@@ -11,6 +11,9 @@ TerritoryKit datasets are versioned separately from package releases. The runtim
 - `sourceDate` records the authority/source snapshot date, not the package publish date.
 - `geometryHash` must change when any zone geometry changes.
 - `compatibility.minCoreVersion` can be used when a dataset requires a newer engine behavior.
+- Global datasets keep `territory-schema@1` and add stricter opt-in metadata through
+  `countryCodes`, `adminLevels`, `sourceProvider`, `buildDate`, `license`, `attribution`, `crs`,
+  `geometryDetail`, `artifactChecksum`, `boundaryPolicy`, `worldview`, and `disputedAreaPolicy`.
 
 ## Real-World Imports
 
@@ -25,3 +28,6 @@ CLI and import pipelines can point back to the dirty source feature.
 Load-time validation rejects stale `bbox` and `center` metadata when they no longer match the
 geometry. Non-reciprocal `neighborIds` are warnings so legacy datasets can still load while
 import pipelines repair adjacency lists.
+
+Global zone metadata is stored under `zone.properties.territory` so schema-v1 consumers can keep
+loading datasets without a new required zone field.
