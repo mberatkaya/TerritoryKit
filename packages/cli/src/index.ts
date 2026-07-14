@@ -17,14 +17,27 @@ import type {
 import {
   NATURAL_EARTH_ADM0_DETAILS,
   WORLD_COUNTRIES_DATASET_ID,
-  buildWorldCountriesDataset,
+  buildWorldCountriesDatasetFromSourcePipeline,
   createDatasetGeometryHash,
   createSyntheticGridDataset,
   createWeightedVoronoiDataset,
+  getTerritorySourceAdapter,
+  hasTerritorySourceAdapter,
   inferBBoxAdjacency,
-  inferBBoxAdjacencyConnections
+  inferBBoxAdjacencyConnections,
+  listTerritorySourceAdapters,
+  runTerritorySourcePipeline
 } from "@territory-kit/generators";
-import type { NaturalEarthAdm0Detail } from "@territory-kit/generators";
+import type {
+  GenericGeoJsonSourceOptions,
+  GeoBoundariesSourceOptions,
+  NaturalEarthAdm0Detail,
+  NaturalEarthSourceOptions,
+  TerritorySourceDescription,
+  TerritorySourceIssue,
+  TerritorySourcePipelineResult,
+  TerritorySourceRequest
+} from "@territory-kit/generators";
 
 interface CliIssue {
   code: string;
@@ -61,6 +74,14 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
       return runDataset(argv.slice(1));
     }
 
+    if (command === "source") {
+      return runSource(argv.slice(1));
+    }
+
+    if (command === "import") {
+      return runImportCommand(argv.slice(1));
+    }
+
     if (command === "generate") {
       return runGenerate(argv.slice(1));
     }
@@ -74,10 +95,6 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
         issues: [createCliIssue(`Missing input path for command '${command}'.`)]
       });
       return 1;
-    }
-
-    if (command === "import") {
-      return runImport(filePath, parseFlags(argv.slice(2)));
     }
 
     const input = await readJson(filePath);
@@ -225,7 +242,7 @@ async function runDataset(args: string[]): Promise<number> {
   const sourceDate = getFlag(flags, "source-date");
   const buildDate = getFlag(flags, "build-date");
   const datasetVersion = getFlag(flags, "dataset-version");
-  const result = await buildWorldCountriesDataset({
+  const result = await buildWorldCountriesDatasetFromSourcePipeline({
     sourcePath,
     outputPath,
     ...(details ? { details } : {}),
@@ -252,6 +269,263 @@ async function runDataset(args: string[]): Promise<number> {
           issues: result.issues
         }
       : { issues: result.issues })
+  });
+  return result.ok ? 0 : 1;
+}
+
+async function runSource(args: string[]): Promise<number> {
+  const [subcommand, sourceId] = args;
+  const flags = parseFlags(subcommand === "info" ? args.slice(2) : args.slice(1));
+  const json = flags.has("json");
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printSourceHelp();
+    return 0;
+  }
+
+  if (subcommand === "list") {
+    const adapters = listTerritorySourceAdapters();
+
+    if (json) {
+      printJson({
+        ok: true,
+        command: "source list",
+        data: adapters.map((adapter) => adapter.describe())
+      });
+    } else {
+      console.log(
+        adapters
+          .map((adapter) => {
+            const description = adapter.describe();
+            return [
+              description.id.padEnd(16),
+              formatAdminLevels(description).padEnd(16),
+              description.supportedTransports.join(", ")
+            ].join("  ");
+          })
+          .join("\n")
+      );
+    }
+
+    return 0;
+  }
+
+  if (subcommand === "info") {
+    if (!sourceId || sourceId === "--help" || sourceId === "-h") {
+      printSourceInfoHelp();
+      return sourceId ? 0 : 1;
+    }
+
+    try {
+      const description = getTerritorySourceAdapter(sourceId).describe();
+
+      if (json) {
+        printJson({
+          ok: true,
+          command: "source info",
+          data: description
+        });
+      } else {
+        console.log(formatSourceDescription(description));
+      }
+
+      return 0;
+    } catch (error) {
+      printJson({
+        ok: false,
+        command: "source info",
+        issues: [
+          createCliIssue(error instanceof Error ? error.message : String(error), {
+            code: "SOURCE_ADAPTER_NOT_FOUND"
+          })
+        ]
+      });
+      return 1;
+    }
+  }
+
+  printJson({
+    ok: false,
+    command: "source",
+    issues: [createCliIssue(`Unsupported source command '${subcommand}'.`)]
+  });
+  return 1;
+}
+
+async function runImportCommand(args: string[]): Promise<number> {
+  const [first] = args;
+
+  if (!first || first === "--help" || first === "-h") {
+    printImportHelp();
+    return 0;
+  }
+
+  const flags = parseFlags(args.slice(1));
+
+  if (hasTerritorySourceAdapter(first)) {
+    return runSourceImport(first, flags);
+  }
+
+  if (looksLikeSourceImport(flags)) {
+    printJson({
+      ok: false,
+      command: "import",
+      issues: [
+        createCliIssue(`Unknown source adapter '${first}'.`, {
+          code: "SOURCE_ADAPTER_NOT_FOUND"
+        })
+      ]
+    });
+    return 1;
+  }
+
+  return runImport(first, flags);
+}
+
+async function runSourceImport(
+  sourceId: string,
+  flags: Map<string, string | true>
+): Promise<number> {
+  const outputPath = getFlag(flags, "output");
+
+  if (!outputPath) {
+    printJson({
+      ok: false,
+      command: `import ${sourceId}`,
+      issues: [createCliIssue("--output is required for source imports.")]
+    });
+    return 1;
+  }
+
+  const request = createSourceRequest(flags);
+
+  if (!request.input && !request.url) {
+    printJson({
+      ok: false,
+      command: `import ${sourceId}`,
+      issues: [createCliIssue("--input or --url is required for source imports.")]
+    });
+    return 1;
+  }
+
+  if (request.input && request.url) {
+    printJson({
+      ok: false,
+      command: `import ${sourceId}`,
+      issues: [createCliIssue("Use either --input or --url, not both.")]
+    });
+    return 1;
+  }
+
+  const buildDate = getFlag(flags, "build-date");
+  const cacheDir = getFlag(flags, "cache-dir");
+  const commonPipelineOptions = {
+    outputPath,
+    ...(flags.has("force") ? { force: true } : {}),
+    ...(flags.has("strict") ? { strict: true } : {}),
+    ...(flags.has("no-cache") ? { noCache: true } : {}),
+    ...(cacheDir ? { cache: { enabled: true, directory: cacheDir } } : {}),
+    ...(buildDate ? { now: () => new Date(buildDate).toISOString() } : {})
+  };
+
+  let result: TerritorySourcePipelineResult;
+
+  try {
+    if (sourceId === "natural-earth") {
+      const detail = getFlag(flags, "detail");
+      const details = detail ? readDetailFlags(detail) : undefined;
+
+      if (detail && !details) {
+        printJson({
+          ok: false,
+          command: "import natural-earth",
+          issues: [createCliIssue(`Invalid --detail '${detail}'. Expected low, medium, or high.`)]
+        });
+        return 1;
+      }
+
+      const datasetVersion = getFlag(flags, "dataset-version");
+      const sourceDate = getFlag(flags, "source-date");
+      const sourceUrl = getFlag(flags, "source-url");
+      const sourceVersion = getFlag(flags, "source-version");
+      result = await runTerritorySourcePipeline<NaturalEarthSourceOptions>({
+        adapter: sourceId,
+        request,
+        options: {
+          ...(buildDate ? { buildDate: new Date(buildDate).toISOString() } : {}),
+          ...(details ? { details } : {}),
+          ...(datasetVersion ? { datasetVersion } : {}),
+          ...(sourceDate ? { sourceDate } : {}),
+          ...(sourceUrl ? { sourceUrl } : {}),
+          ...(sourceVersion ? { sourceVersion } : {})
+        },
+        ...commonPipelineOptions
+      });
+    } else if (sourceId === "geoboundaries") {
+      const options = readGeoBoundariesOptions(flags);
+
+      if (Array.isArray(options)) {
+        printJson({ ok: false, command: "import geoboundaries", issues: options });
+        return 1;
+      }
+
+      result = await runTerritorySourcePipeline<GeoBoundariesSourceOptions>({
+        adapter: sourceId,
+        request,
+        options,
+        ...commonPipelineOptions
+      });
+    } else if (sourceId === "geojson") {
+      const options = readGenericGeoJsonOptions(flags);
+
+      if (Array.isArray(options)) {
+        printJson({ ok: false, command: "import geojson", issues: options });
+        return 1;
+      }
+
+      result = await runTerritorySourcePipeline<GenericGeoJsonSourceOptions>({
+        adapter: sourceId,
+        request,
+        options,
+        ...commonPipelineOptions
+      });
+    } else {
+      printJson({
+        ok: false,
+        command: `import ${sourceId}`,
+        issues: [
+          createCliIssue(`Unknown source adapter '${sourceId}'.`, {
+            code: "SOURCE_ADAPTER_NOT_FOUND"
+          })
+        ]
+      });
+      return 1;
+    }
+  } catch (error) {
+    printJson({
+      ok: false,
+      command: `import ${sourceId}`,
+      issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+    });
+    return 1;
+  }
+
+  printJson({
+    ok: result.ok,
+    command: `import ${sourceId}`,
+    ...(result.ok
+      ? {
+          data: {
+            provider: result.provider,
+            outputPath: result.output?.outputPath,
+            datasetId: result.transform?.dataset.manifest.datasetId,
+            zoneCount: result.transform?.dataset.zones.length,
+            cacheHit: result.artifact?.cacheHit ?? false,
+            stages: result.events.map((event) => `${event.stage}:${event.status}`)
+          },
+          issues: result.issues
+        }
+      : { issues: normalizeSourceIssues(result.issues) })
   });
   return result.ok ? 0 : 1;
 }
@@ -458,6 +732,174 @@ function withDeterministicGeometryHash(dataset: TerritoryDataset): TerritoryData
   };
 }
 
+function createSourceRequest(flags: Map<string, string | true>): TerritorySourceRequest {
+  const input = getFlag(flags, "input");
+  const url = getFlag(flags, "url");
+  const expectedSha256 = getFlag(flags, "source-sha256");
+  const version = getFlag(flags, "source-version");
+
+  return {
+    ...(input ? { input } : {}),
+    ...(url ? { url } : {}),
+    ...(expectedSha256 ? { expectedSha256 } : {}),
+    ...(version ? { version } : {}),
+    ...(flags.has("refresh") ? { refresh: true } : {})
+  };
+}
+
+function looksLikeSourceImport(flags: Map<string, string | true>): boolean {
+  return [
+    "input",
+    "url",
+    "output",
+    "country",
+    "admin-level",
+    "source-sha256",
+    "cache-dir",
+    "no-cache",
+    "refresh"
+  ].some((flag) => flags.has(flag));
+}
+
+function readGeoBoundariesOptions(
+  flags: Map<string, string | true>
+): GeoBoundariesSourceOptions | CliIssue[] {
+  const countryCode = getFlag(flags, "country");
+  const adminLevel = getFlag(flags, "admin-level");
+  const issues: CliIssue[] = [];
+
+  if (!countryCode) {
+    issues.push(createCliIssue("--country is required.", { code: "SOURCE_OPTIONS_INVALID" }));
+  }
+
+  if (!adminLevel) {
+    issues.push(createCliIssue("--admin-level is required.", { code: "SOURCE_OPTIONS_INVALID" }));
+  }
+
+  if (!countryCode || !adminLevel) {
+    return issues;
+  }
+
+  const buildDate = getFlag(flags, "build-date");
+  const releaseType = getFlag(flags, "release-type");
+  const sourceDate = getFlag(flags, "source-date");
+  const sourceUrl = getFlag(flags, "source-url");
+  const datasetId = getFlag(flags, "dataset-id");
+  const datasetVersion = getFlag(flags, "dataset-version");
+  const attribution = getFlag(flags, "attribution");
+
+  return {
+    countryCode,
+    adminLevel,
+    ...(releaseType ? { releaseType } : {}),
+    ...(sourceDate ? { sourceDate } : {}),
+    ...(sourceUrl ? { sourceUrl } : {}),
+    ...(datasetId ? { datasetId } : {}),
+    ...(datasetVersion ? { datasetVersion } : {}),
+    ...(buildDate ? { buildDate: new Date(buildDate).toISOString() } : {}),
+    ...(attribution ? { attribution } : {})
+  };
+}
+
+function readGenericGeoJsonOptions(
+  flags: Map<string, string | true>
+): GenericGeoJsonSourceOptions | CliIssue[] {
+  const countryCode = getFlag(flags, "country");
+  const adminLevel = getFlag(flags, "admin-level");
+  const nameProperty = getFlag(flags, "name-property");
+  const issues: CliIssue[] = [];
+
+  if (!countryCode) {
+    issues.push(createCliIssue("--country is required.", { code: "SOURCE_OPTIONS_INVALID" }));
+  }
+
+  if (!adminLevel) {
+    issues.push(createCliIssue("--admin-level is required.", { code: "SOURCE_OPTIONS_INVALID" }));
+  }
+
+  if (!nameProperty) {
+    issues.push(createCliIssue("--name-property is required.", { code: "SOURCE_OPTIONS_INVALID" }));
+  }
+
+  if (!countryCode || !adminLevel || !nameProperty) {
+    return issues;
+  }
+
+  const buildDate = getFlag(flags, "build-date");
+  const idProperty = getFlag(flags, "id-property");
+  const sourceIdProperty = getFlag(flags, "source-id-property");
+  const parentProperty = getFlag(flags, "parent-property");
+  const codeProperty = getFlag(flags, "code-property");
+  const localType = getFlag(flags, "local-type");
+  const provider = getFlag(flags, "provider");
+  const sourceUrl = getFlag(flags, "source-url");
+  const sourceDate = getFlag(flags, "source-date");
+  const license = getFlag(flags, "license");
+  const attribution = getFlag(flags, "attribution");
+  const datasetId = getFlag(flags, "dataset-id");
+  const datasetVersion = getFlag(flags, "dataset-version");
+
+  return {
+    countryCode,
+    adminLevel,
+    nameProperty,
+    ...(idProperty ? { idProperty } : {}),
+    ...(sourceIdProperty ? { sourceIdProperty } : {}),
+    ...(parentProperty ? { parentProperty } : {}),
+    ...(codeProperty ? { codeProperty } : {}),
+    ...(localType ? { localType } : {}),
+    ...(provider ? { provider } : {}),
+    ...(sourceUrl ? { sourceUrl } : {}),
+    ...(sourceDate ? { sourceDate } : {}),
+    ...(license ? { license } : {}),
+    ...(attribution ? { attribution } : {}),
+    ...(datasetId ? { datasetId } : {}),
+    ...(datasetVersion ? { datasetVersion } : {}),
+    ...(buildDate ? { buildDate: new Date(buildDate).toISOString() } : {})
+  };
+}
+
+function normalizeSourceIssues(issues: TerritorySourceIssue[]): TerritorySourceIssue[] {
+  return issues.map((issue) => {
+    if (issue.code !== "SOURCE_INPUT_NOT_FOUND") {
+      return issue;
+    }
+
+    return {
+      ...issue,
+      code: "SOURCE_NOT_FOUND"
+    };
+  });
+}
+
+function formatAdminLevels(description: TerritorySourceDescription): string {
+  const levels = [...description.supportedAdminLevels];
+
+  if (description.id === "geojson") {
+    return "configurable";
+  }
+
+  if (levels.length === 5) {
+    return "ADM0-ADM4";
+  }
+
+  return levels.join(",");
+}
+
+function formatSourceDescription(description: TerritorySourceDescription): string {
+  return [
+    `Source ID: ${description.id}`,
+    `Display name: ${description.displayName}`,
+    `Supported admin levels: ${formatAdminLevels(description)}`,
+    `Supported transports: ${description.supportedTransports.join(", ")}`,
+    `Input formats: ${description.inputFormats.join(", ")}`,
+    `Default license: ${description.defaultLicense ?? "not declared"}`,
+    `Attribution required: ${description.attributionRequired ? "yes" : "no"}`,
+    `Options: ${description.options.map((option) => option.name).join(", ") || "none"}`,
+    `Example: ${description.exampleCommand}`
+  ].join("\n");
+}
+
 function parseFlags(args: string[]): Map<string, string | true> {
   const flags = new Map<string, string | true>();
 
@@ -603,13 +1045,29 @@ function readDetailFlag(input: string): NaturalEarthAdm0Detail[] | undefined {
   return undefined;
 }
 
+function readDetailFlags(input: string): NaturalEarthAdm0Detail[] | undefined {
+  const details = input
+    .split(",")
+    .map((detail) => detail.trim())
+    .filter(Boolean);
+
+  if (
+    details.length > 0 &&
+    details.every((detail) => NATURAL_EARTH_ADM0_DETAILS.includes(detail as NaturalEarthAdm0Detail))
+  ) {
+    return details as NaturalEarthAdm0Detail[];
+  }
+
+  return undefined;
+}
+
 function printJson(payload: unknown): void {
   console.log(JSON.stringify(payload, null, 2));
 }
 
-function createCliIssue(message: string): CliIssue {
+function createCliIssue(message: string, options: { code?: string } = {}): CliIssue {
   return {
-    code: "CLI_USAGE",
+    code: options.code ?? "CLI_USAGE",
     message,
     path: "$",
     severity: "error"
@@ -623,10 +1081,42 @@ Commands:
   validate   Validate a TerritoryKit dataset
   index      Build a spatial-index metadata summary
   adjacency  Infer bbox adjacency and typed geometric connections
-  import     Import a GeoJSON FeatureCollection into a TerritoryKit dataset
+  import     Import a GeoJSON file or source adapter artifact
+  source     List and inspect source adapters
   dataset    Build curated dataset artifacts, including world-countries
   simplify   Emit a deterministic no-op simplification result for pipeline wiring
   generate   Generate grid or weighted-voronoi MVP datasets as JSON`);
+}
+
+function printSourceHelp(): void {
+  console.log(`territory source <command>
+
+Commands:
+  list                 List registered source adapters
+  info <source-id>     Show source adapter details
+
+Options:
+  --json               Emit machine-readable JSON`);
+}
+
+function printSourceInfoHelp(): void {
+  console.log(`territory source info <source-id>
+
+Examples:
+  territory source info natural-earth
+  territory source info geoboundaries --json`);
+}
+
+function printImportHelp(): void {
+  console.log(`territory import <source-id> --input <source.geojson> --output <dir>
+
+Source adapters:
+  natural-earth
+  geoboundaries
+  geojson
+
+Legacy:
+  territory import <regions.geojson> --dataset-id imported-territories`);
 }
 
 function printDatasetHelp(): void {
