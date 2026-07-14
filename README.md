@@ -21,7 +21,7 @@ document:
 | `0.5.0`         | Sprint 7     | Hardened on roadmap branch |
 | `0.6.0`         | Sprint 8     | Hardened on roadmap branch |
 | `0.9.0-rc.1`    | Sprint 9     | Verified on roadmap branch |
-| `1.0.0`         | Sprint 10    | Release readiness branch   |
+| `1.0.0`         | Sprint 10    | Prepared on release branch |
 
 ## Packages
 

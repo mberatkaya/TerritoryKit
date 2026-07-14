@@ -12,7 +12,7 @@
 | `0.5.0`         | Sprint 7  | NestJS and PostGIS integration                 | Hardened on roadmap branch |
 | `0.6.0`         | Sprint 8  | Generator and CLI tools                        | Hardened on roadmap branch |
 | `0.9.0-rc.1`    | Sprint 9  | Docs, quality, performance                     | Verified on roadmap branch |
-| `1.0.0`         | Sprint 10 | Stable release                                 | Release readiness branch   |
+| `1.0.0`         | Sprint 10 | Stable release                                 | Prepared on release branch |
 
 Maintainers track completion status against sprint tasks, deliverables, acceptance criteria,
 tests, and documentation.

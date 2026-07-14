@@ -7,6 +7,8 @@ repository for a stable release without publishing packages automatically.
 
 - The release-readiness branch is `release/1.0.0-readiness`.
 - Sprint 10 freezes the current public API and keeps `territory-schema@1` unchanged.
+- Public packages are prepared at `1.0.0`; private docs, examples, and shared test fixtures
+  remain out of publish scope.
 - The branch may update package versions, changesets, release notes, benchmark evidence, and
   verification records.
 - Publishing, tagging, and GitHub release creation stay out of scope for the branch and remain

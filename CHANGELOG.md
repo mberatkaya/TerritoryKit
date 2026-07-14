@@ -2,8 +2,10 @@
 
 All notable changes will be tracked here until Changesets generates release notes.
 
-## Unreleased
+## 1.0.0 - 2026-07-14
 
+- Prepared public packages for the `1.0.0` stable release with the current public API surface
+  frozen.
 - Hardened dataset validation for bbox/center drift and reciprocal neighbor warnings.
 - Hardened GeoJSON import for invalid hierarchy array properties with repair suggestions.
 - Hardened core lookup, viewport, and logical adjacency behavior for invalid inputs.

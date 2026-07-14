@@ -1,5 +1,12 @@
 # Migration Guide
 
+## `1.0.0`
+
+The `1.0.0` release freezes the current public APIs for `@territory-kit/dataset`,
+`@territory-kit/core`, `@territory-kit/maplibre`, `@territory-kit/nestjs`,
+`@territory-kit/generators`, and `@territory-kit/cli`. No dataset migration is required for
+this release because `territory-schema@1` remains unchanged.
+
 ## Before `1.0.0`
 
 Public APIs may still change during prerelease sprint work. Breaking changes must be recorded
