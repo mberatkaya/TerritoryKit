@@ -1,7 +1,7 @@
 # Release Readiness
 
 This page is the final verification gate for Sprint 9-10 release hardening. It prepares the
-repository for a stable release without publishing packages automatically.
+repository for a stable npm release through Changesets and npm Trusted Publishing.
 
 The master sprint checklist is the ongoing source of truth for completed evidence, repo-owned
 hardening branches, external release handoff, and post-1.0 roadmap work.
@@ -21,14 +21,18 @@ Release governance checks are tracked in [release governance](./release-governan
 ## Workflow Behavior
 
 - Pull requests and `main` pushes must keep the CI matrix green on Node.js 22 and 24.
-- The Release workflow runs verification on `main` pushes, but it does not publish packages.
-- Publishing is only enabled through `workflow_dispatch` with `publish=true`.
-- The publish command is `pnpm changeset publish`. The current Changesets CLI does not accept
-  `--provenance`; npm trusted publishing is handled by the GitHub/npm OIDC configuration instead.
+- The Release workflow runs verification on `main` pushes.
+- If unreleased changesets exist, the workflow opens or updates the Changesets version PR.
+- After the version PR is merged and no changesets remain, the workflow publishes with
+  `pnpm release`.
+- Manual dispatch is allowed only from `main`; `publish=true` can be used to rerun the publish path
+  after verification.
+- The publish command is `pnpm build && changeset publish`. The workflow uses npm Trusted
+  Publishing through GitHub Actions OIDC and does not use `NPM_TOKEN`.
 
 ## Final Verification
 
-Run these checks before tagging or manually dispatching publish:
+Run these checks before tagging or publishing:
 
 ```sh
 pnpm format:check
@@ -118,8 +122,8 @@ Recorded on 2026-07-14 for `hardening/runtime-integrations`:
 - `pnpm test:visual:maplibre` passed with rendered polygon, click, hover, zoom-transition, and
   frame-rate coverage.
 - `docs/sprint-checklist.md` has no remaining unchecked items.
-- External npm publish, npm registry verification, `v1.0.0` tag creation, GitHub Release creation,
-  and live docs deployment remain maintainer handoff actions and were not executed from this branch.
+- External npm registry verification, `v1.0.0` tag creation, GitHub Release creation, and live docs
+  deployment remain maintainer handoff actions and were not executed from this branch.
 
 ## Triage And Security
 
@@ -132,23 +136,27 @@ Recorded on 2026-07-14 for `hardening/runtime-integrations`:
 
 ## Publish Checklist
 
-Only dispatch publish after:
+Only publish after:
 
 - CI is green on the release branch and after merge to `main`.
 - `pnpm bench` output has been reviewed and documented.
 - `CHANGELOG.md`, changesets, and migration docs are current.
 - The npm package versions and generated package contents have been reviewed.
+- npm Trusted Publisher settings have been configured for each public package.
 
 ## External Release Handoff
 
 These steps are maintainer actions after the final checklist PR merges:
 
-1. Dispatch the `Release` workflow from GitHub Actions with `publish=true`.
-2. Confirm the workflow completes successfully and runs `pnpm changeset publish`.
-3. Verify npm shows version `1.0.0` for `@territory-kit/dataset`, `@territory-kit/core`,
+1. Configure npm Trusted Publishing for every public package as described in
+   [npm publishing](./npm-publishing.md).
+2. Merge the Changesets version PR or dispatch the `Release` workflow from `main` with
+   `publish=true`.
+3. Confirm the workflow completes successfully and runs `pnpm release`.
+4. Verify npm shows version `1.0.0` for `@territory-kit/dataset`, `@territory-kit/core`,
    `@territory-kit/maplibre`, `@territory-kit/nestjs`, `@territory-kit/generators`, and
    `@territory-kit/cli`.
-4. Create the `v1.0.0` tag and GitHub Release if maintainers want a GitHub release artifact.
-5. Keep failed publish attempts private until any npm or credential issues are resolved.
+5. Create the `v1.0.0` tag and GitHub Release if maintainers want a GitHub release artifact.
+6. Keep failed publish attempts private until any npm or credential issues are resolved.
 
 Do not publish packages, create tags, or create GitHub Releases from a normal PR branch.

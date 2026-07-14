@@ -3,11 +3,29 @@
   "version": "1.0.0",
   "description": "NestJS integration boundary for TerritoryKit and PostGIS-backed repositories.",
   "license": "Apache-2.0",
+  "homepage": "https://github.com/mberatkaya/TerritoryKit#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mberatkaya/TerritoryKit.git",
+    "directory": "packages/nestjs"
+  },
+  "bugs": {
+    "url": "https://github.com/mberatkaya/TerritoryKit/issues"
+  },
   "type": "module",
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist/*.cjs",
+    "dist/*.d.cts",
+    "dist/*.d.mts",
+    "dist/*.mjs",
+    "LICENSE",
+    "README.md"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
