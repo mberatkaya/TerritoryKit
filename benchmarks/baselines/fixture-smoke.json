@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "territorykit-benchmark-baseline@1",
+  "mode": "fixture",
+  "scenario": "smoke",
+  "minimumFeatureCount": 2500,
+  "budgets": {
+    "datasetValidationMs": 750,
+    "engineConstructionMs": 750,
+    "getZoneByIdMeanMs": 0.25,
+    "latLngToZoneMeanMs": 0.5,
+    "getZonesInBoundsMeanMs": 5
+  }
+}
