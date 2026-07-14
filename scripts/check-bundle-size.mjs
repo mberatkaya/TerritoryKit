@@ -16,8 +16,8 @@ const maxBytesByFile = new Map([
   ["packages/data-de/dist/index.mjs", 8_000],
   ["packages/data-jp/dist/index.mjs", 8_000],
   ["packages/data-id/dist/index.mjs", 8_000],
-  // Generators now include adjacency artifact build/validate filesystem helpers.
-  ["packages/generators/dist/index.mjs", 190_000],
+  // Generators now include adjacency artifact helpers and global ISO fallback configs.
+  ["packages/generators/dist/index.mjs", 200_000],
   // Sprint 7 adds render commands; Sprint 8 adds benchmark run/compare release smoke commands.
   ["packages/cli/dist/index.mjs", 82_000]
 ]);
