@@ -15,6 +15,7 @@ const grid100k = createSyntheticGridDataset({
 });
 const engine10k = createTerritoryEngine({ dataset: grid10k });
 const engine100k = createTerritoryEngine({ dataset: grid100k });
+const lookupZoneId = "z:50:50";
 
 describe("TerritoryEngine spatial lookup", () => {
   bench("latLngToZone indexed lookup, 10K polygons", () => {
@@ -29,6 +30,14 @@ describe("TerritoryEngine spatial lookup", () => {
       north: 0.4,
       level: 0
     });
+  });
+
+  bench("getZoneById map lookup, 10K polygons", () => {
+    engine10k.getZoneById(lookupZoneId);
+  });
+
+  bench("createTerritoryEngine index construction, 10K polygons", () => {
+    createTerritoryEngine({ dataset: grid10k });
   });
 
   bench("latLngToZone indexed lookup, 100K polygons", () => {

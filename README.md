@@ -55,4 +55,6 @@ TypeScript 7 will be evaluated in a later ADR before adoption.
 - [Roadmap](./docs/roadmap.md)
 - [Dataset compatibility](./docs/dataset-compatibility.md)
 - [Benchmarks](./docs/benchmarks.md)
+- [NestJS and PostGIS](./docs/nestjs-postgis.md)
+- [Release readiness](./docs/release-readiness.md)
 - [Remaining sprint checklist](./docs/sprint-checklist.md)

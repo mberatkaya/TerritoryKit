@@ -23,6 +23,7 @@
     "lint": "turbo run lint",
     "release": "pnpm build && changeset publish",
     "test": "turbo run test",
+    "test:visual:maplibre": "pnpm --filter @territory-kit/example-web-maplibre test:visual",
     "typecheck": "turbo run typecheck",
     "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm bundle:size"
   },

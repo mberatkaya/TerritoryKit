@@ -2,6 +2,15 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish packages to npm after verification"
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
   push:
     branches:
       - main
@@ -32,9 +41,10 @@ jobs:
       - run: pnpm build
       - run: pnpm bundle:size
       - name: Changesets version or publish
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish == 'true' }}
         uses: changesets/action@v1
         with:
-          publish: pnpm changeset publish --provenance
+          publish: pnpm changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
