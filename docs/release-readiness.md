@@ -58,6 +58,19 @@ Recorded on 2026-07-14 for `release/1.0.0-readiness`:
 - Before applying `pnpm changeset version`, `pnpm changeset status --verbose` listed only the
   six public packages above for the `1.0.0` release plan.
 
+## Post-Merge Readiness
+
+Recorded on 2026-07-14 after PR #3 merged:
+
+- PR #3, `Prepare TerritoryKit 1.0 release readiness`, merged into `main` at
+  `27eb9a05e61cb9f8c2acae77dccdd35fa40bd7a3`.
+- The `main` branch `CI` workflow passed for the merge commit.
+- The `main` branch `Release` workflow passed for the merge commit with publish disabled.
+- `gh pr list --state open` and `gh issue list --state open` returned no open blockers.
+- No Git tags or GitHub Releases exist yet for `v1.0.0`.
+- npm registry checks returned `E404` for the six public packages, so publishing has not
+  happened yet.
+
 ## Triage And Security
 
 - New release blockers are tracked as GitHub issues or PR review comments and triaged before a
