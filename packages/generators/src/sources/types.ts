@@ -1,4 +1,5 @@
 import type {
+  GeometryQualityReport,
   TerritoryAdminLevel,
   TerritoryDataset,
   TerritoryGlobalDatasetManifest
@@ -18,6 +19,7 @@ export type TerritorySourceStage =
   | "complete";
 
 export type TerritorySourceSeverity = "info" | "warning" | "error";
+export type TerritorySourceGeometryQualityMode = "none" | "basic" | "full";
 
 export interface TerritorySourceCapabilities {
   localFile: boolean;
@@ -102,6 +104,7 @@ export interface TerritorySourceTransformResult {
   attribution: DatasetAttribution;
   issues: TerritorySourceIssue[];
   statistics: TerritorySourceStatistics;
+  geometryQuality?: Record<string, GeometryQualityReport>;
   datasets?: Record<string, TerritoryDataset>;
   files?: Map<string, string>;
   manifest?: TerritoryGlobalDatasetManifest;
@@ -180,6 +183,7 @@ export interface TerritorySourcePipelineOptions<TOptions = unknown> {
   outputPath?: string;
   force?: boolean;
   strict?: boolean;
+  geometryQuality?: TerritorySourceGeometryQualityMode;
   cache?: Partial<TerritorySourceCacheOptions>;
   noCache?: boolean;
   maxSourceSizeBytes?: number;

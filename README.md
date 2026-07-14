@@ -30,7 +30,8 @@ document:
 - `@territory-kit/maplibre`: first map adapter boundary for MapLibre GL JS.
 - `@territory-kit/nestjs`: NestJS integration boundary and PostGIS repository contracts.
 - `@territory-kit/generators`: deterministic dataset helper and generator utilities.
-- `@territory-kit/cli`: `territory validate`, `territory index`, and related tools.
+- `@territory-kit/cli`: `territory validate`, `territory geometry`, `territory index`, and
+  related tools.
 - `@territory-kit/shared-testkit`: private fixtures for tests and examples.
 
 ## Global Dataset Builds
@@ -46,6 +47,7 @@ territory dataset build world-countries \
 ```bash
 territory source list
 territory import geojson --input ./regions.geojson --output ./dist/regions --country TR --admin-level ADM2 --name-property name
+territory geometry validate ./dist/regions --checks full --report ./geometry-report.json
 ```
 
 Generated world-country artifacts are documented in
@@ -86,6 +88,10 @@ items.
 - [Source adapters](./docs/source-adapters.md)
 - [Source pipeline](./docs/source-pipeline.md)
 - [Source cache](./docs/source-cache.md)
+- [Geometry quality](./docs/geometry-quality.md)
+- [Geometry validation](./docs/geometry-validation.md)
+- [Geometry repair](./docs/geometry-repair.md)
+- [Geometry backends](./docs/geometry-backends.md)
 - [World countries ADM0 dataset](./docs/datasets/world-countries.md)
 - [Benchmarks](./docs/benchmarks.md)
 - [NestJS and PostGIS](./docs/nestjs-postgis.md)

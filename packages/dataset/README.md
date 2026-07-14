@@ -11,7 +11,11 @@ pnpm add @territory-kit/dataset
 ## Basic Usage
 
 ```ts
-import { loadTerritoryDataset, validateTerritoryDataset } from "@territory-kit/dataset";
+import {
+  loadTerritoryDataset,
+  validateGeometryDataset,
+  validateTerritoryDataset
+} from "@territory-kit/dataset";
 
 const result = validateTerritoryDataset(input);
 
@@ -20,6 +24,7 @@ if (!result.ok) {
 }
 
 const dataset = loadTerritoryDataset(input);
+const geometryReport = validateGeometryDataset(dataset, { checks: "full" });
 ```
 
 ## API Summary
@@ -30,6 +35,9 @@ const dataset = loadTerritoryDataset(input);
 - `createTerritoryGlobalId(input)` creates deterministic global territory IDs.
 - `validateGlobalDatasetManifest(input)` validates the stricter global dataset manifest contract.
 - `validateTerritoryGlobalMetadata(input)` validates `zone.properties.territory` metadata.
+- `validateGeometryDataset(dataset, options)` runs validate-only geometry quality checks.
+- `repairGeometryDataset(dataset, options)` applies explicit safe repairs and returns an audit
+  report.
 - `computeGeometryBBox`, `computeGeometryCenter`, and `geometryToPolygons` provide geometry helpers.
 - `TERRITORY_SCHEMA_VERSION` exposes the current `territory-schema@1` identifier.
 

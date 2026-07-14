@@ -21,6 +21,7 @@
     "docs:dev": "pnpm --filter @territory-kit/docs dev",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "geometry:validate:fixtures": "pnpm --filter @territory-kit/dataset exec vitest run test/geometry-quality.test.ts --passWithNoTests && pnpm --filter @territory-kit/cli exec vitest run test/cli.test.ts --passWithNoTests",
     "lint": "turbo run lint",
     "package:boundaries": "node scripts/check-package-boundaries.mjs",
     "prepublishOnly": "node -e \"throw new Error('Root workspace must not be published. Publish packages from packages/* only.')\"",

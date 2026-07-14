@@ -5,6 +5,15 @@ export {
   geometryToPolygons,
   hasRingSelfIntersection
 } from "./geometry.js";
+export {
+  BASIC_GEOMETRY_QUALITY_CHECKS,
+  FULL_GEOMETRY_QUALITY_CHECKS,
+  hashTerritoryGeometry,
+  normalizeGeometryQualityChecks,
+  repairGeometryDataset,
+  typescriptGeometryQualityBackend,
+  validateGeometryDataset
+} from "./quality.js";
 export { TerritoryDatasetValidationError } from "./errors.js";
 export {
   TERRITORY_ADMIN_LEVELS,
@@ -50,3 +59,26 @@ export type {
   TerritoryGlobalValidationIssue,
   TerritoryGlobalValidationResult
 } from "./global.js";
+export type {
+  GeometryQualityBackend,
+  GeometryQualityBackendId,
+  GeometryQualityCheckName,
+  GeometryQualityCheckPreset,
+  GeometryQualityChecks,
+  GeometryQualityIssue,
+  GeometryQualityIssueCode,
+  GeometryQualityMode,
+  GeometryQualityOptions,
+  GeometryQualityPerformance,
+  GeometryQualityReport,
+  GeometryQualitySeverity,
+  GeometryQualitySummary,
+  GeometryRepairDatasetResult,
+  GeometryRepairOperation,
+  GeometryRepairOperationType,
+  GeometryRepairOptions,
+  GeometryRepairRecord,
+  GeometryRepairStrategy,
+  GeometryRepairSummary,
+  NormalizedGeometryQualityChecks
+} from "./quality.js";

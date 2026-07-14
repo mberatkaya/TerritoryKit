@@ -34,6 +34,100 @@ describe("territory cli", () => {
     }
   });
 
+  it("validates and safely repairs geometry datasets", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-geometry-"));
+    const filePath = join(tempDir, "dataset.json");
+    const reportPath = join(tempDir, "geometry-report.json");
+    const repairReportPath = join(tempDir, "repair-report.json");
+    const outputPath = join(tempDir, "repaired");
+
+    await writeFile(filePath, JSON.stringify(createRepairableGeometryDataset()), "utf8");
+
+    try {
+      const validation = await captureCli([
+        "geometry",
+        "validate",
+        filePath,
+        "--checks",
+        "basic",
+        "--report",
+        reportPath
+      ]);
+
+      expect(validation).toMatchObject({
+        code: 1,
+        payload: {
+          ok: false,
+          command: "geometry validate",
+          issues: expect.arrayContaining([expect.objectContaining({ code: "RING_NOT_CLOSED" })])
+        }
+      });
+      await expect(readFile(reportPath, "utf8")).resolves.toContain("RING_NOT_CLOSED");
+
+      const repaired = await captureCli([
+        "geometry",
+        "repair",
+        filePath,
+        "--checks",
+        "basic",
+        "--output",
+        outputPath,
+        "--report",
+        repairReportPath
+      ]);
+
+      expect(repaired).toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "geometry repair",
+          data: {
+            repairSummary: {
+              repairedFeatureCount: 1,
+              rejectedFeatureCount: 0,
+              revalidationOk: true
+            }
+          }
+        }
+      });
+      await expect(readFile(repairReportPath, "utf8")).resolves.toContain("close-ring");
+      const output = JSON.parse(await readFile(join(outputPath, "dataset.json"), "utf8")) as {
+        zones: Array<{ id: string; geometry: { coordinates: number[][][] } }>;
+      };
+      const repairedZone = output.zones.find((zone) => zone.id === "tr:34:kadikoy");
+      expect(repairedZone?.geometry.coordinates[0]).toEqual([
+        [29, 40.97],
+        [29.08, 40.97],
+        [29.08, 41.02],
+        [29, 41.02],
+        [29, 40.97]
+      ]);
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
+
+  it("uses geometry CLI input-error exit codes for unavailable backends", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-geometry-"));
+    const filePath = join(tempDir, "dataset.json");
+
+    await writeFile(filePath, JSON.stringify(createSampleTerritoryDataset()), "utf8");
+
+    try {
+      await expect(
+        captureCli(["geometry", "validate", filePath, "--backend", "postgis"])
+      ).resolves.toMatchObject({
+        code: 2,
+        payload: {
+          ok: false,
+          issues: [expect.objectContaining({ code: "GEOMETRY_BACKEND_UNAVAILABLE" })]
+        }
+      });
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
+
   it("imports GeoJSON and generates deterministic datasets", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-"));
     const geojsonPath = join(tempDir, "zones.geojson");
@@ -785,6 +879,36 @@ function readPayload(payload: unknown, path: string): unknown {
 
 function isRecord(input: unknown): input is Record<string, unknown> {
   return typeof input === "object" && input !== null && !Array.isArray(input);
+}
+
+function createRepairableGeometryDataset(): ReturnType<typeof createSampleTerritoryDataset> {
+  const dataset = createSampleTerritoryDataset();
+  const zoneIndex = dataset.zones.findIndex((zone) => zone.id === "tr:34:kadikoy");
+  const zone = dataset.zones[zoneIndex];
+
+  if (!zone) {
+    throw new Error("Fixture zone missing.");
+  }
+
+  dataset.zones[zoneIndex] = {
+    ...zone,
+    geometry: {
+      type: "Polygon",
+      coordinates: [
+        [
+          [29, 40.97],
+          [29.08, 40.97],
+          [29.08, 40.97],
+          [29.08, 41.02],
+          [29, 41.02]
+        ]
+      ]
+    },
+    bbox: [0, 0, 0, 0],
+    center: [0, 0]
+  };
+
+  return dataset;
 }
 
 function createNaturalEarthCliFixture(): unknown {

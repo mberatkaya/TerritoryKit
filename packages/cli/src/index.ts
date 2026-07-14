@@ -9,6 +9,10 @@ import {
   validateTerritoryDataset
 } from "@territory-kit/dataset";
 import type {
+  GeometryQualityCheckPreset,
+  GeometryQualityOptions,
+  GeometryRepairOptions,
+  GeometryRepairStrategy,
   TerritoryDataset,
   TerritoryDatasetManifest,
   TerritoryGeoJsonImportOptions,
@@ -26,7 +30,10 @@ import {
   inferBBoxAdjacency,
   inferBBoxAdjacencyConnections,
   listTerritorySourceAdapters,
-  runTerritorySourcePipeline
+  repairTerritoryDatasetPath,
+  runTerritorySourcePipeline,
+  validateTerritoryDatasetPath,
+  writeGeometryQualityReport
 } from "@territory-kit/generators";
 import type {
   GenericGeoJsonSourceOptions,
@@ -80,6 +87,10 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
 
     if (command === "import") {
       return runImportCommand(argv.slice(1));
+    }
+
+    if (command === "geometry") {
+      return runGeometry(argv.slice(1));
     }
 
     if (command === "generate") {
@@ -167,6 +178,112 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
       issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
     });
     return 1;
+  }
+}
+
+async function runGeometry(args: string[]): Promise<number> {
+  const [subcommand, inputPath] = args;
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printGeometryHelp();
+    return 0;
+  }
+
+  if (subcommand !== "validate" && subcommand !== "repair") {
+    printJson({
+      ok: false,
+      command: "geometry",
+      issues: [createCliIssue(`Unsupported geometry command '${subcommand}'.`)]
+    });
+    return 2;
+  }
+
+  if (!inputPath || inputPath === "--help" || inputPath === "-h") {
+    printGeometryHelp();
+    return inputPath ? 0 : 2;
+  }
+
+  const flags = parseFlags(args.slice(2));
+
+  try {
+    const commonOptions = readGeometryQualityOptions(flags);
+
+    if (Array.isArray(commonOptions)) {
+      printJson({ ok: false, command: `geometry ${subcommand}`, issues: commonOptions });
+      return 2;
+    }
+
+    if (subcommand === "validate") {
+      const { input, report } = await validateTerritoryDatasetPath(inputPath, commonOptions);
+      const reportPath = getFlag(flags, "report");
+
+      if (reportPath) {
+        await writeGeometryQualityReport(reportPath, report);
+      }
+
+      printJson({
+        ok: report.ok,
+        command: "geometry validate",
+        data: {
+          inputPath: input.sourcePath,
+          datasetPath: input.datasetPath,
+          datasetId: input.dataset.manifest.datasetId,
+          reportPath,
+          summary: report.summary,
+          report
+        },
+        issues: report.issues
+      });
+      return report.ok ? 0 : 1;
+    }
+
+    const outputPath = getFlag(flags, "output");
+
+    if (!outputPath) {
+      printJson({
+        ok: false,
+        command: "geometry repair",
+        issues: [createCliIssue("--output is required for geometry repair.")]
+      });
+      return 2;
+    }
+
+    const repairOptions = readGeometryRepairOptions(flags, commonOptions);
+
+    if (Array.isArray(repairOptions)) {
+      printJson({ ok: false, command: "geometry repair", issues: repairOptions });
+      return 2;
+    }
+
+    const repaired = await repairTerritoryDatasetPath(inputPath, outputPath, repairOptions);
+    const reportPath = getFlag(flags, "report");
+
+    if (reportPath) {
+      await writeGeometryQualityReport(reportPath, repaired.result.report);
+    }
+
+    printJson({
+      ok: repaired.result.ok,
+      command: "geometry repair",
+      data: {
+        inputPath: repaired.input.sourcePath,
+        datasetPath: repaired.input.datasetPath,
+        outputPath: repaired.outputPath,
+        reportPath,
+        summary: repaired.result.report.summary,
+        repairSummary: repaired.result.repairSummary,
+        report: repaired.result.report
+      },
+      issues: repaired.result.report.issues
+    });
+    return repaired.result.ok ? 0 : 3;
+  } catch (error) {
+    printJson({
+      ok: false,
+      command: `geometry ${subcommand}`,
+      issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+    });
+    return 2;
   }
 }
 
@@ -859,6 +976,101 @@ function readGenericGeoJsonOptions(
   };
 }
 
+function readGeometryQualityOptions(
+  flags: Map<string, string | true>
+): GeometryQualityOptions | CliIssue[] {
+  const issues: CliIssue[] = [];
+  const checks = readGeometryChecksFlag(flags, issues);
+  const backend = getFlag(flags, "backend") ?? "typescript";
+  const epsilon = readOptionalNonNegativeNumberFlag(flags, "epsilon", issues);
+  const batchSize = readOptionalPositiveIntegerFlag(flags, "batch-size", issues);
+  const allowHoleBoundaryTouch = readOptionalBooleanFlag(
+    flags,
+    "allow-hole-boundary-touch",
+    issues
+  );
+
+  if (backend !== "typescript") {
+    issues.push(
+      createCliIssue(`Geometry backend '${backend}' is not available in this CLI build.`, {
+        code: "GEOMETRY_BACKEND_UNAVAILABLE"
+      })
+    );
+  }
+
+  if (issues.length > 0 || !checks) {
+    return issues;
+  }
+
+  return {
+    mode: "validate-only",
+    checks,
+    ...(flags.has("strict") ? { strict: true } : {}),
+    ...(epsilon === undefined ? {} : { epsilon }),
+    ...(batchSize === undefined ? {} : { batchSize }),
+    ...(allowHoleBoundaryTouch === undefined ? {} : { allowHoleBoundaryTouch })
+  };
+}
+
+function readGeometryRepairOptions(
+  flags: Map<string, string | true>,
+  commonOptions: GeometryQualityOptions
+): (GeometryRepairOptions & { force?: boolean }) | CliIssue[] {
+  const issues: CliIssue[] = [];
+  const repairStrategy = (getFlag(flags, "repair-strategy") ?? "safe") as GeometryRepairStrategy;
+  const maximumAreaDeltaRatio = readOptionalNonNegativeNumberFlag(
+    flags,
+    "maximum-area-delta-ratio",
+    issues
+  );
+  const normalizeRingOrientation = readOptionalBooleanFlag(
+    flags,
+    "normalize-ring-orientation",
+    issues
+  );
+
+  if (repairStrategy !== "safe" && repairStrategy !== "postgis-make-valid") {
+    issues.push(
+      createCliIssue(
+        `Invalid --repair-strategy '${repairStrategy}'. Expected safe or postgis-make-valid.`
+      )
+    );
+  } else if (repairStrategy === "postgis-make-valid") {
+    issues.push(
+      createCliIssue("Repair strategy 'postgis-make-valid' requires a PostGIS backend.", {
+        code: "GEOMETRY_REPAIR_STRATEGY_UNAVAILABLE"
+      })
+    );
+  }
+
+  if (issues.length > 0) {
+    return issues;
+  }
+
+  return {
+    ...commonOptions,
+    mode: "repair",
+    repairStrategy: "safe",
+    ...(maximumAreaDeltaRatio === undefined ? {} : { maximumAreaDeltaRatio }),
+    ...(normalizeRingOrientation === undefined ? {} : { normalizeRingOrientation }),
+    ...(flags.has("force") ? { force: true } : {})
+  };
+}
+
+function readGeometryChecksFlag(
+  flags: Map<string, string | true>,
+  issues: CliIssue[]
+): GeometryQualityCheckPreset | undefined {
+  const checks = getFlag(flags, "checks") ?? "full";
+
+  if (checks === "basic" || checks === "full") {
+    return checks;
+  }
+
+  issues.push(createCliIssue(`Invalid --checks '${checks}'. Expected basic or full.`));
+  return undefined;
+}
+
 function normalizeSourceIssues(issues: TerritorySourceIssue[]): TerritorySourceIssue[] {
   return issues.map((issue) => {
     if (issue.code !== "SOURCE_INPUT_NOT_FOUND") {
@@ -935,6 +1147,75 @@ function getNumberFlag(flags: Map<string, string | true>, key: string, fallback:
   const parsed = value === undefined ? Number.NaN : Number(value);
 
   return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function readOptionalNonNegativeNumberFlag(
+  flags: Map<string, string | true>,
+  key: string,
+  issues: CliIssue[]
+): number | undefined {
+  const value = getFlag(flags, key);
+
+  if (value === undefined) {
+    return undefined;
+  }
+
+  const parsed = Number(value);
+
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    issues.push(createCliIssue(`--${key} must be a non-negative number.`));
+    return undefined;
+  }
+
+  return parsed;
+}
+
+function readOptionalPositiveIntegerFlag(
+  flags: Map<string, string | true>,
+  key: string,
+  issues: CliIssue[]
+): number | undefined {
+  const value = getFlag(flags, key);
+
+  if (value === undefined) {
+    return undefined;
+  }
+
+  const parsed = Number(value);
+
+  if (!Number.isInteger(parsed) || parsed < 1) {
+    issues.push(createCliIssue(`--${key} must be a positive integer.`));
+    return undefined;
+  }
+
+  return parsed;
+}
+
+function readOptionalBooleanFlag(
+  flags: Map<string, string | true>,
+  key: string,
+  issues: CliIssue[]
+): boolean | undefined {
+  const value = flags.get(key);
+
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (value === true) {
+    return true;
+  }
+
+  if (["true", "1", "yes"].includes(value.toLowerCase())) {
+    return true;
+  }
+
+  if (["false", "0", "no"].includes(value.toLowerCase())) {
+    return false;
+  }
+
+  issues.push(createCliIssue(`--${key} must be true or false.`));
+  return undefined;
 }
 
 function getPositiveIntegerFlag(
@@ -1079,6 +1360,7 @@ function printHelp(): void {
 
 Commands:
   validate   Validate a TerritoryKit dataset
+  geometry   Validate or safely repair dataset geometry
   index      Build a spatial-index metadata summary
   adjacency  Infer bbox adjacency and typed geometric connections
   import     Import a GeoJSON file or source adapter artifact
@@ -1086,6 +1368,27 @@ Commands:
   dataset    Build curated dataset artifacts, including world-countries
   simplify   Emit a deterministic no-op simplification result for pipeline wiring
   generate   Generate grid or weighted-voronoi MVP datasets as JSON`);
+}
+
+function printGeometryHelp(): void {
+  console.log(`territory geometry <command> <dataset-path>
+
+Commands:
+  validate  Validate geometry quality for dataset.json or a dataset directory
+  repair    Apply safe, audited geometry repairs and write a repaired dataset
+
+Options:
+  --checks basic|full
+  --strict
+  --backend typescript
+  --epsilon <number>
+  --maximum-area-delta-ratio <number>
+  --allow-hole-boundary-touch true|false
+  --repair-strategy safe
+  --normalize-ring-orientation true|false
+  --output <dir>
+  --report <report.json>
+  --force`);
 }
 
 function printSourceHelp(): void {
