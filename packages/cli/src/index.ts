@@ -15,6 +15,7 @@ import type {
   GeometryQualityOptions,
   GeometryRepairOptions,
   GeometryRepairStrategy,
+  TerritoryAdminLevel,
   TerritoryAdjacencyBuildOptions,
   TerritoryAdjacencyType,
   TerritoryDataset,
@@ -26,18 +27,26 @@ import {
   NATURAL_EARTH_ADM0_DETAILS,
   WORLD_COUNTRIES_DATASET_ID,
   buildTerritoryAdjacencyPath,
+  buildTerritoryCountryDatasetPath,
   buildWorldCountriesDatasetFromSourcePipeline,
+  createTerritoryCountrySourceLock,
   createDatasetGeometryHash,
   createSyntheticGridDataset,
   createWeightedVoronoiDataset,
   getTerritorySourceAdapter,
+  getTerritoryCountryConfig,
   hasTerritorySourceAdapter,
+  inspectTerritoryCountryDatasetPath,
+  listTerritoryCountryConfigs,
   inferBBoxAdjacency,
   inferBBoxAdjacencyConnections,
   listTerritorySourceAdapters,
+  readTerritoryCountrySourceLockPath,
   readTerritoryAdjacencyArtifactPath,
   repairTerritoryDatasetPath,
   runTerritorySourcePipeline,
+  validateTerritoryCountryDatasetPath,
+  verifyTerritoryCountrySourceLock,
   validateTerritoryAdjacencyPath,
   validateTerritoryDatasetPath,
   writeGeometryQualityReport
@@ -102,6 +111,10 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
 
     if (command === "adjacency") {
       return runAdjacency(argv.slice(1));
+    }
+
+    if (command === "country") {
+      return runCountry(argv.slice(1));
     }
 
     if (command === "generate") {
@@ -177,6 +190,372 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
       issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
     });
     return 1;
+  }
+}
+
+async function runCountry(args: string[]): Promise<number> {
+  const [subcommand] = args;
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printCountryHelp();
+    return 0;
+  }
+
+  if (subcommand === "list") {
+    return runCountryList(args.slice(1));
+  }
+
+  if (subcommand === "info") {
+    return runCountryInfo(args.slice(1));
+  }
+
+  if (subcommand === "source") {
+    return runCountrySource(args.slice(1));
+  }
+
+  if (subcommand === "source-lock") {
+    return runCountrySourceLock(args.slice(1));
+  }
+
+  if (subcommand === "source-verify") {
+    return runCountrySourceVerify(args.slice(1));
+  }
+
+  if (subcommand === "build") {
+    return runCountryBuild(args.slice(1));
+  }
+
+  if (subcommand === "validate") {
+    return runCountryValidate(args.slice(1));
+  }
+
+  if (subcommand === "inspect") {
+    return runCountryInspect(args.slice(1));
+  }
+
+  printJson({
+    ok: false,
+    command: "country",
+    issues: [createCliIssue(`Unsupported country command '${subcommand}'.`)]
+  });
+  return 2;
+}
+
+function runCountryList(args: string[]): number {
+  const flags = parseFlags(args);
+  const countries = listTerritoryCountryConfigs();
+
+  if (flags.has("json")) {
+    printJson({
+      ok: true,
+      command: "country list",
+      data: countries.map((config) => ({
+        country: config.countryCodeAlpha2,
+        alpha3: config.countryCodeAlpha3,
+        name: config.displayName,
+        datasetId: config.datasetId,
+        packageName: config.loaderPackageName,
+        levels: config.requestedLevels,
+        sourceProvider: config.sourceProvider
+      }))
+    });
+    return 0;
+  }
+
+  console.log(
+    countries
+      .map((config) =>
+        [
+          config.countryCodeAlpha2.padEnd(4),
+          config.countryCodeAlpha3.padEnd(5),
+          config.requestedLevels.join(",").padEnd(16),
+          config.loaderPackageName
+        ].join("  ")
+      )
+      .join("\n")
+  );
+  return 0;
+}
+
+function runCountryInfo(args: string[]): number {
+  const [country] = args;
+  const flags = parseFlags(args.slice(1));
+
+  if (!country || country === "--help" || country === "-h") {
+    printCountryInfoHelp();
+    return country ? 0 : 2;
+  }
+
+  try {
+    const config = getTerritoryCountryConfig(country);
+
+    if (flags.has("json")) {
+      printJson({ ok: true, command: "country info", data: config });
+    } else {
+      console.log(formatCountryConfig(config));
+    }
+
+    return 0;
+  } catch (error) {
+    printJson({
+      ok: false,
+      command: "country info",
+      issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+    });
+    return 2;
+  }
+}
+
+async function runCountrySource(args: string[]): Promise<number> {
+  const [subcommand] = args;
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printCountrySourceHelp();
+    return 0;
+  }
+
+  if (subcommand === "lock") {
+    return runCountrySourceLock(args.slice(1));
+  }
+
+  if (subcommand === "verify") {
+    return runCountrySourceVerify(args.slice(1));
+  }
+
+  printJson({
+    ok: false,
+    command: "country source",
+    issues: [createCliIssue(`Unsupported country source command '${subcommand}'.`)]
+  });
+  return 2;
+}
+
+async function runCountrySourceLock(args: string[]): Promise<number> {
+  const [country] = args;
+
+  if (!country || country === "--help" || country === "-h") {
+    printCountrySourceLockHelp();
+    return country ? 0 : 2;
+  }
+
+  const flags = parseFlags(args.slice(1));
+  const config = getTerritoryCountryConfig(country);
+  const levels = readCountryLevelsFlag(flags, config.requestedLevels);
+  const outputPath = getFlag(flags, "output");
+  const metadataPath = getFlag(flags, "metadata") ?? getFlag(flags, "metadata-path");
+  const metadataUrl = getFlag(flags, "metadata-url");
+  const releaseType = getFlag(flags, "release-type");
+  const buildDate = getFlag(flags, "build-date");
+  const cacheDir = getFlag(flags, "cache-dir");
+
+  if (isCliIssueArray(levels)) {
+    printJson({ ok: false, command: "country source lock", issues: levels });
+    return 2;
+  }
+
+  try {
+    const result = await createTerritoryCountrySourceLock({
+      country,
+      levels: levels ?? [...config.requestedLevels],
+      ...(releaseType ? { releaseType } : {}),
+      ...(outputPath ? { outputPath } : {}),
+      ...(metadataPath ? { metadataPath } : {}),
+      ...(metadataUrl ? { metadataUrl } : {}),
+      ...(buildDate ? { buildDate } : {}),
+      ...(cacheDir ? { cacheDir } : {}),
+      ...(flags.has("no-cache") ? { noCache: true } : {}),
+      ...(flags.has("refresh") ? { refresh: true } : {}),
+      ...(flags.has("force") ? { force: true } : {})
+    });
+    const ok = result.issues.every((issue) => issue.severity !== "error") && Boolean(result.lock);
+
+    printJson({
+      ok,
+      command: "country source lock",
+      data: {
+        country: config.countryCodeAlpha2,
+        outputPath: result.outputPath,
+        lock: result.lock
+      },
+      issues: result.issues
+    });
+    return ok ? 0 : 1;
+  } catch (error) {
+    printJson({
+      ok: false,
+      command: "country source lock",
+      issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+    });
+    return 2;
+  }
+}
+
+async function runCountrySourceVerify(args: string[]): Promise<number> {
+  const [lockPath] = args;
+
+  if (!lockPath || lockPath === "--help" || lockPath === "-h") {
+    printCountrySourceVerifyHelp();
+    return lockPath ? 0 : 2;
+  }
+
+  const flags = parseFlags(args.slice(1));
+  const buildDate = getFlag(flags, "build-date");
+
+  try {
+    const lock = await readTerritoryCountrySourceLockPath(lockPath);
+    const result = await verifyTerritoryCountrySourceLock(lock, {
+      ...(buildDate ? { buildDate } : {})
+    });
+
+    printJson({
+      ok: result.ok,
+      command: "country source verify",
+      data: {
+        country: lock.country.alpha2,
+        provider: lock.provider,
+        levels: Object.keys(lock.levels).sort()
+      },
+      issues: result.issues
+    });
+    return result.ok ? 0 : 1;
+  } catch (error) {
+    printJson({
+      ok: false,
+      command: "country source verify",
+      issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+    });
+    return 2;
+  }
+}
+
+async function runCountryBuild(args: string[]): Promise<number> {
+  const [country] = args;
+
+  if (!country || country === "--help" || country === "-h") {
+    printCountryBuildHelp();
+    return country ? 0 : 2;
+  }
+
+  const flags = parseFlags(args.slice(1));
+  const sourceLockPath = getFlag(flags, "source-lock");
+  const outputPath = getFlag(flags, "output");
+  const levels = readCountryLevelsFlag(flags);
+  const buildDate = getFlag(flags, "build-date");
+  const batchSize = getFlag(flags, "batch-size");
+
+  if (!sourceLockPath || !outputPath) {
+    printJson({
+      ok: false,
+      command: "country build",
+      issues: [
+        ...(!sourceLockPath ? [createCliIssue("--source-lock is required.")] : []),
+        ...(!outputPath ? [createCliIssue("--output is required.")] : [])
+      ]
+    });
+    return 2;
+  }
+
+  if (isCliIssueArray(levels)) {
+    printJson({ ok: false, command: "country build", issues: levels });
+    return 2;
+  }
+
+  try {
+    const result = await buildTerritoryCountryDatasetPath({
+      country,
+      sourceLockPath,
+      outputPath,
+      ...(levels ? { levels } : {}),
+      ...(flags.has("build-adjacency") ? { buildAdjacency: true } : {}),
+      ...(flags.has("strict") ? { strict: true } : {}),
+      ...(flags.has("allow-non-publish-ready") ? { allowNonPublishReady: true } : {}),
+      ...(buildDate ? { buildDate } : {}),
+      ...(batchSize ? { batchSize: Number(batchSize) } : {}),
+      ...(flags.has("force") ? { force: true } : {})
+    });
+    const ok = result.issues.every((issue) => issue.severity !== "error");
+
+    printJson({
+      ok,
+      command: "country build",
+      data: {
+        country: result.manifest.country.alpha2,
+        outputPath: result.outputPath,
+        manifest: result.manifest,
+        statistics: result.buildReport.statistics,
+        ...(flags.has("json") ? { buildReport: result.buildReport } : {})
+      },
+      issues: result.issues
+    });
+    return ok ? 0 : 1;
+  } catch (error) {
+    printJson({
+      ok: false,
+      command: "country build",
+      issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+    });
+    return flags.has("strict") ? 3 : 2;
+  }
+}
+
+async function runCountryValidate(args: string[]): Promise<number> {
+  const [inputPath] = args;
+
+  if (!inputPath || inputPath === "--help" || inputPath === "-h") {
+    printCountryValidateHelp();
+    return inputPath ? 0 : 2;
+  }
+
+  const flags = parseFlags(args.slice(1));
+
+  try {
+    const result = await validateTerritoryCountryDatasetPath(inputPath, {
+      ...(flags.has("strict") ? { strict: true } : {})
+    });
+
+    printJson({
+      ok: result.ok,
+      command: "country validate",
+      data: {
+        manifest: result.manifest
+      },
+      issues: result.issues
+    });
+    return result.ok ? 0 : 1;
+  } catch (error) {
+    printJson({
+      ok: false,
+      command: "country validate",
+      issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+    });
+    return 2;
+  }
+}
+
+async function runCountryInspect(args: string[]): Promise<number> {
+  const [inputPath] = args;
+
+  if (!inputPath || inputPath === "--help" || inputPath === "-h") {
+    printCountryInspectHelp();
+    return inputPath ? 0 : 2;
+  }
+
+  try {
+    const summary = await inspectTerritoryCountryDatasetPath(inputPath);
+
+    printJson({
+      ok: true,
+      command: "country inspect",
+      data: summary
+    });
+    return 0;
+  } catch (error) {
+    printJson({
+      ok: false,
+      command: "country inspect",
+      issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+    });
+    return 2;
   }
 }
 
@@ -1341,6 +1720,46 @@ function readAdjacencyTypesFlag(
   return types as TerritoryAdjacencyType[];
 }
 
+function readCountryLevelsFlag(
+  flags: Map<string, string | true>,
+  fallback?: readonly TerritoryAdminLevel[]
+): TerritoryAdminLevel[] | CliIssue[] | undefined {
+  const value = getFlag(flags, "levels");
+
+  if (!value) {
+    return fallback ? [...fallback] : undefined;
+  }
+
+  const levels = value
+    .split(",")
+    .map((entry) => entry.trim().toUpperCase())
+    .filter(Boolean);
+  const validLevels = new Set(["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"]);
+  const invalid = levels.find((level) => !validLevels.has(level));
+
+  if (!invalid && levels.length > 0) {
+    return [...new Set(levels)] as TerritoryAdminLevel[];
+  }
+
+  return [
+    createCliIssue(
+      invalid
+        ? `Invalid --levels entry '${invalid}'. Expected ADM0, ADM1, ADM2, ADM3, or ADM4.`
+        : "--levels must include at least one admin level."
+    )
+  ];
+}
+
+function isCliIssueArray(input: unknown): input is CliIssue[] {
+  return (
+    Array.isArray(input) &&
+    input.some(
+      (entry) =>
+        typeof entry === "object" && entry !== null && "severity" in entry && "message" in entry
+    )
+  );
+}
+
 function printAdjacencyInspection(
   zoneId: string,
   neighbors: string[],
@@ -1433,6 +1852,19 @@ function formatSourceDescription(description: TerritorySourceDescription): strin
     `Attribution required: ${description.attributionRequired ? "yes" : "no"}`,
     `Options: ${description.options.map((option) => option.name).join(", ") || "none"}`,
     `Example: ${description.exampleCommand}`
+  ].join("\n");
+}
+
+function formatCountryConfig(config: ReturnType<typeof getTerritoryCountryConfig>): string {
+  return [
+    `Country: ${config.displayName} (${config.countryCodeAlpha2}/${config.countryCodeAlpha3})`,
+    `Dataset ID: ${config.datasetId}`,
+    `Loader package: ${config.loaderPackageName}`,
+    `Source provider: ${config.sourceProvider}`,
+    `Default release: ${config.defaultReleaseType ?? "not specified"}`,
+    `Requested levels: ${config.requestedLevels.join(", ")}`,
+    `Adjacency levels: ${config.adjacencyPolicy.levels.join(", ") || "none"}`,
+    `License policy: ${config.licensePolicy.allowedReleaseTypes.join(", ")}`
   ].join("\n");
 }
 
@@ -1687,11 +2119,94 @@ Commands:
   geometry   Validate or safely repair dataset geometry
   index      Build a spatial-index metadata summary
   adjacency  Build, validate, inspect, or legacy-infer territory adjacency
+  country    Build and inspect pilot country dataset artifacts
   import     Import a GeoJSON file or source adapter artifact
   source     List and inspect source adapters
   dataset    Build curated dataset artifacts, including world-countries
   simplify   Emit a deterministic no-op simplification result for pipeline wiring
   generate   Generate grid or weighted-voronoi MVP datasets as JSON`);
+}
+
+function printCountryHelp(): void {
+  console.log(`territory country <command>
+
+Commands:
+  list                         List configured pilot countries
+  info <country>               Show pilot country config
+  source lock <country>        Resolve and lock source artifacts
+  source verify <lock.json>    Re-fetch/re-read locked source artifacts
+  build <country>              Build country dataset artifacts from a source lock
+  validate <artifact-dir>      Validate country artifact checksums and datasets
+  inspect <artifact-dir>       Summarize a built country artifact
+
+Aliases:
+  territory country source-lock <country>
+  territory country source-verify <lock.json>`);
+}
+
+function printCountryInfoHelp(): void {
+  console.log(`territory country info <country>
+
+Examples:
+  territory country info TR
+  territory country info united-states --json`);
+}
+
+function printCountrySourceHelp(): void {
+  console.log(`territory country source <command>
+
+Commands:
+  lock <country>        Resolve source metadata, verify artifacts, and write sources.lock.json
+  verify <lock.json>    Verify a source lock against its recorded checksums`);
+}
+
+function printCountrySourceLockHelp(): void {
+  console.log(`territory country source lock <country> --output <sources.lock.json>
+
+Options:
+  --levels ADM0,ADM1,ADM2
+  --release-type gbOpen
+  --metadata <metadata.json>
+  --metadata-url <metadata-url>
+  --cache-dir <dir>
+  --no-cache
+  --refresh
+  --build-date <iso-date>
+  --force
+  --json`);
+}
+
+function printCountrySourceVerifyHelp(): void {
+  console.log(`territory country source verify <sources.lock.json>
+
+Options:
+  --build-date <iso-date>
+  --json`);
+}
+
+function printCountryBuildHelp(): void {
+  console.log(`territory country build <country> --source-lock <sources.lock.json> --output <dir>
+
+Options:
+  --levels ADM0,ADM1,ADM2
+  --build-adjacency
+  --strict
+  --allow-non-publish-ready
+  --build-date <iso-date>
+  --batch-size <integer>
+  --force
+  --json`);
+}
+
+function printCountryValidateHelp(): void {
+  console.log(`territory country validate <artifact-dir>
+
+Options:
+  --strict`);
+}
+
+function printCountryInspectHelp(): void {
+  console.log("territory country inspect <artifact-dir>");
 }
 
 function printGeometryHelp(): void {
