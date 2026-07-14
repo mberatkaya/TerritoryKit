@@ -3,6 +3,17 @@
 This page is the final verification gate for Sprint 9-10 release hardening. It prepares the
 repository for a stable release without publishing packages automatically.
 
+## Branch Scope
+
+- The release-readiness branch is `release/1.0.0-readiness`.
+- Sprint 10 freezes the current public API and keeps `territory-schema@1` unchanged.
+- Public packages are prepared at `1.0.0`; private docs, examples, and shared test fixtures
+  remain out of publish scope.
+- The branch may update package versions, changesets, release notes, benchmark evidence, and
+  verification records.
+- Publishing, tagging, and GitHub release creation stay out of scope for the branch and remain
+  post-merge maintainer actions.
+
 ## Workflow Behavior
 
 - Pull requests and `main` pushes must keep the CI matrix green on Node.js 22 and 24.
@@ -33,6 +44,19 @@ pnpm test:visual:maplibre
 ```
 
 Record benchmark deltas in [benchmarks](./benchmarks.md) before creating a release candidate.
+
+## Branch Verification
+
+Recorded on 2026-07-14 for `release/1.0.0-readiness`:
+
+- `pnpm verify` passed.
+- `pnpm bench` passed.
+- `pnpm test:visual:maplibre` passed.
+- `npm pack --dry-run --json` passed for `@territory-kit/dataset`, `@territory-kit/core`,
+  `@territory-kit/maplibre`, `@territory-kit/nestjs`, `@territory-kit/generators`, and
+  `@territory-kit/cli` at `1.0.0`.
+- Before applying `pnpm changeset version`, `pnpm changeset status --verbose` listed only the
+  six public packages above for the `1.0.0` release plan.
 
 ## Triage And Security
 

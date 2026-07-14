@@ -4,7 +4,22 @@
   "baseBranch": "main",
   "changelog": "@changesets/cli/changelog",
   "commit": false,
-  "fixed": [["@territory-kit/*"]],
-  "ignore": ["@territory-kit/shared-testkit"],
+  "fixed": [
+    [
+      "@territory-kit/cli",
+      "@territory-kit/core",
+      "@territory-kit/dataset",
+      "@territory-kit/generators",
+      "@territory-kit/maplibre",
+      "@territory-kit/nestjs"
+    ]
+  ],
+  "ignore": [
+    "@territory-kit/docs",
+    "@territory-kit/example-nestjs-postgis",
+    "@territory-kit/example-node-basic",
+    "@territory-kit/example-web-maplibre",
+    "@territory-kit/shared-testkit"
+  ],
   "updateInternalDependencies": "patch"
 }

@@ -21,7 +21,7 @@ document:
 | `0.5.0`         | Sprint 7     | Hardened on roadmap branch |
 | `0.6.0`         | Sprint 8     | Hardened on roadmap branch |
 | `0.9.0-rc.1`    | Sprint 9     | Verified on roadmap branch |
-| `1.0.0`         | Sprint 10    | Release gates defined      |
+| `1.0.0`         | Sprint 10    | Prepared on release branch |
 
 ## Packages
 
@@ -46,6 +46,13 @@ pnpm bundle:size
 
 Node.js `>=22` and pnpm `>=11` are required. The current TypeScript baseline is `6.0.3`;
 TypeScript 7 will be evaluated in a later ADR before adoption.
+
+## 1.0 Release Scope
+
+The `1.0.0` release branch freezes the current public API surface and keeps
+`territory-schema@1` unchanged. It prepares package versions, release notes, benchmark
+evidence, and verification gates for a stable PR, but publishing, tagging, and GitHub release
+creation remain post-merge maintainer actions.
 
 ## Planning Docs
 
