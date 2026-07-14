@@ -84,6 +84,7 @@ export {
   validateTerritoryAdjacencyPath,
   writeTerritoryAdjacencyOutput
 } from "./adjacency.js";
+export * from "./countries/index.js";
 export { verifySourceArtifact } from "./sources/verification.js";
 export { getDefaultSourceCacheDir, createSourceCacheKey } from "./sources/cache.js";
 export { fetchHttpSourceArtifact } from "./sources/transports/http.js";

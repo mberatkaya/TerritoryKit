@@ -42,6 +42,9 @@ const realAdjacency = await buildTerritoryAdjacency(dataset, {
 - `buildTerritoryAdjacency(dataset, options)` builds exact polygon adjacency artifacts.
 - `buildTerritoryAdjacencyPath(inputPath, options)` writes `adjacency.json`, `build-report.json`,
   and `checksums.json`.
+- `createTerritoryCountrySourceLock(options)` resolves and checksums pilot country source artifacts.
+- `buildTerritoryCountryDatasetPath(options)` writes country manifests, per-level datasets,
+  hierarchy reports, identity maps, quality reports, and optional adjacency artifacts.
 - `createDefaultTerritorySourceRegistry()` returns built-in adapters for Natural Earth,
   geoBoundaries, and generic GeoJSON.
 - `parseNaturalEarthAdm0FeatureCollection(input, source)` parses local Natural Earth-like GeoJSON
@@ -66,6 +69,31 @@ await buildWorldCountriesDataset({
 
 The builder writes `manifest.json`, `checksums.json`, `attribution.txt`, `build-report.json`, and
 detail-specific `dataset.json` files.
+
+## Pilot Country Datasets
+
+```ts
+import {
+  buildTerritoryCountryDatasetPath,
+  createTerritoryCountrySourceLock
+} from "@territory-kit/generators";
+
+await createTerritoryCountrySourceLock({
+  country: "TR",
+  levels: ["ADM0", "ADM1", "ADM2"],
+  outputPath: "./dist/tr/sources.lock.json"
+});
+
+await buildTerritoryCountryDatasetPath({
+  country: "TR",
+  sourceLockPath: "./dist/tr/sources.lock.json",
+  outputPath: "./dist/tr",
+  buildAdjacency: true,
+  strict: true
+});
+```
+
+Configured pilot countries are `TR`, `US`, `DE`, `JP`, and `ID`.
 
 ## Source Adapters
 
