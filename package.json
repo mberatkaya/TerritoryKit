@@ -32,6 +32,7 @@
     "package:dry-run": "node scripts/package-dry-run.mjs",
     "prepublishOnly": "node -e \"throw new Error('Root workspace must not be published. Publish packages from packages/* only.')\"",
     "query-render:smoke": "node scripts/query-render-compatibility-smoke.mjs",
+    "registry:generate": "node scripts/generate-dataset-registry.mjs",
     "release": "pnpm build && node scripts/publish-packages.mjs",
     "release:check": "node scripts/release-check.mjs",
     "registry:smoke": "node scripts/registry-install-smoke.mjs",

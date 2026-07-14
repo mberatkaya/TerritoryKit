@@ -19,15 +19,24 @@ const FIXTURE_BUILD_DATE = "2026-01-01T00:00:00.000Z";
 
 describe("pilot country dataset pipeline", () => {
   it("registers the Sprint 5 pilot country configs deterministically", () => {
-    expect(listTerritoryCountryConfigs().map((config) => config.countryCodeAlpha2)).toEqual([
-      "DE",
-      "ID",
-      "JP",
-      "TR",
-      "US"
-    ]);
+    const configs = listTerritoryCountryConfigs();
+
+    expect(configs).toHaveLength(249);
+    expect(configs.map((config) => config.countryCodeAlpha2)).toEqual(
+      [...configs.map((config) => config.countryCodeAlpha2)].sort()
+    );
+    expect(configs.map((config) => config.countryCodeAlpha2)).toEqual(
+      expect.arrayContaining(["DE", "ID", "JP", "TR", "US"])
+    );
     expect(getTerritoryCountryConfig("USA").loaderPackageName).toBe("@territory-kit/data-us");
     expect(getTerritoryCountryConfig("tr").requestedLevels).toEqual(["ADM0", "ADM1", "ADM2"]);
+    expect(getTerritoryCountryConfig("FR")).toMatchObject({
+      reviewRequired: true,
+      levelMappings: {
+        ADM1: { semanticType: "unknown", reviewRequired: true },
+        ADM2: { semanticType: "unknown", reviewRequired: true }
+      }
+    });
   });
 
   it("creates reproducible source locks and builds publish-ready country artifacts", async () => {

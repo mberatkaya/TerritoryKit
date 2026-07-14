@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "territorykit-provider-registry@1",
+  "generatedAt": "2026-07-14T00:00:00.000Z",
+  "providers": [
+    {
+      "id": "natural-earth",
+      "name": "Natural Earth",
+      "status": "implemented",
+      "sourceUrl": "https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-0-countries/",
+      "license": "Public Domain",
+      "attribution": "Made with Natural Earth",
+      "redistributionAllowed": true,
+      "commercialUseAllowed": true,
+      "modificationAllowed": true,
+      "supportedLevels": ["ADM0"],
+      "notes": ["Used by the world-countries ADM0 pipeline."]
+    },
+    {
+      "id": "geoboundaries",
+      "name": "geoBoundaries",
+      "status": "implemented",
+      "sourceUrl": "https://www.geoboundaries.org/",
+      "license": "CC BY 4.0",
+      "attribution": "geoBoundaries",
+      "redistributionAllowed": true,
+      "commercialUseAllowed": true,
+      "modificationAllowed": true,
+      "supportedLevels": ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"],
+      "notes": ["Used by pilot country source locks and country build pipeline."]
+    },
+    {
+      "id": "geojson",
+      "name": "Generic GeoJSON",
+      "status": "implemented",
+      "sourceUrl": "local or user supplied",
+      "license": "source-defined",
+      "attribution": "source-defined",
+      "redistributionAllowed": false,
+      "commercialUseAllowed": false,
+      "modificationAllowed": false,
+      "supportedLevels": ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"],
+      "notes": [
+        "Redistribution and commercial-use flags must be supplied by the imported source metadata."
+      ]
+    }
+  ]
+}

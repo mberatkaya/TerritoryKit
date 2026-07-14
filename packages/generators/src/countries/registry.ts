@@ -4,6 +4,8 @@ import { indonesiaCountryConfig } from "./configs/id.js";
 import { japanCountryConfig } from "./configs/jp.js";
 import { turkeyCountryConfig } from "./configs/tr.js";
 import { unitedStatesCountryConfig } from "./configs/us.js";
+import { ISO_3166_COUNTRIES } from "./iso3166.js";
+import type { TerritoryIsoCountryEntry } from "./iso3166.js";
 
 export class TerritoryCountryConfigRegistry {
   readonly #configsByAlpha2 = new Map<string, TerritoryCountryDatasetConfig>();
@@ -73,13 +75,19 @@ export function createTerritoryCountryConfigRegistry(
 }
 
 export function createDefaultTerritoryCountryConfigRegistry(): TerritoryCountryConfigRegistry {
-  return createTerritoryCountryConfigRegistry([
+  const pilotConfigs = [
     germanyCountryConfig,
     indonesiaCountryConfig,
     japanCountryConfig,
     turkeyCountryConfig,
     unitedStatesCountryConfig
-  ]);
+  ] as const;
+  const pilotCountryCodes = new Set(pilotConfigs.map((config) => config.countryCodeAlpha2));
+  const fallbackConfigs = ISO_3166_COUNTRIES.filter(
+    (country) => !pilotCountryCodes.has(country.iso2)
+  ).map(createFallbackIsoCountryConfig);
+
+  return createTerritoryCountryConfigRegistry([...pilotConfigs, ...fallbackConfigs]);
 }
 
 export function listTerritoryCountryConfigs(): TerritoryCountryDatasetConfig[] {
@@ -102,4 +110,90 @@ function normalizeCountryLookup(countryCode: string): string {
   }
 
   return normalized;
+}
+
+function createFallbackIsoCountryConfig(
+  country: TerritoryIsoCountryEntry
+): TerritoryCountryDatasetConfig {
+  return {
+    datasetId: country.iso2.toLowerCase(),
+    countryCodeAlpha2: country.iso2,
+    countryCodeAlpha3: country.iso3,
+    displayName: country.name,
+    defaultLocale: "en",
+    sourceProvider: "geoboundaries",
+    defaultReleaseType: "gbOpen",
+    loaderPackageName: `@territory-kit/data-${country.iso2.toLowerCase()}`,
+    requestedLevels: ["ADM0", "ADM1", "ADM2"],
+    levelMappings: {
+      ADM0: {
+        adminLevel: "ADM0",
+        expectedLocalTypes: ["country"],
+        semanticType: "country",
+        label: "Country",
+        sourceNameProperty: "shapeName",
+        sourceIdProperty: "shapeID",
+        sourceCodeProperties: ["officialCode", "shapeISO", "shapeID"],
+        sourceParentProperties: [],
+        required: true,
+        reviewRequired: false
+      },
+      ADM1: {
+        adminLevel: "ADM1",
+        expectedLocalTypes: ["administrative-unit"],
+        semanticType: "unknown",
+        label: "First-level administrative unit",
+        sourceNameProperty: "shapeName",
+        sourceIdProperty: "shapeID",
+        sourceCodeProperties: ["officialCode", "shapeISO", "shapeID"],
+        sourceParentProperties: ["parentShapeID", "shapeParentID", "parentSourceId"],
+        required: false,
+        reviewRequired: true
+      },
+      ADM2: {
+        adminLevel: "ADM2",
+        expectedLocalTypes: ["administrative-unit"],
+        semanticType: "unknown",
+        label: "Second-level administrative unit",
+        sourceNameProperty: "shapeName",
+        sourceIdProperty: "shapeID",
+        sourceCodeProperties: ["officialCode", "shapeISO", "shapeID"],
+        sourceParentProperties: ["parentShapeID", "shapeParentID", "parentSourceId"],
+        required: false,
+        reviewRequired: true
+      }
+    },
+    notes: [
+      "Fallback ISO country config. ADM1/ADM2 semantic mappings are not reviewed for this country.",
+      `UN M49 numeric code: ${country.numeric}.`
+    ],
+    reviewRequired: true,
+    identityStrategy: {
+      officialCodeProperties: ["officialCode", "shapeISO"],
+      sourceStableCodeProperties: ["shapeID", "sourceCode"],
+      sourceIdProperties: ["shapeID", "id"]
+    },
+    hierarchyStrategy: {
+      parentIdProperties: ["parentShapeID", "shapeParentID", "parentSourceId", "shapeParent"],
+      parentCodeProperties: ["parentCode", "parentOfficialCode"],
+      spatialContainmentTolerance: 1e-9
+    },
+    qualityPolicy: {
+      rejectGeometryErrors: true,
+      rejectUnresolvedParents: false,
+      rejectAmbiguousParents: true,
+      maximumFallbackIdentityRatio: 0.5
+    },
+    adjacencyPolicy: {
+      levels: ["ADM1", "ADM2"],
+      includePointTouches: false,
+      minimumSharedBoundaryMeters: 0
+    },
+    licensePolicy: {
+      allowedReleaseTypes: ["gbOpen", "gbHumanitarian", "gbAuthoritative"],
+      requireAttribution: true,
+      rejectUnknownLicense: true,
+      allowNonRedistributableSource: false
+    }
+  };
 }
