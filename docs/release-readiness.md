@@ -58,6 +58,31 @@ Recorded on 2026-07-14 for `release/1.0.0-readiness`:
 - Before applying `pnpm changeset version`, `pnpm changeset status --verbose` listed only the
   six public packages above for the `1.0.0` release plan.
 
+## Post-Merge Readiness
+
+Recorded on 2026-07-14 after PR #3 merged:
+
+- PR #3, `Prepare TerritoryKit 1.0 release readiness`, merged into `main` at
+  `27eb9a05e61cb9f8c2acae77dccdd35fa40bd7a3`.
+- The `main` branch `CI` workflow passed for the merge commit.
+- The `main` branch `Release` workflow passed for the merge commit with publish disabled.
+- `gh pr list --state open` and `gh issue list --state open` returned no open blockers.
+- No Git tags or GitHub Releases exist yet for `v1.0.0`.
+- npm registry checks returned `E404` for the six public packages, so publishing has not
+  happened yet.
+
+## Final Checklist Closure Verification
+
+Recorded on 2026-07-14 for `release/final-checklist-closure`:
+
+- `pnpm format:check` passed.
+- `pnpm verify` passed.
+- `pnpm bench` passed.
+- `pnpm test:visual:maplibre` passed.
+- `npm pack --dry-run --json` passed for `@territory-kit/dataset`, `@territory-kit/core`,
+  `@territory-kit/maplibre`, `@territory-kit/nestjs`, `@territory-kit/generators`, and
+  `@territory-kit/cli` at `1.0.0`.
+
 ## Triage And Security
 
 - New release blockers are tracked as GitHub issues or PR review comments and triaged before a
@@ -75,3 +100,17 @@ Only dispatch publish after:
 - `pnpm bench` output has been reviewed and documented.
 - `CHANGELOG.md`, changesets, and migration docs are current.
 - The npm package versions and generated package contents have been reviewed.
+
+## External Release Handoff
+
+These steps are maintainer actions after the final checklist PR merges:
+
+1. Dispatch the `Release` workflow from GitHub Actions with `publish=true`.
+2. Confirm the workflow completes successfully and runs `pnpm changeset publish`.
+3. Verify npm shows version `1.0.0` for `@territory-kit/dataset`, `@territory-kit/core`,
+   `@territory-kit/maplibre`, `@territory-kit/nestjs`, `@territory-kit/generators`, and
+   `@territory-kit/cli`.
+4. Create the `v1.0.0` tag and GitHub Release if maintainers want a GitHub release artifact.
+5. Keep failed publish attempts private until any npm or credential issues are resolved.
+
+Do not publish packages, create tags, or create GitHub Releases from a normal PR branch.
