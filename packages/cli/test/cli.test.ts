@@ -303,6 +303,57 @@ describe("territory cli", () => {
     }
   });
 
+  it("builds, validates, inspects, and compares render artifacts", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-cli-render-"));
+    const datasetPath = join(tempDir, "dataset.json");
+    const outputPath = join(tempDir, "render");
+
+    await writeFile(datasetPath, JSON.stringify(createSampleTerritoryDataset()), "utf8");
+
+    try {
+      await expect(
+        captureCli([
+          "render",
+          "build",
+          datasetPath,
+          "--output",
+          outputPath,
+          "--format",
+          "mvt",
+          "--min-zoom",
+          "0",
+          "--max-zoom",
+          "0",
+          "--build-date",
+          "2026-01-01T00:00:00.000Z"
+        ])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: { ok: true, command: "render build", data: { format: "mvt" } }
+      });
+      await expect(captureCli(["render", "validate", outputPath])).resolves.toMatchObject({
+        code: 0,
+        payload: { ok: true, command: "render validate", data: { format: "mvt" } }
+      });
+      await expect(captureCli(["render", "inspect", outputPath])).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "render inspect",
+          data: { tileTemplate: "tiles/{z}/{x}/{y}.mvt" }
+        }
+      });
+      await expect(
+        captureCli(["render", "compare", datasetPath, outputPath])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: { ok: true, command: "render compare", issues: [] }
+      });
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
+
   it("imports GeoJSON and generates deterministic datasets", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-"));
     const geojsonPath = join(tempDir, "zones.geojson");

@@ -45,7 +45,9 @@
   },
   "dependencies": {
     "@territory-kit/core": "workspace:*",
-    "@territory-kit/dataset": "workspace:*"
+    "@territory-kit/dataset": "workspace:*",
+    "@maplibre/geojson-vt": "^6.1.1",
+    "@maplibre/vt-pbf": "^4.3.2"
   },
   "devDependencies": {
     "@territory-kit/shared-testkit": "workspace:*"

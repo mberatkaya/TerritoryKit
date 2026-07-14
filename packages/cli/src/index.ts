@@ -44,11 +44,15 @@ import {
   readTerritoryCountrySourceLockPath,
   readTerritoryAdjacencyArtifactPath,
   repairTerritoryDatasetPath,
+  buildTerritoryRenderArtifactPath,
+  compareTerritoryQueryRenderArtifacts,
   runTerritorySourcePipeline,
+  inspectTerritoryRenderArtifactPath,
   validateTerritoryCountryDatasetPath,
   verifyTerritoryCountrySourceLock,
   validateTerritoryAdjacencyPath,
   validateTerritoryDatasetPath,
+  validateTerritoryRenderArtifactPath,
   writeGeometryQualityReport
 } from "@territory-kit/generators";
 import { validateTerritoryDatasetRegistry } from "@territory-kit/registry";
@@ -126,6 +130,10 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
 
     if (command === "adjacency") {
       return runAdjacency(argv.slice(1));
+    }
+
+    if (command === "render") {
+      return runRender(argv.slice(1));
     }
 
     if (command === "country") {
@@ -995,6 +1003,143 @@ async function runDataset(args: string[]): Promise<number> {
       : { issues: result.issues })
   });
   return result.ok ? 0 : 1;
+}
+
+async function runRender(args: string[]): Promise<number> {
+  const [subcommand] = args;
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printRenderHelp();
+    return 0;
+  }
+
+  if (subcommand === "build") {
+    const [datasetPath] = args.slice(1).filter((value) => !value.startsWith("--"));
+    const flags = parseFlags(args.slice(1));
+    const outputPath = getFlag(flags, "output");
+    const format = getFlag(flags, "format") ?? "mvt";
+
+    if (!datasetPath || !outputPath) {
+      printJson({
+        ok: false,
+        command: "render build",
+        issues: [createCliIssue("Dataset path and --output are required.")]
+      });
+      return 1;
+    }
+
+    if (format !== "mvt" && format !== "geojson") {
+      printJson({
+        ok: false,
+        command: "render build",
+        issues: [createCliIssue("--format must be mvt or geojson.")]
+      });
+      return 1;
+    }
+
+    const layerId = getFlag(flags, "layer");
+    const minZoom = getOptionalNumberFlag(flags, "min-zoom");
+    const maxZoom = getOptionalNumberFlag(flags, "max-zoom");
+    const buildDate = getFlag(flags, "build-date");
+    const result = await buildTerritoryRenderArtifactPath({
+      inputPath: datasetPath,
+      outputPath,
+      format,
+      ...(layerId ? { layerId } : {}),
+      ...(minZoom !== undefined ? { minZoom } : {}),
+      ...(maxZoom !== undefined ? { maxZoom } : {}),
+      ...(buildDate ? { buildDate } : {}),
+      ...(flags.has("force") ? { force: true } : {})
+    });
+
+    printJson({
+      ok: true,
+      command: "render build",
+      data: {
+        format: result.manifest.format,
+        datasetId: result.manifest.datasetId,
+        outputPath,
+        fileCount: result.files.size,
+        layers: result.manifest.layers
+      }
+    });
+    return 0;
+  }
+
+  if (subcommand === "validate") {
+    const [artifactPath] = args.slice(1).filter((value) => !value.startsWith("--"));
+
+    if (!artifactPath) {
+      printJson({
+        ok: false,
+        command: "render validate",
+        issues: [createCliIssue("Render artifact path is required.")]
+      });
+      return 1;
+    }
+
+    const result = await validateTerritoryRenderArtifactPath(artifactPath);
+    printJson({
+      ok: result.ok,
+      command: "render validate",
+      ...(result.manifest ? { data: result.manifest } : {}),
+      issues: result.issues
+    });
+    return result.ok ? 0 : 1;
+  }
+
+  if (subcommand === "inspect") {
+    const [artifactPath] = args.slice(1).filter((value) => !value.startsWith("--"));
+
+    if (!artifactPath) {
+      printJson({
+        ok: false,
+        command: "render inspect",
+        issues: [createCliIssue("Render artifact path is required.")]
+      });
+      return 1;
+    }
+
+    printJson({
+      ok: true,
+      command: "render inspect",
+      data: await inspectTerritoryRenderArtifactPath(artifactPath)
+    });
+    return 0;
+  }
+
+  if (subcommand === "compare") {
+    const [queryDatasetPath, renderArtifactPath] = args
+      .slice(1)
+      .filter((value) => !value.startsWith("--"));
+
+    if (!queryDatasetPath || !renderArtifactPath) {
+      printJson({
+        ok: false,
+        command: "render compare",
+        issues: [createCliIssue("Query dataset path and render artifact path are required.")]
+      });
+      return 1;
+    }
+
+    const result = await compareTerritoryQueryRenderArtifacts({
+      queryDatasetPath,
+      renderArtifactPath
+    });
+    printJson({
+      ok: result.ok,
+      command: "render compare",
+      issues: result.issues
+    });
+    return result.ok ? 0 : 1;
+  }
+
+  printJson({
+    ok: false,
+    command: "render",
+    issues: [createCliIssue(`Unsupported render command '${subcommand}'.`)]
+  });
+  return 1;
 }
 
 async function runRegistry(args: string[]): Promise<number> {
@@ -2230,6 +2375,17 @@ function getNumberFlag(flags: Map<string, string | true>, key: string, fallback:
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
+function getOptionalNumberFlag(flags: Map<string, string | true>, key: string): number | undefined {
+  const value = getFlag(flags, key);
+
+  if (value === undefined) {
+    return undefined;
+  }
+
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : undefined;
+}
+
 function createCliRegistryClient(flags: Map<string, string | true>) {
   const registryUrl = getFlag(flags, "registry");
   const cacheDir = getFlag(flags, "cache-dir");
@@ -2485,6 +2641,7 @@ Commands:
   geometry   Validate or safely repair dataset geometry
   index      Build a spatial-index metadata summary
   adjacency  Build, validate, inspect, or legacy-infer territory adjacency
+  render     Build, validate, inspect, or compare render artifacts
   country    Build and inspect pilot country dataset artifacts
   import     Import a GeoJSON file or source adapter artifact
   source     List and inspect source adapters
@@ -2651,6 +2808,25 @@ function printAdjacencyInspectHelp(): void {
 
 Options:
   --type shared-border|point-touch|maritime|logical
+  --json`);
+}
+
+function printRenderHelp(): void {
+  console.log(`territory render <command>
+
+Commands:
+  build <dataset.json> --output <dir>       Build render artifacts
+  validate <artifact-dir>                   Validate render artifact structure
+  inspect <artifact-dir>                    Print render manifest
+  compare <dataset.json> <artifact-dir>     Compare query identity with render metadata
+
+Options:
+  --format mvt|geojson
+  --layer <source-layer>
+  --min-zoom <number>
+  --max-zoom <number>
+  --build-date <iso-date>
+  --force
   --json`);
 }
 

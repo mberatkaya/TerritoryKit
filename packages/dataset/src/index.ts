@@ -46,6 +46,15 @@ export {
   loadTerritoryDataset,
   validateTerritoryDataset
 } from "./validation.js";
+export {
+  DEFAULT_TERRITORY_RENDER_LEVEL_POLICY,
+  createTerritoryQueryArtifact,
+  createTerritoryRenderArtifactManifest,
+  createTerritoryRenderFeatureCollection,
+  normalizeRenderPolicies,
+  validateTerritoryQueryRenderCompatibility,
+  zoneToAdminLevel
+} from "./artifacts.js";
 export type {
   TerritoryAdjacencyArtifact,
   TerritoryAdjacencyBuildOptions,
@@ -92,6 +101,15 @@ export type {
   TerritoryValidationSeverity,
   TerritoryZone
 } from "./types.js";
+export type {
+  TerritoryQueryArtifact,
+  TerritoryQueryRenderCompatibilityIssue,
+  TerritoryQueryRenderCompatibilityResult,
+  TerritoryRenderArtifactManifest,
+  TerritoryRenderFeatureProperties,
+  TerritoryRenderLayerManifest,
+  TerritoryRenderLevelPolicy
+} from "./artifacts.js";
 export type {
   TerritoryGlobalIdParts,
   TerritoryGlobalValidationIssue,
