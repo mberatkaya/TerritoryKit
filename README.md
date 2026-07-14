@@ -33,6 +33,20 @@ document:
 - `@territory-kit/cli`: `territory validate`, `territory index`, and related tools.
 - `@territory-kit/shared-testkit`: private fixtures for tests and examples.
 
+## Global Dataset Builds
+
+The global dataset pipeline starts with a local Natural Earth ADM0 builder:
+
+```bash
+territory dataset build world-countries \
+  --source ./sources/ne-admin0.geojson \
+  --output ./dist/world-countries
+```
+
+Generated world-country artifacts are documented in
+[docs/datasets/world-countries.md](./docs/datasets/world-countries.md) and are not embedded in npm
+packages.
+
 ## Development
 
 ```bash
@@ -64,6 +78,7 @@ items.
 - [Release governance](./docs/release-governance.md)
 - [Roadmap](./docs/roadmap.md)
 - [Dataset compatibility](./docs/dataset-compatibility.md)
+- [World countries ADM0 dataset](./docs/datasets/world-countries.md)
 - [Benchmarks](./docs/benchmarks.md)
 - [NestJS and PostGIS](./docs/nestjs-postgis.md)
 - [Release readiness](./docs/release-readiness.md)

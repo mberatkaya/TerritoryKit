@@ -120,6 +120,10 @@ Large global datasets should not be embedded in npm packages. Publish build code
 checksums, attribution files, and small fixtures in the repository. Publish large generated
 artifacts separately and verify them with `artifactChecksum`.
 
+The first global build target is documented in [World countries ADM0](./datasets/world-countries.md).
+It reads a local Natural Earth Admin 0 GeoJSON file and emits `manifest.json`, `checksums.json`,
+`attribution.txt`, `build-report.json`, and detail-specific `dataset.json` files.
+
 ## Boundary Policy
 
 No dataset should imply that disputed borders have one universal answer. Each global manifest must
