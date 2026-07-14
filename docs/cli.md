@@ -12,6 +12,8 @@ territory source info natural-earth
 territory import natural-earth --input ./natural-earth.geojson --output ./dist/world-countries
 territory import geoboundaries --input ./geoBoundaries-TUR-ADM1.geojson --country TR --admin-level ADM1 --output ./dist/tr-adm1
 territory import geojson --input ./regions.geojson --country TR --admin-level ADM2 --name-property region.name --output ./dist/regions
+territory geometry validate ./dist/regions --checks full --report ./geometry-report.json
+territory geometry repair ./dist/regions --checks basic --output ./dist/regions-repaired --report ./repair-report.json
 territory simplify dataset.json
 territory generate --kind grid --dataset-id demo --rows 10 --columns 10
 territory generate --kind weighted-voronoi --dataset-id demo
@@ -40,6 +42,14 @@ even when the manifest flag used `import-pending`.
 
 `territory generate` rejects invalid grid dimensions, invalid cell sizes, invalid levels, and
 unordered weighted-voronoi bounds using the same JSON-first error shape.
+
+`territory geometry validate` reads either a `dataset.json` file or a dataset directory. It writes
+the optional report file and exits `0` for valid data, `1` for validation errors, and `2` for
+CLI/input errors.
+
+`territory geometry repair` is explicit opt-in. It applies only safe repairs, writes an audited
+repair report, revalidates the output, and exits `3` if any repair is rejected or revalidation
+fails. The implemented backend is `--backend typescript`.
 
 `territory dataset build world-countries` builds Natural Earth ADM0 artifacts from a local GeoJSON
 source. It writes `manifest.json`, `attribution.txt`, `checksums.json`, `build-report.json`, and

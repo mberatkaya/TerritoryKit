@@ -1,6 +1,11 @@
 import { mkdir } from "node:fs/promises";
 import { join, resolve } from "node:path";
-import { validateGlobalDatasetManifest, validateTerritoryDataset } from "@territory-kit/dataset";
+import {
+  validateGeometryDataset,
+  validateGlobalDatasetManifest,
+  validateTerritoryDataset
+} from "@territory-kit/dataset";
+import type { GeometryQualityReport } from "@territory-kit/dataset";
 import { createDefaultTerritorySourceRegistry } from "./builtins.js";
 import {
   getDefaultSourceCacheDir,
@@ -22,6 +27,7 @@ import type {
   TerritorySourcePipelineResult,
   TerritorySourceRequest,
   TerritorySourceStage,
+  TerritorySourceGeometryQualityMode,
   TerritorySourceTransformResult
 } from "./types.js";
 import { pathExists, serializeJsonStable, sha256Hex, writeFilesAtomically } from "./utils.js";
@@ -101,9 +107,16 @@ export async function runTerritorySourcePipeline<TOptions = unknown>(
     issues.push(...transform.issues);
 
     await stage("validate", async () => {
-      issues.push(
-        ...validateSourceTransform(provider, transform as TerritorySourceTransformResult)
+      const validation = validateSourceTransform(
+        provider,
+        transform as TerritorySourceTransformResult,
+        options.geometryQuality ?? "basic"
       );
+      issues.push(...validation.issues);
+
+      if (validation.geometryQuality) {
+        (transform as TerritorySourceTransformResult).geometryQuality = validation.geometryQuality;
+      }
     });
     await stage("enrich", async () => undefined);
 
@@ -316,6 +329,9 @@ function createGenericArtifactFiles(
     serializeJsonStable({
       statistics: transform.statistics,
       issues: transform.issues,
+      ...(transform.geometryQuality
+        ? { geometryQuality: summarizeGeometryQualityReports(transform.geometryQuality) }
+        : {}),
       buildDurationMs: 0,
       buildDurationPolicy: "normalized-for-reproducibility"
     })
@@ -338,12 +354,19 @@ function createGenericArtifactFiles(
 
 function validateSourceTransform(
   provider: string,
-  transform: TerritorySourceTransformResult
-): TerritorySourceIssue[] {
+  transform: TerritorySourceTransformResult,
+  geometryQualityMode: TerritorySourceGeometryQualityMode
+): {
+  issues: TerritorySourceIssue[];
+  geometryQuality?: Record<string, GeometryQualityReport>;
+} {
   const issues: TerritorySourceIssue[] = [];
-  const datasets = transform.datasets ? Object.values(transform.datasets) : [transform.dataset];
+  const datasetEntries = transform.datasets
+    ? Object.entries(transform.datasets)
+    : [["dataset", transform.dataset] as const];
+  const geometryQualityReports: Record<string, GeometryQualityReport> = {};
 
-  for (const dataset of datasets) {
+  for (const [datasetKey, dataset] of datasetEntries) {
     const validation = validateTerritoryDataset(dataset);
 
     issues.push(
@@ -357,10 +380,39 @@ function validateSourceTransform(
           ...(issue.featureId ? { featureId: issue.featureId } : {}),
           ...(issue.sourcePath ? { sourcePath: issue.sourcePath } : {}),
           ...(issue.repairSuggestion ? { repairSuggestion: issue.repairSuggestion } : {}),
-          details: { path: issue.path, zoneId: issue.zoneId }
+          details: { path: issue.path, zoneId: issue.zoneId, datasetKey }
         })
       )
     );
+
+    if (geometryQualityMode !== "none") {
+      const report = validateGeometryDataset(dataset, {
+        checks: geometryQualityMode,
+        mode: "validate-only"
+      });
+      geometryQualityReports[datasetKey] = report;
+      issues.push(
+        ...report.issues.map((issue) =>
+          createSourceIssue({
+            stage: "validate",
+            severity: issue.severity,
+            code: `GEOMETRY_${issue.code}`,
+            message: issue.message,
+            provider,
+            ...(issue.featureId ? { featureId: issue.featureId } : {}),
+            ...(issue.repairSuggestion ? { repairSuggestion: issue.repairSuggestion } : {}),
+            details: {
+              path: issue.path,
+              check: issue.check,
+              zoneId: issue.zoneId,
+              otherZoneId: issue.otherZoneId,
+              datasetKey,
+              repairable: issue.repairable
+            }
+          })
+        )
+      );
+    }
   }
 
   if (transform.manifest) {
@@ -378,7 +430,37 @@ function validateSourceTransform(
     );
   }
 
-  return issues;
+  return {
+    issues,
+    ...(geometryQualityMode === "none" ? {} : { geometryQuality: geometryQualityReports })
+  };
+}
+
+function summarizeGeometryQualityReports(
+  reports: Record<string, GeometryQualityReport>
+): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(reports)
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([key, report]) => [
+        key,
+        {
+          ok: report.ok,
+          backend: report.backend,
+          mode: report.mode,
+          checks: report.checks,
+          summary: {
+            zoneCount: report.summary.zoneCount,
+            issueCount: report.summary.issueCount,
+            errorCount: report.summary.errorCount,
+            warningCount: report.summary.warningCount,
+            infoCount: report.summary.infoCount,
+            candidatePairCount: report.summary.performance.candidatePairCount,
+            exactComparisonCount: report.summary.performance.exactComparisonCount
+          }
+        }
+      ])
+  );
 }
 
 async function runStage<T>(

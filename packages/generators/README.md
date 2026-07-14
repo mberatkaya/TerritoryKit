@@ -29,6 +29,8 @@ const adjacency = inferBBoxAdjacency(dataset.zones);
 - `createDatasetGeometryHash(dataset)` returns a deterministic geometry hash.
 - `buildWorldCountriesDataset(options)` builds Natural Earth ADM0 world-countries artifacts.
 - `runTerritorySourcePipeline(options)` runs the shared source adapter pipeline.
+- `validateTerritoryDatasetPath(inputPath, options)` and `repairTerritoryDatasetPath(...)` provide
+  filesystem helpers for geometry quality reports and repaired dataset output.
 - `createDefaultTerritorySourceRegistry()` returns built-in adapters for Natural Earth,
   geoBoundaries, and generic GeoJSON.
 - `parseNaturalEarthAdm0FeatureCollection(input, source)` parses local Natural Earth-like GeoJSON
@@ -67,9 +69,13 @@ await runTerritorySourcePipeline({
     idProperty: "region.code",
     nameProperty: "region.name"
   },
+  geometryQuality: "basic",
   outputPath: "./dist/regions"
 });
 ```
+
+Set `geometryQuality` to `"full"` for topology and hierarchy checks, or `"none"` to skip geometry
+quality in a source import.
 
 ## License
 

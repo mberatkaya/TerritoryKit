@@ -230,10 +230,37 @@ describe("source pipeline adapters", () => {
 
     expect(result.ok).toBe(true);
     expect(result.issues.map((issue) => issue.code)).toContain("SOURCE_PARENT_MISSING");
+    expect(result.transform?.geometryQuality?.dataset).toMatchObject({
+      ok: true,
+      checks: expect.objectContaining({ bbox: true, siblingOverlaps: false })
+    });
     const dataset = loadTerritoryDataset(
       JSON.parse(await readFile(join(outputPath, "dataset.json"), "utf8")) as unknown
     );
     expect(dataset.zones.map((zone) => zone.id)).toEqual(["tr:adm2:kadikoy", "tr:adm2:uskudar"]);
+    const buildReport = JSON.parse(
+      await readFile(join(outputPath, "build-report.json"), "utf8")
+    ) as {
+      geometryQuality?: Record<string, unknown>;
+    };
+    expect(buildReport.geometryQuality?.dataset).toMatchObject({
+      ok: true,
+      summary: expect.objectContaining({ zoneCount: 2 })
+    });
+
+    const fullQuality = await runTerritorySourcePipeline<GenericGeoJsonSourceOptions>({
+      adapter: "geojson",
+      request: { input: inputPath },
+      options,
+      outputPath: join(tempDir, "regions-full-quality"),
+      geometryQuality: "full",
+      now: () => "2026-01-01T00:00:00.000Z"
+    });
+
+    expect(fullQuality.ok).toBe(false);
+    expect(fullQuality.issues.map((issue) => issue.code)).toContain(
+      "GEOMETRY_SIBLING_GEOMETRY_OVERLAP"
+    );
 
     const strict = await runTerritorySourcePipeline<GenericGeoJsonSourceOptions>({
       adapter: "geojson",

@@ -65,6 +65,13 @@ export type { NaturalEarthSourceOptions } from "./sources/natural-earth.js";
 export { TerritorySourceError, createSourceIssue } from "./sources/errors.js";
 export { createTerritorySourceRegistry, TerritorySourceRegistry } from "./sources/registry.js";
 export { runTerritorySourcePipeline } from "./sources/pipeline.js";
+export {
+  readTerritoryDatasetPath,
+  repairTerritoryDatasetPath,
+  validateTerritoryDatasetPath,
+  writeGeometryQualityReport,
+  writeTerritoryDatasetOutput
+} from "./geometry-quality.js";
 export { verifySourceArtifact } from "./sources/verification.js";
 export { getDefaultSourceCacheDir, createSourceCacheKey } from "./sources/cache.js";
 export { fetchHttpSourceArtifact } from "./sources/transports/http.js";
@@ -78,6 +85,7 @@ export type {
   TerritorySourceContext,
   TerritorySourceDescription,
   TerritorySourceIssue,
+  TerritorySourceGeometryQualityMode,
   TerritorySourceOptionDescription,
   TerritorySourcePipelineEvent,
   TerritorySourcePipelineOptions,
@@ -91,6 +99,10 @@ export type {
   TerritorySourceTransformResult,
   TerritorySourceVerificationResult
 } from "./sources/types.js";
+export type {
+  GeometryQualityPathRepairOptions,
+  TerritoryDatasetPathInput
+} from "./geometry-quality.js";
 
 export interface BBoxAdjacencyOptions {
   tolerance?: number;

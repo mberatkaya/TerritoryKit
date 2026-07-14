@@ -3,7 +3,7 @@ import { join } from "node:path";
 
 const root = process.cwd();
 const maxBytesByFile = new Map([
-  ["packages/dataset/dist/index.mjs", 45_000],
+  ["packages/dataset/dist/index.mjs", 90_000],
   ["packages/core/dist/index.mjs", 65_000],
   ["packages/maplibre/dist/index.mjs", 45_000],
   ["packages/nestjs/dist/index.mjs", 45_000],

@@ -14,13 +14,24 @@ resolve -> fetch -> verify -> parse -> normalize -> transform -> validate -> enr
 - `parse`: parse provider input without transforming semantics.
 - `normalize`: optional adapter-local normalization.
 - `transform`: create a TerritoryKit dataset and provider metadata.
-- `validate`: run existing dataset and global manifest validation.
+- `validate`: run existing dataset validation, global manifest validation, and geometry quality
+  checks.
 - `enrich`: reserve metadata enrichment boundary.
 - `serialize`: atomically write artifact files if an output path is supplied.
 - `complete`: emit the terminal lifecycle event.
 
 The pipeline emits structured lifecycle events and issues. It does not depend on the CLI and does
 not write to the console.
+
+## Geometry Quality
+
+Source imports run `geometryQuality: "basic"` by default. Basic mode checks coordinates, rings, and
+bbox metadata. Pass `"full"` to add topology, hierarchy, and sibling overlap checks, or `"none"` to
+disable geometry quality for a pipeline run.
+
+Geometry quality issues are mapped into source issues with `GEOMETRY_*` codes. Full reports are
+attached to `result.transform.geometryQuality`. Generic build reports include a compact quality
+summary; source-owned artifact plans keep their checksummed file output stable.
 
 ## Strict Mode
 
