@@ -22,7 +22,8 @@ dataset, core, performance, tooling, adapters, backend, docs, then release readi
 - Sprint 10 branch target: `release/1.0.0-readiness`.
 - Public packages prepared at `1.0.0`: `@territory-kit/dataset`, `@territory-kit/core`, `@territory-kit/maplibre`, `@territory-kit/nestjs`, `@territory-kit/generators`, and `@territory-kit/cli`.
 - Keep the current public API surface frozen; do not add new feature APIs on this branch.
-- Last branch verification: `pnpm verify` and `pnpm bench` passed on 2026-07-14.
+- Final branch verification: `pnpm verify`, `pnpm bench`, `pnpm test:visual:maplibre`,
+  and public package `npm pack --dry-run --json` checks passed on 2026-07-14.
 - Run `pnpm verify` on the branch before opening or merging the PR.
 - Run `pnpm bench` before marking Sprint 9 complete; update `docs/benchmarks.md` when benchmark numbers change materially.
 - Keep `territory-schema@1` unchanged for this hardening branch.

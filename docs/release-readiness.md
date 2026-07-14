@@ -45,6 +45,19 @@ pnpm test:visual:maplibre
 
 Record benchmark deltas in [benchmarks](./benchmarks.md) before creating a release candidate.
 
+## Branch Verification
+
+Recorded on 2026-07-14 for `release/1.0.0-readiness`:
+
+- `pnpm verify` passed.
+- `pnpm bench` passed.
+- `pnpm test:visual:maplibre` passed.
+- `npm pack --dry-run --json` passed for `@territory-kit/dataset`, `@territory-kit/core`,
+  `@territory-kit/maplibre`, `@territory-kit/nestjs`, `@territory-kit/generators`, and
+  `@territory-kit/cli` at `1.0.0`.
+- Before applying `pnpm changeset version`, `pnpm changeset status --verbose` listed only the
+  six public packages above for the `1.0.0` release plan.
+
 ## Triage And Security
 
 - New release blockers are tracked as GitHub issues or PR review comments and triaged before a
