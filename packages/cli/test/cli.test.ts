@@ -846,11 +846,58 @@ describe("territory cli", () => {
       code: 0,
       output: expect.stringContaining("Natural Earth")
     });
+    await expect(
+      captureCli([
+        "sources",
+        "inspect",
+        "--provider",
+        "geoboundaries",
+        "--country",
+        "TR",
+        "--level",
+        "ADM2",
+        "--json"
+      ])
+    ).resolves.toMatchObject({
+      code: 0,
+      payload: {
+        ok: true,
+        command: "sources inspect",
+        data: expect.objectContaining({
+          id: "geoboundaries",
+          request: {
+            country: "TR",
+            level: "ADM2"
+          }
+        })
+      }
+    });
     await expect(captureCli(["source", "info", "unknown"])).resolves.toMatchObject({
       code: 1,
       payload: {
         ok: false,
         issues: [expect.objectContaining({ code: "SOURCE_ADAPTER_NOT_FOUND" })]
+      }
+    });
+  });
+
+  it("prints the generated dataset coverage registry", async () => {
+    await expect(captureCli(["dataset", "coverage", "--json"])).resolves.toMatchObject({
+      code: 0,
+      payload: {
+        ok: true,
+        command: "dataset coverage",
+        data: {
+          schemaVersion: "territorykit-coverage@1",
+          summary: {
+            totalCountries: 249,
+            levels: {
+              ADM0: { available: 249 },
+              ADM1: { available: 5, "not-reviewed": 244 },
+              municipality: { unavailable: 249 }
+            }
+          }
+        }
       }
     });
   });
