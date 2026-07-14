@@ -1,0 +1,995 @@
+{
+  "countriesAttempted": 44,
+  "countriesFailed": 9,
+  "countriesSucceeded": 35,
+  "generatedAt": "2026-07-15T00:00:00.000Z",
+  "levels": ["ADM0"],
+  "outcomes": {
+    "built": 35,
+    "licence-restricted": 0,
+    "mapping-review-required": 0,
+    "provider-error": 1,
+    "source-unavailable": 8,
+    "validation-failed": 0
+  },
+  "reportVersion": "1",
+  "results": [
+    {
+      "alpha3": "AND",
+      "country": "AD",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/AD",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/AD/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "ARE",
+      "country": "AE",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/AE",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/AE/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "AFG",
+      "country": "AF",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/AF",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/AF/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "ATG",
+      "country": "AG",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/AG",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/AG/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "AIA",
+      "country": "AI",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/AI",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/AI/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "ALB",
+      "country": "AL",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/AL",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/AL/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "ARM",
+      "country": "AM",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/AM",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/AM/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "AGO",
+      "country": "AO",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/AO",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/AO/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "ATA",
+      "country": "AQ",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/AQ",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/AQ/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "ARG",
+      "country": "AR",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/AR",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/AR/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "ASM",
+      "country": "AS",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/AS",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/AS/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "AUT",
+      "country": "AT",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/AT",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/AT/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "AUS",
+      "country": "AU",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/AU",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/AU/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "ABW",
+      "country": "AW",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/AW",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/AW/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "ALA",
+      "country": "AX",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 1,
+      "issues": [
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM0",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "issueCodes": ["SOURCE_METADATA_INVALID"],
+          "level": "ADM0",
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "source-unavailable",
+      "outputPath": "datasets/generated/global-adm0-countries/AX",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/AX/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "AZE",
+      "country": "AZ",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/AZ",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/AZ/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BIH",
+      "country": "BA",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/BA",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BA/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BRB",
+      "country": "BB",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/BB",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BB/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BGD",
+      "country": "BD",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/BD",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BD/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BEL",
+      "country": "BE",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/BE",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BE/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BFA",
+      "country": "BF",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/BF",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BF/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BGR",
+      "country": "BG",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/BG",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BG/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BHR",
+      "country": "BH",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/BH",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BH/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BDI",
+      "country": "BI",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/BI",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BI/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BEN",
+      "country": "BJ",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/BJ",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BJ/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BLM",
+      "country": "BL",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/BL",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BL/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BMU",
+      "country": "BM",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/BM",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BM/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BRN",
+      "country": "BN",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/BN",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BN/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BOL",
+      "country": "BO",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 1,
+      "issues": [
+        {
+          "code": "COUNTRY_BUILD_FAILED",
+          "message": "This operation was aborted",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "issueCodes": ["COUNTRY_BUILD_FAILED"],
+          "level": "ADM0",
+          "outcome": "provider-error",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "provider-error",
+      "outputPath": "datasets/generated/global-adm0-countries/BO",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BO/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BES",
+      "country": "BQ",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/BQ",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BQ/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BRA",
+      "country": "BR",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 1,
+      "issues": [
+        {
+          "code": "SOURCE_ACQUIRE_FAILED",
+          "level": "ADM0",
+          "message": "This operation was aborted",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "issueCodes": ["SOURCE_ACQUIRE_FAILED"],
+          "level": "ADM0",
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "source-unavailable",
+      "outputPath": "datasets/generated/global-adm0-countries/BR",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BR/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BHS",
+      "country": "BS",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 1,
+      "issues": [
+        {
+          "code": "SOURCE_ACQUIRE_FAILED",
+          "level": "ADM0",
+          "message": "This operation was aborted",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "issueCodes": ["SOURCE_ACQUIRE_FAILED"],
+          "level": "ADM0",
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "source-unavailable",
+      "outputPath": "datasets/generated/global-adm0-countries/BS",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BS/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BTN",
+      "country": "BT",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 1,
+      "issues": [
+        {
+          "code": "SOURCE_ACQUIRE_FAILED",
+          "level": "ADM0",
+          "message": "This operation was aborted",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "issueCodes": ["SOURCE_ACQUIRE_FAILED"],
+          "level": "ADM0",
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "source-unavailable",
+      "outputPath": "datasets/generated/global-adm0-countries/BT",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BT/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BVT",
+      "country": "BV",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 1,
+      "issues": [
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM0",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "issueCodes": ["SOURCE_METADATA_INVALID"],
+          "level": "ADM0",
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "source-unavailable",
+      "outputPath": "datasets/generated/global-adm0-countries/BV",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BV/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BWA",
+      "country": "BW",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 1,
+      "issues": [
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM0",
+          "message": "This operation was aborted",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "issueCodes": ["SOURCE_METADATA_INVALID"],
+          "level": "ADM0",
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "source-unavailable",
+      "outputPath": "datasets/generated/global-adm0-countries/BW",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BW/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BLR",
+      "country": "BY",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 1,
+      "issues": [
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM0",
+          "message": "This operation was aborted",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "issueCodes": ["SOURCE_METADATA_INVALID"],
+          "level": "ADM0",
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "source-unavailable",
+      "outputPath": "datasets/generated/global-adm0-countries/BY",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BY/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "BLZ",
+      "country": "BZ",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/BZ",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/BZ/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "CCK",
+      "country": "CC",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 1,
+      "issues": [
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM0",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "issueCodes": ["SOURCE_METADATA_INVALID"],
+          "level": "ADM0",
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "source-unavailable",
+      "outputPath": "datasets/generated/global-adm0-countries/CC",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/CC/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "COD",
+      "country": "CD",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/CD",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/CD/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "CAF",
+      "country": "CF",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/CF",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/CF/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "COG",
+      "country": "CG",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/CG",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/CG/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "CHE",
+      "country": "CH",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/CH",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/CH/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "CIV",
+      "country": "CI",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/CI",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/CI/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "COK",
+      "country": "CK",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 0,
+      "issues": [],
+      "levels": [
+        {
+          "featureCount": 1,
+          "issueCodes": [],
+          "level": "ADM0",
+          "outcome": "built",
+          "status": "built"
+        }
+      ],
+      "outcome": "built",
+      "outputPath": "datasets/generated/global-adm0-countries/CK",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm0-countries/CK/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    }
+  ]
+}

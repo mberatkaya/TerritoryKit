@@ -1,0 +1,5570 @@
+{
+  "countriesAttempted": 12,
+  "countriesFailed": 12,
+  "countriesSucceeded": 0,
+  "generatedAt": "2026-07-15T00:00:00.000Z",
+  "levels": ["ADM1", "ADM2"],
+  "outcomes": {
+    "built": 0,
+    "licence-restricted": 0,
+    "mapping-review-required": 0,
+    "provider-error": 0,
+    "source-unavailable": 3,
+    "validation-failed": 9
+  },
+  "reportVersion": "1",
+  "results": [
+    {
+      "alpha3": "AND",
+      "country": "AD",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 5,
+      "issues": [
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 7,
+          "issueCodes": [
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM1",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        }
+      ],
+      "outcome": "validation-failed",
+      "outputPath": "datasets/generated/global-adm1-adm2-countries/AD",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm1-adm2-countries/AD/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "ARE",
+      "country": "AE",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 49,
+      "issues": [
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 7,
+          "issueCodes": [
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM1",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        }
+      ],
+      "outcome": "validation-failed",
+      "outputPath": "datasets/generated/global-adm1-adm2-countries/AE",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm1-adm2-countries/AE/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "AFG",
+      "country": "AF",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 153,
+      "issues": [
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "af:adm1:af-bdn"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_RING_ZERO_AREA",
+          "level": "ADM2",
+          "message": "Linear ring area is zero or below epsilon.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "RELATION_WITHIN",
+          "level": "ADM2",
+          "message": "Rejected adjacency for 'af:adm2:17698898b70189679586713' and 'af:adm2:17698898b92770889491620' because relation is within.",
+          "severity": "warning"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 34,
+          "issueCodes": [
+            "PARENT_UNRESOLVED",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM1",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        },
+        {
+          "featureCount": 398,
+          "issueCodes": [
+            "PARENT_UNRESOLVED",
+            "QUALITY_RING_ZERO_AREA",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "RELATION_WITHIN"
+          ],
+          "level": "ADM2",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        }
+      ],
+      "outcome": "validation-failed",
+      "outputPath": "datasets/generated/global-adm1-adm2-countries/AF",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm1-adm2-countries/AF/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "ATG",
+      "country": "AG",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 7,
+      "issues": [
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 8,
+          "issueCodes": [
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM1",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        }
+      ],
+      "outcome": "validation-failed",
+      "outputPath": "datasets/generated/global-adm1-adm2-countries/AG",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm1-adm2-countries/AG/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "AIA",
+      "country": "AI",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 2,
+      "issues": [
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM1",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "issueCodes": ["SOURCE_METADATA_INVALID"],
+          "level": "ADM1",
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        },
+        {
+          "issueCodes": ["SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "source-unavailable",
+      "outputPath": "datasets/generated/global-adm1-adm2-countries/AI",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm1-adm2-countries/AI/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "ALB",
+      "country": "AL",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 12,
+      "issues": [
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 12,
+          "issueCodes": [
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM1",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        },
+        {
+          "featureCount": 37,
+          "issueCodes": [
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM2",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        }
+      ],
+      "outcome": "validation-failed",
+      "outputPath": "datasets/generated/global-adm1-adm2-countries/AL",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm1-adm2-countries/AL/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "ARM",
+      "country": "AM",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 17,
+      "issues": [
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 11,
+          "issueCodes": [
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM1",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        },
+        {
+          "featureCount": 39,
+          "issueCodes": [
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM2",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        }
+      ],
+      "outcome": "validation-failed",
+      "outputPath": "datasets/generated/global-adm1-adm2-countries/AM",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm1-adm2-countries/AM/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "AGO",
+      "country": "AO",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 64,
+      "issues": [
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "ao:adm2:91424787b45380009406405"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_RING_ZERO_AREA",
+          "level": "ADM2",
+          "message": "Linear ring area is zero or below epsilon.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 18,
+          "issueCodes": [
+            "PARENT_UNRESOLVED",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM1",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        },
+        {
+          "featureCount": 158,
+          "issueCodes": [
+            "PARENT_UNRESOLVED",
+            "QUALITY_RING_ZERO_AREA",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM2",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        }
+      ],
+      "outcome": "validation-failed",
+      "outputPath": "datasets/generated/global-adm1-adm2-countries/AO",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm1-adm2-countries/AO/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "ATA",
+      "country": "AQ",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 2,
+      "issues": [
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM1",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "issueCodes": ["SOURCE_METADATA_INVALID"],
+          "level": "ADM1",
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        },
+        {
+          "issueCodes": ["SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "source-unavailable",
+      "outputPath": "datasets/generated/global-adm1-adm2-countries/AQ",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm1-adm2-countries/AQ/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "ARG",
+      "country": "AR",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 384,
+      "issues": [
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "ar:adm2:61730980b11409583290546"
+        },
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "ar:adm2:61730980b26508052382857"
+        },
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "ar:adm2:61730980b33319795319357"
+        },
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "ar:adm2:61730980b39033896534626"
+        },
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "ar:adm2:61730980b46645672865610"
+        },
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "ar:adm2:61730980b491501502306"
+        },
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "ar:adm2:61730980b497821979952"
+        },
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "ar:adm2:61730980b6528535412911"
+        },
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "ar:adm2:61730980b70807838850882"
+        },
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "ar:adm2:61730980b82066929031844"
+        },
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "ar:adm2:61730980b90079701589370"
+        },
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "ar:adm2:61730980b96499416001790"
+        },
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "ar:adm2:61730980b98128397219365"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 23,
+          "issueCodes": [
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM1",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        },
+        {
+          "featureCount": 525,
+          "issueCodes": [
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "PARENT_UNRESOLVED",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM2",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        }
+      ],
+      "outcome": "validation-failed",
+      "outputPath": "datasets/generated/global-adm1-adm2-countries/AR",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm1-adm2-countries/AR/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "ASM",
+      "country": "AS",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 2,
+      "issues": [
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM1",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "issueCodes": ["SOURCE_METADATA_INVALID"],
+          "level": "ADM1",
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        },
+        {
+          "issueCodes": ["SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "source-unavailable",
+      "outputPath": "datasets/generated/global-adm1-adm2-countries/AS",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm1-adm2-countries/AS/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    },
+    {
+      "alpha3": "AUT",
+      "country": "AT",
+      "finishedAt": "2026-07-15T00:00:00.000Z",
+      "issueCount": 45,
+      "issues": [
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "at:adm2:14549572b74783988457601"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 9,
+          "issueCodes": [
+            "PARENT_UNRESOLVED",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM1",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        },
+        {
+          "featureCount": 94,
+          "issueCodes": [
+            "PARENT_UNRESOLVED",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM2",
+          "outcome": "validation-failed",
+          "status": "validation-failed"
+        }
+      ],
+      "outcome": "validation-failed",
+      "outputPath": "datasets/generated/global-adm1-adm2-countries/AT",
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/global-adm1-adm2-countries/AT/sources.lock.json",
+      "startedAt": "2026-07-15T00:00:00.000Z"
+    }
+  ]
+}
