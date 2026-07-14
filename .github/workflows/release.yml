@@ -79,7 +79,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish packages to npm with Trusted Publishing
+      - name: Check npm publish authentication
+        if: ${{ steps.changesets.outputs.hasChangesets == 'false' && (github.event_name == 'push' || inputs.publish == 'true') }}
+        env:
+          NPM_TOKEN_PRESENT: ${{ secrets.NPM_TOKEN != '' }}
+        run: |
+          if [ "$NPM_TOKEN_PRESENT" = "true" ]; then
+            echo "Using NPM_TOKEN secret for npm publish."
+          else
+            echo "::notice title=NPM publish auth::NPM_TOKEN secret is not set. Publish will rely on npm Trusted Publishing. Configure every published package on npm with GitHub owner 'mberatkaya', repository 'TerritoryKit', workflow filename 'release.yml', no environment, and allowed action 'npm publish'."
+          fi
+
+      - name: Publish packages to npm
         if: ${{ steps.changesets.outputs.hasChangesets == 'false' && (github.event_name == 'push' || inputs.publish == 'true') }}
         run: pnpm release
         env:
