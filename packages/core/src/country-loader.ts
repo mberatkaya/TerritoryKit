@@ -13,7 +13,7 @@ import type {
 export interface TerritoryRegistryLike {
   installDataset(
     options: TerritoryRegistryInstallDatasetOptions
-  ): Promise<TerritoryDatasetArtifactResolver>;
+  ): Promise<TerritoryInstalledDatasetArtifactResolver>;
 }
 
 export interface TerritoryRegistryInstallDatasetOptions {
@@ -37,6 +37,11 @@ export interface TerritoryCountryDatasetDescriptor {
 
 export interface TerritoryDatasetArtifactResolver {
   resolveArtifact(path: string): Promise<unknown>;
+}
+
+export interface TerritoryInstalledDatasetArtifactResolver extends TerritoryDatasetArtifactResolver {
+  installedArtifacts?: ReadonlyArray<{ artifact: { path?: string } }>;
+  readText?(path: string): Promise<string>;
 }
 
 export interface TerritoryCountryDatasetLoadOptions {

@@ -12,6 +12,7 @@ describe("public API compatibility", () => {
       "createTerritoryRegistryClient",
       "defaultZoomLevelStrategy",
       "loadTerritoryCountryDataset",
+      "loadTerritoryQueryDataset",
       "zoomToDefaultLevel"
     ]);
   });
