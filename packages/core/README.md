@@ -35,6 +35,8 @@ const sharedBorderNeighbors = engine.zoneNeighbors("tr:adm2:fatih", {
   `point-touch`, `maritime`, and `logical`.
 - `getVisibleZones(query)` and `getViewportCacheKey(query)` support viewport flows.
 - `zoomToDefaultLevel` and `defaultZoomLevelStrategy` provide default zoom mapping.
+- `createTerritoryCountryDatasetDescriptor` and `loadTerritoryCountryDataset` support thin
+  resolver-driven country loader packages.
 
 ## License
 
