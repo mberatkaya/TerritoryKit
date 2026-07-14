@@ -3,6 +3,9 @@
 This page is the final verification gate for Sprint 9-10 release hardening. It prepares the
 repository for a stable release without publishing packages automatically.
 
+The master sprint checklist is the ongoing source of truth for completed evidence, repo-owned
+hardening branches, external release handoff, and post-1.0 roadmap work.
+
 ## Branch Scope
 
 - The release-readiness branch is `release/1.0.0-readiness`.
@@ -82,6 +85,16 @@ Recorded on 2026-07-14 for `release/final-checklist-closure`:
 - `npm pack --dry-run --json` passed for `@territory-kit/dataset`, `@territory-kit/core`,
   `@territory-kit/maplibre`, `@territory-kit/nestjs`, `@territory-kit/generators`, and
   `@territory-kit/cli` at `1.0.0`.
+
+## Master Checklist Adoption
+
+Recorded on 2026-07-14 for `checklist/master-adoption`:
+
+- `docs/sprint-checklist.md` now contains the master sprint checklist.
+- Remaining unchecked items are classified as repo-owned hardening, external release handoff, or
+  post-1.0 roadmap work.
+- The next repo-owned branches are `hardening/release-governance`,
+  `hardening/tests-benchmarks`, `hardening/adapters-cli`, and `hardening/postgis-openapi`.
 
 ## Triage And Security
 

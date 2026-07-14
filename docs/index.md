@@ -15,8 +15,10 @@ package boundaries required for MapLibre, NestJS/PostGIS, generators, and CLI to
 - [Benchmarks](./benchmarks.md)
 - [NestJS and PostGIS](./nestjs-postgis.md)
 - [Release readiness](./release-readiness.md)
+- [Master sprint checklist](./sprint-checklist.md)
 
-The public roadmap documents major milestones; completion status is tracked by maintainers.
+The public roadmap documents major milestones; completion status is tracked in the master sprint
+checklist.
 
 ## Install
 
