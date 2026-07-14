@@ -1,5 +1,14 @@
 # @territory-kit/nestjs
 
+## 1.1.0
+
+### Patch Changes
+
+- Updated dependencies [0e48877]
+- Updated dependencies [dabf1f1]
+  - @territory-kit/dataset@1.1.0
+  - @territory-kit/core@1.1.0
+
 ## 1.0.0
 
 ### Major Changes
