@@ -11,6 +11,7 @@
   },
   "scripts": {
     "bench": "turbo run bench",
+    "bench:memory": "pnpm build && node --expose-gc scripts/measure-core-memory.mjs",
     "build": "turbo run build",
     "bundle:size": "node scripts/check-bundle-size.mjs",
     "clean": "turbo run clean && rimraf node_modules",

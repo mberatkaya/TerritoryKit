@@ -1,4 +1,5 @@
 import { createSyntheticGridDataset } from "@territory-kit/shared-testkit";
+import { loadTerritoryDataset } from "@territory-kit/dataset";
 import { bench, describe } from "vitest";
 import { createTerritoryEngine } from "../src/index.js";
 
@@ -38,6 +39,10 @@ describe("TerritoryEngine spatial lookup", () => {
 
   bench("createTerritoryEngine index construction, 10K polygons", () => {
     createTerritoryEngine({ dataset: grid10k });
+  });
+
+  bench("loadTerritoryDataset validation, 10K polygons", () => {
+    loadTerritoryDataset(grid10k);
   });
 
   bench("latLngToZone indexed lookup, 100K polygons", () => {
