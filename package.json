@@ -21,11 +21,12 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "turbo run lint",
+    "package:boundaries": "node scripts/check-package-boundaries.mjs",
     "release": "pnpm build && changeset publish",
     "test": "turbo run test",
     "test:visual:maplibre": "pnpm --filter @territory-kit/example-web-maplibre test:visual",
     "typecheck": "turbo run typecheck",
-    "verify": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm bundle:size"
+    "verify": "pnpm format:check && pnpm lint && pnpm package:boundaries && pnpm typecheck && pnpm test && pnpm build && pnpm bundle:size"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
