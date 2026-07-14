@@ -11,3 +11,4 @@ docs/.vitepress/dist/
 playwright-report/
 test-results/
 datasets/world-countries/
+.territory/cache/
