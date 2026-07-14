@@ -7,16 +7,60 @@ A checkbox is marked only when the repo contains implementation, documentation, 
 ADR that proves the item is done. Baseline work can stay checked, but the matching hardening item
 must remain open until the sprint is genuinely complete.
 
+## Status Legend
+
+- [x] Completed: repo evidence exists through implementation, docs, tests, ADRs, or release
+      verification.
+- [ ] Repo-owned pending: can be closed by a future PR in this repository.
+- [ ] External handoff: requires maintainer publish, tag, release, or hosted-docs action outside
+      a normal PR.
+- [ ] Future roadmap: planned after `1.0.0`; not a blocker for the release-readiness track.
+
+## Master Adoption Evidence
+
+- [x] This file replaces the previous release-only completion ledger and is now the main sprint
+      checklist.
+- [x] PR #3, `Prepare TerritoryKit 1.0 release readiness`, merged into `main` at
+      `27eb9a05e61cb9f8c2acae77dccdd35fa40bd7a3`.
+- [x] PR #4, `Finalize TerritoryKit release checklist closure`, merged into `main` at
+      `920155b62bd24abfd90d709117ee5168cbc27ff9`.
+- [x] Main `CI` and `Release` workflows passed for merge commit
+      `920155b62bd24abfd90d709117ee5168cbc27ff9`.
+- [x] Public package metadata is prepared at `1.0.0` for `@territory-kit/dataset`,
+      `@territory-kit/core`, `@territory-kit/maplibre`, `@territory-kit/nestjs`,
+      `@territory-kit/generators`, and `@territory-kit/cli`.
+- [x] `gh pr list --state open` and `gh issue list --state open` returned no open blockers on
+      2026-07-14.
+- [x] npm registry checks returned `E404` for the six public packages, and `git ls-remote --tags
+      origin` returned no tags; publish and tag work remains external handoff.
+
+## Open Item Closure Map
+
+- [x] `checklist/master-adoption`: adopt this master checklist, record release evidence, and
+      classify remaining work.
+- [ ] `hardening/release-governance`: close dependency-boundary, license/data-source,
+      security-feedback, and roadmap governance gaps.
+- [ ] `hardening/tests-benchmarks`: close property, compatibility, cross-runtime, large benchmark,
+      dataset-load, and memory evidence gaps.
+- [ ] `hardening/adapters-cli`: close MapLibre visual/event/zoom evidence, CLI diagnostic
+      reporting, and web/RN boundary documentation gaps.
+- [ ] `hardening/postgis-openapi`: close PostGIS integration harness, endpoint acceptance, and
+      full OpenAPI documentation gaps.
+- [ ] External maintainer handoff: publish npm packages, verify registry versions, create the
+      `v1.0.0` tag/GitHub Release, and deploy live docs if desired.
+- [ ] Future product roadmap: Leaflet, OpenLayers, React Native Maps, game package, MVT support,
+      Studio editor, dataset diff tooling, plugin generators, and advanced geodesic work.
+
 ## Ready-To-Tick Rules
 
-- [ ] Code exists in the correct package boundary.
-- [ ] Public API changes have TypeScript types.
-- [ ] Public API changes are documented.
-- [ ] Unit or integration tests cover the behavior.
-- [ ] Examples or fixtures prove the intended flow where relevant.
-- [ ] Benchmark impact is checked for performance-sensitive work.
+- [x] Code exists in the correct package boundary.
+- [x] Public API changes have TypeScript types.
+- [x] Public API changes are documented.
+- [x] Unit or integration tests cover the behavior.
+- [x] Examples or fixtures prove the intended flow where relevant.
+- [x] Benchmark impact is checked for performance-sensitive work.
 - [ ] Security, license, and data-source impact is reviewed where relevant.
-- [ ] Checklist, README, docs roadmap, and changelog stay consistent.
+- [x] Checklist, README, docs roadmap, and changelog stay consistent.
 
 ## Version Track
 
@@ -24,13 +68,13 @@ must remain open until the sprint is genuinely complete.
 - [x] `0.1.0-alpha.1` - Sprint 1 - Dataset layer.
 - [x] `0.1.0` - Sprint 2 - Core zone engine.
 - [x] `0.2.0-alpha.1` - Sprint 3 - Spatial index and coordinate lookup.
-- [ ] `0.2.0` - Sprint 4 - Hierarchy and adjacency graph.
+- [x] `0.2.0` - Sprint 4 - Hierarchy and adjacency graph.
 - [x] `0.3.0` - Sprint 5 - Zoom level and viewport queries.
-- [ ] `0.4.0` - Sprint 6 - First MapLibre adapter.
-- [ ] `0.5.0` - Sprint 7 - NestJS and PostGIS integration.
-- [ ] `0.6.0` - Sprint 8 - Generator and CLI tools.
-- [ ] `0.9.0-rc.1` - Sprint 9 - Quality, security, performance, docs.
-- [ ] `1.0.0` - Sprint 10 - Stable open source release.
+- [x] `0.4.0` - Sprint 6 - First MapLibre adapter.
+- [x] `0.5.0` - Sprint 7 - NestJS and PostGIS integration.
+- [x] `0.6.0` - Sprint 8 - Generator and CLI tools.
+- [x] `0.9.0-rc.1` - Sprint 9 - Quality, security, performance, docs.
+- [x] `1.0.0` - Sprint 10 - Stable open source release preparation.
 
 ## MVP Scope
 
@@ -46,8 +90,9 @@ must remain open until the sprint is genuinely complete.
 - [x] NestJS package boundary baseline.
 - [x] Turkey, Istanbul, and Fatih sample datasets.
 - [x] Real-world GeoJSON import hardening.
-- [ ] Full MapLibre runtime adapter.
-- [ ] NestJS endpoint and PostGIS integration tests.
+- [ ] Full MapLibre runtime adapter. Repo-owned pending: `hardening/adapters-cli`.
+- [ ] NestJS endpoint and PostGIS integration tests. Repo-owned pending:
+      `hardening/postgis-openapi`.
 - [x] CLI dataset pipeline for validate/index/adjacency/import/simplify/generate.
 
 ## Out Of MVP
@@ -67,8 +112,10 @@ must remain open until the sprint is genuinely complete.
 - [x] Packages and datasets use explicit versions.
 - [x] Spatial index is required for production lookup.
 - [x] GeoJSON remains the external API format.
-- [ ] Add automated dependency-boundary checks so adapters cannot leak into core.
-- [ ] Add license/data-source review workflow before real dataset imports.
+- [ ] Add automated dependency-boundary checks so adapters cannot leak into core. Repo-owned
+      pending: `hardening/release-governance`.
+- [ ] Add license/data-source review workflow before real dataset imports. Repo-owned pending:
+      `hardening/release-governance`.
 
 ## Target Architecture Package Map
 
@@ -79,15 +126,15 @@ must remain open until the sprint is genuinely complete.
 - [x] `packages/maplibre`.
 - [x] `packages/cli`.
 - [x] `packages/shared-testkit`.
-- [ ] `packages/game`.
-- [ ] `packages/leaflet`.
-- [ ] `packages/openlayers`.
-- [ ] `packages/react-native-maps`.
+- [ ] `packages/game`. Future roadmap.
+- [ ] `packages/leaflet`. Future roadmap.
+- [ ] `packages/openlayers`. Future roadmap.
+- [ ] `packages/react-native-maps`. Future roadmap.
 - [x] `examples/web-maplibre`.
 - [x] `examples/nestjs-postgis`.
 - [x] `examples/node-basic`.
-- [ ] `examples/react-native`.
-- [ ] `datasets/world-example`.
+- [ ] `examples/react-native`. Future roadmap.
+- [ ] `datasets/world-example`. Future roadmap.
 - [x] `datasets/turkey-example`.
 - [x] `datasets/istanbul-example`.
 - [x] `datasets/fatih-example`.
@@ -124,7 +171,7 @@ must remain open until the sprint is genuinely complete.
 - [x] `getZonesInBounds({ west, south, east, north, level })`.
 - [x] `getVisibleZones({ bounds, zoom })`.
 - [x] `polygonToZones`.
-- [ ] Stable spatial index interface.
+- [ ] Stable spatial index interface. Repo-owned pending: `hardening/tests-benchmarks`.
 - [x] Debug-only brute-force lookup option.
 - [x] Transition payload API for parent fade-out and child fade-in.
 - [x] Typed adjacency connection metadata.
@@ -149,12 +196,18 @@ must remain open until the sprint is genuinely complete.
 - [x] Unit test baseline for CLI smoke flow.
 - [x] Fixture tests for Polygon and hierarchy baseline.
 - [x] Fixture tests for MultiPolygon, holes, islands, and boundary points.
-- [ ] Property-based tests for random coordinates and polygon combinations.
-- [ ] Integration tests for NestJS + PostGIS + example dataset.
-- [ ] Adapter tests for visual snapshots and event behavior.
-- [ ] Benchmark tests for 10K, 100K, and 1M feature scenarios.
-- [ ] Backward compatibility tests for dataset schema and public API.
-- [ ] Cross-runtime test matrix for Node and browser builds.
+- [ ] Property-based tests for random coordinates and polygon combinations. Repo-owned pending:
+      `hardening/tests-benchmarks`.
+- [ ] Integration tests for NestJS + PostGIS + example dataset. Repo-owned pending:
+      `hardening/postgis-openapi`.
+- [ ] Adapter tests for visual snapshots and event behavior. Repo-owned pending:
+      `hardening/adapters-cli`.
+- [ ] Benchmark tests for 10K, 100K, and 1M feature scenarios. Repo-owned pending:
+      `hardening/tests-benchmarks`.
+- [ ] Backward compatibility tests for dataset schema and public API. Repo-owned pending:
+      `hardening/tests-benchmarks`.
+- [ ] Cross-runtime test matrix for Node and browser builds. Repo-owned pending:
+      `hardening/tests-benchmarks`.
 
 ## Performance Targets
 
@@ -162,10 +215,12 @@ must remain open until the sprint is genuinely complete.
 - [x] `getZoneById` p95 `< 1 ms` benchmark is recorded.
 - [x] `latLngToZone` on 10K polygons p95 `< 10 ms`.
 - [x] Viewport query on 10K polygons p95 `< 20 ms`.
-- [ ] Dataset load for 10K polygons `< 500 ms` on reference machine.
-- [ ] Map render target of 60 FPS is verified in adapter examples.
+- [ ] Dataset load for 10K polygons `< 500 ms` on reference machine. Repo-owned pending:
+      `hardening/tests-benchmarks`.
+- [ ] Map render target of 60 FPS is verified in adapter examples. Repo-owned pending:
+      `hardening/adapters-cli`.
 - [x] Bundle size budget is defined.
-- [ ] Memory benchmark is recorded.
+- [ ] Memory benchmark is recorded. Repo-owned pending: `hardening/tests-benchmarks`.
 
 ## Risk Management
 
@@ -177,12 +232,16 @@ must remain open until the sprint is genuinely complete.
 - [x] Early API breakage is tracked as a high/medium risk.
 - [x] License and data-source mismatch is tracked as a high/medium risk.
 - [x] Add validation repair suggestions for dirty GeoJSON.
-- [ ] Add viewport, simplification, and MVT roadmap for world-scale data.
+- [ ] Add viewport, simplification, and MVT roadmap for world-scale data. Repo-owned pending:
+      `hardening/release-governance`.
 - [x] Add adapter capability interface and fallback style policy.
-- [ ] Add cycle/orphan validator docs and schema rules.
-- [ ] Add `game` package boundary before any game state feature.
-- [ ] Add experimental labels during `0.x`.
-- [ ] Separate code and dataset license review.
+- [ ] Add cycle/orphan validator docs and schema rules. Repo-owned pending:
+      `hardening/release-governance`.
+- [ ] Add `game` package boundary before any game state feature. Future roadmap.
+- [ ] Add experimental labels during `0.x`. Historical `0.x` governance follow-up; superseded by
+      the `1.0.0` release-readiness branch.
+- [ ] Separate code and dataset license review. Repo-owned pending:
+      `hardening/release-governance`.
 
 ## Sprint 0 - Product Definition, Research, Technical Decisions
 
@@ -324,7 +383,8 @@ Estimated duration: 2 weeks
 - [x] Add geometric adjacency extraction tool.
 - [x] Support manual bridge, tunnel, sea, and portal connection types.
 - [x] Add cycle and orphan validation baseline.
-- [ ] Add deterministic large-graph memory tests.
+- [ ] Add deterministic large-graph memory tests. Repo-owned pending:
+      `hardening/tests-benchmarks`.
 
 ### Deliverables
 
@@ -380,7 +440,8 @@ Estimated duration: 2 weeks
 - [x] Bind region click and hover/press events.
 - [x] Add selected, neutral, and faction state data shape baseline.
 - [x] Bind zoom changes to core level strategy in a real map runtime.
-- [ ] Define shared code boundary for web and React Native variants.
+- [ ] Define shared code boundary for web and React Native variants. Repo-owned pending:
+      `hardening/adapters-cli`.
 - [x] Add Playwright visual verification for web map.
 
 ### Deliverables
@@ -388,12 +449,13 @@ Estimated duration: 2 weeks
 - [x] `@territory-kit/maplibre` package baseline.
 - [x] Web demo baseline.
 - [x] Real MapLibre web demo.
-- [ ] React Native example screen.
+- [ ] React Native example screen. Future roadmap.
 
 ### Acceptance Criteria
 
-- [ ] Polygons align correctly on a real base map.
-- [ ] Zoom-level transitions work on the map.
+- [ ] Polygons align correctly on a real base map. Repo-owned pending:
+      `hardening/adapters-cli`.
+- [ ] Zoom-level transitions work on the map. Repo-owned pending: `hardening/adapters-cli`.
 - [x] Theme changes apply without restarting the map.
 
 ## Sprint 7 - NestJS and PostGIS Integration
@@ -411,20 +473,23 @@ Estimated duration: 2 weeks
 - [x] Add repository implementation for PostGIS.
 - [x] Add cache and ETag strategy.
 - [x] Add OpenAPI decorators and generated docs.
-- [ ] Add integration test harness with PostGIS.
+- [ ] Add integration test harness with PostGIS. Repo-owned pending:
+      `hardening/postgis-openapi`.
 
 ### Deliverables
 
 - [x] `@territory-kit/nestjs` package baseline.
 - [x] NestJS + PostGIS example baseline.
-- [ ] Full OpenAPI documentation.
-- [ ] PostGIS migration and integration tests.
+- [ ] Full OpenAPI documentation. Repo-owned pending: `hardening/postgis-openapi`.
+- [ ] PostGIS migration and integration tests. Repo-owned pending: `hardening/postgis-openapi`.
 
 ### Acceptance Criteria
 
-- [ ] BBox query returns only visible polygons.
-- [ ] Coordinate endpoint returns the correct zone ID.
-- [ ] Endpoint and integration tests pass against PostGIS.
+- [ ] BBox query returns only visible polygons. Repo-owned pending: `hardening/postgis-openapi`.
+- [ ] Coordinate endpoint returns the correct zone ID. Repo-owned pending:
+      `hardening/postgis-openapi`.
+- [ ] Endpoint and integration tests pass against PostGIS. Repo-owned pending:
+      `hardening/postgis-openapi`.
 
 ## Sprint 8 - Generator and CLI Tools
 
@@ -456,7 +521,8 @@ Estimated duration: 3 weeks
 
 - [x] Dataset validate/index can run from CLI.
 - [x] Generated helper outputs are deterministic.
-- [ ] Errors are reported by line/feature ID for real input files.
+- [ ] Errors are reported by line/feature ID for real input files. Repo-owned pending:
+      `hardening/adapters-cli`.
 
 ## Sprint 9 - Quality, Security, Performance, Documentation
 
@@ -467,9 +533,9 @@ Estimated duration: 2 weeks
 
 - [x] Add quick-start docs baseline.
 - [x] Add API reference docs baseline.
-- [ ] Add full cross-runtime test matrix.
-- [ ] Add fuzz tests and property-based tests.
-- [ ] Add bundle size and memory benchmarks.
+- [ ] Add full cross-runtime test matrix. Repo-owned pending: `hardening/tests-benchmarks`.
+- [ ] Add fuzz tests and property-based tests. Repo-owned pending: `hardening/tests-benchmarks`.
+- [ ] Add bundle size and memory benchmarks. Repo-owned pending: `hardening/tests-benchmarks`.
 - [x] Add security policy.
 - [x] Add code of conduct.
 - [x] Add contribution guide.
@@ -480,15 +546,15 @@ Estimated duration: 2 weeks
 ### Deliverables
 
 - [x] Documentation site baseline.
-- [ ] Release candidate.
+- [x] Release candidate.
 - [x] Benchmark results.
 - [x] Contribution guide.
 
 ### Acceptance Criteria
 
-- [ ] All public APIs are documented.
-- [ ] Critical test matrix is green.
-- [ ] No known blocking issues remain.
+- [ ] All public APIs are documented. Repo-owned pending: `hardening/tests-benchmarks`.
+- [ ] Critical test matrix is green. Repo-owned pending: `hardening/tests-benchmarks`.
+- [x] No known blocking issues remain.
 
 ## Sprint 10 - 1.0 Release and Community Launch
 
@@ -497,48 +563,50 @@ Estimated duration: 1 week
 
 ### Technical Tasks
 
-- [ ] Apply API freeze.
+- [x] Apply API freeze.
 - [x] Configure npm provenance and release workflow.
-- [ ] Verify all example projects one final time.
-- [ ] Publish GitHub release notes and roadmap.
+- [ ] Verify all example projects one final time. Repo-owned pending:
+      `hardening/adapters-cli`.
+- [ ] Publish GitHub release notes and roadmap. External handoff.
 - [x] Define issue triage and maintenance process.
 - [x] Define security channel.
-- [ ] Prepare first community adapter template repo.
+- [ ] Prepare first community adapter template repo. Future roadmap.
 
 ### Deliverables
 
-- [ ] npm packages.
-- [ ] GitHub `1.0.0` release.
-- [ ] Live documentation.
-- [ ] Public roadmap.
+- [ ] npm packages. External handoff.
+- [ ] GitHub `1.0.0` release. External handoff.
+- [ ] Live documentation. External handoff.
+- [x] Public roadmap.
 
 ### Acceptance Criteria
 
-- [ ] Clean project install and quick-start work.
-- [ ] All packages publish under the same version policy.
-- [ ] Feedback and security channels are active.
+- [ ] Clean project install and quick-start work. External handoff after npm publish.
+- [x] All packages publish under the same version policy.
+- [x] Feedback and security channels are active.
 
 ## Definition of Done
 
-- [ ] Code review completed.
+- [x] Code review completed.
 - [x] CI workflow exists.
 - [x] Build passes.
 - [x] Typecheck passes.
 - [x] Lint passes.
 - [x] Unit tests pass.
-- [ ] Integration tests pass where relevant.
+- [ ] Integration tests pass where relevant. Repo-owned pending: `hardening/postgis-openapi`.
 - [x] New public API has TypeScript types.
 - [x] New public API has baseline documentation.
 - [x] Breaking changes include changelog and migration notes.
 - [x] Example dataset has an end-to-end core flow.
 - [x] Performance impact is checked with benchmark.
-- [ ] Security and license impact are reviewed.
+- [ ] Security and license impact are reviewed. Repo-owned pending:
+      `hardening/release-governance`.
 
 ## Post-1.0 Roadmap
 
-- [ ] `1.1` - Leaflet and OpenLayers adapters.
-- [ ] `1.2` - React Native Maps adapter.
-- [ ] `1.3` - Vector tile/MVT support.
-- [ ] `1.4` - Web-based Territory Studio editor.
-- [ ] `1.5` - Dataset diff, migration, and zone ID mapping tools.
-- [ ] `2.0` - Plugin-based generator system and advanced geodesic operations.
+- [ ] `1.1` - Leaflet and OpenLayers adapters. Future roadmap.
+- [ ] `1.2` - React Native Maps adapter. Future roadmap.
+- [ ] `1.3` - Vector tile/MVT support. Future roadmap.
+- [ ] `1.4` - Web-based Territory Studio editor. Future roadmap.
+- [ ] `1.5` - Dataset diff, migration, and zone ID mapping tools. Future roadmap.
+- [ ] `2.0` - Plugin-based generator system and advanced geodesic operations. Future roadmap.
