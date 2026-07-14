@@ -31,8 +31,10 @@ must remain open until the sprint is genuinely complete.
       `@territory-kit/generators`, and `@territory-kit/cli`.
 - [x] `gh pr list --state open` and `gh issue list --state open` returned no open blockers on
       2026-07-14.
-- [x] npm registry checks returned `E404` for the six public packages, and `git ls-remote --tags
-      origin` returned no tags; publish and tag work remains external handoff.
+- [x] npm registry checks returned `E404` for the six public packages.
+- [x] `git ls-remote --tags origin` returned no tags; publish and tag work remains external
+      handoff.
+- [x] Branch verification passed on 2026-07-14: `pnpm format:check` and `pnpm verify`.
 
 ## Open Item Closure Map
 

@@ -95,6 +95,7 @@ Recorded on 2026-07-14 for `checklist/master-adoption`:
   post-1.0 roadmap work.
 - The next repo-owned branches are `hardening/release-governance`,
   `hardening/tests-benchmarks`, `hardening/adapters-cli`, and `hardening/postgis-openapi`.
+- Branch verification passed: `pnpm format:check` and `pnpm verify`.
 
 ## Triage And Security
 
