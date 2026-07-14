@@ -9,6 +9,7 @@ describe("public API compatibility", () => {
       "TerritoryZoneNotFoundError",
       "createTerritoryCountryDatasetDescriptor",
       "createTerritoryEngine",
+      "createTerritoryRegistryClient",
       "defaultZoomLevelStrategy",
       "loadTerritoryCountryDataset",
       "zoomToDefaultLevel"

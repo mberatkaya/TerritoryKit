@@ -10,6 +10,19 @@ import type {
   TerritoryDataset
 } from "@territory-kit/dataset";
 
+export interface TerritoryRegistryLike {
+  installDataset(
+    options: TerritoryRegistryInstallDatasetOptions
+  ): Promise<TerritoryDatasetArtifactResolver>;
+}
+
+export interface TerritoryRegistryInstallDatasetOptions {
+  datasetId: string;
+  levels?: readonly TerritoryAdminLevel[];
+  detail?: string;
+  loadAdjacency?: boolean;
+}
+
 export interface TerritoryCountryDatasetDescriptor {
   datasetId: string;
   countryCodeAlpha2: string;
@@ -29,6 +42,7 @@ export interface TerritoryDatasetArtifactResolver {
 export interface TerritoryCountryDatasetLoadOptions {
   levels?: readonly TerritoryAdminLevel[];
   detail?: string;
+  registry?: TerritoryRegistryLike;
   resolveArtifact?: TerritoryDatasetArtifactResolver | ((path: string) => Promise<unknown>);
   verifyChecksums?: boolean;
   loadAdjacency?: boolean;
@@ -58,7 +72,17 @@ export async function loadTerritoryCountryDataset(
   descriptor: TerritoryCountryDatasetDescriptor,
   options: TerritoryCountryDatasetLoadOptions = {}
 ): Promise<TerritoryCountryDatasetHandle> {
-  const resolver = normalizeResolver(options.resolveArtifact);
+  const levels = normalizeRequestedLevels(descriptor, options.levels);
+  const resolver =
+    normalizeResolver(options.resolveArtifact) ??
+    (options.registry
+      ? await options.registry.installDataset({
+          datasetId: descriptor.datasetId,
+          levels,
+          ...(options.detail ? { detail: options.detail } : {}),
+          ...(options.loadAdjacency ? { loadAdjacency: true } : {})
+        })
+      : undefined);
 
   if (!resolver) {
     throw new Error(
@@ -66,7 +90,6 @@ export async function loadTerritoryCountryDataset(
     );
   }
 
-  const levels = normalizeRequestedLevels(descriptor, options.levels);
   const checksums = options.verifyChecksums ? await readChecksums(resolver) : undefined;
   const manifest = await readJsonArtifact(resolver, descriptor.manifestPath, checksums);
   const loadedLevels: Partial<Record<TerritoryAdminLevel, TerritoryDataset>> = {};

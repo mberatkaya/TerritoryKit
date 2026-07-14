@@ -5,11 +5,30 @@ export {
   loadTerritoryCountryDataset
 } from "./country-loader.js";
 export { defaultZoomLevelStrategy, zoomToDefaultLevel } from "./zoom.js";
+export { createTerritoryRegistryClient } from "@territory-kit/registry";
+export type {
+  TerritoryDatasetRegistry,
+  TerritoryInstalledDatasetHandle,
+  TerritoryInstalledDatasetSummary,
+  TerritoryRegistryArtifact,
+  TerritoryRegistryArtifactFormat,
+  TerritoryRegistryArtifactPurpose,
+  TerritoryRegistryCache,
+  TerritoryRegistryClient,
+  TerritoryRegistryClientOptions,
+  TerritoryRegistryDataset,
+  TerritoryRegistryInstallOptions,
+  TerritoryRegistryResolveArtifactOptions,
+  TerritoryRegistryResolvedArtifact,
+  TerritoryRegistryTransport
+} from "@territory-kit/registry";
 export type {
   TerritoryCountryDatasetDescriptor,
   TerritoryCountryDatasetHandle,
   TerritoryCountryDatasetLoadOptions,
-  TerritoryDatasetArtifactResolver
+  TerritoryDatasetArtifactResolver,
+  TerritoryRegistryInstallDatasetOptions,
+  TerritoryRegistryLike
 } from "./country-loader.js";
 export type {
   BoundaryMode,
