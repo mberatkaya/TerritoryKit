@@ -11,6 +11,19 @@ import type {
 export type TerritoryIdentityStability =
   "official-code" | "source-stable-code" | "source-id" | "name-parent-fallback";
 
+export type TerritoryArtifactStatus =
+  | "not-reviewed"
+  | "source-available"
+  | "source-unavailable"
+  | "license-restricted"
+  | "downloaded"
+  | "transformed"
+  | "validation-failed"
+  | "validated"
+  | "built"
+  | "packaged"
+  | "published";
+
 export interface TerritoryIdentityStrategyConfig {
   officialCodeProperties: readonly string[];
   sourceStableCodeProperties: readonly string[];
@@ -256,6 +269,65 @@ export interface TerritoryCountryBuildReport {
   reportVersion: "1";
   statistics: TerritoryCountryBuildStatistics;
   issues: TerritoryCountryBuildIssue[];
+}
+
+export type TerritoryCountryBuildAllOutcome =
+  | "built"
+  | "validation-failed"
+  | "source-unavailable"
+  | "licence-restricted"
+  | "provider-error"
+  | "mapping-review-required";
+
+export interface TerritoryCountryBuildAllLevelResult {
+  level: TerritoryAdminLevel;
+  status: TerritoryArtifactStatus;
+  outcome: TerritoryCountryBuildAllOutcome;
+  featureCount?: number;
+  issueCodes: string[];
+}
+
+export interface TerritoryCountryBuildAllCountryResult {
+  country: string;
+  alpha3: string;
+  provider: string;
+  outputPath?: string;
+  sourceLockPath?: string;
+  levels: TerritoryCountryBuildAllLevelResult[];
+  outcome: TerritoryCountryBuildAllOutcome;
+  issueCount: number;
+  issues: TerritoryCountryBuildIssue[];
+  startedAt: string;
+  finishedAt: string;
+}
+
+export interface TerritoryCountryBuildAllReport {
+  reportVersion: "1";
+  generatedAt: string;
+  levels: TerritoryAdminLevel[];
+  countriesAttempted: number;
+  countriesSucceeded: number;
+  countriesFailed: number;
+  outcomes: Record<TerritoryCountryBuildAllOutcome, number>;
+  results: TerritoryCountryBuildAllCountryResult[];
+}
+
+export interface TerritoryCountryBuildAllOptions {
+  levels: readonly TerritoryAdminLevel[];
+  countries?: readonly string[];
+  outputRoot: string;
+  reportPath?: string;
+  releaseType?: string;
+  provider?: string;
+  buildDate?: string;
+  concurrency?: number;
+  continueOnError?: boolean;
+  resume?: boolean;
+  retryFailed?: boolean;
+  offline?: boolean;
+  cacheDir?: string;
+  force?: boolean;
+  cwd?: string;
 }
 
 export interface TerritoryCountryDatasetManifest {

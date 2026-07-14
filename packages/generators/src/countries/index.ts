@@ -1,3 +1,5 @@
+export { buildAllTerritoryCountryDatasets } from "./build-all.js";
+export { buildTerritoryCoverageRegistryFromArtifacts } from "./coverage.js";
 export {
   buildTerritoryCountryDataset,
   buildTerritoryCountryDatasetPath,
@@ -34,7 +36,13 @@ export { resolveTerritoryBoundarySource } from "./source-resolver.js";
 export type {
   BuiltCountryZone,
   ParsedCountryFeature,
+  TerritoryArtifactStatus,
   TerritoryCountryAdjacencyPolicy,
+  TerritoryCountryBuildAllCountryResult,
+  TerritoryCountryBuildAllLevelResult,
+  TerritoryCountryBuildAllOptions,
+  TerritoryCountryBuildAllOutcome,
+  TerritoryCountryBuildAllReport,
   TerritoryCountryBuildIssue,
   TerritoryCountryBuildOptions,
   TerritoryCountryBuildReport,

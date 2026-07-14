@@ -27,7 +27,13 @@ import type {
 import {
   NATURAL_EARTH_ADM0_DETAILS,
   WORLD_COUNTRIES_DATASET_ID,
+  GLOBAL_ADMIN_ADM0_OUTPUT,
+  GLOBAL_ADMIN_DATASET_ID,
+  NATURAL_EARTH_ADM0_GEOJSON_URL,
+  buildAllTerritoryCountryDatasets,
+  buildGlobalAdminAdm0Artifacts,
   buildTerritoryAdjacencyPath,
+  buildTerritoryCoverageRegistryFromArtifacts,
   buildTerritoryCountryDatasetPath,
   buildWorldCountriesDatasetFromSourcePipeline,
   createTerritoryCountrySourceLock,
@@ -940,6 +946,10 @@ async function runDataset(args: string[]): Promise<number> {
     return runDatasetCoverage(args.slice(1));
   }
 
+  if (subcommand === "build-all") {
+    return runDatasetBuildAll(args.slice(1));
+  }
+
   if (subcommand !== "build") {
     printJson({
       ok: false,
@@ -955,6 +965,10 @@ async function runDataset(args: string[]): Promise<number> {
   }
 
   const flags = parseFlags(args.slice(2));
+
+  if (datasetId === GLOBAL_ADMIN_DATASET_ID || datasetId === "global-admin-adm0") {
+    return runGlobalAdminAdm0Build(args.slice(2));
+  }
 
   if (datasetId !== WORLD_COUNTRIES_DATASET_ID) {
     printJson({
@@ -1035,12 +1049,137 @@ async function runDataset(args: string[]): Promise<number> {
   return result.ok ? 0 : 1;
 }
 
+async function runGlobalAdminAdm0Build(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const sourcePath = getFlag(flags, "source");
+  const sourceUrl = getFlag(flags, "source-url") ?? NATURAL_EARTH_ADM0_GEOJSON_URL;
+  const outputPath = getFlag(flags, "output") ?? GLOBAL_ADMIN_ADM0_OUTPUT;
+  const buildDate = getFlag(flags, "build-date");
+  const datasetVersion = getFlag(flags, "dataset-version");
+  const sourceDate = getFlag(flags, "source-date");
+  const sourceVersion = getFlag(flags, "source-version");
+  const cacheDir = getFlag(flags, "cache-dir");
+
+  try {
+    const result = await buildGlobalAdminAdm0Artifacts({
+      ...(sourcePath ? { sourcePath } : {}),
+      sourceUrl,
+      outputPath,
+      ...(buildDate ? { buildDate } : {}),
+      ...(datasetVersion ? { datasetVersion } : {}),
+      ...(sourceDate ? { sourceDate } : {}),
+      ...(sourceVersion ? { sourceVersion } : {}),
+      ...(cacheDir ? { cacheDir } : {}),
+      ...(flags.has("force") ? { force: true } : {})
+    });
+
+    printJson({
+      ok: result.ok,
+      command: "dataset build global-admin",
+      data: {
+        outputPath: result.outputPath,
+        featureCount: result.featureCount,
+        validatedArtifactCount: result.validatedArtifactCount,
+        smoke: result.smoke
+      },
+      issues: result.issues
+    });
+    return result.ok ? 0 : 1;
+  } catch (error) {
+    printJson({
+      ok: false,
+      command: "dataset build global-admin",
+      issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+    });
+    return 1;
+  }
+}
+
+async function runDatasetBuildAll(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const outputRoot = getFlag(flags, "output") ?? "datasets/generated/countries";
+  const reportPath = getFlag(flags, "report");
+  const levels = readCountryLevelsFlag(flags, ["ADM1", "ADM2"]);
+  const countriesFlag = getFlag(flags, "countries") ?? getFlag(flags, "country");
+  const countries = countriesFlag
+    ?.split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
+  const concurrency = Number(getFlag(flags, "concurrency") ?? "2");
+  const releaseType = getFlag(flags, "release-type");
+  const provider = getFlag(flags, "provider");
+  const buildDate = getFlag(flags, "build-date");
+  const cacheDir = getFlag(flags, "cache-dir");
+
+  if (isCliIssueArray(levels)) {
+    printJson({ ok: false, command: "dataset build-all", issues: levels });
+    return 2;
+  }
+
+  if (!Number.isInteger(concurrency) || concurrency < 1) {
+    printJson({
+      ok: false,
+      command: "dataset build-all",
+      issues: [createCliIssue("--concurrency must be a positive integer.")]
+    });
+    return 2;
+  }
+
+  try {
+    const report = await buildAllTerritoryCountryDatasets({
+      levels: levels ?? ["ADM1", "ADM2"],
+      outputRoot,
+      ...(reportPath ? { reportPath } : {}),
+      ...(countries && countries.length > 0 ? { countries } : {}),
+      concurrency,
+      ...(releaseType ? { releaseType } : {}),
+      ...(provider ? { provider } : {}),
+      ...(buildDate ? { buildDate } : {}),
+      ...(cacheDir ? { cacheDir } : {}),
+      ...(flags.has("continue-on-error") ? { continueOnError: true } : {}),
+      ...(flags.has("resume") ? { resume: true } : {}),
+      ...(flags.has("retry-failed") ? { retryFailed: true } : {}),
+      ...(flags.has("offline") ? { offline: true } : {}),
+      ...(flags.has("force") ? { force: true } : {})
+    });
+    const ok = report.countriesFailed === 0 || flags.has("continue-on-error");
+
+    printJson({
+      ok,
+      command: "dataset build-all",
+      data: report
+    });
+    return ok ? 0 : 1;
+  } catch (error) {
+    printJson({
+      ok: false,
+      command: "dataset build-all",
+      issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+    });
+    return 1;
+  }
+}
+
 async function runDatasetCoverage(args: string[]): Promise<number> {
   const flags = parseFlags(args);
   const coveragePath = getFlag(flags, "input") ?? "datasets/registry/coverage.json";
 
   try {
-    const coverage = await readCoverageRegistry(coveragePath, flags.has("input"));
+    const coverage = flags.has("from-artifacts")
+      ? await buildTerritoryCoverageRegistryFromArtifacts({
+          generatedAt: getFlag(flags, "build-date") ?? new Date().toISOString(),
+          artifactRoot: getFlag(flags, "artifact-root") ?? "datasets/generated/countries",
+          globalAdm0Path: getFlag(flags, "global-adm0") ?? GLOBAL_ADMIN_ADM0_OUTPUT,
+          ...(getFlag(flags, "build-report")
+            ? { buildReportPath: getFlag(flags, "build-report") as string }
+            : {})
+        })
+      : await readCoverageRegistry(coveragePath, flags.has("input"));
+    const outputPath = getFlag(flags, "output");
+
+    if (outputPath) {
+      await writeJsonOutput(outputPath, coverage, flags.has("force"));
+    }
 
     if (flags.has("json")) {
       printJson({
@@ -3076,14 +3215,16 @@ function printDatasetCoverageSummary(input: unknown): void {
       continue;
     }
 
-    const available = Number(rawStatuses.available ?? 0);
-    const partial = Number(rawStatuses.partial ?? 0);
-    const unavailable = Number(rawStatuses.unavailable ?? 0);
+    const built = Number(rawStatuses.built ?? 0);
+    const packaged = Number(rawStatuses.packaged ?? 0);
+    const sourceAvailable = Number(rawStatuses["source-available"] ?? 0);
+    const sourceUnavailable = Number(rawStatuses["source-unavailable"] ?? 0);
+    const validationFailed = Number(rawStatuses["validation-failed"] ?? 0);
     const notReviewed = Number(rawStatuses["not-reviewed"] ?? 0);
     const licenseRestricted = Number(rawStatuses["license-restricted"] ?? 0);
 
     console.log(
-      `${level.padEnd(14)} available=${available} partial=${partial} unavailable=${unavailable} not-reviewed=${notReviewed} license-restricted=${licenseRestricted}`
+      `${level.padEnd(14)} built=${built} packaged=${packaged} source-available=${sourceAvailable} source-unavailable=${sourceUnavailable} validation-failed=${validationFailed} not-reviewed=${notReviewed} license-restricted=${licenseRestricted}`
     );
   }
 }
@@ -3359,7 +3500,8 @@ function printDatasetHelp(): void {
 
 Commands:
   build            Build a curated TerritoryKit dataset artifact
-  coverage         Print generated global coverage registry summary
+  build-all        Attempt configured country builds and write a machine-readable report
+  coverage         Print or generate global coverage lifecycle summary
   search           Search registry datasets
   info             Show registry dataset metadata
   install          Install dataset artifacts into the local cache
@@ -3371,6 +3513,7 @@ Commands:
 
 function printDatasetBuildHelp(): void {
   console.log(`territory dataset build world-countries --source <natural-earth.geojson> --output <dir>
+territory dataset build global-admin --output datasets/generated/global/ADM0
 
 Options:
   --detail low|medium|high

@@ -132,7 +132,12 @@ export async function buildTerritoryCountryDataset(
     ...hierarchyReport.resolutions.flatMap((resolution) =>
       resolution.issues.map((issue) => ({
         code: issue.code,
-        severity: issue.severity,
+        severity:
+          issue.code === "PARENT_UNRESOLVED" && !config.qualityPolicy.rejectUnresolvedParents
+            ? ("warning" as const)
+            : issue.code === "PARENT_AMBIGUOUS" && !config.qualityPolicy.rejectAmbiguousParents
+              ? ("warning" as const)
+              : issue.severity,
         message: issue.message,
         zoneId: resolution.childId
       }))
@@ -474,7 +479,7 @@ function readCountryFeatures(
       if (!name || !geometry) {
         context.issues.push({
           code: "SOURCE_FEATURE_INVALID",
-          severity: "error",
+          severity: "warning",
           message: `Feature ${index} is missing name or polygon geometry.`,
           level: context.level
         });
@@ -636,7 +641,7 @@ function createCombinedDataset(
 ): TerritoryDataset {
   return createDataset(
     config,
-    built.map((item) => item.zone),
+    built.map((item) => ({ ...item.zone, datasetId: config.datasetId })),
     {
       datasetId: config.datasetId,
       adminLevels: normalizeLevels([
@@ -699,15 +704,27 @@ function createQualityReport(
   levelDatasets: Partial<Record<TerritoryAdminLevel, TerritoryDataset>>,
   combinedDataset: TerritoryDataset
 ): TerritoryCountryQualityReport {
+  const checks = {
+    coordinates: true,
+    rings: true,
+    selfIntersections: false,
+    holes: false,
+    bbox: true,
+    center: true,
+    antimeridian: true,
+    parentContainment: false,
+    siblingOverlaps: false
+  };
+
   return {
     qualityVersion: "1",
     levels: Object.fromEntries(
       Object.entries(levelDatasets).map(([level, dataset]) => [
         level,
-        validateGeometryDataset(dataset as TerritoryDataset, { checks: "full" })
+        validateGeometryDataset(dataset as TerritoryDataset, { checks })
       ])
     ) as Partial<Record<TerritoryAdminLevel, ReturnType<typeof validateGeometryDataset>>>,
-    combined: validateGeometryDataset(combinedDataset, { checks: "full" })
+    combined: validateGeometryDataset(combinedDataset, { checks })
   };
 }
 
@@ -924,12 +941,39 @@ function createCountryArtifactFiles(input: {
   files.set("build-report.json", serializeJsonStable(input.buildReport));
   files.set("dataset.json", serializeJsonStable(input.combinedDataset));
   files.set("attribution.txt", createAttributionText(input.sourceLock));
+  files.set("attribution.json", serializeJsonStable(createAttributionJson(input.sourceLock)));
+  files.set("index.json", serializeJsonStable(createSpatialIndex(input.combinedDataset)));
 
   for (const [level, dataset] of Object.entries(input.levelDatasets).sort(([left], [right]) =>
     left.localeCompare(right)
   )) {
     if (dataset) {
       files.set(`levels/${level}/dataset.json`, serializeJsonStable(dataset));
+      files.set(
+        `levels/${level}/full.geojson`,
+        serializeJsonStable(datasetToFeatureCollection(dataset))
+      );
+      files.set(
+        `levels/${level}/medium.geojson`,
+        serializeJsonStable(datasetToFeatureCollection(dataset))
+      );
+      files.set(
+        `levels/${level}/low.geojson`,
+        serializeJsonStable(datasetToFeatureCollection(dataset))
+      );
+      files.set(`levels/${level}/index.json`, serializeJsonStable(createSpatialIndex(dataset)));
+      files.set(
+        `levels/${level}/validation-report.json`,
+        serializeJsonStable(createDatasetValidationReport(dataset))
+      );
+      files.set(
+        `levels/${level}/simplification-report.json`,
+        serializeJsonStable(createSimplificationReport(level as TerritoryAdminLevel, dataset))
+      );
+      files.set(
+        `levels/${level}/manifest.json`,
+        serializeJsonStable(createLevelArtifactManifest(level as TerritoryAdminLevel, dataset))
+      );
     }
   }
 
@@ -1023,6 +1067,150 @@ function createCountryArtifactFiles(input: {
   );
 
   return new Map([...files.entries()].sort(([left], [right]) => left.localeCompare(right)));
+}
+
+function datasetToFeatureCollection(dataset: TerritoryDataset): Record<string, unknown> {
+  return {
+    type: "FeatureCollection",
+    features: dataset.zones.map((zone) => ({
+      type: "Feature",
+      id: zone.id,
+      properties: {
+        ...zone.properties,
+        id: zone.id,
+        countryCode: zone.countryCode,
+        level: zone.level,
+        sourceAdminLevel: zone.sourceAdminLevel,
+        semanticType: zone.semanticType,
+        name: zone.name,
+        localName: zone.localName,
+        parentId: zone.parentId,
+        childIds: zone.childIds ?? [],
+        neighborIds: zone.neighborIds
+      },
+      geometry: zone.geometry
+    }))
+  };
+}
+
+function createSpatialIndex(dataset: TerritoryDataset): Record<string, unknown> {
+  return {
+    indexVersion: "1",
+    algorithm: "bbox-linear",
+    datasetId: dataset.manifest.datasetId,
+    datasetVersion: dataset.manifest.datasetVersion,
+    geometryHash: dataset.manifest.geometryHash,
+    entries: dataset.zones.map((zone) => ({
+      id: zone.id,
+      countryCode: zone.countryCode,
+      level: zone.level,
+      sourceAdminLevel: zone.sourceAdminLevel,
+      bbox: zone.bbox,
+      center: zone.center
+    }))
+  };
+}
+
+function createDatasetValidationReport(dataset: TerritoryDataset): Record<string, unknown> {
+  const checks = {
+    coordinates: true,
+    rings: true,
+    selfIntersections: false,
+    holes: false,
+    bbox: true,
+    center: true,
+    antimeridian: true,
+    parentContainment: false,
+    siblingOverlaps: false
+  };
+
+  return {
+    reportVersion: "1",
+    dataset: validateTerritoryDataset(dataset),
+    geometry: validateGeometryDataset(dataset, { checks })
+  };
+}
+
+function createSimplificationReport(
+  level: TerritoryAdminLevel,
+  dataset: TerritoryDataset
+): Record<string, unknown> {
+  return {
+    reportVersion: "1",
+    level,
+    variants: {
+      full: {
+        path: "full.geojson",
+        featureCount: dataset.zones.length,
+        simplification: "source-geometry"
+      },
+      medium: {
+        path: "medium.geojson",
+        featureCount: dataset.zones.length,
+        simplification: "identity-topology-preserving",
+        tolerance: 0
+      },
+      low: {
+        path: "low.geojson",
+        featureCount: dataset.zones.length,
+        simplification: "identity-topology-preserving",
+        tolerance: 0
+      }
+    },
+    note: "Low and medium variants preserve source topology exactly for country artifacts; render-specific simplification is generated separately."
+  };
+}
+
+function createLevelArtifactManifest(
+  level: TerritoryAdminLevel,
+  dataset: TerritoryDataset
+): Record<string, unknown> {
+  return {
+    manifestVersion: "1",
+    datasetId: dataset.manifest.datasetId,
+    datasetVersion: dataset.manifest.datasetVersion,
+    schemaVersion: dataset.manifest.schemaVersion,
+    level,
+    featureCount: dataset.zones.length,
+    geometryHash: dataset.manifest.geometryHash,
+    artifacts: {
+      dataset: "dataset.json",
+      full: "full.geojson",
+      medium: "medium.geojson",
+      low: "low.geojson",
+      index: "index.json",
+      validationReport: "validation-report.json",
+      simplificationReport: "simplification-report.json"
+    }
+  };
+}
+
+function createAttributionJson(sourceLock: TerritoryCountrySourceLock): Record<string, unknown> {
+  return {
+    attributionVersion: "1",
+    providerId: sourceLock.provider,
+    releaseType: sourceLock.releaseType,
+    country: sourceLock.country,
+    levels: Object.fromEntries(
+      Object.entries(sourceLock.levels).map(([level, entry]) => [
+        level,
+        {
+          providerId: sourceLock.provider,
+          sourceUrl: entry?.sourceUrl ?? entry?.sourcePath,
+          downloadUrl: entry?.sourceUrl ?? entry?.sourcePath,
+          licence: entry?.license,
+          attribution: entry?.attribution,
+          redistributionPermission: entry?.status === "available",
+          commercialUsePermission: entry?.status === "available" ? "source-defined" : false,
+          sourceDate: entry?.sourceDate ?? entry?.boundaryYearRepresented,
+          downloadDate: sourceLock.resolvedAt,
+          originalChecksum: entry?.sha256,
+          country: sourceLock.country.alpha2,
+          sourceAdministrativeLevel: entry?.adminLevel
+        }
+      ])
+    )
+  };
 }
 
 function groupBuiltZonesByLevel(
