@@ -1,0 +1,1 @@
+import{_ as a,o as t,c as i,a0 as r}from"./chunks/framework.7S7UUFQz.js";const m=JSON.parse('{"title":"TerritoryKit","description":"","frontmatter":{},"headers":[],"relativePath":"index.md","filePath":"index.md"}'),s={name:"index.md"};function n(l,e,o,h,d,p){return t(),i("div",null,[...e[0]||(e[0]=[r("",10)])])}const k=a(s,[["render",n]]);export{m as __pageData,k as default};
