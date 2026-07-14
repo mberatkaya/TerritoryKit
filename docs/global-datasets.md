@@ -121,8 +121,12 @@ checksums, attribution files, and small fixtures in the repository. Publish larg
 artifacts separately and verify them with `artifactChecksum`.
 
 The first global build target is documented in [World countries ADM0](./datasets/world-countries.md).
-It reads a local Natural Earth Admin 0 GeoJSON file and emits `manifest.json`, `checksums.json`,
-`attribution.txt`, `build-report.json`, and detail-specific `dataset.json` files.
+It reads a Natural Earth Admin 0 GeoJSON file through the shared source adapter pipeline and emits
+`manifest.json`, `checksums.json`, `attribution.txt`, `build-report.json`, and detail-specific
+`dataset.json` files.
+
+See [Source adapters](./source-adapters.md), [Source pipeline](./source-pipeline.md), and
+[Source cache](./source-cache.md) for the shared import architecture.
 
 ## Boundary Policy
 

@@ -28,6 +28,9 @@ const adjacency = inferBBoxAdjacency(dataset.zones);
 - `createWeightedVoronoiDataset(options)` creates a simple weighted territory dataset.
 - `createDatasetGeometryHash(dataset)` returns a deterministic geometry hash.
 - `buildWorldCountriesDataset(options)` builds Natural Earth ADM0 world-countries artifacts.
+- `runTerritorySourcePipeline(options)` runs the shared source adapter pipeline.
+- `createDefaultTerritorySourceRegistry()` returns built-in adapters for Natural Earth,
+  geoBoundaries, and generic GeoJSON.
 - `parseNaturalEarthAdm0FeatureCollection(input, source)` parses local Natural Earth-like GeoJSON
   without network access.
 - `inferBBoxAdjacency(zones, options)` returns neighbor IDs inferred from bounding boxes.
@@ -49,6 +52,24 @@ await buildWorldCountriesDataset({
 
 The builder writes `manifest.json`, `checksums.json`, `attribution.txt`, `build-report.json`, and
 detail-specific `dataset.json` files.
+
+## Source Adapters
+
+```ts
+import { runTerritorySourcePipeline } from "@territory-kit/generators";
+
+await runTerritorySourcePipeline({
+  adapter: "geojson",
+  request: { input: "./regions.geojson" },
+  options: {
+    countryCode: "TR",
+    adminLevel: "ADM2",
+    idProperty: "region.code",
+    nameProperty: "region.name"
+  },
+  outputPath: "./dist/regions"
+});
+```
 
 ## License
 

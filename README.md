@@ -35,12 +35,17 @@ document:
 
 ## Global Dataset Builds
 
-The global dataset pipeline starts with a local Natural Earth ADM0 builder:
+The global dataset pipeline starts with source adapters and a local Natural Earth ADM0 builder:
 
 ```bash
 territory dataset build world-countries \
   --source ./sources/ne-admin0.geojson \
   --output ./dist/world-countries
+```
+
+```bash
+territory source list
+territory import geojson --input ./regions.geojson --output ./dist/regions --country TR --admin-level ADM2 --name-property name
 ```
 
 Generated world-country artifacts are documented in
@@ -78,6 +83,9 @@ items.
 - [Release governance](./docs/release-governance.md)
 - [Roadmap](./docs/roadmap.md)
 - [Dataset compatibility](./docs/dataset-compatibility.md)
+- [Source adapters](./docs/source-adapters.md)
+- [Source pipeline](./docs/source-pipeline.md)
+- [Source cache](./docs/source-cache.md)
 - [World countries ADM0 dataset](./docs/datasets/world-countries.md)
 - [Benchmarks](./docs/benchmarks.md)
 - [NestJS and PostGIS](./docs/nestjs-postgis.md)

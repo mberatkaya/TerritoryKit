@@ -30,6 +30,67 @@ export type {
   NaturalEarthChecksums,
   NaturalEarthSourceDescriptor
 } from "./natural-earth.js";
+export {
+  BUILTIN_TERRITORY_SOURCE_ADAPTERS,
+  createDefaultTerritorySourceRegistry,
+  getTerritorySourceAdapter,
+  hasTerritorySourceAdapter,
+  listTerritorySourceAdapters
+} from "./sources/builtins.js";
+export {
+  GEOBOUNDARIES_LICENSE,
+  GEOBOUNDARIES_RELEASE_TYPES,
+  GEOBOUNDARIES_SOURCE_ADAPTER_ID,
+  geoBoundariesSourceAdapter,
+  transformGeoBoundaries
+} from "./sources/geoboundaries.js";
+export type {
+  GeoBoundariesReleaseType,
+  GeoBoundariesSourceOptions
+} from "./sources/geoboundaries.js";
+export {
+  GEOJSON_SOURCE_ADAPTER_ID,
+  createMappedTerritoryId,
+  finalizeSourceDataset,
+  genericGeoJsonSourceAdapter,
+  transformGenericGeoJson
+} from "./sources/generic-geojson.js";
+export type { GenericGeoJsonSourceOptions } from "./sources/generic-geojson.js";
+export {
+  buildWorldCountriesDatasetFromSourcePipeline,
+  naturalEarthSourceAdapter,
+  transformNaturalEarthAdm0
+} from "./sources/natural-earth.js";
+export type { NaturalEarthSourceOptions } from "./sources/natural-earth.js";
+export { TerritorySourceError, createSourceIssue } from "./sources/errors.js";
+export { createTerritorySourceRegistry, TerritorySourceRegistry } from "./sources/registry.js";
+export { runTerritorySourcePipeline } from "./sources/pipeline.js";
+export { verifySourceArtifact } from "./sources/verification.js";
+export { getDefaultSourceCacheDir, createSourceCacheKey } from "./sources/cache.js";
+export { fetchHttpSourceArtifact } from "./sources/transports/http.js";
+export { resolveFileSourceArtifact, sha256File } from "./sources/transports/file.js";
+export type {
+  DatasetAttribution,
+  TerritorySourceAdapter,
+  TerritorySourceArtifact,
+  TerritorySourceCacheOptions,
+  TerritorySourceCapabilities,
+  TerritorySourceContext,
+  TerritorySourceDescription,
+  TerritorySourceIssue,
+  TerritorySourceOptionDescription,
+  TerritorySourcePipelineEvent,
+  TerritorySourcePipelineOptions,
+  TerritorySourcePipelineOutput,
+  TerritorySourcePipelineResult,
+  TerritorySourceRegistryLike,
+  TerritorySourceRequest,
+  TerritorySourceSeverity,
+  TerritorySourceStage,
+  TerritorySourceStatistics,
+  TerritorySourceTransformResult,
+  TerritorySourceVerificationResult
+} from "./sources/types.js";
 
 export interface BBoxAdjacencyOptions {
   tolerance?: number;

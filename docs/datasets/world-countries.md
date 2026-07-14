@@ -20,6 +20,16 @@ territory dataset build world-countries \
   --build-date 2026-01-01T00:00:00.000Z
 ```
 
+The same conversion engine is also available through the source adapter command:
+
+```sh
+territory import natural-earth \
+  --input ./sources/ne-admin0.geojson \
+  --output ./dist/world-countries \
+  --source-version 5.1.2 \
+  --source-sha256 <sha256>
+```
+
 Natural Earth states that its data is public domain. Generated artifacts preserve the attribution
 text `Made with Natural Earth` and include an `attribution.txt` file. TerritoryKit is not the
 official source for any boundary.
@@ -137,7 +147,7 @@ representation and should be accompanied by product-specific caveats where appro
 
 ## Known Limitations
 
-- This sprint does not add automatic source download or cache behavior.
+- Full Natural Earth native-scale download resolution is not implemented yet.
 - Large Natural Earth source files and generated artifacts are not committed to the repository.
 - `low` and `medium` are deterministic local simplifications, not separate Natural Earth native
   scale downloads yet.

@@ -7,7 +7,7 @@ const maxBytesByFile = new Map([
   ["packages/core/dist/index.mjs", 65_000],
   ["packages/maplibre/dist/index.mjs", 45_000],
   ["packages/nestjs/dist/index.mjs", 45_000],
-  ["packages/generators/dist/index.mjs", 45_000],
+  ["packages/generators/dist/index.mjs", 115_000],
   ["packages/cli/dist/index.mjs", 45_000]
 ]);
 
