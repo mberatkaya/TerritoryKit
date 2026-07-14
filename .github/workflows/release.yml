@@ -20,31 +20,68 @@ permissions:
   id-token: write
   pull-requests: write
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   release:
+    if: ${{ github.repository == 'mberatkaya/TerritoryKit' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v5
+      - name: Checkout repository
+        uses: actions/checkout@v6
         with:
-          version: 11.7.0
-      - uses: actions/setup-node@v5
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: pnpm
-          registry-url: https://registry.npmjs.org
-      - run: pnpm install --frozen-lockfile --ignore-scripts
-      - run: pnpm format:check
-      - run: pnpm lint
-      - run: pnpm typecheck
-      - run: pnpm test
-      - run: pnpm build
-      - run: pnpm bundle:size
-      - name: Changesets version or publish
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.publish == 'true' }}
-        uses: changesets/action@v1
+          package-manager-cache: false
+          registry-url: https://registry.npmjs.org/
+
+      - name: Verify toolchain
+        run: |
+          node --version
+          npm --version
+          pnpm --version
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Check formatting
+        run: pnpm format:check
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      - name: Build
+        run: pnpm build
+
+      - name: Check bundle size
+        run: pnpm bundle:size
+
+      - name: Create release pull request
+        id: changesets
+        uses: changesets/action@v2
         with:
-          publish: pnpm changeset publish
+          version-script: pnpm version-packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish packages to npm with Trusted Publishing
+        if: ${{ steps.changesets.outputs['has-changesets'] == 'false' && (github.event_name == 'push' || inputs.publish == 'true') }}
+        run: pnpm release
+        env:
+          NPM_CONFIG_PROVENANCE: "true"
+          PNPM_CONFIG_PROVENANCE: "true"

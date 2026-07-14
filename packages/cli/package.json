@@ -3,13 +3,31 @@
   "version": "1.0.0",
   "description": "TerritoryKit command line tools.",
   "license": "Apache-2.0",
+  "homepage": "https://github.com/mberatkaya/TerritoryKit#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mberatkaya/TerritoryKit.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/mberatkaya/TerritoryKit/issues"
+  },
   "type": "module",
   "bin": {
     "territory": "./dist/index.mjs"
   },
   "files": [
-    "dist"
+    "dist/*.cjs",
+    "dist/*.d.cts",
+    "dist/*.d.mts",
+    "dist/*.mjs",
+    "LICENSE",
+    "README.md"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
