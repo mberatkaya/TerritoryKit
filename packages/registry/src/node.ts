@@ -389,6 +389,53 @@ export async function buildTerritoryDatasetRegistryFromArtifacts(
       });
     }
 
+    const renderManifestPath = join(root, "render", "manifest.json");
+
+    if (await pathExists(renderManifestPath)) {
+      const renderBytes = new Uint8Array(await readFile(renderManifestPath));
+      const renderManifest = JSON.parse(new TextDecoder().decode(renderBytes)) as Record<
+        string,
+        unknown
+      >;
+      const tileTemplate =
+        typeof renderManifest.tileTemplate === "string"
+          ? renderManifest.tileTemplate
+          : "tiles/{z}/{x}/{y}.mvt";
+      const renderFormat = renderManifest.format === "geojson" ? "geojson" : "mvt";
+      const renderArtifactVersion =
+        typeof renderManifest.renderArtifactVersion === "string"
+          ? renderManifest.renderArtifactVersion
+          : "1";
+      const datasetContentHash =
+        typeof renderManifest.datasetContentHash === "string"
+          ? renderManifest.datasetContentHash
+          : undefined;
+      const identityMapHash =
+        typeof renderManifest.identityMapHash === "string"
+          ? renderManifest.identityMapHash
+          : undefined;
+
+      artifacts.push({
+        id: "render-manifest",
+        purpose: "render",
+        format: renderFormat,
+        path: "render/manifest.json",
+        url: encodeRelativeUrl(
+          joinUrlPath(rootPrefix === "." ? "" : rootPrefix, "render/manifest.json")
+        ),
+        sha256: sha256Hex(renderBytes),
+        sizeBytes: renderBytes.byteLength,
+        compression: "none",
+        contentType: "application/json",
+        tileUrlTemplate: encodeRelativeUrl(
+          joinUrlPath(rootPrefix === "." ? "" : rootPrefix, "render", tileTemplate)
+        ),
+        renderArtifactVersion,
+        ...(datasetContentHash ? { datasetContentHash } : {}),
+        ...(identityMapHash ? { identityMapHash } : {})
+      });
+    }
+
     const sourceVersion = readOptionalString(manifest, "sourceVersion");
     datasets.push({
       id: datasetId,
