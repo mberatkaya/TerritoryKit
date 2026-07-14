@@ -11,7 +11,12 @@
       "@territory-kit/dataset",
       "@territory-kit/generators",
       "@territory-kit/maplibre",
-      "@territory-kit/nestjs"
+      "@territory-kit/nestjs",
+      "@territory-kit/data-tr",
+      "@territory-kit/data-us",
+      "@territory-kit/data-de",
+      "@territory-kit/data-jp",
+      "@territory-kit/data-id"
     ]
   ],
   "ignore": [

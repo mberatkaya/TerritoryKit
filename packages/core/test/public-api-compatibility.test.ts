@@ -7,8 +7,10 @@ describe("public API compatibility", () => {
   it("keeps the stable runtime export surface for 1.0", () => {
     expect(Object.keys(core).sort()).toEqual([
       "TerritoryZoneNotFoundError",
+      "createTerritoryCountryDatasetDescriptor",
       "createTerritoryEngine",
       "defaultZoomLevelStrategy",
+      "loadTerritoryCountryDataset",
       "zoomToDefaultLevel"
     ]);
   });

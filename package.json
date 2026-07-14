@@ -16,6 +16,7 @@
     "bundle:size": "node scripts/check-bundle-size.mjs",
     "clean": "turbo run clean && rimraf node_modules",
     "changeset": "changeset",
+    "country:smoke": "node scripts/country-smoke.mjs",
     "coverage": "vitest run --coverage",
     "docs:build": "pnpm --filter @territory-kit/docs build",
     "docs:dev": "pnpm --filter @territory-kit/docs dev",

@@ -628,6 +628,129 @@ describe("territory cli", () => {
     });
   });
 
+  it("runs pilot country source lock, build, validate, and inspect commands", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-cli-country-"));
+    const fixture = await createCountryCliFixture(tempDir);
+    const lockPath = join(tempDir, "sources.lock.json");
+    const outputPath = join(tempDir, "tr-artifact");
+
+    try {
+      await expect(captureCli(["country", "list", "--json"])).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "country list",
+          data: expect.arrayContaining([expect.objectContaining({ country: "TR" })])
+        }
+      });
+      await expect(captureCliRaw(["country", "info", "TR"])).resolves.toMatchObject({
+        code: 0,
+        output: expect.stringContaining("@territory-kit/data-tr")
+      });
+      await expect(
+        captureCli([
+          "country",
+          "source",
+          "lock",
+          "TR",
+          "--metadata",
+          fixture.metadataPath,
+          "--output",
+          lockPath,
+          "--build-date",
+          "2026-01-01T00:00:00.000Z"
+        ])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "country source lock",
+          data: {
+            country: "TR",
+            outputPath: lockPath,
+            lock: {
+              country: { alpha2: "TR" }
+            }
+          }
+        }
+      });
+      await expect(
+        captureCli([
+          "country",
+          "source",
+          "verify",
+          lockPath,
+          "--build-date",
+          "2026-01-01T00:00:00.000Z"
+        ])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: { ok: true, command: "country source verify" }
+      });
+      await expect(
+        captureCli([
+          "country",
+          "build",
+          "TR",
+          "--source-lock",
+          lockPath,
+          "--output",
+          outputPath,
+          "--build-adjacency",
+          "--strict",
+          "--build-date",
+          "2026-01-01T00:00:00.000Z"
+        ])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "country build",
+          data: {
+            country: "TR",
+            manifest: {
+              publishReady: true,
+              featureCountByLevel: {
+                ADM0: 1,
+                ADM1: 2,
+                ADM2: 4
+              }
+            },
+            statistics: {
+              adjacencyEdgeCountByLevel: {
+                ADM1: 1,
+                ADM2: 2
+              }
+            }
+          }
+        }
+      });
+      await expect(
+        captureCli(["country", "validate", outputPath, "--strict"])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: { ok: true, command: "country validate", issues: [] }
+      });
+      await expect(captureCli(["country", "inspect", outputPath])).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "country inspect",
+          data: {
+            country: "TR",
+            publishReady: true,
+            adjacency: {
+              ADM1: 1,
+              ADM2: 2
+            }
+          }
+        }
+      });
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
+
   it("imports Natural Earth through the source pipeline", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-cli-source-"));
     const sourcePath = join(tempDir, "natural-earth.geojson");
@@ -1074,6 +1197,149 @@ function adjacencyCliZone(
   };
 }
 
+async function createCountryCliFixture(tempDir: string): Promise<{ metadataPath: string }> {
+  const adm0Path = join(tempDir, "tr-adm0.geojson");
+  const adm1Path = join(tempDir, "tr-adm1.geojson");
+  const adm2Path = join(tempDir, "tr-adm2.geojson");
+  const metadataPath = join(tempDir, "metadata.json");
+
+  await writeFile(
+    adm0Path,
+    JSON.stringify({
+      type: "FeatureCollection",
+      features: [
+        countryCliFeature(
+          "TR-ADM0",
+          "TR",
+          undefined,
+          "Turkiye",
+          "country",
+          "TR",
+          rectCli(0, 0, 2, 2)
+        )
+      ]
+    }),
+    "utf8"
+  );
+  await writeFile(
+    adm1Path,
+    JSON.stringify({
+      type: "FeatureCollection",
+      features: [
+        countryCliFeature(
+          "TR-ADM1-1",
+          "TR-01",
+          "TR",
+          "Alpha",
+          "province",
+          "TR-01",
+          rectCli(0, 0, 1, 2)
+        ),
+        countryCliFeature(
+          "TR-ADM1-2",
+          "TR-02",
+          "TR",
+          "Beta",
+          "province",
+          "TR-02",
+          rectCli(1, 0, 2, 2)
+        )
+      ]
+    }),
+    "utf8"
+  );
+  await writeFile(
+    adm2Path,
+    JSON.stringify({
+      type: "FeatureCollection",
+      features: [
+        countryCliFeature(
+          "TR-ADM2-1",
+          "TR-01-A",
+          "TR-01",
+          "Alpha North",
+          "district",
+          "TR-01-A",
+          rectCli(0, 0, 1, 1)
+        ),
+        countryCliFeature(
+          "TR-ADM2-2",
+          "TR-01-B",
+          "TR-01",
+          "Alpha South",
+          "district",
+          "TR-01-B",
+          rectCli(0, 1, 1, 2)
+        ),
+        countryCliFeature(
+          "TR-ADM2-3",
+          "TR-02-A",
+          "TR-02",
+          "Beta North",
+          "district",
+          "TR-02-A",
+          rectCli(1, 0, 2, 1)
+        ),
+        countryCliFeature(
+          "TR-ADM2-4",
+          "TR-02-B",
+          "TR-02",
+          "Beta South",
+          "district",
+          "TR-02-B",
+          rectCli(1, 1, 2, 2)
+        )
+      ]
+    }),
+    "utf8"
+  );
+  await writeFile(
+    metadataPath,
+    JSON.stringify(
+      [
+        ["ADM0", adm0Path],
+        ["ADM1", adm1Path],
+        ["ADM2", adm2Path]
+      ].map(([adminLevel, sourceUrl]) => ({
+        countryCodeAlpha3: "TUR",
+        adminLevel,
+        releaseType: "gbOpen",
+        sourceUrl,
+        sourceVersion: "tr-cli-fixture-1",
+        boundaryYearRepresented: "2026",
+        license: "CC BY 4.0",
+        attribution: `Synthetic TR ${adminLevel} fixture`
+      }))
+    ),
+    "utf8"
+  );
+
+  return { metadataPath };
+}
+
+function countryCliFeature(
+  id: string,
+  shapeID: string,
+  parentShapeID: string | undefined,
+  shapeName: string,
+  shapeType: string,
+  officialCode: string,
+  geometry: unknown
+): unknown {
+  return {
+    type: "Feature",
+    id,
+    properties: {
+      shapeID,
+      ...(parentShapeID ? { parentShapeID } : {}),
+      shapeName,
+      shapeType,
+      officialCode
+    },
+    geometry
+  };
+}
+
 function createNaturalEarthCliFixture(): unknown {
   return {
     type: "FeatureCollection",
@@ -1225,14 +1491,18 @@ function createGeoBoundariesCliFixture(): unknown {
 }
 
 function squareCli(west: number, south: number): unknown {
+  return rectCli(west, south, west + 1, south + 1);
+}
+
+function rectCli(west: number, south: number, east: number, north: number): unknown {
   return {
     type: "Polygon",
     coordinates: [
       [
         [west, south],
-        [west + 1, south],
-        [west + 1, south + 1],
-        [west, south + 1],
+        [east, south],
+        [east, north],
+        [west, north],
         [west, south]
       ]
     ]

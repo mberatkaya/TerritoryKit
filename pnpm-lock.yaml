@@ -135,6 +135,36 @@ importers:
         specifier: workspace:*
         version: link:../shared-testkit
 
+  packages/data-de:
+    dependencies:
+      '@territory-kit/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/data-id:
+    dependencies:
+      '@territory-kit/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/data-jp:
+    dependencies:
+      '@territory-kit/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/data-tr:
+    dependencies:
+      '@territory-kit/core':
+        specifier: workspace:*
+        version: link:../core
+
+  packages/data-us:
+    dependencies:
+      '@territory-kit/core':
+        specifier: workspace:*
+        version: link:../core
+
   packages/dataset:
     dependencies:
       '@types/geojson':

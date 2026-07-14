@@ -14,6 +14,12 @@ territory source info natural-earth
 territory import natural-earth --input ./natural-earth.geojson --output ./dist/world-countries
 territory import geoboundaries --input ./geoBoundaries-TUR-ADM1.geojson --country TR --admin-level ADM1 --output ./dist/tr-adm1
 territory import geojson --input ./regions.geojson --country TR --admin-level ADM2 --name-property region.name --output ./dist/regions
+territory country list
+territory country source lock TR --output ./dist/tr/sources.lock.json
+territory country source verify ./dist/tr/sources.lock.json
+territory country build TR --source-lock ./dist/tr/sources.lock.json --output ./dist/tr --build-adjacency --strict
+territory country validate ./dist/tr --strict
+territory country inspect ./dist/tr
 territory geometry validate ./dist/regions --checks full --report ./geometry-report.json
 territory geometry repair ./dist/regions --checks basic --output ./dist/regions-repaired --report ./repair-report.json
 territory simplify dataset.json
@@ -65,3 +71,9 @@ source. It writes `manifest.json`, `attribution.txt`, `checksums.json`, `build-r
 detail-specific `dataset.json` files. Use `--source-sha256` to verify the source before parsing,
 `--build-date` or `SOURCE_DATE_EPOCH` for reproducible output, `--strict` to fail on warnings, and
 `--force` to replace an existing output directory.
+
+`territory country` builds pilot ADM0/ADM1/ADM2 country artifacts. `source lock` resolves and
+checksums source artifacts, `source verify` re-validates a lock, `build` writes country manifests,
+quality reports, hierarchy reports, identity maps, level datasets, and optional ADM1/ADM2 adjacency
+artifacts, `validate` checks artifact checksums and dataset validity, and `inspect` prints a compact
+summary.
