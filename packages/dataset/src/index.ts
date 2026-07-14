@@ -6,6 +6,20 @@ export {
   hasRingSelfIntersection
 } from "./geometry.js";
 export {
+  applyTerritoryAdjacencyOverrides,
+  canonicalTerritoryAdjacencyPair,
+  classifyTerritoryGeometryRelation,
+  compareTerritoryAdjacencyEdges,
+  computeSharedBoundaryMeters,
+  computeTerritoryAdjacencyContentHash,
+  createTerritoryAdjacencyIndex,
+  createTerritoryAdjacencyTolerance,
+  getTerritoryBoundarySegments,
+  normalizeTerritoryAdjacencyEdge,
+  normalizeTerritoryAdjacencyEdges,
+  validateTerritoryAdjacencyArtifact
+} from "./adjacency.js";
+export {
   BASIC_GEOMETRY_QUALITY_CHECKS,
   FULL_GEOMETRY_QUALITY_CHECKS,
   hashTerritoryGeometry,
@@ -32,6 +46,30 @@ export {
   loadTerritoryDataset,
   validateTerritoryDataset
 } from "./validation.js";
+export type {
+  TerritoryAdjacencyArtifact,
+  TerritoryAdjacencyBuildOptions,
+  TerritoryAdjacencyBuildStatistics,
+  TerritoryAdjacencyEdge,
+  TerritoryAdjacencyIndex,
+  TerritoryAdjacencyOverrides,
+  TerritoryAdjacencyPair,
+  TerritoryAdjacencyProgress,
+  TerritoryAdjacencyQueryOptions,
+  TerritoryAdjacencySource,
+  TerritoryAdjacencyTolerance,
+  TerritoryAdjacencyType,
+  TerritoryAdjacencyValidationCode,
+  TerritoryAdjacencyValidationIssue,
+  TerritoryAdjacencyValidationReport,
+  TerritoryAdjacencyValidationSeverity,
+  TerritoryBoundarySegment,
+  TerritoryGeometryRelation,
+  TerritoryGeometryRelationOptions,
+  TerritoryGeometryRelationResult,
+  TerritoryManualAdjacencyAdd,
+  TerritoryManualAdjacencyRemove
+} from "./adjacency.js";
 export type {
   TerritoryAdminLevel,
   LngLat,

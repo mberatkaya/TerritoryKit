@@ -1,5 +1,15 @@
-import { computeGeometryBBox, loadTerritoryDataset } from "@territory-kit/dataset";
-import type { LngLat, TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
+import {
+  computeGeometryBBox,
+  createTerritoryAdjacencyIndex,
+  loadTerritoryDataset
+} from "@territory-kit/dataset";
+import type {
+  LngLat,
+  TerritoryAdjacencyEdge,
+  TerritoryAdjacencyType,
+  TerritoryDataset,
+  TerritoryZone
+} from "@territory-kit/dataset";
 import Flatbush from "flatbush";
 import { TerritoryZoneNotFoundError } from "./errors.js";
 import {
@@ -35,6 +45,9 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
   );
   const levelStrategy = options.levelStrategy ?? defaultZoomLevelStrategy;
   const indexesByLevel = buildIndexesByLevel(dataset);
+  const adjacencyIndex = options.adjacency
+    ? createTerritoryAdjacencyIndex(options.adjacency)
+    : undefined;
   const adjacencyConnections = normalizeAdjacencyConnections(
     options.adjacencyConnections ?? []
   ).filter(
@@ -185,6 +198,21 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
       return filterConnections(connectionsByZoneId.get(zoneId) ?? [], options.connectionTypes);
     },
 
+    getAdjacencyRelations(zoneId, options = {}) {
+      requireZone(zoneId);
+
+      if (!adjacencyIndex) {
+        return [];
+      }
+
+      const queryOptions = options.types ? { types: options.types } : {};
+
+      return adjacencyIndex
+        .getNeighbors(zoneId, queryOptions)
+        .flatMap((neighborId) => adjacencyIndex.getRelation(zoneId, neighborId, queryOptions))
+        .sort(compareAdjacencyEdges);
+    },
+
     getLevelTransition(query) {
       const strategy = query.strategy ?? levelStrategy;
       const fromLevel = strategy.resolveLevel({
@@ -300,7 +328,8 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
         for (const currentId of frontier) {
           for (const neighborId of getDirectNeighborIds(
             currentId,
-            neighborOptions.connectionTypes
+            neighborOptions.connectionTypes,
+            neighborOptions.types
           )) {
             if (!visited.has(neighborId)) {
               visited.add(neighborId);
@@ -335,16 +364,26 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
 
   function getDirectNeighborIds(
     zoneId: string,
-    connectionTypes: TerritoryAdjacencyConnectionType[] | undefined
+    connectionTypes: TerritoryAdjacencyConnectionType[] | undefined,
+    adjacencyTypes: TerritoryAdjacencyType[] | undefined
   ): string[] {
     const zone = requireZone(zoneId);
     const includeGeometricNeighbors =
-      !connectionTypes || connectionTypes.length === 0 || connectionTypes.includes("geometric");
+      !adjacencyTypes &&
+      (!connectionTypes || connectionTypes.length === 0 || connectionTypes.includes("geometric"));
     const neighborIds = new Set(includeGeometricNeighbors ? zone.neighborIds : []);
+
+    if (adjacencyIndex) {
+      const queryOptions = adjacencyTypes ? { types: adjacencyTypes } : {};
+
+      for (const neighborId of adjacencyIndex.getNeighbors(zoneId, queryOptions)) {
+        neighborIds.add(neighborId);
+      }
+    }
 
     for (const connection of filterConnections(
       connectionsByZoneId.get(zoneId) ?? [],
-      connectionTypes
+      adjacencyTypes ? [] : connectionTypes
     )) {
       neighborIds.add(connection.toZoneId);
     }
@@ -451,6 +490,18 @@ function compareConnections(
     left.fromZoneId.localeCompare(right.fromZoneId) ||
     left.toZoneId.localeCompare(right.toZoneId) ||
     left.type.localeCompare(right.type)
+  );
+}
+
+function compareAdjacencyEdges(
+  left: TerritoryAdjacencyEdge,
+  right: TerritoryAdjacencyEdge
+): number {
+  return (
+    left.from.localeCompare(right.from) ||
+    left.to.localeCompare(right.to) ||
+    left.type.localeCompare(right.type) ||
+    left.source.localeCompare(right.source)
   );
 }
 

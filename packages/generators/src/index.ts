@@ -72,6 +72,18 @@ export {
   writeGeometryQualityReport,
   writeTerritoryDatasetOutput
 } from "./geometry-quality.js";
+export {
+  applyTerritoryAdjacencyOverrides,
+  applyTerritoryAdjacencyOverridesForBuild,
+  buildTerritoryAdjacency,
+  buildTerritoryAdjacencyPath,
+  computeTerritoryAdjacencyContentHash,
+  readTerritoryAdjacencyArtifactPath,
+  readTerritoryAdjacencyOverridesPath,
+  serializeTerritoryAdjacencyArtifact,
+  validateTerritoryAdjacencyPath,
+  writeTerritoryAdjacencyOutput
+} from "./adjacency.js";
 export { verifySourceArtifact } from "./sources/verification.js";
 export { getDefaultSourceCacheDir, createSourceCacheKey } from "./sources/cache.js";
 export { fetchHttpSourceArtifact } from "./sources/transports/http.js";
@@ -103,6 +115,12 @@ export type {
   GeometryQualityPathRepairOptions,
   TerritoryDatasetPathInput
 } from "./geometry-quality.js";
+export type {
+  TerritoryAdjacencyBuildIssue,
+  TerritoryAdjacencyBuildResult,
+  TerritoryAdjacencyPathBuildOptions,
+  TerritoryAdjacencyPathBuildResult
+} from "./adjacency.js";
 
 export interface BBoxAdjacencyOptions {
   tolerance?: number;

@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { createTerritoryEngine } from "@territory-kit/core";
 import {
   TERRITORY_SCHEMA_VERSION,
+  createTerritoryAdjacencyIndex,
   createTerritoryDatasetFromGeoJson,
   loadTerritoryDataset,
   validateTerritoryDataset
@@ -13,6 +15,8 @@ import type {
   GeometryQualityOptions,
   GeometryRepairOptions,
   GeometryRepairStrategy,
+  TerritoryAdjacencyBuildOptions,
+  TerritoryAdjacencyType,
   TerritoryDataset,
   TerritoryDatasetManifest,
   TerritoryGeoJsonImportOptions,
@@ -21,6 +25,7 @@ import type {
 import {
   NATURAL_EARTH_ADM0_DETAILS,
   WORLD_COUNTRIES_DATASET_ID,
+  buildTerritoryAdjacencyPath,
   buildWorldCountriesDatasetFromSourcePipeline,
   createDatasetGeometryHash,
   createSyntheticGridDataset,
@@ -30,8 +35,10 @@ import {
   inferBBoxAdjacency,
   inferBBoxAdjacencyConnections,
   listTerritorySourceAdapters,
+  readTerritoryAdjacencyArtifactPath,
   repairTerritoryDatasetPath,
   runTerritorySourcePipeline,
+  validateTerritoryAdjacencyPath,
   validateTerritoryDatasetPath,
   writeGeometryQualityReport
 } from "@territory-kit/generators";
@@ -93,6 +100,10 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
       return runGeometry(argv.slice(1));
     }
 
+    if (command === "adjacency") {
+      return runAdjacency(argv.slice(1));
+    }
+
     if (command === "generate") {
       return runGenerate(argv.slice(1));
     }
@@ -133,18 +144,6 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
           geometryHash: createDatasetGeometryHash(dataset),
           levels: engine.availableLevels,
           zoneCount: dataset.zones.length
-        }
-      });
-      return 0;
-    }
-
-    if (command === "adjacency") {
-      printJson({
-        ok: true,
-        command,
-        data: {
-          adjacency: inferBBoxAdjacency(dataset.zones),
-          connections: inferBBoxAdjacencyConnections(dataset.zones)
         }
       });
       return 0;
@@ -281,6 +280,192 @@ async function runGeometry(args: string[]): Promise<number> {
     printJson({
       ok: false,
       command: `geometry ${subcommand}`,
+      issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+    });
+    return 2;
+  }
+}
+
+async function runAdjacency(args: string[]): Promise<number> {
+  const [subcommand] = args;
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printAdjacencyHelp();
+    return 0;
+  }
+
+  if (subcommand === "build") {
+    return runAdjacencyBuild(args.slice(1));
+  }
+
+  if (subcommand === "validate") {
+    return runAdjacencyValidate(args.slice(1));
+  }
+
+  if (subcommand === "inspect") {
+    return runAdjacencyInspect(args.slice(1));
+  }
+
+  return runLegacyBBoxAdjacency(subcommand);
+}
+
+async function runLegacyBBoxAdjacency(filePath: string): Promise<number> {
+  const input = await readJson(filePath);
+  const dataset = loadTerritoryDataset(input);
+
+  printJson({
+    ok: true,
+    command: "adjacency",
+    data: {
+      note: "inferBBoxAdjacency is a bbox-based development helper; use 'territory adjacency build' for polygon adjacency.",
+      adjacency: inferBBoxAdjacency(dataset.zones),
+      connections: inferBBoxAdjacencyConnections(dataset.zones)
+    }
+  });
+  return 0;
+}
+
+async function runAdjacencyBuild(args: string[]): Promise<number> {
+  const [inputPath] = args;
+
+  if (!inputPath || inputPath === "--help" || inputPath === "-h") {
+    printAdjacencyBuildHelp();
+    return inputPath ? 0 : 2;
+  }
+
+  const flags = parseFlags(args.slice(1));
+  const outputPath = getFlag(flags, "output");
+
+  if (!outputPath) {
+    printJson({
+      ok: false,
+      command: "adjacency build",
+      issues: [createCliIssue("--output is required for adjacency build.")]
+    });
+    return 2;
+  }
+
+  const options = readAdjacencyBuildOptions(flags);
+
+  if (Array.isArray(options)) {
+    printJson({ ok: false, command: "adjacency build", issues: options });
+    return 2;
+  }
+
+  try {
+    const reportPath = getFlag(flags, "report");
+    const overridesPath = getFlag(flags, "overrides");
+    const buildDate = getFlag(flags, "build-date");
+    const result = await buildTerritoryAdjacencyPath(inputPath, {
+      ...options,
+      outputPath,
+      ...(reportPath ? { reportPath } : {}),
+      ...(overridesPath ? { overridesPath } : {}),
+      ...(buildDate ? { buildDate } : {}),
+      ...(flags.has("force") ? { force: true } : {})
+    });
+    const ok = result.result.issues.every((issue) => issue.severity !== "error");
+
+    printJson({
+      ok,
+      command: "adjacency build",
+      data: {
+        inputPath: result.input.sourcePath,
+        datasetPath: result.input.datasetPath,
+        outputPath: result.outputPath,
+        reportPath: result.reportPath,
+        statistics: result.result.statistics,
+        ...(flags.has("json") ? { artifact: result.result.artifact } : {})
+      },
+      issues: result.result.issues
+    });
+    return ok ? 0 : 1;
+  } catch (error) {
+    printJson({
+      ok: false,
+      command: "adjacency build",
+      issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+    });
+    return flags.has("strict") ? 3 : 2;
+  }
+}
+
+async function runAdjacencyValidate(args: string[]): Promise<number> {
+  const [datasetPath, adjacencyPath] = args;
+
+  if (!datasetPath || !adjacencyPath || datasetPath === "--help" || datasetPath === "-h") {
+    printAdjacencyValidateHelp();
+    return datasetPath ? 0 : 2;
+  }
+
+  try {
+    const result = await validateTerritoryAdjacencyPath(datasetPath, adjacencyPath);
+
+    printJson({
+      ok: result.report.ok,
+      command: "adjacency validate",
+      data: {
+        datasetId: result.dataset.manifest.datasetId,
+        edgeCount: result.artifact.edges.length,
+        report: result.report
+      },
+      issues: result.report.issues
+    });
+    return result.report.ok ? 0 : 1;
+  } catch (error) {
+    printJson({
+      ok: false,
+      command: "adjacency validate",
+      issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+    });
+    return 2;
+  }
+}
+
+async function runAdjacencyInspect(args: string[]): Promise<number> {
+  const [adjacencyPath, zoneId] = args;
+
+  if (!adjacencyPath || !zoneId || adjacencyPath === "--help" || adjacencyPath === "-h") {
+    printAdjacencyInspectHelp();
+    return adjacencyPath ? 0 : 2;
+  }
+
+  const flags = parseFlags(args.slice(2));
+  const types = readAdjacencyTypesFlag(flags);
+
+  if (Array.isArray(types) && types.some((type) => typeof type !== "string")) {
+    printJson({ ok: false, command: "adjacency inspect", issues: types });
+    return 2;
+  }
+
+  try {
+    const artifact = await readTerritoryAdjacencyArtifactPath(adjacencyPath);
+    const index = createTerritoryAdjacencyIndex(artifact);
+    const queryOptions = types ? { types: types as TerritoryAdjacencyType[] } : {};
+    const neighbors = index.getNeighbors(zoneId, queryOptions);
+    const relations = neighbors.flatMap((neighborId) =>
+      index.getRelation(zoneId, neighborId, queryOptions)
+    );
+
+    if (flags.has("json")) {
+      printJson({
+        ok: true,
+        command: "adjacency inspect",
+        data: {
+          zoneId,
+          neighbors,
+          relations
+        }
+      });
+    } else {
+      printAdjacencyInspection(zoneId, neighbors, relations);
+    }
+
+    return 0;
+  } catch (error) {
+    printJson({
+      ok: false,
+      command: "adjacency inspect",
       issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
     });
     return 2;
@@ -627,6 +812,46 @@ async function runSourceImport(
     return 1;
   }
 
+  let adjacencyOutputPath: string | undefined;
+
+  if (result.ok && flags.has("build-adjacency")) {
+    const outputBasePath = result.output?.outputPath;
+
+    if (!outputBasePath) {
+      printJson({
+        ok: false,
+        command: `import ${sourceId}`,
+        issues: [createCliIssue("Source import did not expose an output path for adjacency build.")]
+      });
+      return 1;
+    }
+
+    try {
+      const adjacencyOverridesPath = getFlag(flags, "adjacency-overrides");
+      adjacencyOutputPath = join(outputBasePath, "adjacency");
+      await buildTerritoryAdjacencyPath(outputBasePath, {
+        outputPath: adjacencyOutputPath,
+        includePointTouches: flags.has("adjacency-include-point-touches"),
+        minimumSharedBoundaryMeters: getNumberFlag(
+          flags,
+          "adjacency-minimum-shared-boundary-meters",
+          0
+        ),
+        ...(adjacencyOverridesPath ? { overridesPath: adjacencyOverridesPath } : {}),
+        ...(buildDate ? { buildDate } : {}),
+        ...(flags.has("strict") ? { strict: true } : {}),
+        ...(flags.has("force") ? { force: true } : {})
+      });
+    } catch (error) {
+      printJson({
+        ok: false,
+        command: `import ${sourceId}`,
+        issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+      });
+      return 1;
+    }
+  }
+
   printJson({
     ok: result.ok,
     command: `import ${sourceId}`,
@@ -635,6 +860,7 @@ async function runSourceImport(
           data: {
             provider: result.provider,
             outputPath: result.output?.outputPath,
+            adjacencyOutputPath,
             datasetId: result.transform?.dataset.manifest.datasetId,
             zoneCount: result.transform?.dataset.zones.length,
             cacheHit: result.artifact?.cacheHit ?? false,
@@ -1057,6 +1283,104 @@ function readGeometryRepairOptions(
   };
 }
 
+function readAdjacencyBuildOptions(
+  flags: Map<string, string | true>
+): (TerritoryAdjacencyBuildOptions & { buildDate?: string }) | CliIssue[] {
+  const issues: CliIssue[] = [];
+  const epsilon = readOptionalNonNegativeNumberFlag(flags, "epsilon", issues);
+  const batchSize = readOptionalPositiveIntegerFlag(flags, "batch-size", issues);
+  const minimumSharedBoundaryMeters = readOptionalNonNegativeNumberFlag(
+    flags,
+    "minimum-shared-boundary-meters",
+    issues
+  );
+
+  if (flags.has("same-parent-only") && flags.has("all-parents")) {
+    issues.push(createCliIssue("Use either --same-parent-only or --all-parents, not both."));
+  }
+
+  if (flags.has("same-admin-level-only") && flags.has("cross-level")) {
+    issues.push(createCliIssue("Use either --same-admin-level-only or --cross-level, not both."));
+  }
+
+  if (issues.length > 0) {
+    return issues;
+  }
+
+  return {
+    sameParentOnly: !flags.has("all-parents"),
+    sameAdminLevelOnly: !flags.has("cross-level"),
+    includePointTouches: flags.has("include-point-touches"),
+    ...(minimumSharedBoundaryMeters === undefined ? {} : { minimumSharedBoundaryMeters }),
+    ...(epsilon === undefined ? {} : { epsilon }),
+    ...(batchSize === undefined ? {} : { batchSize }),
+    ...(flags.has("strict") ? { strict: true } : {})
+  };
+}
+
+function readAdjacencyTypesFlag(
+  flags: Map<string, string | true>
+): TerritoryAdjacencyType[] | CliIssue[] | undefined {
+  const value = getFlag(flags, "type");
+
+  if (!value) {
+    return undefined;
+  }
+
+  const types = value
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+  const validTypes = new Set(["shared-border", "point-touch", "maritime", "logical"]);
+  const invalid = types.find((type) => !validTypes.has(type));
+
+  if (invalid) {
+    return [createCliIssue(`Invalid adjacency type '${invalid}'.`)];
+  }
+
+  return types as TerritoryAdjacencyType[];
+}
+
+function printAdjacencyInspection(
+  zoneId: string,
+  neighbors: string[],
+  relations: Array<{
+    from: string;
+    to: string;
+    type: TerritoryAdjacencyType;
+    sharedBoundaryMeters?: number;
+  }>
+): void {
+  const grouped = new Map<TerritoryAdjacencyType, string[]>();
+
+  for (const edge of relations) {
+    const neighborId = edge.from === zoneId ? edge.to : edge.from;
+    const label =
+      edge.sharedBoundaryMeters === undefined
+        ? neighborId
+        : `${neighborId} - ${Math.round(edge.sharedBoundaryMeters)} m`;
+    grouped.set(edge.type, [...(grouped.get(edge.type) ?? []), label]);
+  }
+
+  console.log(`Zone: ${zoneId}`);
+  console.log(`Neighbors: ${neighbors.length}`);
+
+  for (const type of ["shared-border", "point-touch", "maritime", "logical"] as const) {
+    const values = grouped.get(type)?.sort();
+
+    if (!values || values.length === 0) {
+      continue;
+    }
+
+    console.log("");
+    console.log(type);
+
+    for (const value of values) {
+      console.log(`- ${value}`);
+    }
+  }
+}
+
 function readGeometryChecksFlag(
   flags: Map<string, string | true>,
   issues: CliIssue[]
@@ -1362,7 +1686,7 @@ Commands:
   validate   Validate a TerritoryKit dataset
   geometry   Validate or safely repair dataset geometry
   index      Build a spatial-index metadata summary
-  adjacency  Infer bbox adjacency and typed geometric connections
+  adjacency  Build, validate, inspect, or legacy-infer territory adjacency
   import     Import a GeoJSON file or source adapter artifact
   source     List and inspect source adapters
   dataset    Build curated dataset artifacts, including world-countries
@@ -1389,6 +1713,48 @@ Options:
   --output <dir>
   --report <report.json>
   --force`);
+}
+
+function printAdjacencyHelp(): void {
+  console.log(`territory adjacency <command>
+
+Commands:
+  build <dataset-path>                 Build polygon adjacency artifact
+  validate <dataset-path> <artifact>    Validate adjacency artifact
+  inspect <artifact> <zone-id>          Inspect zone neighbors
+
+Legacy:
+  territory adjacency <dataset.json>    Infer bbox adjacency helper output`);
+}
+
+function printAdjacencyBuildHelp(): void {
+  console.log(`territory adjacency build <dataset-path> --output <adjacency.json|dir>
+
+Options:
+  --all-parents
+  --cross-level
+  --include-point-touches
+  --minimum-shared-boundary-meters <number>
+  --epsilon <number>
+  --batch-size <integer>
+  --overrides <overrides.json>
+  --strict
+  --report <report.json>
+  --build-date <iso-date>
+  --force
+  --json`);
+}
+
+function printAdjacencyValidateHelp(): void {
+  console.log("territory adjacency validate <dataset-path> <adjacency.json|dir>");
+}
+
+function printAdjacencyInspectHelp(): void {
+  console.log(`territory adjacency inspect <adjacency.json|dir> <zone-id>
+
+Options:
+  --type shared-border|point-touch|maritime|logical
+  --json`);
 }
 
 function printSourceHelp(): void {

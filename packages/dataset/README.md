@@ -13,7 +13,9 @@ pnpm add @territory-kit/dataset
 ```ts
 import {
   loadTerritoryDataset,
+  createTerritoryAdjacencyIndex,
   validateGeometryDataset,
+  validateTerritoryAdjacencyArtifact,
   validateTerritoryDataset
 } from "@territory-kit/dataset";
 
@@ -25,6 +27,8 @@ if (!result.ok) {
 
 const dataset = loadTerritoryDataset(input);
 const geometryReport = validateGeometryDataset(dataset, { checks: "full" });
+const adjacencyReport = validateTerritoryAdjacencyArtifact(dataset, adjacencyArtifact);
+const adjacencyIndex = createTerritoryAdjacencyIndex(adjacencyArtifact);
 ```
 
 ## API Summary
@@ -39,6 +43,10 @@ const geometryReport = validateGeometryDataset(dataset, { checks: "full" });
 - `repairGeometryDataset(dataset, options)` applies explicit safe repairs and returns an audit
   report.
 - `computeGeometryBBox`, `computeGeometryCenter`, and `geometryToPolygons` provide geometry helpers.
+- `classifyTerritoryGeometryRelation` and `computeSharedBoundaryMeters` provide exact polygon
+  adjacency primitives.
+- `validateTerritoryAdjacencyArtifact` and `createTerritoryAdjacencyIndex` support separate
+  adjacency artifacts.
 - `TERRITORY_SCHEMA_VERSION` exposes the current `territory-schema@1` identifier.
 
 ## Global Dataset Metadata

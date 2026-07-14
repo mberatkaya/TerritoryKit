@@ -18,6 +18,7 @@ package boundaries required for MapLibre, NestJS/PostGIS, generators, and CLI to
 - [Source adapters](./source-adapters.md)
 - [Source pipeline](./source-pipeline.md)
 - [Source cache](./source-cache.md)
+- [Adjacency artifacts](./adjacency.md)
 - [Geometry quality](./geometry-quality.md)
 - [Geometry validation](./geometry-validation.md)
 - [Geometry repair](./geometry-repair.md)

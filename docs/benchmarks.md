@@ -50,3 +50,14 @@ Recorded on 2026-07-14 with `pnpm bench:memory`:
 The memory benchmark uses `node --expose-gc` and records heap deltas after deterministic fixture
 creation and engine index construction. It is kept separate from `pnpm bench` so the regular
 benchmark smoke stays quick.
+
+## Bundle Budget Notes
+
+Recorded on 2026-07-14 after the real adjacency artifact work:
+
+| Package      | ESM size        | Budget          | Reason                                      |
+| ------------ | --------------- | --------------- | ------------------------------------------- |
+| `dataset`    | `106,161 bytes` | `112,000 bytes` | Exact polygon relations and artifact index. |
+| `generators` | `117,522 bytes` | `122,000 bytes` | Adjacency build, validation, and I/O flow.  |
+
+The `core`, `cli`, `maplibre`, and `nestjs` packages remain within their previous bundle budgets.

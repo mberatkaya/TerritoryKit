@@ -125,6 +125,10 @@ It reads a Natural Earth Admin 0 GeoJSON file through the shared source adapter 
 `manifest.json`, `checksums.json`, `attribution.txt`, `build-report.json`, and detail-specific
 `dataset.json` files.
 
+Adjacency artifacts are separate from canonical datasets. See
+[Adjacency artifacts](./adjacency.md) for polygon neighbor builds, manual maritime/logical
+overrides, validation, and core query integration.
+
 See [Source adapters](./source-adapters.md), [Source pipeline](./source-pipeline.md), and
 [Source cache](./source-cache.md) for the shared import architecture.
 
