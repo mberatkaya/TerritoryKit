@@ -73,14 +73,14 @@ jobs:
 
       - name: Create release pull request
         id: changesets
-        uses: changesets/action@v2
+        uses: changesets/action@v1.9.0
         with:
-          version-script: pnpm version-packages
+          version: pnpm version-packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish packages to npm with Trusted Publishing
-        if: ${{ steps.changesets.outputs['has-changesets'] == 'false' && (github.event_name == 'push' || inputs.publish == 'true') }}
+        if: ${{ steps.changesets.outputs.hasChangesets == 'false' && (github.event_name == 'push' || inputs.publish == 'true') }}
         run: pnpm release
         env:
           NPM_CONFIG_PROVENANCE: "true"
