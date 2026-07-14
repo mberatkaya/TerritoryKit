@@ -179,6 +179,12 @@ importers:
 
   packages/generators:
     dependencies:
+      '@maplibre/geojson-vt':
+        specifier: ^6.1.1
+        version: 6.1.1
+      '@maplibre/vt-pbf':
+        specifier: ^4.3.2
+        version: 4.3.2
       '@territory-kit/core':
         specifier: workspace:*
         version: link:../core
