@@ -1,4 +1,7 @@
 import type {
+  TerritoryAdjacencyArtifact,
+  TerritoryAdjacencyEdge,
+  TerritoryAdjacencyType,
   TerritoryBBox,
   TerritoryDataset,
   TerritoryGeometry,
@@ -44,6 +47,7 @@ export interface VisibleZonesQuery {
 
 export interface NeighborOptions {
   distance?: number;
+  types?: TerritoryAdjacencyType[];
   connectionTypes?: TerritoryAdjacencyConnectionType[];
 }
 
@@ -96,6 +100,7 @@ export interface ZoomLevelStrategy {
 
 export interface TerritoryEngineOptions {
   dataset: TerritoryDataset;
+  adjacency?: TerritoryAdjacencyArtifact;
   levelStrategy?: ZoomLevelStrategy;
   adjacencyConnections?: TerritoryAdjacencyConnection[];
   debug?: TerritoryEngineDebugOptions;
@@ -111,6 +116,10 @@ export interface TerritoryEngine {
     zoneId: string,
     options?: Pick<NeighborOptions, "connectionTypes">
   ): TerritoryAdjacencyConnection[];
+  getAdjacencyRelations(
+    zoneId: string,
+    options?: Pick<NeighborOptions, "types">
+  ): TerritoryAdjacencyEdge[];
   getLevelTransition(query: LevelTransitionQuery): LevelTransitionPayload;
   getZonesInBounds(query: BoundsQuery): TerritoryZone[];
   getViewportCacheKey(query: ViewportCacheKeyQuery): string;

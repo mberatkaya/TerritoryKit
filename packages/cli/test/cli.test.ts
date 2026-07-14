@@ -128,6 +128,78 @@ describe("territory cli", () => {
     }
   });
 
+  it("builds, validates, and inspects polygon adjacency artifacts", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-adjacency-"));
+    const datasetPath = join(tempDir, "dataset.json");
+    const outputPath = join(tempDir, "adjacency");
+
+    await writeFile(datasetPath, JSON.stringify(createAdjacencyCliDataset()), "utf8");
+
+    try {
+      const build = await captureCli([
+        "adjacency",
+        "build",
+        datasetPath,
+        "--output",
+        outputPath,
+        "--include-point-touches",
+        "--build-date",
+        "2026-01-01T00:00:00.000Z"
+      ]);
+
+      expect(build).toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "adjacency build",
+          data: {
+            statistics: {
+              finalEdgeCount: 3,
+              sharedBorderCount: 2,
+              pointTouchCount: 1
+            }
+          }
+        }
+      });
+
+      const artifact = JSON.parse(await readFile(join(outputPath, "adjacency.json"), "utf8")) as {
+        generatedAt: string;
+        statistics: { durationMs?: number };
+      };
+      expect(artifact.generatedAt).toBe("2026-01-01T00:00:00.000Z");
+      expect(artifact.statistics.durationMs).toBeUndefined();
+      await expect(readFile(join(outputPath, "checksums.json"), "utf8")).resolves.toContain(
+        "adjacency.json"
+      );
+      await expect(
+        captureCli(["adjacency", "validate", datasetPath, outputPath])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "adjacency validate",
+          data: { edgeCount: 3 }
+        }
+      });
+      await expect(
+        captureCli(["adjacency", "inspect", outputPath, "a", "--type", "point-touch", "--json"])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "adjacency inspect",
+          data: {
+            zoneId: "a",
+            neighbors: ["c"],
+            relations: [expect.objectContaining({ from: "a", to: "c", type: "point-touch" })]
+          }
+        }
+      });
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
+
   it("imports GeoJSON and generates deterministic datasets", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-"));
     const geojsonPath = join(tempDir, "zones.geojson");
@@ -633,9 +705,12 @@ describe("territory cli", () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-cli-source-"));
     const geojsonPath = join(tempDir, "regions.geojson");
     const geojsonOutput = join(tempDir, "regions");
+    const adjacentGeojsonPath = join(tempDir, "adjacent-regions.geojson");
+    const adjacentGeojsonOutput = join(tempDir, "adjacent-regions");
     const geoBoundariesPath = join(tempDir, "geoBoundaries-TUR-ADM1.geojson");
     const geoBoundariesOutput = join(tempDir, "tr-adm1");
     await writeFile(geojsonPath, JSON.stringify(createGenericGeoJsonCliFixture()), "utf8");
+    await writeFile(adjacentGeojsonPath, JSON.stringify(createAdjacentGeoJsonCliFixture()), "utf8");
     await writeFile(geoBoundariesPath, JSON.stringify(createGeoBoundariesCliFixture()), "utf8");
 
     try {
@@ -675,6 +750,39 @@ describe("territory cli", () => {
       await expect(readFile(join(geojsonOutput, "dataset.json"), "utf8")).resolves.toContain(
         "tr:adm2:kadikoy"
       );
+      await expect(
+        captureCli([
+          "import",
+          "geojson",
+          "--input",
+          adjacentGeojsonPath,
+          "--output",
+          adjacentGeojsonOutput,
+          "--country",
+          "TR",
+          "--admin-level",
+          "ADM2",
+          "--id-property",
+          "region.code",
+          "--name-property",
+          "region.name",
+          "--build-date",
+          "2026-01-01T00:00:00.000Z",
+          "--build-adjacency"
+        ])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "import geojson",
+          data: {
+            adjacencyOutputPath: join(adjacentGeojsonOutput, "adjacency")
+          }
+        }
+      });
+      await expect(
+        readFile(join(adjacentGeojsonOutput, "adjacency", "adjacency.json"), "utf8")
+      ).resolves.toContain('"generatedAt": "2026-01-01T00:00:00.000Z"');
       await expect(
         captureCli([
           "import",
@@ -911,6 +1019,61 @@ function createRepairableGeometryDataset(): ReturnType<typeof createSampleTerrit
   return dataset;
 }
 
+function createAdjacencyCliDataset(): unknown {
+  return {
+    manifest: {
+      datasetId: "adjacency-cli",
+      datasetVersion: "0.1.0",
+      schemaVersion: "territory-schema@1",
+      sourceDate: "2026-07",
+      geometryHash: "adjacency-cli-hash"
+    },
+    zones: [
+      {
+        ...adjacencyCliZone("root", 0, 0, 0, 4, 2),
+        childIds: ["a", "b", "c", "d"]
+      },
+      adjacencyCliZone("a", 1, 0, 0, 1, 1, "root"),
+      adjacencyCliZone("b", 1, 1, 0, 2, 1, "root"),
+      adjacencyCliZone("c", 1, 1, 1, 2, 2, "root"),
+      adjacencyCliZone("d", 1, 3, 0, 4, 1, "root")
+    ]
+  };
+}
+
+function adjacencyCliZone(
+  id: string,
+  level: number,
+  west: number,
+  south: number,
+  east: number,
+  north: number,
+  parentId?: string
+): Record<string, unknown> {
+  return {
+    id,
+    datasetId: "adjacency-cli",
+    level,
+    ...(parentId ? { parentId } : {}),
+    neighborIds: [],
+    geometry: {
+      type: "Polygon",
+      coordinates: [
+        [
+          [west, south],
+          [east, south],
+          [east, north],
+          [west, north],
+          [west, south]
+        ]
+      ]
+    },
+    center: [(west + east) / 2, (south + north) / 2],
+    bbox: [west, south, east, north],
+    properties: {}
+  };
+}
+
 function createNaturalEarthCliFixture(): unknown {
   return {
     type: "FeatureCollection",
@@ -1006,12 +1169,28 @@ function createGenericGeoJsonCliFixture(): unknown {
   };
 }
 
-function genericCliFeature(id: string, code: string, name: string, parent: string): unknown {
+function createAdjacentGeoJsonCliFixture(): unknown {
+  return {
+    type: "FeatureCollection",
+    features: [
+      genericCliFeature("left", "LEFT", "Left", "IST", squareCli(0, 0)),
+      genericCliFeature("right", "RIGHT", "Right", "IST", squareCli(1, 0))
+    ]
+  };
+}
+
+function genericCliFeature(
+  id: string,
+  code: string,
+  name: string,
+  parent: string,
+  geometry: unknown = squareCli(29, 40)
+): unknown {
   return {
     type: "Feature",
     id,
     properties: { region: { code, name, parent } },
-    geometry: squareCli(29, 40)
+    geometry
   };
 }
 

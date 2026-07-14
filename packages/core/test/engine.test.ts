@@ -2,6 +2,8 @@ import {
   createSampleTerritoryDataset,
   createSyntheticGridDataset
 } from "@territory-kit/shared-testkit";
+import { computeTerritoryAdjacencyContentHash } from "@territory-kit/dataset";
+import type { TerritoryAdjacencyArtifact, TerritoryDataset } from "@territory-kit/dataset";
 import fc from "fast-check";
 import { describe, expect, it } from "vitest";
 import { createTerritoryEngine, TerritoryZoneNotFoundError } from "../src/index.js";
@@ -179,6 +181,27 @@ describe("createTerritoryEngine", () => {
     ]);
   });
 
+  it("uses adjacency artifacts for typed neighbor queries", () => {
+    const dataset = createSampleTerritoryDataset();
+    const engine = createTerritoryEngine({
+      dataset,
+      adjacency: sampleAdjacencyArtifact(dataset)
+    });
+
+    expect(engine.zoneNeighbors("tr:34:fatih")).toEqual(["tr", "tr:34:kadikoy"]);
+    expect(engine.zoneNeighbors("tr:34:fatih", { types: ["shared-border"] })).toEqual([
+      "tr:34:kadikoy"
+    ]);
+    expect(engine.zoneNeighbors("tr:34:fatih", { types: ["logical"] })).toEqual(["tr"]);
+    expect(engine.getAdjacencyRelations("tr:34:fatih", { types: ["shared-border"] })).toEqual([
+      expect.objectContaining({
+        from: "tr:34:fatih",
+        to: "tr:34:kadikoy",
+        type: "shared-border"
+      })
+    ]);
+  });
+
   it("ignores logical adjacency connections that reference unknown zones", () => {
     const engine = createTerritoryEngine({
       dataset: createSampleTerritoryDataset(),
@@ -290,3 +313,77 @@ describe("createTerritoryEngine", () => {
     expect(() => engine.zoneToBoundary("missing")).toThrow(TerritoryZoneNotFoundError);
   });
 });
+
+function sampleAdjacencyArtifact(dataset: TerritoryDataset): TerritoryAdjacencyArtifact {
+  const artifactWithoutHash: Omit<TerritoryAdjacencyArtifact, "contentHash"> = {
+    artifactVersion: "1",
+    dataset: {
+      id: dataset.manifest.datasetId,
+      version: dataset.manifest.datasetVersion,
+      contentHash: dataset.manifest.geometryHash
+    },
+    generatedBy: {
+      package: "@territory-kit/generators",
+      version: "test"
+    },
+    generatedAt: "2026-01-01T00:00:00.000Z",
+    measurement: {
+      sharedBoundary: "geodesic-haversine",
+      holeBoundaryPolicy: "outer-rings-only"
+    },
+    options: {
+      sameParentOnly: true,
+      sameAdminLevelOnly: true,
+      includePointTouches: false,
+      minimumSharedBoundaryMeters: 0,
+      epsilon: 1e-9
+    },
+    tolerance: {
+      coordinateEpsilon: 1e-9,
+      collinearityEpsilon: 1e-9,
+      lengthEpsilonMeters: 0.001
+    },
+    statistics: {
+      zoneCount: dataset.zones.length,
+      eligibleZoneCount: dataset.zones.length,
+      skippedZoneCount: 0,
+      candidatePairCount: 1,
+      exactComparisonCount: 1,
+      disjointPairCount: 0,
+      sharedBorderCount: 1,
+      pointTouchCount: 0,
+      overlapRejectedCount: 0,
+      ambiguousCount: 0,
+      manualAddCount: 1,
+      manualRemoveCount: 0,
+      finalEdgeCount: 2,
+      totalSharedBoundaryMeters: 6_500
+    },
+    overrides: {
+      addCount: 1,
+      removeCount: 0
+    },
+    edges: [
+      {
+        from: "tr:34:fatih",
+        to: "tr:34:kadikoy",
+        type: "shared-border",
+        source: "computed",
+        sharedBoundaryMeters: 6_500,
+        confidence: 1
+      },
+      {
+        from: "tr:34:fatih",
+        to: "tr",
+        type: "logical",
+        source: "manual",
+        properties: { reason: "metro connection" }
+      }
+    ]
+  };
+
+  return {
+    ...artifactWithoutHash,
+    contentHash: computeTerritoryAdjacencyContentHash(artifactWithoutHash)
+  };
+}
