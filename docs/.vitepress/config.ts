@@ -22,6 +22,11 @@ export default defineConfig({
       { text: "Quick Start", link: "/quick-start" },
       { text: "API", link: "/api" },
       { text: "CLI", link: "/cli" },
+      { text: "Country Datasets", link: "/country-datasets" },
+      { text: "Country Source Locks", link: "/country-source-locks" },
+      { text: "Country Identity", link: "/country-identity" },
+      { text: "Country Hierarchy", link: "/country-hierarchy" },
+      { text: "Country Loaders", link: "/country-loaders" },
       { text: "Roadmap", link: "/roadmap" }
     ]
   }

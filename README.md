@@ -32,6 +32,9 @@ document:
 - `@territory-kit/generators`: deterministic dataset helper, source, and adjacency utilities.
 - `@territory-kit/cli`: `territory validate`, `territory geometry`, `territory index`, and
   adjacency artifact tools.
+- `@territory-kit/data-tr`, `@territory-kit/data-us`, `@territory-kit/data-de`,
+  `@territory-kit/data-jp`, `@territory-kit/data-id`: thin resolver-driven pilot country loaders
+  without embedded geometry artifacts.
 - `@territory-kit/shared-testkit`: private fixtures for tests and examples.
 
 ## Global Dataset Builds
@@ -49,11 +52,15 @@ territory source list
 territory import geojson --input ./regions.geojson --output ./dist/regions --country TR --admin-level ADM2 --name-property name
 territory geometry validate ./dist/regions --checks full --report ./geometry-report.json
 territory adjacency build ./dist/regions --output ./dist/regions-adjacency
+territory country source lock TR --output ./dist/tr/sources.lock.json
+territory country build TR --source-lock ./dist/tr/sources.lock.json --output ./dist/tr --build-adjacency --strict
 ```
 
 Generated world-country artifacts are documented in
 [docs/datasets/world-countries.md](./docs/datasets/world-countries.md) and are not embedded in npm
-packages.
+packages. Pilot country artifacts are documented in
+[docs/country-datasets.md](./docs/country-datasets.md); their loader packages also do not embed
+geometry.
 
 ## Development
 
@@ -89,6 +96,9 @@ items.
 - [Source adapters](./docs/source-adapters.md)
 - [Source pipeline](./docs/source-pipeline.md)
 - [Source cache](./docs/source-cache.md)
+- [Country datasets](./docs/country-datasets.md)
+- [Country source locks](./docs/country-source-locks.md)
+- [Country loaders](./docs/country-loaders.md)
 - [Adjacency artifacts](./docs/adjacency.md)
 - [Geometry quality](./docs/geometry-quality.md)
 - [Geometry validation](./docs/geometry-validation.md)

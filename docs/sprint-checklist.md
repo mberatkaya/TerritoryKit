@@ -67,6 +67,20 @@ verification, or an explicit handoff/backlog classification that proves the item
       `pnpm --filter @territory-kit/nestjs test`, `pnpm --filter @territory-kit/example-web-maplibre
 typecheck`, and `pnpm test:visual:maplibre`.
 
+## Sprint 5 Pilot Country Dataset Evidence
+
+- [x] Pilot configs exist for `TR`, `US`, `DE`, `JP`, and `ID` at ADM0/ADM1/ADM2.
+- [x] Source locks record resolved source metadata, checksums, license, attribution, and a stable
+      lock hash.
+- [x] Country builds write combined and per-level datasets, identity maps, hierarchy reports,
+      geometry quality reports, build reports, manifests, checksums, and optional ADM1/ADM2
+      adjacency artifacts.
+- [x] Thin loader packages exist for `@territory-kit/data-tr`, `@territory-kit/data-us`,
+      `@territory-kit/data-de`, `@territory-kit/data-jp`, and `@territory-kit/data-id` without
+      embedded geometry.
+- [x] CLI coverage exercises `territory country source lock`, `source verify`, `build`,
+      `validate`, and `inspect` with network-free fixtures.
+
 ## Open Item Closure Map
 
 - [x] `checklist/master-adoption`: adopt this master checklist, record release evidence, and
