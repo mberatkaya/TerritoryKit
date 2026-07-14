@@ -6,6 +6,8 @@ const maxBytesByFile = new Map([
   // Sprint 4 real adjacency adds exact polygon relation primitives and artifact indexing.
   ["packages/dataset/dist/index.mjs", 112_000],
   ["packages/core/dist/index.mjs", 65_000],
+  ["packages/registry/dist/index.mjs", 5_000],
+  ["packages/registry/dist/node.mjs", 28_000],
   ["packages/maplibre/dist/index.mjs", 45_000],
   ["packages/nestjs/dist/index.mjs", 45_000],
   ["packages/data-tr/dist/index.mjs", 8_000],
