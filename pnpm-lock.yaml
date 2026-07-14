@@ -117,6 +117,9 @@ importers:
       '@territory-kit/generators':
         specifier: workspace:*
         version: link:../generators
+      '@territory-kit/registry':
+        specifier: workspace:*
+        version: link:../registry
     devDependencies:
       '@territory-kit/shared-testkit':
         specifier: workspace:*
@@ -127,6 +130,9 @@ importers:
       '@territory-kit/dataset':
         specifier: workspace:*
         version: link:../dataset
+      '@territory-kit/registry':
+        specifier: workspace:*
+        version: link:../registry
       flatbush:
         specifier: ^4.6.2
         version: 4.6.2
@@ -224,6 +230,16 @@ importers:
       rxjs:
         specifier: ^7.8.2
         version: 7.8.2
+
+  packages/registry:
+    dependencies:
+      '@territory-kit/dataset':
+        specifier: workspace:*
+        version: link:../dataset
+    devDependencies:
+      '@territory-kit/shared-testkit':
+        specifier: workspace:*
+        version: link:../shared-testkit
 
   packages/shared-testkit:
     dependencies:

@@ -1,21 +1,19 @@
 {
-  "name": "@territory-kit/cli",
+  "name": "@territory-kit/registry",
   "version": "1.1.0",
-  "description": "TerritoryKit command line tools.",
+  "description": "Dataset registry, artifact resolution, and verified cache utilities for TerritoryKit.",
   "license": "Apache-2.0",
   "homepage": "https://github.com/mberatkaya/TerritoryKit#readme",
   "repository": {
     "type": "git",
     "url": "https://github.com/mberatkaya/TerritoryKit.git",
-    "directory": "packages/cli"
+    "directory": "packages/registry"
   },
   "bugs": {
     "url": "https://github.com/mberatkaya/TerritoryKit/issues"
   },
   "type": "module",
-  "bin": {
-    "territory": "./dist/index.mjs"
-  },
+  "sideEffects": false,
   "files": [
     "dist/*.cjs",
     "dist/*.d.cts",
@@ -36,6 +34,11 @@
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
+    },
+    "./node": {
+      "types": "./dist/node.d.mts",
+      "import": "./dist/node.mjs",
+      "require": "./dist/node.cjs"
     }
   },
   "scripts": {
@@ -46,10 +49,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@territory-kit/core": "workspace:*",
-    "@territory-kit/dataset": "workspace:*",
-    "@territory-kit/generators": "workspace:*",
-    "@territory-kit/registry": "workspace:*"
+    "@territory-kit/dataset": "workspace:*"
   },
   "devDependencies": {
     "@territory-kit/shared-testkit": "workspace:*"

@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "@territory-kit/dataset": "workspace:*",
+    "@territory-kit/registry": "workspace:*",
     "flatbush": "^4.6.2"
   },
   "devDependencies": {
