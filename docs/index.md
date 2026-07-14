@@ -14,6 +14,8 @@ package boundaries required for MapLibre, NestJS/PostGIS, generators, and CLI to
 - [Release governance](./release-governance.md)
 - [Roadmap](./roadmap.md)
 - [Benchmarks](./benchmarks.md)
+- [Real-world benchmarks](./real-world-benchmarks.md)
+- [Release check](./release-check.md)
 - [Global datasets](./global-datasets.md)
 - [Source adapters](./source-adapters.md)
 - [Source pipeline](./source-pipeline.md)

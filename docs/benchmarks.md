@@ -18,6 +18,7 @@ Run:
 
 ```sh
 pnpm bench
+pnpm benchmark:fixture
 ```
 
 The first tracked fixture is 10K polygons (`100 x 100`). A 100K polygon fixture exists for
@@ -50,6 +51,16 @@ Recorded on 2026-07-14 with `pnpm bench:memory`:
 The memory benchmark uses `node --expose-gc` and records heap deltas after deterministic fixture
 creation and engine index construction. It is kept separate from `pnpm bench` so the regular
 benchmark smoke stays quick.
+
+## Sprint 8 Fixture Baseline
+
+`pnpm benchmark:fixture` runs the release-safe benchmark schema and compares it with
+`benchmarks/baselines/fixture-smoke.json`. The result schema is
+`territorykit-benchmark-result@1`; the baseline schema is `territorykit-benchmark-baseline@1`.
+
+`pnpm benchmark:run -- --mode local-real --dataset <dataset.json>` enables local real-world
+benchmarking without committing large source data. When local-real mode has no dataset path,
+automation can use `--allow-skip` to record an explicit skip instead of downloading data.
 
 ## Bundle Budget Notes
 

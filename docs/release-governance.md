@@ -11,14 +11,14 @@ leak into lower-level packages.
 
 The enforced source dependency direction is:
 
-| Package                     | Allowed workspace imports                                                    |
-| --------------------------- | ---------------------------------------------------------------------------- |
-| `@territory-kit/dataset`    | none                                                                         |
-| `@territory-kit/core`       | `@territory-kit/dataset`                                                     |
-| `@territory-kit/generators` | `@territory-kit/core`, `@territory-kit/dataset`                              |
-| `@territory-kit/maplibre`   | `@territory-kit/core`, `@territory-kit/dataset`                              |
-| `@territory-kit/nestjs`     | `@territory-kit/core`, `@territory-kit/dataset`                              |
-| `@territory-kit/cli`        | `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/generators` |
+| Package                     | Allowed workspace imports                                                                               |
+| --------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `@territory-kit/dataset`    | none                                                                                                    |
+| `@territory-kit/core`       | `@territory-kit/dataset`, `@territory-kit/registry`                                                     |
+| `@territory-kit/generators` | `@territory-kit/core`, `@territory-kit/dataset`                                                         |
+| `@territory-kit/maplibre`   | `@territory-kit/core`, `@territory-kit/dataset`                                                         |
+| `@territory-kit/nestjs`     | `@territory-kit/core`, `@territory-kit/dataset`                                                         |
+| `@territory-kit/cli`        | `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/generators`, `@territory-kit/registry` |
 
 Tests and examples can import higher-level packages when they are proving an integration flow.
 

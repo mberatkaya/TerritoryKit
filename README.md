@@ -75,6 +75,7 @@ pnpm test
 pnpm typecheck
 pnpm lint
 pnpm bundle:size
+pnpm release:check
 ```
 
 Node.js `>=22` and pnpm `>=11` are required. The current TypeScript baseline is `6.0.3`;
@@ -96,6 +97,7 @@ items.
 - [Risk register](./docs/risk-register.md)
 - [Release governance](./docs/release-governance.md)
 - [Roadmap](./docs/roadmap.md)
+- [Release check](./docs/release-check.md)
 - [Dataset compatibility](./docs/dataset-compatibility.md)
 - [Source adapters](./docs/source-adapters.md)
 - [Source pipeline](./docs/source-pipeline.md)
@@ -122,6 +124,7 @@ items.
 - [Geometry backends](./docs/geometry-backends.md)
 - [World countries ADM0 dataset](./docs/datasets/world-countries.md)
 - [Benchmarks](./docs/benchmarks.md)
+- [Real-world benchmarks](./docs/real-world-benchmarks.md)
 - [NestJS and PostGIS](./docs/nestjs-postgis.md)
 - [Release readiness](./docs/release-readiness.md)
 - [Master sprint checklist](./docs/sprint-checklist.md)
