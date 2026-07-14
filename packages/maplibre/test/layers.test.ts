@@ -2,10 +2,14 @@ import { createSampleTerritoryDataset } from "@territory-kit/shared-testkit";
 import { describe, expect, it, vi } from "vitest";
 import {
   createTerritoryMapLibreAdapter,
+  createTerritoryMapLibreController,
+  createTerritoryMapLibreLayer,
   createTerritoryMapLibreLayers,
+  createTerritoryMapLibreSource,
   zonesToFeatureCollection
 } from "../src/index.js";
 import type { TerritoryMapLibreGeoJsonSource, TerritoryMapLibreMap } from "../src/index.js";
+import type { TerritoryRegistryClient } from "@territory-kit/core";
 
 describe("maplibre adapter", () => {
   it("converts zones into a GeoJSON feature collection", () => {
@@ -100,5 +104,120 @@ describe("maplibre adapter", () => {
     expect(clicked).toEqual(["tr:34"]);
     expect(layers.size).toBe(0);
     expect(sources.size).toBe(0);
+  });
+
+  it("creates registry-backed vector sources and lazy territory resolution", async () => {
+    const dataset = createSampleTerritoryDataset();
+    const registry: Pick<TerritoryRegistryClient, "resolveArtifact" | "installDataset"> = {
+      async resolveArtifact() {
+        return {
+          dataset: {
+            id: "sample",
+            displayName: "Sample",
+            version: "1.0.0",
+            schemaVersion: "territory-schema@1",
+            levels: ["ADM0" as const],
+            source: { provider: "fixture" },
+            license: { id: "Apache-2.0", attribution: "fixture" },
+            artifacts: []
+          },
+          artifact: {
+            id: "render-manifest",
+            purpose: "render",
+            format: "mvt",
+            url: "render/manifest.json",
+            sha256: "0".repeat(64),
+            sizeBytes: 1,
+            tileUrlTemplate: "tiles/{z}/{x}/{y}.mvt"
+          },
+          url: "https://cdn.example.test/datasets/sample/render/manifest.json",
+          registryHash: "hash"
+        };
+      },
+      async installDataset() {
+        const text = JSON.stringify(dataset);
+
+        return {
+          dataset: {
+            id: "sample",
+            displayName: "Sample",
+            version: "1.0.0",
+            schemaVersion: "territory-schema@1",
+            levels: ["ADM0"],
+            source: { provider: "fixture" },
+            license: { id: "Apache-2.0", attribution: "fixture" },
+            artifacts: []
+          },
+          registryHash: "hash",
+          manifest: {
+            datasetId: "sample",
+            version: "1.0.0",
+            artifactCount: 1,
+            installedAt: "2026-01-01T00:00:00.000Z",
+            verified: true,
+            registryHash: "hash"
+          },
+          installedArtifacts: [
+            {
+              key: { datasetId: "sample", version: "1.0.0", artifactId: "adm0" },
+              artifact: {
+                id: "adm0",
+                purpose: "query",
+                format: "territory-json",
+                path: "levels/ADM0/dataset.json",
+                url: "levels/ADM0/dataset.json",
+                sha256: "0".repeat(64),
+                sizeBytes: text.length
+              },
+              metadata: {
+                datasetId: "sample",
+                version: "1.0.0",
+                artifactId: "adm0",
+                sha256: "0".repeat(64),
+                sizeBytes: text.length,
+                installedAt: "2026-01-01T00:00:00.000Z",
+                sourceUrl: "memory://adm0",
+                registryHash: "hash",
+                compression: "none"
+              },
+              bytes: new TextEncoder().encode(text)
+            }
+          ],
+          async readText() {
+            return text;
+          },
+          async readBytes() {
+            return new TextEncoder().encode(text);
+          },
+          async resolveArtifact() {
+            return text;
+          }
+        };
+      }
+    };
+
+    await expect(
+      createTerritoryMapLibreSource({ registry, datasetId: "sample", levels: ["ADM0"] })
+    ).resolves.toMatchObject({
+      source: {
+        id: "territory-kit-render",
+        spec: {
+          type: "vector",
+          tiles: ["https://cdn.example.test/datasets/sample/render/tiles/{z}/{x}/{y}.mvt"]
+        }
+      },
+      sourceLayer: "territory"
+    });
+    expect(createTerritoryMapLibreLayer({ sourceId: "render" })).toHaveLength(2);
+
+    const controller = createTerritoryMapLibreController({ registry, datasetId: "sample" });
+    const clicked: string[] = [];
+    const listener = controller.onTerritoryClick((event) => clicked.push(event.territoryId));
+    listener({
+      features: [{ type: "Feature", properties: { territoryId: "tr:34" }, geometry: null }]
+    });
+
+    await expect(controller.resolveTerritory("tr:34")).resolves.toMatchObject({ id: "tr:34" });
+    expect(clicked).toEqual(["tr:34"]);
   });
 });
