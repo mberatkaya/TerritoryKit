@@ -466,6 +466,7 @@ describe("territory cli", () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-cli-source-"));
     const sourcePath = join(tempDir, "natural-earth.geojson");
     const outputPath = join(tempDir, "world-countries");
+    const legacyOutputPath = join(tempDir, "world-countries-legacy");
     const source = JSON.stringify(createNaturalEarthCliFixture());
     await writeFile(sourcePath, source, "utf8");
 
@@ -503,6 +504,31 @@ describe("territory cli", () => {
       );
       await expect(readFile(join(outputPath, "high", "dataset.json"), "utf8")).resolves.toContain(
         "world-countries"
+      );
+      await expect(
+        captureCli([
+          "dataset",
+          "build",
+          "world-countries",
+          "--source",
+          sourcePath,
+          "--output",
+          legacyOutputPath,
+          "--source-version",
+          "fixture-1",
+          "--source-sha256",
+          sha256Hex(source),
+          "--detail",
+          "high",
+          "--build-date",
+          "2026-01-01T00:00:00.000Z"
+        ])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: { ok: true, command: "dataset build" }
+      });
+      await expect(readFile(join(outputPath, "high", "dataset.json"), "utf8")).resolves.toBe(
+        await readFile(join(legacyOutputPath, "high", "dataset.json"), "utf8")
       );
     } finally {
       await rm(tempDir, { force: true, recursive: true });
