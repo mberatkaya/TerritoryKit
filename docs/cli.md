@@ -5,7 +5,9 @@ The CLI is JSON-first so import pipelines can parse every command.
 ```sh
 territory validate dataset.json
 territory index dataset.json
-territory adjacency dataset.json
+territory adjacency build ./dist/regions --output ./dist/regions-adjacency
+territory adjacency validate ./dist/regions ./dist/regions-adjacency
+territory adjacency inspect ./dist/regions-adjacency tr:adm2:fatih --type shared-border --json
 territory import source.geojson --dataset-id demo --source-date 2026-07
 territory source list
 territory source info natural-earth
@@ -50,6 +52,13 @@ CLI/input errors.
 `territory geometry repair` is explicit opt-in. It applies only safe repairs, writes an audited
 repair report, revalidates the output, and exits `3` if any repair is rejected or revalidation
 fails. The implemented backend is `--backend typescript`.
+
+`territory adjacency build` reads either a `dataset.json` file or dataset directory and writes a
+separate adjacency artifact. Directory outputs contain `adjacency.json`, `build-report.json`, and
+`checksums.json`. Bounding boxes are used only as a candidate prefilter; final `shared-border` and
+`point-touch` relations use exact polygon boundary checks. Use `--include-point-touches`,
+`--minimum-shared-boundary-meters`, `--overrides`, `--build-date`, and `--strict` to tune builds.
+`territory adjacency <dataset.json>` remains a legacy bbox helper for fixture work.
 
 `territory dataset build world-countries` builds Natural Earth ADM0 artifacts from a local GeoJSON
 source. It writes `manifest.json`, `attribution.txt`, `checksums.json`, `build-report.json`, and

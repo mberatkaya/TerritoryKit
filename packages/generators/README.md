@@ -11,7 +11,11 @@ pnpm add @territory-kit/generators @territory-kit/core @territory-kit/dataset
 ## Basic Usage
 
 ```ts
-import { createSyntheticGridDataset, inferBBoxAdjacency } from "@territory-kit/generators";
+import {
+  buildTerritoryAdjacency,
+  createSyntheticGridDataset,
+  inferBBoxAdjacency
+} from "@territory-kit/generators";
 
 const dataset = createSyntheticGridDataset({
   datasetId: "demo-grid",
@@ -20,6 +24,10 @@ const dataset = createSyntheticGridDataset({
 });
 
 const adjacency = inferBBoxAdjacency(dataset.zones);
+const realAdjacency = await buildTerritoryAdjacency(dataset, {
+  includePointTouches: true,
+  buildDate: "2026-01-01T00:00:00.000Z"
+});
 ```
 
 ## API Summary
@@ -31,11 +39,15 @@ const adjacency = inferBBoxAdjacency(dataset.zones);
 - `runTerritorySourcePipeline(options)` runs the shared source adapter pipeline.
 - `validateTerritoryDatasetPath(inputPath, options)` and `repairTerritoryDatasetPath(...)` provide
   filesystem helpers for geometry quality reports and repaired dataset output.
+- `buildTerritoryAdjacency(dataset, options)` builds exact polygon adjacency artifacts.
+- `buildTerritoryAdjacencyPath(inputPath, options)` writes `adjacency.json`, `build-report.json`,
+  and `checksums.json`.
 - `createDefaultTerritorySourceRegistry()` returns built-in adapters for Natural Earth,
   geoBoundaries, and generic GeoJSON.
 - `parseNaturalEarthAdm0FeatureCollection(input, source)` parses local Natural Earth-like GeoJSON
   without network access.
-- `inferBBoxAdjacency(zones, options)` returns neighbor IDs inferred from bounding boxes.
+- `inferBBoxAdjacency(zones, options)` returns neighbor IDs inferred from bounding boxes for
+  development fixtures.
 - `inferBBoxAdjacencyConnections(zones, options)` returns adjacency connection objects.
 
 ## World Countries ADM0

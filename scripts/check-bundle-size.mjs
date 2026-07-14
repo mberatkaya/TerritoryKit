@@ -3,11 +3,13 @@ import { join } from "node:path";
 
 const root = process.cwd();
 const maxBytesByFile = new Map([
-  ["packages/dataset/dist/index.mjs", 90_000],
+  // Sprint 4 real adjacency adds exact polygon relation primitives and artifact indexing.
+  ["packages/dataset/dist/index.mjs", 112_000],
   ["packages/core/dist/index.mjs", 65_000],
   ["packages/maplibre/dist/index.mjs", 45_000],
   ["packages/nestjs/dist/index.mjs", 45_000],
-  ["packages/generators/dist/index.mjs", 115_000],
+  // Generators now include adjacency artifact build/validate filesystem helpers.
+  ["packages/generators/dist/index.mjs", 122_000],
   ["packages/cli/dist/index.mjs", 45_000]
 ]);
 

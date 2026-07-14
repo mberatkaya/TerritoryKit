@@ -11,10 +11,14 @@
 - `territoryDatasetJsonSchema` exposes the schema baseline for `territory-schema@1`.
 - Validation also reports stale geometry metadata with `BBOX_MISMATCH` and
   `CENTER_OUT_OF_BOUNDS`, and warns on `NEIGHBOR_NOT_RECIPROCAL`.
+- `classifyTerritoryGeometryRelation(left, right, options)` classifies exact polygon relations.
+- `computeSharedBoundaryMeters(left, right, options)` measures shared boundary length.
+- `validateTerritoryAdjacencyArtifact(dataset, artifact)` validates adjacency artifact integrity.
+- `createTerritoryAdjacencyIndex(artifact)` creates typed neighbor and relation queries.
 
 ## `@territory-kit/core`
 
-- `createTerritoryEngine({ dataset, levelStrategy })`
+- `createTerritoryEngine({ dataset, adjacency, levelStrategy })`
 - `engine.latLngToZone({ lat, lng }, { level })`
 - `engine.latLngToZones([{ lat, lng }], { level })`
 - `engine.zoneToBoundary(zoneId)`
@@ -25,7 +29,9 @@
 - `engine.getDescendants(zoneId)`
 - `engine.isValidZone(zoneId)`
 - `engine.zoneNeighbors(zoneId, { distance })`
+- `engine.zoneNeighbors(zoneId, { types })`
 - `engine.getAdjacencyConnections(zoneId, { connectionTypes })`
+- `engine.getAdjacencyRelations(zoneId, { types })`
 - `engine.getZonesInBounds({ west, south, east, north, level })`
 - `engine.getVisibleZones({ bounds, zoom })`
 - `engine.getViewportCacheKey({ bounds, zoom, level })`
@@ -54,9 +60,13 @@
 - `generateGridTerritoryDataset(options)` creates deterministic rectangular fixtures.
 - `generateVoronoiTerritoryDataset(options)` creates deterministic Voronoi-style fixtures.
 - `generateWeightedVoronoiTerritoryDataset(options)` accepts weighted seed points.
-- `createAdjacencyConnections(zones, options)` emits typed adjacency connection metadata.
+- `buildTerritoryAdjacency(dataset, options)` builds exact polygon adjacency artifacts.
+- `buildTerritoryAdjacencyPath(inputPath, options)` reads a dataset file or directory and writes
+  `adjacency.json`, `build-report.json`, and `checksums.json`.
+- `inferBBoxAdjacency(zones, options)` remains a bounding-box development helper.
 
 ## `@territory-kit/cli`
 
-- JSON-first commands: `validate`, `index`, `adjacency`, `import`, `simplify`, `generate`
+- JSON-first commands: `validate`, `index`, `adjacency build`, `adjacency validate`,
+  `adjacency inspect`, `import`, `simplify`, `generate`
 - `import` emits a deterministic `manifest.geometryHash` in the returned dataset.

@@ -33,6 +33,18 @@ Geometry quality issues are mapped into source issues with `GEOMETRY_*` codes. F
 attached to `result.transform.geometryQuality`. Generic build reports include a compact quality
 summary; source-owned artifact plans keep their checksummed file output stable.
 
+## Adjacency Build
+
+The CLI can run the polygon adjacency builder immediately after a successful source import:
+
+```sh
+territory import geojson --input ./regions.geojson --output ./dist/regions --country TR --admin-level ADM2 --name-property name --build-adjacency
+```
+
+This writes a separate `adjacency/` directory under the import output. Use
+`--adjacency-include-point-touches`, `--adjacency-minimum-shared-boundary-meters`, and
+`--adjacency-overrides` to tune the generated artifact.
+
 ## Strict Mode
 
 Warnings are allowed by default. `--strict` converts warnings into `STRICT_*` errors after transform

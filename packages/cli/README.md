@@ -18,6 +18,9 @@ territory source list
 territory import geojson --input ./regions.geojson --country TR --admin-level ADM2 --name-property name --output ./dist/regions
 territory geometry validate ./dist/regions --checks full --report ./geometry-report.json
 territory geometry repair ./dist/regions --checks basic --output ./dist/regions-repaired --report ./repair-report.json
+territory adjacency build ./dist/regions --output ./dist/regions-adjacency --build-date 2026-01-01T00:00:00.000Z
+territory adjacency validate ./dist/regions ./dist/regions-adjacency
+territory adjacency inspect ./dist/regions-adjacency tr:adm2:fatih --type shared-border --json
 territory dataset build world-countries --source ./sources/ne-admin0.geojson --output ./dist/world-countries
 ```
 
@@ -29,8 +32,12 @@ territory dataset build world-countries --source ./sources/ne-admin0.geojson --o
 - `territory import natural-earth|geoboundaries|geojson` runs the source adapter pipeline.
 - `territory geometry validate <dataset-path>` runs validate-only geometry quality checks.
 - `territory geometry repair <dataset-path> --output <dir>` applies safe audited repairs.
+- `territory adjacency build <dataset-path> --output <dir|json>` builds exact polygon adjacency
+  artifacts.
+- `territory adjacency validate <dataset-path> <dir|json>` validates an adjacency artifact.
+- `territory adjacency inspect <dir|json> <zone-id>` inspects typed neighbors.
 - `territory index <file>` builds engine metadata and reports dataset stats.
-- `territory adjacency <file>` infers bounding-box adjacency.
+- `territory adjacency <file>` remains a legacy bounding-box development helper.
 - `territory generate grid` and `territory generate weighted-voronoi` create deterministic datasets.
 - `territory dataset build world-countries` builds Natural Earth ADM0 artifacts from a local source
   file.
