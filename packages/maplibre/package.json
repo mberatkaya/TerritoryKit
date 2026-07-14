@@ -1,6 +1,6 @@
 {
   "name": "@territory-kit/maplibre",
-  "version": "0.4.0-alpha.0",
+  "version": "1.0.0",
   "description": "MapLibre GL JS adapter utilities for TerritoryKit.",
   "license": "Apache-2.0",
   "type": "module",
