@@ -5,6 +5,28 @@ import { createTerritoryMapLibreAdapter } from "@territory-kit/maplibre";
 import type { TerritoryMapLibreMap, TerritoryMapLibreState } from "@territory-kit/maplibre";
 import { createSampleTerritoryDataset } from "@territory-kit/shared-testkit";
 
+type VisibleZone = ReturnType<typeof getVisibleZonesForMap>[number];
+
+interface TerritoryKitDemoProbe {
+  ready: boolean;
+  attachCount: number;
+  updateCount: number;
+  lastClickedZoneId: string | undefined;
+  lastHoveredZoneId: string | undefined;
+  lastVisibleZoneIds: string[];
+  lastZoom: number;
+  estimateFrameRate(durationMs?: number): Promise<number>;
+  projectZoneCenter(zoneId: string): { x: number; y: number } | undefined;
+  queryRenderedZoneIds(): string[];
+  setZoom(zoom: number): Promise<string[]>;
+}
+
+declare global {
+  interface Window {
+    __territoryKitDemo?: TerritoryKitDemoProbe;
+  }
+}
+
 const app = document.querySelector<HTMLDivElement>("#app");
 const dataset = createSampleTerritoryDataset();
 const engine = createTerritoryEngine({ dataset });
@@ -43,9 +65,49 @@ if (app) {
       ]
     }
   });
+  let attachCount = 0;
+  let updateCount = 0;
+  let lastVisibleZones = getVisibleZonesForMap(map);
+  let lastClickedZoneId: string | undefined;
+  let lastHoveredZoneId: string | undefined;
+
+  const demoProbe: TerritoryKitDemoProbe = {
+    ready: false,
+    attachCount,
+    updateCount,
+    lastClickedZoneId,
+    lastHoveredZoneId,
+    lastVisibleZoneIds: zoneIds(lastVisibleZones),
+    lastZoom: map.getZoom(),
+    estimateFrameRate,
+    projectZoneCenter(zoneId) {
+      const zone = lastVisibleZones.find((candidate) => candidate.id === zoneId);
+
+      if (!zone) {
+        return undefined;
+      }
+
+      const point = map.project(zone.center);
+
+      return { x: point.x, y: point.y };
+    },
+    queryRenderedZoneIds() {
+      return queryRenderedZoneIds(map);
+    },
+    async setZoom(zoom) {
+      const idle = waitForMapIdle(map);
+      map.setZoom(zoom);
+      await idle;
+      updateAdapterData();
+
+      return demoProbe.lastVisibleZoneIds;
+    }
+  };
+
+  window.__territoryKitDemo = demoProbe;
 
   const adapter = createTerritoryMapLibreAdapter({
-    zones: getVisibleZonesForMap(map),
+    zones: lastVisibleZones,
     sourceId: "territory-zones",
     fillLayerId: "territory-zones-fill",
     lineLayerId: "territory-zones-line",
@@ -58,25 +120,32 @@ if (app) {
       }
 
       stateByZoneId.set(event.zoneId, { selected: true });
-      adapter.updateData(getVisibleZonesForMap(map), stateByZoneId);
+      lastClickedZoneId = event.zoneId;
+      updateAdapterData();
 
       if (status) {
         status.textContent = event.zoneId;
       }
+      syncDemoProbe();
     },
     onZoneHover(event) {
+      lastHoveredZoneId = event.zoneId;
       if (status) {
         status.textContent = event.zoneId;
       }
+      syncDemoProbe();
     }
   });
 
   map.on("load", () => {
     adapter.attach(map as unknown as TerritoryMapLibreMap);
+    attachCount += 1;
+    demoProbe.ready = true;
+    syncDemoProbe();
   });
 
   map.on("zoomend", () => {
-    adapter.updateData(getVisibleZonesForMap(map), stateByZoneId);
+    updateAdapterData();
   });
 
   themeButton?.addEventListener("click", () => {
@@ -88,6 +157,22 @@ if (app) {
       lineColor: darkTheme ? "#e5e7eb" : "#0f172a"
     });
   });
+
+  function updateAdapterData(): void {
+    lastVisibleZones = getVisibleZonesForMap(map);
+    updateCount += 1;
+    adapter.updateData(lastVisibleZones, stateByZoneId);
+    syncDemoProbe();
+  }
+
+  function syncDemoProbe(): void {
+    demoProbe.attachCount = attachCount;
+    demoProbe.updateCount = updateCount;
+    demoProbe.lastClickedZoneId = lastClickedZoneId;
+    demoProbe.lastHoveredZoneId = lastHoveredZoneId;
+    demoProbe.lastVisibleZoneIds = zoneIds(lastVisibleZones);
+    demoProbe.lastZoom = map.getZoom();
+  }
 }
 
 const style = document.createElement("style");
@@ -156,5 +241,51 @@ function getVisibleZonesForMap(map: maplibregl.Map) {
       north: bounds.getNorth()
     },
     zoom: map.getZoom()
+  });
+}
+
+function zoneIds(zones: VisibleZone[]): string[] {
+  return zones.map((zone) => zone.id).sort();
+}
+
+function queryRenderedZoneIds(map: maplibregl.Map): string[] {
+  return map
+    .queryRenderedFeatures(undefined, { layers: ["territory-zones-fill"] })
+    .map((feature) => {
+      if (typeof feature.id === "string" || typeof feature.id === "number") {
+        return String(feature.id);
+      }
+
+      const id = feature.properties.id;
+
+      return typeof id === "string" || typeof id === "number" ? String(id) : undefined;
+    })
+    .filter((zoneId): zoneId is string => Boolean(zoneId))
+    .sort();
+}
+
+function waitForMapIdle(map: maplibregl.Map): Promise<void> {
+  return new Promise((resolve) => {
+    map.once("idle", () => resolve());
+  });
+}
+
+function estimateFrameRate(durationMs = 500): Promise<number> {
+  return new Promise((resolve) => {
+    const start = performance.now();
+    let frames = 0;
+
+    function tick(time: number): void {
+      frames += 1;
+
+      if (time - start >= durationMs) {
+        resolve((frames * 1000) / (time - start));
+        return;
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
   });
 }
