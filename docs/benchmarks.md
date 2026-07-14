@@ -29,11 +29,11 @@ Recorded on 2026-07-14 with `pnpm bench`:
 
 | Benchmark                             |        Mean |          p99 |         p995 |
 | ------------------------------------- | ----------: | -----------: | -----------: |
-| `latLngToZone`, 10K polygons          | `0.0003 ms` |  `0.0005 ms` |  `0.0006 ms` |
-| `getZonesInBounds`, 10K polygons      | `0.0606 ms` |  `0.0665 ms` |  `0.0693 ms` |
-| `getZoneById`, 10K polygons           | `0.0000 ms` |  `0.0000 ms` |  `0.0000 ms` |
-| Engine construction, 10K polygons     | `9.6710 ms` | `24.7328 ms` | `24.7328 ms` |
-| Dataset validation load, 10K polygons | `7.8126 ms` | `15.7765 ms` | `15.7765 ms` |
+| `latLngToZone`, 10K polygons          | `0.0003 ms` |  `0.0007 ms` |  `0.0009 ms` |
+| `getZonesInBounds`, 10K polygons      | `0.0650 ms` |  `0.1762 ms` |  `0.2130 ms` |
+| `getZoneById`, 10K polygons           | `0.0000 ms` |  `0.0000 ms` |  `0.0001 ms` |
+| Engine construction, 10K polygons     | `9.8093 ms` | `23.2468 ms` | `23.2468 ms` |
+| Dataset validation load, 10K polygons | `7.8898 ms` | `15.1426 ms` | `15.1426 ms` |
 | `latLngToZone`, 100K polygons         | `0.0004 ms` |  `0.0005 ms` |  `0.0006 ms` |
 
 Vitest reports p99/p995 instead of p95. Since p99 is below the p95 target, the p95 gate is
