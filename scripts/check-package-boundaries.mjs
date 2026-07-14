@@ -19,6 +19,11 @@ const sourceRules = [
     allowed: new Set(["@territory-kit/core", "@territory-kit/dataset"]),
     description: "@territory-kit/generators may depend on core and dataset only"
   },
+  ...["data-tr", "data-us", "data-de", "data-jp", "data-id"].map((packageName) => ({
+    packageDir: `packages/${packageName}`,
+    allowed: new Set(["@territory-kit/core"]),
+    description: `@territory-kit/${packageName} may depend only on core workspace APIs`
+  })),
   {
     packageDir: "packages/maplibre",
     allowed: new Set(["@territory-kit/core", "@territory-kit/dataset"]),

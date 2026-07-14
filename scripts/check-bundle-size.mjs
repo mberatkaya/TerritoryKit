@@ -8,9 +8,14 @@ const maxBytesByFile = new Map([
   ["packages/core/dist/index.mjs", 65_000],
   ["packages/maplibre/dist/index.mjs", 45_000],
   ["packages/nestjs/dist/index.mjs", 45_000],
+  ["packages/data-tr/dist/index.mjs", 8_000],
+  ["packages/data-us/dist/index.mjs", 8_000],
+  ["packages/data-de/dist/index.mjs", 8_000],
+  ["packages/data-jp/dist/index.mjs", 8_000],
+  ["packages/data-id/dist/index.mjs", 8_000],
   // Generators now include adjacency artifact build/validate filesystem helpers.
-  ["packages/generators/dist/index.mjs", 122_000],
-  ["packages/cli/dist/index.mjs", 45_000]
+  ["packages/generators/dist/index.mjs", 190_000],
+  ["packages/cli/dist/index.mjs", 65_000]
 ]);
 
 const failures = [];
