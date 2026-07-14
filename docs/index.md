@@ -15,6 +15,7 @@ package boundaries required for MapLibre, NestJS/PostGIS, generators, and CLI to
 - [Roadmap](./roadmap.md)
 - [Benchmarks](./benchmarks.md)
 - [NestJS and PostGIS](./nestjs-postgis.md)
+- [NestJS OpenAPI contract](./nestjs-openapi.md)
 - [Release readiness](./release-readiness.md)
 - [Master sprint checklist](./sprint-checklist.md)
 

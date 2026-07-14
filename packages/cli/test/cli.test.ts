@@ -131,6 +131,64 @@ describe("territory cli", () => {
       }
     });
   });
+
+  it("reports GeoJSON import errors with source path, feature id, and line context", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-"));
+    const geojsonPath = join(tempDir, "broken-zones.geojson");
+
+    await writeFile(
+      geojsonPath,
+      JSON.stringify(
+        {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              id: "bad-zone",
+              properties: { level: "bad" },
+              geometry: {
+                type: "Polygon",
+                coordinates: [
+                  [
+                    [0, 0],
+                    [1, 0],
+                    [1, 1],
+                    [0, 1],
+                    [0, 0]
+                  ]
+                ]
+              }
+            }
+          ]
+        },
+        null,
+        2
+      ),
+      "utf8"
+    );
+
+    try {
+      const result = await captureCli(["import", geojsonPath]);
+
+      expect(result).toMatchObject({
+        code: 1,
+        payload: {
+          ok: false,
+          command: "import",
+          issues: expect.arrayContaining([
+            expect.objectContaining({
+              featureId: "bad-zone",
+              line: expect.any(Number),
+              path: "$.features[0].properties.level",
+              sourcePath: geojsonPath
+            })
+          ])
+        }
+      });
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
 });
 
 async function captureCli(args: string[]): Promise<{ code: number; payload: unknown }> {

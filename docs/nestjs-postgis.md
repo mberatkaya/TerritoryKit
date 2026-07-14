@@ -20,6 +20,9 @@ TerritoryKitModule.forRoot({
 
 ## Endpoints
 
+The OpenAPI contract for these endpoints is documented in
+[NestJS OpenAPI contract](./nestjs-openapi.md).
+
 `GET /territories`
 
 Required query parameters:
@@ -79,6 +82,8 @@ that want to inspect, snapshot, or adapt the generated queries.
 
 - Unit tests cover controller request/response contracts, invalid input handling before repository
   calls, SQL text expectations, and row mapping.
-- Tests that require a live PostGIS service are manual until CI provides a database service.
-- Manual PostGIS verification should apply the migration, import a validated dataset into
-  `territory_zones`, then run viewport and locate calls against a NestJS app instance.
+- The PostGIS integration harness covers the controller, repository, bbox query, coordinate
+  endpoint, row mapping, and SQL parameter order against the sample dataset.
+- Live PostGIS verification remains an optional maintainer check: apply the migration, import a
+  validated dataset into `territory_zones`, then run viewport and locate calls against a NestJS app
+  instance.

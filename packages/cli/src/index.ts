@@ -11,7 +11,8 @@ import {
 import type {
   TerritoryDataset,
   TerritoryDatasetManifest,
-  TerritoryGeoJsonImportOptions
+  TerritoryGeoJsonImportOptions,
+  TerritoryValidationIssue
 } from "@territory-kit/dataset";
 import {
   createDatasetGeometryHash,
@@ -24,8 +25,23 @@ import {
 interface CliIssue {
   code: string;
   message: string;
+  column?: number;
+  featureId?: string;
+  line?: number;
   path?: string;
+  repairSuggestion?: string;
   severity: "error" | "warning";
+  sourcePath?: string;
+  zoneId?: string;
+}
+
+interface JsonSource {
+  input: unknown;
+  lineIndex: JsonLineIndex;
+}
+
+interface JsonLineIndex {
+  findLineForIssue(issue: TerritoryValidationIssue): number | undefined;
 }
 
 export async function runCli(argv: string[] = process.argv.slice(2)): Promise<number> {
@@ -134,8 +150,17 @@ async function readJson(filePath: string): Promise<unknown> {
   return JSON.parse(content) as unknown;
 }
 
+async function readJsonSource(filePath: string): Promise<JsonSource> {
+  const content = await readFile(filePath, "utf8");
+
+  return {
+    input: JSON.parse(content) as unknown,
+    lineIndex: createJsonLineIndex(content)
+  };
+}
+
 async function runImport(filePath: string, flags: Map<string, string | true>): Promise<number> {
-  const input = await readJson(filePath);
+  const { input, lineIndex } = await readJsonSource(filePath);
   const manifest = createManifestFromFlags(flags, "imported-territories");
   const importOptions: TerritoryGeoJsonImportOptions = {
     manifest,
@@ -173,9 +198,77 @@ async function runImport(filePath: string, flags: Map<string, string | true>): P
   printJson({
     ok: result.ok,
     command: "import",
-    ...(result.ok ? { data: dataset } : { issues: result.issues })
+    ...(result.ok ? { data: dataset } : { issues: withSourceLines(result.issues, lineIndex) })
   });
   return result.ok ? 0 : 1;
+}
+
+function withSourceLines(
+  issues: TerritoryValidationIssue[],
+  lineIndex: JsonLineIndex
+): TerritoryValidationIssue[] {
+  return issues.map((issue) => {
+    if (issue.line !== undefined) {
+      return issue;
+    }
+
+    const line = lineIndex.findLineForIssue(issue);
+
+    return line === undefined ? issue : { ...issue, line };
+  });
+}
+
+function createJsonLineIndex(content: string): JsonLineIndex {
+  const lines = content.split(/\r?\n/);
+
+  return {
+    findLineForIssue(issue) {
+      if (issue.featureId) {
+        const featureIdLine = findFeatureIdLine(lines, issue.featureId);
+
+        if (featureIdLine !== undefined) {
+          return featureIdLine;
+        }
+      }
+
+      return findFeaturePathLine(lines, issue.path);
+    }
+  };
+}
+
+function findFeatureIdLine(lines: string[], featureId: string): number | undefined {
+  const serializedFeatureId = JSON.stringify(featureId);
+
+  for (const [index, line] of lines.entries()) {
+    if (/"id"\s*:/.test(line) && line.includes(serializedFeatureId)) {
+      return index + 1;
+    }
+  }
+
+  return undefined;
+}
+
+function findFeaturePathLine(lines: string[], path: string): number | undefined {
+  const match = /^\$\.features\[(\d+)\]/.exec(path);
+
+  if (!match) {
+    return undefined;
+  }
+
+  const targetFeatureIndex = Number(match[1]);
+  let currentFeatureIndex = -1;
+
+  for (const [index, line] of lines.entries()) {
+    if (/"type"\s*:\s*"Feature"/.test(line)) {
+      currentFeatureIndex += 1;
+    }
+
+    if (currentFeatureIndex === targetFeatureIndex) {
+      return index + 1;
+    }
+  }
+
+  return undefined;
 }
 
 function runGenerate(args: string[]): number {

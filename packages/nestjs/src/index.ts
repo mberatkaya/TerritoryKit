@@ -110,13 +110,48 @@ export class TerritoryKitController {
   @Get("territories")
   @Header("Cache-Control", "public, max-age=30")
   @ApiOperation({ summary: "Return territories intersecting a viewport." })
-  @ApiQuery({ name: "west", required: true })
-  @ApiQuery({ name: "south", required: true })
-  @ApiQuery({ name: "east", required: true })
-  @ApiQuery({ name: "north", required: true })
-  @ApiQuery({ name: "level", required: false })
-  @ApiQuery({ name: "zoom", required: false })
-  @ApiResponse({ status: 200, description: "Viewport territory response." })
+  @ApiQuery({ description: "Western longitude bound.", name: "west", required: true, type: Number })
+  @ApiQuery({
+    description: "Southern latitude bound.",
+    name: "south",
+    required: true,
+    type: Number
+  })
+  @ApiQuery({ description: "Eastern longitude bound.", name: "east", required: true, type: Number })
+  @ApiQuery({
+    description: "Northern latitude bound.",
+    name: "north",
+    required: true,
+    type: Number
+  })
+  @ApiQuery({
+    description: "Explicit territory level.",
+    name: "level",
+    required: false,
+    type: Number
+  })
+  @ApiQuery({
+    description: "Zoom resolved by the configured level strategy.",
+    name: "zoom",
+    required: false,
+    type: Number
+  })
+  @ApiResponse({
+    status: 200,
+    description: "Viewport territory response.",
+    schema: {
+      type: "object",
+      required: ["zones", "cacheKey"],
+      properties: {
+        zones: {
+          type: "array",
+          items: { $ref: "#/components/schemas/TerritoryZone" }
+        },
+        cacheKey: { type: "string" }
+      }
+    }
+  })
+  @ApiResponse({ status: 400, description: "Invalid viewport query parameters." })
   async getTerritories(
     @Query() query: TerritoryViewportQueryDto,
     @Res({ passthrough: true }) response?: HeaderResponse
@@ -139,7 +174,21 @@ export class TerritoryKitController {
   @Post("territories/locate")
   @ApiOperation({ summary: "Locate the territory covering a coordinate." })
   @ApiBody({ type: TerritoryLocateBodyDto })
-  @ApiResponse({ status: 200, description: "Locate response." })
+  @ApiResponse({
+    status: 200,
+    description: "Locate response.",
+    schema: {
+      type: "object",
+      required: ["zoneId"],
+      properties: {
+        zoneId: {
+          nullable: true,
+          type: "string"
+        }
+      }
+    }
+  })
+  @ApiResponse({ status: 400, description: "Invalid coordinate request body." })
   async locateTerritory(@Body() body: TerritoryLocateBodyDto): Promise<TerritoryLocateResponse> {
     const request = parseLocateBody(body);
     const zoneId = this.repository

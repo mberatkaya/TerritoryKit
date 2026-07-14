@@ -108,6 +108,19 @@ Recorded on 2026-07-14 for `hardening/release-quality`:
 - `pnpm bench:memory` passed and recorded deterministic 10K fixture heap deltas.
 - The remaining repo-owned branch is `hardening/runtime-integrations`.
 
+## Runtime Integration Verification
+
+Recorded on 2026-07-14 for `hardening/runtime-integrations`:
+
+- `pnpm format:check` passed.
+- `pnpm verify` passed.
+- `pnpm bench` passed and refreshed benchmark evidence.
+- `pnpm test:visual:maplibre` passed with rendered polygon, click, hover, zoom-transition, and
+  frame-rate coverage.
+- `docs/sprint-checklist.md` has no remaining unchecked items.
+- External npm publish, npm registry verification, `v1.0.0` tag creation, GitHub Release creation,
+  and live docs deployment remain maintainer handoff actions and were not executed from this branch.
+
 ## Triage And Security
 
 - New release blockers are tracked as GitHub issues or PR review comments and triaged before a
