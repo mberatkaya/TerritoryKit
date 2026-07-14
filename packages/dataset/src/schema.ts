@@ -17,7 +17,27 @@ export const territoryDatasetJsonSchema = {
         datasetVersion: { type: "string", minLength: 1 },
         schemaVersion: { const: TERRITORY_SCHEMA_VERSION },
         sourceDate: { type: "string", minLength: 1 },
-        geometryHash: { type: "string", minLength: 1 }
+        geometryHash: { type: "string", minLength: 1 },
+        adminLevels: {
+          type: "array",
+          items: { enum: ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"] },
+          minItems: 1
+        },
+        artifactChecksum: { type: "string", minLength: 1 },
+        attribution: { type: "string", minLength: 1 },
+        boundaryPolicy: { type: "string", minLength: 1 },
+        buildDate: { type: "string", minLength: 1 },
+        countryCodes: {
+          type: "array",
+          items: { pattern: "^[A-Za-z]{2}$", type: "string" },
+          minItems: 1
+        },
+        crs: { type: "string", minLength: 1 },
+        disputedAreaPolicy: { type: "string", minLength: 1 },
+        geometryDetail: { enum: ["low", "medium", "high", "source"] },
+        license: { type: "string", minLength: 1 },
+        sourceProvider: { type: "string", minLength: 1 },
+        worldview: { type: "string", minLength: 1 }
       }
     },
     zones: {
