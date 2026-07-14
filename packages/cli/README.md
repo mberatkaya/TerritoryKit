@@ -14,6 +14,8 @@ pnpm add -g @territory-kit/cli
 territory validate dataset.json
 territory index dataset.json
 territory generate grid --rows 4 --columns 4
+territory source list
+territory import geojson --input ./regions.geojson --country TR --admin-level ADM2 --name-property name --output ./dist/regions
 territory dataset build world-countries --source ./sources/ne-admin0.geojson --output ./dist/world-countries
 ```
 
@@ -21,6 +23,8 @@ territory dataset build world-countries --source ./sources/ne-admin0.geojson --o
 
 - `territory validate <file>` validates a TerritoryKit dataset.
 - `territory import <geojson>` converts GeoJSON features into a TerritoryKit dataset.
+- `territory source list` and `territory source info <id>` inspect source adapters.
+- `territory import natural-earth|geoboundaries|geojson` runs the source adapter pipeline.
 - `territory index <file>` builds engine metadata and reports dataset stats.
 - `territory adjacency <file>` infers bounding-box adjacency.
 - `territory generate grid` and `territory generate weighted-voronoi` create deterministic datasets.
