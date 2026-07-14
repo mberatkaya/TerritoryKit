@@ -2,6 +2,35 @@ import { createHash } from "node:crypto";
 import type { TerritoryAdjacencyConnection } from "@territory-kit/core";
 import type { TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
 
+export {
+  NATURAL_EARTH_ADM0_DATASET_NAME,
+  NATURAL_EARTH_ADM0_DETAILS,
+  NATURAL_EARTH_ADM0_SOURCE_URL,
+  NATURAL_EARTH_ATTRIBUTION,
+  NATURAL_EARTH_PROVIDER,
+  NATURAL_EARTH_PUBLIC_DOMAIN_LICENSE,
+  WORLD_COUNTRIES_DATASET_ID,
+  buildWorldCountriesDataset,
+  createWorldCountriesAdm0ArtifactPlan,
+  normalizeNaturalEarthDetails,
+  parseNaturalEarthAdm0FeatureCollection,
+  resolveBuildDate,
+  serializeJsonStable,
+  sha256Hex
+} from "./natural-earth.js";
+export type {
+  NaturalEarthAdm0BuildOptions,
+  NaturalEarthAdm0BuildReport,
+  NaturalEarthAdm0BuildResult,
+  NaturalEarthAdm0CreateOptions,
+  NaturalEarthAdm0Detail,
+  NaturalEarthAdm0DetailReport,
+  NaturalEarthAdm0Issue,
+  NaturalEarthAdm0ParseResult,
+  NaturalEarthChecksums,
+  NaturalEarthSourceDescriptor
+} from "./natural-earth.js";
+
 export interface BBoxAdjacencyOptions {
   tolerance?: number;
 }

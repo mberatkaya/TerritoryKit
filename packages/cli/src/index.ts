@@ -15,12 +15,16 @@ import type {
   TerritoryValidationIssue
 } from "@territory-kit/dataset";
 import {
+  NATURAL_EARTH_ADM0_DETAILS,
+  WORLD_COUNTRIES_DATASET_ID,
+  buildWorldCountriesDataset,
   createDatasetGeometryHash,
   createSyntheticGridDataset,
   createWeightedVoronoiDataset,
   inferBBoxAdjacency,
   inferBBoxAdjacencyConnections
 } from "@territory-kit/generators";
+import type { NaturalEarthAdm0Detail } from "@territory-kit/generators";
 
 interface CliIssue {
   code: string;
@@ -53,6 +57,10 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
   }
 
   try {
+    if (command === "dataset") {
+      return runDataset(argv.slice(1));
+    }
+
     if (command === "generate") {
       return runGenerate(argv.slice(1));
     }
@@ -143,6 +151,109 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
     });
     return 1;
   }
+}
+
+async function runDataset(args: string[]): Promise<number> {
+  const [subcommand, datasetId] = args;
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printDatasetHelp();
+    return 0;
+  }
+
+  if (subcommand !== "build") {
+    printJson({
+      ok: false,
+      command: "dataset",
+      issues: [createCliIssue(`Unsupported dataset command '${subcommand}'.`)]
+    });
+    return 1;
+  }
+
+  if (!datasetId || datasetId === "--help" || datasetId === "-h") {
+    printDatasetBuildHelp();
+    return datasetId ? 0 : 1;
+  }
+
+  const flags = parseFlags(args.slice(2));
+
+  if (datasetId !== WORLD_COUNTRIES_DATASET_ID) {
+    printJson({
+      ok: false,
+      command: "dataset build",
+      issues: [createCliIssue(`Unknown dataset '${datasetId}'.`)]
+    });
+    return 1;
+  }
+
+  const sourcePath = getFlag(flags, "source");
+  const outputPath = getFlag(flags, "output");
+
+  if (!sourcePath) {
+    printJson({
+      ok: false,
+      command: "dataset build",
+      issues: [createCliIssue("--source is required for dataset builds.")]
+    });
+    return 1;
+  }
+
+  if (!outputPath) {
+    printJson({
+      ok: false,
+      command: "dataset build",
+      issues: [createCliIssue("--output is required for dataset builds.")]
+    });
+    return 1;
+  }
+
+  const detail = getFlag(flags, "detail");
+  const details = detail ? readDetailFlag(detail) : undefined;
+
+  if (detail && !details) {
+    printJson({
+      ok: false,
+      command: "dataset build",
+      issues: [createCliIssue(`Invalid --detail '${detail}'. Expected low, medium, or high.`)]
+    });
+    return 1;
+  }
+
+  const sourceVersion = getFlag(flags, "source-version");
+  const sourceUrl = getFlag(flags, "source-url");
+  const sourceSha256 = getFlag(flags, "source-sha256");
+  const sourceDate = getFlag(flags, "source-date");
+  const buildDate = getFlag(flags, "build-date");
+  const datasetVersion = getFlag(flags, "dataset-version");
+  const result = await buildWorldCountriesDataset({
+    sourcePath,
+    outputPath,
+    ...(details ? { details } : {}),
+    ...(sourceVersion ? { sourceVersion } : {}),
+    ...(sourceUrl ? { sourceUrl } : {}),
+    ...(sourceSha256 ? { sourceSha256 } : {}),
+    ...(sourceDate ? { sourceDate } : {}),
+    ...(buildDate ? { buildDate } : {}),
+    ...(datasetVersion ? { datasetVersion } : {}),
+    ...(flags.has("force") ? { force: true } : {}),
+    ...(flags.has("strict") ? { strict: true } : {})
+  });
+
+  printJson({
+    ok: result.ok,
+    command: "dataset build",
+    ...(result.ok
+      ? {
+          data: {
+            ...result.summary,
+            manifest: result.manifest,
+            checksums: result.checksums
+          },
+          issues: result.issues
+        }
+      : { issues: result.issues })
+  });
+  return result.ok ? 0 : 1;
 }
 
 async function readJson(filePath: string): Promise<unknown> {
@@ -484,6 +595,14 @@ function parseSeeds(
   });
 }
 
+function readDetailFlag(input: string): NaturalEarthAdm0Detail[] | undefined {
+  if (NATURAL_EARTH_ADM0_DETAILS.includes(input as NaturalEarthAdm0Detail)) {
+    return [input as NaturalEarthAdm0Detail];
+  }
+
+  return undefined;
+}
+
 function printJson(payload: unknown): void {
   console.log(JSON.stringify(payload, null, 2));
 }
@@ -505,8 +624,29 @@ Commands:
   index      Build a spatial-index metadata summary
   adjacency  Infer bbox adjacency and typed geometric connections
   import     Import a GeoJSON FeatureCollection into a TerritoryKit dataset
+  dataset    Build curated dataset artifacts, including world-countries
   simplify   Emit a deterministic no-op simplification result for pipeline wiring
   generate   Generate grid or weighted-voronoi MVP datasets as JSON`);
+}
+
+function printDatasetHelp(): void {
+  console.log(`territory dataset <command>
+
+Commands:
+  build  Build a curated TerritoryKit dataset artifact`);
+}
+
+function printDatasetBuildHelp(): void {
+  console.log(`territory dataset build world-countries --source <natural-earth.geojson> --output <dir>
+
+Options:
+  --detail low|medium|high
+  --source-version <version>
+  --source-url <url>
+  --source-sha256 <sha256>
+  --build-date <iso-date>
+  --strict
+  --force`);
 }
 
 const currentEntry = process.argv[1] ? pathToFileURL(process.argv[1]).href : undefined;

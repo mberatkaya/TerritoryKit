@@ -15,6 +15,7 @@ package boundaries required for MapLibre, NestJS/PostGIS, generators, and CLI to
 - [Roadmap](./roadmap.md)
 - [Benchmarks](./benchmarks.md)
 - [Global datasets](./global-datasets.md)
+- [World countries ADM0 dataset](./datasets/world-countries.md)
 - [Dataset ID conventions](./dataset-id-conventions.md)
 - [Dataset provenance](./dataset-provenance.md)
 - [Dataset licensing](./dataset-licensing.md)
