@@ -83,5 +83,8 @@ jobs:
         if: ${{ steps.changesets.outputs.hasChangesets == 'false' && (github.event_name == 'push' || inputs.publish == 'true') }}
         run: pnpm release
         env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_ACCESS: "public"
           NPM_CONFIG_PROVENANCE: "true"
+          PNPM_CONFIG_ACCESS: "public"
           PNPM_CONFIG_PROVENANCE: "true"
