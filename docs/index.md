@@ -11,6 +11,7 @@ package boundaries required for MapLibre, NestJS/PostGIS, generators, and CLI to
 - [Product requirements](./prd.md)
 - [H3 comparison](./h3-comparison.md)
 - [Risk register](./risk-register.md)
+- [Release governance](./release-governance.md)
 - [Roadmap](./roadmap.md)
 - [Benchmarks](./benchmarks.md)
 - [NestJS and PostGIS](./nestjs-postgis.md)

@@ -5,6 +5,7 @@ repository for a stable release without publishing packages automatically.
 
 The master sprint checklist is the ongoing source of truth for completed evidence, repo-owned
 hardening branches, external release handoff, and post-1.0 roadmap work.
+Release governance checks are tracked in [release governance](./release-governance.md).
 
 ## Branch Scope
 
@@ -93,9 +94,19 @@ Recorded on 2026-07-14 for `checklist/master-adoption`:
 - `docs/sprint-checklist.md` now contains the master sprint checklist.
 - Remaining unchecked items are classified as repo-owned hardening, external release handoff, or
   post-1.0 roadmap work.
-- The next repo-owned branches are `hardening/release-governance`,
-  `hardening/tests-benchmarks`, `hardening/adapters-cli`, and `hardening/postgis-openapi`.
+- The remaining repo-owned branches are `hardening/release-quality` and
+  `hardening/runtime-integrations`.
 - Branch verification passed: `pnpm format:check` and `pnpm verify`.
+
+## Release Quality Verification
+
+Recorded on 2026-07-14 for `hardening/release-quality`:
+
+- `pnpm package:boundaries` is part of `pnpm verify`.
+- `pnpm verify` passed.
+- `pnpm bench` passed and refreshed dataset-load benchmark evidence.
+- `pnpm bench:memory` passed and recorded deterministic 10K fixture heap deltas.
+- The remaining repo-owned branch is `hardening/runtime-integrations`.
 
 ## Triage And Security
 

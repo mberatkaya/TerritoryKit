@@ -49,6 +49,89 @@ describe("createTerritoryEngine", () => {
     );
   });
 
+  it("keeps indexed and brute-force grid lookups equivalent for random coordinates", () => {
+    const rows = 10;
+    const columns = 11;
+    const cellSize = 0.05;
+    const dataset = createSyntheticGridDataset({ rows, columns, cellSize });
+    const indexedEngine = createTerritoryEngine({ dataset });
+    const bruteForceEngine = createTerritoryEngine({
+      dataset,
+      debug: { bruteForceLookup: true }
+    });
+
+    fc.assert(
+      fc.property(
+        fc.double({ min: 0, max: rows * cellSize, noNaN: true }),
+        fc.double({ min: 0, max: columns * cellSize, noNaN: true }),
+        (lat, lng) => {
+          expect(indexedEngine.latLngToZone({ lat, lng }, { level: 0 })).toBe(
+            bruteForceEngine.latLngToZone({ lat, lng }, { level: 0 })
+          );
+        }
+      ),
+      { numRuns: 100 }
+    );
+  });
+
+  it("matches random polygon rectangles to visible grid cells by center containment", () => {
+    const rows = 8;
+    const columns = 9;
+    const cellSize = 0.1;
+    const inset = cellSize / 10;
+    const dataset = createSyntheticGridDataset({ rows, columns, cellSize });
+    const engine = createTerritoryEngine({ dataset });
+
+    fc.assert(
+      fc.property(
+        fc.integer({ min: 0, max: rows - 1 }),
+        fc.integer({ min: 0, max: rows - 1 }),
+        fc.integer({ min: 0, max: columns - 1 }),
+        fc.integer({ min: 0, max: columns - 1 }),
+        (firstRow, secondRow, firstColumn, secondColumn) => {
+          const minRow = Math.min(firstRow, secondRow);
+          const maxRow = Math.max(firstRow, secondRow);
+          const minColumn = Math.min(firstColumn, secondColumn);
+          const maxColumn = Math.max(firstColumn, secondColumn);
+          const west = minColumn * cellSize + inset;
+          const south = minRow * cellSize + inset;
+          const east = (maxColumn + 1) * cellSize - inset;
+          const north = (maxRow + 1) * cellSize - inset;
+          const expectedIds = dataset.zones
+            .filter((zone) => {
+              const [lng, lat] = zone.center;
+
+              return lng >= west && lng <= east && lat >= south && lat <= north;
+            })
+            .map((zone) => zone.id)
+            .sort();
+
+          const matchedIds = engine
+            .polygonToZones(
+              {
+                type: "Polygon",
+                coordinates: [
+                  [
+                    [west, south],
+                    [east, south],
+                    [east, north],
+                    [west, north],
+                    [west, south]
+                  ]
+                ]
+              },
+              { level: 0, mode: "contains-center" }
+            )
+            .map((zone) => zone.id)
+            .sort();
+
+          expect(matchedIds).toEqual(expectedIds);
+        }
+      ),
+      { numRuns: 100 }
+    );
+  });
+
   it("supports a debug brute-force spatial lookup path", () => {
     const engine = createTerritoryEngine({
       dataset: createSampleTerritoryDataset(),
