@@ -4,6 +4,7 @@ import type {
   TerritoryAdjacencyArtifact,
   TerritoryDataset,
   TerritoryGeometry,
+  TerritorySemanticAdminType,
   TerritoryZone
 } from "@territory-kit/dataset";
 
@@ -48,11 +49,14 @@ export interface TerritoryCountryLicensePolicy {
 export interface TerritoryCountryLevelConfig {
   adminLevel: TerritoryAdminLevel;
   expectedLocalTypes: readonly string[];
+  semanticType: TerritorySemanticAdminType;
+  label?: string;
   sourceNameProperty?: string;
   sourceIdProperty?: string;
   sourceCodeProperties?: readonly string[];
   sourceParentProperties?: readonly string[];
   required: boolean;
+  reviewRequired?: boolean;
 }
 
 export interface TerritoryCountryDatasetConfig {
@@ -66,6 +70,9 @@ export interface TerritoryCountryDatasetConfig {
   loaderPackageName: string;
   requestedLevels: readonly TerritoryAdminLevel[];
   levelMappings: Partial<Record<TerritoryAdminLevel, TerritoryCountryLevelConfig>>;
+  localeNames?: Record<string, string>;
+  notes?: string[];
+  reviewRequired?: boolean;
   identityStrategy: TerritoryIdentityStrategyConfig;
   hierarchyStrategy: TerritoryHierarchyStrategyConfig;
   qualityPolicy: TerritoryCountryQualityPolicy;

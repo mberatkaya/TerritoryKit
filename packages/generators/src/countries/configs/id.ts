@@ -12,5 +12,10 @@ export const indonesiaCountryConfig: TerritoryCountryDatasetConfig = createPilot
     ADM0: ["country"],
     ADM1: ["province", "administrative-unit"],
     ADM2: ["regency-or-city-equivalent", "administrative-unit"]
+  },
+  semanticTypes: {
+    ADM0: "country",
+    ADM1: "province",
+    ADM2: "district"
   }
 });

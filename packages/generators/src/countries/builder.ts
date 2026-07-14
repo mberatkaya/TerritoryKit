@@ -546,10 +546,18 @@ function buildLevelZones(input: {
       ...(input.sourceDatasetVersion ? { sourceDatasetVersion: input.sourceDatasetVersion } : {})
     });
     parentKeyByFeature.set(feature.sourceId ?? identity.territoryId, identity.territoryId);
+    const levelConfig = input.config.levelMappings[input.level];
     const zone: TerritoryZone = {
       id: identity.territoryId,
       datasetId: `${input.config.datasetId}-${input.level.toLowerCase()}`,
+      countryCode: input.config.countryCodeAlpha2,
       level: Number(input.level.slice(3)),
+      sourceAdminLevel: input.level,
+      semanticType: levelConfig?.semanticType ?? "unknown",
+      name: feature.name,
+      ...(input.config.defaultLocale && input.config.defaultLocale !== "en"
+        ? { localName: feature.name }
+        : {}),
       neighborIds: [],
       geometry: feature.geometry,
       center: computeGeometryCenter(feature.geometry),
@@ -575,8 +583,7 @@ function buildLevelZones(input: {
           nameProvenance: {
             default: {
               value: feature.name,
-              sourceProperty:
-                input.config.levelMappings[input.level]?.sourceNameProperty ?? "shapeName"
+              sourceProperty: levelConfig?.sourceNameProperty ?? "shapeName"
             }
           }
         }

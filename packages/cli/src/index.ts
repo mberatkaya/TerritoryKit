@@ -138,7 +138,7 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
       return runCache(argv.slice(1));
     }
 
-    if (command === "source") {
+    if (command === "source" || command === "sources") {
       return runSource(argv.slice(1));
     }
 
@@ -936,6 +936,10 @@ async function runDataset(args: string[]): Promise<number> {
     return runDatasetListInstalled(args.slice(1));
   }
 
+  if (subcommand === "coverage") {
+    return runDatasetCoverage(args.slice(1));
+  }
+
   if (subcommand !== "build") {
     printJson({
       ok: false,
@@ -1029,6 +1033,58 @@ async function runDataset(args: string[]): Promise<number> {
       : { issues: result.issues })
   });
   return result.ok ? 0 : 1;
+}
+
+async function runDatasetCoverage(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const coveragePath = getFlag(flags, "input") ?? "datasets/registry/coverage.json";
+
+  try {
+    const coverage = await readCoverageRegistry(coveragePath, flags.has("input"));
+
+    if (flags.has("json")) {
+      printJson({
+        ok: true,
+        command: "dataset coverage",
+        data: coverage
+      });
+    } else {
+      printDatasetCoverageSummary(coverage);
+    }
+
+    return 0;
+  } catch (error) {
+    printJson({
+      ok: false,
+      command: "dataset coverage",
+      issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+    });
+    return 1;
+  }
+}
+
+async function readCoverageRegistry(inputPath: string, explicit: boolean): Promise<unknown> {
+  if (explicit) {
+    return readJson(inputPath);
+  }
+
+  const candidates = [
+    inputPath,
+    join(process.cwd(), inputPath),
+    join(process.cwd(), "..", inputPath),
+    join(process.cwd(), "..", "..", inputPath)
+  ];
+  let lastError: unknown;
+
+  for (const candidate of candidates) {
+    try {
+      return await readJson(candidate);
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError instanceof Error ? lastError : new Error(`Unable to read ${inputPath}.`);
 }
 
 async function runRender(args: string[]): Promise<number> {
@@ -1583,30 +1639,43 @@ async function runSource(args: string[]): Promise<number> {
     return 0;
   }
 
-  if (subcommand === "info") {
-    if (!sourceId || sourceId === "--help" || sourceId === "-h") {
+  if (subcommand === "info" || subcommand === "inspect") {
+    const inspectedSourceId =
+      subcommand === "inspect" ? (getFlag(flags, "provider") ?? sourceId) : sourceId;
+
+    if (!inspectedSourceId || inspectedSourceId === "--help" || inspectedSourceId === "-h") {
       printSourceInfoHelp();
-      return sourceId ? 0 : 1;
+      return inspectedSourceId ? 0 : 1;
     }
 
     try {
-      const description = getTerritorySourceAdapter(sourceId).describe();
+      const description = getTerritorySourceAdapter(inspectedSourceId).describe();
+      const inspectRequest = {
+        ...(getFlag(flags, "country") ? { country: getFlag(flags, "country") } : {}),
+        ...(getFlag(flags, "level") ? { level: getFlag(flags, "level") } : {})
+      };
 
       if (json) {
         printJson({
           ok: true,
-          command: "source info",
-          data: description
+          command: subcommand === "inspect" ? "sources inspect" : "source info",
+          data: {
+            ...description,
+            ...(Object.keys(inspectRequest).length > 0 ? { request: inspectRequest } : {})
+          }
         });
       } else {
         console.log(formatSourceDescription(description));
+        if (Object.keys(inspectRequest).length > 0) {
+          console.log(`Request: ${JSON.stringify(inspectRequest)}`);
+        }
       }
 
       return 0;
     } catch (error) {
       printJson({
         ok: false,
-        command: "source info",
+        command: subcommand === "inspect" ? "sources inspect" : "source info",
         issues: [
           createCliIssue(error instanceof Error ? error.message : String(error), {
             code: "SOURCE_ADAPTER_NOT_FOUND"
@@ -2991,6 +3060,34 @@ function readDetailFlags(input: string): NaturalEarthAdm0Detail[] | undefined {
   return undefined;
 }
 
+function printDatasetCoverageSummary(input: unknown): void {
+  if (!isRecordValue(input) || !isRecordValue(input.summary)) {
+    console.log("Coverage registry is missing a summary.");
+    return;
+  }
+
+  const totalCountries = input.summary.totalCountries;
+  const levels = isRecordValue(input.summary.levels) ? input.summary.levels : {};
+
+  console.log(`Countries: ${typeof totalCountries === "number" ? totalCountries : "unknown"}`);
+
+  for (const [level, rawStatuses] of Object.entries(levels)) {
+    if (!isRecordValue(rawStatuses)) {
+      continue;
+    }
+
+    const available = Number(rawStatuses.available ?? 0);
+    const partial = Number(rawStatuses.partial ?? 0);
+    const unavailable = Number(rawStatuses.unavailable ?? 0);
+    const notReviewed = Number(rawStatuses["not-reviewed"] ?? 0);
+    const licenseRestricted = Number(rawStatuses["license-restricted"] ?? 0);
+
+    console.log(
+      `${level.padEnd(14)} available=${available} partial=${partial} unavailable=${unavailable} not-reviewed=${notReviewed} license-restricted=${licenseRestricted}`
+    );
+  }
+}
+
 function printJson(payload: unknown): void {
   console.log(JSON.stringify(payload, null, 2));
 }
@@ -3015,9 +3112,9 @@ Commands:
   adjacency  Build, validate, inspect, or legacy-infer territory adjacency
   render     Build, validate, inspect, or compare render artifacts
   benchmark  Run or compare fixture/local-real benchmark results
-  country    Build and inspect pilot country dataset artifacts
+  country    Build and inspect configured country dataset artifacts
   import     Import a GeoJSON file or source adapter artifact
-  source     List and inspect source adapters
+  source     List and inspect source adapters (alias: sources)
   dataset    Build curated datasets and install registry artifacts
   cache      List, verify, or clear installed dataset cache artifacts
   simplify   Emit a deterministic no-op simplification result for pipeline wiring
@@ -3043,8 +3140,8 @@ function printCountryHelp(): void {
   console.log(`territory country <command>
 
 Commands:
-  list                         List configured pilot countries
-  info <country>               Show pilot country config
+  list                         List configured countries
+  info <country>               Show country config
   source lock <country>        Resolve and lock source artifacts
   source verify <lock.json>    Re-fetch/re-read locked source artifacts
   build <country>              Build country dataset artifacts from a source lock
@@ -3226,10 +3323,13 @@ function printSourceHelp(): void {
   console.log(`territory source <command>
 
 Commands:
-  list                 List registered source adapters
-  info <source-id>     Show source adapter details
+  list                        List registered source adapters
+  info <source-id>            Show source adapter details
+  inspect --provider <id>     Inspect a provider for a country/level request
 
 Options:
+  --country <ISO2>
+  --level <ADM0|ADM1|ADM2>
   --json               Emit machine-readable JSON`);
 }
 
@@ -3238,7 +3338,8 @@ function printSourceInfoHelp(): void {
 
 Examples:
   territory source info natural-earth
-  territory source info geoboundaries --json`);
+  territory source info geoboundaries --json
+  territory sources inspect --provider geoboundaries --country TR --level ADM2 --json`);
 }
 
 function printImportHelp(): void {
@@ -3258,6 +3359,7 @@ function printDatasetHelp(): void {
 
 Commands:
   build            Build a curated TerritoryKit dataset artifact
+  coverage         Print generated global coverage registry summary
   search           Search registry datasets
   info             Show registry dataset metadata
   install          Install dataset artifacts into the local cache

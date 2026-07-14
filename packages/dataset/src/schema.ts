@@ -54,7 +54,69 @@ export const territoryDatasetJsonSchema = {
           "bbox",
           "properties"
         ],
-        additionalProperties: false
+        additionalProperties: false,
+        properties: {
+          id: { type: "string", minLength: 1 },
+          datasetId: { type: "string", minLength: 1 },
+          countryCode: { pattern: "^[A-Za-z]{2}$", type: "string" },
+          level: { type: "integer", minimum: 0 },
+          sourceAdminLevel: { type: "string", minLength: 1 },
+          semanticType: {
+            enum: [
+              "world",
+              "country",
+              "state",
+              "province",
+              "region",
+              "governorate",
+              "prefecture",
+              "county",
+              "district",
+              "city",
+              "municipality",
+              "borough",
+              "ward",
+              "neighbourhood",
+              "village",
+              "local",
+              "game-region",
+              "unknown"
+            ]
+          },
+          name: { type: "string", minLength: 1 },
+          localName: { type: "string", minLength: 1 },
+          parentId: { type: "string", minLength: 1 },
+          childIds: {
+            type: "array",
+            items: { type: "string", minLength: 1 }
+          },
+          neighborIds: {
+            type: "array",
+            items: { type: "string", minLength: 1 }
+          },
+          geometry: {
+            type: "object"
+          },
+          center: {
+            type: "array",
+            prefixItems: [{ type: "number" }, { type: "number" }],
+            minItems: 2
+          },
+          bbox: {
+            type: "array",
+            prefixItems: [
+              { type: "number" },
+              { type: "number" },
+              { type: "number" },
+              { type: "number" }
+            ],
+            minItems: 4,
+            maxItems: 4
+          },
+          properties: {
+            type: "object"
+          }
+        }
       }
     }
   }

@@ -4,11 +4,32 @@ import type {
   TerritoryGeometryDetailLevel,
   TerritoryGlobalDatasetManifest,
   TerritoryGlobalMetadata,
+  TerritorySemanticAdminType,
   TerritorySourceMetadata
 } from "./types.js";
 
 export const TERRITORY_ADMIN_LEVELS = ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"] as const;
 export const TERRITORY_GEOMETRY_DETAIL_LEVELS = ["low", "medium", "high", "source"] as const;
+export const TERRITORY_SEMANTIC_ADMIN_TYPES = [
+  "world",
+  "country",
+  "state",
+  "province",
+  "region",
+  "governorate",
+  "prefecture",
+  "county",
+  "district",
+  "city",
+  "municipality",
+  "borough",
+  "ward",
+  "neighbourhood",
+  "village",
+  "local",
+  "game-region",
+  "unknown"
+] as const satisfies readonly TerritorySemanticAdminType[];
 
 export interface TerritoryGlobalIdParts {
   countryCode: string;

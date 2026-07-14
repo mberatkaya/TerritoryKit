@@ -20,6 +20,8 @@ export {
   hasTerritoryCountryConfig,
   listTerritoryCountryConfigs
 } from "./registry.js";
+export { ISO_3166_COUNTRIES, getIso3166CountryEntry } from "./iso3166.js";
+export type { TerritoryIsoCountryEntry } from "./iso3166.js";
 export {
   acquireBoundarySourceArtifact,
   computeTerritoryCountrySourceLockHash,

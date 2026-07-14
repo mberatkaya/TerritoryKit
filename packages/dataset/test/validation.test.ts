@@ -63,6 +63,48 @@ describe("validateTerritoryDataset", () => {
     expect(dataset.zones).toHaveLength(2);
   });
 
+  it("preserves additive semantic zone metadata", () => {
+    const dataset = validDataset();
+    dataset.zones[1] = {
+      ...dataset.zones[1]!,
+      countryCode: "TR",
+      sourceAdminLevel: "ADM1",
+      semanticType: "province",
+      name: "Istanbul",
+      localName: "Istanbul"
+    };
+
+    const loadedDataset = loadTerritoryDataset(dataset);
+
+    expect(loadedDataset.zones[1]).toEqual(
+      expect.objectContaining({
+        countryCode: "TR",
+        sourceAdminLevel: "ADM1",
+        semanticType: "province",
+        name: "Istanbul",
+        localName: "Istanbul"
+      })
+    );
+  });
+
+  it("rejects unknown semantic zone metadata", () => {
+    const dataset = validDataset();
+    dataset.zones[1] = {
+      ...dataset.zones[1]!,
+      semanticType: "city-but-not-really" as never
+    };
+
+    const result = validateTerritoryDataset(dataset);
+
+    expect(result.ok).toBe(false);
+    expect(result.issues).toContainEqual(
+      expect.objectContaining({
+        code: "ZONE_FIELD",
+        path: "$.zones[1].semanticType"
+      })
+    );
+  });
+
   it("rejects duplicate ids", () => {
     const dataset = validDataset();
     dataset.zones[1] = { ...dataset.zones[1]!, id: "root" };

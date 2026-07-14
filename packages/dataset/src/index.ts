@@ -32,6 +32,7 @@ export { TerritoryDatasetValidationError } from "./errors.js";
 export {
   TERRITORY_ADMIN_LEVELS,
   TERRITORY_GEOMETRY_DETAIL_LEVELS,
+  TERRITORY_SEMANTIC_ADMIN_TYPES,
   createTerritoryGlobalId,
   normalizeTerritoryAdminLevel,
   normalizeTerritoryCountryCode,
@@ -94,6 +95,7 @@ export type {
   TerritoryGlobalMetadata,
   TerritoryNames,
   TerritorySchemaVersion,
+  TerritorySemanticAdminType,
   TerritorySourceMetadata,
   TerritoryValidationCode,
   TerritoryValidationIssue,

@@ -1,8 +1,9 @@
 # Global Datasets
 
 Global datasets extend `territory-schema@1` without changing its required runtime shape. Existing
-loaders still read `{ manifest, zones }`; global datasets add stricter manifest metadata and store
-zone metadata under `zone.properties.territory`.
+loaders still read `{ manifest, zones }`; global datasets add stricter manifest metadata, preserve
+source metadata under `zone.properties.territory`, and may also expose frequently used metadata as
+top-level optional zone fields.
 
 ## Manifest Contract
 
@@ -65,12 +66,25 @@ if (!result.ok) {
 ## Zone Metadata
 
 Global zone metadata lives in `zone.properties.territory` to preserve schema-v1 compatibility.
+New artifacts should also populate these optional top-level fields when the source/config knows
+them:
+
+- `countryCode`
+- `sourceAdminLevel`
+- `semanticType`
+- `name`
+- `localName`
 
 ```json
 {
   "id": "tr:adm2:fatih",
   "datasetId": "turkey-admin",
+  "countryCode": "TR",
   "level": 2,
+  "sourceAdminLevel": "ADM2",
+  "semanticType": "district",
+  "name": "Fatih",
+  "localName": "Fatih",
   "properties": {
     "territory": {
       "adminLevel": "ADM2",
