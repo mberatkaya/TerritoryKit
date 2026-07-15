@@ -1,0 +1,103 @@
+{
+  "country": "ES",
+  "levels": ["ADM1", "ADM2"],
+  "sourceFeatureCountByLevel": {
+    "ADM1": 19,
+    "ADM2": 52
+  },
+  "generatedIdCount": 72,
+  "collisionCountBeforeFix": 18,
+  "collisionCountAfterFix": 0,
+  "duplicateOfficialCodeWarnings": 18,
+  "strategyUsed": "When provider official/source code produced duplicate territory IDs, append a deterministic source-derived disambiguator using source id, raw feature id, parent id, local type, source name, representative point grid, and bbox grid.",
+  "fallbackIdsUsed": [
+    {
+      "territoryId": "es:adm1:esp-25490228b14384488423733-administrative-unit-comunitat-valenciana-pt-0-55463-39-40139-bbox-1-52894-37-84381-0-68864-40-78863",
+      "name": "Comunitat Valenciana"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b18225280299410-administrative-unit-ciudad-autonoma-de-melilla-pt-2-93293-35-28675-bbox-4-30122-35-17062-2-41869-35-32030",
+      "name": "Ciudad Autónoma de Melilla"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b24314700704920-administrative-unit-principado-de-asturias-pt-5-99333-43-29236-bbox-7-18249-42-88255-4-51129-43-66455",
+      "name": "Principado de Asturias"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b26609846683583-administrative-unit-illes-balears-pt-2-91235-39-57402-bbox-1-15874-38-64039-4-32778-40-09457",
+      "name": "Illes Balears"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b27950689864224-administrative-unit-region-de-murcia-pt-1-48513-38-00204-bbox-2-34441-37-37376-0-68810-38-75509",
+      "name": "Región de Murcia"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b33348776534112-administrative-unit-comunidad-foral-de-navarra-pt-1-64608-42-66718-bbox-2-50008-41-90989-0-72395-43-31479",
+      "name": "Comunidad Foral de Navarra"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b37069901476290-administrative-unit-cantabria-pt-4-02938-43-19727-bbox-4-85173-42-75808-3-14963-43-51369",
+      "name": "Cantabria"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b43154843394848-administrative-unit-comunidad-de-madrid-pt-3-71697-40-49515-bbox-4-57908-39-88472-3-05298-41-16570",
+      "name": "Comunidad de Madrid"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b48808997991554-administrative-unit-ciudad-autonoma-de-ceuta-pt-5-34337-35-89380-bbox-5-42179-35-87074-5-27829-35-91798",
+      "name": "Ciudad Autónoma de Ceuta"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b56567998760255-administrative-unit-pais-vasco-euskadi-pt-2-62117-43-03231-bbox-3-45015-42-47225-1-72937-43-45696",
+      "name": "País Vasco/Euskadi"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b61325010384209-administrative-unit-aragon-pt-0-66021-41-52007-bbox-2-17367-39-84678-0-77131-42-92450",
+      "name": "Aragón"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b80227492032103-administrative-unit-cataluna-catalunya-pt-1-52881-41-79839-bbox-0-15918-40-52305-3-32379-42-86145",
+      "name": "Cataluña/Catalunya"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b81978515469630-administrative-unit-la-rioja-pt-2-51728-42-27510-bbox-3-13427-41-91914-1-67901-42-64426",
+      "name": "La Rioja"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b84620027724461-administrative-unit-canarias-pt-16-61490-28-01941-bbox-18-16081-27-63772-13-33496-29-41601",
+      "name": "Canarias"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b8471183517505-administrative-unit-castilla-y-leon-pt-4-78180-41-75417-bbox-7-07705-40-08245-1-77537-43-23817",
+      "name": "Castilla y León"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b86140490400531-administrative-unit-extremadura-pt-6-15073-39-19150-bbox-7-54502-37-94103-4-64776-40-48660",
+      "name": "Extremadura"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b88831207743232-administrative-unit-andalucia-pt-4-57565-37-46327-bbox-7-52285-35-93767-1-63012-38-72909",
+      "name": "Andalucía"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b94236519555378-administrative-unit-galicia-pt-7-91071-42-75688-bbox-9-30105-41-80723-6-73395-43-79136",
+      "name": "Galicia"
+    },
+    {
+      "territoryId": "es:adm1:esp-25490228b94630301010512-administrative-unit-castilla-la-mancha-pt-3-00462-39-58099-bbox-5-40611-38-02244-0-91579-41-32763",
+      "name": "Castilla-La Mancha"
+    }
+  ],
+  "aliasesGenerated": [],
+  "determinismTest": {
+    "repeatedBuildIdsIdentical": "verified-by-deterministic-input-key; full repeated-build check pending final verification",
+    "featureOrderIndependent": "covered by source-derived key design; fixture test added in code verification phase",
+    "outputDirectoryIndependent": "territory IDs do not include output paths"
+  },
+  "outcomeAfterFix": "built-with-warnings",
+  "loaderStatus": {
+    "ADM1": "passed",
+    "ADM2": "passed"
+  },
+  "remainingErrors": []
+}

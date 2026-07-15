@@ -1,0 +1,2610 @@
+{
+  "countriesAttempted": 7,
+  "countriesFailed": 3,
+  "countriesSucceeded": 4,
+  "generatedAt": "2026-07-15T12:21:24.066Z",
+  "levels": ["ADM1", "ADM2"],
+  "outcomes": {
+    "adjacency-failed": 0,
+    "built": 0,
+    "built-with-warnings": 4,
+    "CRS-error": 0,
+    "download-error": 0,
+    "extraction-error": 0,
+    "geometry-repair-failed": 0,
+    "hierarchy-failed": 0,
+    "index-failed": 0,
+    "licence-restricted": 0,
+    "loader-smoke-failed": 0,
+    "mapping-review-required": 0,
+    "not-applicable": 0,
+    "parse-error": 0,
+    "partial": 3,
+    "performance-deferred": 0,
+    "provider-error": 0,
+    "provider-unsupported": 0,
+    "source-unavailable": 0,
+    "stable-id-failed": 0,
+    "transform-error": 0,
+    "validation-failed": 0
+  },
+  "reportVersion": "1",
+  "results": [
+    {
+      "alpha3": "BLR",
+      "country": "BY",
+      "finishedAt": "2026-07-15T12:21:24.066Z",
+      "issueCount": 75,
+      "issues": [
+        {
+          "code": "PARENT_AMBIGUOUS_RESOLVED",
+          "message": "Multiple spatial parent candidates covered this child; chose the most specific parent by bbox area.",
+          "severity": "warning",
+          "zoneId": "by:adm2:67162791b57724394311820"
+        },
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 7
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM2",
+          "message": "ADM2 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 65
+          },
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 7,
+          "issueCodes": [
+            "MAPPING_REVIEW_REQUIRED",
+            "PARENT_AMBIGUOUS_RESOLVED",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "featureCount": 118,
+          "issueCodes": [
+            "MAPPING_REVIEW_REQUIRED",
+            "PARENT_AMBIGUOUS_RESOLVED",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        }
+      ],
+      "outcome": "built-with-warnings",
+      "outputPath": "datasets/generated/countries/BY",
+      "phaseTimings": [
+        {
+          "country": "BY",
+          "durationMs": 1189,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 0,
+          "inputBytes": 1393580,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 0,
+          "inputBytes": 1393580,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 1,
+          "inputBytes": 10913,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 0,
+          "inputBytes": 10913,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 1,
+          "inputBytes": 10913,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 84,
+          "featureCount": 1,
+          "inputBytes": 10913,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 10913,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 2,
+          "inputBytes": 255376,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 0,
+          "inputBytes": 255376,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 1,
+          "inputBytes": 255376,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 65,
+          "featureCount": 7,
+          "inputBytes": 255376,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 0,
+          "featureCount": 7,
+          "inputBytes": 255376,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 5,
+          "inputBytes": 1138204,
+          "level": "ADM2",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 0,
+          "inputBytes": 1138204,
+          "level": "ADM2",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 5,
+          "inputBytes": 1138204,
+          "level": "ADM2",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 119,
+          "featureCount": 118,
+          "inputBytes": 1138204,
+          "level": "ADM2",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 1,
+          "featureCount": 118,
+          "inputBytes": 1138204,
+          "level": "ADM2",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 493,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 14,
+          "featureCount": 126,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 116,
+          "featureCount": 126,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 0,
+          "featureCount": 126,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 129,
+          "featureCount": 126,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 0,
+          "inputBytes": 16412834,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 1349,
+          "inputBytes": 16412834,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 176,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "BY",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/BY/sources.lock.json",
+      "startedAt": "2026-07-15T12:21:24.066Z"
+    },
+    {
+      "alpha3": "ETH",
+      "country": "ET",
+      "finishedAt": "2026-07-15T12:21:24.066Z",
+      "issueCount": 45,
+      "issues": [
+        {
+          "code": "PARENT_AMBIGUOUS_RESOLVED",
+          "message": "Multiple spatial parent candidates covered this child; chose the most specific parent by bbox area.",
+          "severity": "warning",
+          "zoneId": "et:adm2:57463737b5378229891244"
+        },
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 6
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM2",
+          "message": "ADM2 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 36
+          },
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 11,
+          "issueCodes": [
+            "MAPPING_REVIEW_REQUIRED",
+            "PARENT_AMBIGUOUS_RESOLVED",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "featureCount": 74,
+          "issueCodes": [
+            "MAPPING_REVIEW_REQUIRED",
+            "PARENT_AMBIGUOUS_RESOLVED",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        }
+      ],
+      "outcome": "built-with-warnings",
+      "outputPath": "datasets/generated/countries/ET",
+      "phaseTimings": [
+        {
+          "country": "ET",
+          "durationMs": 1199,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 0,
+          "inputBytes": 1271639,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 0,
+          "inputBytes": 1271639,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 3,
+          "inputBytes": 80437,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 0,
+          "inputBytes": 80437,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 1,
+          "inputBytes": 80437,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 79,
+          "featureCount": 1,
+          "inputBytes": 80437,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 80437,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 2,
+          "inputBytes": 391053,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 0,
+          "inputBytes": 391053,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 1,
+          "inputBytes": 391053,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 87,
+          "featureCount": 11,
+          "inputBytes": 391053,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 0,
+          "featureCount": 11,
+          "inputBytes": 391053,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 2,
+          "inputBytes": 880586,
+          "level": "ADM2",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 0,
+          "inputBytes": 880586,
+          "level": "ADM2",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 2,
+          "inputBytes": 880586,
+          "level": "ADM2",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 893,
+          "featureCount": 74,
+          "inputBytes": 880586,
+          "level": "ADM2",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 0,
+          "featureCount": 74,
+          "inputBytes": 880586,
+          "level": "ADM2",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 988,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 10,
+          "featureCount": 86,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 157,
+          "featureCount": 86,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 0,
+          "featureCount": 86,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 127,
+          "featureCount": 86,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 0,
+          "inputBytes": 15654896,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 39,
+          "inputBytes": 15654896,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 176,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "ET",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/ET/sources.lock.json",
+      "startedAt": "2026-07-15T12:21:24.066Z"
+    },
+    {
+      "alpha3": "GUM",
+      "country": "GU",
+      "finishedAt": "2026-07-15T12:21:24.066Z",
+      "issueCount": 28,
+      "issues": [
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b17205204900927"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b20896286289421"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b26973637010941"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b27536991093250"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b28089182733682"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b33377803133936"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b39660846480906"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b46824849398692"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b60030225466541"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b63444042999452"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b67534366547029"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b7245743220793"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b72833595516841"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b74833203647496"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b76375240183470"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b91363375193449"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b92026365900832"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b97114790292533"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "gu:adm2:77769853b98386396694239"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM1",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM1",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        },
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM2",
+          "message": "ADM2 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 6
+          },
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        }
+      ],
+      "levels": [
+        {
+          "issueCodes": [
+            "COUNTRY_LEVEL_UNAVAILABLE",
+            "PARENT_LEVEL_EMPTY",
+            "SOURCE_METADATA_INVALID"
+          ],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        },
+        {
+          "featureCount": 19,
+          "issueCodes": [
+            "MAPPING_REVIEW_REQUIRED",
+            "PARENT_LEVEL_EMPTY",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/GU",
+      "phaseTimings": [
+        {
+          "country": "GU",
+          "durationMs": 447,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 0,
+          "inputBytes": 22061,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 0,
+          "inputBytes": 22061,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 1,
+          "inputBytes": 14014,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 0,
+          "inputBytes": 14014,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 0,
+          "inputBytes": 14014,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 71,
+          "featureCount": 1,
+          "inputBytes": 14014,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 14014,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 1,
+          "inputBytes": 22061,
+          "level": "ADM2",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 0,
+          "inputBytes": 22061,
+          "level": "ADM2",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 1,
+          "inputBytes": 22061,
+          "level": "ADM2",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 51,
+          "featureCount": 19,
+          "inputBytes": 22061,
+          "level": "ADM2",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 0,
+          "featureCount": 19,
+          "inputBytes": 22061,
+          "level": "ADM2",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 0,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 0,
+          "featureCount": 20,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 2,
+          "featureCount": 20,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 0,
+          "featureCount": 20,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 2,
+          "featureCount": 20,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 0,
+          "inputBytes": 694573,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 5,
+          "inputBytes": 694573,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 3,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "GU",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/GU/sources.lock.json",
+      "startedAt": "2026-07-15T12:21:24.066Z"
+    },
+    {
+      "alpha3": "IRQ",
+      "country": "IQ",
+      "finishedAt": "2026-07-15T12:21:24.066Z",
+      "issueCount": 57,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 8
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM2",
+          "message": "ADM2 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 47
+          },
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 18,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "featureCount": 101,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        }
+      ],
+      "outcome": "built-with-warnings",
+      "outputPath": "datasets/generated/countries/IQ",
+      "phaseTimings": [
+        {
+          "country": "IQ",
+          "durationMs": 2014,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 0,
+          "inputBytes": 616296,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 0,
+          "inputBytes": 616296,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 0,
+          "inputBytes": 28962,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 0,
+          "inputBytes": 28962,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 1,
+          "inputBytes": 28962,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 78,
+          "featureCount": 1,
+          "inputBytes": 28962,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 28962,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 142,
+          "inputBytes": 148896,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 0,
+          "inputBytes": 148896,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 0,
+          "inputBytes": 148896,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 65,
+          "featureCount": 18,
+          "inputBytes": 148896,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 0,
+          "featureCount": 18,
+          "inputBytes": 148896,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 1,
+          "inputBytes": 467400,
+          "level": "ADM2",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 0,
+          "inputBytes": 467400,
+          "level": "ADM2",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 1,
+          "inputBytes": 467400,
+          "level": "ADM2",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 76,
+          "featureCount": 101,
+          "inputBytes": 467400,
+          "level": "ADM2",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 0,
+          "featureCount": 101,
+          "inputBytes": 467400,
+          "level": "ADM2",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 70,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 5,
+          "featureCount": 120,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 21,
+          "featureCount": 120,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 0,
+          "featureCount": 120,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 31,
+          "featureCount": 120,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 0,
+          "inputBytes": 7902682,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 11,
+          "inputBytes": 7902682,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 19,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "IQ",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/IQ/sources.lock.json",
+      "startedAt": "2026-07-15T12:21:24.066Z"
+    },
+    {
+      "alpha3": "MLI",
+      "country": "ML",
+      "finishedAt": "2026-07-15T12:21:24.066Z",
+      "issueCount": 33,
+      "issues": [
+        {
+          "code": "PARENT_AMBIGUOUS_RESOLVED",
+          "message": "Multiple spatial parent candidates covered this child; chose the most specific parent by bbox area.",
+          "severity": "warning",
+          "zoneId": "ml:adm2:8926073b70420899930674"
+        },
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 4
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "RELATION_CONTAINS",
+          "level": "ADM1",
+          "message": "Rejected adjacency for 'ml:adm1:ml-2' and 'ml:adm1:ml-bko' because relation is contains.",
+          "severity": "warning"
+        },
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM2",
+          "message": "ADM2 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 25
+          },
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 9,
+          "issueCodes": [
+            "MAPPING_REVIEW_REQUIRED",
+            "PARENT_AMBIGUOUS_RESOLVED",
+            "QUALITY_SELF_INTERSECTION",
+            "RELATION_CONTAINS"
+          ],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "featureCount": 50,
+          "issueCodes": [
+            "MAPPING_REVIEW_REQUIRED",
+            "PARENT_AMBIGUOUS_RESOLVED",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        }
+      ],
+      "outcome": "built-with-warnings",
+      "outputPath": "datasets/generated/countries/ML",
+      "phaseTimings": [
+        {
+          "country": "ML",
+          "durationMs": 433,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 0,
+          "inputBytes": 824413,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 0,
+          "inputBytes": 824413,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 1,
+          "inputBytes": 162704,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 0,
+          "inputBytes": 162704,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 1,
+          "inputBytes": 162704,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 66,
+          "featureCount": 1,
+          "inputBytes": 162704,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 1,
+          "featureCount": 1,
+          "inputBytes": 162704,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 1,
+          "inputBytes": 295387,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 0,
+          "inputBytes": 295387,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 0,
+          "inputBytes": 295387,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 64,
+          "featureCount": 9,
+          "inputBytes": 295387,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 0,
+          "featureCount": 9,
+          "inputBytes": 295387,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 2,
+          "inputBytes": 529026,
+          "level": "ADM2",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 0,
+          "inputBytes": 529026,
+          "level": "ADM2",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 2,
+          "inputBytes": 529026,
+          "level": "ADM2",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 76,
+          "featureCount": 50,
+          "inputBytes": 529026,
+          "level": "ADM2",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 0,
+          "featureCount": 50,
+          "inputBytes": 529026,
+          "level": "ADM2",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 362,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 7,
+          "featureCount": 60,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 237,
+          "featureCount": 60,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 0,
+          "featureCount": 60,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 152,
+          "featureCount": 60,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 0,
+          "inputBytes": 11346238,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 15,
+          "inputBytes": 11346238,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 124,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "ML",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/ML/sources.lock.json",
+      "startedAt": "2026-07-15T12:21:24.066Z"
+    },
+    {
+      "alpha3": "MNP",
+      "country": "MP",
+      "finishedAt": "2026-07-15T12:21:24.066Z",
+      "issueCount": 11,
+      "issues": [
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "mp:adm2:39175420b24162802066299"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "mp:adm2:39175420b42755231479115"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "mp:adm2:39175420b64217482742742"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "mp:adm2:39175420b77088391070908"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM1",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM1",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        },
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM2",
+          "message": "ADM2 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 4
+          },
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        }
+      ],
+      "levels": [
+        {
+          "issueCodes": [
+            "COUNTRY_LEVEL_UNAVAILABLE",
+            "PARENT_LEVEL_EMPTY",
+            "SOURCE_METADATA_INVALID"
+          ],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        },
+        {
+          "featureCount": 4,
+          "issueCodes": [
+            "MAPPING_REVIEW_REQUIRED",
+            "PARENT_LEVEL_EMPTY",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/MP",
+      "phaseTimings": [
+        {
+          "country": "MP",
+          "durationMs": 512,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 0,
+          "inputBytes": 13215,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 0,
+          "inputBytes": 13215,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 1,
+          "inputBytes": 12067,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 0,
+          "inputBytes": 12067,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 0,
+          "inputBytes": 12067,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 65,
+          "featureCount": 1,
+          "inputBytes": 12067,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 12067,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 0,
+          "inputBytes": 13215,
+          "level": "ADM2",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 0,
+          "inputBytes": 13215,
+          "level": "ADM2",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 1,
+          "inputBytes": 13215,
+          "level": "ADM2",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 54,
+          "featureCount": 4,
+          "inputBytes": 13215,
+          "level": "ADM2",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 0,
+          "featureCount": 4,
+          "inputBytes": 13215,
+          "level": "ADM2",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 0,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 0,
+          "featureCount": 5,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 0,
+          "featureCount": 5,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 0,
+          "featureCount": 5,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 2,
+          "featureCount": 5,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 0,
+          "inputBytes": 461383,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 5,
+          "inputBytes": 461383,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 2,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "MP",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/MP/sources.lock.json",
+      "startedAt": "2026-07-15T12:21:24.066Z"
+    },
+    {
+      "alpha3": "PRI",
+      "country": "PR",
+      "finishedAt": "2026-07-15T12:21:24.066Z",
+      "issueCount": 110,
+      "issues": [
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b12204404308150"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b1223039681342"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b12754205522862"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b13421931783932"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b14079989067624"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b14965508281660"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b16977701319194"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b17072559885930"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b17453471751527"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b18263027351843"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b18801000784875"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b21184218191895"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b22166841242195"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b22305202508705"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b23731839572395"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b24410852555408"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b24763897648420"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b254490582873"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b26348414705735"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b26629522791293"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b28103012902602"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b29338824934020"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b29369551718499"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b30311265398207"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b33074408407079"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b33566817880086"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b34283188720428"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b35175802889516"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b35991649080507"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b36616514861103"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b36782575213222"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b37384670628479"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b37684321987765"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b39341524675779"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b40456711023422"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b40723553467953"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b41053706339825"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b42725289573863"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b43804230876127"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b44125592347050"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b44684662227535"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b4476069881606"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b49819301822346"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b52057892334666"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b56185542285992"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b56909324713626"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b57249745430969"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b58001941007009"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b64369847691903"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b65674201186595"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b67187557196313"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b67293545491700"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b68011232458605"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b71550850987381"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b72195961791628"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b73228350773325"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b73379646065034"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b73716222823884"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b74616121786134"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b75385712317101"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b75781996269938"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b77779311465946"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b80614899484924"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b81379947560815"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b83389329504851"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b87242959394677"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b88013752264410"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b88362750247815"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b91105509770544"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b91189931708887"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b91435435365169"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b91916522285611"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b94179162407819"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b95664633284712"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b96449576459370"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b96467798502033"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b97201459085327"
+        },
+        {
+          "code": "PARENT_LEVEL_EMPTY",
+          "message": "No parent level features are available.",
+          "severity": "warning",
+          "zoneId": "pr:adm2:32010507b98584278063898"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM0",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM0",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM1",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM1",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        },
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM2",
+          "message": "ADM2 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 27
+          },
+          "level": "ADM2",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        }
+      ],
+      "levels": [
+        {
+          "issueCodes": [
+            "COUNTRY_LEVEL_UNAVAILABLE",
+            "PARENT_LEVEL_EMPTY",
+            "SOURCE_METADATA_INVALID"
+          ],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        },
+        {
+          "featureCount": 78,
+          "issueCodes": [
+            "MAPPING_REVIEW_REQUIRED",
+            "PARENT_LEVEL_EMPTY",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/PR",
+      "phaseTimings": [
+        {
+          "country": "PR",
+          "durationMs": 436,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "PR",
+          "durationMs": 1,
+          "inputBytes": 196931,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "PR",
+          "durationMs": 0,
+          "inputBytes": 196931,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "PR",
+          "durationMs": 2,
+          "inputBytes": 196931,
+          "level": "ADM2",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "PR",
+          "durationMs": 0,
+          "inputBytes": 196931,
+          "level": "ADM2",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "PR",
+          "durationMs": 3,
+          "inputBytes": 196931,
+          "level": "ADM2",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "PR",
+          "durationMs": 91,
+          "featureCount": 78,
+          "inputBytes": 196931,
+          "level": "ADM2",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "PR",
+          "durationMs": 1,
+          "featureCount": 78,
+          "inputBytes": 196931,
+          "level": "ADM2",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "PR",
+          "durationMs": 0,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "PR",
+          "durationMs": 2,
+          "featureCount": 78,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "PR",
+          "durationMs": 32,
+          "featureCount": 78,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "PR",
+          "durationMs": 0,
+          "featureCount": 78,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "PR",
+          "durationMs": 13,
+          "featureCount": 78,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "PR",
+          "durationMs": 0,
+          "inputBytes": 4006201,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "PR",
+          "durationMs": 6,
+          "inputBytes": 4006201,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "PR",
+          "durationMs": 11,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "PR",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/PR/sources.lock.json",
+      "startedAt": "2026-07-15T12:21:24.066Z"
+    }
+  ]
+}

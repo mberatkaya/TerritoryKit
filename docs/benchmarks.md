@@ -64,11 +64,12 @@ automation can use `--allow-skip` to record an explicit skip instead of download
 
 ## Bundle Budget Notes
 
-Recorded on 2026-07-14 after the real adjacency artifact work:
+Recorded on 2026-07-15 after the global ADM1/ADM2 completion work:
 
-| Package      | ESM size        | Budget          | Reason                                      |
-| ------------ | --------------- | --------------- | ------------------------------------------- |
-| `dataset`    | `106,161 bytes` | `112,000 bytes` | Exact polygon relations and artifact index. |
-| `generators` | `117,522 bytes` | `122,000 bytes` | Adjacency build, validation, and I/O flow.  |
+| Package      | ESM size        | Budget          | Reason                                                 |
+| ------------ | --------------- | --------------- | ------------------------------------------------------ |
+| `dataset`    | `116,734 bytes` | `118,000 bytes` | Exact polygon relations and artifact index.            |
+| `generators` | `293,923 bytes` | `300,000 bytes` | Global ADM0-ADM2 build orchestration and source locks. |
+| `cli`        | `88,575 bytes`  | `92,000 bytes`  | Dataset build-all controls and coverage/report output. |
 
-The `core`, `cli`, `maplibre`, and `nestjs` packages remain within their previous bundle budgets.
+The `core`, `maplibre`, and `nestjs` packages remain within their previous bundle budgets.

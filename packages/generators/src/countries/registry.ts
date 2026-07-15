@@ -136,7 +136,8 @@ function createFallbackIsoCountryConfig(
         sourceCodeProperties: ["officialCode", "shapeISO", "shapeID"],
         sourceParentProperties: [],
         required: true,
-        reviewRequired: false
+        reviewRequired: false,
+        reviewStatus: "reviewed"
       },
       ADM1: {
         adminLevel: "ADM1",
@@ -148,7 +149,8 @@ function createFallbackIsoCountryConfig(
         sourceCodeProperties: ["officialCode", "shapeISO", "shapeID"],
         sourceParentProperties: ["parentShapeID", "shapeParentID", "parentSourceId"],
         required: false,
-        reviewRequired: true
+        reviewRequired: true,
+        reviewStatus: "mapping-review-required"
       },
       ADM2: {
         adminLevel: "ADM2",
@@ -160,7 +162,8 @@ function createFallbackIsoCountryConfig(
         sourceCodeProperties: ["officialCode", "shapeISO", "shapeID"],
         sourceParentProperties: ["parentShapeID", "shapeParentID", "parentSourceId"],
         required: false,
-        reviewRequired: true
+        reviewRequired: true,
+        reviewStatus: "mapping-review-required"
       }
     },
     notes: [

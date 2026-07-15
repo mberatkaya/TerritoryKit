@@ -1,0 +1,111 @@
+{
+  "country": "MP",
+  "alpha3": "MNP",
+  "outcome": "partial",
+  "generatedAt": "2026-07-15T12:21:24.066Z",
+  "strategyUsed": "center-first spatial parent resolution and parent-level warning downgrade",
+  "levels": {
+    "ADM1": {
+      "status": "source-unavailable",
+      "outcome": "source-unavailable",
+      "featureCount": 0,
+      "sourceStatus": "unavailable",
+      "semanticReviewStatus": "review-required",
+      "hierarchyStatus": "passed-with-warnings",
+      "adjacencyStatus": "not-run",
+      "indexStatus": "passed-with-warnings",
+      "validationStatus": "passed-with-warnings",
+      "loaderStatus": "not-run"
+    },
+    "ADM2": {
+      "status": "built-with-warnings",
+      "outcome": "built-with-warnings",
+      "featureCount": 4,
+      "sourceStatus": "available",
+      "semanticReviewStatus": "review-required",
+      "hierarchyStatus": "passed",
+      "adjacencyStatus": "passed",
+      "indexStatus": "passed",
+      "validationStatus": "passed",
+      "loaderStatus": "passed"
+    }
+  },
+  "issueCounts": {
+    "PARENT_LEVEL_EMPTY": 4,
+    "COUNTRY_LEVEL_UNAVAILABLE": 1,
+    "SOURCE_METADATA_INVALID": 1,
+    "MAPPING_REVIEW_REQUIRED": 1,
+    "QUALITY_SELF_INTERSECTION": 1
+  },
+  "phaseDurationsMs": {
+    "adjacency-generation": 0,
+    "artifact-write": 5,
+    "checksum": 0,
+    "derived-metadata": 0,
+    "download": 1,
+    "extraction": 0,
+    "geometry-repair": 119,
+    "loader-smoke": 0,
+    "parsing": 1,
+    "serialization": 2,
+    "simplification": 0,
+    "source-resolution": 512,
+    "spatial-index": 0,
+    "validation": 2
+  },
+  "remainingErrors": [
+    {
+      "code": "SOURCE_METADATA_INVALID",
+      "level": "ADM1",
+      "message": "Remote source returned HTTP 404.",
+      "severity": "error"
+    }
+  ],
+  "remainingWarnings": [
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "mp:adm2:39175420b24162802066299"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "mp:adm2:39175420b42755231479115"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "mp:adm2:39175420b64217482742742"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "mp:adm2:39175420b77088391070908"
+    },
+    {
+      "code": "COUNTRY_LEVEL_UNAVAILABLE",
+      "level": "ADM1",
+      "message": "Remote source returned HTTP 404.",
+      "severity": "warning"
+    },
+    {
+      "code": "MAPPING_REVIEW_REQUIRED",
+      "level": "ADM2",
+      "message": "ADM2 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+      "severity": "warning"
+    },
+    {
+      "code": "QUALITY_SELF_INTERSECTION",
+      "details": {
+        "count": 4
+      },
+      "level": "ADM2",
+      "message": "Linear ring self-intersects.",
+      "severity": "warning"
+    }
+  ]
+}

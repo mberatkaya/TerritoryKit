@@ -1,0 +1,90 @@
+{
+  "country": "GL",
+  "alpha3": "GRL",
+  "outcome": "partial",
+  "generatedAt": "2026-07-15T12:45:48.119Z",
+  "strategyUsed": "source availability audit for prior partial countries",
+  "levels": {
+    "ADM1": {
+      "status": "built-with-warnings",
+      "outcome": "built-with-warnings",
+      "featureCount": 6,
+      "sourceStatus": "available",
+      "semanticReviewStatus": "review-required",
+      "hierarchyStatus": "passed",
+      "adjacencyStatus": "passed",
+      "indexStatus": "passed",
+      "validationStatus": "passed",
+      "loaderStatus": "passed"
+    },
+    "ADM2": {
+      "status": "source-unavailable",
+      "outcome": "source-unavailable",
+      "featureCount": 0,
+      "sourceStatus": "unavailable",
+      "semanticReviewStatus": "review-required",
+      "hierarchyStatus": "passed-with-warnings",
+      "adjacencyStatus": "not-run",
+      "indexStatus": "passed-with-warnings",
+      "validationStatus": "passed-with-warnings",
+      "loaderStatus": "not-run"
+    }
+  },
+  "issueCounts": {
+    "PARENT_UNRESOLVED": 1,
+    "MAPPING_REVIEW_REQUIRED": 1,
+    "QUALITY_SELF_INTERSECTION": 1,
+    "COUNTRY_LEVEL_UNAVAILABLE": 1,
+    "SOURCE_METADATA_INVALID": 1
+  },
+  "phaseDurationsMs": {
+    "adjacency-generation": 3748,
+    "artifact-write": 57,
+    "checksum": 0,
+    "derived-metadata": 987,
+    "download": 10,
+    "extraction": 0,
+    "geometry-repair": 2558,
+    "loader-smoke": 0,
+    "parsing": 16,
+    "serialization": 10700,
+    "simplification": 42,
+    "source-resolution": 446,
+    "spatial-index": 0,
+    "validation": 10652
+  },
+  "remainingErrors": [
+    {
+      "code": "SOURCE_METADATA_INVALID",
+      "level": "ADM2",
+      "message": "Remote source returned HTTP 404.",
+      "severity": "error"
+    }
+  ],
+  "remainingWarnings": [
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "gl:adm1:gl-ku"
+    },
+    {
+      "code": "MAPPING_REVIEW_REQUIRED",
+      "level": "ADM1",
+      "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+      "severity": "warning"
+    },
+    {
+      "code": "QUALITY_SELF_INTERSECTION",
+      "level": "ADM1",
+      "message": "Linear ring self-intersects.",
+      "severity": "warning"
+    },
+    {
+      "code": "COUNTRY_LEVEL_UNAVAILABLE",
+      "level": "ADM2",
+      "message": "Remote source returned HTTP 404.",
+      "severity": "warning"
+    }
+  ]
+}

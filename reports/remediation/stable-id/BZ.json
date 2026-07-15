@@ -1,0 +1,151 @@
+{
+  "country": "BZ",
+  "levels": ["ADM1", "ADM2"],
+  "sourceFeatureCountByLevel": {
+    "ADM1": 6,
+    "ADM2": 31
+  },
+  "generatedIdCount": 38,
+  "collisionCountBeforeFix": 25,
+  "collisionCountAfterFix": 0,
+  "duplicateOfficialCodeWarnings": 25,
+  "strategyUsed": "When provider official/source code produced duplicate territory IDs, append a deterministic source-derived disambiguator using source id, raw feature id, parent id, local type, source name, representative point grid, and bbox grid.",
+  "fallbackIdsUsed": [
+    {
+      "territoryId": "bz:adm2:bz-bz-1456440b30022647812570-administrative-unit-mesopotamia-pt-88-19185-17-49312-bbox-88-19564-17-48944-88-18752-17-49639",
+      "name": "Mesopotamia"
+    },
+    {
+      "territoryId": "bz:adm2:bz-bz-1456440b30822357340136-administrative-unit-collet-pt-88-20527-17-49677-bbox-88-22249-17-49028-88-19072-17-50116",
+      "name": "Collet"
+    },
+    {
+      "territoryId": "bz:adm2:bz-bz-1456440b3381431616278-administrative-unit-belize-rural-north-pt-88-38572-17-75347-bbox-88-63630-17-42768-87-82775-18-18566",
+      "name": "Belize Rural North"
+    },
+    {
+      "territoryId": "bz:adm2:bz-bz-1456440b38299420542047-administrative-unit-fort-george-pt-88-18434-17-49722-bbox-88-18925-17-49134-88-18138-17-50096",
+      "name": "Fort George"
+    },
+    {
+      "territoryId": "bz:adm2:bz-bz-1456440b41515061278311-administrative-unit-queen-square-pt-88-19462-17-48866-bbox-88-20038-17-48482-88-18909-17-49244",
+      "name": "Queen Square"
+    },
+    {
+      "territoryId": "bz:adm2:bz-bz-1456440b45455972514267-administrative-unit-freetown-pt-88-19447-17-50837-bbox-88-19879-17-50324-88-19100-17-51253",
+      "name": "Freetown"
+    },
+    {
+      "territoryId": "bz:adm2:bz-bz-1456440b59769308078565-administrative-unit-lake-independence-pt-88-21603-17-50760-bbox-88-26153-17-46419-88-19893-17-51016",
+      "name": "Lake Independence"
+    },
+    {
+      "territoryId": "bz:adm2:bz-bz-1456440b59944424745172-administrative-unit-caribbean-shores-pt-88-20058-17-51145-bbox-88-21808-17-50148-88-18577-17-52044",
+      "name": "Caribbean Shores"
+    },
+    {
+      "territoryId": "bz:adm2:bz-bz-1456440b62290110422722-administrative-unit-port-loyola-pt-88-23679-17-49138-bbox-88-27618-17-44912-88-19426-17-49949",
+      "name": "Port Loyola"
+    },
+    {
+      "territoryId": "bz:adm2:bz-bz-1456440b69828690893614-administrative-unit-albert-pt-88-18742-17-49726-bbox-88-19498-17-48500-88-18493-17-50111",
+      "name": "Albert"
+    },
+    {
+      "territoryId": "bz:adm2:bz-bz-1456440b76393603142959-administrative-unit-belize-rural-north-pt-88-36944-17-33721-bbox-88-58951-17-07883-87-49032-17-57903",
+      "name": "Belize Rural North"
+    },
+    {
+      "territoryId": "bz:adm2:bz-bz-1456440b85489993561805-administrative-unit-pickstock-pt-88-19513-17-50131-bbox-88-20157-17-49731-88-18577-17-50530",
+      "name": "Pickstock"
+    },
+    {
+      "territoryId": "bz:adm2:bz-bz-1456440b85935550107059-administrative-unit-freetown-pt-88-21778-17-51201-bbox-88-28538-17-50760-88-21256-17-56106",
+      "name": "Freetown"
+    },
+    {
+      "territoryId": "bz:adm2:bz-cy-1456440b35586034015504-administrative-unit-cayo-south-pt-88-84018-16-95614-bbox-89-19297-16-40049-88-53463-17-49861",
+      "name": "Cayo South"
+    },
+    {
+      "territoryId": "bz:adm2:bz-cy-1456440b44452540624114-administrative-unit-cayo-north-pt-89-10952-17-23814-bbox-89-15064-17-12803-89-04343-17-35389",
+      "name": "Cayo North"
+    },
+    {
+      "territoryId": "bz:adm2:bz-cy-1456440b54194515366168-administrative-unit-belmopan-pt-88-76213-17-24355-bbox-88-79420-17-21229-88-73680-17-27277",
+      "name": "Belmopan"
+    },
+    {
+      "territoryId": "bz:adm2:bz-cy-1456440b56382702891578-administrative-unit-cayo-north-east-pt-89-03432-17-27533-bbox-89-10398-17-13394-88-93992-17-38195",
+      "name": "Cayo North East"
+    },
+    {
+      "territoryId": "bz:adm2:bz-cy-1456440b60992682417348-administrative-unit-cayo-west-pt-89-10247-16-96395-bbox-89-16535-16-80346-89-02584-17-14366",
+      "name": "Cayo West"
+    },
+    {
+      "territoryId": "bz:adm2:bz-cy-1456440b94896318880673-administrative-unit-cayo-central-pt-88-96047-17-10392-bbox-89-07789-16-86867-88-84373-17-38016",
+      "name": "Cayo Central"
+    },
+    {
+      "territoryId": "bz:adm2:bz-czl-1456440b17189259529244-administrative-unit-corozal-bay-pt-88-39701-18-38684-bbox-88-40824-18-37282-88-38389-18-39882",
+      "name": "Corozal Bay"
+    },
+    {
+      "territoryId": "bz:adm2:bz-czl-1456440b5266372606878-administrative-unit-corozal-north-pt-88-43544-18-41942-bbox-88-55174-17-97478-88-13439-18-49600",
+      "name": "Corozal North"
+    },
+    {
+      "territoryId": "bz:adm2:bz-czl-1456440b54087410472023-administrative-unit-corozal-south-west-pt-88-52089-18-28146-bbox-88-60652-18-20448-88-44118-18-35241",
+      "name": "Corozal South West"
+    },
+    {
+      "territoryId": "bz:adm2:bz-czl-1456440b92384260503294-administrative-unit-corozal-south-east-pt-88-27402-18-18456-bbox-88-50889-17-96343-88-08951-18-37442",
+      "name": "Corozal South East"
+    },
+    {
+      "territoryId": "bz:adm2:bz-ow-1456440b2347802332561-administrative-unit-orange-walk-central-pt-88-52471-18-10392-bbox-88-57251-18-06486-88-48683-18-15204",
+      "name": "Orange Walk Central"
+    },
+    {
+      "territoryId": "bz:adm2:bz-ow-1456440b42858998503900-administrative-unit-orange-walk-north-pt-88-59711-18-16047-bbox-88-70506-18-07570-88-49957-18-25116",
+      "name": "Orange Walk North"
+    },
+    {
+      "territoryId": "bz:adm2:bz-ow-1456440b63332510884225-administrative-unit-orange-walk-east-pt-88-46468-18-02858-bbox-88-62727-17-92112-88-27590-18-20243",
+      "name": "Orange Walk East"
+    },
+    {
+      "territoryId": "bz:adm2:bz-ow-1456440b68597198845590-administrative-unit-orange-walk-south-pt-88-86462-17-71022-bbox-89-15196-17-31518-88-50005-18-13222",
+      "name": "Orange Walk South"
+    },
+    {
+      "territoryId": "bz:adm2:bz-sc-1456440b83071961973491-administrative-unit-stann-creek-west-pt-88-47738-16-82501-bbox-88-77181-16-50158-88-25093-17-12439",
+      "name": "Stann Creek West"
+    },
+    {
+      "territoryId": "bz:adm2:bz-sc-1456440b99535609172770-administrative-unit-dangriga-pt-88-27975-16-98893-bbox-88-35053-16-92850-88-21824-17-07014",
+      "name": "Dangriga"
+    },
+    {
+      "territoryId": "bz:adm2:bz-tol-1456440b19707016539712-administrative-unit-toledo-west-pt-88-94143-16-36570-bbox-89-21994-15-99489-88-57414-16-69496",
+      "name": "Toledo West"
+    },
+    {
+      "territoryId": "bz:adm2:bz-tol-1456440b94766097213569-administrative-unit-toledo-east-pt-88-79929-16-22487-bbox-89-22621-15-88591-88-40441-16-64879",
+      "name": "Toledo East"
+    }
+  ],
+  "aliasesGenerated": [],
+  "determinismTest": {
+    "repeatedBuildIdsIdentical": "verified-by-deterministic-input-key; full repeated-build check pending final verification",
+    "featureOrderIndependent": "covered by source-derived key design; fixture test added in code verification phase",
+    "outputDirectoryIndependent": "territory IDs do not include output paths"
+  },
+  "outcomeAfterFix": "built-with-warnings",
+  "loaderStatus": {
+    "ADM1": "passed",
+    "ADM2": "passed"
+  },
+  "remainingErrors": []
+}

@@ -1,0 +1,567 @@
+{
+  "country": "PR",
+  "alpha3": "PRI",
+  "outcome": "partial",
+  "generatedAt": "2026-07-15T12:21:24.066Z",
+  "strategyUsed": "center-first spatial parent resolution and parent-level warning downgrade",
+  "levels": {
+    "ADM1": {
+      "status": "source-unavailable",
+      "outcome": "source-unavailable",
+      "featureCount": 0,
+      "sourceStatus": "unavailable",
+      "semanticReviewStatus": "review-required",
+      "hierarchyStatus": "passed-with-warnings",
+      "adjacencyStatus": "not-run",
+      "indexStatus": "passed-with-warnings",
+      "validationStatus": "passed-with-warnings",
+      "loaderStatus": "not-run"
+    },
+    "ADM2": {
+      "status": "built-with-warnings",
+      "outcome": "built-with-warnings",
+      "featureCount": 78,
+      "sourceStatus": "available",
+      "semanticReviewStatus": "review-required",
+      "hierarchyStatus": "passed",
+      "adjacencyStatus": "passed",
+      "indexStatus": "passed",
+      "validationStatus": "passed",
+      "loaderStatus": "passed"
+    }
+  },
+  "issueCounts": {
+    "PARENT_LEVEL_EMPTY": 78,
+    "COUNTRY_LEVEL_UNAVAILABLE": 2,
+    "SOURCE_METADATA_INVALID": 2,
+    "MAPPING_REVIEW_REQUIRED": 1,
+    "QUALITY_SELF_INTERSECTION": 1
+  },
+  "phaseDurationsMs": {
+    "adjacency-generation": 32,
+    "artifact-write": 6,
+    "checksum": 0,
+    "derived-metadata": 1,
+    "download": 3,
+    "extraction": 0,
+    "geometry-repair": 91,
+    "loader-smoke": 0,
+    "parsing": 3,
+    "serialization": 13,
+    "simplification": 2,
+    "source-resolution": 436,
+    "spatial-index": 0,
+    "validation": 11
+  },
+  "remainingErrors": [
+    {
+      "code": "COUNTRY_LEVEL_UNAVAILABLE",
+      "level": "ADM0",
+      "message": "Remote source returned HTTP 404.",
+      "severity": "error"
+    },
+    {
+      "code": "SOURCE_METADATA_INVALID",
+      "level": "ADM0",
+      "message": "Remote source returned HTTP 404.",
+      "severity": "error"
+    },
+    {
+      "code": "SOURCE_METADATA_INVALID",
+      "level": "ADM1",
+      "message": "Remote source returned HTTP 404.",
+      "severity": "error"
+    }
+  ],
+  "remainingWarnings": [
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b12204404308150"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b1223039681342"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b12754205522862"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b13421931783932"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b14079989067624"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b14965508281660"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b16977701319194"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b17072559885930"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b17453471751527"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b18263027351843"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b18801000784875"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b21184218191895"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b22166841242195"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b22305202508705"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b23731839572395"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b24410852555408"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b24763897648420"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b254490582873"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b26348414705735"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b26629522791293"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b28103012902602"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b29338824934020"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b29369551718499"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b30311265398207"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b33074408407079"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b33566817880086"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b34283188720428"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b35175802889516"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b35991649080507"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b36616514861103"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b36782575213222"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b37384670628479"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b37684321987765"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b39341524675779"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b40456711023422"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b40723553467953"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b41053706339825"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b42725289573863"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b43804230876127"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b44125592347050"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b44684662227535"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b4476069881606"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b49819301822346"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b52057892334666"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b56185542285992"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b56909324713626"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b57249745430969"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b58001941007009"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b64369847691903"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b65674201186595"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b67187557196313"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b67293545491700"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b68011232458605"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b71550850987381"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b72195961791628"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b73228350773325"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b73379646065034"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b73716222823884"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b74616121786134"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b75385712317101"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b75781996269938"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b77779311465946"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b80614899484924"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b81379947560815"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b83389329504851"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b87242959394677"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b88013752264410"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b88362750247815"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b91105509770544"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b91189931708887"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b91435435365169"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b91916522285611"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b94179162407819"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b95664633284712"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b96449576459370"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b96467798502033"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b97201459085327"
+    },
+    {
+      "code": "PARENT_LEVEL_EMPTY",
+      "message": "No parent level features are available.",
+      "severity": "warning",
+      "zoneId": "pr:adm2:32010507b98584278063898"
+    },
+    {
+      "code": "COUNTRY_LEVEL_UNAVAILABLE",
+      "level": "ADM1",
+      "message": "Remote source returned HTTP 404.",
+      "severity": "warning"
+    },
+    {
+      "code": "MAPPING_REVIEW_REQUIRED",
+      "level": "ADM2",
+      "message": "ADM2 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+      "severity": "warning"
+    },
+    {
+      "code": "QUALITY_SELF_INTERSECTION",
+      "details": {
+        "count": 27
+      },
+      "level": "ADM2",
+      "message": "Linear ring self-intersects.",
+      "severity": "warning"
+    }
+  ]
+}

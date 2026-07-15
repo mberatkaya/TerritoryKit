@@ -1,0 +1,1271 @@
+{
+  "country": "PT",
+  "levels": ["ADM1", "ADM2"],
+  "sourceFeatureCountByLevel": {
+    "ADM1": 20,
+    "ADM2": 311
+  },
+  "generatedIdCount": 332,
+  "collisionCountBeforeFix": 310,
+  "collisionCountAfterFix": 0,
+  "duplicateOfficialCodeWarnings": 310,
+  "strategyUsed": "When provider official/source code produced duplicate territory IDs, append a deterministic source-derived disambiguator using source id, raw feature id, parent id, local type, source name, representative point grid, and bbox grid.",
+  "fallbackIdsUsed": [
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b1000608824852-administrative-unit-silves-pt-8-34119-37-28421-bbox-8-51974-37-10653-8-17566-37-44583",
+      "name": "Silves"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b10601306194261-administrative-unit-montijo-pt-8-64531-38-77463-bbox-8-76993-38-67207-8-51957-38-87506",
+      "name": "Montijo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b11475009930612-administrative-unit-boticas-pt-7-74827-41-68620-bbox-7-93180-41-59616-7-57907-41-80062",
+      "name": "Boticas"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b11703437565908-administrative-unit-lagoa-pt-25-56061-37-75412-bbox-25-63794-37-71379-25-48942-37-78719",
+      "name": "Lagoa"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b11776480745713-administrative-unit-odemira-pt-8-57777-37-61951-bbox-8-81813-37-37914-8-33100-37-87006",
+      "name": "Odemira"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b11803338191108-administrative-unit-armamar-pt-7-70645-41-12500-bbox-7-79133-41-05237-7-63501-41-19154",
+      "name": "Armamar"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b11830376405667-administrative-unit-montalegre-pt-7-86931-41-78592-bbox-8-10816-41-60657-7-60459-41-91815",
+      "name": "Montalegre"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b12128694949530-administrative-unit-murca-pt-7-46906-41-44060-bbox-7-63167-41-33415-7-33772-41-53776",
+      "name": "Murca"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b13078000098594-administrative-unit-barrancos-pt-7-05679-38-15195-bbox-7-22408-38-09132-6-91457-38-22595",
+      "name": "Barrancos"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b13233233072275-administrative-unit-vendas-novas-pt-8-53644-38-68702-bbox-8-66426-38-56896-8-39690-38-79951",
+      "name": "Vendas Novas"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b13324666486870-administrative-unit-sao-bras-de-alportel-pt-7-86720-37-20830-bbox-7-95083-37-12213-7-77395-37-28578",
+      "name": "Sao Bras de Alportel"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b13329343625414-administrative-unit-mourao-pt-7-26247-38-32569-bbox-7-44448-38-17290-7-06699-38-46264",
+      "name": "Mourao"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b13508937537537-administrative-unit-alcoutim-pt-7-62908-37-43253-bbox-7-88972-37-27833-7-40188-37-54640",
+      "name": "Alcoutim"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b14195441772590-administrative-unit-lajes-das-flores-pt-31-22248-39-40537-bbox-31-27346-39-35559-31-15019-39-43478",
+      "name": "Lajes das Flores"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b14276851137333-administrative-unit-vila-franca-do-campo-pt-25-41349-37-74951-bbox-25-49406-37-71747-25-33994-37-79636",
+      "name": "Vila Franca do Campo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b15481383147669-administrative-unit-sobral-de-monte-agraco-pt-9-17320-39-02115-bbox-9-24263-38-96890-9-10570-39-07079",
+      "name": "Sobral de Monte Agraco"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b16138440227323-administrative-unit-penalva-do-castelo-pt-7-68375-40-70413-bbox-7-81468-40-65160-7-55178-40-76263",
+      "name": "Penalva do Castelo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b16178647542899-administrative-unit-alfandega-da-fe-pt-6-97231-41-35278-bbox-7-09722-41-24159-6-83768-41-46799",
+      "name": "Alfandega da Fe"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b16515770856605-administrative-unit-trancoso-pt-7-36119-40-81516-bbox-7-47890-40-72458-7-21540-40-94357",
+      "name": "Trancoso"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b16921775760122-administrative-unit-seia-pt-7-74289-40-41494-bbox-7-86574-40-26538-7-61345-40-57127",
+      "name": "Seia"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b17098308241947-administrative-unit-vila-vicosa-pt-7-37254-38-79335-bbox-7-52682-38-70662-7-22303-38-88395",
+      "name": "Vila Vicosa"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b17322391042167-administrative-unit-sao-pedro-do-sul-pt-8-12212-40-84730-bbox-8-26005-40-76546-7-96294-40-96050",
+      "name": "Sao Pedro do Sul"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b17958594556854-administrative-unit-paredes-pt-8-42135-41-20857-bbox-8-51234-41-12385-8-31425-41-29131",
+      "name": "Paredes"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b18483479217888-administrative-unit-tarouca-pt-7-80102-41-04154-bbox-7-91222-40-97461-7-68627-41-10852",
+      "name": "Tarouca"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b18847148423922-administrative-unit-esposende-pt-8-75860-41-55996-bbox-8-80938-41-48933-8-70673-41-63058",
+      "name": "Esposende"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b18866012861687-administrative-unit-batalha-pt-8-77248-39-65257-bbox-8-89202-39-54719-8-67528-39-72708",
+      "name": "Batalha"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b19327110413559-administrative-unit-castro-daire-pt-7-96493-40-94191-bbox-8-15353-40-81535-7-77417-41-05358",
+      "name": "Castro Daire"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b19826937126659-administrative-unit-sao-roque-do-pico-pt-28-31513-38-50483-bbox-28-42730-38-45526-28-16990-38-56431",
+      "name": "Sao Roque do Pico"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b20097330240085-administrative-unit-beja-pt-7-85960-37-98312-bbox-8-07986-37-81516-7-65686-38-16999",
+      "name": "Beja"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b2035262171118-administrative-unit-mafra-pt-9-31827-38-96966-bbox-9-44218-38-87522-9-17300-39-06954",
+      "name": "Mafra"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b20450831910574-administrative-unit-ansiao-pt-8-46452-39-96804-bbox-8-57588-39-89074-8-36284-40-05972",
+      "name": "Ansiao"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b20719637052080-administrative-unit-vidigueira-pt-7-71243-38-19416-bbox-7-88950-38-08095-7-48420-38-29123",
+      "name": "Vidigueira"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b21025005242916-administrative-unit-caldas-da-rainha-pt-9-10034-39-42728-bbox-9-24678-39-31046-8-94886-39-51259",
+      "name": "Caldas da Rainha"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b21150593532191-administrative-unit-lagos-pt-8-72821-37-15561-bbox-8-84445-37-07370-8-62839-37-23640",
+      "name": "Lagos"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b21183696289923-administrative-unit-ponte-de-sor-pt-8-11184-39-23381-bbox-8-35434-39-03081-7-87343-39-42063",
+      "name": "Ponte de Sor"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b21262307296147-administrative-unit-fronteira-pt-7-66401-39-11468-bbox-7-80356-39-02905-7-56070-39-17951",
+      "name": "Fronteira"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b21371732930348-administrative-unit-chamusca-pt-8-39983-39-31676-bbox-8-57465-39-12830-8-21052-39-49988",
+      "name": "Chamusca"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b2145262070020-administrative-unit-mogadouro-pt-6-68132-41-33095-bbox-6-95011-41-20740-6-42505-41-45528",
+      "name": "Mogadouro"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b21465215622532-administrative-unit-tavira-pt-7-71995-37-24616-bbox-7-91185-37-08946-7-54347-37-40723",
+      "name": "Tavira"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b21944289016738-administrative-unit-oliveira-de-frades-pt-8-27212-40-75185-bbox-8-36221-40-65355-8-16288-40-88143",
+      "name": "Oliveira de Frades"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b22631698632271-administrative-unit-avis-pt-7-93600-39-11932-bbox-8-15656-38-99580-7-73846-39-27385",
+      "name": "Avis"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b22721701641997-administrative-unit-portel-pt-7-70246-38-33289-bbox-7-93581-38-21345-7-45168-38-45611",
+      "name": "Portel"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b23391535999829-administrative-unit-torres-vedras-pt-9-26638-39-11462-bbox-9-40853-38-99986-9-12677-39-22114",
+      "name": "Torres Vedras"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b23436714028676-administrative-unit-leiria-pt-8-81785-39-81213-bbox-8-97393-39-66433-8-64162-39-97815",
+      "name": "Leiria"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b24025236019409-administrative-unit-nisa-pt-7-68698-39-57297-bbox-7-88367-39-41483-7-48581-39-70435",
+      "name": "Nisa"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b24145188662981-administrative-unit-torres-novas-pt-8-58139-39-54943-bbox-8-69980-39-43226-8-47380-39-66867",
+      "name": "Torres Novas"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b2421797273552-administrative-unit-crato-pt-7-66410-39-35831-bbox-7-89619-39-23259-7-50632-39-48636",
+      "name": "Crato"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b24550911914843-administrative-unit-calheta-pt-17-14551-32-75748-bbox-17-21955-32-70511-17-06081-32-82061",
+      "name": "Calheta"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b25065309610910-administrative-unit-povoa-de-varzim-pt-8-74252-41-44955-bbox-8-79916-41-38712-8-66042-41-49739",
+      "name": "Povoa de Varzim"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b25299423406959-administrative-unit-braganca-pt-6-75232-41-76055-bbox-6-96124-41-52538-6-52208-41-98127",
+      "name": "Braganca"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b25659359288022-administrative-unit-castelo-de-vide-pt-7-51457-39-50678-bbox-7-64120-39-40866-7-39659-39-63175",
+      "name": "Castelo de Vide"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b25803530493929-administrative-unit-alvaiazere-pt-8-43111-39-85921-bbox-8-52052-39-78038-8-32546-39-94090",
+      "name": "Alvaiazere"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b25989222534263-administrative-unit-serpa-pt-7-49167-37-94687-bbox-7-65799-37-74754-7-25895-38-19640",
+      "name": "Serpa"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b26833341973100-administrative-unit-pinhel-pt-7-13096-40-76467-bbox-7-28828-40-61408-6-97423-40-98167",
+      "name": "Pinhel"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b27097007228186-administrative-unit-lamego-pt-7-84363-41-11160-bbox-7-93311-41-03754-7-76296-41-18170",
+      "name": "Lamego"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b27219191157725-administrative-unit-cinfaes-pt-8-12794-41-06130-bbox-8-26753-40-99860-7-99506-41-12400",
+      "name": "Cinfaes"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b27228771360349-administrative-unit-lagoa-pt-8-44618-37-13862-bbox-8-52961-37-09603-8-36663-37-18789",
+      "name": "Lagoa"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b27665639264447-administrative-unit-pombal-pt-8-70356-39-95483-bbox-8-97393-39-79442-8-51608-40-06687",
+      "name": "Pombal"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b27725753917070-administrative-unit-sernancelhe-pt-7-53314-40-93225-bbox-7-69052-40-84044-7-42284-41-02680",
+      "name": "Sernancelhe"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b28218745985426-administrative-unit-golega-pt-8-51942-39-43902-bbox-8-58476-39-35291-8-45949-39-51420",
+      "name": "Golega"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b2878786593857-administrative-unit-mesao-frio-pt-7-90363-41-18426-bbox-7-95410-41-15357-7-84371-41-21966",
+      "name": "Mesao Frio"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b2957696169624-administrative-unit-redondo-pt-7-61252-38-65441-bbox-7-73256-38-50712-7-50664-38-77036",
+      "name": "Redondo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b2981277827282-administrative-unit-lajes-do-pico-pt-28-20405-38-43034-bbox-28-37160-38-39173-28-01655-38-47353",
+      "name": "Lajes do Pico"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b30295340914120-administrative-unit-ferriera-do-alentejo-pt-8-19657-38-11360-bbox-8-41170-37-99788-7-98983-38-23500",
+      "name": "Ferriera do Alentejo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b3038784188538-administrative-unit-vila-verde-pt-8-45084-41-69666-bbox-8-55604-41-60657-8-31553-41-77411",
+      "name": "Vila Verde"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b30461992811302-administrative-unit-vila-do-conde-pt-8-69128-41-35962-bbox-8-75252-41-27518-8-62813-41-44004",
+      "name": "Vila do Conde"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b30682221667796-administrative-unit-barriero-pt-9-04415-38-63357-bbox-9-09929-38-58221-9-00241-38-68786",
+      "name": "Barriero"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b30682926964938-administrative-unit-salvaterra-de-magos-pt-8-70353-39-10036-bbox-8-86506-38-99969-8-58466-39-18091",
+      "name": "Salvaterra de Magos"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b30745632351664-administrative-unit-estremoz-pt-7-63190-38-87423-bbox-7-82228-38-72412-7-48060-39-02303",
+      "name": "Estremoz"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b3149971354441-administrative-unit-vouzela-pt-8-15372-40-71490-bbox-8-28248-40-64213-8-03393-40-79377",
+      "name": "Vouzela"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b32277573146992-administrative-unit-campo-maior-pt-7-06063-39-04542-bbox-7-14741-38-92689-6-97989-39-13964",
+      "name": "Campo Maior"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b3271806081154-administrative-unit-oliveira-do-bairro-pt-8-57618-40-53904-bbox-8-66371-40-49173-8-44787-40-59398",
+      "name": "Oliveira do Bairro"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b33113566032627-administrative-unit-condeixa-a-nova-pt-8-52992-40-13043-bbox-8-61512-40-05972-8-42451-40-20260",
+      "name": "Condeixa-a-Nova"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b33132116208961-administrative-unit-bombarral-pt-9-16725-39-30911-bbox-9-21145-39-25341-9-08167-39-34515",
+      "name": "Bombarral"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b33325499022339-administrative-unit-calheta-pt-27-88638-38-60116-bbox-28-02584-38-53709-27-73808-38-67310",
+      "name": "Calheta"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b33615979863425-administrative-unit-cuba-pt-7-92098-38-21773-bbox-8-00938-38-13437-7-83548-38-33563",
+      "name": "Cuba"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b34058543933560-administrative-unit-oleiros-pt-7-90527-39-98457-bbox-8-14606-39-85158-7-71811-40-09261",
+      "name": "Oleiros"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b34102697977263-administrative-unit-peniche-pt-9-34435-39-34739-bbox-9-42618-39-30550-9-29157-39-38994",
+      "name": "Peniche"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b34212513834643-administrative-unit-alter-do-chao-pt-7-74464-39-25594-bbox-7-90120-39-17652-7-52817-39-37226",
+      "name": "Alter do Chao"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b34401883056370-administrative-unit-santa-cruz-das-flores-pt-31-20713-39-47307-bbox-31-27346-39-43364-31-14425-39-52878",
+      "name": "Santa Cruz das Flores"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b34606480203204-administrative-unit-amarante-pt-8-07211-41-29107-bbox-8-22455-41-23231-7-92890-41-37691",
+      "name": "Amarante"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b34949703173808-administrative-unit-vimioso-pt-6-54227-41-55856-bbox-6-69961-41-43466-6-37631-41-66793",
+      "name": "Vimioso"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b35674486711202-administrative-unit-vila-pouca-de-aguiar-pt-7-64326-41-52406-bbox-7-77864-41-42542-7-48657-41-63953",
+      "name": "Vila Pouca de Aguiar"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b36422085880740-administrative-unit-porto-pt-8-63039-41-18424-bbox-8-69735-41-16200-8-58335-41-21544",
+      "name": "Porto"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b37302249539411-administrative-unit-ribeira-brava-pt-17-00875-32-71256-bbox-17-04751-32-66076-16-97342-32-76148",
+      "name": "Ribeira Brava"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b37307893900596-administrative-unit-castro-marim-pt-7-48655-37-31450-bbox-7-59615-37-20363-7-39859-37-41314",
+      "name": "Castro Marim"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b3764915911212-administrative-unit-nazare-pt-9-07400-39-61250-bbox-9-18936-39-51115-8-99823-39-70405",
+      "name": "Nazare"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b37726926053341-administrative-unit-aguiar-da-beira-pt-7-55493-40-81531-bbox-7-66017-40-72299-7-44526-40-90544",
+      "name": "Aguiar da Beira"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b37747914256978-administrative-unit-ourique-pt-8-29591-37-65571-bbox-8-45800-37-43014-8-13614-37-87819",
+      "name": "Ourique"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b38354031539836-administrative-unit-estarreja-pt-8-59851-40-78574-bbox-8-67866-40-70741-8-52916-40-85599",
+      "name": "Estarreja"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b38430892863225-administrative-unit-montemor-o-velho-pt-8-68599-40-24307-bbox-8-78518-40-13549-8-57214-40-33949",
+      "name": "Montemor-o-Velho"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b38692721999641-administrative-unit-sousel-pt-7-75876-39-00053-bbox-7-92373-38-92132-7-54068-39-06192",
+      "name": "Sousel"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b38854907356514-administrative-unit-nelas-pt-7-89569-40-56148-bbox-7-96017-40-49599-7-77366-40-61810",
+      "name": "Nelas"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b39010061947552-administrative-unit-freixo-de-espada-a-cinta-pt-6-86008-41-11601-bbox-7-02105-41-02454-6-71210-41-24338",
+      "name": "Freixo de Espada a Cinta"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b39667251725776-administrative-unit-vila-flor-pt-7-17727-41-32690-bbox-7-31250-41-23349-7-07337-41-42177",
+      "name": "Vila Flor"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b39815841230354-administrative-unit-oliveira-do-hospital-pt-7-89635-40-40313-bbox-8-02085-40-30140-7-79099-40-54146",
+      "name": "Oliveira do Hospital"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b39881605530614-administrative-unit-satao-pt-7-69897-40-80110-bbox-7-80968-40-73715-7-59148-40-88849",
+      "name": "Satao"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b40601521893357-administrative-unit-idanha-a-nova-pt-7-14140-39-92774-bbox-7-39480-39-68539-6-89957-40-12263",
+      "name": "Idanha-a-Nova"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b40640066990777-administrative-unit-nordeste-pt-25-22397-37-82969-bbox-25-32002-37-78902-25-12973-37-86418",
+      "name": "Nordeste"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b40745083839882-administrative-unit-torre-de-moncorvo-pt-7-04048-41-17822-bbox-7-25982-41-04901-6-82692-41-30361",
+      "name": "Torre de Moncorvo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b40888792105335-administrative-unit-santo-tirso-pt-8-46706-41-34094-bbox-8-56283-41-26347-8-34055-41-39642",
+      "name": "Santo Tirso"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b40912909065465-administrative-unit-almada-pt-9-21349-38-63353-bbox-9-30867-38-56911-9-13098-38-68927",
+      "name": "Almada"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b40974128626781-administrative-unit-porto-de-mos-pt-8-84038-39-58857-bbox-8-93656-39-50403-8-73286-39-66956",
+      "name": "Porto de Mos"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b40981917431050-administrative-unit-vila-nova-de-paiva-pt-7-78965-40-90037-bbox-7-90311-40-80367-7-71063-40-97461",
+      "name": "Vila Nova de Paiva"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b4115863363061-administrative-unit-povoacao-pt-25-23926-37-77193-bbox-25-35947-37-73582-25-13669-37-82176",
+      "name": "Povoacao"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b41725550003559-administrative-unit-angra-do-heroismo-pt-27-24220-38-71464-bbox-27-37839-38-63867-27-07439-38-79981",
+      "name": "Angra do Heroismo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b41751158046893-administrative-unit-seixal-pt-9-11769-38-62319-bbox-9-18101-38-57862-9-05603-38-67160",
+      "name": "Seixal"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b41768317119061-administrative-unit-ponte-da-barca-pt-8-32778-41-81557-bbox-8-47956-41-74309-8-17592-41-88146",
+      "name": "Ponte da Barca"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b4202330031635-administrative-unit-horta-pt-28-74460-38-58611-bbox-28-92159-38-52620-28-60366-38-67129",
+      "name": "Horta"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b43172288653786-administrative-unit-anadia-pt-8-47390-40-48038-bbox-8-61326-40-42917-8-35723-40-54714",
+      "name": "Anadia"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b43421578736002-administrative-unit-montijo-pt-8-97474-38-72042-bbox-9-04802-38-67403-8-92625-38-75037",
+      "name": "Montijo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b4359189474661-administrative-unit-santa-marta-de-penaguiao-pt-7-82718-41-24695-bbox-7-90498-41-20674-7-74737-41-28268",
+      "name": "Santa Marta de Penaguiao"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b44176903413239-administrative-unit-penamacor-pt-7-16571-40-19723-bbox-7-34336-40-08430-6-96685-40-33094",
+      "name": "Penamacor"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b44271526766007-administrative-unit-setubul-pt-8-90140-38-54365-bbox-9-05783-38-47242-8-75741-38-60950",
+      "name": "Setubul"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b44612249710949-administrative-unit-funchal-pt-16-91269-32-68857-bbox-16-94740-32-64701-16-86572-32-73075",
+      "name": "Funchal"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b44729406261107-administrative-unit-proenca-a-nova-pt-7-88342-39-78163-bbox-8-06196-39-61888-7-77043-39-90221",
+      "name": "Proenca-a-Nova"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b44993408193026-administrative-unit-olhao-pt-7-79266-37-08622-bbox-7-87460-37-02841-7-71304-37-14853",
+      "name": "Olhao"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b45198116293115-administrative-unit-vila-de-rei-pt-8-18226-39-72678-bbox-8-26356-39-64169-8-09008-39-80321",
+      "name": "Vila de Rei"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b45203801766540-administrative-unit-barcelos-pt-8-62535-41-55876-bbox-8-73904-41-44987-8-49338-41-66208",
+      "name": "Barcelos"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b45584620103908-administrative-unit-marvao-pt-7-38353-39-43572-bbox-7-45220-39-33892-7-31286-39-52499",
+      "name": "Marvao"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b46213935137121-administrative-unit-penedono-pt-7-41977-41-01214-bbox-7-49572-40-92380-7-34808-41-10007",
+      "name": "Penedono"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b46964025697073-administrative-unit-soure-pt-8-64691-40-09822-bbox-8-78145-39-99676-8-45815-40-20403",
+      "name": "Soure"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b47546839947789-administrative-unit-serta-pt-8-12725-39-86400-bbox-8-31324-39-77286-7-95170-39-97671",
+      "name": "Serta"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b47788182238922-administrative-unit-ovar-pt-8-64480-40-89524-bbox-8-71043-40-81499-8-56841-40-99154",
+      "name": "Ovar"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b47876936319507-administrative-unit-machico-pt-16-83618-32-74753-bbox-16-91176-32-71076-16-74690-32-78196",
+      "name": "Machico"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b47980590419850-administrative-unit-santa-cruz-da-graciosa-pt-28-01761-39-05491-bbox-28-10474-39-00568-27-94693-39-09579",
+      "name": "Santa Cruz da Graciosa"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b48175687282110-administrative-unit-marco-de-canaveses-pt-8-18775-41-17827-bbox-8-31098-41-08880-8-08252-41-27727",
+      "name": "Marco de Canaveses"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b48413362260100-administrative-unit-portalegre-pt-7-42057-39-30203-bbox-7-56784-39-18234-7-26029-39-43165",
+      "name": "Portalegre"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b48495156347259-administrative-unit-vila-nova-da-barquinha-pt-8-41398-39-52132-bbox-8-47380-39-49215-8-35434-39-55202",
+      "name": "Vila Nova da Barquinha"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b48583272049708-administrative-unit-elvas-pt-7-24146-38-93413-bbox-7-44561-38-78285-7-03461-39-07591",
+      "name": "Elvas"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b48587054125615-administrative-unit-sao-joao-da-madeira-pt-8-53309-40-91317-bbox-8-57588-40-90403-8-50544-40-93145",
+      "name": "Sao Joao da Madeira"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b48777920112875-administrative-unit-valongo-pt-8-51614-41-23796-bbox-8-58978-41-19013-8-45067-41-28782",
+      "name": "Valongo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b48952843015080-administrative-unit-tondela-pt-8-15454-40-58002-bbox-8-33107-40-49088-7-98706-40-66773",
+      "name": "Tondela"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b49046996876107-administrative-unit-lousa-pt-8-25457-40-17067-bbox-8-33294-40-09118-8-18530-40-24256",
+      "name": "Lousa"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b49129395898207-administrative-unit-pedrogao-grande-pt-8-20577-39-97157-bbox-8-28998-39-90157-8-12176-40-05686",
+      "name": "Pedrogao Grande"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b49214040884362-administrative-unit-montemor-o-novo-pt-8-31365-38-69008-bbox-8-58599-38-46582-8-05141-38-90234",
+      "name": "Montemor-o-Novo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b49482896641350-administrative-unit-ourem-pt-8-59928-39-73430-bbox-8-69864-39-58095-8-48256-39-85945",
+      "name": "Ourem"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b49791986800992-administrative-unit-borba-pt-7-48879-38-84653-bbox-7-57478-38-74477-7-40409-38-97050",
+      "name": "Borba"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b49795198350975-administrative-unit-arruda-dos-vinhos-pt-9-10198-39-00825-bbox-9-18421-38-93759-9-02238-39-07079",
+      "name": "Arruda dos Vinhos"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b49865802064714-administrative-unit-arronches-pt-7-24877-39-14485-bbox-7-41300-39-01778-7-09756-39-23860",
+      "name": "Arronches"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b50247265681610-administrative-unit-mertola-pt-7-70023-37-66338-bbox-7-92552-37-45628-7-42133-37-85991",
+      "name": "Mertola"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b50897168658766-administrative-unit-santarem-pt-8-75025-39-37528-bbox-8-90596-39-22141-8-57465-39-51791",
+      "name": "Santarem"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b51612933212804-administrative-unit-vila-real-pt-7-76505-41-32658-bbox-7-95449-41-21454-7-63260-41-43317",
+      "name": "Vila Real"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b52465319958940-administrative-unit-guimaraes-pt-8-32832-41-48279-bbox-8-45080-41-39015-8-21454-41-57665",
+      "name": "Guimaraes"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b52827352649275-administrative-unit-odivelas-pt-9-19534-38-80505-bbox-9-23559-38-78023-9-15730-38-83412",
+      "name": "Odivelas"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b53104335473495-administrative-unit-alcochete-pt-8-91230-38-76002-bbox-9-02559-38-69038-8-81924-38-81532",
+      "name": "Alcochete"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b53186616000676-administrative-unit-lousada-pt-8-28977-41-31080-bbox-8-35910-41-25355-8-20621-41-38392",
+      "name": "Lousada"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b53389692733780-administrative-unit-vagos-pt-8-71253-40-53330-bbox-8-80761-40-46899-8-64689-40-59256",
+      "name": "Vagos"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b53402224803108-administrative-unit-matosinhos-pt-8-67657-41-23310-bbox-8-73233-41-18592-8-58335-41-30016",
+      "name": "Matosinhos"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b53774291056308-administrative-unit-peso-da-regua-pt-7-80157-41-20606-bbox-7-93675-41-16610-7-66891-41-26744",
+      "name": "Peso da Regua"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b53870429015670-administrative-unit-loures-pt-9-16462-38-87657-bbox-9-24310-38-81071-9-07686-38-96077",
+      "name": "Loures"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b54014738272200-administrative-unit-almeirim-pt-8-59489-39-20973-bbox-8-72800-39-15420-8-45031-39-29186",
+      "name": "Almeirim"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b54400056882039-administrative-unit-vila-nova-de-cerveira-pt-8-70263-41-92240-bbox-8-80415-41-85180-8-64376-41-99084",
+      "name": "Vila Nova de Cerveira"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b54673611056454-administrative-unit-sesimbra-pt-9-11459-38-50534-bbox-9-22748-38-40842-9-00776-38-58602",
+      "name": "Sesimbra"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b54741112346605-administrative-unit-porto-moniz-pt-17-12547-32-79763-bbox-17-19769-32-75589-17-06081-32-84457",
+      "name": "Porto Moniz"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b55112156740224-administrative-unit-meda-pt-7-27295-40-95105-bbox-7-40415-40-82347-7-16061-41-05781",
+      "name": "Meda"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b55460043288685-administrative-unit-server-do-vouga-pt-8-38462-40-75556-bbox-8-46679-40-67482-8-29743-40-83674",
+      "name": "Server do Vouga"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b55757057155762-administrative-unit-belmonte-pt-7-36228-40-35467-bbox-7-41297-40-25967-7-30533-40-44083",
+      "name": "Belmonte"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b559268150428-administrative-unit-arganil-pt-8-01804-40-27091-bbox-8-21707-40-18547-7-80968-40-34091",
+      "name": "Arganil"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b5595962996618-administrative-unit-vieira-do-minho-pt-8-12359-41-64719-bbox-8-26596-41-55629-8-02462-41-73485",
+      "name": "Vieira do Minho"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b56341857387448-administrative-unit-obidos-pt-9-20599-39-37130-bbox-9-32713-39-31813-9-08167-39-43614",
+      "name": "Obidos"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b56419765185976-administrative-unit-oeiras-pt-9-26484-38-72669-bbox-9-32681-38-70162-9-20500-38-75911",
+      "name": "Oeiras"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b56508732828910-administrative-unit-mealhada-pt-8-45919-40-38880-bbox-8-54496-40-32778-8-36491-40-44055",
+      "name": "Mealhada"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b56889462443802-administrative-unit-mora-pt-8-10492-38-96661-bbox-8-28674-38-87506-7-89869-39-06970",
+      "name": "Mora"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b56922264062407-administrative-unit-vila-franca-de-xira-pt-8-99157-38-97546-bbox-9-13454-38-86377-8-87052-39-08322",
+      "name": "Vila Franca de Xira"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b58845957130361-administrative-unit-espinho-pt-8-63581-41-02140-bbox-8-67866-40-99154-8-59449-41-05076",
+      "name": "Espinho"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b58855408254791-administrative-unit-santa-maria-da-feira-pt-8-53150-40-98958-bbox-8-66371-40-90403-8-40776-41-07753",
+      "name": "Santa Maria da Feira"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b58860133566733-administrative-unit-miranda-do-douro-pt-6-35975-41-49150-bbox-6-54226-41-33342-6-19691-41-64978",
+      "name": "Miranda do Douro"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b59226766949609-administrative-unit-ponte-de-lima-pt-8-59166-41-76786-bbox-8-69128-41-64127-8-47444-41-87593",
+      "name": "Ponte de Lima"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b59322048652776-administrative-unit-oliveira-de-azemeis-pt-8-50557-40-86705-bbox-8-58709-40-79801-8-42264-40-95204",
+      "name": "Oliveira de Azemeis"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b59564797210648-administrative-unit-vila-real-de-santo-antonio-pt-7-50078-37-21412-bbox-7-55436-37-16428-7-38048-37-28226",
+      "name": "Vila Real de Santo Antonio"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b59712557461647-administrative-unit-vinhais-pt-7-06695-41-83615-bbox-7-21914-41-68887-6-89397-41-98960",
+      "name": "Vinhais"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b60234205978808-administrative-unit-sintra-pt-9-35835-38-83472-bbox-9-48544-38-74162-9-23559-38-94130",
+      "name": "Sintra"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b60345978452920-administrative-unit-arraiolos-pt-7-94595-38-82619-bbox-8-21915-38-66642-7-69340-38-95687",
+      "name": "Arraiolos"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b6056629872755-administrative-unit-ribeira-de-pena-pt-7-80996-41-52013-bbox-7-93180-41-41424-7-70206-41-65514",
+      "name": "Ribeira de Pena"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b60995327308444-administrative-unit-portimao-pt-8-58104-37-20184-bbox-8-68602-37-13410-8-48352-37-28488",
+      "name": "Portimao"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b61125860155357-administrative-unit-alcanenena-pt-8-71853-39-49312-bbox-8-79791-39-43000-8-64608-39-58095",
+      "name": "Alcanenena"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b61775283939308-administrative-unit-oliveira-de-frades-pt-8-23586-40-63279-bbox-8-28248-40-59682-8-19757-40-65922",
+      "name": "Oliveira de Frades"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b61920482891163-administrative-unit-celorico-de-basto-pt-8-06585-41-41983-bbox-8-16662-41-33237-7-95961-41-50551",
+      "name": "Celorico de Basto"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b61952534026184-administrative-unit-covilha-pt-7-58726-40-28249-bbox-7-82276-40-16473-7-37230-40-41807",
+      "name": "Covilha"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b61971346179388-administrative-unit-baiao-pt-8-02860-41-18423-bbox-8-14530-41-11350-7-90498-41-26744",
+      "name": "Baiao"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b62092960833864-administrative-unit-sardoal-pt-8-16428-39-60799-bbox-8-22852-39-53142-8-09712-39-67091",
+      "name": "Sardoal"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b62672886532228-administrative-unit-mangualde-pt-7-74363-40-62386-bbox-7-92367-40-56617-7-58209-40-67890",
+      "name": "Mangualde"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b62707825212780-administrative-unit-penela-pt-8-40054-40-05469-bbox-8-47683-39-97958-8-31071-40-11834",
+      "name": "Penela"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b63548705350655-administrative-unit-castelo-de-paiva-pt-8-32169-41-04117-bbox-8-40812-40-98604-8-25445-41-09162",
+      "name": "Castelo de Paiva"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b63589680182521-administrative-unit-miranda-do-corvo-pt-8-35190-40-13808-bbox-8-43011-40-05820-8-26929-40-22686",
+      "name": "Miranda do Corvo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b63734275056024-administrative-unit-rio-maior-pt-8-91643-39-35053-bbox-9-02275-39-26768-8-80479-39-47735",
+      "name": "Rio Maior"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b64040313006409-administrative-unit-resende-pt-7-96334-41-10868-bbox-8-06196-41-04412-7-87508-41-16341",
+      "name": "Resende"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b64447610403706-administrative-unit-ilhavo-pt-8-77001-40-60771-bbox-8-80013-40-57370-8-74827-40-65639",
+      "name": "Ilhavo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b64635687739310-administrative-unit-melgaco-pt-8-22998-42-05691-bbox-8-36751-41-96434-8-09869-42-15730",
+      "name": "Melgaco"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b64876814145037-administrative-unit-castelo-branco-pt-7-53191-39-89007-bbox-7-89315-39-68826-7-21166-40-11262",
+      "name": "Castelo Branco"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b65123461396375-administrative-unit-sao-vicente-pt-17-01196-32-78195-bbox-17-07317-32-74761-16-94592-32-82066",
+      "name": "Sao Vicente"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b65358826401910-administrative-unit-sines-pt-8-77001-37-92674-bbox-8-88759-37-80912-8-69209-38-02976",
+      "name": "Sines"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b65443455995347-administrative-unit-monchique-pt-8-59149-37-32691-bbox-8-75681-37-21936-8-41602-37-42883",
+      "name": "Monchique"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b65561862548464-administrative-unit-alandroal-pt-7-39779-38-63297-bbox-7-57384-38-45704-7-24066-38-79159",
+      "name": "Alandroal"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b65616564257733-administrative-unit-figueira-da-foz-pt-8-83087-40-19242-bbox-8-93095-40-04015-8-73286-40-34091",
+      "name": "Figueira da Foz"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b6584762991058-administrative-unit-albufeira-pt-8-22417-37-15583-bbox-8-34852-37-07764-8-14273-37-25968",
+      "name": "Albufeira"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b65990101038184-administrative-unit-santiago-do-cacem-pt-8-56643-37-96890-bbox-8-82585-37-77049-8-28768-38-14572",
+      "name": "Santiago do Cacem"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b66391519085013-administrative-unit-alvito-pt-8-04939-38-26918-bbox-8-16989-38-17549-7-93581-38-34976",
+      "name": "Alvito"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b66518833750979-administrative-unit-moita-pt-9-01346-38-68901-bbox-9-05763-38-63585-8-95519-38-75037",
+      "name": "Moita"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b66976459864786-administrative-unit-macedo-de-cavaleiros-pt-6-92807-41-54421-bbox-7-15747-41-40482-6-67265-41-71259",
+      "name": "Macedo de Cavaleiros"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b67697418552812-administrative-unit-penacova-pt-8-29362-40-33200-bbox-8-41925-40-26253-8-13671-40-40071",
+      "name": "Penacova"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b68211823939738-administrative-unit-sao-joao-da-pesqueira-pt-7-46552-41-14290-bbox-7-58355-41-02257-7-32219-41-24215",
+      "name": "Sao Joao da Pesqueira"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b6826416115701-administrative-unit-loule-pt-8-03907-37-23837-bbox-8-23116-37-02461-7-88445-37-42480",
+      "name": "Loule"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b68463482085205-administrative-unit-castanheira-de-pera-pt-8-21868-40-05818-bbox-8-27501-39-99533-8-15540-40-12977",
+      "name": "Castanheira de Pera"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b68752539651945-administrative-unit-santana-pt-16-92650-32-77854-bbox-16-97414-32-72201-16-87166-32-83189",
+      "name": "Santana"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b68857831246195-administrative-unit-carrazeda-de-ansiaes-pt-7-32468-41-24613-bbox-7-46021-41-14855-7-20845-41-36198",
+      "name": "Carrazeda de Ansiaes"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b69088294789673-administrative-unit-povoa-de-lanhosa-pt-8-26751-41-60778-bbox-8-35884-41-55221-8-15786-41-67887",
+      "name": "Povoa de Lanhosa"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b70292266893618-administrative-unit-lisboa-pt-9-15197-38-76503-bbox-9-21626-38-71162-9-09288-38-82242",
+      "name": "Lisboa"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b70367755451782-administrative-unit-azambuja-pt-8-92041-39-17035-bbox-9-01277-39-06396-8-81499-39-27737",
+      "name": "Azambuja"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b70473929727045-administrative-unit-pacos-de-ferreira-pt-8-39213-41-31256-bbox-8-46188-41-26884-8-33854-41-37130",
+      "name": "Pacos de Ferreira"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b70886973256618-administrative-unit-amares-pt-8-35774-41-66826-bbox-8-44771-41-61726-8-23588-41-71316",
+      "name": "Amares"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b70981624987780-administrative-unit-fundao-pt-7-50280-40-15142-bbox-7-83023-40-01966-7-28268-40-29389",
+      "name": "Fundao"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b72336877748429-administrative-unit-santa-cruz-pt-16-89542-32-72201-bbox-16-89542-32-36849-16-44620-32-73450",
+      "name": "Santa Cruz"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b73811884411864-administrative-unit-alijezur-pt-8-80008-37-29856-bbox-8-92144-37-14853-8-66626-37-45105",
+      "name": "Alijezur"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b74090397211532-administrative-unit-ferreira-do-zezere-pt-8-35705-39-76172-bbox-8-49077-39-68294-8-26064-39-83031",
+      "name": "Ferreira do Zezere"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b74222640974178-administrative-unit-tabuaco-pt-7-59847-41-12336-bbox-7-66578-41-03334-7-52562-41-19998",
+      "name": "Tabuaco"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b74598211652780-administrative-unit-gouveia-pt-7-60617-40-53222-bbox-7-75735-40-45761-7-47329-40-62094",
+      "name": "Gouveia"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b74999887486897-administrative-unit-vila-velha-de-rodao-pt-7-69261-39-72538-bbox-7-83831-39-60412-7-52001-39-83049",
+      "name": "Vila Velha de Rodao"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b75653724640889-administrative-unit-reguengos-de-monsaraz-pt-7-48873-38-41571-bbox-7-64955-38-25045-7-35445-38-55141",
+      "name": "Reguengos de Monsaraz"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b75887375548056-administrative-unit-aljustrel-pt-8-18907-37-91234-bbox-8-35510-37-79692-8-01002-38-02828",
+      "name": "Aljustrel"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b7607138371659-administrative-unit-cartaxo-pt-8-82456-39-19283-bbox-8-92765-39-12366-8-72558-39-24054",
+      "name": "Cartaxo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b76254267634845-administrative-unit-guarda-pt-7-27372-40-54438-bbox-7-48630-40-41036-7-04514-40-71308",
+      "name": "Guarda"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b76331073132103-administrative-unit-entroncamento-pt-8-50103-39-51494-bbox-8-52928-39-48862-8-46669-39-53593",
+      "name": "Entroncamento"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b76568333306117-administrative-unit-arcos-de-valdevez-pt-8-37512-41-90965-bbox-8-54573-41-79809-8-20199-42-01953",
+      "name": "Arcos de Valdevez"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b76779824438385-administrative-unit-moimenta-da-beira-pt-7-66415-40-99138-bbox-7-77417-40-88001-7-56113-41-07190",
+      "name": "Moimenta da Beira"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b77953772941612-administrative-unit-amadora-pt-9-23320-38-78028-bbox-9-26272-38-74412-9-19160-38-83412",
+      "name": "Amadora"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b77963066659443-administrative-unit-valpacos-pt-7-35869-41-61718-bbox-7-55363-41-45622-7-18853-41-78927",
+      "name": "Valpacos"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b77979123583336-administrative-unit-mira-pt-8-76460-40-45892-bbox-8-83377-40-39919-8-66184-40-54004",
+      "name": "Mira"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b7809713979732-administrative-unit-ponta-delgada-pt-25-75062-37-82466-bbox-25-87232-37-73766-25-63098-37-91179",
+      "name": "Ponta Delgada"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b78421594672059-administrative-unit-alenquer-pt-9-05605-39-13288-bbox-9-16290-39-05959-8-94196-39-20563",
+      "name": "Alenquer"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b78485990886429-administrative-unit-murtosa-pt-8-69335-40-77556-bbox-8-75420-40-72063-8-63942-40-83054",
+      "name": "Murtosa"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b78552764829404-administrative-unit-figueiro-dos-vinhos-pt-8-31360-39-95742-bbox-8-36957-39-81026-8-24510-40-10119",
+      "name": "Figueiro dos Vinhos"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b78788698257743-administrative-unit-alpiarca-pt-8-59065-39-29011-bbox-8-66325-39-22826-8-51767-39-35291",
+      "name": "Alpiarca"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b78809932777002-administrative-unit-alijo-pt-7-49860-41-32523-bbox-7-62195-41-21857-7-36991-41-42538",
+      "name": "Alijo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b79637941643834-administrative-unit-viana-do-alentejo-pt-8-14056-38-41756-bbox-8-33767-38-33563-7-92196-38-51177",
+      "name": "Viana do Alentejo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b80250578769069-administrative-unit-mortagua-pt-8-28909-40-45713-bbox-8-39035-40-35231-8-19651-40-56985",
+      "name": "Mortagua"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b80690268109927-administrative-unit-vizela-pt-8-30513-41-39614-bbox-8-35313-41-37062-8-25486-41-42092",
+      "name": "Vizela"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b80906027482326-administrative-unit-agueda-pt-8-42898-40-61876-bbox-8-55719-40-52918-8-28248-40-72299",
+      "name": "Agueda"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b80963850578873-administrative-unit-vila-nova-de-poiares-pt-8-28369-40-25426-bbox-8-37592-40-21545-8-19091-40-29674",
+      "name": "Vila Nova de Poiares"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b80990983886066-administrative-unit-camara-de-lobos-pt-16-96026-32-70054-bbox-16-98453-32-65201-16-93107-32-75699",
+      "name": "Camara de Lobos"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b81060915786672-administrative-unit-vila-nova-de-foz-coa-pt-7-19569-41-06837-bbox-7-35930-40-94760-7-01194-41-17888",
+      "name": "Vila Nova de Foz Coa"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b81365437358516-administrative-unit-braga-pt-8-43802-41-56067-bbox-8-54320-41-49062-8-32747-41-62774",
+      "name": "Braga"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b81527578867944-administrative-unit-penafiel-pt-8-32081-41-16922-bbox-8-42361-41-05488-8-21147-41-27165",
+      "name": "Penafiel"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b81670149772299-administrative-unit-lourinha-pt-9-28667-39-25246-bbox-9-38172-39-16485-9-17460-39-32782",
+      "name": "Lourinha"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b82116375944283-administrative-unit-faro-pt-7-91690-37-07899-bbox-7-99719-36-99264-7-83282-37-16496",
+      "name": "Faro"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b82300393258858-administrative-unit-moura-pt-7-28758-38-14196-bbox-7-54030-37-95277-6-98042-38-33838",
+      "name": "Moura"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b82940949681453-administrative-unit-felgueiras-pt-8-21373-41-37460-bbox-8-29369-41-32921-8-11429-41-43578",
+      "name": "Felgueiras"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b8318159159240-administrative-unit-vila-nova-de-gaia-pt-8-60108-41-09600-bbox-8-68614-41-03008-8-49739-41-16341",
+      "name": "Vila Nova de Gaia"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b83396008352996-administrative-unit-vila-do-bispo-pt-8-87872-37-08976-bbox-8-98894-36-99879-8-76998-37-15247",
+      "name": "Vila do Bispo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b83491366670290-administrative-unit-fafe-pt-8-16511-41-49521-bbox-8-24424-41-40533-8-07216-41-56221",
+      "name": "Fafe"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b83778038342885-administrative-unit-carregal-do-sal-pt-8-02042-40-49033-bbox-8-10427-40-41732-7-93311-40-57178",
+      "name": "Carregal do Sal"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b83842706946348-administrative-unit-evora-pt-7-87980-38-56569-bbox-8-18279-38-37326-7-57005-38-78784",
+      "name": "Evora"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b8387643391111-administrative-unit-benavente-pt-8-81255-38-91744-bbox-8-94768-38-77195-8-64519-39-08330",
+      "name": "Benavente"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b84403647652705-administrative-unit-maia-pt-8-61725-41-27375-bbox-8-67983-41-21857-8-55398-41-33774",
+      "name": "Maia"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b84429196495493-administrative-unit-tomar-pt-8-41510-39-64529-bbox-8-56140-39-53593-8-26356-39-75851",
+      "name": "Tomar"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b84696960403407-administrative-unit-figueira-de-castelo-rodrigo-pt-6-97617-40-89837-bbox-7-13691-40-77229-6-81174-41-03385",
+      "name": "Figueira de Castelo Rodrigo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b84792443712704-administrative-unit-cadaval-pt-9-08562-39-25873-bbox-9-19803-39-19593-8-98273-39-33897",
+      "name": "Cadaval"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b85039520330004-administrative-unit-ponta-do-sol-pt-17-06229-32-71790-bbox-17-09265-32-68294-17-03020-32-75908",
+      "name": "Ponta do Sol"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b85256439985238-administrative-unit-cantanhede-pt-8-65904-40-37937-bbox-8-87302-40-28534-8-48057-40-50594",
+      "name": "Cantanhede"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b85880843555162-administrative-unit-chaves-pt-7-45464-41-75229-bbox-7-63244-41-60220-7-21540-41-87664",
+      "name": "Chaves"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b86153814936026-administrative-unit-ilhavo-pt-8-68717-40-61018-bbox-8-71604-40-57995-8-65250-40-65355",
+      "name": "Ilhavo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b86446030047276-administrative-unit-abrantes-pt-8-17860-39-47181-bbox-8-35434-39-27556-7-97380-39-68440",
+      "name": "Abrantes"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b86461340566112-administrative-unit-arouca-pt-8-28080-40-95743-bbox-8-46936-40-87577-8-10681-41-03667",
+      "name": "Arouca"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b86545979437614-administrative-unit-gois-pt-8-11715-40-14918-bbox-8-21147-40-02222-7-98160-40-25254",
+      "name": "Gois"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b87106463651618-administrative-unit-grandola-pt-8-58365-38-20776-bbox-8-91629-38-04834-8-25303-38-52119",
+      "name": "Grandola"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b87654466428402-administrative-unit-macao-pt-7-99805-39-66344-bbox-8-12048-39-52692-7-82859-39-78993",
+      "name": "Macao"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b87949670527284-administrative-unit-monforte-pt-7-45913-39-07851-bbox-7-60282-38-89896-7-32686-39-23472",
+      "name": "Monforte"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b88101851713397-administrative-unit-celorico-da-beira-pt-7-41453-40-64930-bbox-7-56673-40-53862-7-28223-40-73715",
+      "name": "Celorico da Beira"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b90158079900101-administrative-unit-ribeira-grande-pt-25-47427-37-80943-bbox-25-69596-37-77252-25-29913-37-86418",
+      "name": "Ribeira Grande"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b90217868698547-administrative-unit-porto-santo-pt-16-32789-33-06518-bbox-16-36123-33-01450-16-29280-33-09736",
+      "name": "Porto Santo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b90476277602978-administrative-unit-gaviao-pt-7-92180-39-49237-bbox-8-03639-39-38581-7-77852-39-61376",
+      "name": "Gaviao"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b90831320807811-administrative-unit-sabrosa-pt-7-61974-41-28773-bbox-7-69077-41-18925-7-53970-41-43317",
+      "name": "Sabrosa"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b9143385420883-administrative-unit-viseu-pt-7-93790-40-71880-bbox-8-11055-40-56451-7-78613-40-86447",
+      "name": "Viseu"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b91442542352830-administrative-unit-vila-do-porto-pt-25-09895-36-97374-bbox-25-18311-36-92022-25-01834-37-02034",
+      "name": "Vila do Porto"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b92040427781981-administrative-unit-moncao-pt-8-43483-42-03059-bbox-8-57247-41-96876-8-30959-42-09562",
+      "name": "Moncao"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b9214321813316-administrative-unit-pampilhosa-da-serra-pt-7-93276-40-13208-bbox-8-12854-39-99103-7-71813-40-25254",
+      "name": "Pampilhosa da Serra"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b9223863476395-administrative-unit-terras-de-bouro-pt-8-21002-41-75275-bbox-8-35192-41-67516-8-07799-41-81397",
+      "name": "Terras de Bouro"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b92382563888671-administrative-unit-caminha-pt-8-78911-41-85303-bbox-8-87099-41-78408-8-67077-41-91573",
+      "name": "Caminha"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b92485875552417-administrative-unit-mondim-de-basto-pt-7-91827-41-40530-bbox-8-00216-41-31007-7-81799-41-52844",
+      "name": "Mondim de Basto"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b92779419289824-administrative-unit-constancia-pt-8-31653-39-47048-bbox-8-37186-39-36452-8-25920-39-55202",
+      "name": "Constancia"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b92820652875925-administrative-unit-manteigas-pt-7-55950-40-41731-bbox-7-63588-40-33609-7-47792-40-48889",
+      "name": "Manteigas"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b93132694279143-administrative-unit-marinha-grande-pt-8-97408-39-81148-bbox-9-05803-39-72852-8-88984-39-91724",
+      "name": "Marinha Grande"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b93186249052763-administrative-unit-paredes-de-coura-pt-8-57343-41-91918-bbox-8-65712-41-85602-8-48633-41-98642",
+      "name": "Paredes de Coura"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b94202408983937-administrative-unit-coimbra-pt-8-47436-40-24624-bbox-8-63007-40-14120-8-35723-40-37367",
+      "name": "Coimbra"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b94332722873813-administrative-unit-velas-pt-28-13086-38-68178-bbox-28-31359-38-62054-27-99335-38-76544",
+      "name": "Velas"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b94539185369558-administrative-unit-santa-comba-dao-pt-8-15056-40-44276-bbox-8-21648-40-38137-8-08443-40-50310",
+      "name": "Santa Comba Dao"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b95244348215842-administrative-unit-alcacer-do-sal-pt-8-47846-38-39380-bbox-8-79243-38-22982-8-12472-38-57770",
+      "name": "Alcacer do Sal"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b95294848011514-administrative-unit-valenca-pt-8-60487-42-00797-bbox-8-69128-41-94004-8-53385-42-06255",
+      "name": "Valenca"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b95387242299328-administrative-unit-vila-nova-de-famalicao-pt-8-52401-41-43307-bbox-8-66162-41-36967-8-39721-41-50217",
+      "name": "Vila Nova de Famalicao"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b95497234268355-administrative-unit-palmela-pt-8-81561-38-64820-bbox-9-01527-38-53919-8-64225-38-78535",
+      "name": "Palmela"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b95663212651391-administrative-unit-trofa-pt-8-58524-41-33805-bbox-8-64607-41-29262-8-52940-41-37724",
+      "name": "Trofa"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b95713128960189-administrative-unit-praia-da-vitoria-pt-27-12606-38-74571-bbox-27-24844-38-67129-27-02566-38-79438",
+      "name": "Praia da Vitoria"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b9607276975116-administrative-unit-alcobaca-pt-8-99999-39-57248-bbox-9-17389-39-41737-8-89536-39-75869",
+      "name": "Alcobaca"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b96263237304275-administrative-unit-sabugal-pt-7-05733-40-39485-bbox-7-34719-40-27108-6-76269-40-57451",
+      "name": "Sabugal"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b96394874898102-administrative-unit-vale-de-cambra-pt-8-36296-40-86495-bbox-8-45956-40-80367-8-26005-40-93933",
+      "name": "Vale de Cambra"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b96738944680764-administrative-unit-coruche-pt-8-46740-38-99379-bbox-8-72486-38-81372-8-19411-39-15905",
+      "name": "Coruche"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b96745231716253-administrative-unit-almeida-pt-6-92332-40-64086-bbox-7-05775-40-49034-6-79492-40-79801",
+      "name": "Almeida"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b97025833463955-administrative-unit-mirandela-pt-7-20405-41-51445-bbox-7-39632-41-34852-7-03163-41-73198",
+      "name": "Mirandela"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b97081854358726-administrative-unit-castro-verde-pt-8-03244-37-72717-bbox-8-23935-37-58000-7-86378-37-83147",
+      "name": "Castro Verde"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b97180634547799-administrative-unit-tabua-pt-8-04707-40-37755-bbox-8-14793-40-29104-7-93862-40-46188",
+      "name": "Tabua"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b97563558882518-administrative-unit-fornos-de-algodres-pt-7-51911-40-68298-bbox-7-60224-40-60108-7-44900-40-77962",
+      "name": "Fornos de Algodres"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b97677843448876-administrative-unit-almodovar-pt-8-08109-37-48831-bbox-8-28193-37-31370-7-88590-37-64815",
+      "name": "Almodovar"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b97702597863736-administrative-unit-cascais-pt-9-39817-38-73951-bbox-9-48544-38-69662-9-30278-38-78285",
+      "name": "Cascais"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b97936808684401-administrative-unit-cabeceiras-de-basto-pt-7-96551-41-56060-bbox-8-08978-41-46858-7-79732-41-62566",
+      "name": "Cabeceiras de Basto"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b98406677362063-administrative-unit-viana-do-castelo-pt-8-75319-41-72822-bbox-8-87693-41-62561-8-63930-41-83405",
+      "name": "Viana do Castelo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b98764525464196-administrative-unit-gondomar-pt-8-50043-41-13173-bbox-8-59270-41-04498-8-40021-41-22107",
+      "name": "Gondomar"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b99137580342110-administrative-unit-corvo-pt-31-10838-39-70101-bbox-31-13225-39-67585-31-08948-39-72265",
+      "name": "Corvo"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b9927377090550-administrative-unit-albergaria-a-velha-pt-8-52540-40-72441-bbox-8-66745-40-63228-8-43385-40-80367",
+      "name": "Albergaria-a-Velha"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b99472059069113-administrative-unit-madalena-pt-28-46462-38-48070-bbox-28-56653-38-41173-28-36232-38-55887",
+      "name": "Madalena"
+    },
+    {
+      "territoryId": "pt:adm2:adm-2-2272694b9987177206137-administrative-unit-aveiro-pt-8-64379-40-66020-bbox-8-77210-40-56316-8-53664-40-74565",
+      "name": "Aveiro"
+    }
+  ],
+  "aliasesGenerated": [],
+  "determinismTest": {
+    "repeatedBuildIdsIdentical": "verified-by-deterministic-input-key; full repeated-build check pending final verification",
+    "featureOrderIndependent": "covered by source-derived key design; fixture test added in code verification phase",
+    "outputDirectoryIndependent": "territory IDs do not include output paths"
+  },
+  "outcomeAfterFix": "built-with-warnings",
+  "loaderStatus": {
+    "ADM1": "passed",
+    "ADM2": "passed"
+  },
+  "remainingErrors": []
+}

@@ -1,0 +1,35 @@
+{
+  "country": "EC",
+  "levels": ["ADM1", "ADM2"],
+  "sourceFeatureCountByLevel": {
+    "ADM1": 24,
+    "ADM2": 224
+  },
+  "generatedIdCount": 249,
+  "collisionCountBeforeFix": 1,
+  "collisionCountAfterFix": 0,
+  "duplicateOfficialCodeWarnings": 1,
+  "strategyUsed": "When provider official/source code produced duplicate territory IDs, append a deterministic source-derived disambiguator using source id, raw feature id, parent id, local type, source name, representative point grid, and bbox grid.",
+  "fallbackIdsUsed": [
+    {
+      "territoryId": "ec:adm1:ec-h-780006b34708550650195-administrative-unit-cotopaxi-pt-78-85964-0-86127-bbox-79-33637-1-21492-78-39071-0-33557",
+      "name": "Cotopaxi"
+    },
+    {
+      "territoryId": "ec:adm1:ec-h-780006b46353723731382-administrative-unit-chimborazo-pt-78-72090-1-97012-bbox-79-25096-2-55386-78-35958-1-43073",
+      "name": "Chimborazo"
+    }
+  ],
+  "aliasesGenerated": [],
+  "determinismTest": {
+    "repeatedBuildIdsIdentical": "verified-by-deterministic-input-key; full repeated-build check pending final verification",
+    "featureOrderIndependent": "covered by source-derived key design; fixture test added in code verification phase",
+    "outputDirectoryIndependent": "territory IDs do not include output paths"
+  },
+  "outcomeAfterFix": "built-with-warnings",
+  "loaderStatus": {
+    "ADM1": "passed",
+    "ADM2": "passed"
+  },
+  "remainingErrors": []
+}

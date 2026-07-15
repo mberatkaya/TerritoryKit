@@ -3,7 +3,12 @@ import { join, relative, resolve } from "node:path";
 import type { TerritoryAdminLevel } from "@territory-kit/dataset";
 import { ISO_3166_COUNTRIES } from "./iso3166.js";
 import { getTerritoryCountryConfig } from "./registry.js";
-import type { TerritoryArtifactStatus, TerritoryCountryBuildAllReport } from "./types.js";
+import type {
+  TerritoryArtifactStatus,
+  TerritoryCountryBuildAllReport,
+  TerritoryLifecycleStatus,
+  TerritorySemanticReviewStatus
+} from "./types.js";
 
 export interface TerritoryCoverageRegistry {
   schemaVersion: "territorykit-coverage@2";
@@ -11,6 +16,14 @@ export interface TerritoryCoverageRegistry {
   summary: {
     totalCountries: number;
     levels: Record<string, Record<TerritoryArtifactStatus, number>>;
+    sourceStatus: Record<string, Record<string, number>>;
+    validationStatus: Record<string, Record<string, number>>;
+    semanticReviewStatus: Record<string, Record<TerritorySemanticReviewStatus, number>>;
+    hierarchyStatus: Record<string, Record<string, number>>;
+    adjacencyStatus: Record<string, Record<string, number>>;
+    indexStatus: Record<string, Record<string, number>>;
+    loaderStatus: Record<string, Record<string, number>>;
+    featureCountByLevel: Record<string, number>;
     licenseRestrictedCountries: number;
     sourceMissingCountries: number;
     validationFailedCountries: number;
@@ -35,8 +48,20 @@ export interface TerritoryCoverageLevel {
   license?: string;
   artifactPath?: string;
   featureCount?: number;
-  validationStatus?: "not-run" | "passed" | "failed";
-  sourceStatus?: "not-reviewed" | "available" | "unavailable" | "restricted";
+  validationStatus?: "not-run" | "passed" | "passed-with-warnings" | "failed";
+  semanticReviewStatus?: TerritorySemanticReviewStatus;
+  hierarchyStatus?: TerritoryLifecycleStatus;
+  adjacencyStatus?: TerritoryLifecycleStatus;
+  indexStatus?: TerritoryLifecycleStatus;
+  loaderStatus?: TerritoryLifecycleStatus;
+  sourceStatus?:
+    | "not-reviewed"
+    | "available"
+    | "unavailable"
+    | "not-applicable"
+    | "restricted"
+    | "provider-error"
+    | "provider-unsupported";
 }
 
 export interface TerritoryCoverageBuildOptions {
@@ -208,7 +233,11 @@ async function inferCountryLevelStatus(input: {
   const levelResult = input.buildResult?.levels.find((level) => level.level === input.level);
   const built =
     Boolean(manifest?.supportedLevels?.includes(input.level)) &&
-    Boolean(manifest?.publishReady || levelResult?.status === "built") &&
+    Boolean(
+      manifest?.publishReady ||
+      levelResult?.status === "built" ||
+      levelResult?.status === "built-with-warnings"
+    ) &&
     hasDataset &&
     hasIndex &&
     hasValidation &&
@@ -224,7 +253,9 @@ async function inferCountryLevelStatus(input: {
       ...(manifest?.featureCountByLevel?.[input.level] !== undefined
         ? { featureCount: manifest.featureCountByLevel[input.level] }
         : {}),
-      validationStatus: "passed",
+      validationStatus:
+        levelResult?.status === "built-with-warnings" ? "passed-with-warnings" : "passed",
+      ...coverageLifecycleFields(levelResult),
       sourceStatus: "available"
     };
   }
@@ -235,6 +266,7 @@ async function inferCountryLevelStatus(input: {
       provider: input.provider,
       ...(levelResult.featureCount !== undefined ? { featureCount: levelResult.featureCount } : {}),
       validationStatus: "failed",
+      ...coverageLifecycleFields(levelResult),
       sourceStatus: "available"
     };
   }
@@ -243,9 +275,60 @@ async function inferCountryLevelStatus(input: {
     status: levelResult?.status ?? input.fallbackStatus,
     provider: input.provider,
     ...(levelResult?.featureCount !== undefined ? { featureCount: levelResult.featureCount } : {}),
-    validationStatus: "not-run",
-    sourceStatus: input.fallbackStatus === "not-reviewed" ? "not-reviewed" : "available"
+    validationStatus:
+      levelResult?.status === "built-with-warnings" ? "passed-with-warnings" : "not-run",
+    ...coverageLifecycleFields(levelResult),
+    sourceStatus: sourceStatusForCoverage(levelResult?.status ?? input.fallbackStatus)
   };
+}
+
+function coverageLifecycleFields(
+  levelResult: TerritoryCountryBuildAllReport["results"][number]["levels"][number] | undefined
+): Pick<
+  TerritoryCoverageLevel,
+  "semanticReviewStatus" | "hierarchyStatus" | "adjacencyStatus" | "indexStatus" | "loaderStatus"
+> {
+  const lifecycle = levelResult?.lifecycle;
+
+  return {
+    ...(lifecycle?.semanticReviewStatus
+      ? { semanticReviewStatus: lifecycle.semanticReviewStatus }
+      : {}),
+    ...(lifecycle?.hierarchyStatus ? { hierarchyStatus: lifecycle.hierarchyStatus } : {}),
+    ...(lifecycle?.adjacencyStatus ? { adjacencyStatus: lifecycle.adjacencyStatus } : {}),
+    ...(lifecycle?.indexStatus ? { indexStatus: lifecycle.indexStatus } : {}),
+    ...(lifecycle?.loaderStatus ? { loaderStatus: lifecycle.loaderStatus } : {})
+  };
+}
+
+function sourceStatusForCoverage(
+  status: TerritoryArtifactStatus
+): NonNullable<TerritoryCoverageLevel["sourceStatus"]> {
+  if (status === "not-reviewed") {
+    return "not-reviewed";
+  }
+
+  if (status === "source-unavailable") {
+    return "unavailable";
+  }
+
+  if (status === "not-applicable") {
+    return "not-applicable";
+  }
+
+  if (status === "licence-restricted" || status === "license-restricted") {
+    return "restricted";
+  }
+
+  if (status === "provider-error") {
+    return "provider-error";
+  }
+
+  if (status === "provider-unsupported") {
+    return "provider-unsupported";
+  }
+
+  return "available";
 }
 
 function summarizeCoverage(
@@ -258,13 +341,57 @@ function summarizeCoverage(
   return {
     totalCountries: countries.length,
     levels,
-    licenseRestrictedCountries: countCountriesWithStatus(countries, "license-restricted"),
-    sourceMissingCountries: countCountriesWithStatus(countries, "source-unavailable"),
+    sourceStatus: summarizeCoverageProperty(countries, "sourceStatus"),
+    validationStatus: summarizeCoverageProperty(countries, "validationStatus"),
+    semanticReviewStatus: summarizeCoverageProperty(countries, "semanticReviewStatus") as Record<
+      string,
+      Record<TerritorySemanticReviewStatus, number>
+    >,
+    hierarchyStatus: summarizeCoverageProperty(countries, "hierarchyStatus"),
+    adjacencyStatus: summarizeCoverageProperty(countries, "adjacencyStatus"),
+    indexStatus: summarizeCoverageProperty(countries, "indexStatus"),
+    loaderStatus: summarizeCoverageProperty(countries, "loaderStatus"),
+    featureCountByLevel: Object.fromEntries(
+      COVERAGE_LEVELS.map((level) => [
+        level,
+        countries.reduce((sum, country) => sum + (country.levels[level]?.featureCount ?? 0), 0)
+      ])
+    ),
+    licenseRestrictedCountries: countCountriesWithStatus(countries, "licence-restricted", [
+      "ADM1",
+      "ADM2"
+    ]),
+    sourceMissingCountries: countries.filter(
+      (country) =>
+        country.levels.ADM1?.status === "source-unavailable" &&
+        country.levels.ADM2?.status === "source-unavailable"
+    ).length,
     validationFailedCountries: countCountriesWithStatus(countries, "validation-failed"),
     builtCountries: countries.filter((country) =>
       Object.values(country.levels).some((level) => level.status === "built")
     ).length
   };
+}
+
+function summarizeCoverageProperty(
+  countries: TerritoryCoverageCountry[],
+  property: keyof TerritoryCoverageLevel
+): Record<string, Record<string, number>> {
+  return Object.fromEntries(
+    COVERAGE_LEVELS.map((level) => {
+      const counts: Record<string, number> = {};
+
+      for (const country of countries) {
+        const value = country.levels[level]?.[property];
+
+        if (typeof value === "string") {
+          counts[value] = (counts[value] ?? 0) + 1;
+        }
+      }
+
+      return [level, counts];
+    })
+  );
 }
 
 function summarizeLevel(
@@ -283,10 +410,11 @@ function summarizeLevel(
 
 function countCountriesWithStatus(
   countries: TerritoryCoverageCountry[],
-  status: TerritoryArtifactStatus
+  status: TerritoryArtifactStatus,
+  levels: readonly string[] = COVERAGE_LEVELS
 ): number {
   return countries.filter((country) =>
-    Object.values(country.levels).some((level) => level.status === status)
+    levels.some((level) => country.levels[level]?.status === status)
   ).length;
 }
 

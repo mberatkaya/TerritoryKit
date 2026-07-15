@@ -1,0 +1,163 @@
+{
+  "country": "CN",
+  "levels": ["ADM1", "ADM2"],
+  "sourceFeatureCountByLevel": {
+    "ADM1": 34,
+    "ADM2": 2390
+  },
+  "generatedIdCount": 2425,
+  "collisionCountBeforeFix": 33,
+  "collisionCountAfterFix": 0,
+  "duplicateOfficialCodeWarnings": 33,
+  "strategyUsed": "When provider official/source code produced duplicate territory IDs, append a deterministic source-derived disambiguator using source id, raw feature id, parent id, local type, source name, representative point grid, and bbox grid.",
+  "fallbackIdsUsed": [
+    {
+      "territoryId": "cn:adm1:chn-43563684b11053367304830-administrative-unit-gansu-province-pt-105-57755-32-99797-bbox-92-61771-32-65425-108-78256-42-65993",
+      "name": "Gansu Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b14397599951889-administrative-unit-sichuan-province-pt-102-83571-30-66517-bbox-97-43044-26-17162-108-75889-34-32398",
+      "name": "Sichuan Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b17418114845297-administrative-unit-beijing-municipality-pt-116-51366-40-27044-bbox-115-54021-39-57509-117-50647-41-07551",
+      "name": "Beijing Municipality"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b19802372559419-administrative-unit-tibet-autonomous-region-pt-88-43888-31-51536-bbox-78-46692-26-88824-99-12145-36-54605",
+      "name": "Tibet Autonomous Region"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b26929678147954-administrative-unit-liaoning-province-pt-122-70320-41-35916-bbox-118-95627-38-76057-125-84222-43-53805",
+      "name": "Liaoning Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b30737817496648-administrative-unit-fujian-province-pt-118-04340-26-13173-bbox-115-90744-23-61637-120-54140-28-39009",
+      "name": "Fujian Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b32372453033755-administrative-unit-taiwan-province-pt-120-96039-23-73047-bbox-120-02700-21-90161-121-94793-25-28138",
+      "name": "Taiwan Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b32591653033375-administrative-unit-shanghai-municipality-pt-121-51661-31-23224-bbox-121-00187-30-71009-122-04414-31-83692",
+      "name": "Shanghai Municipality"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b34303967365755-administrative-unit-shanxi-province-pt-112-38233-37-68306-bbox-110-37033-34-71945-114-62232-40-79158",
+      "name": "Shanxi Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b38891657012300-administrative-unit-guangzhou-province-pt-113-46187-23-39632-bbox-109-68254-20-26178-117-22162-25-58553",
+      "name": "Guangzhou Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b3982601277390-administrative-unit-jilin-province-pt-126-27205-43-72196-bbox-121-77456-40-86283-131-32245-46-34939",
+      "name": "Jilin Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b41908353419915-administrative-unit-hubei-province-pt-112-40109-31-08642-bbox-108-53166-29-19660-116-24570-33-39702",
+      "name": "Hubei Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b46172434476792-administrative-unit-qinghai-province-pt-96-10006-35-66194-bbox-89-46695-31-71121-103-07793-39-20835",
+      "name": "Qinghai Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b50492231896073-administrative-unit-xinjiang-uyghur-autonomous-region-pt-85-15059-41-12227-bbox-73-60608-34-35575-96-40396-49-15072",
+      "name": "Xinjiang Uyghur Autonomous Region"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b55920014778896-administrative-unit-heilongjiang-province-pt-127-84085-47-86663-bbox-121-33681-43-42831-134-74042-53-57096",
+      "name": "Heilongjiang Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b58229551045164-administrative-unit-hebei-province-pt-116-21413-39-64545-bbox-113-59500-36-20226-119-97127-42-68080",
+      "name": "Hebei Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b58995436924100-administrative-unit-shandong-province-pt-118-23682-36-41749-bbox-114-94853-34-51400-122-65528-38-30339",
+      "name": "Shandong Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b59914390554750-administrative-unit-guangxi-zhuang-autonomous-region-pt-108-83227-23-91956-bbox-104-54236-21-43760-112-07688-26-46908",
+      "name": "Guangxi Zhuang Autonomous Region"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b62959128536432-administrative-unit-shaanxi-province-pt-108-94851-35-26864-bbox-105-81978-31-90567-111-27181-39-64572",
+      "name": "Shaanxi Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b64367354813847-administrative-unit-jiangsu-province-pt-119-51076-33-05105-bbox-116-45645-30-87856-121-98261-35-19970",
+      "name": "Jiangsu Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b64666899633249-administrative-unit-ningxia-ningxia-hui-autonomous-region-pt-106-21090-37-38540-bbox-104-54273-35-42026-107-58141-39-43223",
+      "name": "Ningxia Ningxia Hui Autonomous Region"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b64987462919315-administrative-unit-hunan-province-pt-111-80023-27-72178-bbox-108-91291-24-75487-114-31756-30-23650",
+      "name": "Hunan Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b67556328368055-administrative-unit-hainan-province-pt-109-73372-19-19552-bbox-108-59850-18-17208-110-98406-20-15999",
+      "name": "Hainan Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b69230098435171-administrative-unit-hong-kong-special-administrative-region-pt-114-16361-22-40744-bbox-113-84133-22-19300-114-41427-22-60405",
+      "name": "Hong Kong Special Administrative Region"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b73528730180553-administrative-unit-zhejiang-province-pt-120-16498-29-23789-bbox-118-16848-27-28741-122-41145-31-22506",
+      "name": "Zhejiang Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b75549295130005-administrative-unit-anhui-province-pt-117-34279-31-90774-bbox-115-00038-29-48723-119-74000-34-73220",
+      "name": "Anhui Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b78583622565599-administrative-unit-guizhou-province-pt-106-94215-26-92597-bbox-103-69188-24-77905-109-59644-29-34883",
+      "name": "Guizhou Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b84540832148656-administrative-unit-yunnan-province-pt-101-54256-25-01187-bbox-97-58262-21-17114-106-20386-29-34010",
+      "name": "Yunnan Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b84701301190484-administrative-unit-tianjin-municipality-pt-117-42657-39-40153-bbox-116-79262-38-67746-118-15694-40-30003",
+      "name": "Tianjin Municipality"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b87813050901813-administrative-unit-jiangxi-province-pt-115-81747-27-68904-bbox-113-67845-24-58754-118-59998-30-14784",
+      "name": "Jiangxi Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b95381459098578-administrative-unit-inner-mongolia-autonomous-region-pt-114-09875-44-19598-bbox-97-36665-37-52672-126-10751-53-40579",
+      "name": "Inner Mongolia Autonomous Region"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b96917371447908-administrative-unit-henan-province-pt-113-72631-34-00262-bbox-110-43834-31-51407-116-73244-36-46221",
+      "name": "Henan Province"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b97104103456250-administrative-unit-macau-special-administrative-region-pt-113-56143-22-17149-bbox-113-49713-22-09133-113-62211-22-22736",
+      "name": "Macau Special Administrative Region"
+    },
+    {
+      "territoryId": "cn:adm1:chn-43563684b97743196909507-administrative-unit-chongqing-municipality-pt-107-97150-30-15556-bbox-105-37304-28-34442-110-25867-32-29969",
+      "name": "Chongqing Municipality"
+    }
+  ],
+  "aliasesGenerated": [],
+  "determinismTest": {
+    "repeatedBuildIdsIdentical": "verified-by-deterministic-input-key; full repeated-build check pending final verification",
+    "featureOrderIndependent": "covered by source-derived key design; fixture test added in code verification phase",
+    "outputDirectoryIndependent": "territory IDs do not include output paths"
+  },
+  "outcomeAfterFix": "built-with-warnings",
+  "loaderStatus": {
+    "ADM1": "passed",
+    "ADM2": "passed"
+  },
+  "remainingErrors": []
+}

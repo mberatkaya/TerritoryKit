@@ -1,0 +1,55 @@
+{
+  "country": "OM",
+  "levels": ["ADM1", "ADM2"],
+  "sourceFeatureCountByLevel": {
+    "ADM1": 7,
+    "ADM2": 61
+  },
+  "generatedIdCount": 69,
+  "collisionCountBeforeFix": 6,
+  "collisionCountAfterFix": 0,
+  "duplicateOfficialCodeWarnings": 6,
+  "strategyUsed": "When provider official/source code produced duplicate territory IDs, append a deterministic source-derived disambiguator using source id, raw feature id, parent id, local type, source name, representative point grid, and bbox grid.",
+  "fallbackIdsUsed": [
+    {
+      "territoryId": "om:adm1:omn-34121849b130430185889-administrative-unit-al-wusta-pt-56-52796-19-99727-bbox-55-00000-17-94188-58-31632-21-40134",
+      "name": "Al Wusta"
+    },
+    {
+      "territoryId": "om:adm1:omn-34121849b25434331600406-administrative-unit-ad-dakhiliyah-pt-57-41396-22-16582-bbox-56-59508-20-87310-58-33774-23-54285",
+      "name": "Ad Dakhiliyah"
+    },
+    {
+      "territoryId": "om:adm1:omn-34121849b37717587073732-administrative-unit-az-zahirah-pt-56-14045-22-96153-bbox-55-21137-17-46318-58-96287-26-38856",
+      "name": "Az Zahirah"
+    },
+    {
+      "territoryId": "om:adm1:omn-34121849b48568874604869-administrative-unit-ash-sharqiyah-pt-58-68955-21-98009-bbox-57-91300-20-35029-59-83942-23-30372",
+      "name": "Ash Sharqiyah"
+    },
+    {
+      "territoryId": "om:adm1:omn-34121849b71010913728332-administrative-unit-al-batinah-pt-57-05662-23-84720-bbox-56-20362-23-10801-58-07272-24-98133",
+      "name": "Al Batinah"
+    },
+    {
+      "territoryId": "om:adm1:omn-34121849b74132742221768-administrative-unit-muscat-pt-58-59595-23-33420-bbox-58-01602-22-88969-59-22574-23-71554",
+      "name": "Muscat"
+    },
+    {
+      "territoryId": "om:adm1:omn-34121849b8854015950868-administrative-unit-dhofar-pt-54-10361-18-33530-bbox-52-00000-16-65021-56-35582-20-00000",
+      "name": "Dhofar"
+    }
+  ],
+  "aliasesGenerated": [],
+  "determinismTest": {
+    "repeatedBuildIdsIdentical": "verified-by-deterministic-input-key; full repeated-build check pending final verification",
+    "featureOrderIndependent": "covered by source-derived key design; fixture test added in code verification phase",
+    "outputDirectoryIndependent": "territory IDs do not include output paths"
+  },
+  "outcomeAfterFix": "built-with-warnings",
+  "loaderStatus": {
+    "ADM1": "passed",
+    "ADM2": "passed"
+  },
+  "remainingErrors": []
+}

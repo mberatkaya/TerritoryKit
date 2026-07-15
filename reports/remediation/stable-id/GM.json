@@ -1,0 +1,43 @@
+{
+  "country": "GM",
+  "levels": ["ADM1", "ADM2"],
+  "sourceFeatureCountByLevel": {
+    "ADM1": 8,
+    "ADM2": 48
+  },
+  "generatedIdCount": 57,
+  "collisionCountBeforeFix": 2,
+  "collisionCountAfterFix": 0,
+  "duplicateOfficialCodeWarnings": 2,
+  "strategyUsed": "When provider official/source code produced duplicate territory IDs, append a deterministic source-derived disambiguator using source id, raw feature id, parent id, local type, source name, representative point grid, and bbox grid.",
+  "fallbackIdsUsed": [
+    {
+      "territoryId": "gm:adm1:gm-m-31243875b72482523363184-administrative-unit-janjanbureh-pt-14-93665-13-53847-bbox-15-37188-13-32135-14-49805-13-72427",
+      "name": "Janjanbureh"
+    },
+    {
+      "territoryId": "gm:adm1:gm-m-31243875b86283726287100-administrative-unit-kuntaur-pt-15-39548-13-62950-bbox-15-46257-13-43483-14-44686-13-82324",
+      "name": "Kuntaur"
+    },
+    {
+      "territoryId": "gm:adm1:gm-w-31243875b42421745591684-administrative-unit-kanifing-pt-16-67330-13-44356-bbox-16-72428-13-38447-16-62904-13-48923",
+      "name": "Kanifing"
+    },
+    {
+      "territoryId": "gm:adm1:gm-w-31243875b88426941804625-administrative-unit-brikama-pt-16-39221-13-24355-bbox-16-81426-13-04347-15-80121-13-44374",
+      "name": "Brikama"
+    }
+  ],
+  "aliasesGenerated": [],
+  "determinismTest": {
+    "repeatedBuildIdsIdentical": "verified-by-deterministic-input-key; full repeated-build check pending final verification",
+    "featureOrderIndependent": "covered by source-derived key design; fixture test added in code verification phase",
+    "outputDirectoryIndependent": "territory IDs do not include output paths"
+  },
+  "outcomeAfterFix": "built-with-warnings",
+  "loaderStatus": {
+    "ADM1": "passed",
+    "ADM2": "passed"
+  },
+  "remainingErrors": []
+}

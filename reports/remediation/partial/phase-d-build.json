@@ -1,0 +1,5039 @@
+{
+  "countriesAttempted": 20,
+  "countriesFailed": 20,
+  "countriesSucceeded": 0,
+  "generatedAt": "2026-07-15T12:45:48.119Z",
+  "levels": ["ADM1", "ADM2"],
+  "outcomes": {
+    "adjacency-failed": 0,
+    "built": 0,
+    "built-with-warnings": 0,
+    "CRS-error": 0,
+    "download-error": 0,
+    "extraction-error": 0,
+    "geometry-repair-failed": 0,
+    "hierarchy-failed": 0,
+    "index-failed": 0,
+    "licence-restricted": 0,
+    "loader-smoke-failed": 0,
+    "mapping-review-required": 0,
+    "not-applicable": 0,
+    "parse-error": 0,
+    "partial": 20,
+    "performance-deferred": 0,
+    "provider-error": 0,
+    "provider-unsupported": 0,
+    "source-unavailable": 0,
+    "stable-id-failed": 0,
+    "transform-error": 0,
+    "validation-failed": 0
+  },
+  "reportVersion": "1",
+  "results": [
+    {
+      "alpha3": "AND",
+      "country": "AD",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 7,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 4
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 7,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/AD",
+      "phaseTimings": [
+        {
+          "country": "AD",
+          "durationMs": 919,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 0,
+          "inputBytes": 13699,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 0,
+          "inputBytes": 13699,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 1,
+          "inputBytes": 5932,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 0,
+          "inputBytes": 5932,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 1,
+          "inputBytes": 5932,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 126,
+          "featureCount": 1,
+          "inputBytes": 5932,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 5932,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 2,
+          "inputBytes": 13699,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 0,
+          "inputBytes": 13699,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 0,
+          "inputBytes": 13699,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 58,
+          "featureCount": 7,
+          "inputBytes": 13699,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 1,
+          "featureCount": 7,
+          "inputBytes": 13699,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 0,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 1,
+          "featureCount": 8,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 3,
+          "featureCount": 8,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 0,
+          "featureCount": 8,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 3,
+          "featureCount": 8,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 0,
+          "inputBytes": 293468,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 24,
+          "inputBytes": 293468,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 7,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "AD",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/AD/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "ARE",
+      "country": "AE",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 37,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 34
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 7,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/AE",
+      "phaseTimings": [
+        {
+          "country": "AE",
+          "durationMs": 932,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 0,
+          "inputBytes": 204734,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 0,
+          "inputBytes": 204734,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 1,
+          "inputBytes": 57866,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 0,
+          "inputBytes": 57866,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 1,
+          "inputBytes": 57866,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 122,
+          "featureCount": 1,
+          "inputBytes": 57866,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 57866,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 1,
+          "inputBytes": 204734,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 0,
+          "inputBytes": 204734,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 1,
+          "inputBytes": 204734,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 137,
+          "featureCount": 7,
+          "inputBytes": 204734,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 0,
+          "featureCount": 7,
+          "inputBytes": 204734,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 1,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 2,
+          "featureCount": 8,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 131,
+          "featureCount": 8,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 0,
+          "featureCount": 8,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 41,
+          "featureCount": 8,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 0,
+          "inputBytes": 4693695,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 11,
+          "inputBytes": 4693695,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 24,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "AE",
+          "durationMs": 1,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/AE/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "ATG",
+      "country": "AG",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 9,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 6
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 8,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/AG",
+      "phaseTimings": [
+        {
+          "country": "AG",
+          "durationMs": 928,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 0,
+          "inputBytes": 26215,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 0,
+          "inputBytes": 26215,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 2,
+          "inputBytes": 20462,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 0,
+          "inputBytes": 20462,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 0,
+          "inputBytes": 20462,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 118,
+          "featureCount": 1,
+          "inputBytes": 20462,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 20462,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 2,
+          "inputBytes": 26215,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 0,
+          "inputBytes": 26215,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 0,
+          "inputBytes": 26215,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 67,
+          "featureCount": 8,
+          "inputBytes": 26215,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 0,
+          "featureCount": 8,
+          "inputBytes": 26215,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 1,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 0,
+          "featureCount": 9,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 2,
+          "featureCount": 9,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 0,
+          "featureCount": 9,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 4,
+          "featureCount": 9,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 0,
+          "inputBytes": 627520,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 15,
+          "inputBytes": 627520,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 11,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "AG",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/AG/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "BRB",
+      "country": "BB",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 10,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 7
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 11,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/BB",
+      "phaseTimings": [
+        {
+          "country": "BB",
+          "durationMs": 533,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 1,
+          "inputBytes": 12184,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 0,
+          "inputBytes": 12184,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 2,
+          "inputBytes": 4656,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 0,
+          "inputBytes": 4656,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 1,
+          "inputBytes": 4656,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 67,
+          "featureCount": 1,
+          "inputBytes": 4656,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 4656,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 1,
+          "inputBytes": 12184,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 0,
+          "inputBytes": 12184,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 0,
+          "inputBytes": 12184,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 53,
+          "featureCount": 11,
+          "inputBytes": 12184,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 0,
+          "featureCount": 11,
+          "inputBytes": 12184,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 0,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 0,
+          "featureCount": 12,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 1,
+          "featureCount": 12,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 0,
+          "featureCount": 12,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 2,
+          "featureCount": 12,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 0,
+          "inputBytes": 283485,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 7,
+          "inputBytes": 283485,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 16,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "BB",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/BB/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "BHR",
+      "country": "BH",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 8,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 5
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 4,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/BH",
+      "phaseTimings": [
+        {
+          "country": "BH",
+          "durationMs": 519,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 0,
+          "inputBytes": 40375,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 0,
+          "inputBytes": 40375,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 1,
+          "inputBytes": 50272,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 0,
+          "inputBytes": 50272,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 0,
+          "inputBytes": 50272,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 87,
+          "featureCount": 1,
+          "inputBytes": 50272,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 50272,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 1,
+          "inputBytes": 40375,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 0,
+          "inputBytes": 40375,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 0,
+          "inputBytes": 40375,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 58,
+          "featureCount": 4,
+          "inputBytes": 40375,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 0,
+          "featureCount": 4,
+          "inputBytes": 40375,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 0,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 1,
+          "featureCount": 5,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 3,
+          "featureCount": 5,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 0,
+          "featureCount": 5,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 7,
+          "featureCount": 5,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 0,
+          "inputBytes": 1498934,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 8,
+          "inputBytes": 1498934,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 5,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "BH",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/BH/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "DMA",
+      "country": "DM",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 3,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 10,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/DM",
+      "phaseTimings": [
+        {
+          "country": "DM",
+          "durationMs": 438,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 0,
+          "inputBytes": 24013,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 0,
+          "inputBytes": 24013,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 1,
+          "inputBytes": 9195,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 0,
+          "inputBytes": 9195,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 0,
+          "inputBytes": 9195,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 53,
+          "featureCount": 1,
+          "inputBytes": 9195,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 9195,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 1,
+          "inputBytes": 24013,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 0,
+          "inputBytes": 24013,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 0,
+          "inputBytes": 24013,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 52,
+          "featureCount": 10,
+          "inputBytes": 24013,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 0,
+          "featureCount": 10,
+          "inputBytes": 24013,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 0,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 0,
+          "featureCount": 11,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 5,
+          "featureCount": 11,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 0,
+          "featureCount": 11,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 1,
+          "featureCount": 11,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 0,
+          "inputBytes": 458713,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 6,
+          "inputBytes": 458713,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 3,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "DM",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/DM/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "GRD",
+      "country": "GD",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 7,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 4
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 7,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/GD",
+      "phaseTimings": [
+        {
+          "country": "GD",
+          "durationMs": 445,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 0,
+          "inputBytes": 21305,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 0,
+          "inputBytes": 21305,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 1,
+          "inputBytes": 10866,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 0,
+          "inputBytes": 10866,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 0,
+          "inputBytes": 10866,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 62,
+          "featureCount": 1,
+          "inputBytes": 10866,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 10866,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 0,
+          "inputBytes": 21305,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 0,
+          "inputBytes": 21305,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 0,
+          "inputBytes": 21305,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 58,
+          "featureCount": 7,
+          "inputBytes": 21305,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 0,
+          "featureCount": 7,
+          "inputBytes": 21305,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 0,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 0,
+          "featureCount": 8,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 1,
+          "featureCount": 8,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 0,
+          "featureCount": 8,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 2,
+          "featureCount": 8,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 0,
+          "inputBytes": 530703,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 7,
+          "inputBytes": 530703,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 3,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "GD",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/GD/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "GRL",
+      "country": "GL",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 5,
+      "issues": [
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "gl:adm1:gl-ku"
+        },
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 6,
+          "issueCodes": [
+            "MAPPING_REVIEW_REQUIRED",
+            "PARENT_UNRESOLVED",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": [
+            "COUNTRY_LEVEL_UNAVAILABLE",
+            "PARENT_UNRESOLVED",
+            "SOURCE_METADATA_INVALID"
+          ],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/GL",
+      "phaseTimings": [
+        {
+          "country": "GL",
+          "durationMs": 446,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 0,
+          "inputBytes": 1599609,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 0,
+          "inputBytes": 1599609,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 6,
+          "inputBytes": 5256723,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 0,
+          "inputBytes": 5256723,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 13,
+          "inputBytes": 5256723,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 2402,
+          "featureCount": 1,
+          "inputBytes": 5256723,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 5256723,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 4,
+          "inputBytes": 1599609,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 0,
+          "inputBytes": 1599609,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 3,
+          "inputBytes": 1599609,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 156,
+          "featureCount": 6,
+          "inputBytes": 1599609,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 0,
+          "featureCount": 6,
+          "inputBytes": 1599609,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 987,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 42,
+          "featureCount": 7,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 3748,
+          "featureCount": 7,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 0,
+          "featureCount": 7,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 10700,
+          "featureCount": 7,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 0,
+          "inputBytes": 81646969,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 57,
+          "inputBytes": 81646969,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 10652,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "GL",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/GL/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "KNA",
+      "country": "KN",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 11,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 8
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 14,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/KN",
+      "phaseTimings": [
+        {
+          "country": "KN",
+          "durationMs": 452,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 0,
+          "inputBytes": 14698,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 0,
+          "inputBytes": 14698,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 0,
+          "inputBytes": 6739,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 0,
+          "inputBytes": 6739,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 0,
+          "inputBytes": 6739,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 59,
+          "featureCount": 1,
+          "inputBytes": 6739,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 6739,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 2,
+          "inputBytes": 14698,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 0,
+          "inputBytes": 14698,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 0,
+          "inputBytes": 14698,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 55,
+          "featureCount": 14,
+          "inputBytes": 14698,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 0,
+          "featureCount": 14,
+          "inputBytes": 14698,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 1,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 0,
+          "featureCount": 15,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 0,
+          "featureCount": 15,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 0,
+          "featureCount": 15,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 2,
+          "featureCount": 15,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 0,
+          "inputBytes": 429555,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 10,
+          "inputBytes": 429555,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 2,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "KN",
+          "durationMs": 1,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/KN/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "LIE",
+      "country": "LI",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 17,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 14
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 11,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/LI",
+      "phaseTimings": [
+        {
+          "country": "LI",
+          "durationMs": 444,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 0,
+          "inputBytes": 18157,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 0,
+          "inputBytes": 18157,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 1,
+          "inputBytes": 3652,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 0,
+          "inputBytes": 3652,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 0,
+          "inputBytes": 3652,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 53,
+          "featureCount": 1,
+          "inputBytes": 3652,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 3652,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 1,
+          "inputBytes": 18157,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 0,
+          "inputBytes": 18157,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 0,
+          "inputBytes": 18157,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 56,
+          "featureCount": 11,
+          "inputBytes": 18157,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 0,
+          "featureCount": 11,
+          "inputBytes": 18157,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 0,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 0,
+          "featureCount": 12,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 1,
+          "featureCount": 12,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 0,
+          "featureCount": 12,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 2,
+          "featureCount": 12,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 0,
+          "inputBytes": 475908,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 7,
+          "inputBytes": 475908,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 2,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "LI",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/LI/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "LBY",
+      "country": "LY",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 19,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 16
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 22,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/LY",
+      "phaseTimings": [
+        {
+          "country": "LY",
+          "durationMs": 427,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 0,
+          "inputBytes": 77388,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 0,
+          "inputBytes": 77388,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 0,
+          "inputBytes": 22168,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 0,
+          "inputBytes": 22168,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 1,
+          "inputBytes": 22168,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 57,
+          "featureCount": 1,
+          "inputBytes": 22168,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 22168,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 1,
+          "inputBytes": 77388,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 0,
+          "inputBytes": 77388,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 1,
+          "inputBytes": 77388,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 59,
+          "featureCount": 22,
+          "inputBytes": 77388,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 0,
+          "featureCount": 22,
+          "inputBytes": 77388,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 1,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 0,
+          "featureCount": 23,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 3,
+          "featureCount": 23,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 0,
+          "featureCount": 23,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 8,
+          "featureCount": 23,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 0,
+          "inputBytes": 1262015,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 8,
+          "inputBytes": 1262015,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 6,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "LY",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/LY/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "MDA",
+      "country": "MD",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 33,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 30
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 37,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/MD",
+      "phaseTimings": [
+        {
+          "country": "MD",
+          "durationMs": 436,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 0,
+          "inputBytes": 317753,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 0,
+          "inputBytes": 317753,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 1,
+          "inputBytes": 50691,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 0,
+          "inputBytes": 50691,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 0,
+          "inputBytes": 50691,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 64,
+          "featureCount": 1,
+          "inputBytes": 50691,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 50691,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 3,
+          "inputBytes": 317753,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 0,
+          "inputBytes": 317753,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 1,
+          "inputBytes": 317753,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 75,
+          "featureCount": 37,
+          "inputBytes": 317753,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 1,
+          "featureCount": 37,
+          "inputBytes": 317753,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 0,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 2,
+          "featureCount": 38,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 9,
+          "featureCount": 38,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 0,
+          "featureCount": 38,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 25,
+          "featureCount": 38,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 0,
+          "inputBytes": 4392923,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 10,
+          "inputBytes": 4392923,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 19,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "MD",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/MD/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "MNE",
+      "country": "ME",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 16,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 13
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 23,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/ME",
+      "phaseTimings": [
+        {
+          "country": "ME",
+          "durationMs": 476,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 0,
+          "inputBytes": 72358,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 0,
+          "inputBytes": 72358,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 1,
+          "inputBytes": 48745,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 0,
+          "inputBytes": 48745,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 0,
+          "inputBytes": 48745,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 61,
+          "featureCount": 1,
+          "inputBytes": 48745,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 48745,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 1,
+          "inputBytes": 72358,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 0,
+          "inputBytes": 72358,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 0,
+          "inputBytes": 72358,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 62,
+          "featureCount": 23,
+          "inputBytes": 72358,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 0,
+          "featureCount": 23,
+          "inputBytes": 72358,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 0,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 2,
+          "featureCount": 24,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 3,
+          "featureCount": 24,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 0,
+          "featureCount": 24,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 18,
+          "featureCount": 24,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 0,
+          "inputBytes": 2006215,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 8,
+          "inputBytes": 2006215,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 12,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "ME",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/ME/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "MHL",
+      "country": "MH",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 32,
+      "issues": [
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "mh:adm1:mh-alk"
+        },
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "mh:adm1:mh-jab"
+        },
+        {
+          "code": "PARENT_UNRESOLVED",
+          "message": "No parent candidate covers this child geometry.",
+          "severity": "warning",
+          "zoneId": "mh:adm1:mh-lae"
+        },
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 26
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 24,
+          "issueCodes": [
+            "MAPPING_REVIEW_REQUIRED",
+            "PARENT_UNRESOLVED",
+            "QUALITY_SELF_INTERSECTION"
+          ],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": [
+            "COUNTRY_LEVEL_UNAVAILABLE",
+            "PARENT_UNRESOLVED",
+            "SOURCE_METADATA_INVALID"
+          ],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/MH",
+      "phaseTimings": [
+        {
+          "country": "MH",
+          "durationMs": 443,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 0,
+          "inputBytes": 43531,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 0,
+          "inputBytes": 43531,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 1,
+          "inputBytes": 34245,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 0,
+          "inputBytes": 34245,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 0,
+          "inputBytes": 34245,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 70,
+          "featureCount": 1,
+          "inputBytes": 34245,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 34245,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 1,
+          "inputBytes": 43531,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 0,
+          "inputBytes": 43531,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 1,
+          "inputBytes": 43531,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 97,
+          "featureCount": 24,
+          "inputBytes": 43531,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 0,
+          "featureCount": 24,
+          "inputBytes": 43531,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 11,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 2,
+          "featureCount": 25,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 2,
+          "featureCount": 25,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 0,
+          "featureCount": 25,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 7,
+          "featureCount": 25,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 0,
+          "inputBytes": 1523325,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 22,
+          "inputBytes": 1523325,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 8,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "MH",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/MH/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "MUS",
+      "country": "MU",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 9,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 6
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 12,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/MU",
+      "phaseTimings": [
+        {
+          "country": "MU",
+          "durationMs": 427,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 0,
+          "inputBytes": 57588,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 0,
+          "inputBytes": 57588,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 1,
+          "inputBytes": 33192,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 0,
+          "inputBytes": 33192,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 0,
+          "inputBytes": 33192,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 93,
+          "featureCount": 1,
+          "inputBytes": 33192,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 33192,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 3,
+          "inputBytes": 57588,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 0,
+          "inputBytes": 57588,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 1,
+          "inputBytes": 57588,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 81,
+          "featureCount": 12,
+          "inputBytes": 57588,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 0,
+          "featureCount": 12,
+          "inputBytes": 57588,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 1,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 0,
+          "featureCount": 13,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 5,
+          "featureCount": 13,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 0,
+          "featureCount": 13,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 7,
+          "featureCount": 13,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 0,
+          "inputBytes": 1174771,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 7,
+          "inputBytes": 1174771,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 6,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "MU",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/MU/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "NRU",
+      "country": "NR",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 15,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 12
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 14,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/NR",
+      "phaseTimings": [
+        {
+          "country": "NR",
+          "durationMs": 429,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 0,
+          "inputBytes": 18579,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 0,
+          "inputBytes": 18579,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 1,
+          "inputBytes": 922,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 0,
+          "inputBytes": 922,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 0,
+          "inputBytes": 922,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 54,
+          "featureCount": 1,
+          "inputBytes": 922,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 922,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 1,
+          "inputBytes": 18579,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 0,
+          "inputBytes": 18579,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 1,
+          "inputBytes": 18579,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 55,
+          "featureCount": 14,
+          "inputBytes": 18579,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 0,
+          "featureCount": 14,
+          "inputBytes": 18579,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 0,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 0,
+          "featureCount": 15,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 0,
+          "featureCount": 15,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 0,
+          "featureCount": 15,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 1,
+          "featureCount": 15,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 0,
+          "inputBytes": 332090,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 6,
+          "inputBytes": 332090,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 2,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "NR",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/NR/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "NIU",
+      "country": "NU",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 10,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 7
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 14,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/NU",
+      "phaseTimings": [
+        {
+          "country": "NU",
+          "durationMs": 16054,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 0,
+          "inputBytes": 14444,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 0,
+          "inputBytes": 14444,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 6,
+          "inputBytes": 2323,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 0,
+          "inputBytes": 2323,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 0,
+          "inputBytes": 2323,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 63,
+          "featureCount": 1,
+          "inputBytes": 2323,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 2323,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 1,
+          "inputBytes": 14444,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 0,
+          "inputBytes": 14444,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 1,
+          "inputBytes": 14444,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 9604,
+          "featureCount": 14,
+          "inputBytes": 14444,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 0,
+          "featureCount": 14,
+          "inputBytes": 14444,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 0,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 1,
+          "featureCount": 15,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 1,
+          "featureCount": 15,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 0,
+          "featureCount": 15,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 1,
+          "featureCount": 15,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 0,
+          "inputBytes": 304111,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 1030,
+          "inputBytes": 304111,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 2,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "NU",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/NU/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "SMR",
+      "country": "SM",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 4,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 9,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/SM",
+      "phaseTimings": [
+        {
+          "country": "SM",
+          "durationMs": 26606,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 0,
+          "inputBytes": 7921,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 0,
+          "inputBytes": 7921,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 1,
+          "inputBytes": 2410,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 0,
+          "inputBytes": 2410,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 1,
+          "inputBytes": 2410,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 73,
+          "featureCount": 1,
+          "inputBytes": 2410,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 2410,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 1,
+          "inputBytes": 7921,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 0,
+          "inputBytes": 7921,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 0,
+          "inputBytes": 7921,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 51,
+          "featureCount": 9,
+          "inputBytes": 7921,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 0,
+          "featureCount": 9,
+          "inputBytes": 7921,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 0,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 0,
+          "featureCount": 10,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 1,
+          "featureCount": 10,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 0,
+          "featureCount": 10,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 1,
+          "featureCount": 10,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 0,
+          "inputBytes": 241790,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 8,
+          "inputBytes": 241790,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 1,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "SM",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/SM/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "TTO",
+      "country": "TT",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 10,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 7
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 14,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/TT",
+      "phaseTimings": [
+        {
+          "country": "TT",
+          "durationMs": 714,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 0,
+          "inputBytes": 45003,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 0,
+          "inputBytes": 45003,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 2,
+          "inputBytes": 42708,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 0,
+          "inputBytes": 42708,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 0,
+          "inputBytes": 42708,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 83,
+          "featureCount": 1,
+          "inputBytes": 42708,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 42708,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 1,
+          "inputBytes": 45003,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 0,
+          "inputBytes": 45003,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 0,
+          "inputBytes": 45003,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 59,
+          "featureCount": 14,
+          "inputBytes": 45003,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 0,
+          "featureCount": 14,
+          "inputBytes": 45003,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 0,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 1,
+          "featureCount": 15,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 1,
+          "featureCount": 15,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 0,
+          "featureCount": 15,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 8,
+          "featureCount": 15,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 0,
+          "inputBytes": 1466025,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 8,
+          "inputBytes": 1466025,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 7,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "TT",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/TT/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    },
+    {
+      "alpha3": "VCT",
+      "country": "VC",
+      "finishedAt": "2026-07-15T12:45:48.119Z",
+      "issueCount": 5,
+      "issues": [
+        {
+          "code": "MAPPING_REVIEW_REQUIRED",
+          "level": "ADM1",
+          "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+          "severity": "warning"
+        },
+        {
+          "code": "QUALITY_SELF_INTERSECTION",
+          "details": {
+            "count": 2
+          },
+          "level": "ADM1",
+          "message": "Linear ring self-intersects.",
+          "severity": "warning"
+        },
+        {
+          "code": "COUNTRY_LEVEL_UNAVAILABLE",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "warning"
+        },
+        {
+          "code": "SOURCE_METADATA_INVALID",
+          "level": "ADM2",
+          "message": "Remote source returned HTTP 404.",
+          "severity": "error"
+        }
+      ],
+      "levels": [
+        {
+          "featureCount": 6,
+          "issueCodes": ["MAPPING_REVIEW_REQUIRED", "QUALITY_SELF_INTERSECTION"],
+          "level": "ADM1",
+          "lifecycle": {
+            "adjacencyStatus": "passed",
+            "artifactStatus": "built",
+            "downloadStatus": "passed",
+            "hierarchyStatus": "passed",
+            "indexStatus": "passed",
+            "loaderStatus": "passed",
+            "publishStatus": "passed-with-warnings",
+            "repairStatus": "passed",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "available",
+            "transformStatus": "passed",
+            "validationStatus": "passed"
+          },
+          "outcome": "built-with-warnings",
+          "status": "built-with-warnings"
+        },
+        {
+          "issueCodes": ["COUNTRY_LEVEL_UNAVAILABLE", "SOURCE_METADATA_INVALID"],
+          "level": "ADM2",
+          "lifecycle": {
+            "adjacencyStatus": "not-run",
+            "artifactStatus": "not-attempted",
+            "downloadStatus": "passed-with-warnings",
+            "hierarchyStatus": "passed-with-warnings",
+            "indexStatus": "passed-with-warnings",
+            "loaderStatus": "not-run",
+            "publishStatus": "not-run",
+            "repairStatus": "not-run",
+            "semanticReviewStatus": "review-required",
+            "sourceStatus": "unavailable",
+            "transformStatus": "passed-with-warnings",
+            "validationStatus": "passed-with-warnings"
+          },
+          "outcome": "source-unavailable",
+          "status": "source-unavailable"
+        }
+      ],
+      "outcome": "partial",
+      "outputPath": "datasets/generated/countries/VC",
+      "phaseTimings": [
+        {
+          "country": "VC",
+          "durationMs": 704,
+          "phase": "source-resolution",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 0,
+          "inputBytes": 19562,
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 0,
+          "inputBytes": 19562,
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 2,
+          "inputBytes": 19426,
+          "level": "ADM0",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 0,
+          "inputBytes": 19426,
+          "level": "ADM0",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 3,
+          "inputBytes": 19426,
+          "level": "ADM0",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 77,
+          "featureCount": 1,
+          "inputBytes": 19426,
+          "level": "ADM0",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 0,
+          "featureCount": 1,
+          "inputBytes": 19426,
+          "level": "ADM0",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 2,
+          "inputBytes": 19562,
+          "level": "ADM1",
+          "phase": "download",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 0,
+          "inputBytes": 19562,
+          "level": "ADM1",
+          "phase": "extraction",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 0,
+          "inputBytes": 19562,
+          "level": "ADM1",
+          "phase": "parsing",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 55,
+          "featureCount": 6,
+          "inputBytes": 19562,
+          "level": "ADM1",
+          "phase": "geometry-repair",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 0,
+          "featureCount": 6,
+          "inputBytes": 19562,
+          "level": "ADM1",
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 0,
+          "phase": "derived-metadata",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 0,
+          "featureCount": 7,
+          "phase": "simplification",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 1,
+          "featureCount": 7,
+          "phase": "adjacency-generation",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 0,
+          "featureCount": 7,
+          "phase": "spatial-index",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 3,
+          "featureCount": 7,
+          "phase": "serialization",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 0,
+          "inputBytes": 671952,
+          "phase": "checksum",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 21,
+          "inputBytes": 671952,
+          "phase": "artifact-write",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 7,
+          "phase": "validation",
+          "status": "completed"
+        },
+        {
+          "country": "VC",
+          "durationMs": 0,
+          "phase": "loader-smoke",
+          "status": "completed"
+        }
+      ],
+      "provider": "geoboundaries",
+      "sourceLockPath": "datasets/generated/countries/VC/sources.lock.json",
+      "startedAt": "2026-07-15T12:45:48.119Z"
+    }
+  ]
+}

@@ -41,7 +41,8 @@ export function createPilotCountryConfig(input: {
             "parentCode",
             "shapeParent"
           ],
-          required: true
+          required: true,
+          reviewStatus: "reviewed"
         }
       ])
     ),

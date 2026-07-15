@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  buildAllTerritoryCountryDatasets,
   buildTerritoryCountryDatasetPath,
   createTerritoryCountryIdentity,
   createTerritoryCountrySourceLock,
@@ -159,11 +160,139 @@ describe("pilot country dataset pipeline", () => {
     expect(right.stability).toBe("name-parent-fallback");
     expect(left.territoryId).not.toBe(right.territoryId);
   });
+
+  it("disambiguates colliding official identities with source context", () => {
+    const config = getTerritoryCountryConfig("AZ");
+    const first = createTerritoryCountryIdentity({
+      config,
+      adminLevel: "ADM2",
+      feature: codedFeature("District", "AZE", 0),
+      collisionDisambiguator: "shape:left|bbox:0:0:1:1"
+    });
+    const second = createTerritoryCountryIdentity({
+      config,
+      adminLevel: "ADM2",
+      feature: codedFeature("District", "AZE", 1),
+      collisionDisambiguator: "shape:right|bbox:1:1:2:2"
+    });
+
+    expect(first.stability).toBe("source-disambiguated");
+    expect(second.stability).toBe("source-disambiguated");
+    expect(first.territoryId).not.toBe(second.territoryId);
+  });
+
+  it("reports skipped build-all adjacency as not-run", async () => {
+    const fixture = await createCountrySourceFixture("TR");
+    const outputRoot = join(fixture.tempDir, "generated");
+    const sourceLockPath = join(outputRoot, "TR", "sources.lock.json");
+
+    try {
+      await createTerritoryCountrySourceLock({
+        country: "TR",
+        levels: ["ADM0", "ADM1", "ADM2"],
+        metadataPath: fixture.metadataPath,
+        outputPath: sourceLockPath,
+        buildDate: FIXTURE_BUILD_DATE
+      });
+
+      const report = await buildAllTerritoryCountryDatasets({
+        countries: ["TR"],
+        levels: ["ADM1", "ADM2"],
+        outputRoot,
+        offline: true,
+        concurrency: 1,
+        buildAdjacency: false,
+        buildDate: FIXTURE_BUILD_DATE,
+        cwd: fixture.tempDir,
+        force: true
+      });
+
+      expect(report.results[0]?.levels).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            level: "ADM1",
+            lifecycle: expect.objectContaining({ adjacencyStatus: "not-run" })
+          }),
+          expect.objectContaining({
+            level: "ADM2",
+            lifecycle: expect.objectContaining({ adjacencyStatus: "not-run" })
+          })
+        ])
+      );
+    } finally {
+      await rm(fixture.tempDir, { force: true, recursive: true });
+    }
+  });
+
+  it("classifies a built country with an unavailable sibling level as partial", async () => {
+    const fixture = await createCountrySourceFixture("TR", {
+      omittedMetadataLevels: ["ADM2"]
+    });
+    const outputRoot = join(fixture.tempDir, "generated");
+    const sourceLockPath = join(outputRoot, "TR", "sources.lock.json");
+
+    try {
+      await createTerritoryCountrySourceLock({
+        country: "TR",
+        levels: ["ADM0", "ADM1", "ADM2"],
+        metadataPath: fixture.metadataPath,
+        outputPath: sourceLockPath,
+        buildDate: FIXTURE_BUILD_DATE
+      });
+
+      const report = await buildAllTerritoryCountryDatasets({
+        countries: ["TR"],
+        levels: ["ADM1", "ADM2"],
+        outputRoot,
+        offline: true,
+        concurrency: 1,
+        buildDate: FIXTURE_BUILD_DATE,
+        cwd: fixture.tempDir,
+        force: true
+      });
+
+      expect(report).toMatchObject({
+        countriesAttempted: 1,
+        countriesSucceeded: 0,
+        countriesFailed: 1,
+        outcomes: {
+          partial: 1
+        }
+      });
+      expect(report.results[0]).toMatchObject({
+        country: "TR",
+        outcome: "partial",
+        levels: [
+          {
+            level: "ADM1",
+            outcome: "built",
+            lifecycle: {
+              sourceStatus: "available",
+              artifactStatus: "built",
+              loaderStatus: "passed"
+            }
+          },
+          {
+            level: "ADM2",
+            outcome: "source-unavailable",
+            lifecycle: {
+              sourceStatus: "unavailable",
+              artifactStatus: "not-attempted",
+              adjacencyStatus: "not-run",
+              loaderStatus: "not-run"
+            }
+          }
+        ]
+      });
+    } finally {
+      await rm(fixture.tempDir, { force: true, recursive: true });
+    }
+  });
 });
 
 async function createCountrySourceFixture(
   country: string,
-  options: { adm0MultiPolygon?: boolean } = {}
+  options: { adm0MultiPolygon?: boolean; omittedMetadataLevels?: TerritoryAdminLevel[] } = {}
 ): Promise<{ tempDir: string; metadataPath: string }> {
   const config = getTerritoryCountryConfig(country);
   const tempDir = await mkdtemp(
@@ -272,17 +401,19 @@ async function createCountrySourceFixture(
   await writeFile(
     metadataPath,
     JSON.stringify(
-      ["ADM0", "ADM1", "ADM2"].map((adminLevel) => ({
-        countryCodeAlpha3: config.countryCodeAlpha3,
-        adminLevel,
-        releaseType: "gbOpen",
-        sourceUrl: files[adminLevel as TerritoryAdminLevel],
-        sourceVersion,
-        boundaryYearRepresented: "2026",
-        license: "CC BY 4.0",
-        licenseDetail: "fixture://license",
-        attribution: `Synthetic ${config.countryCodeAlpha2} ${adminLevel} fixture`
-      }))
+      (["ADM0", "ADM1", "ADM2"] as TerritoryAdminLevel[])
+        .filter((adminLevel) => !(options.omittedMetadataLevels ?? []).includes(adminLevel))
+        .map((adminLevel) => ({
+          countryCodeAlpha3: config.countryCodeAlpha3,
+          adminLevel,
+          releaseType: "gbOpen",
+          sourceUrl: files[adminLevel],
+          sourceVersion,
+          boundaryYearRepresented: "2026",
+          license: "CC BY 4.0",
+          licenseDetail: "fixture://license",
+          attribution: `Synthetic ${config.countryCodeAlpha2} ${adminLevel} fixture`
+        }))
     ),
     "utf8"
   );
@@ -319,6 +450,16 @@ function fallbackFeature(name: string, offset: number): ParsedCountryFeature {
     localType: "district",
     geometry: square(offset, offset, offset + 1, offset + 1) as ParsedCountryFeature["geometry"],
     rawProperties: {}
+  };
+}
+
+function codedFeature(name: string, code: string, offset: number): ParsedCountryFeature {
+  return {
+    ...fallbackFeature(name, offset),
+    rawProperties: {
+      officialCode: code,
+      shapeID: code
+    }
   };
 }
 

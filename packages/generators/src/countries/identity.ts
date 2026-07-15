@@ -16,6 +16,7 @@ export function createTerritoryCountryIdentity(input: {
   adminLevel: TerritoryAdminLevel;
   feature: ParsedCountryFeature;
   parentKey?: string;
+  collisionDisambiguator?: string;
   sourceDatasetVersion?: string;
 }): TerritoryIdentityMapEntry {
   const strategy = input.config.identityStrategy;
@@ -45,7 +46,10 @@ export function createTerritoryCountryIdentity(input: {
           ...(stableCode ? { stableCode } : {}),
           ...(sourceId ? { sourceId } : {}),
           name: input.feature.name,
-          ...(input.parentKey ? { parentKey: input.parentKey } : {})
+          ...(input.parentKey ? { parentKey: input.parentKey } : {}),
+          ...(input.collisionDisambiguator
+            ? { collisionDisambiguator: input.collisionDisambiguator }
+            : {})
         });
   const territoryId = createTerritoryGlobalId({
     countryCode: input.config.countryCodeAlpha2,
@@ -64,7 +68,7 @@ export function createTerritoryCountryIdentity(input: {
     names: {
       default: input.feature.name
     },
-    stability,
+    stability: input.collisionDisambiguator ? "source-disambiguated" : stability,
     ...(input.sourceDatasetVersion ? { sourceDatasetVersion: input.sourceDatasetVersion } : {})
   };
 }
@@ -95,7 +99,7 @@ export function validateTerritoryIdentityMap(
       if (existing && existing !== entry.territoryId) {
         issues.push({
           code: "IDENTITY_DUPLICATE_SOURCE_ID",
-          severity: "error",
+          severity: "warning",
           message: `Source id '${entry.sourceId}' maps to multiple territories.`,
           zoneId: entry.territoryId
         });
@@ -111,7 +115,7 @@ export function validateTerritoryIdentityMap(
       if (existing && existing !== entry.territoryId) {
         issues.push({
           code: "IDENTITY_DUPLICATE_OFFICIAL_CODE",
-          severity: "error",
+          severity: "warning",
           message: `Official code '${code}' maps to multiple ${entry.adminLevel} territories.`,
           zoneId: entry.territoryId
         });
@@ -132,6 +136,8 @@ export function summarizeIdentityStability(
     "source-stable-code": entries.filter((entry) => entry.stability === "source-stable-code")
       .length,
     "source-id": entries.filter((entry) => entry.stability === "source-id").length,
+    "source-disambiguated": entries.filter((entry) => entry.stability === "source-disambiguated")
+      .length,
     "name-parent-fallback": entries.filter((entry) => entry.stability === "name-parent-fallback")
       .length
   };
@@ -214,16 +220,20 @@ function createLocalIdentityKey(input: {
   sourceId?: string;
   name: string;
   parentKey?: string;
+  collisionDisambiguator?: string;
 }): string {
   const stable = input.officialCode ?? input.stableCode ?? input.sourceId;
+  const suffix = input.collisionDisambiguator
+    ? `-${slugifyTerritoryIdPart(input.collisionDisambiguator)}`
+    : "";
 
   if (stable) {
-    return stable;
+    return `${stable}${suffix}`;
   }
 
   return `${input.parentKey ? `${slugifyTerritoryIdPart(input.parentKey)}-` : ""}${slugifyTerritoryIdPart(
     input.name
-  )}`;
+  )}${suffix}`;
 }
 
 function readFirstProperty(

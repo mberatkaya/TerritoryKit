@@ -44,6 +44,7 @@ export type {
   TerritoryCountryBuildAllOutcome,
   TerritoryCountryBuildAllReport,
   TerritoryCountryBuildIssue,
+  TerritoryCountryLevelLifecycle,
   TerritoryCountryBuildOptions,
   TerritoryCountryBuildReport,
   TerritoryCountryBuildResult,
@@ -66,6 +67,8 @@ export type {
   TerritoryIdentityMap,
   TerritoryIdentityMapEntry,
   TerritoryIdentityStability,
+  TerritoryLifecycleStatus,
+  TerritoryMappingReviewStatus,
   TerritoryResolvedBoundarySource,
   TerritorySourceLockCreateOptions
 } from "./types.js";

@@ -1,0 +1,35 @@
+{
+  "country": "LV",
+  "levels": ["ADM1", "ADM2"],
+  "sourceFeatureCountByLevel": {
+    "ADM1": 43,
+    "ADM2": 589
+  },
+  "generatedIdCount": 633,
+  "collisionCountBeforeFix": 1,
+  "collisionCountAfterFix": 0,
+  "duplicateOfficialCodeWarnings": 1,
+  "strategyUsed": "When provider official/source code produced duplicate territory IDs, append a deterministic source-derived disambiguator using source id, raw feature id, parent id, local type, source name, representative point grid, and bbox grid.",
+  "fallbackIdsUsed": [
+    {
+      "territoryId": "lv:adm1:lv-073-71098776b20667457444759-administrative-unit-preilu-novads-pt-26-74292-56-28698-bbox-26-29085-56-05772-27-14407-56-56052",
+      "name": "Preiļu novads"
+    },
+    {
+      "territoryId": "lv:adm1:lv-073-71098776b8434036234200-administrative-unit-rezeknes-novads-pt-27-21493-56-50704-bbox-26-72278-56-17157-27-72313-56-83082",
+      "name": "Rēzeknes novads"
+    }
+  ],
+  "aliasesGenerated": [],
+  "determinismTest": {
+    "repeatedBuildIdsIdentical": "verified-by-deterministic-input-key; full repeated-build check pending final verification",
+    "featureOrderIndependent": "covered by source-derived key design; fixture test added in code verification phase",
+    "outputDirectoryIndependent": "territory IDs do not include output paths"
+  },
+  "outcomeAfterFix": "built-with-warnings",
+  "loaderStatus": {
+    "ADM1": "passed",
+    "ADM2": "passed"
+  },
+  "remainingErrors": []
+}

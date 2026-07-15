@@ -1119,7 +1119,18 @@ async function runDatasetBuildAll(args: string[]): Promise<number> {
     ?.split(",")
     .map((value) => value.trim())
     .filter(Boolean);
+  const excludeFlag = getFlag(flags, "exclude");
+  const excludeCountries = excludeFlag
+    ?.split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
   const concurrency = Number(getFlag(flags, "concurrency") ?? "2");
+  const countryTimeoutMs = getFlag(flags, "country-timeout-ms")
+    ? Number(getFlag(flags, "country-timeout-ms"))
+    : undefined;
+  const phaseTimeoutMs = getFlag(flags, "phase-timeout-ms")
+    ? Number(getFlag(flags, "phase-timeout-ms"))
+    : undefined;
   const releaseType = getFlag(flags, "release-type");
   const provider = getFlag(flags, "provider");
   const buildDate = getFlag(flags, "build-date");
@@ -1151,18 +1162,43 @@ async function runDatasetBuildAll(args: string[]): Promise<number> {
     return 2;
   }
 
+  if (
+    countryTimeoutMs !== undefined &&
+    (!Number.isInteger(countryTimeoutMs) || countryTimeoutMs < 1)
+  ) {
+    printJson({
+      ok: false,
+      command: "dataset build-all",
+      issues: [createCliIssue("--country-timeout-ms must be a positive integer.")]
+    });
+    return 2;
+  }
+
+  if (phaseTimeoutMs !== undefined && (!Number.isInteger(phaseTimeoutMs) || phaseTimeoutMs < 1)) {
+    printJson({
+      ok: false,
+      command: "dataset build-all",
+      issues: [createCliIssue("--phase-timeout-ms must be a positive integer.")]
+    });
+    return 2;
+  }
+
   try {
     const report = await buildAllTerritoryCountryDatasets({
       levels: levels ?? ["ADM1", "ADM2"],
       outputRoot,
       ...(reportPath ? { reportPath } : {}),
       ...(countries && countries.length > 0 ? { countries } : {}),
+      ...(excludeCountries && excludeCountries.length > 0 ? { excludeCountries } : {}),
       concurrency,
       ...(releaseType ? { releaseType } : {}),
       ...(provider ? { provider } : {}),
       ...(buildDate ? { buildDate } : {}),
       ...(cacheDir ? { cacheDir } : {}),
       ...(maxSourceBytes ? { maxSourceBytes } : {}),
+      ...(countryTimeoutMs ? { countryTimeoutMs } : {}),
+      ...(phaseTimeoutMs ? { phaseTimeoutMs } : {}),
+      ...(flags.has("skip-adjacency") ? { buildAdjacency: false } : {}),
       onPhase: (event) => {
         process.stderr.write(`${JSON.stringify(event)}\n`);
       },
@@ -3563,11 +3599,18 @@ function printDatasetBuildAllHelp(): void {
 Options:
   --levels <ADM0[,ADM1...]>
   --countries <ISO2[,ISO2...]>
+  --exclude <ISO2[,ISO2...]>
   --output <dir>
   --report <report.json>
   --max-source-bytes <bytes>            Defer oversized country-detail builds as performance-deferred.
+  --country-timeout-ms <ms>
+  --phase-timeout-ms <ms>
+  --skip-adjacency                      Build country datasets without adjacency artifacts.
   --continue-on-error
   --concurrency <number>
+  --cache-dir <dir>
+  --offline
+  --provider <id>
   --resume
   --retry-failed
   --force`);

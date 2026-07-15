@@ -11,21 +11,65 @@ import type {
 } from "@territory-kit/dataset";
 
 export type TerritoryIdentityStability =
-  "official-code" | "source-stable-code" | "source-id" | "name-parent-fallback";
+  | "official-code"
+  | "source-stable-code"
+  | "source-id"
+  | "source-disambiguated"
+  | "name-parent-fallback";
 
 export type TerritoryArtifactStatus =
   | "not-reviewed"
+  | "not-attempted"
   | "source-available"
   | "source-unavailable"
+  | "provider-unsupported"
+  | "provider-error"
+  | "download-error"
+  | "extraction-error"
+  | "parse-error"
+  | "CRS-error"
+  | "transform-error"
+  | "geometry-repair-failed"
+  | "stable-id-failed"
+  | "hierarchy-failed"
+  | "adjacency-failed"
+  | "index-failed"
   | "performance-deferred"
+  | "licence-restricted"
   | "license-restricted"
+  | "mapping-review-required"
+  | "not-applicable"
+  | "partial"
   | "downloaded"
   | "transformed"
   | "validation-failed"
   | "validated"
   | "built"
+  | "built-with-warnings"
   | "packaged"
   | "published";
+
+export type TerritoryMappingReviewStatus =
+  "reviewed" | "provider-confirmed" | "generic-admin-level" | "mapping-review-required";
+
+export type TerritorySemanticReviewStatus =
+  "reviewed" | "provider-confirmed" | "generic-admin-level" | "review-required";
+
+export type TerritoryLifecycleStatus =
+  | "not-run"
+  | "not-attempted"
+  | "available"
+  | "unavailable"
+  | "provider-error"
+  | "provider-unsupported"
+  | "licence-restricted"
+  | "downloaded"
+  | "passed"
+  | "passed-with-warnings"
+  | "failed"
+  | "partial"
+  | "built"
+  | "performance-deferred";
 
 export interface TerritoryIdentityStrategyConfig {
   officialCodeProperties: readonly string[];
@@ -73,6 +117,7 @@ export interface TerritoryCountryLevelConfig {
   sourceParentProperties?: readonly string[];
   required: boolean;
   reviewRequired?: boolean;
+  reviewStatus: TerritoryMappingReviewStatus;
 }
 
 export interface TerritoryCountryDatasetConfig {
@@ -107,14 +152,21 @@ export interface TerritoryResolvedBoundarySource {
   boundaryYearRepresented?: string;
   sourceVersion?: string;
   sourceUrl: string;
+  resolvedDownloadUrl?: string;
   metadataUrl?: string;
   sourceLicense?: string;
+  licenseUrl?: string;
   licenseDetail?: string;
   attribution: string;
+  redistributionStatus?: string;
+  commercialUseStatus?: string;
   sourceDate?: string;
   buildDate?: string;
   expectedSha256?: string;
   sizeBytes?: number;
+  originalFilename?: string;
+  originalFormat?: string;
+  sourceFeatureCount?: number;
 }
 
 export interface TerritoryCountrySourceLockLevel {
@@ -124,15 +176,22 @@ export interface TerritoryCountrySourceLockLevel {
   boundaryName?: string;
   boundaryYearRepresented?: string;
   sourceUrl?: string;
+  resolvedDownloadUrl?: string;
   sourcePath?: string;
   metadataUrl?: string;
   sourceVersion?: string;
   sourceDate?: string;
   license?: string;
+  licenseUrl?: string;
   licenseDetail?: string;
   attribution?: string;
+  redistributionStatus?: string;
+  commercialUseStatus?: string;
   sha256?: string;
   sizeBytes?: number;
+  originalFilename?: string;
+  originalFormat?: string;
+  sourceFeatureCount?: number;
   unavailableReason?: string;
 }
 
@@ -165,6 +224,7 @@ export interface TerritorySourceLockCreateOptions {
   noCache?: boolean;
   refresh?: boolean;
   force?: boolean;
+  maxSourceBytes?: number;
   cwd?: string;
 }
 
@@ -291,12 +351,27 @@ export interface TerritoryCountryBuildReport {
 
 export type TerritoryCountryBuildAllOutcome =
   | "built"
+  | "built-with-warnings"
+  | "partial"
   | "validation-failed"
   | "source-unavailable"
+  | "provider-unsupported"
   | "performance-deferred"
   | "licence-restricted"
   | "provider-error"
-  | "mapping-review-required";
+  | "download-error"
+  | "extraction-error"
+  | "parse-error"
+  | "CRS-error"
+  | "transform-error"
+  | "geometry-repair-failed"
+  | "stable-id-failed"
+  | "hierarchy-failed"
+  | "adjacency-failed"
+  | "index-failed"
+  | "loader-smoke-failed"
+  | "mapping-review-required"
+  | "not-applicable";
 
 export type TerritoryCountryBuildPhase =
   | "source-resolution"
@@ -305,6 +380,7 @@ export type TerritoryCountryBuildPhase =
   | "parsing"
   | "geometry-repair"
   | "derived-metadata"
+  | "adjacency-generation"
   | "simplification"
   | "spatial-index"
   | "validation"
@@ -344,7 +420,23 @@ export interface TerritoryCountryBuildAllLevelResult {
   status: TerritoryArtifactStatus;
   outcome: TerritoryCountryBuildAllOutcome;
   featureCount?: number;
+  lifecycle: TerritoryCountryLevelLifecycle;
   issueCodes: string[];
+}
+
+export interface TerritoryCountryLevelLifecycle {
+  sourceStatus: TerritoryLifecycleStatus;
+  downloadStatus: TerritoryLifecycleStatus;
+  transformStatus: TerritoryLifecycleStatus;
+  repairStatus: TerritoryLifecycleStatus;
+  semanticReviewStatus: TerritorySemanticReviewStatus;
+  hierarchyStatus: TerritoryLifecycleStatus;
+  adjacencyStatus: TerritoryLifecycleStatus;
+  indexStatus: TerritoryLifecycleStatus;
+  validationStatus: TerritoryLifecycleStatus;
+  artifactStatus: TerritoryLifecycleStatus;
+  loaderStatus: TerritoryLifecycleStatus;
+  publishStatus: TerritoryLifecycleStatus;
 }
 
 export interface TerritoryCountryBuildAllCountryResult {
@@ -376,6 +468,7 @@ export interface TerritoryCountryBuildAllReport {
 export interface TerritoryCountryBuildAllOptions {
   levels: readonly TerritoryAdminLevel[];
   countries?: readonly string[];
+  excludeCountries?: readonly string[];
   outputRoot: string;
   reportPath?: string;
   releaseType?: string;
@@ -388,6 +481,9 @@ export interface TerritoryCountryBuildAllOptions {
   offline?: boolean;
   cacheDir?: string;
   maxSourceBytes?: number;
+  countryTimeoutMs?: number;
+  phaseTimeoutMs?: number;
+  buildAdjacency?: boolean;
   onPhase?: (event: TerritoryCountryBuildPhaseEvent) => void;
   force?: boolean;
   cwd?: string;
@@ -464,6 +560,7 @@ export interface TerritoryCountryBuildOptions {
   reportPath?: string;
   force?: boolean;
   cwd?: string;
+  phaseTimeoutMs?: number;
   onPhase?: (event: TerritoryCountryBuildPhaseEvent) => void;
 }
 

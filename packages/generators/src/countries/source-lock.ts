@@ -1,9 +1,14 @@
 import { mkdir, mkdtemp, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { basename, dirname, join, resolve } from "node:path";
 import type { TerritoryAdminLevel } from "@territory-kit/dataset";
+import {
+  createSourceCacheKey,
+  readCachedSourceArtifact,
+  writeSourceCacheEntry
+} from "../sources/cache.js";
 import { fetchHttpSourceArtifact } from "../sources/transports/http.js";
 import { resolveFileSourceArtifact } from "../sources/transports/file.js";
-import { pathExists, serializeJsonStable, sha256Hex } from "../sources/utils.js";
+import { isRecord, pathExists, serializeJsonStable, sha256Hex } from "../sources/utils.js";
 import { getTerritoryCountryConfig } from "./registry.js";
 import { resolveTerritoryBoundarySource } from "./source-resolver.js";
 import type {
@@ -70,12 +75,20 @@ export async function createTerritoryCountrySourceLock(
     try {
       const artifact = await acquireBoundarySourceArtifact(resolvedSource.source, {
         cwd: options.cwd ?? process.cwd(),
-        ...(options.buildDate ? { buildDate: options.buildDate } : {})
+        ...(options.buildDate ? { buildDate: options.buildDate } : {}),
+        ...(options.cacheDir ? { cacheDir: options.cacheDir } : {}),
+        ...(options.noCache ? { noCache: true } : {}),
+        ...(options.refresh ? { refresh: true } : {}),
+        ...(options.maxSourceBytes ? { maxSourceBytes: options.maxSourceBytes } : {})
       });
+      const sourceFeatureCount =
+        resolvedSource.source.sourceFeatureCount ?? (await countSourceFeatures(artifact.localPath));
       levels[level] = createLockLevel(resolvedSource.source, {
         sha256: artifact.sha256,
         sizeBytes: artifact.sizeBytes,
-        ...(artifact.sourcePath ? { sourcePath: artifact.sourcePath } : {})
+        ...(artifact.sourcePath ? { sourcePath: artifact.sourcePath } : {}),
+        ...(artifact.originalUrl ? { resolvedDownloadUrl: artifact.originalUrl } : {}),
+        ...(sourceFeatureCount !== undefined ? { sourceFeatureCount } : {})
       });
     } catch (error) {
       issues.push({
@@ -287,22 +300,91 @@ export async function acquireBoundarySourceArtifact(
     TerritoryResolvedBoundarySource,
     "provider" | "sourceUrl" | "expectedSha256" | "sourceVersion"
   >,
-  options: { cwd: string; buildDate?: string }
-): Promise<{ localPath: string; sha256: string; sizeBytes: number; sourcePath?: string }> {
+  options: {
+    cwd: string;
+    buildDate?: string;
+    cacheDir?: string;
+    noCache?: boolean;
+    refresh?: boolean;
+    maxSourceBytes?: number;
+  }
+): Promise<{
+  localPath: string;
+  sha256: string;
+  sizeBytes: number;
+  sourcePath?: string;
+  originalUrl?: string;
+}> {
+  const maxSourceSizeBytes = options.maxSourceBytes ?? 100 * 1024 * 1024;
+
   if (isRemoteUrl(source.sourceUrl)) {
+    const cacheEnabled = !options.noCache;
+    const request = {
+      url: source.sourceUrl,
+      ...(source.expectedSha256 ? { expectedSha256: source.expectedSha256 } : {}),
+      ...(source.sourceVersion ? { version: source.sourceVersion } : {}),
+      ...(options.refresh ? { refresh: true } : {})
+    };
+    const cacheDir = resolve(
+      options.cwd,
+      options.cacheDir ?? join(".territory", "cache", "sources")
+    );
+    const cacheKey = createSourceCacheKey(source.provider, request);
+
+    if (cacheEnabled && !options.refresh) {
+      const cached = await readCachedSourceArtifact({
+        provider: source.provider,
+        cacheDir,
+        cacheKey,
+        request
+      });
+      const blockingIssue = cached.issues.find((issue) => issue.severity === "error");
+
+      if (blockingIssue) {
+        throw new Error(blockingIssue.message);
+      }
+
+      if (cached.artifact) {
+        return {
+          localPath: cached.artifact.localPath,
+          sha256: cached.artifact.sha256,
+          sizeBytes: cached.artifact.sizeBytes,
+          ...(cached.artifact.originalUrl ? { originalUrl: cached.artifact.originalUrl } : {})
+        };
+      }
+    }
+
+    const downloadDir = cacheEnabled
+      ? join(cacheDir, source.provider, `${cacheKey}.download`)
+      : undefined;
+
+    if (downloadDir) {
+      await mkdir(downloadDir, { recursive: true });
+    }
+
     const artifact = await fetchHttpSourceArtifact({
       provider: source.provider,
       url: source.sourceUrl,
+      ...(downloadDir ? { destinationDirectory: downloadDir } : {}),
       ...(source.expectedSha256 ? { expectedSha256: source.expectedSha256 } : {}),
       ...(source.sourceVersion ? { sourceVersion: source.sourceVersion } : {}),
-      maxSourceSizeBytes: 100 * 1024 * 1024,
+      maxSourceSizeBytes,
       now: () => resolveBuildTimestamp(options.buildDate)
     });
+    const cachedArtifact = cacheEnabled
+      ? await writeSourceCacheEntry({
+          provider: source.provider,
+          cacheDir,
+          cacheKey,
+          artifact
+        })
+      : artifact;
 
     return {
-      localPath: artifact.localPath,
-      sha256: artifact.sha256,
-      sizeBytes: artifact.sizeBytes
+      localPath: cachedArtifact.localPath,
+      sha256: cachedArtifact.sha256,
+      sizeBytes: cachedArtifact.sizeBytes,
+      ...(cachedArtifact.originalUrl ? { originalUrl: cachedArtifact.originalUrl } : {})
     };
   }
 
@@ -317,7 +399,7 @@ export async function acquireBoundarySourceArtifact(
       ...(source.sourceVersion ? { version: source.sourceVersion } : {})
     },
     cwd: options.cwd,
-    maxSourceSizeBytes: 100 * 1024 * 1024
+    maxSourceSizeBytes
   });
 
   if (source.expectedSha256 && artifact.sha256 !== source.expectedSha256) {
@@ -334,7 +416,13 @@ export async function acquireBoundarySourceArtifact(
 
 function createLockLevel(
   source: TerritoryResolvedBoundarySource,
-  artifact: { sha256: string; sizeBytes: number; sourcePath?: string }
+  artifact: {
+    sha256: string;
+    sizeBytes: number;
+    sourcePath?: string;
+    resolvedDownloadUrl?: string;
+    sourceFeatureCount?: number;
+  }
 ): TerritoryCountrySourceLockLevel {
   return {
     adminLevel: source.adminLevel,
@@ -347,15 +435,39 @@ function createLockLevel(
     ...(artifact.sourcePath
       ? { sourcePath: artifact.sourcePath }
       : { sourceUrl: source.sourceUrl }),
+    resolvedDownloadUrl:
+      artifact.resolvedDownloadUrl ?? source.resolvedDownloadUrl ?? source.sourceUrl,
     ...(source.metadataUrl ? { metadataUrl: source.metadataUrl } : {}),
     ...(source.sourceVersion ? { sourceVersion: source.sourceVersion } : {}),
     ...(source.sourceDate ? { sourceDate: source.sourceDate } : {}),
     license: source.sourceLicense ?? "unknown",
+    ...(source.licenseUrl ? { licenseUrl: source.licenseUrl } : {}),
     ...(source.licenseDetail ? { licenseDetail: source.licenseDetail } : {}),
     attribution: source.attribution,
+    ...(source.redistributionStatus ? { redistributionStatus: source.redistributionStatus } : {}),
+    ...(source.commercialUseStatus ? { commercialUseStatus: source.commercialUseStatus } : {}),
     sha256: artifact.sha256,
-    sizeBytes: artifact.sizeBytes
+    sizeBytes: artifact.sizeBytes,
+    ...(source.originalFilename ? { originalFilename: source.originalFilename } : {}),
+    ...(source.originalFormat ? { originalFormat: source.originalFormat } : {}),
+    ...(artifact.sourceFeatureCount !== undefined
+      ? { sourceFeatureCount: artifact.sourceFeatureCount }
+      : {})
   };
+}
+
+async function countSourceFeatures(path: string): Promise<number | undefined> {
+  try {
+    const input = JSON.parse(await readFile(path, "utf8")) as unknown;
+
+    if (isRecord(input) && Array.isArray(input.features)) {
+      return input.features.length;
+    }
+  } catch {
+    return undefined;
+  }
+
+  return undefined;
 }
 
 function isRemoteUrl(input: string): boolean {

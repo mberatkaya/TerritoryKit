@@ -1,0 +1,66 @@
+{
+  "country": "CA",
+  "alpha3": "CAN",
+  "outcome": "built-with-warnings",
+  "generatedAt": "2026-07-15T12:39:22.642Z",
+  "strategyUsed": "large-source build without max-source byte deferral; adjacency lifecycle reported separately",
+  "levels": {
+    "ADM1": {
+      "status": "built-with-warnings",
+      "outcome": "built-with-warnings",
+      "featureCount": 13,
+      "sourceStatus": "available",
+      "semanticReviewStatus": "review-required",
+      "hierarchyStatus": "passed",
+      "adjacencyStatus": "not-run",
+      "indexStatus": "passed",
+      "validationStatus": "passed",
+      "loaderStatus": "passed"
+    },
+    "ADM2": {
+      "status": "built-with-warnings",
+      "outcome": "built-with-warnings",
+      "featureCount": 76,
+      "sourceStatus": "available",
+      "semanticReviewStatus": "review-required",
+      "hierarchyStatus": "passed",
+      "adjacencyStatus": "not-run",
+      "indexStatus": "passed",
+      "validationStatus": "passed",
+      "loaderStatus": "passed"
+    }
+  },
+  "issueCounts": {
+    "MAPPING_REVIEW_REQUIRED": 2
+  },
+  "phaseDurationsMs": {
+    "artifact-write": 429,
+    "checksum": 0,
+    "derived-metadata": 222,
+    "download": 59,
+    "extraction": 0,
+    "geometry-repair": 23814,
+    "loader-smoke": 0,
+    "parsing": 126,
+    "serialization": 99204,
+    "simplification": 398,
+    "source-resolution": 772,
+    "spatial-index": 0,
+    "validation": 97744
+  },
+  "remainingErrors": [],
+  "remainingWarnings": [
+    {
+      "code": "MAPPING_REVIEW_REQUIRED",
+      "level": "ADM1",
+      "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+      "severity": "warning"
+    },
+    {
+      "code": "MAPPING_REVIEW_REQUIRED",
+      "level": "ADM2",
+      "message": "ADM2 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+      "severity": "warning"
+    }
+  ]
+}

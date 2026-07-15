@@ -152,30 +152,26 @@ function resolveParent(
     };
   }
 
+  const centerCandidates = parents
+    .filter((parent) => bboxContainsPoint(parent.zone.bbox, child.zone.center, tolerance))
+    .filter((parent) => pointIntersectsGeometry(child.zone.center, parent.zone.geometry))
+    .sort(compareParentSpecificity);
+
+  const centerResolution = resolveSpatialCandidates(child, centerCandidates, 0.95, "center");
+
+  if (centerResolution) {
+    return centerResolution;
+  }
+
   const candidates = parents
     .filter((parent) => bboxesIntersect(parent.zone.bbox, child.zone.bbox, tolerance))
-    .filter((parent) => parentContainsChild(parent, child, tolerance))
-    .sort(
-      (left, right) =>
-        bboxArea(left.zone.bbox) - bboxArea(right.zone.bbox) ||
-        left.zone.id.localeCompare(right.zone.id)
-    );
+    .filter((parent) => parentGeometryContainsChild(parent, child, tolerance))
+    .sort(compareParentSpecificity);
 
-  if (candidates.length === 1) {
-    const candidate = candidates[0];
+  const containmentResolution = resolveSpatialCandidates(child, candidates, 0.9, "geometry");
 
-    if (!candidate) {
-      throw new Error("Expected one parent candidate.");
-    }
-
-    return {
-      childId: child.zone.id,
-      parentId: candidate.zone.id,
-      method: "spatial-containment",
-      confidence: 0.95,
-      candidateParentIds: candidates.map((candidate) => candidate.zone.id),
-      issues: []
-    };
+  if (containmentResolution) {
+    return containmentResolution;
   }
 
   if (candidates.length > 1) {
@@ -188,6 +184,21 @@ function resolveParent(
           code: "PARENT_AMBIGUOUS",
           severity: "error",
           message: "Multiple spatial parent candidates cover this child."
+        }
+      ]
+    };
+  }
+
+  if (centerCandidates.length > 1) {
+    return {
+      childId: child.zone.id,
+      method: "ambiguous",
+      candidateParentIds: centerCandidates.map((candidate) => candidate.zone.id),
+      issues: [
+        {
+          code: "PARENT_AMBIGUOUS",
+          severity: "error",
+          message: "Multiple spatial parent candidates cover this child center."
         }
       ]
     };
@@ -208,6 +219,78 @@ function resolveParent(
       }
     ]
   };
+}
+
+function resolveSpatialCandidates(
+  child: BuiltCountryZone,
+  candidates: readonly BuiltCountryZone[],
+  confidence: number,
+  mode: "center" | "geometry"
+): TerritoryHierarchyResolution | undefined {
+  if (candidates.length === 1) {
+    const candidate = candidates[0];
+
+    if (!candidate) {
+      throw new Error("Expected one parent candidate.");
+    }
+
+    return {
+      childId: child.zone.id,
+      parentId: candidate.zone.id,
+      method: "spatial-containment",
+      confidence,
+      candidateParentIds: candidates.map((candidate) => candidate.zone.id),
+      issues: []
+    };
+  }
+
+  if (candidates.length > 1) {
+    const resolved = resolveAmbiguousSpatialParent(candidates);
+
+    if (resolved) {
+      return {
+        childId: child.zone.id,
+        parentId: resolved.zone.id,
+        method: "spatial-containment",
+        confidence: 0.9,
+        candidateParentIds: candidates.map((candidate) => candidate.zone.id),
+        issues: [
+          {
+            code: "PARENT_AMBIGUOUS_RESOLVED",
+            severity: "warning",
+            message:
+              mode === "center"
+                ? "Multiple spatial parent candidates covered this child center; chose the most specific parent by bbox area."
+                : "Multiple spatial parent candidates covered this child; chose the most specific parent by bbox area."
+          }
+        ]
+      };
+    }
+  }
+
+  return undefined;
+}
+
+function compareParentSpecificity(left: BuiltCountryZone, right: BuiltCountryZone): number {
+  return (
+    bboxArea(left.zone.bbox) - bboxArea(right.zone.bbox) ||
+    left.zone.id.localeCompare(right.zone.id)
+  );
+}
+
+function resolveAmbiguousSpatialParent(
+  candidates: readonly BuiltCountryZone[]
+): BuiltCountryZone | undefined {
+  const [first, second] = candidates;
+
+  if (!first || !second) {
+    return first;
+  }
+
+  const firstArea = bboxArea(first.zone.bbox);
+  const secondArea = bboxArea(second.zone.bbox);
+
+  return firstArea > 0 && firstArea <= secondArea * 0.75 ? first : undefined;
 }
 
 function findExplicitParent(
@@ -249,15 +332,26 @@ function parentContainsChild(
   child: BuiltCountryZone,
   tolerance: number
 ): boolean {
+  if (
+    bboxContainsPoint(parent.zone.bbox, child.zone.center, tolerance) &&
+    pointIntersectsGeometry(child.zone.center, parent.zone.geometry)
+  ) {
+    return true;
+  }
+
+  return parentGeometryContainsChild(parent, child, tolerance);
+}
+
+function parentGeometryContainsChild(
+  parent: BuiltCountryZone,
+  child: BuiltCountryZone,
+  tolerance: number
+): boolean {
   const relation = classifyTerritoryGeometryRelation(parent.zone.geometry, child.zone.geometry, {
     epsilon: tolerance
   }).relation;
 
-  return (
-    relation === "contains" ||
-    relation === "equal" ||
-    pointIntersectsGeometry(child.zone.center, parent.zone.geometry)
-  );
+  return relation === "contains" || relation === "equal";
 }
 
 function pointIntersectsGeometry(point: LngLat, geometry: TerritoryGeometry): boolean {
@@ -308,6 +402,15 @@ function bboxesIntersect(left: TerritoryBBox, right: TerritoryBBox, epsilon: num
     right[2] < left[0] - epsilon ||
     left[3] < right[1] - epsilon ||
     right[3] < left[1] - epsilon
+  );
+}
+
+function bboxContainsPoint(bbox: TerritoryBBox, point: LngLat, epsilon: number): boolean {
+  return (
+    point[0] >= bbox[0] - epsilon &&
+    point[0] <= bbox[2] + epsilon &&
+    point[1] >= bbox[1] - epsilon &&
+    point[1] <= bbox[3] + epsilon
   );
 }
 

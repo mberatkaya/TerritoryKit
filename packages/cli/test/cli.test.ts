@@ -892,9 +892,36 @@ describe("territory cli", () => {
           summary: {
             totalCountries: 249,
             levels: {
-              ADM0: { built: 228, "source-unavailable": 20, "performance-deferred": 1 },
-              ADM1: { built: 5, "not-reviewed": 244 },
+              ADM0: { built: 236 },
+              ADM1: {
+                built: 197,
+                "source-unavailable": 52
+              },
+              ADM2: {
+                built: 179,
+                "source-unavailable": 70
+              },
               municipality: { "source-unavailable": 249 }
+            },
+            semanticReviewStatus: {
+              ADM1: {
+                "review-required": 244,
+                reviewed: 5
+              },
+              ADM2: {
+                "review-required": 244,
+                reviewed: 5
+              }
+            },
+            adjacencyStatus: {
+              ADM1: {
+                passed: 193,
+                "not-run": 56
+              },
+              ADM2: {
+                passed: 175,
+                "not-run": 74
+              }
             }
           }
         }
