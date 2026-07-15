@@ -1,12 +1,12 @@
 {
   "schemaVersion": "territorykit-provider-registry@1",
-  "generatedAt": "2026-07-14T00:00:00.000Z",
+  "generatedAt": "2026-07-15T00:00:00.000Z",
   "providers": [
     {
       "id": "natural-earth",
       "name": "Natural Earth",
       "status": "implemented",
-      "sourceUrl": "https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-0-countries/",
+      "sourceUrl": "https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries/",
       "license": "Public Domain",
       "attribution": "Made with Natural Earth",
       "redistributionAllowed": true,

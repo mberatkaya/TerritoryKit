@@ -892,7 +892,7 @@ describe("territory cli", () => {
           summary: {
             totalCountries: 249,
             levels: {
-              ADM0: { built: 40, "source-available": 200, "source-unavailable": 9 },
+              ADM0: { built: 228, "source-unavailable": 20, "performance-deferred": 1 },
               ADM1: { built: 5, "not-reviewed": 244 },
               municipality: { "source-unavailable": 249 }
             }
