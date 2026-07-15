@@ -892,8 +892,21 @@ describe("territory cli", () => {
           summary: {
             totalCountries: 249,
             levels: {
-              ADM0: { built: 228, "source-unavailable": 20, "performance-deferred": 1 },
-              ADM1: { built: 5, "not-reviewed": 244 },
+              ADM0: { built: 236 },
+              ADM1: {
+                "built-with-warnings": 174,
+                "source-unavailable": 54,
+                "performance-deferred": 4,
+                "hierarchy-failed": 3,
+                "stable-id-failed": 14
+              },
+              ADM2: {
+                "built-with-warnings": 154,
+                "source-unavailable": 70,
+                "performance-deferred": 4,
+                "hierarchy-failed": 7,
+                "stable-id-failed": 14
+              },
               municipality: { "source-unavailable": 249 }
             }
           }

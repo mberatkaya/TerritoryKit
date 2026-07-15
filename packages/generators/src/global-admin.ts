@@ -820,7 +820,23 @@ function mapBuildOutcomeToCountryDetailStatus(
 ): GlobalAdminAdm0CountryDetailStatus {
   switch (outcome) {
     case "built":
+    case "built-with-warnings":
       return "built";
+    case "partial":
+    case "provider-unsupported":
+    case "download-error":
+    case "extraction-error":
+    case "parse-error":
+    case "CRS-error":
+    case "transform-error":
+    case "geometry-repair-failed":
+    case "stable-id-failed":
+    case "hierarchy-failed":
+    case "adjacency-failed":
+    case "index-failed":
+    case "loader-smoke-failed":
+    case "not-applicable":
+      return "provider-error";
     case "licence-restricted":
       return "licence-restricted";
     case "performance-deferred":

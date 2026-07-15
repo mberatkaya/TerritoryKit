@@ -92,12 +92,13 @@ export async function resolveTerritoryBoundarySource(
 
   const record = matches[0] as Record<string, unknown>;
   const sourceUrl = readFirstString(record, [
-    "sourceUrl",
     "simplifiedGeometryGeoJSON",
-    "downloadURL",
     "gjDownloadURL",
     "gjDownloadUrl",
+    "downloadURL",
     "downloadUrl",
+    "staticDownloadLink",
+    "sourceUrl",
     "url"
   ]);
 
@@ -126,6 +127,7 @@ export async function resolveTerritoryBoundarySource(
     "licenseType",
     "boundaryLicense"
   ]);
+  const licenseUrl = readFirstString(record, ["licenseUrl", "licenseSource"]);
   const boundaryId = readFirstString(record, ["boundaryID", "boundaryId", "shapeID"]);
   const boundaryName = readFirstString(record, ["boundaryName", "shapeName", "name"]);
   const boundaryYearRepresented = readFirstString(record, [
@@ -142,6 +144,7 @@ export async function resolveTerritoryBoundarySource(
     "buildDate"
   ]);
   const expectedSha256 = readFirstString(record, ["sha256", "checksum", "sourceSha256"]);
+  const sourceFeatureCount = readFirstNumber(record, ["admUnitCount", "featureCount"]);
 
   if (!license) {
     issues.push(
@@ -161,6 +164,8 @@ export async function resolveTerritoryBoundarySource(
     );
   }
 
+  const originalFilename = inferFilename(sourceUrl);
+
   return {
     source: {
       provider: "geoboundaries",
@@ -173,16 +178,23 @@ export async function resolveTerritoryBoundarySource(
       ...(boundaryYearRepresented ? { boundaryYearRepresented } : {}),
       ...(sourceVersion ? { sourceVersion } : {}),
       sourceUrl,
+      resolvedDownloadUrl: sourceUrl,
       metadataUrl: options.metadataPath
         ? resolve(options.cwd ?? process.cwd(), options.metadataPath)
         : metadataUrl,
       ...(license ? { sourceLicense: license } : {}),
+      ...(licenseUrl ? { licenseUrl } : {}),
       ...(licenseDetail ? { licenseDetail } : {}),
       attribution,
+      redistributionStatus: "source-defined",
+      commercialUseStatus: "source-defined",
       ...(sourceDate ? { sourceDate } : {}),
       ...(options.buildDate ? { buildDate: options.buildDate } : {}),
       ...(expectedSha256 ? { expectedSha256 } : {}),
-      ...(typeof record.sizeBytes === "number" ? { sizeBytes: record.sizeBytes } : {})
+      ...(typeof record.sizeBytes === "number" ? { sizeBytes: record.sizeBytes } : {}),
+      ...(sourceFeatureCount !== undefined ? { sourceFeatureCount } : {}),
+      ...(originalFilename ? { originalFilename } : {}),
+      originalFormat: inferFormat(sourceUrl)
     },
     issues
   };
@@ -230,7 +242,7 @@ function readFirstString(
   paths: readonly string[]
 ): string | undefined {
   for (const path of paths) {
-    const value = readStringPropertyPath(record, path);
+    const value = normalizeMetadataString(readStringPropertyPath(record, path));
 
     if (value) {
       return value;
@@ -238,6 +250,64 @@ function readFirstString(
   }
 
   return undefined;
+}
+
+function readFirstNumber(
+  record: Record<string, unknown>,
+  paths: readonly string[]
+): number | undefined {
+  for (const path of paths) {
+    const value = record[path];
+
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return value;
+    }
+
+    if (typeof value === "string" && value.trim() && Number.isFinite(Number(value))) {
+      return Number(value);
+    }
+  }
+
+  return undefined;
+}
+
+function normalizeMetadataString(value: string | undefined): string | undefined {
+  if (!value) {
+    return undefined;
+  }
+
+  const trimmed = value.trim();
+
+  if (!trimmed || ["nan", "null", "undefined"].includes(trimmed.toLowerCase())) {
+    return undefined;
+  }
+
+  return trimmed;
+}
+
+function inferFilename(sourceUrl: string): string | undefined {
+  try {
+    const pathname = new URL(sourceUrl).pathname;
+    const filename = pathname.split("/").filter(Boolean).at(-1);
+    return filename || undefined;
+  } catch {
+    const filename = sourceUrl.split(/[\\/]/).filter(Boolean).at(-1);
+    return filename || undefined;
+  }
+}
+
+function inferFormat(sourceUrl: string): string {
+  const filename = inferFilename(sourceUrl)?.toLowerCase() ?? sourceUrl.toLowerCase();
+
+  if (filename.endsWith(".geojson") || filename.endsWith(".json")) {
+    return "GeoJSON";
+  }
+
+  if (filename.endsWith(".zip")) {
+    return "ZIP";
+  }
+
+  return "unknown";
 }
 
 function validateSourceUrl(

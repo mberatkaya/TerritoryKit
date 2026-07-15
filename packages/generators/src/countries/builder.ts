@@ -79,6 +79,7 @@ export async function buildTerritoryCountryDataset(
   const unavailableLevels: TerritoryAdminLevel[] = [];
   const runPhase = createPhaseRunner({
     country: config.countryCodeAlpha2,
+    ...(options.phaseTimeoutMs ? { timeoutMs: options.phaseTimeoutMs } : {}),
     ...(options.onPhase ? { onPhase: options.onPhase } : {})
   });
 
@@ -120,7 +121,13 @@ export async function buildTerritoryCountryDataset(
             ...(lockLevel.sha256 ? { expectedSha256: lockLevel.sha256 } : {}),
             ...(lockLevel.sourceVersion ? { sourceVersion: lockLevel.sourceVersion } : {})
           },
-          { cwd, buildDate }
+          {
+            cwd,
+            buildDate,
+            ...(options.cacheDir ? { cacheDir: options.cacheDir } : {}),
+            ...(options.noCache ? { noCache: true } : {}),
+            ...(options.refresh ? { refresh: true } : {})
+          }
         )
     );
     await runPhase("extraction", { level, inputBytes: artifact.sizeBytes }, async () => undefined);
@@ -277,12 +284,14 @@ export async function buildTerritoryCountryDataset(
   };
   issues.push(...validateTerritoryIdentityMap(identityMap));
   const adjacencyArtifacts = options.buildAdjacency
-    ? await buildAdjacencyArtifacts(config, adjacencyLevelDatasets, {
-        buildDate,
-        publishedLevelDatasets: levelDatasets,
-        ...(options.batchSize ? { batchSize: options.batchSize } : {}),
-        issues
-      })
+    ? await runPhase("adjacency-generation", { featureCount: allBuilt.length }, () =>
+        buildAdjacencyArtifacts(config, adjacencyLevelDatasets, {
+          buildDate,
+          publishedLevelDatasets: levelDatasets,
+          ...(options.batchSize ? { batchSize: options.batchSize } : {}),
+          issues
+        })
+      )
     : {};
   const publishReadyFailures = evaluatePublishReadyFailures({
     config,
@@ -321,7 +330,7 @@ export async function buildTerritoryCountryDataset(
     issues: issues.sort(compareIssues)
   };
   await runPhase("spatial-index", { featureCount: allBuilt.length }, async () => undefined);
-  let files = await runPhase("serialization", { featureCount: allBuilt.length }, async () =>
+  const files = await runPhase("serialization", { featureCount: allBuilt.length }, async () =>
     createCountryArtifactFiles({
       config,
       sourceLock: options.sourceLock,
@@ -339,37 +348,10 @@ export async function buildTerritoryCountryDataset(
       publishReadyFailures
     })
   );
-
-  for (let attempt = 0; attempt < 5; attempt += 1) {
-    const artifactBytes = [...files.values()].reduce(
-      (sum, content) => sum + Buffer.byteLength(content),
-      0
-    );
-
-    if (statistics.artifactBytes === artifactBytes) {
-      break;
-    }
-
-    statistics.artifactBytes = artifactBytes;
-    files = await runPhase("serialization", { featureCount: allBuilt.length }, async () =>
-      createCountryArtifactFiles({
-        config,
-        sourceLock: options.sourceLock,
-        levelDatasets,
-        combinedDataset,
-        identityMap,
-        hierarchyReport,
-        qualityReport,
-        adjacencyArtifacts,
-        repairReportsByLevel,
-        buildReport,
-        buildDate,
-        sourceDates,
-        publishReady,
-        publishReadyFailures
-      })
-    );
-  }
+  statistics.artifactBytes = [...files.values()].reduce(
+    (sum, content) => sum + Buffer.byteLength(content),
+    0
+  );
 
   await runPhase("checksum", { inputBytes: statistics.artifactBytes }, async () => undefined);
 
@@ -408,8 +390,12 @@ export async function buildTerritoryCountryDatasetPath(options: {
   allowNonPublishReady?: boolean;
   buildDate?: string;
   batchSize?: number;
+  cacheDir?: string;
+  noCache?: boolean;
+  refresh?: boolean;
   force?: boolean;
   cwd?: string;
+  phaseTimeoutMs?: number;
   onPhase?: (event: TerritoryCountryBuildPhaseEvent) => void;
 }): Promise<TerritoryCountryBuildResult> {
   const lock = JSON.parse(
@@ -426,8 +412,12 @@ export async function buildTerritoryCountryDatasetPath(options: {
     ...(options.allowNonPublishReady ? { allowNonPublishReady: true } : {}),
     ...(options.buildDate ? { buildDate: options.buildDate } : {}),
     ...(options.batchSize ? { batchSize: options.batchSize } : {}),
+    ...(options.cacheDir ? { cacheDir: options.cacheDir } : {}),
+    ...(options.noCache ? { noCache: true } : {}),
+    ...(options.refresh ? { refresh: true } : {}),
     ...(options.force ? { force: true } : {}),
     ...(options.cwd ? { cwd: options.cwd } : {}),
+    ...(options.phaseTimeoutMs ? { phaseTimeoutMs: options.phaseTimeoutMs } : {}),
     ...(options.onPhase ? { onPhase: options.onPhase } : {})
   });
 }
@@ -518,6 +508,7 @@ export async function validateTerritoryCountryDatasetPath(
 
 function createPhaseRunner(input: {
   country: string;
+  timeoutMs?: number;
   onPhase?: (event: TerritoryCountryBuildPhaseEvent) => void;
 }) {
   return async function runPhase<T>(
@@ -542,7 +533,7 @@ function createPhaseRunner(input: {
     });
 
     try {
-      const value = await action();
+      const value = await runWithOptionalTimeout(action, input.timeoutMs, phase);
       input.onPhase?.({
         country: input.country,
         phase,
@@ -567,6 +558,33 @@ function createPhaseRunner(input: {
       throw error;
     }
   };
+}
+
+async function runWithOptionalTimeout<T>(
+  action: () => Promise<T>,
+  timeoutMs: number | undefined,
+  phase: TerritoryCountryBuildPhase
+): Promise<T> {
+  if (!timeoutMs || timeoutMs < 1) {
+    return action();
+  }
+
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+
+  try {
+    return await Promise.race([
+      action(),
+      new Promise<T>((_, reject) => {
+        timeout = setTimeout(() => {
+          reject(new Error(`${phase} exceeded ${timeoutMs} ms phase timeout.`));
+        }, timeoutMs);
+      })
+    ]);
+  } finally {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+  }
 }
 
 export async function inspectTerritoryCountryDatasetPath(
@@ -916,7 +934,7 @@ async function buildAdjacencyArtifacts(
     context.issues.push(
       ...result.issues.map((issue) => ({
         code: issue.code,
-        severity: issue.severity,
+        severity: issue.code.startsWith("QUALITY_") ? ("warning" as const) : issue.severity,
         message: issue.message,
         level
       }))
@@ -1398,16 +1416,25 @@ function createAttributionJson(sourceLock: TerritoryCountrySourceLock): Record<s
         {
           providerId: sourceLock.provider,
           sourceUrl: entry?.sourceUrl ?? entry?.sourcePath,
-          downloadUrl: entry?.sourceUrl ?? entry?.sourcePath,
+          resolvedDownloadUrl: entry?.resolvedDownloadUrl ?? entry?.sourceUrl ?? entry?.sourcePath,
+          downloadUrl: entry?.resolvedDownloadUrl ?? entry?.sourceUrl ?? entry?.sourcePath,
           licence: entry?.license,
+          licenceUrl: entry?.licenseUrl,
           attribution: entry?.attribution,
-          redistributionPermission: entry?.status === "available",
-          commercialUsePermission: entry?.status === "available" ? "source-defined" : false,
+          redistributionStatus:
+            entry?.redistributionStatus ??
+            (entry?.status === "available" ? "source-defined" : false),
+          commercialUseStatus:
+            entry?.commercialUseStatus ??
+            (entry?.status === "available" ? "source-defined" : false),
           sourceDate: entry?.sourceDate ?? entry?.boundaryYearRepresented,
           downloadDate: sourceLock.resolvedAt,
+          originalFilename: entry?.originalFilename,
+          originalFormat: entry?.originalFormat,
           originalChecksum: entry?.sha256,
           country: sourceLock.country.alpha2,
-          sourceAdministrativeLevel: entry?.adminLevel
+          sourceAdministrativeLevel: entry?.adminLevel,
+          sourceFeatureCount: entry?.sourceFeatureCount
         }
       ])
     )

@@ -183,14 +183,13 @@ def repair_one(feature, precision):
         result = {
             "id": feature_id,
             "status": "repaired" if changed else "unchanged",
+            "geometry": mapping(area_geometry),
             "center": [float(point.x), float(point.y)],
             "areaBefore": area_before,
             "areaAfter": area_after,
             "areaDifference": abs(area_after - area_before),
             "componentsDiscarded": discarded
         }
-        if changed:
-            result["geometry"] = mapping(area_geometry)
         return result
     except Exception as error:
         return {

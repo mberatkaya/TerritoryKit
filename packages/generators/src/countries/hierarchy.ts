@@ -249,15 +249,15 @@ function parentContainsChild(
   child: BuiltCountryZone,
   tolerance: number
 ): boolean {
+  if (pointIntersectsGeometry(child.zone.center, parent.zone.geometry)) {
+    return true;
+  }
+
   const relation = classifyTerritoryGeometryRelation(parent.zone.geometry, child.zone.geometry, {
     epsilon: tolerance
   }).relation;
 
-  return (
-    relation === "contains" ||
-    relation === "equal" ||
-    pointIntersectsGeometry(child.zone.center, parent.zone.geometry)
-  );
+  return relation === "contains" || relation === "equal";
 }
 
 function pointIntersectsGeometry(point: LngLat, geometry: TerritoryGeometry): boolean {
