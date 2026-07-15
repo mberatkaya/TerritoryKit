@@ -1059,12 +1059,21 @@ async function runGlobalAdminAdm0Build(args: string[]): Promise<number> {
   const sourceDate = getFlag(flags, "source-date");
   const sourceVersion = getFlag(flags, "source-version");
   const cacheDir = getFlag(flags, "cache-dir");
+  const buildReportPath = getFlag(flags, "build-report");
+  const artifactRootsFlag =
+    getFlag(flags, "country-artifact-root") ?? getFlag(flags, "artifact-root");
+  const countryArtifactRoots = artifactRootsFlag
+    ?.split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
 
   try {
     const result = await buildGlobalAdminAdm0Artifacts({
       ...(sourcePath ? { sourcePath } : {}),
       sourceUrl,
       outputPath,
+      ...(countryArtifactRoots && countryArtifactRoots.length > 0 ? { countryArtifactRoots } : {}),
+      ...(buildReportPath ? { buildReportPath } : {}),
       ...(buildDate ? { buildDate } : {}),
       ...(datasetVersion ? { datasetVersion } : {}),
       ...(sourceDate ? { sourceDate } : {}),
@@ -1096,6 +1105,11 @@ async function runGlobalAdminAdm0Build(args: string[]): Promise<number> {
 }
 
 async function runDatasetBuildAll(args: string[]): Promise<number> {
+  if (args.includes("--help") || args.includes("-h")) {
+    printDatasetBuildAllHelp();
+    return 0;
+  }
+
   const flags = parseFlags(args);
   const outputRoot = getFlag(flags, "output") ?? "datasets/generated/countries";
   const reportPath = getFlag(flags, "report");
@@ -1110,6 +1124,9 @@ async function runDatasetBuildAll(args: string[]): Promise<number> {
   const provider = getFlag(flags, "provider");
   const buildDate = getFlag(flags, "build-date");
   const cacheDir = getFlag(flags, "cache-dir");
+  const maxSourceBytes = getFlag(flags, "max-source-bytes")
+    ? Number(getFlag(flags, "max-source-bytes"))
+    : undefined;
 
   if (isCliIssueArray(levels)) {
     printJson({ ok: false, command: "dataset build-all", issues: levels });
@@ -1125,6 +1142,15 @@ async function runDatasetBuildAll(args: string[]): Promise<number> {
     return 2;
   }
 
+  if (maxSourceBytes !== undefined && (!Number.isInteger(maxSourceBytes) || maxSourceBytes < 1)) {
+    printJson({
+      ok: false,
+      command: "dataset build-all",
+      issues: [createCliIssue("--max-source-bytes must be a positive integer.")]
+    });
+    return 2;
+  }
+
   try {
     const report = await buildAllTerritoryCountryDatasets({
       levels: levels ?? ["ADM1", "ADM2"],
@@ -1136,6 +1162,10 @@ async function runDatasetBuildAll(args: string[]): Promise<number> {
       ...(provider ? { provider } : {}),
       ...(buildDate ? { buildDate } : {}),
       ...(cacheDir ? { cacheDir } : {}),
+      ...(maxSourceBytes ? { maxSourceBytes } : {}),
+      onPhase: (event) => {
+        process.stderr.write(`${JSON.stringify(event)}\n`);
+      },
       ...(flags.has("continue-on-error") ? { continueOnError: true } : {}),
       ...(flags.has("resume") ? { resume: true } : {}),
       ...(flags.has("retry-failed") ? { retryFailed: true } : {}),
@@ -3517,11 +3547,29 @@ territory dataset build global-admin --output datasets/generated/global/ADM0
 
 Options:
   --detail low|medium|high
+  --country-artifact-root <dir[,dir]>   Optional country-detail artifact roots for coverage.
+  --build-report <report.json>
   --source-version <version>
   --source-url <url>
   --source-sha256 <sha256>
   --build-date <iso-date>
   --strict
+  --force`);
+}
+
+function printDatasetBuildAllHelp(): void {
+  console.log(`territory dataset build-all --levels ADM0 --output datasets/generated/global-adm0-countries --report reports/global-adm0-build-all.json
+
+Options:
+  --levels <ADM0[,ADM1...]>
+  --countries <ISO2[,ISO2...]>
+  --output <dir>
+  --report <report.json>
+  --max-source-bytes <bytes>            Defer oversized country-detail builds as performance-deferred.
+  --continue-on-error
+  --concurrency <number>
+  --resume
+  --retry-failed
   --force`);
 }
 

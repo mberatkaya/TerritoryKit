@@ -13,6 +13,9 @@ import type {
   TerritoryCountryBuildAllCountryResult,
   TerritoryCountryBuildAllOptions,
   TerritoryCountryBuildAllOutcome,
+  TerritoryCountryBuildPhase,
+  TerritoryCountryBuildPhaseEvent,
+  TerritoryCountryBuildPhaseTiming,
   TerritoryCountryBuildAllReport,
   TerritoryCountryBuildIssue,
   TerritoryCountryBuildReport
@@ -32,10 +35,15 @@ export async function buildAllTerritoryCountryDatasets(
   const previousByCountry = new Map(
     previousReport?.results.map((result) => [result.country, result]) ?? []
   );
+  const selectedCountryCodes = new Set(countries.map((country) => country.countryCodeAlpha2));
   const queue = countries.filter((country) => {
     const previous = previousByCountry.get(country.countryCodeAlpha2);
 
-    if (!previous || options.retryFailed) {
+    if (previous?.outcome === "built" && options.resume) {
+      return false;
+    }
+
+    if (!previous) {
       return true;
     }
 
@@ -45,7 +53,12 @@ export async function buildAllTerritoryCountryDatasets(
     const previous = previousByCountry.get(country.countryCodeAlpha2);
     return previous && options.resume && previous.outcome === "built" ? [previous] : [];
   });
-  const results: TerritoryCountryBuildAllCountryResult[] = [...reusedResults];
+  const previousUnselectedResults =
+    previousReport?.results.filter((result) => !selectedCountryCodes.has(result.country)) ?? [];
+  const results: TerritoryCountryBuildAllCountryResult[] = [
+    ...previousUnselectedResults,
+    ...reusedResults
+  ];
   const concurrency = Math.max(1, Math.min(options.concurrency ?? 2, 8));
   let cursor = 0;
   let writeReport = Promise.resolve();
@@ -71,6 +84,8 @@ export async function buildAllTerritoryCountryDatasets(
         ...(options.provider ? { provider: options.provider } : {}),
         ...(options.offline ? { offline: true } : {}),
         ...(options.cacheDir ? { cacheDir: resolve(cwd, options.cacheDir) } : {}),
+        ...(options.maxSourceBytes ? { maxSourceBytes: options.maxSourceBytes } : {}),
+        ...(options.onPhase ? { onPhase: options.onPhase } : {}),
         ...(options.force ? { force: true } : {}),
         cwd
       });
@@ -127,6 +142,8 @@ async function buildOneCountry(input: {
   provider?: string;
   offline?: boolean;
   cacheDir?: string;
+  maxSourceBytes?: number;
+  onPhase?: (event: TerritoryCountryBuildPhaseEvent) => void;
   force?: boolean;
   cwd: string;
 }): Promise<TerritoryCountryBuildAllCountryResult> {
@@ -138,6 +155,15 @@ async function buildOneCountry(input: {
   const buildLevels = withRequiredAncestorLevels(input.levels);
   const issues: TerritoryCountryBuildIssue[] = [];
   const startedAt = input.generatedAt;
+  const phaseTimings: TerritoryCountryBuildPhaseTiming[] = [];
+  const onPhase = createPhaseRecorder({
+    phaseTimings,
+    ...(input.onPhase ? { onPhase: input.onPhase } : {})
+  });
+  const runPhase = createPhaseRunner({
+    country: config.countryCodeAlpha2,
+    onPhase
+  });
 
   if (input.provider && input.provider !== config.sourceProvider) {
     const issue = {
@@ -153,27 +179,32 @@ async function buildOneCountry(input: {
       outcome: "provider-error",
       status: "source-unavailable",
       issues: [issue],
+      phaseTimings,
       startedAt,
       finishedAt: input.generatedAt
     });
   }
 
   try {
-    await mkdir(countryRoot, { recursive: true });
+    await runPhase("source-resolution", {}, async () => {
+      await mkdir(countryRoot, { recursive: true });
 
-    if (!input.offline) {
-      const lock = await createTerritoryCountrySourceLock({
-        country: config.countryCodeAlpha2,
-        levels: buildLevels,
-        outputPath: sourceLockPath,
-        ...(input.releaseType ? { releaseType: input.releaseType } : {}),
-        ...(input.cacheDir ? { cacheDir: input.cacheDir } : {}),
-        buildDate: input.generatedAt,
-        force: true,
-        cwd: input.cwd
-      });
-      issues.push(...lock.issues);
-    } else if (!(await pathExists(sourceLockPath))) {
+      if (!input.offline) {
+        const lock = await createTerritoryCountrySourceLock({
+          country: config.countryCodeAlpha2,
+          levels: buildLevels,
+          outputPath: sourceLockPath,
+          ...(input.releaseType ? { releaseType: input.releaseType } : {}),
+          ...(input.cacheDir ? { cacheDir: input.cacheDir } : {}),
+          buildDate: input.generatedAt,
+          force: true,
+          cwd: input.cwd
+        });
+        issues.push(...lock.issues);
+      }
+    });
+
+    if (input.offline && !(await pathExists(sourceLockPath))) {
       return createCountryResult({
         config,
         countryRoot: reportCountryRoot,
@@ -188,13 +219,16 @@ async function buildOneCountry(input: {
             message: `Offline build requires ${reportSourceLockPath}.`
           }
         ],
+        phaseTimings,
         startedAt,
         finishedAt: input.generatedAt
       });
     }
 
     const sourceLock = JSON.parse(await readFile(sourceLockPath, "utf8")) as {
-      levels: Partial<Record<TerritoryAdminLevel, { status: string; license?: string }>>;
+      levels: Partial<
+        Record<TerritoryAdminLevel, { status: string; license?: string; sizeBytes?: number }>
+      >;
     };
     const availableLevels = input.levels.filter(
       (level) => sourceLock.levels[level]?.status === "available"
@@ -209,6 +243,48 @@ async function buildOneCountry(input: {
         outcome: "source-unavailable",
         status: "source-unavailable",
         issues,
+        phaseTimings,
+        startedAt,
+        finishedAt: input.generatedAt
+      });
+    }
+
+    const availableInputBytes = availableLevels.reduce(
+      (sum, level) => sum + (sourceLock.levels[level]?.sizeBytes ?? 0),
+      0
+    );
+    await runPhase("download", { inputBytes: availableInputBytes }, async () => undefined);
+    await runPhase("extraction", { inputBytes: availableInputBytes }, async () => undefined);
+
+    const oversizedLevel = input.maxSourceBytes
+      ? availableLevels.find(
+          (level) => (sourceLock.levels[level]?.sizeBytes ?? 0) > input.maxSourceBytes!
+        )
+      : undefined;
+
+    if (oversizedLevel) {
+      const sizeBytes = sourceLock.levels[oversizedLevel]?.sizeBytes ?? 0;
+      issues.push({
+        code: "SOURCE_GEOMETRY_TOO_LARGE_FOR_INLINE_BUILD",
+        severity: "warning",
+        message: `${oversizedLevel} source is ${sizeBytes} bytes, above the configured ${input.maxSourceBytes} byte build guard.`,
+        level: oversizedLevel,
+        details: {
+          sizeBytes,
+          maxSourceBytes: input.maxSourceBytes,
+          outcome: "performance-deferred",
+          phase: "download"
+        }
+      });
+      return createCountryResult({
+        config,
+        countryRoot: reportCountryRoot,
+        sourceLockPath: reportSourceLockPath,
+        levels: input.levels,
+        outcome: "performance-deferred",
+        status: "performance-deferred",
+        issues,
+        phaseTimings,
         startedAt,
         finishedAt: input.generatedAt
       });
@@ -234,6 +310,7 @@ async function buildOneCountry(input: {
         outcome: "licence-restricted",
         status: "license-restricted",
         issues,
+        phaseTimings,
         startedAt,
         finishedAt: input.generatedAt
       });
@@ -247,12 +324,20 @@ async function buildOneCountry(input: {
       buildAdjacency: true,
       allowNonPublishReady: true,
       buildDate: input.generatedAt,
+      onPhase,
       force: true,
       cwd: input.cwd
     });
     issues.push(...build.issues);
-    const validation = await validateTerritoryCountryDatasetPath(countryRoot, { strict: false });
+    const validation = await runPhase("validation", {}, () =>
+      validateTerritoryCountryDatasetPath(countryRoot, { strict: false })
+    );
     issues.push(...validation.issues);
+    await runPhase("loader-smoke", {}, async () => {
+      if (!validation.manifest) {
+        throw new Error("Country validation did not return a manifest.");
+      }
+    });
     const hasError = issues.some((issue) => issue.severity === "error");
 
     return createCountryResult({
@@ -264,6 +349,7 @@ async function buildOneCountry(input: {
       status: hasError ? "validation-failed" : "built",
       issues,
       buildReport: build.buildReport,
+      phaseTimings,
       startedAt,
       finishedAt: input.generatedAt
     });
@@ -283,6 +369,7 @@ async function buildOneCountry(input: {
           message: error instanceof Error ? error.message : String(error)
         }
       ],
+      phaseTimings,
       startedAt,
       finishedAt: input.generatedAt
     });
@@ -298,6 +385,7 @@ function createCountryResult(input: {
   status: TerritoryArtifactStatus;
   issues: TerritoryCountryBuildIssue[];
   buildReport?: TerritoryCountryBuildReport;
+  phaseTimings: TerritoryCountryBuildPhaseTiming[];
   startedAt: string;
   finishedAt: string;
 }): TerritoryCountryBuildAllCountryResult {
@@ -328,8 +416,93 @@ function createCountryResult(input: {
       (left, right) =>
         (left.level ?? "").localeCompare(right.level ?? "") || left.code.localeCompare(right.code)
     ),
+    phaseTimings: input.phaseTimings,
     startedAt: input.startedAt,
     finishedAt: input.finishedAt
+  };
+}
+
+function createPhaseRunner(input: {
+  country: string;
+  onPhase?: (event: TerritoryCountryBuildPhaseEvent) => void;
+}) {
+  return async function runPhase<T>(
+    phase: TerritoryCountryBuildPhase,
+    details: {
+      inputBytes?: number;
+      featureCount?: number;
+      level?: TerritoryAdminLevel;
+      outcome?: TerritoryCountryBuildAllOutcome;
+      reason?: string;
+    },
+    action: () => Promise<T>
+  ): Promise<T> {
+    const startedAt = new Date().toISOString();
+    const started = Date.now();
+    input.onPhase?.({
+      country: input.country,
+      phase,
+      status: "started",
+      durationMs: 0,
+      startedAt,
+      ...details
+    });
+
+    try {
+      const value = await action();
+      const timing: TerritoryCountryBuildPhaseTiming = {
+        country: input.country,
+        phase,
+        status: "completed",
+        durationMs: Date.now() - started,
+        ...details
+      };
+      input.onPhase?.({
+        ...timing,
+        startedAt,
+        finishedAt: new Date().toISOString()
+      });
+      return value;
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : String(error);
+      const timing: TerritoryCountryBuildPhaseTiming = {
+        country: input.country,
+        phase,
+        status: "failed",
+        durationMs: Date.now() - started,
+        reason,
+        ...details
+      };
+      input.onPhase?.({
+        ...timing,
+        startedAt,
+        finishedAt: new Date().toISOString()
+      });
+      throw error;
+    }
+  };
+}
+
+function createPhaseRecorder(input: {
+  phaseTimings: TerritoryCountryBuildPhaseTiming[];
+  onPhase?: (event: TerritoryCountryBuildPhaseEvent) => void;
+}) {
+  return (event: TerritoryCountryBuildPhaseEvent): void => {
+    if (event.status !== "started") {
+      input.phaseTimings.push({
+        country: event.country,
+        phase: event.phase,
+        status: event.status,
+        durationMs: event.durationMs,
+        ...(event.inputBytes !== undefined ? { inputBytes: event.inputBytes } : {}),
+        ...(event.featureCount !== undefined ? { featureCount: event.featureCount } : {}),
+        ...(event.level ? { level: event.level } : {}),
+        ...(event.outcome ? { outcome: event.outcome } : {}),
+        ...(event.reason ? { reason: event.reason } : {})
+      });
+    }
+
+    input.onPhase?.(event);
   };
 }
 
@@ -373,6 +546,7 @@ function createBuildAllReport(input: {
     built: 0,
     "validation-failed": 0,
     "source-unavailable": 0,
+    "performance-deferred": 0,
     "licence-restricted": 0,
     "provider-error": 0,
     "mapping-review-required": 0

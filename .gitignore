@@ -14,4 +14,5 @@ datasets/world-countries/
 datasets/generated/
 datasets/**/dist/
 datasets/**/.cache/
+.territory/
 .territory/cache/

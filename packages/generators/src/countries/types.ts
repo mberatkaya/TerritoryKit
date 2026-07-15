@@ -1,7 +1,9 @@
 import type {
   GeometryQualityReport,
+  LngLat,
   TerritoryAdminLevel,
   TerritoryAdjacencyArtifact,
+  TerritoryBBox,
   TerritoryDataset,
   TerritoryGeometry,
   TerritorySemanticAdminType,
@@ -15,6 +17,7 @@ export type TerritoryArtifactStatus =
   | "not-reviewed"
   | "source-available"
   | "source-unavailable"
+  | "performance-deferred"
   | "license-restricted"
   | "downloaded"
   | "transformed"
@@ -240,6 +243,18 @@ export interface TerritoryCountryQualityReport {
   combined?: GeometryQualityReport;
 }
 
+export interface TerritoryCountryGeometryRepairSummary {
+  engine: string;
+  engineVersion: string;
+  mode: string;
+  precision: number;
+  featuresRepaired: number;
+  featuresUnchanged: number;
+  featuresRejected: number;
+  areaDifference: number;
+  componentsDiscarded: number;
+}
+
 export interface TerritoryCountryBuildStatistics {
   countryCode: string;
   requestedLevels: TerritoryAdminLevel[];
@@ -260,6 +275,9 @@ export interface TerritoryCountryBuildStatistics {
   ambiguousParentCount: number;
   geometryErrorCount: number;
   geometryWarningCount: number;
+  geometryRepairedFeatureCount: number;
+  geometryRejectedFeatureCount: number;
+  geometryRepairDiscardedComponentCount: number;
   adjacencyEdgeCountByLevel: Record<string, number>;
   artifactBytes: number;
   publishReady: boolean;
@@ -275,9 +293,51 @@ export type TerritoryCountryBuildAllOutcome =
   | "built"
   | "validation-failed"
   | "source-unavailable"
+  | "performance-deferred"
   | "licence-restricted"
   | "provider-error"
   | "mapping-review-required";
+
+export type TerritoryCountryBuildPhase =
+  | "source-resolution"
+  | "download"
+  | "extraction"
+  | "parsing"
+  | "geometry-repair"
+  | "derived-metadata"
+  | "simplification"
+  | "spatial-index"
+  | "validation"
+  | "serialization"
+  | "checksum"
+  | "artifact-write"
+  | "loader-smoke";
+
+export interface TerritoryCountryBuildPhaseTiming {
+  country: string;
+  phase: TerritoryCountryBuildPhase;
+  status: "completed" | "failed" | "skipped";
+  durationMs: number;
+  inputBytes?: number;
+  featureCount?: number;
+  level?: TerritoryAdminLevel;
+  outcome?: TerritoryCountryBuildAllOutcome;
+  reason?: string;
+}
+
+export interface TerritoryCountryBuildPhaseEvent {
+  country: string;
+  phase: TerritoryCountryBuildPhase;
+  status: "started" | "completed" | "failed" | "skipped";
+  durationMs: number;
+  inputBytes?: number;
+  featureCount?: number;
+  level?: TerritoryAdminLevel;
+  outcome?: TerritoryCountryBuildAllOutcome;
+  reason?: string;
+  startedAt: string;
+  finishedAt?: string;
+}
 
 export interface TerritoryCountryBuildAllLevelResult {
   level: TerritoryAdminLevel;
@@ -297,6 +357,7 @@ export interface TerritoryCountryBuildAllCountryResult {
   outcome: TerritoryCountryBuildAllOutcome;
   issueCount: number;
   issues: TerritoryCountryBuildIssue[];
+  phaseTimings: TerritoryCountryBuildPhaseTiming[];
   startedAt: string;
   finishedAt: string;
 }
@@ -326,6 +387,8 @@ export interface TerritoryCountryBuildAllOptions {
   retryFailed?: boolean;
   offline?: boolean;
   cacheDir?: string;
+  maxSourceBytes?: number;
+  onPhase?: (event: TerritoryCountryBuildPhaseEvent) => void;
   force?: boolean;
   cwd?: string;
 }
@@ -353,6 +416,9 @@ export interface TerritoryCountryDatasetManifest {
     errorCount: number;
     warningCount: number;
   };
+  geometryRepairSummary: Partial<
+    Record<TerritoryAdminLevel, TerritoryCountryGeometryRepairSummary>
+  >;
   adjacencySummary: Record<string, { edgeCount: number }>;
   license: string;
   attribution: string;
@@ -398,6 +464,7 @@ export interface TerritoryCountryBuildOptions {
   reportPath?: string;
   force?: boolean;
   cwd?: string;
+  onPhase?: (event: TerritoryCountryBuildPhaseEvent) => void;
 }
 
 export interface TerritoryCountryValidateResult {
@@ -429,6 +496,8 @@ export interface ParsedCountryFeature {
   name: string;
   localType: string;
   geometry: TerritoryGeometry;
+  center?: LngLat;
+  bbox?: TerritoryBBox;
   rawProperties: Record<string, unknown>;
   rawFeatureId?: string;
 }

@@ -85,6 +85,19 @@ export {
   writeTerritoryDatasetOutput
 } from "./geometry-quality.js";
 export {
+  computeGeometryRepresentativePoint,
+  pointCoveredByGeometry,
+  repairTerritoryGeometries
+} from "./geometry-repair.js";
+export type {
+  TerritoryGeometryRepairEngine,
+  TerritoryGeometryRepairFeatureResult,
+  TerritoryGeometryRepairInputFeature,
+  TerritoryGeometryRepairOptions,
+  TerritoryGeometryRepairReport,
+  TerritoryGeometryRepairStatus
+} from "./geometry-repair.js";
+export {
   buildTerritoryRenderArtifactPath,
   buildTerritoryRenderArtifacts,
   compareTerritoryQueryRenderArtifacts,
