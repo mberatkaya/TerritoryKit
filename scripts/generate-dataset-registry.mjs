@@ -1,12 +1,13 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
+import { dirname, join, resolve } from "node:path";
 import prettier from "prettier";
 
-const GENERATED_AT = "2026-07-14T00:00:00.000Z";
+const GENERATED_AT = "2026-07-15T00:00:00.000Z";
 const ROOT = resolve(import.meta.dirname, "..");
 const ISO_SOURCE_PATH = resolve(ROOT, "packages/generators/src/countries/iso3166.ts");
 const REGISTRY_DIR = resolve(ROOT, "datasets/registry");
 const COVERAGE_DOC_PATH = resolve(ROOT, "docs/datasets/coverage.md");
+const GLOBAL_ADM0_BUILD_REPORT_PATH = resolve(ROOT, "reports/global-adm0-build-all.json");
 
 const PILOT_COUNTRIES = new Map([
   ["DE", { ADM1: "state", ADM2: "district" }],
@@ -22,7 +23,7 @@ const PROVIDERS = [
     name: "Natural Earth",
     status: "implemented",
     sourceUrl:
-      "https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-0-countries/",
+      "https://www.naturalearthdata.com/downloads/50m-cultural-vectors/50m-admin-0-countries/",
     license: "Public Domain",
     attribution: "Made with Natural Earth",
     redistributionAllowed: true,
@@ -80,7 +81,7 @@ const countryRegistry = {
   ],
   countries: countries.map((country) => createCountryRegistryEntry(country))
 };
-const coverage = createCoverageRegistry(countries);
+const coverage = await createCoverageRegistry(countries);
 const providers = {
   schemaVersion: "territorykit-provider-registry@1",
   generatedAt: GENERATED_AT,
@@ -168,73 +169,193 @@ function createCountryRegistryEntry(country) {
   };
 }
 
-function createCoverageRegistry(countryRows) {
-  const countries = countryRows.map((country) => {
-    const pilot = PILOT_COUNTRIES.has(country.iso2);
+async function createCoverageRegistry(countryRows) {
+  const countries = await Promise.all(
+    countryRows.map(async (country) => {
+      const pilot = PILOT_COUNTRIES.has(country.iso2);
+      const adm0Status = await inferGlobalAdm0Status(country.iso2);
+      const adm1 = await inferCountryLevelStatus(country.iso2, "ADM1", pilot);
+      const adm2 = await inferCountryLevelStatus(country.iso2, "ADM2", pilot);
 
-    return {
-      iso2: country.iso2,
-      iso3: country.iso3,
-      name: country.name,
-      levels: {
-        ADM0: {
-          status: "available",
-          provider: "natural-earth",
-          license: "Public Domain",
-          validationStatus: "warnings"
+      return {
+        iso2: country.iso2,
+        iso3: country.iso3,
+        name: country.name,
+        levels: {
+          ADM0: adm0Status,
+          ADM1: adm1,
+          ADM2: adm2,
+          ADM3: { status: "not-reviewed" },
+          municipality: { status: "source-unavailable" },
+          neighbourhood: { status: "source-unavailable" }
         },
-        ADM1: pilot
-          ? {
-              status: "available",
-              provider: "geoboundaries",
-              license: "CC BY 4.0",
-              validationStatus: "warnings"
-            }
-          : {
-              status: "not-reviewed",
-              provider: "geoboundaries"
-            },
-        ADM2: pilot
-          ? {
-              status: "available",
-              provider: "geoboundaries",
-              license: "CC BY 4.0",
-              validationStatus: "warnings"
-            }
-          : {
-              status: "not-reviewed",
-              provider: "geoboundaries"
-            },
-        ADM3: { status: "not-reviewed" },
-        municipality: { status: "unavailable" },
-        neighbourhood: { status: "unavailable" }
-      },
-      lastCheckedAt: GENERATED_AT,
-      reviewRequired: !pilot,
-      notes: pilot
-        ? ["Pilot country. Source locks and artifacts must still be regenerated for release."]
-        : [
-            "Sub-country levels are intentionally not marked available until country mapping review."
-          ]
-    };
-  });
+        lastCheckedAt: GENERATED_AT,
+        reviewRequired: !pilot,
+        notes: pilot
+          ? ["Pilot country. Artifact status is derived from generated build outputs."]
+          : [
+              "Sub-country levels are intentionally not marked source-available until country mapping review."
+            ]
+      };
+    })
+  );
 
   return {
-    schemaVersion: "territorykit-coverage@1",
+    schemaVersion: "territorykit-coverage@2",
     generatedAt: GENERATED_AT,
     summary: summarizeCoverage(countries),
     countries
   };
 }
 
+async function inferGlobalAdm0Status(iso2) {
+  const report = await readJsonOptional(GLOBAL_ADM0_BUILD_REPORT_PATH);
+  const buildResult = report?.results?.find?.((result) => result.country === iso2);
+  const artifact = await readCountryAdm0Artifact(iso2);
+
+  if (buildResult?.outcome === "built" && artifact.built) {
+    const { built: _built, ...level } = artifact;
+    return level;
+  }
+
+  if (!buildResult) {
+    if (artifact.built) {
+      const { built: _built, ...level } = artifact;
+      return level;
+    }
+
+    return {
+      status: "source-available",
+      provider: "geoboundaries",
+      sourceStatus: "available",
+      validationStatus: "not-run"
+    };
+  }
+
+  if (buildResult.outcome === "source-unavailable") {
+    return {
+      status: "source-unavailable",
+      provider: "geoboundaries",
+      sourceStatus: "unavailable",
+      validationStatus: "not-run",
+      reason: buildResult.issues?.[0]?.message
+    };
+  }
+
+  if (buildResult.outcome === "validation-failed") {
+    return {
+      status: "validation-failed",
+      provider: "geoboundaries",
+      sourceStatus: "available",
+      validationStatus: "failed",
+      artifactPath: buildResult.outputPath
+    };
+  }
+
+  if (buildResult.outcome === "performance-deferred") {
+    return {
+      status: "performance-deferred",
+      provider: "geoboundaries",
+      sourceStatus: "available",
+      validationStatus: "deferred",
+      artifactPath: buildResult.outputPath,
+      reason: buildResult.issues?.[0]?.message
+    };
+  }
+
+  if (buildResult.outcome === "built") {
+    return {
+      status: "built",
+      provider: "geoboundaries",
+      sourceStatus: "available",
+      validationStatus: "passed",
+      artifactPath: `${buildResult.outputPath}/levels/ADM0`
+    };
+  }
+
+  return {
+    status: "source-available",
+    provider: "geoboundaries",
+    sourceStatus: "available",
+    validationStatus: "not-run",
+    reason: buildResult.issues?.[0]?.message
+  };
+}
+
+async function inferCountryLevelStatus(iso2, level, pilot) {
+  if (!pilot) {
+    return { status: "not-reviewed", provider: "geoboundaries", sourceStatus: "not-reviewed" };
+  }
+
+  const root = resolve(ROOT, "datasets/generated/countries", iso2);
+  const manifest = await readJsonOptional(join(root, "manifest.json"));
+  const [dataset, index, validation, checksums, attributionJson, attributionText] =
+    await Promise.all([
+      fileExists(join(root, "levels", level, "dataset.json")),
+      fileExists(join(root, "levels", level, "index.json")),
+      fileExists(join(root, "levels", level, "validation-report.json")),
+      fileExists(join(root, "checksums.json")),
+      fileExists(join(root, "attribution.json")),
+      fileExists(join(root, "attribution.txt"))
+    ]);
+  const built =
+    manifest?.supportedLevels?.includes?.(level) &&
+    dataset &&
+    index &&
+    validation &&
+    checksums &&
+    (attributionJson || attributionText);
+
+  if (built) {
+    return {
+      status: "built",
+      provider: "geoboundaries",
+      license: manifest.license ?? "source-defined",
+      sourceStatus: "available",
+      validationStatus: "passed",
+      artifactPath: `datasets/generated/countries/${iso2}/levels/${level}`,
+      featureCount: manifest.featureCountByLevel?.[level]
+    };
+  }
+
+  return {
+    status: "source-available",
+    provider: "geoboundaries",
+    sourceStatus: "available",
+    validationStatus: "not-run"
+  };
+}
+
 function summarizeCoverage(countryRows) {
   const levels = ["ADM0", "ADM1", "ADM2", "ADM3", "municipality", "neighbourhood"];
+  const adm0 = summarizeLevel(countryRows, "ADM0");
+  const reviewedAdm1 = countryRows.filter(
+    (country) => country.levels.ADM1?.status !== "not-reviewed"
+  ).length;
+  const reviewedAdm2 = countryRows.filter(
+    (country) => country.levels.ADM2?.status !== "not-reviewed"
+  ).length;
   const summary = {
+    totalIsoCountriesOrAreas: countryRows.length,
+    countriesWithBuiltAdm0: adm0.built ?? 0,
+    countriesWithAdm0SourceAvailableNotBuilt: adm0["source-available"] ?? 0,
+    countriesWithNoAdm0Source: adm0["source-unavailable"] ?? 0,
+    countriesWithAdm0ValidationFailure: adm0["validation-failed"] ?? 0,
+    countriesWithAdm0PerformanceDeferred: adm0["performance-deferred"] ?? 0,
+    countriesWithAnyOptionalLevelUnavailable: countryRows.filter((country) =>
+      ["ADM1", "ADM2", "ADM3", "municipality", "neighbourhood"].some(
+        (level) => country.levels[level]?.status === "source-unavailable"
+      )
+    ).length,
+    countriesWithReviewedAdm1: reviewedAdm1,
+    countriesWithReviewedAdm2: reviewedAdm2,
     totalCountries: countryRows.length,
     levels: Object.fromEntries(levels.map((level) => [level, summarizeLevel(countryRows, level)])),
     licenseRestrictedCountries: 0,
-    sourceMissingCountries: 0,
-    validationFailedCountries: 0
+    validationFailedCountries: adm0["validation-failed"] ?? 0,
+    builtCountries: countryRows.filter((country) =>
+      Object.values(country.levels).some((level) => level.status === "built")
+    ).length
   };
 
   return summary;
@@ -244,7 +365,7 @@ function summarizeLevel(countryRows, level) {
   const statuses = {};
 
   for (const country of countryRows) {
-    const status = country.levels[level]?.status ?? "unavailable";
+    const status = country.levels[level]?.status ?? "source-unavailable";
     statuses[status] = (statuses[status] ?? 0) + 1;
   }
 
@@ -253,22 +374,34 @@ function summarizeLevel(countryRows, level) {
 
 function renderCoverageMarkdown(coverage) {
   const metricRows = [
-    ["Total ISO countries/areas", coverage.summary.totalCountries],
-    ["License-restricted countries", coverage.summary.licenseRestrictedCountries],
-    ["Countries with missing source", coverage.summary.sourceMissingCountries],
-    ["Countries with validation failures", coverage.summary.validationFailedCountries]
+    ["totalIsoCountriesOrAreas", coverage.summary.totalIsoCountriesOrAreas],
+    ["countriesWithBuiltAdm0", coverage.summary.countriesWithBuiltAdm0],
+    [
+      "countriesWithAdm0SourceAvailableNotBuilt",
+      coverage.summary.countriesWithAdm0SourceAvailableNotBuilt
+    ],
+    ["countriesWithNoAdm0Source", coverage.summary.countriesWithNoAdm0Source],
+    ["countriesWithAdm0ValidationFailure", coverage.summary.countriesWithAdm0ValidationFailure],
+    [
+      "countriesWithAnyOptionalLevelUnavailable",
+      coverage.summary.countriesWithAnyOptionalLevelUnavailable
+    ],
+    ["countriesWithReviewedAdm1", coverage.summary.countriesWithReviewedAdm1],
+    ["countriesWithReviewedAdm2", coverage.summary.countriesWithReviewedAdm2]
   ]
-    .map(([label, count]) => `| ${label.padEnd(34)} | ${String(count).padStart(5)} |`)
+    .map(([label, count]) => `| ${label.padEnd(44)} | ${String(count).padStart(5)} |`)
     .join("\n");
   const rows = Object.entries(coverage.summary.levels)
     .map(([level, statuses]) => {
-      const available = statuses.available ?? 0;
-      const partial = statuses.partial ?? 0;
-      const unavailable = statuses.unavailable ?? 0;
+      const built = statuses.built ?? 0;
+      const sourceAvailable = statuses["source-available"] ?? 0;
+      const sourceUnavailable = statuses["source-unavailable"] ?? 0;
+      const validationFailed = statuses["validation-failed"] ?? 0;
+      const performanceDeferred = statuses["performance-deferred"] ?? 0;
       const notReviewed = statuses["not-reviewed"] ?? 0;
       const licenseRestricted = statuses["license-restricted"] ?? 0;
 
-      return `| ${level.padEnd(13)} | ${String(available).padStart(9)} | ${String(partial).padStart(7)} | ${String(unavailable).padStart(11)} | ${String(notReviewed).padStart(12)} | ${String(licenseRestricted).padStart(18)} |`;
+      return `| ${level.padEnd(13)} | ${String(built).padStart(5)} | ${String(sourceAvailable).padStart(16)} | ${String(sourceUnavailable).padStart(18)} | ${String(validationFailed).padStart(17)} | ${String(performanceDeferred).padStart(20)} | ${String(notReviewed).padStart(12)} | ${String(licenseRestricted).padStart(18)} |`;
     })
     .join("\n");
 
@@ -276,15 +409,15 @@ function renderCoverageMarkdown(coverage) {
 
 Generated: ${coverage.generatedAt}
 
-This registry reports source/build readiness, not a claim that every level has a committed artifact.
+This registry reports explicit source/artifact lifecycle state, not a claim that every level has a committed artifact.
 Missing municipality and neighbourhood data is marked unavailable rather than substituted with ADM2.
 
-| Metric                             | Count |
-| ---------------------------------- | ----: |
+| Metric                                       | Count |
+| -------------------------------------------- | ----: |
 ${metricRows}
 
-| Level         | Available | Partial | Unavailable | Not reviewed | License restricted |
-| ------------- | --------: | ------: | ----------: | -----------: | -----------------: |
+| Level         | Built | Source available | Source unavailable | Validation failed | Performance deferred | Not reviewed | License restricted |
+| ------------- | ----: | ---------------: | -----------------: | ----------------: | -------------------: | -----------: | -----------------: |
 ${rows}
 
 Pilot countries with reviewed ADM1/ADM2 mappings: DE, ID, JP, TR, US.
@@ -295,6 +428,63 @@ Sources:
 - geoBoundaries source metadata is tracked as CC BY 4.0.
 - Non-pilot ADM1/ADM2 mappings require country-specific review before publishing artifacts.
 `;
+}
+
+async function readJsonOptional(path) {
+  try {
+    return JSON.parse(await readFile(path, "utf8"));
+  } catch {
+    return undefined;
+  }
+}
+
+async function readCountryAdm0Artifact(iso2) {
+  for (const root of [
+    resolve(ROOT, "datasets/generated/global-adm0-countries", iso2),
+    resolve(ROOT, "datasets/generated/countries", iso2)
+  ]) {
+    const [manifest, dataset, index, validation, checksums, attributionJson, attributionText] =
+      await Promise.all([
+        readJsonOptional(join(root, "manifest.json")),
+        fileExists(join(root, "levels", "ADM0", "dataset.json")),
+        fileExists(join(root, "levels", "ADM0", "index.json")),
+        fileExists(join(root, "levels", "ADM0", "validation-report.json")),
+        fileExists(join(root, "checksums.json")),
+        fileExists(join(root, "attribution.json")),
+        fileExists(join(root, "attribution.txt"))
+      ]);
+    const built =
+      manifest?.supportedLevels?.includes?.("ADM0") &&
+      dataset &&
+      index &&
+      validation &&
+      checksums &&
+      (attributionJson || attributionText);
+
+    if (built) {
+      return {
+        built: true,
+        status: "built",
+        provider: "geoboundaries",
+        license: manifest.license ?? "source-defined",
+        sourceStatus: "available",
+        validationStatus: "passed",
+        artifactPath: `datasets/generated/${root.includes("global-adm0-countries") ? "global-adm0-countries" : "countries"}/${iso2}/levels/ADM0`,
+        featureCount: manifest.featureCountByLevel?.ADM0
+      };
+    }
+  }
+
+  return { built: false };
+}
+
+async function fileExists(path) {
+  try {
+    await stat(path);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 async function writeJson(path, value) {

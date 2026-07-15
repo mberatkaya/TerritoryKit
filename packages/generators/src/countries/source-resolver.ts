@@ -93,6 +93,7 @@ export async function resolveTerritoryBoundarySource(
   const record = matches[0] as Record<string, unknown>;
   const sourceUrl = readFirstString(record, [
     "sourceUrl",
+    "simplifiedGeometryGeoJSON",
     "downloadURL",
     "gjDownloadURL",
     "gjDownloadUrl",
@@ -119,7 +120,12 @@ export async function resolveTerritoryBoundarySource(
   const attribution =
     readFirstString(record, ["attribution", "sourceAttribution", "boundarySource"]) ??
     `geoBoundaries ${config.countryCodeAlpha2} ${options.adminLevel} (${releaseType})`;
-  const license = readFirstString(record, ["license", "sourceLicense", "licenseType"]);
+  const license = readFirstString(record, [
+    "license",
+    "sourceLicense",
+    "licenseType",
+    "boundaryLicense"
+  ]);
   const boundaryId = readFirstString(record, ["boundaryID", "boundaryId", "shapeID"]);
   const boundaryName = readFirstString(record, ["boundaryName", "shapeName", "name"]);
   const boundaryYearRepresented = readFirstString(record, [
@@ -128,8 +134,13 @@ export async function resolveTerritoryBoundarySource(
     "sourceDate"
   ]);
   const sourceVersion = readFirstString(record, ["sourceVersion", "boundaryCanonical"]);
-  const licenseDetail = readFirstString(record, ["licenseDetail", "licenseUrl"]);
-  const sourceDate = readFirstString(record, ["sourceDate", "boundaryYearRepresented"]);
+  const licenseDetail = readFirstString(record, ["licenseDetail", "licenseUrl", "licenseSource"]);
+  const sourceDate = readFirstString(record, [
+    "sourceDate",
+    "sourceDataUpdateDate",
+    "boundaryYearRepresented",
+    "buildDate"
+  ]);
   const expectedSha256 = readFirstString(record, ["sha256", "checksum", "sourceSha256"]);
 
   if (!license) {

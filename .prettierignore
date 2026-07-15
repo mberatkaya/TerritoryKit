@@ -1,6 +1,7 @@
 dist
 coverage
 node_modules
+.territory
 .turbo
 docs/.vitepress/cache
 docs/.vitepress/dist

@@ -65,7 +65,10 @@ export async function fetchHttpSourceArtifact(
     let sizeBytes = 0;
 
     while (true) {
-      const { done, value } = await reader.read();
+      const { done, value } = await readBodyChunkWithTimeout(reader, timeoutMs, {
+        provider: options.provider,
+        url: result.url
+      });
 
       if (done) {
         break;
@@ -142,6 +145,37 @@ export async function fetchHttpSourceArtifact(
       provider: options.provider,
       details: { url: options.url }
     });
+  }
+}
+
+async function readBodyChunkWithTimeout(
+  reader: ReadableStreamDefaultReader<Uint8Array>,
+  timeoutMs: number,
+  context: { provider: string; url: string }
+): Promise<ReadableStreamReadResult<Uint8Array>> {
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+
+  try {
+    return await Promise.race([
+      reader.read(),
+      new Promise<ReadableStreamReadResult<Uint8Array>>((_, reject) => {
+        timeout = setTimeout(() => {
+          reject(
+            new TerritorySourceError({
+              code: "SOURCE_FETCH_TIMEOUT",
+              message: `Remote source body stalled for more than ${timeoutMs} ms.`,
+              stage: "fetch",
+              provider: context.provider,
+              details: { url: context.url, timeoutMs }
+            })
+          );
+        }, timeoutMs);
+      })
+    ]);
+  } finally {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
   }
 }
 

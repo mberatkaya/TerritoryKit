@@ -3,6 +3,18 @@ import type { TerritoryAdjacencyConnection } from "@territory-kit/core";
 import type { TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
 
 export {
+  GLOBAL_ADMIN_ADM0_OUTPUT,
+  GLOBAL_ADMIN_DATASET_ID,
+  GLOBAL_ADMIN_WORLD_ID,
+  NATURAL_EARTH_ADM0_GEOJSON_URL,
+  buildGlobalAdminAdm0Artifacts
+} from "./global-admin.js";
+export type {
+  GlobalAdminAdm0BuildOptions,
+  GlobalAdminAdm0BuildResult,
+  GlobalAdminSmokeReport
+} from "./global-admin.js";
+export {
   NATURAL_EARTH_ADM0_DATASET_NAME,
   NATURAL_EARTH_ADM0_DETAILS,
   NATURAL_EARTH_ADM0_SOURCE_URL,
@@ -72,6 +84,19 @@ export {
   writeGeometryQualityReport,
   writeTerritoryDatasetOutput
 } from "./geometry-quality.js";
+export {
+  computeGeometryRepresentativePoint,
+  pointCoveredByGeometry,
+  repairTerritoryGeometries
+} from "./geometry-repair.js";
+export type {
+  TerritoryGeometryRepairEngine,
+  TerritoryGeometryRepairFeatureResult,
+  TerritoryGeometryRepairInputFeature,
+  TerritoryGeometryRepairOptions,
+  TerritoryGeometryRepairReport,
+  TerritoryGeometryRepairStatus
+} from "./geometry-repair.js";
 export {
   buildTerritoryRenderArtifactPath,
   buildTerritoryRenderArtifacts,

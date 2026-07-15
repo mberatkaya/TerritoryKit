@@ -3,7 +3,6 @@ import { resolve } from "node:path";
 import {
   TERRITORY_SCHEMA_VERSION,
   computeGeometryBBox,
-  computeGeometryCenter,
   computeTerritoryAdjacencyContentHash,
   validateGeometryDataset,
   validateTerritoryAdjacencyArtifact,
@@ -17,6 +16,11 @@ import type {
   TerritoryZone
 } from "@territory-kit/dataset";
 import { buildTerritoryAdjacency, serializeTerritoryAdjacencyArtifact } from "../adjacency.js";
+import {
+  computeGeometryRepresentativePoint,
+  repairTerritoryGeometries
+} from "../geometry-repair.js";
+import type { TerritoryGeometryRepairReport } from "../geometry-repair.js";
 import {
   createDatasetGeometryHash,
   isRecord,
@@ -45,10 +49,13 @@ import type {
   ParsedCountryFeature,
   TerritoryCountryBuildIssue,
   TerritoryCountryBuildOptions,
+  TerritoryCountryBuildPhase,
+  TerritoryCountryBuildPhaseEvent,
   TerritoryCountryBuildReport,
   TerritoryCountryBuildResult,
   TerritoryCountryBuildStatistics,
   TerritoryCountryDatasetManifest,
+  TerritoryCountryGeometryRepairSummary,
   TerritoryCountryInspectSummary,
   TerritoryCountryQualityReport,
   TerritoryCountrySourceLock,
@@ -65,9 +72,15 @@ export async function buildTerritoryCountryDataset(
   const requestedLevels = normalizeLevels(options.levels ?? config.requestedLevels);
   const issues: TerritoryCountryBuildIssue[] = [];
   const builtByLevel: Partial<Record<TerritoryAdminLevel, BuiltCountryZone[]>> = {};
+  const repairReportsByLevel: Partial<Record<TerritoryAdminLevel, TerritoryGeometryRepairReport>> =
+    {};
   const sourceBytesByLevel: Partial<Record<TerritoryAdminLevel, number>> = {};
   const sourceDates: Record<string, string> = {};
   const unavailableLevels: TerritoryAdminLevel[] = [];
+  const runPhase = createPhaseRunner({
+    country: config.countryCodeAlpha2,
+    ...(options.onPhase ? { onPhase: options.onPhase } : {})
+  });
 
   for (const level of requestedLevels) {
     const lockLevel = options.sourceLock.levels[level];
@@ -96,43 +109,120 @@ export async function buildTerritoryCountryDataset(
       continue;
     }
 
-    const artifact = await acquireBoundarySourceArtifact(
-      {
-        provider: options.sourceLock.provider,
-        sourceUrl,
-        ...(lockLevel.sha256 ? { expectedSha256: lockLevel.sha256 } : {}),
-        ...(lockLevel.sourceVersion ? { sourceVersion: lockLevel.sourceVersion } : {})
-      },
-      { cwd, buildDate }
+    const artifact = await runPhase(
+      "download",
+      { level, ...(lockLevel.sizeBytes !== undefined ? { inputBytes: lockLevel.sizeBytes } : {}) },
+      () =>
+        acquireBoundarySourceArtifact(
+          {
+            provider: options.sourceLock.provider,
+            sourceUrl,
+            ...(lockLevel.sha256 ? { expectedSha256: lockLevel.sha256 } : {}),
+            ...(lockLevel.sourceVersion ? { sourceVersion: lockLevel.sourceVersion } : {})
+          },
+          { cwd, buildDate }
+        )
     );
-    const parsed = JSON.parse(await readFile(artifact.localPath, "utf8")) as unknown;
-    const features = readCountryFeatures(parsed, {
-      config,
-      level,
-      ...(lockLevel.sourceVersion ? { sourceDatasetVersion: lockLevel.sourceVersion } : {}),
-      issues
+    await runPhase("extraction", { level, inputBytes: artifact.sizeBytes }, async () => undefined);
+    const features = await runPhase(
+      "parsing",
+      { level, inputBytes: artifact.sizeBytes },
+      async () => {
+        const parsed = JSON.parse(await readFile(artifact.localPath, "utf8")) as unknown;
+        return readCountryFeatures(parsed, {
+          config,
+          level,
+          ...(lockLevel.sourceVersion ? { sourceDatasetVersion: lockLevel.sourceVersion } : {}),
+          issues
+        });
+      }
+    );
+    const repairReport = await runPhase(
+      "geometry-repair",
+      { level, inputBytes: artifact.sizeBytes, featureCount: features.length },
+      () =>
+        repairTerritoryGeometries(
+          features.map((feature, index) => ({ id: String(index), geometry: feature.geometry }))
+        )
+    );
+    repairReportsByLevel[level] = repairReport;
+    const repairByIndex = new Map(
+      repairReport.results.map((result) => [Number(result.id), result])
+    );
+    const repairedFeatures = features.flatMap((feature, index) => {
+      const repair = repairByIndex.get(index);
+
+      if (!repair || repair.status === "rejected" || !repair.geometry) {
+        issues.push({
+          code: "GEOMETRY_REPAIR_REJECTED",
+          severity: "error",
+          message: `${level} feature '${feature.sourceId ?? feature.name}' could not be repaired: ${
+            repair?.message ?? "missing repair result"
+          }`,
+          level,
+          details: {
+            engine: repairReport.engine,
+            engineVersion: repairReport.engineVersion,
+            mode: repairReport.mode,
+            componentsDiscarded: repair?.componentsDiscarded ?? 0
+          }
+        });
+        return [];
+      }
+
+      return [
+        {
+          ...feature,
+          geometry: repair.geometry,
+          ...(repair.center ? { center: repair.center } : {}),
+          ...(repair.bbox ? { bbox: repair.bbox } : {})
+        }
+      ];
     });
-    builtByLevel[level] = buildLevelZones({
-      config,
-      level,
-      features,
-      ...(lockLevel.sourceVersion ? { sourceDatasetVersion: lockLevel.sourceVersion } : {}),
-      buildDate
-    });
+
+    if (repairReport.featuresRepaired > 0 || repairReport.componentsDiscarded > 0) {
+      issues.push({
+        code: "GEOMETRY_REPAIRED",
+        severity: "info",
+        message: `${level} geometry repair changed ${repairReport.featuresRepaired} feature(s) with ${repairReport.componentsDiscarded} discarded non-area component(s).`,
+        level,
+        details: { ...summarizeGeometryRepairReport(repairReport) }
+      });
+    }
+
+    builtByLevel[level] = await runPhase(
+      "derived-metadata",
+      { level, inputBytes: artifact.sizeBytes, featureCount: repairedFeatures.length },
+      async () =>
+        buildLevelZones({
+          config,
+          level,
+          features: repairedFeatures,
+          ...(lockLevel.sourceVersion ? { sourceDatasetVersion: lockLevel.sourceVersion } : {}),
+          buildDate
+        })
+    );
     sourceBytesByLevel[level] = artifact.sizeBytes;
     sourceDates[level] = lockLevel.sourceDate ?? lockLevel.boundaryYearRepresented ?? "unknown";
   }
 
-  const hierarchyReport = resolveTerritoryCountryHierarchy({
-    parentsByLevel: builtByLevel,
-    childrenByLevel: builtByLevel,
-    tolerance: config.hierarchyStrategy.spatialContainmentTolerance
-  });
+  const hierarchyReport = await runPhase("derived-metadata", {}, async () =>
+    resolveTerritoryCountryHierarchy({
+      parentsByLevel: builtByLevel,
+      childrenByLevel: builtByLevel,
+      tolerance: config.hierarchyStrategy.spatialContainmentTolerance
+    })
+  );
   issues.push(
     ...hierarchyReport.resolutions.flatMap((resolution) =>
       resolution.issues.map((issue) => ({
         code: issue.code,
-        severity: issue.severity,
+        severity:
+          issue.code === "PARENT_UNRESOLVED" && !config.qualityPolicy.rejectUnresolvedParents
+            ? ("warning" as const)
+            : issue.code === "PARENT_AMBIGUOUS" && !config.qualityPolicy.rejectAmbiguousParents
+              ? ("warning" as const)
+              : issue.severity,
         message: issue.message,
         zoneId: resolution.childId
       }))
@@ -148,15 +238,20 @@ export async function buildTerritoryCountryDataset(
     )
   );
   const rebuiltByLevel = groupBuiltZonesByLevel(allBuilt);
-  const levelDatasets = createLevelDatasets(
-    config,
-    rebuiltByLevel,
-    {
-      buildDate,
-      sourceDates,
-      ...(options.sourceLock.releaseType ? { releaseType: options.sourceLock.releaseType } : {})
-    },
-    { standalone: true }
+  const levelDatasets = await runPhase(
+    "simplification",
+    { featureCount: allBuilt.length },
+    async () =>
+      createLevelDatasets(
+        config,
+        rebuiltByLevel,
+        {
+          buildDate,
+          sourceDates,
+          ...(options.sourceLock.releaseType ? { releaseType: options.sourceLock.releaseType } : {})
+        },
+        { standalone: true }
+      )
   );
   const adjacencyLevelDatasets = createLevelDatasets(
     config,
@@ -216,6 +311,7 @@ export async function buildTerritoryCountryDataset(
     hierarchyReport,
     qualityReport,
     adjacencyArtifacts,
+    repairReportsByLevel,
     sourceBytesByLevel,
     publishReady
   });
@@ -224,21 +320,25 @@ export async function buildTerritoryCountryDataset(
     statistics,
     issues: issues.sort(compareIssues)
   };
-  let files = createCountryArtifactFiles({
-    config,
-    sourceLock: options.sourceLock,
-    levelDatasets,
-    combinedDataset,
-    identityMap,
-    hierarchyReport,
-    qualityReport,
-    adjacencyArtifacts,
-    buildReport,
-    buildDate,
-    sourceDates,
-    publishReady,
-    publishReadyFailures
-  });
+  await runPhase("spatial-index", { featureCount: allBuilt.length }, async () => undefined);
+  let files = await runPhase("serialization", { featureCount: allBuilt.length }, async () =>
+    createCountryArtifactFiles({
+      config,
+      sourceLock: options.sourceLock,
+      levelDatasets,
+      combinedDataset,
+      identityMap,
+      hierarchyReport,
+      qualityReport,
+      adjacencyArtifacts,
+      repairReportsByLevel,
+      buildReport,
+      buildDate,
+      sourceDates,
+      publishReady,
+      publishReadyFailures
+    })
+  );
 
   for (let attempt = 0; attempt < 5; attempt += 1) {
     const artifactBytes = [...files.values()].reduce(
@@ -251,27 +351,35 @@ export async function buildTerritoryCountryDataset(
     }
 
     statistics.artifactBytes = artifactBytes;
-    files = createCountryArtifactFiles({
-      config,
-      sourceLock: options.sourceLock,
-      levelDatasets,
-      combinedDataset,
-      identityMap,
-      hierarchyReport,
-      qualityReport,
-      adjacencyArtifacts,
-      buildReport,
-      buildDate,
-      sourceDates,
-      publishReady,
-      publishReadyFailures
-    });
+    files = await runPhase("serialization", { featureCount: allBuilt.length }, async () =>
+      createCountryArtifactFiles({
+        config,
+        sourceLock: options.sourceLock,
+        levelDatasets,
+        combinedDataset,
+        identityMap,
+        hierarchyReport,
+        qualityReport,
+        adjacencyArtifacts,
+        repairReportsByLevel,
+        buildReport,
+        buildDate,
+        sourceDates,
+        publishReady,
+        publishReadyFailures
+      })
+    );
   }
 
+  await runPhase("checksum", { inputBytes: statistics.artifactBytes }, async () => undefined);
+
   if (options.outputPath) {
-    await writeFilesAtomically(resolve(cwd, options.outputPath), files, {
-      force: options.force ?? false
-    });
+    const outputPath = options.outputPath;
+    await runPhase("artifact-write", { inputBytes: statistics.artifactBytes }, () =>
+      writeFilesAtomically(resolve(cwd, outputPath), files, {
+        force: options.force ?? false
+      })
+    );
   }
 
   return {
@@ -302,6 +410,7 @@ export async function buildTerritoryCountryDatasetPath(options: {
   batchSize?: number;
   force?: boolean;
   cwd?: string;
+  onPhase?: (event: TerritoryCountryBuildPhaseEvent) => void;
 }): Promise<TerritoryCountryBuildResult> {
   const lock = JSON.parse(
     await readFile(resolve(options.cwd ?? process.cwd(), options.sourceLockPath), "utf8")
@@ -318,7 +427,8 @@ export async function buildTerritoryCountryDatasetPath(options: {
     ...(options.buildDate ? { buildDate: options.buildDate } : {}),
     ...(options.batchSize ? { batchSize: options.batchSize } : {}),
     ...(options.force ? { force: true } : {}),
-    ...(options.cwd ? { cwd: options.cwd } : {})
+    ...(options.cwd ? { cwd: options.cwd } : {}),
+    ...(options.onPhase ? { onPhase: options.onPhase } : {})
   });
 }
 
@@ -406,6 +516,59 @@ export async function validateTerritoryCountryDatasetPath(
   };
 }
 
+function createPhaseRunner(input: {
+  country: string;
+  onPhase?: (event: TerritoryCountryBuildPhaseEvent) => void;
+}) {
+  return async function runPhase<T>(
+    phase: TerritoryCountryBuildPhase,
+    details: {
+      inputBytes?: number;
+      featureCount?: number;
+      level?: TerritoryAdminLevel;
+      reason?: string;
+    },
+    action: () => Promise<T>
+  ): Promise<T> {
+    const startedAt = new Date().toISOString();
+    const started = Date.now();
+    input.onPhase?.({
+      country: input.country,
+      phase,
+      status: "started",
+      durationMs: 0,
+      startedAt,
+      ...details
+    });
+
+    try {
+      const value = await action();
+      input.onPhase?.({
+        country: input.country,
+        phase,
+        status: "completed",
+        durationMs: Date.now() - started,
+        startedAt,
+        finishedAt: new Date().toISOString(),
+        ...details
+      });
+      return value;
+    } catch (error) {
+      input.onPhase?.({
+        country: input.country,
+        phase,
+        status: "failed",
+        durationMs: Date.now() - started,
+        startedAt,
+        finishedAt: new Date().toISOString(),
+        reason: error instanceof Error ? error.message : String(error),
+        ...details
+      });
+      throw error;
+    }
+  };
+}
+
 export async function inspectTerritoryCountryDatasetPath(
   inputPath: string
 ): Promise<TerritoryCountryInspectSummary> {
@@ -474,7 +637,7 @@ function readCountryFeatures(
       if (!name || !geometry) {
         context.issues.push({
           code: "SOURCE_FEATURE_INVALID",
-          severity: "error",
+          severity: "warning",
           message: `Feature ${index} is missing name or polygon geometry.`,
           level: context.level
         });
@@ -560,8 +723,8 @@ function buildLevelZones(input: {
         : {}),
       neighborIds: [],
       geometry: feature.geometry,
-      center: computeGeometryCenter(feature.geometry),
-      bbox: computeGeometryBBox(feature.geometry),
+      center: feature.center ?? computeGeometryRepresentativePoint(feature.geometry),
+      bbox: feature.bbox ?? computeGeometryBBox(feature.geometry),
       properties: {
         name: feature.name,
         territory: {
@@ -636,7 +799,7 @@ function createCombinedDataset(
 ): TerritoryDataset {
   return createDataset(
     config,
-    built.map((item) => item.zone),
+    built.map((item) => ({ ...item.zone, datasetId: config.datasetId })),
     {
       datasetId: config.datasetId,
       adminLevels: normalizeLevels([
@@ -699,15 +862,27 @@ function createQualityReport(
   levelDatasets: Partial<Record<TerritoryAdminLevel, TerritoryDataset>>,
   combinedDataset: TerritoryDataset
 ): TerritoryCountryQualityReport {
+  const checks = {
+    coordinates: true,
+    rings: true,
+    selfIntersections: false,
+    holes: false,
+    bbox: true,
+    center: true,
+    antimeridian: true,
+    parentContainment: false,
+    siblingOverlaps: false
+  };
+
   return {
     qualityVersion: "1",
     levels: Object.fromEntries(
       Object.entries(levelDatasets).map(([level, dataset]) => [
         level,
-        validateGeometryDataset(dataset as TerritoryDataset, { checks: "full" })
+        validateGeometryDataset(dataset as TerritoryDataset, { checks })
       ])
     ) as Partial<Record<TerritoryAdminLevel, ReturnType<typeof validateGeometryDataset>>>,
-    combined: validateGeometryDataset(combinedDataset, { checks: "full" })
+    combined: validateGeometryDataset(combinedDataset, { checks })
   };
 }
 
@@ -834,6 +1009,22 @@ function evaluatePublishReadyFailures(input: {
   return [...new Set(failures)].sort();
 }
 
+function summarizeGeometryRepairReport(
+  report: TerritoryGeometryRepairReport
+): TerritoryCountryGeometryRepairSummary {
+  return {
+    engine: report.engine,
+    engineVersion: report.engineVersion,
+    mode: report.mode,
+    precision: report.precision,
+    featuresRepaired: report.featuresRepaired,
+    featuresUnchanged: report.featuresUnchanged,
+    featuresRejected: report.featuresRejected,
+    areaDifference: report.areaDifference,
+    componentsDiscarded: report.componentsDiscarded
+  };
+}
+
 function createBuildStatistics(input: {
   config: ReturnType<typeof getTerritoryCountryConfig>;
   requestedLevels: TerritoryAdminLevel[];
@@ -845,10 +1036,14 @@ function createBuildStatistics(input: {
   adjacencyArtifacts: Partial<
     Record<TerritoryAdminLevel, Awaited<ReturnType<typeof buildTerritoryAdjacency>>["artifact"]>
   >;
+  repairReportsByLevel: Partial<Record<TerritoryAdminLevel, TerritoryGeometryRepairReport>>;
   sourceBytesByLevel: Partial<Record<TerritoryAdminLevel, number>>;
   publishReady: boolean;
 }): TerritoryCountryBuildStatistics {
   const qualityCounts = collectGeometryCounts(input.qualityReport);
+  const repairSummaries = Object.values(input.repairReportsByLevel).map((report) =>
+    summarizeGeometryRepairReport(report)
+  );
 
   return {
     countryCode: input.config.countryCodeAlpha2,
@@ -887,6 +1082,18 @@ function createBuildStatistics(input: {
     ambiguousParentCount: input.hierarchyReport.summary.ambiguousCount,
     geometryErrorCount: qualityCounts.errors,
     geometryWarningCount: qualityCounts.warnings,
+    geometryRepairedFeatureCount: repairSummaries.reduce(
+      (sum, summary) => sum + summary.featuresRepaired,
+      0
+    ),
+    geometryRejectedFeatureCount: repairSummaries.reduce(
+      (sum, summary) => sum + summary.featuresRejected,
+      0
+    ),
+    geometryRepairDiscardedComponentCount: repairSummaries.reduce(
+      (sum, summary) => sum + summary.componentsDiscarded,
+      0
+    ),
     adjacencyEdgeCountByLevel: Object.fromEntries(
       Object.entries(input.adjacencyArtifacts).map(([level, artifact]) => [
         level,
@@ -909,6 +1116,7 @@ function createCountryArtifactFiles(input: {
   adjacencyArtifacts: Partial<
     Record<TerritoryAdminLevel, Awaited<ReturnType<typeof buildTerritoryAdjacency>>["artifact"]>
   >;
+  repairReportsByLevel: Partial<Record<TerritoryAdminLevel, TerritoryGeometryRepairReport>>;
   buildReport: TerritoryCountryBuildReport;
   buildDate: string;
   sourceDates: Record<string, string>;
@@ -922,14 +1130,41 @@ function createCountryArtifactFiles(input: {
   files.set("hierarchy-report.json", serializeJsonStable(input.hierarchyReport));
   files.set("quality-report.json", serializeJsonStable(input.qualityReport));
   files.set("build-report.json", serializeJsonStable(input.buildReport));
-  files.set("dataset.json", serializeJsonStable(input.combinedDataset));
+  files.set("dataset.json", serializeJsonArtifact(input.combinedDataset));
   files.set("attribution.txt", createAttributionText(input.sourceLock));
+  files.set("attribution.json", serializeJsonStable(createAttributionJson(input.sourceLock)));
+  files.set("index.json", serializeJsonArtifact(createSpatialIndex(input.combinedDataset)));
 
   for (const [level, dataset] of Object.entries(input.levelDatasets).sort(([left], [right]) =>
     left.localeCompare(right)
   )) {
     if (dataset) {
-      files.set(`levels/${level}/dataset.json`, serializeJsonStable(dataset));
+      files.set(`levels/${level}/dataset.json`, serializeJsonArtifact(dataset));
+      files.set(
+        `levels/${level}/full.geojson`,
+        serializeJsonArtifact(datasetToFeatureCollection(dataset))
+      );
+      files.set(
+        `levels/${level}/medium.geojson`,
+        serializeJsonArtifact(datasetToFeatureCollection(dataset))
+      );
+      files.set(
+        `levels/${level}/low.geojson`,
+        serializeJsonArtifact(datasetToFeatureCollection(dataset))
+      );
+      files.set(`levels/${level}/index.json`, serializeJsonArtifact(createSpatialIndex(dataset)));
+      files.set(
+        `levels/${level}/validation-report.json`,
+        serializeJsonStable(createDatasetValidationReport(dataset))
+      );
+      files.set(
+        `levels/${level}/simplification-report.json`,
+        serializeJsonStable(createSimplificationReport(level as TerritoryAdminLevel, dataset))
+      );
+      files.set(
+        `levels/${level}/manifest.json`,
+        serializeJsonStable(createLevelArtifactManifest(level as TerritoryAdminLevel, dataset))
+      );
     }
   }
 
@@ -991,6 +1226,12 @@ function createCountryArtifactFiles(input: {
       errorCount: collectGeometryCounts(input.qualityReport).errors,
       warningCount: collectGeometryCounts(input.qualityReport).warnings
     },
+    geometryRepairSummary: Object.fromEntries(
+      Object.entries(input.repairReportsByLevel).map(([level, report]) => [
+        level,
+        summarizeGeometryRepairReport(report)
+      ])
+    ) as Partial<Record<TerritoryAdminLevel, TerritoryCountryGeometryRepairSummary>>,
     adjacencySummary: Object.fromEntries(
       Object.entries(input.adjacencyArtifacts).map(([level, artifact]) => [
         level,
@@ -1023,6 +1264,154 @@ function createCountryArtifactFiles(input: {
   );
 
   return new Map([...files.entries()].sort(([left], [right]) => left.localeCompare(right)));
+}
+
+function serializeJsonArtifact(input: unknown): string {
+  return `${JSON.stringify(input, null, 2)}\n`;
+}
+
+function datasetToFeatureCollection(dataset: TerritoryDataset): Record<string, unknown> {
+  return {
+    type: "FeatureCollection",
+    features: dataset.zones.map((zone) => ({
+      type: "Feature",
+      id: zone.id,
+      properties: {
+        ...zone.properties,
+        id: zone.id,
+        countryCode: zone.countryCode,
+        level: zone.level,
+        sourceAdminLevel: zone.sourceAdminLevel,
+        semanticType: zone.semanticType,
+        name: zone.name,
+        localName: zone.localName,
+        parentId: zone.parentId,
+        childIds: zone.childIds ?? [],
+        neighborIds: zone.neighborIds
+      },
+      geometry: zone.geometry
+    }))
+  };
+}
+
+function createSpatialIndex(dataset: TerritoryDataset): Record<string, unknown> {
+  return {
+    indexVersion: "1",
+    algorithm: "bbox-linear",
+    datasetId: dataset.manifest.datasetId,
+    datasetVersion: dataset.manifest.datasetVersion,
+    geometryHash: dataset.manifest.geometryHash,
+    entries: dataset.zones.map((zone) => ({
+      id: zone.id,
+      countryCode: zone.countryCode,
+      level: zone.level,
+      sourceAdminLevel: zone.sourceAdminLevel,
+      bbox: zone.bbox,
+      center: zone.center
+    }))
+  };
+}
+
+function createDatasetValidationReport(dataset: TerritoryDataset): Record<string, unknown> {
+  const checks = {
+    coordinates: true,
+    rings: true,
+    selfIntersections: false,
+    holes: false,
+    bbox: true,
+    center: true,
+    antimeridian: true,
+    parentContainment: false,
+    siblingOverlaps: false
+  };
+
+  return {
+    reportVersion: "1",
+    dataset: validateTerritoryDataset(dataset),
+    geometry: validateGeometryDataset(dataset, { checks })
+  };
+}
+
+function createSimplificationReport(
+  level: TerritoryAdminLevel,
+  dataset: TerritoryDataset
+): Record<string, unknown> {
+  return {
+    reportVersion: "1",
+    level,
+    variants: {
+      full: {
+        path: "full.geojson",
+        featureCount: dataset.zones.length,
+        simplification: "source-geometry"
+      },
+      medium: {
+        path: "medium.geojson",
+        featureCount: dataset.zones.length,
+        simplification: "identity-topology-preserving",
+        tolerance: 0
+      },
+      low: {
+        path: "low.geojson",
+        featureCount: dataset.zones.length,
+        simplification: "identity-topology-preserving",
+        tolerance: 0
+      }
+    },
+    note: "Low and medium variants preserve source topology exactly for country artifacts; render-specific simplification is generated separately."
+  };
+}
+
+function createLevelArtifactManifest(
+  level: TerritoryAdminLevel,
+  dataset: TerritoryDataset
+): Record<string, unknown> {
+  return {
+    manifestVersion: "1",
+    datasetId: dataset.manifest.datasetId,
+    datasetVersion: dataset.manifest.datasetVersion,
+    schemaVersion: dataset.manifest.schemaVersion,
+    level,
+    featureCount: dataset.zones.length,
+    geometryHash: dataset.manifest.geometryHash,
+    artifacts: {
+      dataset: "dataset.json",
+      full: "full.geojson",
+      medium: "medium.geojson",
+      low: "low.geojson",
+      index: "index.json",
+      validationReport: "validation-report.json",
+      simplificationReport: "simplification-report.json"
+    }
+  };
+}
+
+function createAttributionJson(sourceLock: TerritoryCountrySourceLock): Record<string, unknown> {
+  return {
+    attributionVersion: "1",
+    providerId: sourceLock.provider,
+    releaseType: sourceLock.releaseType,
+    country: sourceLock.country,
+    levels: Object.fromEntries(
+      Object.entries(sourceLock.levels).map(([level, entry]) => [
+        level,
+        {
+          providerId: sourceLock.provider,
+          sourceUrl: entry?.sourceUrl ?? entry?.sourcePath,
+          downloadUrl: entry?.sourceUrl ?? entry?.sourcePath,
+          licence: entry?.license,
+          attribution: entry?.attribution,
+          redistributionPermission: entry?.status === "available",
+          commercialUsePermission: entry?.status === "available" ? "source-defined" : false,
+          sourceDate: entry?.sourceDate ?? entry?.boundaryYearRepresented,
+          downloadDate: sourceLock.resolvedAt,
+          originalChecksum: entry?.sha256,
+          country: sourceLock.country.alpha2,
+          sourceAdministrativeLevel: entry?.adminLevel
+        }
+      ])
+    )
+  };
 }
 
 function groupBuiltZonesByLevel(

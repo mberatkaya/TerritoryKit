@@ -162,7 +162,7 @@ interface ArtifactPlan {
   details: NaturalEarthAdm0Detail[];
 }
 
-const COUNTRY_CODE_CANDIDATES = ["ISO_A2", "ISO_A2_EH", "WB_A2", "POSTAL", "FIPS_10"] as const;
+const COUNTRY_CODE_CANDIDATES = ["ISO_A2", "ISO_A2_EH", "WB_A2"] as const;
 const SOURCE_CODE_CANDIDATES = ["ADM0_A3", "ISO_A3", "SOV_A3", "GU_A3", "BRK_A3"] as const;
 const NAME_CANDIDATES = [
   "NAME",
@@ -547,15 +547,26 @@ export function parseNaturalEarthAdm0FeatureCollection(
     const nameResult = readCountryName(feature.properties, codeResult.countryCode ?? sourceCode);
 
     if (!codeResult.countryCode) {
-      issues.push({
-        code: "COUNTRY_CODE_MISSING",
-        message: "Feature does not contain a usable ISO alpha-2 or stable alpha-2 fallback code.",
-        severity: "error",
-        path: `${path}.properties`,
-        featureId,
-        sourcePath: source.sourcePath,
-        repairSuggestion: `Populate one of ${COUNTRY_CODE_CANDIDATES.join(", ")} with a stable alpha-2 code.`
-      });
+      if (sourceCode && sourceCode !== "-99") {
+        issues.push({
+          code: "NON_ISO_SOURCE_ENTITY",
+          message: `Feature '${sourceCode}' does not contain a usable ISO alpha-2 code and was recorded as a non-ISO source entity.`,
+          severity: "warning",
+          path: `${path}.properties`,
+          featureId,
+          sourcePath: source.sourcePath
+        });
+      } else {
+        issues.push({
+          code: "COUNTRY_CODE_MISSING",
+          message: "Feature does not contain a usable ISO alpha-2 or stable alpha-2 fallback code.",
+          severity: "error",
+          path: `${path}.properties`,
+          featureId,
+          sourcePath: source.sourcePath,
+          repairSuggestion: `Populate one of ${COUNTRY_CODE_CANDIDATES.join(", ")} with a stable alpha-2 code.`
+        });
+      }
     }
 
     if (codeResult.usedFallback) {

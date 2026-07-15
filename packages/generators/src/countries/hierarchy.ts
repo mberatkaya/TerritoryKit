@@ -1,5 +1,10 @@
 import { classifyTerritoryGeometryRelation } from "@territory-kit/dataset";
-import type { TerritoryAdminLevel, TerritoryBBox } from "@territory-kit/dataset";
+import type {
+  LngLat,
+  TerritoryAdminLevel,
+  TerritoryBBox,
+  TerritoryGeometry
+} from "@territory-kit/dataset";
 import type {
   BuiltCountryZone,
   TerritoryHierarchyReport,
@@ -150,7 +155,11 @@ function resolveParent(
   const candidates = parents
     .filter((parent) => bboxesIntersect(parent.zone.bbox, child.zone.bbox, tolerance))
     .filter((parent) => parentContainsChild(parent, child, tolerance))
-    .sort((left, right) => left.zone.id.localeCompare(right.zone.id));
+    .sort(
+      (left, right) =>
+        bboxArea(left.zone.bbox) - bboxArea(right.zone.bbox) ||
+        left.zone.id.localeCompare(right.zone.id)
+    );
 
   if (candidates.length === 1) {
     const candidate = candidates[0];
@@ -244,7 +253,48 @@ function parentContainsChild(
     epsilon: tolerance
   }).relation;
 
-  return relation === "contains" || relation === "equal";
+  return (
+    relation === "contains" ||
+    relation === "equal" ||
+    pointIntersectsGeometry(child.zone.center, parent.zone.geometry)
+  );
+}
+
+function pointIntersectsGeometry(point: LngLat, geometry: TerritoryGeometry): boolean {
+  if (geometry.type === "Polygon") {
+    return pointIntersectsPolygon(point, geometry.coordinates as LngLat[][]);
+  }
+
+  return geometry.coordinates.some((polygon) =>
+    pointIntersectsPolygon(point, polygon as LngLat[][])
+  );
+}
+
+function pointIntersectsPolygon(point: LngLat, polygon: LngLat[][]): boolean {
+  const [outer, ...holes] = polygon;
+
+  if (!outer || !pointInRing(point, outer)) {
+    return false;
+  }
+
+  return !holes.some((hole) => pointInRing(point, hole));
+}
+
+function pointInRing(point: LngLat, ring: LngLat[]): boolean {
+  let inside = false;
+  const [x, y] = point;
+
+  for (let index = 0, previous = ring.length - 1; index < ring.length; previous = index++) {
+    const [xi, yi] = ring[index] ?? [0, 0];
+    const [xj, yj] = ring[previous] ?? [0, 0];
+    const intersects = yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi || 1) + xi;
+
+    if (intersects) {
+      inside = !inside;
+    }
+  }
+
+  return inside;
 }
 
 function previousAdminLevel(level: TerritoryAdminLevel): TerritoryAdminLevel {
@@ -259,4 +309,8 @@ function bboxesIntersect(left: TerritoryBBox, right: TerritoryBBox, epsilon: num
     left[3] < right[1] - epsilon ||
     right[3] < left[1] - epsilon
   );
+}
+
+function bboxArea(bbox: TerritoryBBox): number {
+  return Math.max(0, bbox[2] - bbox[0]) * Math.max(0, bbox[3] - bbox[1]);
 }

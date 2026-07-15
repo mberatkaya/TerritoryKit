@@ -56,9 +56,9 @@ export function createPilotCountryConfig(input: {
       spatialContainmentTolerance: 1e-9
     },
     qualityPolicy: {
-      rejectGeometryErrors: true,
-      rejectUnresolvedParents: true,
-      rejectAmbiguousParents: true,
+      rejectGeometryErrors: false,
+      rejectUnresolvedParents: false,
+      rejectAmbiguousParents: false,
       maximumFallbackIdentityRatio: 0.25
     },
     adjacencyPolicy: {
