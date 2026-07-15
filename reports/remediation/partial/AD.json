@@ -1,0 +1,86 @@
+{
+  "country": "AD",
+  "alpha3": "AND",
+  "outcome": "partial",
+  "generatedAt": "2026-07-15T12:45:48.119Z",
+  "strategyUsed": "source availability audit for prior partial countries",
+  "levels": {
+    "ADM1": {
+      "status": "built-with-warnings",
+      "outcome": "built-with-warnings",
+      "featureCount": 7,
+      "sourceStatus": "available",
+      "semanticReviewStatus": "review-required",
+      "hierarchyStatus": "passed",
+      "adjacencyStatus": "passed",
+      "indexStatus": "passed",
+      "validationStatus": "passed",
+      "loaderStatus": "passed"
+    },
+    "ADM2": {
+      "status": "source-unavailable",
+      "outcome": "source-unavailable",
+      "featureCount": 0,
+      "sourceStatus": "unavailable",
+      "semanticReviewStatus": "review-required",
+      "hierarchyStatus": "passed-with-warnings",
+      "adjacencyStatus": "not-run",
+      "indexStatus": "passed-with-warnings",
+      "validationStatus": "passed-with-warnings",
+      "loaderStatus": "not-run"
+    }
+  },
+  "issueCounts": {
+    "MAPPING_REVIEW_REQUIRED": 1,
+    "QUALITY_SELF_INTERSECTION": 1,
+    "COUNTRY_LEVEL_UNAVAILABLE": 1,
+    "SOURCE_METADATA_INVALID": 1
+  },
+  "phaseDurationsMs": {
+    "adjacency-generation": 3,
+    "artifact-write": 24,
+    "checksum": 0,
+    "derived-metadata": 1,
+    "download": 3,
+    "extraction": 0,
+    "geometry-repair": 184,
+    "loader-smoke": 0,
+    "parsing": 1,
+    "serialization": 3,
+    "simplification": 1,
+    "source-resolution": 919,
+    "spatial-index": 0,
+    "validation": 7
+  },
+  "remainingErrors": [
+    {
+      "code": "SOURCE_METADATA_INVALID",
+      "level": "ADM2",
+      "message": "Remote source returned HTTP 404.",
+      "severity": "error"
+    }
+  ],
+  "remainingWarnings": [
+    {
+      "code": "MAPPING_REVIEW_REQUIRED",
+      "level": "ADM1",
+      "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+      "severity": "warning"
+    },
+    {
+      "code": "QUALITY_SELF_INTERSECTION",
+      "details": {
+        "count": 4
+      },
+      "level": "ADM1",
+      "message": "Linear ring self-intersects.",
+      "severity": "warning"
+    },
+    {
+      "code": "COUNTRY_LEVEL_UNAVAILABLE",
+      "level": "ADM2",
+      "message": "Remote source returned HTTP 404.",
+      "severity": "warning"
+    }
+  ]
+}

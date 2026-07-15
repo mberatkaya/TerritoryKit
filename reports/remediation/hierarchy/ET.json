@@ -1,0 +1,93 @@
+{
+  "country": "ET",
+  "alpha3": "ETH",
+  "outcome": "built-with-warnings",
+  "generatedAt": "2026-07-15T12:21:24.066Z",
+  "strategyUsed": "center-first spatial parent resolution and parent-level warning downgrade",
+  "levels": {
+    "ADM1": {
+      "status": "built-with-warnings",
+      "outcome": "built-with-warnings",
+      "featureCount": 11,
+      "sourceStatus": "available",
+      "semanticReviewStatus": "review-required",
+      "hierarchyStatus": "passed",
+      "adjacencyStatus": "passed",
+      "indexStatus": "passed",
+      "validationStatus": "passed",
+      "loaderStatus": "passed"
+    },
+    "ADM2": {
+      "status": "built-with-warnings",
+      "outcome": "built-with-warnings",
+      "featureCount": 74,
+      "sourceStatus": "available",
+      "semanticReviewStatus": "review-required",
+      "hierarchyStatus": "passed",
+      "adjacencyStatus": "passed",
+      "indexStatus": "passed",
+      "validationStatus": "passed",
+      "loaderStatus": "passed"
+    }
+  },
+  "issueCounts": {
+    "PARENT_AMBIGUOUS_RESOLVED": 1,
+    "MAPPING_REVIEW_REQUIRED": 2,
+    "QUALITY_SELF_INTERSECTION": 2
+  },
+  "phaseDurationsMs": {
+    "adjacency-generation": 157,
+    "artifact-write": 39,
+    "checksum": 0,
+    "derived-metadata": 988,
+    "download": 7,
+    "extraction": 0,
+    "geometry-repair": 1059,
+    "loader-smoke": 0,
+    "parsing": 4,
+    "serialization": 127,
+    "simplification": 10,
+    "source-resolution": 1199,
+    "spatial-index": 0,
+    "validation": 176
+  },
+  "remainingErrors": [],
+  "remainingWarnings": [
+    {
+      "code": "PARENT_AMBIGUOUS_RESOLVED",
+      "message": "Multiple spatial parent candidates covered this child; chose the most specific parent by bbox area.",
+      "severity": "warning",
+      "zoneId": "et:adm2:57463737b5378229891244"
+    },
+    {
+      "code": "MAPPING_REVIEW_REQUIRED",
+      "level": "ADM1",
+      "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+      "severity": "warning"
+    },
+    {
+      "code": "QUALITY_SELF_INTERSECTION",
+      "details": {
+        "count": 6
+      },
+      "level": "ADM1",
+      "message": "Linear ring self-intersects.",
+      "severity": "warning"
+    },
+    {
+      "code": "MAPPING_REVIEW_REQUIRED",
+      "level": "ADM2",
+      "message": "ADM2 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+      "severity": "warning"
+    },
+    {
+      "code": "QUALITY_SELF_INTERSECTION",
+      "details": {
+        "count": 36
+      },
+      "level": "ADM2",
+      "message": "Linear ring self-intersects.",
+      "severity": "warning"
+    }
+  ]
+}

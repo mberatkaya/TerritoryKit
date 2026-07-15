@@ -1,0 +1,211 @@
+{
+  "country": "BR",
+  "alpha3": "BRA",
+  "outcome": "built-with-warnings",
+  "generatedAt": "2026-07-15T12:39:22.642Z",
+  "strategyUsed": "large-source build without max-source byte deferral; adjacency lifecycle reported separately",
+  "levels": {
+    "ADM1": {
+      "status": "built-with-warnings",
+      "outcome": "built-with-warnings",
+      "featureCount": 27,
+      "sourceStatus": "available",
+      "semanticReviewStatus": "review-required",
+      "hierarchyStatus": "passed",
+      "adjacencyStatus": "not-run",
+      "indexStatus": "passed",
+      "validationStatus": "passed",
+      "loaderStatus": "passed"
+    },
+    "ADM2": {
+      "status": "built-with-warnings",
+      "outcome": "built-with-warnings",
+      "featureCount": 5570,
+      "sourceStatus": "available",
+      "semanticReviewStatus": "review-required",
+      "hierarchyStatus": "passed",
+      "adjacencyStatus": "not-run",
+      "indexStatus": "passed",
+      "validationStatus": "passed",
+      "loaderStatus": "passed"
+    }
+  },
+  "issueCounts": {
+    "PARENT_UNRESOLVED": 24,
+    "MAPPING_REVIEW_REQUIRED": 2
+  },
+  "phaseDurationsMs": {
+    "artifact-write": 312,
+    "checksum": 0,
+    "derived-metadata": 153,
+    "download": 28,
+    "extraction": 0,
+    "geometry-repair": 2922,
+    "loader-smoke": 0,
+    "parsing": 149,
+    "serialization": 4499,
+    "simplification": 329,
+    "source-resolution": 1058,
+    "spatial-index": 0,
+    "validation": 4100
+  },
+  "remainingErrors": [],
+  "remainingWarnings": [
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b15483842761864"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b26603049963849"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b28423582121888"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b31979699807440"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b4042781644411"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b44994056013366"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b48185053064222"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b51048892739897"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b52127181831063"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b6248133710185"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b64518825165882"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b6565916351535"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b66814431717617"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b68153873864864"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b69390320621521"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b71807415879430"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b78825911007655"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b84967197177731"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b90634068804727"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b93664630758988"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b97137242485272"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b97691755303432"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b98855082713"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "br:adm2:56859067b99309548374267"
+    },
+    {
+      "code": "MAPPING_REVIEW_REQUIRED",
+      "level": "ADM1",
+      "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+      "severity": "warning"
+    },
+    {
+      "code": "MAPPING_REVIEW_REQUIRED",
+      "level": "ADM2",
+      "message": "ADM2 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+      "severity": "warning"
+    }
+  ]
+}

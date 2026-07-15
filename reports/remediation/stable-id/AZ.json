@@ -1,0 +1,343 @@
+{
+  "country": "AZ",
+  "levels": ["ADM1", "ADM2"],
+  "sourceFeatureCountByLevel": {
+    "ADM1": 2,
+    "ADM2": 79
+  },
+  "generatedIdCount": 82,
+  "collisionCountBeforeFix": 78,
+  "collisionCountAfterFix": 0,
+  "duplicateOfficialCodeWarnings": 78,
+  "strategyUsed": "When provider official/source code produced duplicate territory IDs, append a deterministic source-derived disambiguator using source id, raw feature id, parent id, local type, source name, representative point grid, and bbox grid.",
+  "fallbackIdsUsed": [
+    {
+      "territoryId": "az:adm2:aze-54616110b12323901372431-administrative-unit-agsu-district-pt-48-40298-40-53721-bbox-48-12084-40-31203-48-67828-40-81151",
+      "name": "Agsu District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b13615645655589-administrative-unit-goygol-district-pt-46-32586-40-54501-bbox-46-12257-40-28334-46-52177-40-82258",
+      "name": "Goygol District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b15657888815271-administrative-unit-khankendi-city-pt-46-79702-39-84235-bbox-46-76316-39-81288-46-83181-39-87086",
+      "name": "Khankendi City"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b16304773097912-administrative-unit-bilasuvar-district-pt-48-45864-39-54096-bbox-47-95846-39-33808-48-77336-39-75014",
+      "name": "Bilasuvar District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b16521863868797-administrative-unit-mingachevir-city-pt-47-02274-40-77008-bbox-46-97448-40-73636-47-07178-40-80389",
+      "name": "Mingachevir City"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b16651088424667-administrative-unit-shamakhi-district-pt-48-64873-40-65192-bbox-48-45319-40-28706-48-83314-40-97095",
+      "name": "Shamakhi District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b17009633679109-administrative-unit-lankaran-district-pt-48-86575-39-20115-bbox-48-82324-38-85426-49-21474-39-29626",
+      "name": "Lankaran District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b20470092766685-administrative-unit-beylagan-district-pt-47-69335-39-81444-bbox-47-45145-39-54581-47-91768-40-14638",
+      "name": "Beylagan District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b2076465815790-administrative-unit-lankaran-district-pt-48-73576-38-77183-bbox-48-54477-38-60187-48-87808-38-93641",
+      "name": "Lankaran District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b21396185337631-administrative-unit-sabirabad-district-pt-48-68856-39-91256-bbox-48-26739-39-62371-48-94966-40-16607",
+      "name": "Sabirabad District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b21517829058101-administrative-unit-qusar-district-pt-48-27693-41-44892-bbox-47-84955-41-18232-48-65182-41-73722",
+      "name": "Qusar District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b24607032839399-administrative-unit-ordubad-district-pt-45-93602-39-05088-bbox-45-75761-38-84521-46-14200-39-30448",
+      "name": "Ordubad District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b24616396985677-administrative-unit-shaki-city-pt-47-18857-41-20816-bbox-47-15112-41-18157-47-22290-41-23501",
+      "name": "Shaki City"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b25010354244926-administrative-unit-shaki-district-pt-47-17343-41-09707-bbox-46-83004-40-76615-47-61515-41-44893",
+      "name": "Shaki District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b25171122868047-administrative-unit-jabrayil-district-pt-46-99315-39-33030-bbox-46-72688-39-13438-47-31431-39-50037",
+      "name": "Jabrayil District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b29637726057754-administrative-unit-fuzuli-district-pt-47-35397-39-58379-bbox-47-04225-39-36604-47-66436-39-76626",
+      "name": "Fuzuli District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b32389340464615-administrative-unit-naftalan-city-pt-46-80056-40-44688-bbox-46-77561-40-42760-46-82798-40-46669",
+      "name": "Naftalan City"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b33183266084070-administrative-unit-shabran-district-pt-48-89960-41-15951-bbox-48-69965-40-86811-49-14993-41-37555",
+      "name": "Shabran District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b33746839775993-administrative-unit-qabala-district-pt-47-81092-40-93853-bbox-47-55093-40-65972-48-08814-41-22004",
+      "name": "Qabala District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b34042895235078-administrative-unit-zardab-district-pt-47-72895-40-25044-bbox-47-45080-40-10204-47-97537-40-39851",
+      "name": "Zardab District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b36354954300290-administrative-unit-agstafa-district-pt-45-45393-41-26289-bbox-45-09612-40-95945-45-79150-41-46995",
+      "name": "Agstafa District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b37358032697149-administrative-unit-kalbajar-district-pt-46-21004-40-07375-bbox-45-59800-39-79481-46-78579-40-30826",
+      "name": "Kalbajar District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b38461317640181-administrative-unit-khojavend-district-pt-47-01788-39-66597-bbox-46-69064-39-39907-47-36834-39-90062",
+      "name": "Khojavend District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b40961788089107-administrative-unit-neftchala-district-pt-49-06337-39-35256-bbox-48-70511-38-95633-49-45287-39-62542",
+      "name": "Neftchala District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b43271825035432-administrative-unit-gobustan-district-pt-48-94997-40-53170-bbox-48-68698-40-30942-49-29973-40-78032",
+      "name": "Gobustan District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b43488292017990-administrative-unit-qazakh-district-pt-45-21212-41-16783-bbox-44-98115-40-98216-45-38489-41-33299",
+      "name": "Qazakh District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b45272408011177-administrative-unit-shirvan-city-pt-48-92043-39-97156-bbox-48-89260-39-93353-48-94959-40-01051",
+      "name": "Shirvan City"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b45290451128830-administrative-unit-ismailli-district-pt-48-18655-40-81203-bbox-47-77331-40-52890-48-54286-41-07753",
+      "name": "Ismailli District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b46799199998097-administrative-unit-gadabay-district-pt-45-68002-40-54935-bbox-45-37219-40-31151-45-93970-40-80015",
+      "name": "Gadabay District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b46945931752574-administrative-unit-lachin-district-pt-46-35356-39-73390-bbox-45-92647-39-46088-46-76311-39-95988",
+      "name": "Lachin District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b47039748407948-administrative-unit-imishli-district-pt-48-06750-39-87365-bbox-47-76955-39-59591-48-39882-40-15463",
+      "name": "Imishli District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b4759617374649-administrative-unit-zaqatala-district-pt-46-68416-41-58825-bbox-46-30703-41-37491-47-05739-41-86140",
+      "name": "Zaqatala District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b48173541517146-administrative-unit-hajigabul-district-pt-48-90451-40-12389-bbox-48-46252-39-85401-49-34967-40-36099",
+      "name": "Hajigabul District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b49356278605879-administrative-unit-qakh-district-pt-46-88310-41-31482-bbox-46-65092-40-92641-47-21047-41-58590",
+      "name": "Qakh District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b49912296290484-administrative-unit-shusha-district-pt-46-67240-39-69691-bbox-46-55711-39-59547-46-82240-39-79015",
+      "name": "Shusha District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b5213879595332-administrative-unit-astara-district-pt-48-70986-38-51707-bbox-48-50999-38-39115-48-88084-38-63641",
+      "name": "Astara District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b52362464060400-administrative-unit-yevlakh-district-pt-47-04901-40-69350-bbox-46-76430-40-43397-47-31599-40-96883",
+      "name": "Yevlakh District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b53070579367508-administrative-unit-babek-district-pt-45-38532-39-25418-bbox-45-09703-38-96713-45-58350-39-55088",
+      "name": "Babek District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b53393721771174-administrative-unit-julfa-district-pt-45-70098-39-15628-bbox-45-50789-38-92404-45-94312-39-36378",
+      "name": "Julfa District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b53436270368491-administrative-unit-sharur-district-pt-45-06081-39-57493-bbox-44-86850-39-37199-45-30211-39-79389",
+      "name": "Sharur District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b55207089168458-administrative-unit-salyan-district-pt-49-06391-39-68220-bbox-48-73465-39-38115-49-36160-39-95141",
+      "name": "Salyan District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b57585842497805-administrative-unit-shamkir-district-pt-46-05757-40-84127-bbox-45-72951-40-56918-46-34179-41-13216",
+      "name": "Shamkir District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b59366301344355-administrative-unit-lerik-district-pt-48-45314-38-74610-bbox-48-22432-38-53574-48-69623-38-96934",
+      "name": "Lerik District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b61947743987915-administrative-unit-baku-city-pt-49-77531-40-31883-bbox-49-30332-39-67732-50-62029-40-59447",
+      "name": "Baku City"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b63590673188827-administrative-unit-yardymli-district-pt-48-24380-38-90393-bbox-48-00837-38-73815-48-53387-39-07642",
+      "name": "Yardymli District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b63924922129682-administrative-unit-balakan-district-pt-46-42878-41-73701-bbox-46-17750-41-56664-46-74628-41-92144",
+      "name": "Balakan District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b64107713492867-administrative-unit-zangilan-district-pt-46-64887-39-09118-bbox-46-42887-38-87302-46-89603-39-24742",
+      "name": "Zangilan District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b65018719015844-administrative-unit-samukh-district-pt-46-45665-40-94598-bbox-46-10659-40-67421-46-83192-41-20348",
+      "name": "Samukh District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b66639423042347-administrative-unit-qubadli-district-pt-46-61729-39-35055-bbox-46-36567-39-07417-46-83189-39-52873",
+      "name": "Qubadli District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b68105682916253-administrative-unit-shahbuz-district-pt-45-63716-39-44733-bbox-45-38299-39-27896-45-83767-39-59987",
+      "name": "Shahbuz District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b71765796178707-administrative-unit-agdam-district-pt-47-02051-40-04012-bbox-46-71470-39-81972-47-31824-40-23875",
+      "name": "Agdam District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b73470411147872-administrative-unit-shusha-city-pt-46-74744-39-73823-bbox-46-72517-39-71882-46-77053-39-75609",
+      "name": "Shusha City"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b75082210580506-administrative-unit-kangarli-district-pt-45-20579-39-42536-bbox-45-04490-39-30349-45-33196-39-59331",
+      "name": "Kangarli District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b75141866412524-administrative-unit-goranboy-district-pt-46-65967-40-55619-bbox-46-34173-40-25823-47-00547-40-89079",
+      "name": "Goranboy District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b75219613739908-administrative-unit-sumqayit-city-pt-49-63250-40-58264-bbox-49-53387-40-53179-49-71050-40-64953",
+      "name": "Sumqayit City"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b75800990015815-administrative-unit-agdash-district-pt-47-42873-40-58205-bbox-47-22429-40-31213-47-65371-40-80080",
+      "name": "Agdash District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b76249555634218-administrative-unit-barda-district-pt-47-23334-40-34240-bbox-47-00032-40-17316-47-49467-40-55463",
+      "name": "Barda District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b77048085748362-administrative-unit-quba-district-pt-48-45796-41-19039-bbox-47-96161-40-91166-48-81770-41-48844",
+      "name": "Quba District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b78302808254353-administrative-unit-jalilabad-district-pt-48-45631-39-23588-bbox-48-12848-39-02940-48-74005-39-46084",
+      "name": "Jalilabad District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b78344971255813-administrative-unit-yevlakh-city-pt-47-16688-40-61354-bbox-47-13070-40-59049-47-20305-40-63720",
+      "name": "Yevlakh City"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b79262118902245-administrative-unit-nakhchivan-city-pt-45-41205-39-21283-bbox-45-37493-39-18576-45-44900-39-24121",
+      "name": "Nakhchivan City"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b79809370995070-administrative-unit-tartar-district-pt-46-82246-40-28235-bbox-46-52498-40-06437-47-13159-40-49108",
+      "name": "Tartar District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b79964383852369-administrative-unit-sadarak-district-pt-44-88273-39-68106-bbox-44-76515-39-58842-44-99505-39-80368",
+      "name": "Sadarak District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b82810927503709-administrative-unit-kurdamir-district-pt-48-20675-40-26127-bbox-47-87935-40-02251-48-50064-40-54538",
+      "name": "Kurdamir District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b84154267491992-administrative-unit-ganja-city-pt-46-35383-40-69092-bbox-46-31412-40-65272-46-39247-40-72841",
+      "name": "Ganja City"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b84161876100413-administrative-unit-aghjabadi-district-pt-47-43798-40-02609-bbox-47-08944-39-73784-47-78057-40-25554",
+      "name": "Aghjabadi District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b84187356839814-administrative-unit-tovuz-district-pt-45-77252-40-98220-bbox-45-46014-40-57821-46-23984-41-23497",
+      "name": "Tovuz District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b86237771899826-administrative-unit-masally-district-pt-48-69552-39-02308-bbox-48-45959-38-86113-48-89389-39-19767",
+      "name": "Masally District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b8701125158325-administrative-unit-ujar-district-pt-47-75962-40-43121-bbox-47-49573-40-31687-48-02739-40-55991",
+      "name": "Ujar District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b87325868620163-administrative-unit-khojaly-district-pt-46-73683-39-87134-bbox-46-46646-39-64862-46-95703-40-03232",
+      "name": "Khojaly District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b88384638285498-administrative-unit-dashkasan-district-pt-46-04526-40-45676-bbox-45-83675-40-28968-46-26332-40-67005",
+      "name": "Dashkasan District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b88432173472444-administrative-unit-absheron-district-pt-49-33609-40-34512-bbox-48-86981-39-98916-49-92126-40-65693",
+      "name": "Absheron District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b88730523237575-administrative-unit-goychay-district-pt-47-86329-40-58000-bbox-47-61729-40-46404-48-08781-40-68402",
+      "name": "Goychay District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b89497242950609-administrative-unit-khachmaz-district-pt-48-76674-41-55086-bbox-48-50846-41-34794-49-07912-41-84273",
+      "name": "Khachmaz District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b92317303093203-administrative-unit-lankaran-city-pt-48-84343-38-74202-bbox-48-81253-38-71861-48-87498-38-76350",
+      "name": "Lankaran City"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b939777630101-administrative-unit-saatly-district-pt-48-47538-39-84167-bbox-48-23394-39-65139-48-71709-40-03316",
+      "name": "Saatly District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b9592293002412-administrative-unit-siazan-district-pt-49-09452-41-01291-bbox-48-87523-40-87094-49-36318-41-18421",
+      "name": "Siazan District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b97026515433008-administrative-unit-khizi-district-pt-49-20967-40-74487-bbox-48-80624-40-51438-49-54392-40-98116",
+      "name": "Khizi District"
+    },
+    {
+      "territoryId": "az:adm2:aze-54616110b99657283459996-administrative-unit-oghuz-district-pt-47-52857-41-06282-bbox-47-31149-40-82413-47-74619-41-27263",
+      "name": "Oghuz District"
+    }
+  ],
+  "aliasesGenerated": [],
+  "determinismTest": {
+    "repeatedBuildIdsIdentical": "verified-by-deterministic-input-key; full repeated-build check pending final verification",
+    "featureOrderIndependent": "covered by source-derived key design; fixture test added in code verification phase",
+    "outputDirectoryIndependent": "territory IDs do not include output paths"
+  },
+  "outcomeAfterFix": "built-with-warnings",
+  "loaderStatus": {
+    "ADM1": "passed",
+    "ADM2": "passed"
+  },
+  "remainingErrors": []
+}

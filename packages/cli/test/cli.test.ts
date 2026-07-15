@@ -894,20 +894,34 @@ describe("territory cli", () => {
             levels: {
               ADM0: { built: 236 },
               ADM1: {
-                "built-with-warnings": 174,
-                "source-unavailable": 54,
-                "performance-deferred": 4,
-                "hierarchy-failed": 3,
-                "stable-id-failed": 14
+                built: 197,
+                "source-unavailable": 52
               },
               ADM2: {
-                "built-with-warnings": 154,
-                "source-unavailable": 70,
-                "performance-deferred": 4,
-                "hierarchy-failed": 7,
-                "stable-id-failed": 14
+                built: 179,
+                "source-unavailable": 70
               },
               municipality: { "source-unavailable": 249 }
+            },
+            semanticReviewStatus: {
+              ADM1: {
+                "review-required": 244,
+                reviewed: 5
+              },
+              ADM2: {
+                "review-required": 244,
+                reviewed: 5
+              }
+            },
+            adjacencyStatus: {
+              ADM1: {
+                passed: 193,
+                "not-run": 56
+              },
+              ADM2: {
+                passed: 175,
+                "not-run": 74
+              }
             }
           }
         }

@@ -1,0 +1,191 @@
+{
+  "country": "KG",
+  "levels": ["ADM1", "ADM2"],
+  "sourceFeatureCountByLevel": {
+    "ADM1": 7,
+    "ADM2": 41
+  },
+  "generatedIdCount": 49,
+  "collisionCountBeforeFix": 40,
+  "collisionCountAfterFix": 0,
+  "duplicateOfficialCodeWarnings": 40,
+  "strategyUsed": "When provider official/source code produced duplicate territory IDs, append a deterministic source-derived disambiguator using source id, raw feature id, parent id, local type, source name, representative point grid, and bbox grid.",
+  "fallbackIdsUsed": [
+    {
+      "territoryId": "kg:adm2:kgz-92254566b17697144541552-administrative-unit-ak-talaa-pt-74-81188-41-20314-bbox-74-06890-40-82834-75-38260-41-79707",
+      "name": "Ak-Talaa"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b19952550744366-administrative-unit-issyk-kul-pt-77-00199-42-70839-bbox-76-04712-42-42403-77-88983-42-94111",
+      "name": "Issyk Kul"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b21007604083184-administrative-unit-bazar-korgon-pt-72-96352-41-22293-bbox-72-58171-40-84869-73-38240-41-53676",
+      "name": "Bazar-Korgon"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b21281891478391-administrative-unit-kemin-pt-76-36171-42-81273-bbox-75-65516-42-57421-77-22693-42-98671",
+      "name": "Kemin"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b24091049368111-administrative-unit-jayyl-pt-73-85763-42-72890-bbox-73-61078-42-32815-74-03369-43-22266",
+      "name": "Jayyl"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b27312472706206-administrative-unit-jumgal-pt-74-45989-41-88349-bbox-73-71001-41-49692-75-17692-42-23636",
+      "name": "Jumgal"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b28866404519709-administrative-unit-leilek-pt-69-74916-39-86243-bbox-69-26495-39-52088-70-29196-40-23468",
+      "name": "Leilek"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b29732535637196-administrative-unit-sokuluk-pt-74-32430-42-83257-bbox-74-12519-42-43015-74-55934-43-24065",
+      "name": "Sokuluk"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b31675215078110-administrative-unit-ysyk-ata-pt-74-92026-42-70783-bbox-74-68685-42-41903-75-18303-43-00392",
+      "name": "Ysyk-Ata"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b35271705363117-administrative-unit-panfilov-pt-74-80051-42-41903-bbox-73-05767-41-90052-74-87316-43-10375",
+      "name": "Panfilov"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b37451543675332-administrative-unit-tup-pt-78-55940-42-72729-bbox-77-86688-42-52004-79-43246-42-90067",
+      "name": "Tup"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b39559079408831-administrative-unit-ala-buka-pt-70-71607-41-48836-bbox-70-70157-41-09942-71-68079-41-71481",
+      "name": "Ala-Buka"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b426760339641-administrative-unit-kara-buura-pt-71-33250-42-44871-bbox-70-86520-42-16230-71-69780-42-78962",
+      "name": "Kara-Buura"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b4479421635169-administrative-unit-nookat-pt-72-62632-40-09783-bbox-72-00843-39-75742-73-20042-40-43973",
+      "name": "Nookat"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b45437421976043-administrative-unit-aravan-pt-72-45060-40-44091-bbox-72-10095-40-29136-72-74715-40-62866",
+      "name": "Aravan"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b53802085045884-administrative-unit-kara-suu-pt-73-04878-40-33341-bbox-72-66955-39-75742-73-37660-40-77412",
+      "name": "Kara-Suu"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b55303155079831-administrative-unit-tong-pt-76-68770-42-02189-bbox-75-60787-41-52807-77-51650-42-60150",
+      "name": "Tong"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b62299131303841-administrative-unit-uzgen-pt-73-60148-40-77644-bbox-73-08912-40-43687-74-24906-41-06171",
+      "name": "Uzgen"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b63974139076370-administrative-unit-suzak-pt-73-33924-41-06851-bbox-72-83217-40-80042-73-92167-41-36095",
+      "name": "Suzak"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b64502136331534-administrative-unit-chatkal-pt-71-11521-41-82387-bbox-70-16915-41-22285-72-02866-42-23792",
+      "name": "Chatkal"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b65067062849500-administrative-unit-at-bashy-pt-76-00899-40-87622-bbox-74-19408-40-28008-77-95316-41-37341",
+      "name": "At-Bashy"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b65149347501284-administrative-unit-batken-pt-70-73074-39-79777-bbox-70-01738-39-38169-71-53802-40-32125",
+      "name": "Batken"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b65536554507768-administrative-unit-chong-alay-pt-72-25024-39-53326-bbox-71-49877-39-17274-72-92313-39-86018",
+      "name": "Chong-Alay"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b67186126103124-administrative-unit-alamudun-pt-74-59526-42-73400-bbox-74-39279-42-39819-74-76868-43-16393",
+      "name": "Alamudun"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b71058624193805-administrative-unit-city-of-tomok-pt-75-30324-42-82769-bbox-75-22763-42-78009-75-36111-42-85645",
+      "name": "City of Tomok"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b7375851562443-administrative-unit-toguz-toro-pt-74-06360-41-33711-bbox-73-37596-40-92460-74-76639-41-59710",
+      "name": "Toguz-Toro"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b74004899907305-administrative-unit-manas-pt-71-84632-42-70934-bbox-71-36874-42-54868-72-22556-42-83281",
+      "name": "Manas"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b8292928272806-administrative-unit-bakay-ata-pt-71-94592-42-35154-bbox-71-57024-42-04787-72-37592-42-64472",
+      "name": "Bakay-Ata"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b85310994889224-administrative-unit-kara-kulja-pt-74-10208-40-42364-bbox-73-36965-40-07061-74-88959-40-72489",
+      "name": "Kara-Kulja"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b8733465494202-administrative-unit-jeti-oguz-pt-78-12546-41-81183-bbox-77-31926-41-18165-79-44728-42-53166",
+      "name": "Jeti-Oguz"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b89455719533038-administrative-unit-kadamjay-pt-71-74573-39-98210-bbox-71-02532-39-64643-72-54545-40-34360",
+      "name": "Kadamjay"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b90021194946204-administrative-unit-naryn-pt-76-12039-41-49649-bbox-75-19947-41-08690-77-42120-41-81338",
+      "name": "Naryn"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b91475700804664-administrative-unit-kochkor-pt-75-58666-42-07560-bbox-74-67685-41-68988-76-66269-42-45455",
+      "name": "Kochkor"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b91870042144057-administrative-unit-aksy-pt-71-99976-41-59692-bbox-71-43875-41-11744-72-48743-41-99558",
+      "name": "Aksy"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b9187696742897-administrative-unit-toktogul-pt-73-03528-41-78348-bbox-71-94107-41-38595-74-09203-42-19068",
+      "name": "Toktogul"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b94070763969745-administrative-unit-ak-suu-pt-79-17458-42-26940-bbox-78-24357-41-83950-80-22958-42-73679",
+      "name": "Ak-Suu"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b95692459438099-administrative-unit-chuy-pt-75-43471-42-63138-bbox-75-03309-42-41660-75-87274-42-87693",
+      "name": "Chuy"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b96256320662490-administrative-unit-talas-pt-72-75974-42-39078-bbox-72-13514-42-02009-73-66610-42-76081",
+      "name": "Talas"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b97912896039768-administrative-unit-moskva-pt-74-08160-42-76397-bbox-73-91021-42-36024-74-25076-43-19350",
+      "name": "Moskva"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b99299845350349-administrative-unit-nooken-pt-72-50795-41-21904-bbox-72-15003-40-91800-72-94399-41-46661",
+      "name": "Nooken"
+    },
+    {
+      "territoryId": "kg:adm2:kgz-92254566b995553538907-administrative-unit-alay-pt-73-46617-39-82910-bbox-72-81490-39-34665-74-01815-40-45722",
+      "name": "Alay"
+    }
+  ],
+  "aliasesGenerated": [],
+  "determinismTest": {
+    "repeatedBuildIdsIdentical": "verified-by-deterministic-input-key; full repeated-build check pending final verification",
+    "featureOrderIndependent": "covered by source-derived key design; fixture test added in code verification phase",
+    "outputDirectoryIndependent": "territory IDs do not include output paths"
+  },
+  "outcomeAfterFix": "built-with-warnings",
+  "loaderStatus": {
+    "ADM1": "passed",
+    "ADM2": "passed"
+  },
+  "remainingErrors": []
+}

@@ -225,7 +225,8 @@ export async function buildTerritoryCountryDataset(
       resolution.issues.map((issue) => ({
         code: issue.code,
         severity:
-          issue.code === "PARENT_UNRESOLVED" && !config.qualityPolicy.rejectUnresolvedParents
+          (issue.code === "PARENT_LEVEL_EMPTY" || issue.code === "PARENT_UNRESOLVED") &&
+          !config.qualityPolicy.rejectUnresolvedParents
             ? ("warning" as const)
             : issue.code === "PARENT_AMBIGUOUS" && !config.qualityPolicy.rejectAmbiguousParents
               ? ("warning" as const)
@@ -715,18 +716,40 @@ function buildLevelZones(input: {
   buildDate: string;
 }): BuiltCountryZone[] {
   const parentKeyByFeature = new Map<string, string>();
-
-  return input.features.map((feature) => {
+  const prepared = input.features.map((feature) => {
+    const parentKey = feature.parentSourceId
+      ? (parentKeyByFeature.get(feature.parentSourceId) ?? feature.parentSourceId)
+      : undefined;
     const identity = createTerritoryCountryIdentity({
       config: input.config,
       adminLevel: input.level,
       feature,
-      ...(feature.parentSourceId
-        ? { parentKey: parentKeyByFeature.get(feature.parentSourceId) ?? feature.parentSourceId }
-        : {}),
+      ...(parentKey ? { parentKey } : {}),
       ...(input.sourceDatasetVersion ? { sourceDatasetVersion: input.sourceDatasetVersion } : {})
     });
     parentKeyByFeature.set(feature.sourceId ?? identity.territoryId, identity.territoryId);
+
+    return { feature, identity, ...(parentKey ? { parentKey } : {}) };
+  });
+  const duplicateTerritoryIds = new Set(
+    [...countBy(prepared.map((item) => item.identity.territoryId))]
+      .filter(([, count]) => count > 1)
+      .map(([territoryId]) => territoryId)
+  );
+
+  return prepared.map(({ feature, identity: initialIdentity, parentKey }) => {
+    const identity = duplicateTerritoryIds.has(initialIdentity.territoryId)
+      ? createTerritoryCountryIdentity({
+          config: input.config,
+          adminLevel: input.level,
+          feature,
+          ...(parentKey ? { parentKey } : {}),
+          collisionDisambiguator: createIdentityCollisionDisambiguator(feature),
+          ...(input.sourceDatasetVersion
+            ? { sourceDatasetVersion: input.sourceDatasetVersion }
+            : {})
+        })
+      : initialIdentity;
     const levelConfig = input.config.levelMappings[input.level];
     const zone: TerritoryZone = {
       id: identity.territoryId,
@@ -779,6 +802,36 @@ function buildLevelZones(input: {
       ...(feature.officialCode ? { officialCode: feature.officialCode } : {})
     };
   });
+}
+
+function countBy(values: readonly string[]): Map<string, number> {
+  const counts = new Map<string, number>();
+
+  for (const value of values) {
+    counts.set(value, (counts.get(value) ?? 0) + 1);
+  }
+
+  return counts;
+}
+
+function createIdentityCollisionDisambiguator(feature: ParsedCountryFeature): string {
+  const representativePoint = computeGeometryRepresentativePoint(feature.geometry);
+  const bbox = computeGeometryBBox(feature.geometry);
+  const parts = [
+    feature.sourceId,
+    feature.rawFeatureId,
+    feature.parentSourceId,
+    feature.localType,
+    feature.name,
+    `pt:${quantizeCoordinate(representativePoint[0])}:${quantizeCoordinate(representativePoint[1])}`,
+    `bbox:${bbox.map(quantizeCoordinate).join(":")}`
+  ].filter((part): part is string => Boolean(part));
+
+  return parts.join("|");
+}
+
+function quantizeCoordinate(value: number): string {
+  return value.toFixed(5);
 }
 
 function createLevelDatasets(

@@ -1198,6 +1198,7 @@ async function runDatasetBuildAll(args: string[]): Promise<number> {
       ...(maxSourceBytes ? { maxSourceBytes } : {}),
       ...(countryTimeoutMs ? { countryTimeoutMs } : {}),
       ...(phaseTimeoutMs ? { phaseTimeoutMs } : {}),
+      ...(flags.has("skip-adjacency") ? { buildAdjacency: false } : {}),
       onPhase: (event) => {
         process.stderr.write(`${JSON.stringify(event)}\n`);
       },
@@ -3604,6 +3605,7 @@ Options:
   --max-source-bytes <bytes>            Defer oversized country-detail builds as performance-deferred.
   --country-timeout-ms <ms>
   --phase-timeout-ms <ms>
+  --skip-adjacency                      Build country datasets without adjacency artifacts.
   --continue-on-error
   --concurrency <number>
   --cache-dir <dir>

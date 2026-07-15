@@ -117,6 +117,7 @@ export async function buildAllTerritoryCountryDatasets(
         ...(options.maxSourceBytes ? { maxSourceBytes: options.maxSourceBytes } : {}),
         ...(options.countryTimeoutMs ? { countryTimeoutMs: options.countryTimeoutMs } : {}),
         ...(options.phaseTimeoutMs ? { phaseTimeoutMs: options.phaseTimeoutMs } : {}),
+        buildAdjacency: options.buildAdjacency ?? true,
         ...(options.onPhase ? { onPhase: options.onPhase } : {}),
         ...(options.force ? { force: true } : {}),
         cwd
@@ -177,6 +178,7 @@ async function buildOneCountry(input: {
   maxSourceBytes?: number;
   countryTimeoutMs?: number;
   phaseTimeoutMs?: number;
+  buildAdjacency: boolean;
   onPhase?: (event: TerritoryCountryBuildPhaseEvent) => void;
   force?: boolean;
   cwd: string;
@@ -376,7 +378,7 @@ async function buildOneCountry(input: {
       sourceLockPath,
       outputPath: countryRoot,
       levels: buildLevels,
-      buildAdjacency: true,
+      buildAdjacency: input.buildAdjacency,
       allowNonPublishReady: true,
       buildDate: input.generatedAt,
       onPhase,
@@ -503,6 +505,7 @@ function createCountryResult(input: {
           ? { featureCount: input.buildReport.statistics.featureCountByLevel[level] }
           : {}),
         lifecycle: createLevelLifecycle({
+          config: input.config,
           level,
           outcome: levelOutcome,
           builtLevels,
@@ -815,6 +818,7 @@ function createLevelStatus(outcome: TerritoryCountryBuildAllOutcome): TerritoryA
 }
 
 function createLevelLifecycle(input: {
+  config: ReturnType<typeof getTerritoryCountryConfig>;
   level: TerritoryAdminLevel;
   outcome: TerritoryCountryBuildAllOutcome;
   builtLevels: Set<TerritoryAdminLevel>;
@@ -851,6 +855,9 @@ function createLevelLifecycle(input: {
       ran: hasPhase("geometry-repair"),
       failed: failedPhase("geometry-repair")
     }),
+    semanticReviewStatus: semanticReviewLifecycle(
+      input.config.levelMappings[input.level]?.reviewStatus
+    ),
     hierarchyStatus: phaseLifecycle({
       built,
       ran: hasPhase("derived-metadata"),
@@ -859,11 +866,11 @@ function createLevelLifecycle(input: {
     adjacencyStatus:
       input.level === "ADM0"
         ? "not-run"
-        : built
-          ? "built"
-          : input.outcome === "performance-deferred"
-            ? "performance-deferred"
-            : "not-run",
+        : adjacencyLifecycle({
+            built,
+            ran: hasPhase("adjacency-generation"),
+            failed: failedPhase("adjacency-generation")
+          }),
     indexStatus: phaseLifecycle({
       built,
       ran: hasPhase("spatial-index"),
@@ -898,6 +905,22 @@ function createLevelLifecycle(input: {
   };
 }
 
+function semanticReviewLifecycle(
+  status: string | undefined
+): TerritoryCountryLevelLifecycle["semanticReviewStatus"] {
+  switch (status) {
+    case "reviewed":
+      return "reviewed";
+    case "provider-confirmed":
+      return "provider-confirmed";
+    case "generic-admin-level":
+      return "generic-admin-level";
+    case "mapping-review-required":
+    default:
+      return "review-required";
+  }
+}
+
 function phaseLifecycle(input: {
   built: boolean;
   ran: boolean;
@@ -912,6 +935,22 @@ function phaseLifecycle(input: {
   }
 
   return input.ran ? "passed-with-warnings" : "not-run";
+}
+
+function adjacencyLifecycle(input: {
+  built: boolean;
+  ran: boolean;
+  failed: boolean;
+}): TerritoryLifecycleStatus {
+  if (input.failed) {
+    return "failed";
+  }
+
+  if (!input.ran) {
+    return "not-run";
+  }
+
+  return input.built ? "passed" : "not-run";
 }
 
 function sourceLifecycleForOutcome(
@@ -992,11 +1031,7 @@ function classifyBlockingOutcomeFromIssues(
     return "licence-restricted";
   }
 
-  if (
-    codes.has("IDENTITY_DUPLICATE_TERRITORY_ID") ||
-    codes.has("IDENTITY_DUPLICATE_SOURCE_ID") ||
-    codes.has("IDENTITY_DUPLICATE_OFFICIAL_CODE")
-  ) {
+  if (codes.has("IDENTITY_DUPLICATE_TERRITORY_ID")) {
     return "stable-id-failed";
   }
 

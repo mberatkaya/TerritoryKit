@@ -1,0 +1,35 @@
+{
+  "country": "CF",
+  "levels": ["ADM1", "ADM2"],
+  "sourceFeatureCountByLevel": {
+    "ADM1": 17,
+    "ADM2": 72
+  },
+  "generatedIdCount": 90,
+  "collisionCountBeforeFix": 1,
+  "collisionCountAfterFix": 0,
+  "duplicateOfficialCodeWarnings": 1,
+  "strategyUsed": "When provider official/source code produced duplicate territory IDs, append a deterministic source-derived disambiguator using source id, raw feature id, parent id, local type, source name, representative point grid, and bbox grid.",
+  "fallbackIdsUsed": [
+    {
+      "territoryId": "cf:adm1:cf-hs-63714938b76474956810594-administrative-unit-sangha-mbaere-pt-16-28031-3-44906-bbox-15-27789-2-22068-17-41885-4-25508",
+      "name": "Sangha-Mbaéré"
+    },
+    {
+      "territoryId": "cf:adm1:cf-hs-63714938b93412376758102-administrative-unit-mambere-kadei-pt-15-92492-4-56151-bbox-14-68572-3-67399-17-12929-5-37878",
+      "name": "Mambéré-Kadéï"
+    }
+  ],
+  "aliasesGenerated": [],
+  "determinismTest": {
+    "repeatedBuildIdsIdentical": "verified-by-deterministic-input-key; full repeated-build check pending final verification",
+    "featureOrderIndependent": "covered by source-derived key design; fixture test added in code verification phase",
+    "outputDirectoryIndependent": "territory IDs do not include output paths"
+  },
+  "outcomeAfterFix": "built-with-warnings",
+  "loaderStatus": {
+    "ADM1": "passed",
+    "ADM2": "passed"
+  },
+  "remainingErrors": []
+}

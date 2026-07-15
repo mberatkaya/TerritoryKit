@@ -11,7 +11,11 @@ import type {
 } from "@territory-kit/dataset";
 
 export type TerritoryIdentityStability =
-  "official-code" | "source-stable-code" | "source-id" | "name-parent-fallback";
+  | "official-code"
+  | "source-stable-code"
+  | "source-id"
+  | "source-disambiguated"
+  | "name-parent-fallback";
 
 export type TerritoryArtifactStatus =
   | "not-reviewed"
@@ -47,6 +51,9 @@ export type TerritoryArtifactStatus =
 
 export type TerritoryMappingReviewStatus =
   "reviewed" | "provider-confirmed" | "generic-admin-level" | "mapping-review-required";
+
+export type TerritorySemanticReviewStatus =
+  "reviewed" | "provider-confirmed" | "generic-admin-level" | "review-required";
 
 export type TerritoryLifecycleStatus =
   | "not-run"
@@ -422,6 +429,7 @@ export interface TerritoryCountryLevelLifecycle {
   downloadStatus: TerritoryLifecycleStatus;
   transformStatus: TerritoryLifecycleStatus;
   repairStatus: TerritoryLifecycleStatus;
+  semanticReviewStatus: TerritorySemanticReviewStatus;
   hierarchyStatus: TerritoryLifecycleStatus;
   adjacencyStatus: TerritoryLifecycleStatus;
   indexStatus: TerritoryLifecycleStatus;
@@ -475,6 +483,7 @@ export interface TerritoryCountryBuildAllOptions {
   maxSourceBytes?: number;
   countryTimeoutMs?: number;
   phaseTimeoutMs?: number;
+  buildAdjacency?: boolean;
   onPhase?: (event: TerritoryCountryBuildPhaseEvent) => void;
   force?: boolean;
   cwd?: string;

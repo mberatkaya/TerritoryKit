@@ -1,0 +1,91 @@
+{
+  "country": "CL",
+  "levels": ["ADM1", "ADM2"],
+  "sourceFeatureCountByLevel": {
+    "ADM1": 16,
+    "ADM2": 56
+  },
+  "generatedIdCount": 73,
+  "collisionCountBeforeFix": 15,
+  "collisionCountAfterFix": 0,
+  "duplicateOfficialCodeWarnings": 15,
+  "strategyUsed": "When provider official/source code produced duplicate territory IDs, append a deterministic source-derived disambiguator using source id, raw feature id, parent id, local type, source name, representative point grid, and bbox grid.",
+  "fallbackIdsUsed": [
+    {
+      "territoryId": "cl:adm1:chl-47653553b1207481020383-administrative-unit-regia3n-de-arica-y-parinacota-pt-69-62842-18-49680-bbox-70-37913-19-22934-68-91165-17-49840",
+      "name": "RegiÃ³n de Arica y Parinacota"
+    },
+    {
+      "territoryId": "cl:adm1:chl-47653553b32293817275864-administrative-unit-regia3n-de-a-uble-pt-71-97450-36-64552-bbox-72-88404-37-19755-71-00736-36-00562",
+      "name": "RegiÃ³n de Ãuble"
+    },
+    {
+      "territoryId": "cl:adm1:chl-47653553b40993810137393-administrative-unit-regia3n-de-antofagasta-pt-69-11935-23-53608-bbox-70-73792-26-06154-66-99018-20-93454",
+      "name": "RegiÃ³n de Antofagasta"
+    },
+    {
+      "territoryId": "cl:adm1:chl-47653553b5611469222723-administrative-unit-regia3n-de-valparaa-so-pt-71-38709-32-73242-bbox-109-45489-33-95589-69-98935-26-28623",
+      "name": "RegiÃ³n de ValparaÃ­so"
+    },
+    {
+      "territoryId": "cl:adm1:chl-47653553b65340542415201-administrative-unit-regia3n-del-maule-pt-71-44553-35-62126-bbox-72-78590-36-54328-70-31175-34-68463",
+      "name": "RegiÃ³n del Maule"
+    },
+    {
+      "territoryId": "cl:adm1:chl-47653553b66141875659978-administrative-unit-regia3n-del-libertador-bernardo-o-higgins-pt-71-04661-34-43533-bbox-72-05626-35-00529-70-00926-33-85062",
+      "name": "RegiÃ³n del Libertador Bernardo O'Higgins"
+    },
+    {
+      "territoryId": "cl:adm1:chl-47653553b66835736668351-administrative-unit-regia3n-del-ba-o-ba-o-pt-72-39416-37-49949-bbox-73-96144-38-49230-70-98327-36-44327",
+      "name": "RegiÃ³n del BÃ­o-BÃ­o"
+    },
+    {
+      "territoryId": "cl:adm1:chl-47653553b67595840047202-administrative-unit-regia3n-de-los-ra-os-pt-72-57006-40-00526-bbox-73-72491-40-68116-71-59210-39-28789",
+      "name": "RegiÃ³n de Los RÃ­os"
+    },
+    {
+      "territoryId": "cl:adm1:chl-47653553b69224850096491-administrative-unit-regia3n-de-los-lagos-pt-71-79499-44-03145-bbox-74-84644-44-06704-71-58104-40-23658",
+      "name": "RegiÃ³n de Los Lagos"
+    },
+    {
+      "territoryId": "cl:adm1:chl-47653553b71653813080592-administrative-unit-regia3n-de-atacama-pt-69-91002-27-39531-bbox-71-52562-29-53515-68-26323-25-28584",
+      "name": "RegiÃ³n de Atacama"
+    },
+    {
+      "territoryId": "cl:adm1:chl-47653553b77266651052380-administrative-unit-regia3n-de-aysa-n-del-gral-ibaa-ez-del-campo-pt-73-25440-46-41727-bbox-75-65478-49-21167-71-09165-43-63814",
+      "name": "RegiÃ³n de AysÃ©n del Gral.IbaÃ±ez del Campo"
+    },
+    {
+      "territoryId": "cl:adm1:chl-47653553b78904739401519-administrative-unit-regia3n-metropolitana-de-santiago-pt-70-62695-33-60449-bbox-71-71449-34-29067-69-76981-32-92248",
+      "name": "RegiÃ³n Metropolitana de Santiago"
+    },
+    {
+      "territoryId": "cl:adm1:chl-47653553b84299910343297-administrative-unit-regia3n-de-la-araucana-a-pt-72-27465-38-64949-bbox-73-51901-39-63714-70-82738-37-58173",
+      "name": "RegiÃ³n de La AraucanÃ­a"
+    },
+    {
+      "territoryId": "cl:adm1:chl-47653553b86325292267162-administrative-unit-regia3n-de-magallanes-y-anta-rtica-chilena-pt-71-90124-52-44143-bbox-75-72150-55-98000-66-41823-48-59564",
+      "name": "RegiÃ³n de Magallanes y AntÃ¡rtica Chilena"
+    },
+    {
+      "territoryId": "cl:adm1:chl-47653553b91907313612474-administrative-unit-regia3n-de-coquimbo-pt-70-86065-30-61927-bbox-71-71746-32-28216-69-80909-29-03787",
+      "name": "RegiÃ³n de Coquimbo"
+    },
+    {
+      "territoryId": "cl:adm1:chl-47653553b97418467345315-administrative-unit-regia3n-de-tarapaca-pt-69-39304-20-21570-bbox-70-28530-21-62983-68-40487-18-93667",
+      "name": "RegiÃ³n de TarapacÃ¡"
+    }
+  ],
+  "aliasesGenerated": [],
+  "determinismTest": {
+    "repeatedBuildIdsIdentical": "verified-by-deterministic-input-key; full repeated-build check pending final verification",
+    "featureOrderIndependent": "covered by source-derived key design; fixture test added in code verification phase",
+    "outputDirectoryIndependent": "territory IDs do not include output paths"
+  },
+  "outcomeAfterFix": "built-with-warnings",
+  "loaderStatus": {
+    "ADM1": "passed",
+    "ADM2": "passed"
+  },
+  "remainingErrors": []
+}

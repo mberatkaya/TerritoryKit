@@ -1,0 +1,98 @@
+{
+  "country": "MX",
+  "alpha3": "MEX",
+  "outcome": "built-with-warnings",
+  "generatedAt": "2026-07-15T12:39:22.642Z",
+  "strategyUsed": "large-source build without max-source byte deferral; adjacency lifecycle reported separately",
+  "levels": {
+    "ADM1": {
+      "status": "built-with-warnings",
+      "outcome": "built-with-warnings",
+      "featureCount": 32,
+      "sourceStatus": "available",
+      "semanticReviewStatus": "review-required",
+      "hierarchyStatus": "passed",
+      "adjacencyStatus": "not-run",
+      "indexStatus": "passed",
+      "validationStatus": "passed",
+      "loaderStatus": "passed"
+    },
+    "ADM2": {
+      "status": "built-with-warnings",
+      "outcome": "built-with-warnings",
+      "featureCount": 2457,
+      "sourceStatus": "available",
+      "semanticReviewStatus": "review-required",
+      "hierarchyStatus": "passed",
+      "adjacencyStatus": "not-run",
+      "indexStatus": "passed",
+      "validationStatus": "passed",
+      "loaderStatus": "passed"
+    }
+  },
+  "issueCounts": {
+    "IDENTITY_DUPLICATE_OFFICIAL_CODE": 1,
+    "PARENT_UNRESOLVED": 4,
+    "MAPPING_REVIEW_REQUIRED": 2
+  },
+  "phaseDurationsMs": {
+    "artifact-write": 142,
+    "checksum": 0,
+    "derived-metadata": 487,
+    "download": 3166,
+    "extraction": 0,
+    "geometry-repair": 2008,
+    "loader-smoke": 0,
+    "parsing": 69,
+    "serialization": 2829,
+    "simplification": 152,
+    "source-resolution": 939,
+    "spatial-index": 0,
+    "validation": 2575
+  },
+  "remainingErrors": [],
+  "remainingWarnings": [
+    {
+      "code": "IDENTITY_DUPLICATE_OFFICIAL_CODE",
+      "message": "Official code 'MX-MEX' maps to multiple ADM1 territories.",
+      "severity": "warning",
+      "zoneId": "mx:adm1:mx-mex-31927357b79016588373767-administrative-unit-distrito-federal-pt-99-13943-19-27693-bbox-99-36492-19-04824-98-94030-19-59276"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "mx:adm2:50627088b18238703345700"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "mx:adm2:50627088b28921038205871"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "mx:adm2:50627088b92703262083917"
+    },
+    {
+      "code": "PARENT_UNRESOLVED",
+      "message": "No parent candidate covers this child geometry.",
+      "severity": "warning",
+      "zoneId": "mx:adm2:50627088b94546809143043"
+    },
+    {
+      "code": "MAPPING_REVIEW_REQUIRED",
+      "level": "ADM1",
+      "message": "ADM1 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+      "severity": "warning"
+    },
+    {
+      "code": "MAPPING_REVIEW_REQUIRED",
+      "level": "ADM2",
+      "message": "ADM2 uses a generic ISO fallback mapping; semantic labels require review before publishing.",
+      "severity": "warning"
+    }
+  ]
+}

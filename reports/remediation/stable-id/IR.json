@@ -1,0 +1,35 @@
+{
+  "country": "IR",
+  "levels": ["ADM1", "ADM2"],
+  "sourceFeatureCountByLevel": {
+    "ADM1": 32,
+    "ADM2": 432
+  },
+  "generatedIdCount": 465,
+  "collisionCountBeforeFix": 1,
+  "collisionCountAfterFix": 0,
+  "duplicateOfficialCodeWarnings": 1,
+  "strategyUsed": "When provider official/source code produced duplicate territory IDs, append a deterministic source-derived disambiguator using source id, raw feature id, parent id, local type, source name, representative point grid, and bbox grid.",
+  "fallbackIdsUsed": [
+    {
+      "territoryId": "ir:adm1:ir-21-17685810b10287014873220-administrative-unit-mazandaran-pt-52-38372-36-37987-bbox-50-35982-35-76136-54-13056-36-96584",
+      "name": "Mazandaran"
+    },
+    {
+      "territoryId": "ir:adm1:ir-21-17685810b76974127550435-administrative-unit-mazandaran-pt-53-96455-36-73090-bbox-53-86055-36-64945-54-06104-36-82148",
+      "name": "Mazandaran"
+    }
+  ],
+  "aliasesGenerated": [],
+  "determinismTest": {
+    "repeatedBuildIdsIdentical": "verified-by-deterministic-input-key; full repeated-build check pending final verification",
+    "featureOrderIndependent": "covered by source-derived key design; fixture test added in code verification phase",
+    "outputDirectoryIndependent": "territory IDs do not include output paths"
+  },
+  "outcomeAfterFix": "built-with-warnings",
+  "loaderStatus": {
+    "ADM1": "passed",
+    "ADM2": "passed"
+  },
+  "remainingErrors": []
+}
