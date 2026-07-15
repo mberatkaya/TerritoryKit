@@ -18,6 +18,14 @@ test("renders TerritoryKit polygons on a MapLibre canvas", async ({ page }) => {
   });
   expect(initialZoneIds).toEqual(["tr:34:fatih", "tr:34:kadikoy"]);
 
+  await page.waitForFunction((expectedZoneIds) => {
+    const renderedZoneIds = new Set(
+      (window as WindowWithTerritoryKitDemo).__territoryKitDemo?.queryRenderedZoneIds() ?? []
+    );
+
+    return expectedZoneIds.every((zoneId) => renderedZoneIds.has(zoneId));
+  }, initialZoneIds);
+
   const renderedZoneIds = await page.evaluate(() => {
     return (window as WindowWithTerritoryKitDemo).__territoryKitDemo?.queryRenderedZoneIds() ?? [];
   });

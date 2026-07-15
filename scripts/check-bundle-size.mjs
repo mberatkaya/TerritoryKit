@@ -16,10 +16,11 @@ const maxBytesByFile = new Map([
   ["packages/data-de/dist/index.mjs", 8_000],
   ["packages/data-jp/dist/index.mjs", 8_000],
   ["packages/data-id/dist/index.mjs", 8_000],
-  // Generators now include adjacency artifact helpers and global ISO fallback configs.
-  ["packages/generators/dist/index.mjs", 200_000],
-  // Sprint 7 adds render commands; Sprint 8 adds benchmark run/compare release smoke commands.
-  ["packages/cli/dist/index.mjs", 82_000]
+  // Global ADM0 completion adds GEOS repair orchestration, phased country builds,
+  // and Natural Earth overview artifact generation.
+  ["packages/generators/dist/index.mjs", 290_000],
+  // Dataset build-all/global-admin CLI commands now expose ADM0 completion controls and reports.
+  ["packages/cli/dist/index.mjs", 92_000]
 ]);
 
 const failures = [];
