@@ -1,4 +1,6 @@
-import type { TerritoryCountryDatasetConfig } from "./types.js";
+import { TERRITORY_ADMIN_LEVELS, getAdminLevelDepth } from "@territory-kit/dataset";
+import type { TerritoryAdminLevel } from "@territory-kit/dataset";
+import type { TerritoryCountryDatasetConfig, TerritoryCountryLevelConfig } from "./types.js";
 import { germanyCountryConfig } from "./configs/de.js";
 import { indonesiaCountryConfig } from "./configs/id.js";
 import { japanCountryConfig } from "./configs/jp.js";
@@ -125,49 +127,9 @@ function createFallbackIsoCountryConfig(
     defaultReleaseType: "gbOpen",
     loaderPackageName: `@territory-kit/data-${country.iso2.toLowerCase()}`,
     requestedLevels: ["ADM0", "ADM1", "ADM2"],
-    levelMappings: {
-      ADM0: {
-        adminLevel: "ADM0",
-        expectedLocalTypes: ["country"],
-        semanticType: "country",
-        label: "Country",
-        sourceNameProperty: "shapeName",
-        sourceIdProperty: "shapeID",
-        sourceCodeProperties: ["officialCode", "shapeISO", "shapeID"],
-        sourceParentProperties: [],
-        required: true,
-        reviewRequired: false,
-        reviewStatus: "reviewed"
-      },
-      ADM1: {
-        adminLevel: "ADM1",
-        expectedLocalTypes: ["administrative-unit"],
-        semanticType: "unknown",
-        label: "First-level administrative unit",
-        sourceNameProperty: "shapeName",
-        sourceIdProperty: "shapeID",
-        sourceCodeProperties: ["officialCode", "shapeISO", "shapeID"],
-        sourceParentProperties: ["parentShapeID", "shapeParentID", "parentSourceId"],
-        required: false,
-        reviewRequired: true,
-        reviewStatus: "mapping-review-required"
-      },
-      ADM2: {
-        adminLevel: "ADM2",
-        expectedLocalTypes: ["administrative-unit"],
-        semanticType: "unknown",
-        label: "Second-level administrative unit",
-        sourceNameProperty: "shapeName",
-        sourceIdProperty: "shapeID",
-        sourceCodeProperties: ["officialCode", "shapeISO", "shapeID"],
-        sourceParentProperties: ["parentShapeID", "shapeParentID", "parentSourceId"],
-        required: false,
-        reviewRequired: true,
-        reviewStatus: "mapping-review-required"
-      }
-    },
+    levelMappings: createFallbackLevelMappings(),
     notes: [
-      "Fallback ISO country config. ADM1/ADM2 semantic mappings are not reviewed for this country.",
+      "Fallback ISO country config. ADM1-ADM5 semantic mappings are not reviewed for this country.",
       `UN M49 numeric code: ${country.numeric}.`
     ],
     reviewRequired: true,
@@ -188,7 +150,7 @@ function createFallbackIsoCountryConfig(
       maximumFallbackIdentityRatio: 0.5
     },
     adjacencyPolicy: {
-      levels: ["ADM1", "ADM2"],
+      levels: ["ADM1", "ADM2", "ADM3", "ADM4", "ADM5"],
       includePointTouches: false,
       minimumSharedBoundaryMeters: 0
     },
@@ -199,4 +161,42 @@ function createFallbackIsoCountryConfig(
       allowNonRedistributableSource: false
     }
   };
+}
+
+function createFallbackLevelMappings(): Record<TerritoryAdminLevel, TerritoryCountryLevelConfig> {
+  return TERRITORY_ADMIN_LEVELS.reduce<Record<TerritoryAdminLevel, TerritoryCountryLevelConfig>>(
+    (mappings, adminLevel) => {
+      mappings[adminLevel] = {
+        adminLevel,
+        expectedLocalTypes: adminLevel === "ADM0" ? ["country"] : ["administrative-unit"],
+        semanticType: adminLevel === "ADM0" ? "country" : "unknown",
+        label: fallbackAdminLevelLabel(adminLevel),
+        sourceNameProperty: "shapeName",
+        sourceIdProperty: "shapeID",
+        sourceCodeProperties: ["officialCode", "shapeISO", "shapeID"],
+        sourceParentProperties:
+          getAdminLevelDepth(adminLevel) === 0
+            ? []
+            : ["parentShapeID", "shapeParentID", "parentSourceId", "parentCode", "shapeParent"],
+        required: adminLevel === "ADM0",
+        reviewRequired: adminLevel !== "ADM0",
+        reviewStatus: adminLevel === "ADM0" ? "reviewed" : "mapping-review-required"
+      };
+      return mappings;
+    },
+    {} as Record<TerritoryAdminLevel, TerritoryCountryLevelConfig>
+  );
+}
+
+function fallbackAdminLevelLabel(adminLevel: TerritoryAdminLevel): string {
+  switch (adminLevel) {
+    case "ADM0":
+      return "Country";
+    case "ADM1":
+      return "First-level administrative unit";
+    case "ADM2":
+      return "Second-level administrative unit";
+    default:
+      return `${adminLevel} administrative unit`;
+  }
 }

@@ -65,17 +65,35 @@ describe("validateTerritoryDataset", () => {
 
   it("preserves additive semantic zone metadata", () => {
     const dataset = validDataset();
+    dataset.manifest = {
+      ...dataset.manifest,
+      adminLevels: ["ADM0", "ADM3", "ADM5"]
+    };
     dataset.zones[1] = {
       ...dataset.zones[1]!,
       countryCode: "TR",
       sourceAdminLevel: "ADM1",
       semanticType: "province",
       name: "Istanbul",
-      localName: "Istanbul"
+      localName: "Istanbul",
+      properties: {
+        territory: {
+          adminLevel: "ADM3",
+          sourceAdminLevel: "ADM3",
+          semanticType: "neighbourhood",
+          localTypeName: "Mahalle",
+          hierarchyDepth: 3,
+          parentId: "root",
+          sourceParentId: "TR-34-FATIH",
+          semanticReviewStatus: "reviewed",
+          coverageStatus: "partial"
+        }
+      }
     };
 
     const loadedDataset = loadTerritoryDataset(dataset);
 
+    expect(loadedDataset.manifest.adminLevels).toEqual(["ADM0", "ADM3", "ADM5"]);
     expect(loadedDataset.zones[1]).toEqual(
       expect.objectContaining({
         countryCode: "TR",
@@ -84,6 +102,37 @@ describe("validateTerritoryDataset", () => {
         name: "Istanbul",
         localName: "Istanbul"
       })
+    );
+  });
+
+  it("rejects invalid lower-admin territory metadata", () => {
+    const dataset = validDataset();
+    dataset.zones[1] = {
+      ...dataset.zones[1]!,
+      properties: {
+        territory: {
+          adminLevel: "ADM6",
+          semanticType: "neighborhood",
+          hierarchyDepth: 9,
+          semanticReviewStatus: "done",
+          coverageStatus: "complete"
+        }
+      }
+    };
+
+    const result = validateTerritoryDataset(dataset);
+
+    expect(result.ok).toBe(false);
+    expect(result.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ path: "$.zones[1].properties.territory.adminLevel" }),
+        expect.objectContaining({ path: "$.zones[1].properties.territory.semanticType" }),
+        expect.objectContaining({ path: "$.zones[1].properties.territory.hierarchyDepth" }),
+        expect.objectContaining({
+          path: "$.zones[1].properties.territory.semanticReviewStatus"
+        }),
+        expect.objectContaining({ path: "$.zones[1].properties.territory.coverageStatus" })
+      ])
     );
   });
 

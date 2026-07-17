@@ -1,5 +1,6 @@
 import { mkdir, mkdtemp, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { basename, dirname, join, resolve } from "node:path";
+import { compareAdminLevels } from "@territory-kit/dataset";
 import type { TerritoryAdminLevel } from "@territory-kit/dataset";
 import {
   createSourceCacheKey,
@@ -486,10 +487,6 @@ function resolveBuildTimestamp(buildDate: string | undefined): string {
   }
 
   return new Date().toISOString();
-}
-
-function compareAdminLevels(left: TerritoryAdminLevel, right: TerritoryAdminLevel): number {
-  return Number(left.slice(3)) - Number(right.slice(3));
 }
 
 async function writeJsonFileAtomically(

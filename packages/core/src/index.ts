@@ -19,8 +19,12 @@ export type {
   TerritoryRegistryClientOptions,
   TerritoryRegistryDataset,
   TerritoryRegistryInstallOptions,
+  TerritoryRegistryResolveDeepestAvailableTerritoryArtifactOptions,
   TerritoryRegistryResolveArtifactOptions,
+  TerritoryRegistryResolvedTerritoryArtifact,
+  TerritoryRegistryResolveTerritoryArtifactOptions,
   TerritoryRegistryResolvedArtifact,
+  TerritoryRegistryTerritoryArtifactFallback,
   TerritoryRegistryTransport
 } from "@territory-kit/registry";
 export type {

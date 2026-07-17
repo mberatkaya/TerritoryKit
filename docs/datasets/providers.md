@@ -9,8 +9,8 @@ Implemented provider adapters:
 | Provider        | Levels    | License Metadata           | Notes                                          |
 | --------------- | --------- | -------------------------- | ---------------------------------------------- |
 | `natural-earth` | ADM0      | Public Domain              | Used for the world-countries ADM0 pipeline.    |
-| `geoboundaries` | ADM0-ADM4 | CC BY 4.0 release metadata | Used by pilot country source locks and builds. |
-| `geojson`       | ADM0-ADM4 | User supplied              | Generic local/manual import path.              |
+| `geoboundaries` | ADM0-ADM5 | CC BY 4.0 release metadata | Used by pilot country source locks and builds. |
+| `geojson`       | ADM0-ADM5 | User supplied              | Generic local/manual import path.              |
 
 Provider registry metadata is generated into `datasets/registry/providers.json`.
 
@@ -22,3 +22,5 @@ Provider registry metadata is generated into `datasets/registry/providers.json`.
   artifacts.
 - Official government sources must record source URL, source date, license, attribution, checksum,
   and any commercial or redistribution restrictions.
+- Adapter ADM support is not a coverage guarantee; country/level source availability is reported in
+  `datasets/registry/coverage.json`.

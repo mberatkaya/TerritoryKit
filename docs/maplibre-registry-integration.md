@@ -25,3 +25,23 @@ const controller = createTerritoryMapLibreController({ registry, datasetId: "ter
 ```
 
 The controller lazy-loads query artifacts only when `resolveTerritory(territoryId)` is called.
+
+Lower administrative render artifacts can be resolved by country and level:
+
+```ts
+const adm3 = await createTerritoryMapLibreSource({
+  registry,
+  country: "TR",
+  level: "ADM3",
+  fallback: "deepest-available"
+});
+
+console.log(adm3.requestedLevel, adm3.renderedLevel, adm3.fallbackReason);
+```
+
+`requestedLevel` and `renderedLevel` are intentionally separate. If ADM3 is missing and fallback
+selects ADM2, the source reports `renderedLevel: "ADM2"` with reason
+`requested-level-unavailable`.
+
+Use `createTerritoryMapLibreLevelLayers()` for ADM0-ADM5 zoom policy defaults. ADM3 and deeper
+sources prefer MVT when available; use GeoJSON fallback for small fixtures only.

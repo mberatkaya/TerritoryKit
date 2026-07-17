@@ -17,6 +17,7 @@ Generated registry files:
   mappings.
 - `datasets/registry/coverage.json`: country/level coverage status.
 - `datasets/registry/providers.json`: implemented provider metadata and redistribution flags.
+- `datasets/registry/admin-semantics.json`: ADM0-ADM5 semantic mapping and review status.
 - `docs/datasets/coverage.md`: human-readable coverage summary.
 
 ## Coverage Rules
@@ -25,8 +26,9 @@ Coverage is intentionally conservative:
 
 - ADM0 is source-available for 249 ISO countries/areas through the Natural Earth ADM0 pipeline.
 - ADM1 and ADM2 are reviewed only for DE, ID, JP, TR, and US in this repository state.
-- Non-pilot ADM1/ADM2 entries are `not-reviewed` and use `semanticType: "unknown"`.
-- Municipality and neighbourhood levels are `unavailable` until a real, licensed source is wired.
+- Turkey also has reviewed ADM3 semantics for `neighbourhood / Mahalle`.
+- Non-pilot ADM1-ADM5 entries are `not-reviewed` and use `semanticType: "unknown"`.
+- Municipality and neighbourhood meanings are stored as semantic types on ADM records.
 - Missing local data must not be silently replaced with broader ADM2 geometry.
 
 Large generated geometry artifacts stay out of Git and npm packages. Commit source definitions,

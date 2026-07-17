@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import {
+  TERRITORY_ADMIN_LEVELS,
   TERRITORY_SCHEMA_VERSION,
   TERRITORY_SEMANTIC_ADMIN_TYPES,
   computeGeometryBBox,
@@ -73,7 +74,7 @@ export const genericGeoJsonSourceAdapter: TerritorySourceAdapter<
 > = {
   id: GEOJSON_SOURCE_ADAPTER_ID,
   displayName: "Generic GeoJSON",
-  supportedAdminLevels: ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"],
+  supportedAdminLevels: TERRITORY_ADMIN_LEVELS,
   capabilities: {
     localFile: true,
     remoteFetch: true,
@@ -84,13 +85,13 @@ export const genericGeoJsonSourceAdapter: TerritorySourceAdapter<
     return {
       id: GEOJSON_SOURCE_ADAPTER_ID,
       displayName: "Generic GeoJSON",
-      supportedAdminLevels: ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"],
+      supportedAdminLevels: TERRITORY_ADMIN_LEVELS,
       supportedTransports: ["local", "remote"],
       inputFormats: ["GeoJSON FeatureCollection"],
       attributionRequired: true,
       options: [
         { name: "countryCode", required: true, description: "ISO 3166-1 alpha-2 country code." },
-        { name: "adminLevel", required: true, description: "ADM0 through ADM4." },
+        { name: "adminLevel", required: true, description: "ADM0 through ADM5." },
         { name: "idProperty", required: false, description: "Stable source id property path." },
         { name: "nameProperty", required: true, description: "Display name property path." },
         {

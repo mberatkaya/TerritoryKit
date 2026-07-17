@@ -1,13 +1,22 @@
 import { describe, expect, it } from "vitest";
 import {
+  TERRITORY_ADMIN_LEVELS,
+  compareAdminLevels,
   createTerritoryGlobalId,
+  getAdminLevelDepth,
+  getChildAdminLevel,
+  getParentAdminLevel,
   normalizeTerritoryCountryCode,
   slugifyTerritoryIdPart,
   validateGlobalDatasetManifest,
   validateTerritoryGlobalId,
   validateTerritoryGlobalMetadata
 } from "../src/index.js";
-import type { TerritoryGlobalDatasetManifest, TerritoryGlobalMetadata } from "../src/index.js";
+import type {
+  TerritoryAdminLevel,
+  TerritoryGlobalDatasetManifest,
+  TerritoryGlobalMetadata
+} from "../src/index.js";
 
 describe("global territory ids", () => {
   it("accepts valid global territory ids", () => {
@@ -21,15 +30,28 @@ describe("global territory ids", () => {
       }
     });
     expect(validateTerritoryGlobalId("us:adm2:los-angeles-county").ok).toBe(true);
+    expect(validateTerritoryGlobalId("tr:adm5:doorway").ok).toBe(true);
   });
 
   it("rejects invalid global territory ids", () => {
     expect(validateTerritoryGlobalId("turkey").ok).toBe(false);
     expect(validateTerritoryGlobalId("TR").ok).toBe(false);
-    expect(validateTerritoryGlobalId("tr:adm5:fatih").ok).toBe(false);
+    expect(validateTerritoryGlobalId("tr:adm6:fatih").ok).toBe(false);
     expect(validateTerritoryGlobalId("tr:adm0:turkey").ok).toBe(false);
     expect(validateTerritoryGlobalId("tr:ADM2:fatih").ok).toBe(false);
     expect(validateTerritoryGlobalId("TR:ADM2:Fatih").ok).toBe(false);
+  });
+
+  it("orders ADM0 through ADM5 with parent and child helpers", () => {
+    expect(TERRITORY_ADMIN_LEVELS).toEqual(["ADM0", "ADM1", "ADM2", "ADM3", "ADM4", "ADM5"]);
+    expect(getAdminLevelDepth("ADM3")).toBe(3);
+    expect(getParentAdminLevel("ADM3")).toBe("ADM2");
+    expect(getChildAdminLevel("ADM4")).toBe("ADM5");
+    expect(getParentAdminLevel("ADM0")).toBeUndefined();
+    expect(getChildAdminLevel("ADM5")).toBeUndefined();
+    const levels: TerritoryAdminLevel[] = ["ADM3", "ADM0", "ADM5", "ADM1"];
+
+    expect(levels.sort(compareAdminLevels)).toEqual(["ADM0", "ADM1", "ADM3", "ADM5"]);
   });
 
   it("normalizes ISO country codes for ids", () => {
@@ -71,7 +93,15 @@ describe("global territory metadata", () => {
   it("validates global metadata stored in zone properties", () => {
     const metadata: TerritoryGlobalMetadata = {
       adminLevel: "ADM2",
+      sourceAdminLevel: "ADM2",
+      semanticType: "district",
       localType: "district",
+      localTypeName: "Ilce",
+      hierarchyDepth: 2,
+      parentId: "tr:adm1:34",
+      sourceParentId: "TR-34",
+      semanticReviewStatus: "reviewed",
+      coverageStatus: "verified",
       codes: {
         iso3166_1: "TR",
         official: "3410",
@@ -93,9 +123,38 @@ describe("global territory metadata", () => {
       ok: true,
       value: {
         adminLevel: "ADM2",
-        localType: "district"
+        localType: "district",
+        semanticType: "district",
+        semanticReviewStatus: "reviewed",
+        coverageStatus: "verified"
       }
     });
+  });
+
+  it("rejects inconsistent lower-admin metadata", () => {
+    const result = validateTerritoryGlobalMetadata({
+      adminLevel: "ADM3",
+      hierarchyDepth: 2,
+      semanticType: "neighborhood",
+      semanticReviewStatus: "auto-reviewed",
+      coverageStatus: "complete",
+      source: {
+        provider: "source",
+        sourceDate: "2026-01-01",
+        license: "license",
+        attribution: "attribution"
+      }
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ path: "$.semanticType" }),
+        expect.objectContaining({ path: "$.semanticReviewStatus" }),
+        expect.objectContaining({ path: "$.coverageStatus" }),
+        expect.objectContaining({ path: "$.hierarchyDepth" })
+      ])
+    );
   });
 
   it("rejects missing attribution", () => {

@@ -6,6 +6,7 @@ import type {
   TerritoryGeometry,
   TerritoryZone
 } from "./types.js";
+import { compareAdminLevels } from "./global.js";
 
 export interface TerritoryQueryArtifact {
   queryArtifactVersion: "1";
@@ -75,7 +76,8 @@ export const DEFAULT_TERRITORY_RENDER_LEVEL_POLICY: readonly TerritoryRenderLeve
   { adminLevel: "ADM1", minZoom: 5, maxZoom: 7, simplificationTolerance: 0.01 },
   { adminLevel: "ADM2", minZoom: 8, maxZoom: 11, simplificationTolerance: 0.005 },
   { adminLevel: "ADM3", minZoom: 12, maxZoom: 14, simplificationTolerance: 0.0025 },
-  { adminLevel: "ADM4", minZoom: 15, maxZoom: 16, simplificationTolerance: 0.001 }
+  { adminLevel: "ADM4", minZoom: 15, maxZoom: 17, simplificationTolerance: 0.001 },
+  { adminLevel: "ADM5", minZoom: 18, maxZoom: 24, simplificationTolerance: 0.0005 }
 ];
 
 export function createTerritoryQueryArtifact(
@@ -258,7 +260,7 @@ export function zoneToAdminLevel(
 function normalizeDatasetLevels(dataset: TerritoryDataset): TerritoryAdminLevel[] {
   const levels =
     dataset.manifest.adminLevels ?? dataset.zones.map((zone) => zoneToAdminLevel(zone));
-  return [...new Set(levels)].sort((left, right) => Number(left.slice(3)) - Number(right.slice(3)));
+  return [...new Set(levels)].sort(compareAdminLevels);
 }
 
 function readAdminLevel(properties: Record<string, unknown>): TerritoryAdminLevel | undefined {

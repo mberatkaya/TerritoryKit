@@ -11,6 +11,7 @@ territory adjacency inspect ./dist/regions-adjacency tr:adm2:fatih --type shared
 territory import source.geojson --dataset-id demo --source-date 2026-07
 territory source list
 territory source info natural-earth
+territory sources inspect --provider geoboundaries --country TR --level ADM3 --json
 territory import natural-earth --input ./natural-earth.geojson --output ./dist/world-countries
 territory import geoboundaries --input ./geoBoundaries-TUR-ADM1.geojson --country TR --admin-level ADM1 --output ./dist/tr-adm1
 territory import geojson --input ./regions.geojson --country TR --admin-level ADM2 --name-property region.name --output ./dist/regions
@@ -26,6 +27,7 @@ territory simplify dataset.json
 territory generate --kind grid --dataset-id demo --rows 10 --columns 10
 territory generate --kind weighted-voronoi --dataset-id demo
 territory dataset build world-countries --source ./sources/ne-admin0.geojson --output ./dist/world-countries
+territory dataset resolve --country TR --level ADM3 --deepest-available --json
 ```
 
 Every command returns:
@@ -72,8 +74,13 @@ detail-specific `dataset.json` files. Use `--source-sha256` to verify the source
 `--build-date` or `SOURCE_DATE_EPOCH` for reproducible output, `--strict` to fail on warnings, and
 `--force` to replace an existing output directory.
 
-`territory country` builds pilot ADM0/ADM1/ADM2 country artifacts. `source lock` resolves and
+`territory country` builds pilot ADM0/ADM1/ADM2 country artifacts by default and accepts ADM0-ADM5
+when a suitable source lock exists. `source lock` resolves and
 checksums source artifacts, `source verify` re-validates a lock, `build` writes country manifests,
 quality reports, hierarchy reports, identity maps, level datasets, and optional ADM1/ADM2 adjacency
-artifacts, `validate` checks artifact checksums and dataset validity, and `inspect` prints a compact
-summary.
+artifacts, `validate` checks artifact checksums and dataset validity, and `inspect` prints a
+compact summary. Use `--allow-partial` when intentionally building partial lower-admin fixtures.
+
+`territory dataset resolve --country <ISO2> --level <ADM*> --deepest-available` exposes registry
+fallback metadata. The output includes `requestedLevel`, `resolvedLevel`, `exactMatch`, `reason`,
+and `coverageStatus`.

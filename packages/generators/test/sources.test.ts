@@ -9,10 +9,12 @@ import {
   createSourceCacheKey,
   createTerritorySourceRegistry,
   fetchHttpSourceArtifact,
+  inspectTerritorySourceCapabilities,
   listTerritorySourceAdapters,
   resolveFileSourceArtifact,
   runTerritorySourcePipeline,
-  sha256Hex
+  sha256Hex,
+  validateOfficialOpenDataSourceManifest
 } from "../src/index.js";
 import { readCachedSourceArtifact, writeSourceCacheEntry } from "../src/sources/cache.js";
 import type {
@@ -39,11 +41,84 @@ describe("source adapter registry", () => {
     const registry = createDefaultTerritorySourceRegistry();
     expect(registry.has("natural-earth")).toBe(true);
     expect(registry.get("geojson").describe().displayName).toBe("Generic GeoJSON");
+    expect(registry.get("geoboundaries").describe().supportedAdminLevels).toContain("ADM5");
     expect(() => registry.get("unknown")).toThrow("not registered");
 
     const isolated = createTerritorySourceRegistry([registry.get("geojson")]);
     expect(isolated.list().map((adapter) => adapter.id)).toEqual(["geojson"]);
     expect(() => isolated.register(registry.get("geojson"))).toThrow("already registered");
+  });
+
+  it("inspects provider level capabilities and validates strict open-data manifests", () => {
+    const registry = createDefaultTerritorySourceRegistry();
+    const unavailable = inspectTerritorySourceCapabilities({
+      registry,
+      provider: "geoboundaries",
+      country: "TR",
+      level: "ADM3"
+    });
+
+    expect(unavailable.levels.ADM3).toMatchObject({
+      supported: true,
+      available: false,
+      status: "source-unavailable"
+    });
+
+    const validManifest = validateOfficialOpenDataSourceManifest(
+      {
+        manifestVersion: "territory-source-manifest@1",
+        provider: "official-open-data",
+        countryCode: "TR",
+        adminLevel: "ADM3",
+        sourceUrl: "https://data.example.test/tr-adm3.geojson",
+        sourceDate: "2026-01-01",
+        license: "CC BY 4.0",
+        attribution: "Synthetic official-open-data fixture",
+        redistributionStatus: "allowed",
+        commercialUseStatus: "allowed",
+        sourceVersion: "fixture-1"
+      },
+      { strict: true }
+    );
+
+    expect(validManifest.ok).toBe(true);
+    expect(
+      inspectTerritorySourceCapabilities({
+        registry,
+        provider: "geojson",
+        country: "TR",
+        level: "ADM3",
+        manifest: validManifest.manifest,
+        strictManifest: true
+      }).levels.ADM3
+    ).toMatchObject({
+      available: true,
+      status: "available",
+      provider: "official-open-data",
+      license: "CC BY 4.0"
+    });
+
+    expect(
+      validateOfficialOpenDataSourceManifest(
+        {
+          provider: "official-open-data",
+          countryCode: "TR",
+          adminLevel: "ADM3",
+          sourceUrl: "https://data.example.test/tr-adm3.geojson",
+          sourceDate: "2026-01-01",
+          license: "unknown",
+          attribution: "Fixture",
+          redistributionStatus: "unknown"
+        },
+        { strict: true }
+      )
+    ).toMatchObject({
+      ok: false,
+      issues: expect.arrayContaining([
+        expect.objectContaining({ code: "SOURCE_MANIFEST_LICENSE_RESTRICTED" }),
+        expect.objectContaining({ code: "SOURCE_MANIFEST_REDISTRIBUTION_RESTRICTED" })
+      ])
+    });
   });
 });
 

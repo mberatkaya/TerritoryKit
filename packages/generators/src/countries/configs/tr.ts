@@ -11,11 +11,19 @@ export const turkeyCountryConfig: TerritoryCountryDatasetConfig = createPilotCou
   localTypes: {
     ADM0: ["country"],
     ADM1: ["province", "administrative-unit"],
-    ADM2: ["district", "administrative-unit"]
+    ADM2: ["district", "administrative-unit"],
+    ADM3: ["neighbourhood", "Mahalle", "administrative-unit"]
   },
   semanticTypes: {
     ADM0: "country",
     ADM1: "province",
-    ADM2: "district"
+    ADM2: "district",
+    ADM3: "neighbourhood"
+  },
+  localTypeNames: {
+    ADM0: "Ulke",
+    ADM1: "Il",
+    ADM2: "Ilce",
+    ADM3: "Mahalle"
   }
 });

@@ -20,7 +20,7 @@ export const territoryDatasetJsonSchema = {
         geometryHash: { type: "string", minLength: 1 },
         adminLevels: {
           type: "array",
-          items: { enum: ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"] },
+          items: { enum: ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4", "ADM5"] },
           minItems: 1
         },
         artifactChecksum: { type: "string", minLength: 1 },
@@ -72,13 +72,18 @@ export const territoryDatasetJsonSchema = {
               "prefecture",
               "county",
               "district",
+              "subdistrict",
               "city",
               "municipality",
               "borough",
+              "commune",
               "ward",
               "neighbourhood",
               "village",
+              "locality",
               "local",
+              "special-administrative-area",
+              "administrative-unit",
               "game-region",
               "unknown"
             ]

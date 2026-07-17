@@ -7,6 +7,19 @@ The `1.0.0` release freezes the current public APIs for `@territory-kit/dataset`
 `@territory-kit/generators`, and `@territory-kit/cli`. No dataset migration is required for
 this release because `territory-schema@1` remains unchanged.
 
+### Lower Administrative Levels
+
+`TerritoryAdminLevel` now includes `ADM5`. Existing ADM0-ADM2 ids and manifests remain valid.
+Optional metadata fields such as `sourceAdminLevel`, `semanticType`, `localTypeName`,
+`hierarchyDepth`, `semanticReviewStatus`, and `coverageStatus` are additive.
+
+Coverage registries no longer use `municipality` or `neighbourhood` as pseudo-level keys. Consumers
+should read ADM keys (`ADM0` through `ADM5`) and inspect `semanticType` for local meaning.
+
+Registry fallback is opt-in. Code that wants broader fallback should call
+`resolveDeepestAvailableTerritoryArtifact` or pass `fallback: "deepest-available"` through the
+MapLibre helper, then display `renderedLevel` separately from `requestedLevel`.
+
 ## Before `1.0.0`
 
 Public APIs may still change during prerelease sprint work. Breaking changes must be recorded

@@ -1,14 +1,16 @@
 import { TERRITORY_SCHEMA_VERSION } from "./schema.js";
 import type {
   TerritoryAdminLevel,
+  TerritoryCoverageStatus,
   TerritoryGeometryDetailLevel,
   TerritoryGlobalDatasetManifest,
   TerritoryGlobalMetadata,
+  TerritorySemanticReviewStatus,
   TerritorySemanticAdminType,
   TerritorySourceMetadata
 } from "./types.js";
 
-export const TERRITORY_ADMIN_LEVELS = ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"] as const;
+export const TERRITORY_ADMIN_LEVELS = ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4", "ADM5"] as const;
 export const TERRITORY_GEOMETRY_DETAIL_LEVELS = ["low", "medium", "high", "source"] as const;
 export const TERRITORY_SEMANTIC_ADMIN_TYPES = [
   "world",
@@ -20,16 +22,37 @@ export const TERRITORY_SEMANTIC_ADMIN_TYPES = [
   "prefecture",
   "county",
   "district",
+  "subdistrict",
   "city",
   "municipality",
   "borough",
+  "commune",
   "ward",
   "neighbourhood",
   "village",
+  "locality",
   "local",
+  "special-administrative-area",
+  "administrative-unit",
   "game-region",
   "unknown"
 ] as const satisfies readonly TerritorySemanticAdminType[];
+export const TERRITORY_SEMANTIC_REVIEW_STATUSES = [
+  "reviewed",
+  "review-required",
+  "mapping-review-required",
+  "not-applicable"
+] as const satisfies readonly TerritorySemanticReviewStatus[];
+export const TERRITORY_COVERAGE_STATUSES = [
+  "verified",
+  "generated",
+  "generated-with-warnings",
+  "partial",
+  "source-unavailable",
+  "licence-restricted",
+  "semantic-review-required",
+  "deprecated"
+] as const satisfies readonly TerritoryCoverageStatus[];
 
 export interface TerritoryGlobalIdParts {
   countryCode: string;
@@ -66,7 +89,29 @@ export function normalizeTerritoryAdminLevel(input: string): TerritoryAdminLevel
     return adminLevel;
   }
 
-  throw new Error("Administrative level must be ADM0, ADM1, ADM2, ADM3, or ADM4.");
+  throw new Error("Administrative level must be ADM0, ADM1, ADM2, ADM3, ADM4, or ADM5.");
+}
+
+export function isTerritoryAdminLevel(input: string): input is TerritoryAdminLevel {
+  return TERRITORY_ADMIN_LEVELS.includes(input as TerritoryAdminLevel);
+}
+
+export function getAdminLevelDepth(level: TerritoryAdminLevel): number {
+  return Number(level.slice(3));
+}
+
+export function compareAdminLevels(left: TerritoryAdminLevel, right: TerritoryAdminLevel): number {
+  return getAdminLevelDepth(left) - getAdminLevelDepth(right);
+}
+
+export function getParentAdminLevel(level: TerritoryAdminLevel): TerritoryAdminLevel | undefined {
+  const index = TERRITORY_ADMIN_LEVELS.indexOf(level);
+  return index > 0 ? TERRITORY_ADMIN_LEVELS[index - 1] : undefined;
+}
+
+export function getChildAdminLevel(level: TerritoryAdminLevel): TerritoryAdminLevel | undefined {
+  const index = TERRITORY_ADMIN_LEVELS.indexOf(level);
+  return index >= 0 ? TERRITORY_ADMIN_LEVELS[index + 1] : undefined;
 }
 
 export function slugifyTerritoryIdPart(input: string): string {
@@ -202,10 +247,41 @@ export function validateTerritoryGlobalMetadata(
     input.adminLevel === undefined
       ? undefined
       : readAdminLevel(input.adminLevel, "$.adminLevel", issues);
+  const sourceAdminLevel =
+    input.sourceAdminLevel === undefined
+      ? undefined
+      : readAdminLevel(input.sourceAdminLevel, "$.sourceAdminLevel", issues);
+  const semanticType = readSemanticAdminType(input.semanticType, "$.semanticType", issues);
   const localType = readOptionalString(input.localType, "$.localType", issues);
+  const localTypeName = readOptionalString(input.localTypeName, "$.localTypeName", issues);
+  const hierarchyDepth = readOptionalHierarchyDepth(
+    input.hierarchyDepth,
+    "$.hierarchyDepth",
+    issues
+  );
+  const parentId = readOptionalString(input.parentId, "$.parentId", issues);
+  const sourceParentId = readOptionalString(input.sourceParentId, "$.sourceParentId", issues);
+  const semanticReviewStatus = readSemanticReviewStatus(
+    input.semanticReviewStatus,
+    "$.semanticReviewStatus",
+    issues
+  );
+  const coverageStatus = readCoverageStatus(input.coverageStatus, "$.coverageStatus", issues);
   const codes = readCodes(input.codes, "$.codes", issues);
   const names = readNames(input.names, "$.names", issues);
   const source = readRequiredSourceMetadata(input.source, "$.source", issues);
+
+  if (
+    adminLevel &&
+    hierarchyDepth !== undefined &&
+    hierarchyDepth !== getAdminLevelDepth(adminLevel)
+  ) {
+    issues.push({
+      code: "GLOBAL_METADATA",
+      message: `hierarchyDepth ${hierarchyDepth} does not match ${adminLevel}.`,
+      path: "$.hierarchyDepth"
+    });
+  }
 
   if (issues.length > 0 || !source) {
     return { ok: false, issues };
@@ -216,7 +292,15 @@ export function validateTerritoryGlobalMetadata(
     issues,
     value: {
       ...(adminLevel ? { adminLevel } : {}),
+      ...(sourceAdminLevel ? { sourceAdminLevel } : {}),
+      ...(semanticType ? { semanticType } : {}),
       ...(localType ? { localType } : {}),
+      ...(localTypeName ? { localTypeName } : {}),
+      ...(hierarchyDepth !== undefined ? { hierarchyDepth } : {}),
+      ...(parentId ? { parentId } : {}),
+      ...(sourceParentId ? { sourceParentId } : {}),
+      ...(semanticReviewStatus ? { semanticReviewStatus } : {}),
+      ...(coverageStatus ? { coverageStatus } : {}),
       ...(codes ? { codes } : {}),
       ...(names ? { names } : {}),
       source
@@ -499,7 +583,7 @@ function readAdminLevels(
   if (!Array.isArray(input) || input.length === 0) {
     issues.push({
       code: "GLOBAL_MANIFEST",
-      message: "adminLevels must be a non-empty array of ADM0 through ADM4 values.",
+      message: "adminLevels must be a non-empty array of ADM0 through ADM5 values.",
       path
     });
     return undefined;
@@ -528,6 +612,100 @@ function readGeometryDetail(
   issues.push({
     code: "GLOBAL_MANIFEST",
     message: "geometryDetail must be low, medium, high, or source.",
+    path
+  });
+  return undefined;
+}
+
+function readSemanticAdminType(
+  input: unknown,
+  path: string,
+  issues: TerritoryGlobalValidationIssue[]
+): TerritorySemanticAdminType | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (
+    typeof input === "string" &&
+    TERRITORY_SEMANTIC_ADMIN_TYPES.includes(input as TerritorySemanticAdminType)
+  ) {
+    return input as TerritorySemanticAdminType;
+  }
+
+  issues.push({
+    code: "GLOBAL_METADATA",
+    message: "semanticType must be a known administrative semantic type.",
+    path
+  });
+  return undefined;
+}
+
+function readSemanticReviewStatus(
+  input: unknown,
+  path: string,
+  issues: TerritoryGlobalValidationIssue[]
+): TerritorySemanticReviewStatus | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (
+    typeof input === "string" &&
+    TERRITORY_SEMANTIC_REVIEW_STATUSES.includes(input as TerritorySemanticReviewStatus)
+  ) {
+    return input as TerritorySemanticReviewStatus;
+  }
+
+  issues.push({
+    code: "GLOBAL_METADATA",
+    message:
+      "semanticReviewStatus must be reviewed, review-required, mapping-review-required, or not-applicable.",
+    path
+  });
+  return undefined;
+}
+
+function readCoverageStatus(
+  input: unknown,
+  path: string,
+  issues: TerritoryGlobalValidationIssue[]
+): TerritoryCoverageStatus | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (
+    typeof input === "string" &&
+    TERRITORY_COVERAGE_STATUSES.includes(input as TerritoryCoverageStatus)
+  ) {
+    return input as TerritoryCoverageStatus;
+  }
+
+  issues.push({
+    code: "GLOBAL_METADATA",
+    message: "coverageStatus must be a known lower-administrative coverage status.",
+    path
+  });
+  return undefined;
+}
+
+function readOptionalHierarchyDepth(
+  input: unknown,
+  path: string,
+  issues: TerritoryGlobalValidationIssue[]
+): number | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (typeof input === "number" && Number.isInteger(input) && input >= 0 && input <= 5) {
+    return input;
+  }
+
+  issues.push({
+    code: "GLOBAL_METADATA",
+    message: "hierarchyDepth must be an integer from 0 through 5.",
     path
   });
   return undefined;
@@ -694,10 +872,6 @@ function readOptionalString(
     path
   });
   return undefined;
-}
-
-function isTerritoryAdminLevel(input: string): input is TerritoryAdminLevel {
-  return TERRITORY_ADMIN_LEVELS.includes(input as TerritoryAdminLevel);
 }
 
 function isTerritoryGeometryDetailLevel(input: string): input is TerritoryGeometryDetailLevel {

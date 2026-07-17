@@ -20,6 +20,7 @@ territory import geojson \
 ## Mapping
 
 Supported geometry types are `Polygon` and `MultiPolygon`.
+Supported administrative levels are `ADM0` through `ADM5`.
 
 Property paths support simple dot notation against feature properties. Unknown source properties are
 not copied by default; only explicitly mapped values enter the artifact.

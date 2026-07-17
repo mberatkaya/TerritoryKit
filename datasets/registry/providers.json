@@ -25,7 +25,7 @@
       "redistributionAllowed": true,
       "commercialUseAllowed": true,
       "modificationAllowed": true,
-      "supportedLevels": ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"],
+      "supportedLevels": ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4", "ADM5"],
       "notes": ["Used by pilot country source locks and country build pipeline."]
     },
     {
@@ -38,7 +38,7 @@
       "redistributionAllowed": false,
       "commercialUseAllowed": false,
       "modificationAllowed": false,
-      "supportedLevels": ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"],
+      "supportedLevels": ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4", "ADM5"],
       "notes": [
         "Redistribution and commercial-use flags must be supplied by the imported source metadata."
       ]

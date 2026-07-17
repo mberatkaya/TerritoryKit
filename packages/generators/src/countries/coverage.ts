@@ -1,11 +1,13 @@
 import { readFile, stat } from "node:fs/promises";
 import { join, relative, resolve } from "node:path";
-import type { TerritoryAdminLevel } from "@territory-kit/dataset";
+import { TERRITORY_ADMIN_LEVELS } from "@territory-kit/dataset";
+import type { TerritoryAdminLevel, TerritorySemanticAdminType } from "@territory-kit/dataset";
 import { ISO_3166_COUNTRIES } from "./iso3166.js";
 import { getTerritoryCountryConfig } from "./registry.js";
 import type {
   TerritoryArtifactStatus,
   TerritoryCountryBuildAllReport,
+  TerritoryCountryDatasetConfig,
   TerritoryLifecycleStatus,
   TerritorySemanticReviewStatus
 } from "./types.js";
@@ -13,6 +15,7 @@ import type {
 export interface TerritoryCoverageRegistry {
   schemaVersion: "territorykit-coverage@2";
   generatedAt: string;
+  levels: readonly TerritoryAdminLevel[];
   summary: {
     totalCountries: number;
     levels: Record<string, Record<TerritoryArtifactStatus, number>>;
@@ -46,6 +49,17 @@ export interface TerritoryCoverageLevel {
   status: TerritoryArtifactStatus;
   provider?: string;
   license?: string;
+  semanticType?: TerritorySemanticAdminType;
+  localTypeName?: string;
+  coverageScope?: "complete" | "partial" | "unknown" | "not-applicable";
+  coveragePercent?: number;
+  coveredParents?: number;
+  missingParents?: number;
+  sourceProvider?: string;
+  sourceVersion?: string;
+  sourceChecksum?: string;
+  licenseIdentifier?: string;
+  attribution?: string;
   artifactPath?: string;
   featureCount?: number;
   validationStatus?: "not-run" | "passed" | "passed-with-warnings" | "failed";
@@ -72,7 +86,7 @@ export interface TerritoryCoverageBuildOptions {
   cwd?: string;
 }
 
-const COVERAGE_LEVELS = ["ADM0", "ADM1", "ADM2", "ADM3", "municipality", "neighbourhood"] as const;
+const COVERAGE_LEVELS = TERRITORY_ADMIN_LEVELS;
 
 export async function buildTerritoryCoverageRegistryFromArtifacts(
   options: TerritoryCoverageBuildOptions
@@ -104,51 +118,62 @@ export async function buildTerritoryCoverageRegistryFromArtifacts(
       fallbackStatus: adm0Status,
       ...(adm0BuildResult ? { buildResult: adm0BuildResult } : {})
     });
-    const levels: Record<string, TerritoryCoverageLevel> = {
-      ADM0:
-        countryAdm0Level.status === "built" && countryAdm0Level.artifactPath
-          ? countryAdm0Level
-          : {
-              status: adm0Status,
-              provider: adm0BuiltFromCountryArtifact ? config.sourceProvider : "natural-earth",
-              license: adm0BuiltFromCountryArtifact ? "source-defined" : "Public Domain",
-              ...(adm0Status === "built"
-                ? {
-                    artifactPath: adm0BuiltFromCountryArtifact
-                      ? toPortableArtifactPath(
-                          join(
-                            resolve(cwd, adm0BuildResult.outputPath ?? countryRoot),
-                            "levels",
-                            "ADM0"
-                          ),
-                          cwd
-                        )
-                      : globalAdm0ArtifactPath
-                  }
-                : {}),
-              validationStatus: adm0Status === "built" ? "passed" : "not-run",
-              sourceStatus: "available"
-            },
-      ADM1: await inferCountryLevelStatus({
-        countryRoot,
-        level: "ADM1",
-        provider: config.sourceProvider,
-        artifactPath: toPortableArtifactPath(join(countryRoot, "levels", "ADM1"), cwd),
-        fallbackStatus: config.reviewRequired ? "not-reviewed" : "source-available",
-        ...(buildResult ? { buildResult } : {})
-      }),
-      ADM2: await inferCountryLevelStatus({
-        countryRoot,
-        level: "ADM2",
-        provider: config.sourceProvider,
-        artifactPath: toPortableArtifactPath(join(countryRoot, "levels", "ADM2"), cwd),
-        fallbackStatus: config.reviewRequired ? "not-reviewed" : "source-available",
-        ...(buildResult ? { buildResult } : {})
-      }),
-      ADM3: { status: "not-reviewed", sourceStatus: "not-reviewed" },
-      municipality: { status: "source-unavailable", sourceStatus: "unavailable" },
-      neighbourhood: { status: "source-unavailable", sourceStatus: "unavailable" }
-    };
+    const levels = Object.fromEntries(
+      await Promise.all(
+        COVERAGE_LEVELS.map(async (level) => {
+          if (level === "ADM0") {
+            const value: TerritoryCoverageLevel =
+              countryAdm0Level.status === "built" && countryAdm0Level.artifactPath
+                ? countryAdm0Level
+                : {
+                    status: adm0Status,
+                    provider: adm0BuiltFromCountryArtifact
+                      ? config.sourceProvider
+                      : "natural-earth",
+                    sourceProvider: adm0BuiltFromCountryArtifact
+                      ? config.sourceProvider
+                      : "natural-earth",
+                    license: adm0BuiltFromCountryArtifact ? "source-defined" : "Public Domain",
+                    licenseIdentifier: adm0BuiltFromCountryArtifact
+                      ? "source-defined"
+                      : "Public Domain",
+                    semanticType: "country",
+                    coverageScope: adm0Status === "built" ? "complete" : "unknown",
+                    ...(adm0Status === "built"
+                      ? {
+                          artifactPath: adm0BuiltFromCountryArtifact
+                            ? toPortableArtifactPath(
+                                join(
+                                  resolve(cwd, adm0BuildResult.outputPath ?? countryRoot),
+                                  "levels",
+                                  "ADM0"
+                                ),
+                                cwd
+                              )
+                            : globalAdm0ArtifactPath
+                        }
+                      : {}),
+                    validationStatus: adm0Status === "built" ? "passed" : "not-run",
+                    semanticReviewStatus: "reviewed",
+                    sourceStatus: "available"
+                  };
+
+            return [level, withConfigCoverageMetadata(value, config, level)];
+          }
+
+          const value = await inferCountryLevelStatus({
+            countryRoot,
+            level,
+            provider: config.sourceProvider,
+            artifactPath: toPortableArtifactPath(join(countryRoot, "levels", level), cwd),
+            fallbackStatus: fallbackCoverageStatusForLevel(config, level),
+            ...(buildResult ? { buildResult } : {})
+          });
+
+          return [level, withConfigCoverageMetadata(value, config, level)];
+        })
+      )
+    ) as Record<TerritoryAdminLevel, TerritoryCoverageLevel>;
 
     countries.push({
       iso2: country.iso2,
@@ -166,8 +191,50 @@ export async function buildTerritoryCoverageRegistryFromArtifacts(
   return {
     schemaVersion: "territorykit-coverage@2",
     generatedAt: options.generatedAt,
+    levels: COVERAGE_LEVELS,
     summary: summarizeCoverage(countries),
     countries
+  };
+}
+
+function fallbackCoverageStatusForLevel(
+  config: TerritoryCountryDatasetConfig,
+  level: TerritoryAdminLevel
+): TerritoryArtifactStatus {
+  const mapping = config.levelMappings[level];
+
+  if (!mapping || mapping.reviewStatus === "mapping-review-required") {
+    return "not-reviewed";
+  }
+
+  return level === "ADM1" || level === "ADM2" ? "source-available" : "source-unavailable";
+}
+
+function withConfigCoverageMetadata(
+  level: TerritoryCoverageLevel,
+  config: TerritoryCountryDatasetConfig,
+  adminLevel: TerritoryAdminLevel
+): TerritoryCoverageLevel {
+  const mapping = config.levelMappings[adminLevel];
+
+  return {
+    ...level,
+    provider: level.provider ?? config.sourceProvider,
+    sourceProvider: level.sourceProvider ?? level.provider ?? config.sourceProvider,
+    ...(mapping?.semanticType ? { semanticType: mapping.semanticType } : {}),
+    ...(mapping?.localTypeName ? { localTypeName: mapping.localTypeName } : {}),
+    semanticReviewStatus:
+      level.semanticReviewStatus ??
+      (mapping?.reviewStatus === "reviewed" ? "reviewed" : "mapping-review-required"),
+    coverageScope:
+      level.coverageScope ??
+      (level.status === "built"
+        ? "complete"
+        : level.status === "partial"
+          ? "partial"
+          : level.status === "not-applicable"
+            ? "not-applicable"
+            : "unknown")
   };
 }
 
@@ -357,14 +424,11 @@ function summarizeCoverage(
         countries.reduce((sum, country) => sum + (country.levels[level]?.featureCount ?? 0), 0)
       ])
     ),
-    licenseRestrictedCountries: countCountriesWithStatus(countries, "licence-restricted", [
-      "ADM1",
-      "ADM2"
-    ]),
-    sourceMissingCountries: countries.filter(
-      (country) =>
-        country.levels.ADM1?.status === "source-unavailable" &&
-        country.levels.ADM2?.status === "source-unavailable"
+    licenseRestrictedCountries: countCountriesWithStatus(countries, "licence-restricted"),
+    sourceMissingCountries: countries.filter((country) =>
+      COVERAGE_LEVELS.filter((level) => level !== "ADM0").some(
+        (level) => country.levels[level]?.status === "source-unavailable"
+      )
     ).length,
     validationFailedCountries: countCountriesWithStatus(countries, "validation-failed"),
     builtCountries: countries.filter((country) =>

@@ -5,7 +5,8 @@ const root = process.cwd();
 const maxBytesByFile = new Map([
   // Sprint 4 real adjacency adds exact polygon relation primitives and artifact indexing.
   // Sprint 7 adds query/render artifact metadata and compatibility helpers.
-  ["packages/dataset/dist/index.mjs", 118_000],
+  // Lower-admin support adds ADM5 metadata, semantic review, and coverage statuses.
+  ["packages/dataset/dist/index.mjs", 128_000],
   ["packages/core/dist/index.mjs", 65_000],
   ["packages/registry/dist/index.mjs", 5_000],
   ["packages/registry/dist/node.mjs", 28_000],
@@ -18,9 +19,11 @@ const maxBytesByFile = new Map([
   ["packages/data-id/dist/index.mjs", 8_000],
   // Global ADM0-ADM2 completion adds GEOS repair orchestration, phased country builds,
   // source-lock reuse, lifecycle reporting, and Natural Earth overview artifact generation.
-  ["packages/generators/dist/index.mjs", 302_000],
+  // Lower-admin support adds provider capability inspection and open-data manifest gates.
+  ["packages/generators/dist/index.mjs", 312_000],
   // Dataset build-all/global-admin CLI commands now expose ADM0 completion controls and reports.
-  ["packages/cli/dist/index.mjs", 92_000]
+  // Lower-admin support adds level filtering, source capability output, and artifact fallback.
+  ["packages/cli/dist/index.mjs", 96_000]
 ]);
 
 const failures = [];

@@ -1,5 +1,10 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join, relative, resolve } from "node:path";
+import {
+  TERRITORY_ADMIN_LEVELS,
+  compareAdminLevels,
+  getAdminLevelDepth
+} from "@territory-kit/dataset";
 import type { TerritoryAdminLevel } from "@territory-kit/dataset";
 import { pathExists, serializeJsonStable } from "../sources/utils.js";
 import {
@@ -668,26 +673,15 @@ function createPhaseRecorder(input: {
 function withRequiredAncestorLevels(
   levels: readonly TerritoryAdminLevel[]
 ): readonly TerritoryAdminLevel[] {
-  const requested = new Set(levels);
-  const ordered: TerritoryAdminLevel[] = [];
-
-  if (
-    requested.has("ADM0") ||
-    requested.has("ADM1") ||
-    requested.has("ADM2") ||
-    requested.has("ADM3") ||
-    requested.has("ADM4")
-  ) {
-    ordered.push("ADM0");
+  if (levels.length === 0) {
+    return [];
   }
 
-  for (const level of ["ADM1", "ADM2", "ADM3", "ADM4"] as const) {
-    if (requested.has(level)) {
-      ordered.push(level);
-    }
-  }
+  const deepestRequestedDepth = Math.max(...levels.map(getAdminLevelDepth));
 
-  return ordered;
+  return TERRITORY_ADMIN_LEVELS.filter(
+    (level) => getAdminLevelDepth(level) <= deepestRequestedDepth
+  ).sort(compareAdminLevels);
 }
 
 function toPortableReportPath(path: string, cwd: string): string {

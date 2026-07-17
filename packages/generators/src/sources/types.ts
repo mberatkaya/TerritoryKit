@@ -48,6 +48,34 @@ export interface TerritorySourceDescription {
   exampleCommand: string;
 }
 
+export type TerritoryProviderLevelCapabilityStatus =
+  | "available"
+  | "source-unavailable"
+  | "provider-unsupported"
+  | "licence-restricted"
+  | "semantic-review-required"
+  | "unknown";
+
+export interface TerritoryProviderLevelCapability {
+  level: TerritoryAdminLevel;
+  supported: boolean;
+  available: boolean;
+  status: TerritoryProviderLevelCapabilityStatus;
+  reason?: string;
+  provider?: string;
+  sourceVersion?: string;
+  license?: string;
+  attribution?: string;
+}
+
+export interface TerritoryProviderCapabilitiesResult {
+  provider: string;
+  country?: string;
+  requestedLevel?: TerritoryAdminLevel;
+  levels: Partial<Record<TerritoryAdminLevel, TerritoryProviderLevelCapability>>;
+  issues: TerritorySourceIssue[];
+}
+
 export interface TerritorySourceRequest {
   input?: string;
   url?: string;

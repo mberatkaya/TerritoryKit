@@ -2,7 +2,7 @@ import type { MultiPolygon, Polygon } from "geojson";
 
 export type TerritorySchemaVersion = "territory-schema@1";
 
-export type TerritoryAdminLevel = "ADM0" | "ADM1" | "ADM2" | "ADM3" | "ADM4";
+export type TerritoryAdminLevel = "ADM0" | "ADM1" | "ADM2" | "ADM3" | "ADM4" | "ADM5";
 
 export type TerritoryGeometryDetailLevel = "low" | "medium" | "high" | "source";
 
@@ -16,15 +16,33 @@ export type TerritorySemanticAdminType =
   | "prefecture"
   | "county"
   | "district"
+  | "subdistrict"
   | "city"
   | "municipality"
   | "borough"
+  | "commune"
   | "ward"
   | "neighbourhood"
   | "village"
+  | "locality"
   | "local"
+  | "special-administrative-area"
+  | "administrative-unit"
   | "game-region"
   | "unknown";
+
+export type TerritorySemanticReviewStatus =
+  "reviewed" | "review-required" | "mapping-review-required" | "not-applicable";
+
+export type TerritoryCoverageStatus =
+  | "verified"
+  | "generated"
+  | "generated-with-warnings"
+  | "partial"
+  | "source-unavailable"
+  | "licence-restricted"
+  | "semantic-review-required"
+  | "deprecated";
 
 export type LngLat = [longitude: number, latitude: number];
 
@@ -123,7 +141,15 @@ export interface TerritorySourceMetadata {
 
 export interface TerritoryGlobalMetadata {
   adminLevel?: TerritoryAdminLevel;
+  sourceAdminLevel?: TerritoryAdminLevel;
+  semanticType?: TerritorySemanticAdminType;
   localType?: string;
+  localTypeName?: string;
+  hierarchyDepth?: number;
+  parentId?: string;
+  sourceParentId?: string;
+  semanticReviewStatus?: TerritorySemanticReviewStatus;
+  coverageStatus?: TerritoryCoverageStatus;
   codes?: TerritoryCodes;
   names?: TerritoryNames;
   source?: TerritorySourceMetadata;

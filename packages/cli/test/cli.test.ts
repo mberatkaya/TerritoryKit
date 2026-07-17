@@ -868,7 +868,15 @@ describe("territory cli", () => {
           request: {
             country: "TR",
             level: "ADM2"
-          }
+          },
+          capabilities: expect.objectContaining({
+            levels: expect.objectContaining({
+              ADM2: expect.objectContaining({
+                supported: true,
+                status: "source-unavailable"
+              })
+            })
+          })
         })
       }
     });
@@ -892,35 +900,51 @@ describe("territory cli", () => {
           summary: {
             totalCountries: 249,
             levels: {
-              ADM0: { built: 236 },
+              ADM0: { built: 228 },
               ADM1: {
-                built: 197,
-                "source-unavailable": 52
+                built: 5,
+                "not-reviewed": 244
               },
               ADM2: {
-                built: 179,
-                "source-unavailable": 70
+                built: 5,
+                "not-reviewed": 244
               },
-              municipality: { "source-unavailable": 249 }
+              ADM3: {
+                "source-unavailable": 1,
+                "not-reviewed": 248
+              },
+              ADM4: { "not-reviewed": 249 },
+              ADM5: { "not-reviewed": 249 }
             },
             semanticReviewStatus: {
+              ADM0: {
+                reviewed: 249
+              },
               ADM1: {
-                "review-required": 244,
+                "mapping-review-required": 244,
                 reviewed: 5
               },
               ADM2: {
-                "review-required": 244,
+                "mapping-review-required": 244,
                 reviewed: 5
+              },
+              ADM3: {
+                "mapping-review-required": 248,
+                reviewed: 1
               }
             },
-            adjacencyStatus: {
+            sourceStatus: {
               ADM1: {
-                passed: 193,
-                "not-run": 56
+                available: 5,
+                "not-reviewed": 244
               },
               ADM2: {
-                passed: 175,
-                "not-run": 74
+                available: 5,
+                "not-reviewed": 244
+              },
+              ADM3: {
+                unavailable: 1,
+                "not-reviewed": 248
               }
             }
           }

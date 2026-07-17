@@ -26,7 +26,8 @@ Sub-country identifiers use ISO 3166-2 when it is stable and available. If ISO 3
 too coarse for the local level, importers must use a stable official code or source-system ID. Names
 alone are not acceptable as canonical identifiers.
 
-Administrative levels are represented with `ADM0`, `ADM1`, `ADM2`, `ADM3`, and `ADM4`.
+Administrative levels were originally represented with `ADM0`, `ADM1`, `ADM2`, `ADM3`, and `ADM4`.
+ADR 0011 extends the supported range to `ADM5`.
 `adminLevel` is the global semantic level. The existing numeric `level` field remains the
 schema-v1 engine ordering field. For global datasets, `level` maps to the hierarchy order
 (`ADM0 -> 0`, `ADM1 -> 1`, and so on), while `adminLevel` is stored as metadata in
