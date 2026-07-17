@@ -51,7 +51,7 @@ territory dataset build world-countries \
 
 ```bash
 territory source list
-territory sources inspect --provider geoboundaries --country TR --level ADM2 --json
+territory sources inspect --provider geoboundaries --country TR --level ADM3 --json
 territory dataset coverage
 territory import geojson --input ./regions.geojson --output ./dist/regions --country TR --admin-level ADM2 --name-property name
 territory geometry validate ./dist/regions --checks full --report ./geometry-report.json
@@ -69,8 +69,10 @@ packages. Pilot country artifacts are documented in
 geometry.
 
 The generated coverage registry lives in `datasets/registry/coverage.json` and is summarized in
-[docs/datasets/coverage.md](./docs/datasets/coverage.md). It marks missing municipality and
-neighbourhood data as unavailable rather than substituting broader ADM levels.
+[docs/datasets/coverage.md](./docs/datasets/coverage.md). TerritoryKit supports lower
+administrative levels when a suitable source exists, but it does not guarantee neighbourhood-level
+coverage for every country. Municipality and neighbourhood are semantic types on ADM records, not
+pseudo-administrative levels.
 
 ## Development
 
@@ -131,7 +133,12 @@ items.
 - [World countries ADM0 dataset](./docs/datasets/world-countries.md)
 - [Global dataset overview](./docs/datasets/global-overview.md)
 - [Dataset coverage](./docs/datasets/coverage.md)
+- [Lower administrative levels](./docs/datasets/lower-admin-levels.md)
+- [Administrative semantics](./docs/datasets/admin-semantics.md)
+- [Partial coverage](./docs/datasets/partial-coverage.md)
+- [Turkey neighbourhoods](./docs/datasets/turkey-neighbourhoods.md)
 - [Dataset providers](./docs/datasets/providers.md)
+- [Lower-admin providers](./docs/sources/lower-admin-providers.md)
 - [Benchmarks](./docs/benchmarks.md)
 - [Real-world benchmarks](./docs/real-world-benchmarks.md)
 - [NestJS and PostGIS](./docs/nestjs-postgis.md)

@@ -4,6 +4,7 @@ import {
   TERRITORY_SCHEMA_VERSION,
   computeGeometryBBox,
   computeTerritoryAdjacencyContentHash,
+  getAdminLevelDepth,
   validateGeometryDataset,
   validateTerritoryAdjacencyArtifact,
   validateTerritoryDataset
@@ -58,6 +59,7 @@ import type {
   TerritoryCountryGeometryRepairSummary,
   TerritoryCountryInspectSummary,
   TerritoryCountryQualityReport,
+  TerritoryCountrySourceLockLevel,
   TerritoryCountrySourceLock,
   TerritoryCountryValidateResult,
   TerritoryIdentityMap
@@ -205,6 +207,7 @@ export async function buildTerritoryCountryDataset(
           config,
           level,
           features: repairedFeatures,
+          sourceLockLevel: lockLevel,
           ...(lockLevel.sourceVersion ? { sourceDatasetVersion: lockLevel.sourceVersion } : {}),
           buildDate
         })
@@ -712,6 +715,7 @@ function buildLevelZones(input: {
   config: ReturnType<typeof getTerritoryCountryConfig>;
   level: TerritoryAdminLevel;
   features: readonly ParsedCountryFeature[];
+  sourceLockLevel: TerritoryCountrySourceLockLevel;
   sourceDatasetVersion?: string;
   buildDate: string;
 }): BuiltCountryZone[] {
@@ -770,7 +774,15 @@ function buildLevelZones(input: {
         name: feature.name,
         territory: {
           adminLevel: input.level,
+          sourceAdminLevel: input.level,
+          semanticType: levelConfig?.semanticType ?? "unknown",
           localType: feature.localType,
+          ...(levelConfig?.localTypeName ? { localTypeName: levelConfig.localTypeName } : {}),
+          hierarchyDepth: getAdminLevelDepth(input.level),
+          ...(feature.parentSourceId ? { sourceParentId: feature.parentSourceId } : {}),
+          semanticReviewStatus:
+            levelConfig?.reviewStatus === "reviewed" ? "reviewed" : "mapping-review-required",
+          coverageStatus: "generated",
           codes: {
             ...identity.officialCodes,
             ...(input.level === "ADM0" ? { iso3166_1: input.config.countryCodeAlpha2 } : {})
@@ -782,6 +794,16 @@ function buildLevelZones(input: {
           source: {
             provider: input.config.sourceProvider,
             ...(feature.sourceId ? { sourceId: feature.sourceId } : {}),
+            ...(input.sourceLockLevel.sourceUrl
+              ? { sourceUrl: input.sourceLockLevel.sourceUrl }
+              : {}),
+            ...(input.sourceLockLevel.sourceDate
+              ? { sourceDate: input.sourceLockLevel.sourceDate }
+              : {}),
+            ...(input.sourceLockLevel.license ? { license: input.sourceLockLevel.license } : {}),
+            ...(input.sourceLockLevel.attribution
+              ? { attribution: input.sourceLockLevel.attribution }
+              : {}),
             importedAt: input.buildDate
           },
           nameProvenance: {

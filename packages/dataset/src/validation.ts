@@ -4,16 +4,25 @@ import { computeGeometryBBox, hasRingSelfIntersection } from "./geometry.js";
 import { TERRITORY_SCHEMA_VERSION } from "./schema.js";
 import type {
   LngLat,
+  TerritoryAdminLevel,
   TerritoryBBox,
+  TerritoryCoverageStatus,
   TerritoryDataset,
   TerritoryDatasetManifest,
   TerritoryGeometry,
   TerritorySemanticAdminType,
+  TerritorySemanticReviewStatus,
   TerritoryValidationIssue,
   TerritoryValidationResult,
   TerritoryZone
 } from "./types.js";
-import { TERRITORY_SEMANTIC_ADMIN_TYPES } from "./global.js";
+import {
+  TERRITORY_ADMIN_LEVELS,
+  TERRITORY_COVERAGE_STATUSES,
+  TERRITORY_SEMANTIC_ADMIN_TYPES,
+  TERRITORY_SEMANTIC_REVIEW_STATUSES,
+  getAdminLevelDepth
+} from "./global.js";
 
 export function validateTerritoryDataset(input: unknown): TerritoryValidationResult {
   const issues: TerritoryValidationIssue[] = [];
@@ -96,6 +105,7 @@ function readManifest(
   const schemaVersion = readRequiredString(input.schemaVersion, "$.manifest.schemaVersion", issues);
   const sourceDate = readRequiredString(input.sourceDate, "$.manifest.sourceDate", issues);
   const geometryHash = readRequiredString(input.geometryHash, "$.manifest.geometryHash", issues);
+  const adminLevels = readOptionalAdminLevels(input.adminLevels, "$.manifest.adminLevels", issues);
 
   if (schemaVersion && schemaVersion !== TERRITORY_SCHEMA_VERSION) {
     issues.push({
@@ -122,6 +132,7 @@ function readManifest(
     schemaVersion,
     sourceDate,
     geometryHash,
+    ...(adminLevels ? { adminLevels } : {}),
     ...(typeof input.license === "string" ? { license: input.license } : {}),
     ...(typeof input.name === "string" ? { name: input.name } : {}),
     ...(typeof input.description === "string" ? { description: input.description } : {}),
@@ -210,6 +221,8 @@ function readZones(
         ...(id ? { zoneId: id, featureId: id } : {}),
         repairSuggestion: "Set properties to an object, even when it is empty."
       });
+    } else {
+      validateTerritoryPropertiesMetadata(properties, `${path}.properties.territory`, issues, id);
     }
 
     if (id && seenIds.has(id)) {
@@ -634,6 +647,234 @@ function readSemanticAdminType(
   return undefined;
 }
 
+function validateTerritoryPropertiesMetadata(
+  properties: Record<string, unknown>,
+  path: string,
+  issues: TerritoryValidationIssue[],
+  zoneId: string | undefined
+): void {
+  const territory = properties.territory;
+
+  if (territory === undefined) {
+    return;
+  }
+
+  if (!isRecord(territory)) {
+    issues.push({
+      code: "ZONE_FIELD",
+      message: "properties.territory must be an object when present.",
+      path,
+      severity: "error",
+      ...(zoneId ? { zoneId, featureId: zoneId } : {})
+    });
+    return;
+  }
+
+  const adminLevel = readOptionalMetadataAdminLevel(
+    territory.adminLevel,
+    `${path}.adminLevel`,
+    issues,
+    zoneId
+  );
+  readOptionalMetadataAdminLevel(
+    territory.sourceAdminLevel,
+    `${path}.sourceAdminLevel`,
+    issues,
+    zoneId
+  );
+  readOptionalMetadataSemanticType(territory.semanticType, `${path}.semanticType`, issues, zoneId);
+  readOptionalMetadataString(territory.localType, `${path}.localType`, issues, zoneId);
+  readOptionalMetadataString(territory.localTypeName, `${path}.localTypeName`, issues, zoneId);
+  readOptionalMetadataString(territory.parentId, `${path}.parentId`, issues, zoneId);
+  readOptionalMetadataString(territory.sourceParentId, `${path}.sourceParentId`, issues, zoneId);
+  readOptionalMetadataSemanticReviewStatus(
+    territory.semanticReviewStatus,
+    `${path}.semanticReviewStatus`,
+    issues,
+    zoneId
+  );
+  readOptionalMetadataCoverageStatus(
+    territory.coverageStatus,
+    `${path}.coverageStatus`,
+    issues,
+    zoneId
+  );
+  const hierarchyDepth = readOptionalMetadataHierarchyDepth(
+    territory.hierarchyDepth,
+    `${path}.hierarchyDepth`,
+    issues,
+    zoneId
+  );
+
+  if (
+    adminLevel &&
+    hierarchyDepth !== undefined &&
+    hierarchyDepth !== getAdminLevelDepth(adminLevel)
+  ) {
+    issues.push({
+      code: "ZONE_FIELD",
+      message: `properties.territory.hierarchyDepth ${hierarchyDepth} does not match ${adminLevel}.`,
+      path: `${path}.hierarchyDepth`,
+      severity: "error",
+      ...(zoneId ? { zoneId, featureId: zoneId } : {})
+    });
+  }
+}
+
+function readOptionalMetadataAdminLevel(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[],
+  zoneId: string | undefined
+): TerritoryAdminLevel | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (typeof input === "string" && TERRITORY_ADMIN_LEVELS.includes(input as TerritoryAdminLevel)) {
+    return input as TerritoryAdminLevel;
+  }
+
+  issues.push({
+    code: "ZONE_FIELD",
+    message: "Expected ADM0, ADM1, ADM2, ADM3, ADM4, or ADM5.",
+    path,
+    severity: "error",
+    ...(zoneId ? { zoneId, featureId: zoneId } : {})
+  });
+  return undefined;
+}
+
+function readOptionalMetadataSemanticType(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[],
+  zoneId: string | undefined
+): TerritorySemanticAdminType | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (
+    typeof input === "string" &&
+    TERRITORY_SEMANTIC_ADMIN_TYPES.includes(input as TerritorySemanticAdminType)
+  ) {
+    return input as TerritorySemanticAdminType;
+  }
+
+  issues.push({
+    code: "ZONE_FIELD",
+    message: "Expected a known administrative semantic type.",
+    path,
+    severity: "error",
+    ...(zoneId ? { zoneId, featureId: zoneId } : {})
+  });
+  return undefined;
+}
+
+function readOptionalMetadataSemanticReviewStatus(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[],
+  zoneId: string | undefined
+): TerritorySemanticReviewStatus | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (
+    typeof input === "string" &&
+    TERRITORY_SEMANTIC_REVIEW_STATUSES.includes(input as TerritorySemanticReviewStatus)
+  ) {
+    return input as TerritorySemanticReviewStatus;
+  }
+
+  issues.push({
+    code: "ZONE_FIELD",
+    message:
+      "Expected semanticReviewStatus to be reviewed, review-required, mapping-review-required, or not-applicable.",
+    path,
+    severity: "error",
+    ...(zoneId ? { zoneId, featureId: zoneId } : {})
+  });
+  return undefined;
+}
+
+function readOptionalMetadataCoverageStatus(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[],
+  zoneId: string | undefined
+): TerritoryCoverageStatus | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (
+    typeof input === "string" &&
+    TERRITORY_COVERAGE_STATUSES.includes(input as TerritoryCoverageStatus)
+  ) {
+    return input as TerritoryCoverageStatus;
+  }
+
+  issues.push({
+    code: "ZONE_FIELD",
+    message: "Expected a known coverage status.",
+    path,
+    severity: "error",
+    ...(zoneId ? { zoneId, featureId: zoneId } : {})
+  });
+  return undefined;
+}
+
+function readOptionalMetadataHierarchyDepth(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[],
+  zoneId: string | undefined
+): number | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (typeof input === "number" && Number.isInteger(input) && input >= 0 && input <= 5) {
+    return input;
+  }
+
+  issues.push({
+    code: "ZONE_FIELD",
+    message: "hierarchyDepth must be an integer from 0 through 5.",
+    path,
+    severity: "error",
+    ...(zoneId ? { zoneId, featureId: zoneId } : {})
+  });
+  return undefined;
+}
+
+function readOptionalMetadataString(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[],
+  zoneId: string | undefined
+): string | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (typeof input === "string" && input.length > 0) {
+    return input;
+  }
+
+  issues.push({
+    code: "ZONE_FIELD",
+    message: "Expected a non-empty string when present.",
+    path,
+    severity: "error",
+    ...(zoneId ? { zoneId, featureId: zoneId } : {})
+  });
+  return undefined;
+}
+
 function readRequiredStringArray(
   input: unknown,
   path: string,
@@ -665,6 +906,47 @@ function readOptionalStringArray(
   }
 
   return readRequiredStringArray(input, path, issues);
+}
+
+function readOptionalAdminLevels(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[]
+): TerritoryAdminLevel[] | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (!Array.isArray(input) || input.length === 0) {
+    issues.push({
+      code: "MANIFEST_FIELD",
+      message: "adminLevels must be a non-empty array of ADM0 through ADM5 values.",
+      path,
+      severity: "error"
+    });
+    return undefined;
+  }
+
+  const levels = input.map((level, index) => {
+    if (
+      typeof level === "string" &&
+      TERRITORY_ADMIN_LEVELS.includes(level as TerritoryAdminLevel)
+    ) {
+      return level as TerritoryAdminLevel;
+    }
+
+    issues.push({
+      code: "MANIFEST_FIELD",
+      message: "adminLevels entries must be ADM0, ADM1, ADM2, ADM3, ADM4, or ADM5.",
+      path: `${path}[${index}]`,
+      severity: "error"
+    });
+    return undefined;
+  });
+
+  return levels.every((level): level is TerritoryAdminLevel => level !== undefined)
+    ? [...new Set(levels)]
+    : undefined;
 }
 
 function readLevel(

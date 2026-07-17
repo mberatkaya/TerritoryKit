@@ -1,4 +1,9 @@
-import type { TerritoryAdminLevel } from "@territory-kit/dataset";
+import {
+  TERRITORY_COVERAGE_STATUSES,
+  compareAdminLevels,
+  getAdminLevelDepth
+} from "@territory-kit/dataset";
+import type { TerritoryAdminLevel, TerritoryCoverageStatus } from "@territory-kit/dataset";
 import { validateTerritoryDatasetRegistry } from "./schema.js";
 import { compareSemver, isPrerelease, matchesVersionRange } from "./semver.js";
 import type {
@@ -14,7 +19,11 @@ import type {
   TerritoryRegistryClientOptions,
   TerritoryRegistryDataset,
   TerritoryRegistryInstallOptions,
+  TerritoryRegistryArtifactPurpose,
   TerritoryRegistryResolveArtifactOptions,
+  TerritoryRegistryResolveDeepestAvailableTerritoryArtifactOptions,
+  TerritoryRegistryResolvedTerritoryArtifact,
+  TerritoryRegistryResolveTerritoryArtifactOptions,
   TerritoryRegistryResolvedArtifact,
   TerritoryRegistryTransport
 } from "./types.js";
@@ -129,6 +138,112 @@ export function createTerritoryRegistryClient(
       dataset,
       artifact,
       url: joinUrl(registry.baseUrl, artifact.url),
+      registryHash: await currentRegistryHash()
+    };
+  }
+
+  async function resolveTerritoryArtifact(
+    request: TerritoryRegistryResolveTerritoryArtifactOptions
+  ): Promise<TerritoryRegistryResolvedTerritoryArtifact> {
+    return resolveTerritoryArtifactInternal({
+      country: request.country,
+      requestedLevel: request.level,
+      purpose: request.purpose ?? "query",
+      ...(request.detail ? { detail: request.detail } : {}),
+      ...(request.formatPreference ? { formatPreference: request.formatPreference } : {}),
+      ...(request.version ? { version: request.version } : {}),
+      ...(request.allowPrerelease ? { allowPrerelease: request.allowPrerelease } : {}),
+      fallback: request.fallback ?? "none"
+    });
+  }
+
+  async function resolveDeepestAvailableTerritoryArtifact(
+    request: TerritoryRegistryResolveDeepestAvailableTerritoryArtifactOptions
+  ): Promise<TerritoryRegistryResolvedTerritoryArtifact> {
+    return resolveTerritoryArtifactInternal({
+      country: request.country,
+      requestedLevel: request.requestedLevel,
+      purpose: request.purpose ?? "query",
+      ...(request.detail ? { detail: request.detail } : {}),
+      ...(request.formatPreference ? { formatPreference: request.formatPreference } : {}),
+      ...(request.version ? { version: request.version } : {}),
+      ...(request.allowPrerelease ? { allowPrerelease: request.allowPrerelease } : {}),
+      fallback: request.fallback ?? "deepest-available"
+    });
+  }
+
+  async function resolveTerritoryArtifactInternal(request: {
+    country: string;
+    requestedLevel: TerritoryAdminLevel;
+    purpose: TerritoryRegistryArtifactPurpose;
+    detail?: string;
+    formatPreference?: readonly string[];
+    version?: string;
+    allowPrerelease?: boolean;
+    fallback: "none" | "deepest-available";
+  }): Promise<TerritoryRegistryResolvedTerritoryArtifact> {
+    const registry = await loadRegistry();
+    const datasets = selectCountryDatasets(registry.datasets, request);
+    const exact = selectBestTerritoryArtifactCandidate(datasets, {
+      ...request,
+      level: request.requestedLevel,
+      allowFallback: false
+    });
+
+    if (exact) {
+      return createResolvedTerritoryArtifact({
+        registry,
+        match: exact,
+        requestedLevel: request.requestedLevel,
+        reason: "exact-match"
+      });
+    }
+
+    if (request.fallback !== "deepest-available") {
+      throw new Error(
+        `No ${request.requestedLevel} artifact is available for country '${request.country}'.`
+      );
+    }
+
+    const fallback = selectBestTerritoryArtifactCandidate(datasets, {
+      ...request,
+      level: request.requestedLevel,
+      allowFallback: true
+    });
+
+    if (!fallback) {
+      throw new Error(
+        `No artifact at or above ${request.requestedLevel} is available for country '${request.country}'.`
+      );
+    }
+
+    return createResolvedTerritoryArtifact({
+      registry,
+      match: fallback,
+      requestedLevel: request.requestedLevel,
+      reason: "requested-level-unavailable"
+    });
+  }
+
+  async function createResolvedTerritoryArtifact(input: {
+    registry: TerritoryDatasetRegistry;
+    match: TerritoryArtifactCandidate;
+    requestedLevel: TerritoryAdminLevel;
+    reason: TerritoryRegistryResolvedTerritoryArtifact["reason"];
+  }): Promise<TerritoryRegistryResolvedTerritoryArtifact> {
+    const exactMatch = input.reason === "exact-match";
+
+    return {
+      requestedLevel: input.requestedLevel,
+      resolvedLevel: input.match.resolvedLevel,
+      exactMatch,
+      reason: input.reason,
+      coverageStatus: exactMatch
+        ? readCoverageStatus(input.match.artifact, input.match.dataset)
+        : "source-unavailable",
+      dataset: input.match.dataset,
+      artifact: input.match.artifact,
+      url: joinUrl(input.registry.baseUrl, input.match.artifact.url),
       registryHash: await currentRegistryHash()
     };
   }
@@ -349,6 +464,8 @@ export function createTerritoryRegistryClient(
       });
     },
     resolveArtifact,
+    resolveTerritoryArtifact,
+    resolveDeepestAvailableTerritoryArtifact,
     installDataset,
     updateDataset: installDataset,
     verifyInstalledDataset,
@@ -435,6 +552,124 @@ function selectDataset(
   }
 
   return candidates[0]!;
+}
+
+interface TerritoryArtifactCandidate {
+  dataset: TerritoryRegistryDataset;
+  artifact: TerritoryRegistryArtifact;
+  resolvedLevel: TerritoryAdminLevel;
+}
+
+function selectCountryDatasets(
+  datasets: readonly TerritoryRegistryDataset[],
+  request: { country: string; version?: string; allowPrerelease?: boolean }
+): TerritoryRegistryDataset[] {
+  const country = request.country.trim().toUpperCase();
+  const requestedVersion = request.version ?? "latest-compatible";
+  const candidates = datasets
+    .filter(
+      (dataset) =>
+        dataset.country?.alpha2?.toUpperCase() === country ||
+        dataset.country?.alpha3?.toUpperCase() === country
+    )
+    .filter((dataset) => request.allowPrerelease || !isPrerelease(dataset.version))
+    .filter((dataset) => {
+      if (requestedVersion === "latest" || requestedVersion === "latest-compatible") {
+        return true;
+      }
+
+      return matchesVersionRange(dataset.version, requestedVersion);
+    })
+    .sort((left, right) => compareSemver(right.version, left.version));
+
+  if (candidates.length === 0) {
+    throw new Error(`No registry dataset is available for country '${request.country}'.`);
+  }
+
+  return candidates;
+}
+
+function selectBestTerritoryArtifactCandidate(
+  datasets: readonly TerritoryRegistryDataset[],
+  request: {
+    level: TerritoryAdminLevel;
+    purpose: TerritoryRegistryArtifactPurpose;
+    detail?: string;
+    formatPreference?: readonly string[];
+    allowFallback: boolean;
+  }
+): TerritoryArtifactCandidate | undefined {
+  const requestedDepth = getAdminLevelDepth(request.level);
+  const candidates = datasets.flatMap((dataset) =>
+    dataset.artifacts.flatMap((artifact): TerritoryArtifactCandidate[] => {
+      if (artifact.purpose !== request.purpose) {
+        return [];
+      }
+
+      if (request.detail && artifact.detail && artifact.detail !== request.detail) {
+        return [];
+      }
+
+      if (request.formatPreference && !request.formatPreference.includes(artifact.format)) {
+        return [];
+      }
+
+      const artifactLevels = normalizeLevels(artifact.levels ?? dataset.levels);
+      const matchingLevels = request.allowFallback
+        ? artifactLevels.filter((level) => getAdminLevelDepth(level) <= requestedDepth)
+        : artifactLevels.filter((level) => level === request.level);
+      const resolvedLevel = matchingLevels.sort(compareAdminLevels).at(-1);
+
+      return resolvedLevel ? [{ dataset, artifact, resolvedLevel }] : [];
+    })
+  );
+
+  return candidates.sort((left, right) => {
+    const depth = getAdminLevelDepth(right.resolvedLevel) - getAdminLevelDepth(left.resolvedLevel);
+
+    if (depth !== 0) {
+      return depth;
+    }
+
+    const format = compareFormatPreference(left.artifact, right.artifact, request.formatPreference);
+
+    if (format !== 0) {
+      return format;
+    }
+
+    const version = compareSemver(right.dataset.version, left.dataset.version);
+
+    if (version !== 0) {
+      return version;
+    }
+
+    return (
+      left.dataset.id.localeCompare(right.dataset.id) ||
+      left.artifact.id.localeCompare(right.artifact.id)
+    );
+  })[0];
+}
+
+function readCoverageStatus(
+  artifact: TerritoryRegistryArtifact,
+  dataset: TerritoryRegistryDataset
+): TerritoryCoverageStatus {
+  const artifactCoverageStatus = artifact.coverageStatus;
+
+  if (artifactCoverageStatus && TERRITORY_COVERAGE_STATUSES.includes(artifactCoverageStatus)) {
+    return artifactCoverageStatus;
+  }
+
+  const datasetCoverageStatus = dataset.coverageStatus;
+
+  if (
+    typeof datasetCoverageStatus === "string" &&
+    TERRITORY_COVERAGE_STATUSES.includes(datasetCoverageStatus as TerritoryCoverageStatus)
+  ) {
+    return datasetCoverageStatus as TerritoryCoverageStatus;
+  }
+
+  return artifact.partialCoverage ? "partial" : "generated";
 }
 
 function artifactMatchesRequest(

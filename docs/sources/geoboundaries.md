@@ -11,7 +11,7 @@ territory import geoboundaries \
   --output ./dist/tr-adm1
 ```
 
-Supported levels are `ADM0` through `ADM4`, but the adapter does not invent levels absent from the
+Supported levels are `ADM0` through `ADM5`, but the adapter does not invent levels absent from the
 source file.
 
 ## Mapping

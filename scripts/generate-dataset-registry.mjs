@@ -8,13 +8,18 @@ const ISO_SOURCE_PATH = resolve(ROOT, "packages/generators/src/countries/iso3166
 const REGISTRY_DIR = resolve(ROOT, "datasets/registry");
 const COVERAGE_DOC_PATH = resolve(ROOT, "docs/datasets/coverage.md");
 const GLOBAL_ADM0_BUILD_REPORT_PATH = resolve(ROOT, "reports/global-adm0-build-all.json");
+const ADMIN_LEVELS = ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4", "ADM5"];
+const SUB_COUNTRY_LEVELS = ADMIN_LEVELS.filter((level) => level !== "ADM0");
 
 const PILOT_COUNTRIES = new Map([
   ["DE", { ADM1: "state", ADM2: "district" }],
   ["ID", { ADM1: "province", ADM2: "district" }],
   ["JP", { ADM1: "prefecture", ADM2: "unknown" }],
-  ["TR", { ADM1: "province", ADM2: "district" }],
+  ["TR", { ADM1: "province", ADM2: "district", ADM3: "neighbourhood" }],
   ["US", { ADM1: "state", ADM2: "county" }]
+]);
+const PILOT_LOCAL_TYPE_NAMES = new Map([
+  ["TR", { ADM0: "Ülke", ADM1: "İl", ADM2: "İlçe", ADM3: "Mahalle" }]
 ]);
 
 const PROVIDERS = [
@@ -42,7 +47,7 @@ const PROVIDERS = [
     redistributionAllowed: true,
     commercialUseAllowed: true,
     modificationAllowed: true,
-    supportedLevels: ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"],
+    supportedLevels: ADMIN_LEVELS,
     notes: ["Used by pilot country source locks and country build pipeline."]
   },
   {
@@ -55,7 +60,7 @@ const PROVIDERS = [
     redistributionAllowed: false,
     commercialUseAllowed: false,
     modificationAllowed: false,
-    supportedLevels: ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"],
+    supportedLevels: ADMIN_LEVELS,
     notes: [
       "Redistribution and commercial-use flags must be supplied by the imported source metadata."
     ]
@@ -82,6 +87,7 @@ const countryRegistry = {
   countries: countries.map((country) => createCountryRegistryEntry(country))
 };
 const coverage = await createCoverageRegistry(countries);
+const adminSemantics = createAdminSemanticsRegistry(countries);
 const providers = {
   schemaVersion: "territorykit-provider-registry@1",
   generatedAt: GENERATED_AT,
@@ -92,6 +98,7 @@ await mkdir(REGISTRY_DIR, { recursive: true });
 await mkdir(dirname(COVERAGE_DOC_PATH), { recursive: true });
 await writeJson(resolve(REGISTRY_DIR, "countries.json"), countryRegistry);
 await writeJson(resolve(REGISTRY_DIR, "coverage.json"), coverage);
+await writeJson(resolve(REGISTRY_DIR, "admin-semantics.json"), adminSemantics);
 await writeJson(resolve(REGISTRY_DIR, "providers.json"), providers);
 await writeFile(
   COVERAGE_DOC_PATH,
@@ -123,6 +130,7 @@ function parseIsoCountries(source) {
 
 function createCountryRegistryEntry(country) {
   const pilot = PILOT_COUNTRIES.get(country.iso2);
+  const localTypeNames = PILOT_LOCAL_TYPE_NAMES.get(country.iso2) ?? {};
   const reviewRequired = !pilot;
 
   return {
@@ -132,63 +140,66 @@ function createCountryRegistryEntry(country) {
     name: country.name,
     defaultProvider: "geoboundaries",
     reviewRequired,
-    levels: [
-      {
-        sourceLevel: "ADM0",
-        territoryLevel: 1,
-        semanticType: "country",
-        label: "Country",
-        provider: "natural-earth",
-        required: true,
-        reviewRequired: false
-      },
-      {
-        sourceLevel: "ADM1",
-        territoryLevel: 2,
-        semanticType: pilot?.ADM1 ?? "unknown",
-        label: pilot ? "First-level administrative unit" : "Unreviewed ADM1",
-        parentSourceLevel: "ADM0",
-        provider: "geoboundaries",
-        required: Boolean(pilot),
-        reviewRequired
-      },
-      {
-        sourceLevel: "ADM2",
-        territoryLevel: 3,
-        semanticType: pilot?.ADM2 ?? "unknown",
-        label: pilot ? "Second-level administrative unit" : "Unreviewed ADM2",
-        parentSourceLevel: "ADM1",
-        provider: "geoboundaries",
-        required: Boolean(pilot),
-        reviewRequired
-      }
-    ],
+    levels: ADMIN_LEVELS.map((level) =>
+      createCountryRegistryLevelEntry({ level, pilot, localTypeNames })
+    ),
     notes: reviewRequired
       ? ["Fallback ISO config. Sub-country semantic mappings require review before publishing."]
-      : ["Pilot config reviewed for ADM0/ADM1/ADM2 semantic mapping."]
+      : [
+          "Pilot config reviewed for configured ADM semantics; coverage still depends on source availability."
+        ]
+  };
+}
+
+function createCountryRegistryLevelEntry({ level, pilot, localTypeNames }) {
+  const depth = Number(level.slice(3));
+  const semanticType = level === "ADM0" ? "country" : (pilot?.[level] ?? "unknown");
+  const reviewed = level === "ADM0" || Boolean(pilot?.[level]);
+
+  return {
+    sourceLevel: level,
+    territoryLevel: depth + 1,
+    hierarchyDepth: depth,
+    semanticType,
+    ...(localTypeNames[level] ? { localTypeName: localTypeNames[level] } : {}),
+    label:
+      level === "ADM0"
+        ? "Country"
+        : reviewed
+          ? `${level} administrative unit`
+          : `Unreviewed ${level}`,
+    ...(depth > 0 ? { parentSourceLevel: `ADM${depth - 1}` } : {}),
+    provider: level === "ADM0" ? "natural-earth" : "geoboundaries",
+    required: level === "ADM0" || Boolean(pilot && (level === "ADM1" || level === "ADM2")),
+    reviewRequired: !reviewed
   };
 }
 
 async function createCoverageRegistry(countryRows) {
   const countries = await Promise.all(
     countryRows.map(async (country) => {
-      const pilot = PILOT_COUNTRIES.has(country.iso2);
+      const pilot = PILOT_COUNTRIES.get(country.iso2);
       const adm0Status = await inferGlobalAdm0Status(country.iso2);
-      const adm1 = await inferCountryLevelStatus(country.iso2, "ADM1", pilot);
-      const adm2 = await inferCountryLevelStatus(country.iso2, "ADM2", pilot);
+      const levels = Object.fromEntries(
+        await Promise.all(
+          ADMIN_LEVELS.map(async (level) => [
+            level,
+            level === "ADM0"
+              ? withCoverageSemantics(country.iso2, level, adm0Status)
+              : withCoverageSemantics(
+                  country.iso2,
+                  level,
+                  await inferCountryLevelStatus(country.iso2, level, pilot)
+                )
+          ])
+        )
+      );
 
       return {
         iso2: country.iso2,
         iso3: country.iso3,
         name: country.name,
-        levels: {
-          ADM0: adm0Status,
-          ADM1: adm1,
-          ADM2: adm2,
-          ADM3: { status: "not-reviewed" },
-          municipality: { status: "source-unavailable" },
-          neighbourhood: { status: "source-unavailable" }
-        },
+        levels,
         lastCheckedAt: GENERATED_AT,
         reviewRequired: !pilot,
         notes: pilot
@@ -203,6 +214,7 @@ async function createCoverageRegistry(countryRows) {
   return {
     schemaVersion: "territorykit-coverage@2",
     generatedAt: GENERATED_AT,
+    levels: ADMIN_LEVELS,
     summary: summarizeCoverage(countries),
     countries
   };
@@ -318,6 +330,19 @@ async function inferCountryLevelStatus(iso2, level, pilot) {
     };
   }
 
+  if (!pilot[level]) {
+    return { status: "not-reviewed", provider: "geoboundaries", sourceStatus: "not-reviewed" };
+  }
+
+  if (level !== "ADM1" && level !== "ADM2") {
+    return {
+      status: "source-unavailable",
+      provider: "geoboundaries",
+      sourceStatus: "unavailable",
+      validationStatus: "not-run"
+    };
+  }
+
   return {
     status: "source-available",
     provider: "geoboundaries",
@@ -326,14 +351,38 @@ async function inferCountryLevelStatus(iso2, level, pilot) {
   };
 }
 
+function withCoverageSemantics(iso2, level, coverageLevel) {
+  const pilot = PILOT_COUNTRIES.get(iso2);
+  const localTypeNames = PILOT_LOCAL_TYPE_NAMES.get(iso2) ?? {};
+  const semanticType = level === "ADM0" ? "country" : (pilot?.[level] ?? "unknown");
+  const reviewed = level === "ADM0" || Boolean(pilot?.[level]);
+
+  return {
+    ...coverageLevel,
+    semanticType,
+    ...(localTypeNames[level] ? { localTypeName: localTypeNames[level] } : {}),
+    semanticReviewStatus: reviewed ? "reviewed" : "mapping-review-required",
+    coverageScope:
+      coverageLevel.status === "built"
+        ? "complete"
+        : coverageLevel.status === "partial"
+          ? "partial"
+          : coverageLevel.status === "not-applicable"
+            ? "not-applicable"
+            : "unknown"
+  };
+}
+
 function summarizeCoverage(countryRows) {
-  const levels = ["ADM0", "ADM1", "ADM2", "ADM3", "municipality", "neighbourhood"];
   const adm0 = summarizeLevel(countryRows, "ADM0");
   const reviewedAdm1 = countryRows.filter(
-    (country) => country.levels.ADM1?.status !== "not-reviewed"
+    (country) => country.levels.ADM1?.semanticReviewStatus === "reviewed"
   ).length;
   const reviewedAdm2 = countryRows.filter(
-    (country) => country.levels.ADM2?.status !== "not-reviewed"
+    (country) => country.levels.ADM2?.semanticReviewStatus === "reviewed"
+  ).length;
+  const reviewedAdm3 = countryRows.filter(
+    (country) => country.levels.ADM3?.semanticReviewStatus === "reviewed"
   ).length;
   const summary = {
     totalIsoCountriesOrAreas: countryRows.length,
@@ -343,14 +392,28 @@ function summarizeCoverage(countryRows) {
     countriesWithAdm0ValidationFailure: adm0["validation-failed"] ?? 0,
     countriesWithAdm0PerformanceDeferred: adm0["performance-deferred"] ?? 0,
     countriesWithAnyOptionalLevelUnavailable: countryRows.filter((country) =>
-      ["ADM1", "ADM2", "ADM3", "municipality", "neighbourhood"].some(
-        (level) => country.levels[level]?.status === "source-unavailable"
-      )
+      SUB_COUNTRY_LEVELS.some((level) => country.levels[level]?.status === "source-unavailable")
     ).length,
     countriesWithReviewedAdm1: reviewedAdm1,
     countriesWithReviewedAdm2: reviewedAdm2,
+    countriesWithReviewedAdm3: reviewedAdm3,
     totalCountries: countryRows.length,
-    levels: Object.fromEntries(levels.map((level) => [level, summarizeLevel(countryRows, level)])),
+    levels: Object.fromEntries(
+      ADMIN_LEVELS.map((level) => [level, summarizeLevel(countryRows, level)])
+    ),
+    sourceStatus: summarizeCoverageProperty(countryRows, "sourceStatus"),
+    validationStatus: summarizeCoverageProperty(countryRows, "validationStatus"),
+    semanticReviewStatus: summarizeCoverageProperty(countryRows, "semanticReviewStatus"),
+    hierarchyStatus: summarizeCoverageProperty(countryRows, "hierarchyStatus"),
+    adjacencyStatus: summarizeCoverageProperty(countryRows, "adjacencyStatus"),
+    indexStatus: summarizeCoverageProperty(countryRows, "indexStatus"),
+    loaderStatus: summarizeCoverageProperty(countryRows, "loaderStatus"),
+    featureCountByLevel: Object.fromEntries(
+      ADMIN_LEVELS.map((level) => [
+        level,
+        countryRows.reduce((sum, country) => sum + (country.levels[level]?.featureCount ?? 0), 0)
+      ])
+    ),
     licenseRestrictedCountries: 0,
     validationFailedCountries: adm0["validation-failed"] ?? 0,
     builtCountries: countryRows.filter((country) =>
@@ -359,6 +422,24 @@ function summarizeCoverage(countryRows) {
   };
 
   return summary;
+}
+
+function summarizeCoverageProperty(countryRows, property) {
+  return Object.fromEntries(
+    ADMIN_LEVELS.map((level) => {
+      const counts = {};
+
+      for (const country of countryRows) {
+        const value = country.levels[level]?.[property];
+
+        if (typeof value === "string") {
+          counts[value] = (counts[value] ?? 0) + 1;
+        }
+      }
+
+      return [level, counts];
+    })
+  );
 }
 
 function summarizeLevel(countryRows, level) {
@@ -387,7 +468,8 @@ function renderCoverageMarkdown(coverage) {
       coverage.summary.countriesWithAnyOptionalLevelUnavailable
     ],
     ["countriesWithReviewedAdm1", coverage.summary.countriesWithReviewedAdm1],
-    ["countriesWithReviewedAdm2", coverage.summary.countriesWithReviewedAdm2]
+    ["countriesWithReviewedAdm2", coverage.summary.countriesWithReviewedAdm2],
+    ["countriesWithReviewedAdm3", coverage.summary.countriesWithReviewedAdm3]
   ]
     .map(([label, count]) => `| ${label.padEnd(44)} | ${String(count).padStart(5)} |`)
     .join("\n");
@@ -410,7 +492,7 @@ function renderCoverageMarkdown(coverage) {
 Generated: ${coverage.generatedAt}
 
 This registry reports explicit source/artifact lifecycle state, not a claim that every level has a committed artifact.
-Missing municipality and neighbourhood data is marked unavailable rather than substituted with ADM2.
+Administrative availability is represented with ADM0 through ADM5 only. Municipality, neighbourhood, and similar meanings are stored as semantic metadata on the corresponding ADM record.
 
 | Metric                                       | Count |
 | -------------------------------------------- | ----: |
@@ -420,14 +502,97 @@ ${metricRows}
 | ------------- | ----: | ---------------: | -----------------: | ----------------: | -------------------: | -----------: | -----------------: |
 ${rows}
 
-Pilot countries with reviewed ADM1/ADM2 mappings: DE, ID, JP, TR, US.
+Pilot countries with reviewed ADM1/ADM2 mappings: DE, ID, JP, TR, US. Turkey also has reviewed ADM3 semantics for neighbourhood / Mahalle, without claiming nationwide ADM3 source coverage.
 
 Sources:
 
 - Natural Earth ADM0 source metadata is tracked as Public Domain with attribution.
 - geoBoundaries source metadata is tracked as CC BY 4.0.
-- Non-pilot ADM1/ADM2 mappings require country-specific review before publishing artifacts.
+- Non-pilot ADM1-ADM5 mappings require country-specific review before publishing artifacts.
 `;
+}
+
+function createAdminSemanticsRegistry(countryRows) {
+  const countries = countryRows.map((country) => {
+    const pilot = PILOT_COUNTRIES.get(country.iso2);
+    const localTypeNames = PILOT_LOCAL_TYPE_NAMES.get(country.iso2) ?? {};
+    const levels = Object.fromEntries(
+      ADMIN_LEVELS.map((level) => [
+        level,
+        createAdminSemanticsLevel({ level, pilot, localTypeNames })
+      ])
+    );
+
+    return {
+      iso2: country.iso2,
+      iso3: country.iso3,
+      name: country.name,
+      reviewRequired: !pilot,
+      levels,
+      notes: pilot
+        ? [
+            "Reviewed semantic mappings are country-specific and do not imply source coverage for every configured level."
+          ]
+        : [
+            "Fallback ISO country config. Sub-country semantic mappings are not reviewed for this country."
+          ]
+    };
+  });
+
+  return {
+    schemaVersion: "territorykit-admin-semantics@2",
+    generatedAt: GENERATED_AT,
+    levels: ADMIN_LEVELS,
+    summary: Object.fromEntries(
+      ADMIN_LEVELS.map((level) => [level, summarizeSemanticReviewStatus(countries, level)])
+    ),
+    countries
+  };
+}
+
+function createAdminSemanticsLevel({ level, pilot, localTypeNames }) {
+  const depth = Number(level.slice(3));
+  const semanticType = level === "ADM0" ? "country" : (pilot?.[level] ?? "unknown");
+  const reviewed = level === "ADM0" || Boolean(pilot?.[level]);
+  const localTypes = new Set([
+    semanticType === "unknown" ? "administrative-unit" : semanticType,
+    ...(localTypeNames[level] ? [localTypeNames[level]] : []),
+    ...(level === "ADM0" ? [] : ["administrative-unit"])
+  ]);
+
+  return {
+    label:
+      level === "ADM0"
+        ? "Country"
+        : reviewed
+          ? `${level} administrative unit`
+          : `Unreviewed ${level}`,
+    semanticType,
+    ...(localTypeNames[level] ? { localTypeName: localTypeNames[level] } : {}),
+    hierarchyDepth: depth,
+    expectedLocalTypes: [...localTypes],
+    reviewStatus: reviewed ? "reviewed" : "mapping-review-required",
+    semanticReviewStatus: reviewed ? "reviewed" : "review-required",
+    required: level === "ADM0" || Boolean(pilot && (level === "ADM1" || level === "ADM2")),
+    sourceNameProperty: "shapeName",
+    sourceIdProperty: "shapeID",
+    sourceCodeProperties: ["officialCode", "shapeISO", "shapeID"],
+    sourceParentProperties:
+      depth === 0
+        ? []
+        : ["parentShapeID", "shapeParentID", "parentSourceId", "parentCode", "shapeParent"]
+  };
+}
+
+function summarizeSemanticReviewStatus(countries, level) {
+  const counts = {};
+
+  for (const country of countries) {
+    const status = country.levels[level]?.semanticReviewStatus ?? "review-required";
+    counts[status] = (counts[status] ?? 0) + 1;
+  }
+
+  return counts;
 }
 
 async function readJsonOptional(path) {

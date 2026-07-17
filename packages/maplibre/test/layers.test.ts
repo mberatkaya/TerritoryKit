@@ -1,11 +1,17 @@
-import { createSampleTerritoryDataset } from "@territory-kit/shared-testkit";
+import {
+  createSampleTerritoryDataset,
+  createTurkeyAdm3DemoDataset
+} from "@territory-kit/shared-testkit";
 import { describe, expect, it, vi } from "vitest";
 import {
   createTerritoryMapLibreAdapter,
   createTerritoryMapLibreController,
   createTerritoryMapLibreLayer,
+  createTerritoryMapLibreLevelLayers,
   createTerritoryMapLibreLayers,
   createTerritoryMapLibreSource,
+  setTerritoryMapLibreHoverState,
+  setTerritoryMapLibreSelectedState,
   zonesToFeatureCollection
 } from "../src/index.js";
 import type { TerritoryMapLibreGeoJsonSource, TerritoryMapLibreMap } from "../src/index.js";
@@ -18,6 +24,23 @@ describe("maplibre adapter", () => {
 
     expect(collection.features).toHaveLength(dataset.zones.length);
     expect(collection.features[0]?.id).toBe("world:europe");
+  });
+
+  it("carries synthetic Turkey ADM3 neighbourhood metadata into GeoJSON features", () => {
+    const collection = zonesToFeatureCollection(createTurkeyAdm3DemoDataset().zones);
+    const neighbourhood = collection.features.find(
+      (feature) => feature.id === "tr:adm3:demo-neighbourhood-a"
+    );
+
+    expect(neighbourhood?.properties).toMatchObject({
+      id: "tr:adm3:demo-neighbourhood-a",
+      level: 3,
+      territory: {
+        semanticType: "neighbourhood",
+        localTypeName: "Mahalle",
+        coverageStatus: "partial"
+      }
+    });
   });
 
   it("creates source and fill/line layer specs", () => {
@@ -61,6 +84,7 @@ describe("maplibre adapter", () => {
         sources.delete(id);
       },
       setPaintProperty: vi.fn(),
+      setFeatureState: vi.fn(),
       on(type, layerId, listener) {
         listeners.set(`${type}:${layerId}`, listener);
       },
@@ -101,6 +125,25 @@ describe("maplibre adapter", () => {
       }
     });
     expect(map.setPaintProperty).toHaveBeenCalledWith("zones-fill", "fill-color", "#ff0000");
+    setTerritoryMapLibreHoverState(map, {
+      sourceId: "zones",
+      sourceLayer: "territory",
+      territoryId: "tr:34",
+      hover: true
+    });
+    setTerritoryMapLibreSelectedState(map, {
+      sourceId: "zones",
+      territoryId: "tr:34",
+      selected: true
+    });
+    expect(map.setFeatureState).toHaveBeenCalledWith(
+      { source: "zones", sourceLayer: "territory", id: "tr:34" },
+      { hover: true }
+    );
+    expect(map.setFeatureState).toHaveBeenCalledWith(
+      { source: "zones", id: "tr:34" },
+      { selected: true }
+    );
     expect(clicked).toEqual(["tr:34"]);
     expect(layers.size).toBe(0);
     expect(sources.size).toBe(0);
@@ -208,7 +251,107 @@ describe("maplibre adapter", () => {
       },
       sourceLayer: "territory"
     });
+    const lowerRegistry: Pick<
+      TerritoryRegistryClient,
+      "resolveArtifact" | "resolveTerritoryArtifact" | "resolveDeepestAvailableTerritoryArtifact"
+    > = {
+      ...registry,
+      async resolveTerritoryArtifact() {
+        return {
+          requestedLevel: "ADM3",
+          resolvedLevel: "ADM3",
+          exactMatch: true,
+          reason: "exact-match",
+          coverageStatus: "partial",
+          dataset: {
+            id: "tr-demo",
+            displayName: "Turkey Demo",
+            version: "1.0.0",
+            schemaVersion: "territory-schema@1",
+            country: { alpha2: "TR" },
+            levels: ["ADM3"],
+            source: { provider: "fixture" },
+            license: { id: "Apache-2.0", attribution: "fixture" },
+            artifacts: []
+          },
+          artifact: {
+            id: "tr-adm3",
+            purpose: "render",
+            format: "mvt",
+            levels: ["ADM3"],
+            url: "tr/adm3/manifest.json",
+            sha256: "1".repeat(64),
+            sizeBytes: 1,
+            layer: "territory_adm3",
+            tileUrlTemplate: "adm3/{z}/{x}/{y}.mvt"
+          },
+          url: "https://cdn.example.test/tr/adm3/manifest.json",
+          registryHash: "hash"
+        };
+      },
+      async resolveDeepestAvailableTerritoryArtifact() {
+        return {
+          requestedLevel: "ADM3",
+          resolvedLevel: "ADM2",
+          exactMatch: false,
+          reason: "requested-level-unavailable",
+          coverageStatus: "source-unavailable",
+          dataset: {
+            id: "tr-demo",
+            displayName: "Turkey Demo",
+            version: "1.0.0",
+            schemaVersion: "territory-schema@1",
+            country: { alpha2: "TR" },
+            levels: ["ADM2"],
+            source: { provider: "fixture" },
+            license: { id: "Apache-2.0", attribution: "fixture" },
+            artifacts: []
+          },
+          artifact: {
+            id: "tr-adm2",
+            purpose: "render",
+            format: "geojson",
+            levels: ["ADM2"],
+            url: "tr/adm2.geojson",
+            sha256: "2".repeat(64),
+            sizeBytes: 1
+          },
+          url: "https://cdn.example.test/tr/adm2.geojson",
+          registryHash: "hash"
+        };
+      }
+    };
+
+    await expect(
+      createTerritoryMapLibreSource({ registry: lowerRegistry, country: "TR", level: "ADM3" })
+    ).resolves.toMatchObject({
+      source: { spec: { type: "vector" } },
+      sourceLayer: "territory_adm3",
+      requestedLevel: "ADM3",
+      renderedLevel: "ADM3",
+      exactMatch: true,
+      coverageStatus: "partial",
+      format: "mvt"
+    });
+    await expect(
+      createTerritoryMapLibreSource({
+        registry: lowerRegistry,
+        country: "TR",
+        level: "ADM3",
+        fallback: "deepest-available"
+      })
+    ).resolves.toMatchObject({
+      source: { spec: { type: "geojson", data: "https://cdn.example.test/tr/adm2.geojson" } },
+      requestedLevel: "ADM3",
+      renderedLevel: "ADM2",
+      exactMatch: false,
+      fallbackReason: "requested-level-unavailable",
+      coverageStatus: "source-unavailable",
+      format: "geojson"
+    });
+
     expect(createTerritoryMapLibreLayer({ sourceId: "render" })).toHaveLength(2);
+    expect(createTerritoryMapLibreLevelLayers({ sourceId: "render" })).toHaveLength(12);
 
     const controller = createTerritoryMapLibreController({ registry, datasetId: "sample" });
     const clicked: string[] = [];

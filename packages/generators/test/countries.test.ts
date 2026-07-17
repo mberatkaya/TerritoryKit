@@ -10,11 +10,12 @@ import {
   getTerritoryCountryConfig,
   inspectTerritoryCountryDatasetPath,
   listTerritoryCountryConfigs,
+  resolveTerritoryCountryHierarchy,
   validateTerritoryCountryDatasetPath,
   verifyTerritoryCountrySourceLock
 } from "../src/index.js";
-import type { TerritoryAdminLevel } from "@territory-kit/dataset";
-import type { ParsedCountryFeature } from "../src/index.js";
+import type { TerritoryAdminLevel, TerritoryBBox, TerritoryGeometry } from "@territory-kit/dataset";
+import type { BuiltCountryZone, ParsedCountryFeature } from "../src/index.js";
 
 const FIXTURE_BUILD_DATE = "2026-01-01T00:00:00.000Z";
 
@@ -161,6 +162,28 @@ describe("pilot country dataset pipeline", () => {
     expect(left.territoryId).not.toBe(right.territoryId);
   });
 
+  it("reports ambiguous spatial parents without choosing by bbox size", () => {
+    const report = resolveTerritoryCountryHierarchy({
+      parentsByLevel: {
+        ADM1: [
+          builtZone("tr:adm1:left", "ADM1", squareGeometry(0, 0, 10)),
+          builtZone("tr:adm1:right", "ADM1", squareGeometry(0, 0, 10))
+        ]
+      },
+      childrenByLevel: {
+        ADM2: [builtZone("tr:adm2:child", "ADM2", squareGeometry(1, 1, 1))]
+      }
+    });
+
+    expect(report.resolutions).toEqual([
+      expect.objectContaining({
+        childId: "tr:adm2:child",
+        method: "ambiguous",
+        candidateParentIds: ["tr:adm1:left", "tr:adm1:right"]
+      })
+    ]);
+  });
+
   it("disambiguates colliding official identities with source context", () => {
     const config = getTerritoryCountryConfig("AZ");
     const first = createTerritoryCountryIdentity({
@@ -303,7 +326,8 @@ async function createCountrySourceFixture(
     ADM1: join(tempDir, "adm1.geojson"),
     ADM2: join(tempDir, "adm2.geojson"),
     ADM3: join(tempDir, "adm3.geojson"),
-    ADM4: join(tempDir, "adm4.geojson")
+    ADM4: join(tempDir, "adm4.geojson"),
+    ADM5: join(tempDir, "adm5.geojson")
   };
   const sourceVersion = `${config.countryCodeAlpha2.toLowerCase()}-fixture-1`;
 
@@ -451,6 +475,51 @@ function fallbackFeature(name: string, offset: number): ParsedCountryFeature {
     geometry: square(offset, offset, offset + 1, offset + 1) as ParsedCountryFeature["geometry"],
     rawProperties: {}
   };
+}
+
+function builtZone(
+  id: string,
+  adminLevel: TerritoryAdminLevel,
+  geometry: TerritoryGeometry
+): BuiltCountryZone {
+  const bbox = geometryToBBox(geometry);
+
+  return {
+    zone: {
+      id,
+      datasetId: "test",
+      countryCode: "TR",
+      level: Number(adminLevel.slice(3)),
+      sourceAdminLevel: adminLevel,
+      semanticType: adminLevel === "ADM1" ? "province" : "district",
+      name: id,
+      neighborIds: [],
+      geometry,
+      center: [(bbox[0] + bbox[2]) / 2, (bbox[1] + bbox[3]) / 2],
+      bbox,
+      properties: { territory: { adminLevel } }
+    },
+    identity: {
+      territoryId: id,
+      adminLevel,
+      officialCodes: {},
+      names: { default: id },
+      stability: "source-id"
+    }
+  };
+}
+
+function squareGeometry(west: number, south: number, size: number): TerritoryGeometry {
+  return square(west, south, west + size, south + size) as TerritoryGeometry;
+}
+
+function geometryToBBox(geometry: TerritoryGeometry): TerritoryBBox {
+  const coordinates =
+    geometry.type === "Polygon" ? geometry.coordinates.flat() : geometry.coordinates.flat(2);
+  const lngs = coordinates.map((coordinate) => coordinate[0]!);
+  const lats = coordinates.map((coordinate) => coordinate[1]!);
+
+  return [Math.min(...lngs), Math.min(...lats), Math.max(...lngs), Math.max(...lats)];
 }
 
 function codedFeature(name: string, code: string, offset: number): ParsedCountryFeature {

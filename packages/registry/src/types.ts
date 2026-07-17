@@ -1,4 +1,8 @@
-import type { TerritoryAdminLevel } from "@territory-kit/dataset";
+import type {
+  TerritoryAdminLevel,
+  TerritoryCoverageStatus,
+  TerritorySemanticAdminType
+} from "@territory-kit/dataset";
 
 export const TERRITORY_REGISTRY_VERSION = "1";
 
@@ -45,6 +49,10 @@ export interface TerritoryRegistryArtifact {
   identityMapHash?: string;
   renderArtifactVersion?: string;
   layer?: string;
+  coverageStatus?: TerritoryCoverageStatus;
+  semanticType?: TerritorySemanticAdminType;
+  localTypeName?: string;
+  partialCoverage?: boolean;
   [key: string]: unknown;
 }
 
@@ -178,6 +186,42 @@ export interface TerritoryRegistryResolvedArtifact {
   registryHash: string;
 }
 
+export type TerritoryRegistryTerritoryArtifactFallback = "none" | "deepest-available";
+
+export interface TerritoryRegistryResolveTerritoryArtifactOptions {
+  country: string;
+  level: TerritoryAdminLevel;
+  purpose?: TerritoryRegistryArtifactPurpose;
+  detail?: string;
+  formatPreference?: readonly TerritoryRegistryArtifactFormat[];
+  version?: string;
+  allowPrerelease?: boolean;
+  fallback?: TerritoryRegistryTerritoryArtifactFallback;
+}
+
+export interface TerritoryRegistryResolveDeepestAvailableTerritoryArtifactOptions {
+  country: string;
+  requestedLevel: TerritoryAdminLevel;
+  purpose?: TerritoryRegistryArtifactPurpose;
+  detail?: string;
+  formatPreference?: readonly TerritoryRegistryArtifactFormat[];
+  version?: string;
+  allowPrerelease?: boolean;
+  fallback?: TerritoryRegistryTerritoryArtifactFallback;
+}
+
+export interface TerritoryRegistryResolvedTerritoryArtifact {
+  requestedLevel: TerritoryAdminLevel;
+  resolvedLevel: TerritoryAdminLevel;
+  exactMatch: boolean;
+  reason: "exact-match" | "requested-level-unavailable";
+  coverageStatus: TerritoryCoverageStatus;
+  dataset: TerritoryRegistryDataset;
+  artifact: TerritoryRegistryArtifact;
+  url: string;
+  registryHash: string;
+}
+
 export interface TerritoryRegistryResolveArtifactOptions {
   datasetId: string;
   purpose?: TerritoryRegistryArtifactPurpose;
@@ -222,6 +266,12 @@ export interface TerritoryRegistryClient {
   resolveArtifact(
     options: TerritoryRegistryResolveArtifactOptions
   ): Promise<TerritoryRegistryResolvedArtifact>;
+  resolveTerritoryArtifact(
+    options: TerritoryRegistryResolveTerritoryArtifactOptions
+  ): Promise<TerritoryRegistryResolvedTerritoryArtifact>;
+  resolveDeepestAvailableTerritoryArtifact(
+    options: TerritoryRegistryResolveDeepestAvailableTerritoryArtifactOptions
+  ): Promise<TerritoryRegistryResolvedTerritoryArtifact>;
   installDataset(
     options: TerritoryRegistryInstallOptions
   ): Promise<TerritoryInstalledDatasetHandle>;

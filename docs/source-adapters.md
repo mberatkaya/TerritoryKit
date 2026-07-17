@@ -34,6 +34,10 @@ const adapter = registry.get("natural-earth");
 The registry rejects duplicate ids, normalizes ids, returns deterministic lists, and can be created
 per test to avoid global mutable state.
 
+Use `territory sources inspect --provider <id> --country <ISO2> --level <ADM*> --json` to inspect
+provider support without downloading data. See [Lower-admin providers](./sources/lower-admin-providers.md)
+for ADM0-ADM5 source and manifest rules.
+
 ## Adapter vs Dataset Builder
 
 An adapter handles source-specific conversion. A dataset builder handles artifact layout and curated

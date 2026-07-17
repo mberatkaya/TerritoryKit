@@ -50,10 +50,19 @@ export type TerritoryArtifactStatus =
   | "published";
 
 export type TerritoryMappingReviewStatus =
-  "reviewed" | "provider-confirmed" | "generic-admin-level" | "mapping-review-required";
+  | "reviewed"
+  | "provider-confirmed"
+  | "generic-admin-level"
+  | "mapping-review-required"
+  | "not-applicable";
 
 export type TerritorySemanticReviewStatus =
-  "reviewed" | "provider-confirmed" | "generic-admin-level" | "review-required";
+  | "reviewed"
+  | "provider-confirmed"
+  | "generic-admin-level"
+  | "review-required"
+  | "mapping-review-required"
+  | "not-applicable";
 
 export type TerritoryLifecycleStatus =
   | "not-run"
@@ -110,6 +119,7 @@ export interface TerritoryCountryLevelConfig {
   adminLevel: TerritoryAdminLevel;
   expectedLocalTypes: readonly string[];
   semanticType: TerritorySemanticAdminType;
+  localTypeName?: string;
   label?: string;
   sourceNameProperty?: string;
   sourceIdProperty?: string;

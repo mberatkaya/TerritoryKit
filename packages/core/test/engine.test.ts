@@ -1,8 +1,12 @@
 import {
   createSampleTerritoryDataset,
-  createSyntheticGridDataset
+  createSyntheticGridDataset,
+  createTurkeyAdm3DemoDataset
 } from "@territory-kit/shared-testkit";
-import { computeTerritoryAdjacencyContentHash } from "@territory-kit/dataset";
+import {
+  computeTerritoryAdjacencyContentHash,
+  validateTerritoryDataset
+} from "@territory-kit/dataset";
 import type { TerritoryAdjacencyArtifact, TerritoryDataset } from "@territory-kit/dataset";
 import fc from "fast-check";
 import { describe, expect, it } from "vitest";
@@ -27,6 +31,32 @@ describe("createTerritoryEngine", () => {
     expect(engine.latLngToZone({ lat: 10, lng: 10 }, { level: 1 })).toBeNull();
     expect(engine.latLngToZone({ lat: Number.NaN, lng: 28.95 }, { level: 3 })).toBeNull();
     expect(engine.latLngToZone({ lat: 41.01, lng: 28.95 }, { level: -1 })).toBeNull();
+  });
+
+  it("loads the synthetic Turkey ADM3 neighbourhood demo without claiming broader coverage", () => {
+    const dataset = createTurkeyAdm3DemoDataset();
+    const engine = createTerritoryEngine({ dataset });
+
+    expect(validateTerritoryDataset(dataset).ok).toBe(true);
+    expect(engine.availableLevels).toEqual([0, 1, 2, 3]);
+    expect(engine.zoneToChildren("tr:adm2:fatih")).toEqual([
+      "tr:adm3:demo-neighbourhood-a",
+      "tr:adm3:demo-neighbourhood-b",
+      "tr:adm3:demo-neighbourhood-c"
+    ]);
+    expect(engine.zoneToParent("tr:adm3:demo-neighbourhood-a")).toBe("tr:adm2:fatih");
+    expect(engine.zoneNeighbors("tr:adm3:demo-neighbourhood-b")).toEqual([
+      "tr:adm3:demo-neighbourhood-a",
+      "tr:adm3:demo-neighbourhood-c"
+    ]);
+    expect(engine.latLngToZone({ lat: 41.03, lng: 28.965 }, { level: 3 })).toBe(
+      "tr:adm3:demo-neighbourhood-b"
+    );
+    expect(engine.getZoneById("tr:adm3:demo-neighbourhood-a")?.properties.territory).toMatchObject({
+      semanticType: "neighbourhood",
+      localTypeName: "Mahalle",
+      coverageStatus: "partial"
+    });
   });
 
   it("resolves synthetic grid center points to their generated zones", () => {

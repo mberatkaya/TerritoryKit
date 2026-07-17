@@ -5,6 +5,7 @@ import { performance } from "node:perf_hooks";
 import { pathToFileURL } from "node:url";
 import { createTerritoryEngine } from "@territory-kit/core";
 import {
+  TERRITORY_ADMIN_LEVELS,
   TERRITORY_SCHEMA_VERSION,
   createTerritoryAdjacencyIndex,
   createTerritoryDatasetFromGeoJson,
@@ -43,6 +44,7 @@ import {
   getTerritorySourceAdapter,
   getTerritoryCountryConfig,
   hasTerritorySourceAdapter,
+  inspectTerritorySourceCapabilities,
   inspectTerritoryCountryDatasetPath,
   listTerritoryCountryConfigs,
   inferBBoxAdjacency,
@@ -74,6 +76,7 @@ import type {
   GeoBoundariesSourceOptions,
   NaturalEarthAdm0Detail,
   NaturalEarthSourceOptions,
+  TerritoryProviderCapabilitiesResult,
   TerritorySourceDescription,
   TerritorySourceIssue,
   TerritorySourcePipelineResult,
@@ -523,7 +526,9 @@ async function runCountryBuild(args: string[]): Promise<number> {
       ...(levels ? { levels } : {}),
       ...(flags.has("build-adjacency") ? { buildAdjacency: true } : {}),
       ...(flags.has("strict") ? { strict: true } : {}),
-      ...(flags.has("allow-non-publish-ready") ? { allowNonPublishReady: true } : {}),
+      ...(flags.has("allow-non-publish-ready") || flags.has("allow-partial")
+        ? { allowNonPublishReady: true }
+        : {}),
       ...(buildDate ? { buildDate } : {}),
       ...(batchSize ? { batchSize: Number(batchSize) } : {}),
       ...(flags.has("force") ? { force: true } : {})
@@ -922,6 +927,10 @@ async function runDataset(args: string[]): Promise<number> {
     return runDatasetInfo(args.slice(1));
   }
 
+  if (subcommand === "resolve") {
+    return runDatasetResolve(args.slice(1));
+  }
+
   if (subcommand === "install") {
     return runDatasetInstall(args.slice(1));
   }
@@ -1208,7 +1217,8 @@ async function runDatasetBuildAll(args: string[]): Promise<number> {
       ...(flags.has("offline") ? { offline: true } : {}),
       ...(flags.has("force") ? { force: true } : {})
     });
-    const ok = report.countriesFailed === 0 || flags.has("continue-on-error");
+    const ok =
+      report.countriesFailed === 0 || flags.has("continue-on-error") || flags.has("allow-partial");
 
     printJson({
       ok,
@@ -1229,9 +1239,15 @@ async function runDatasetBuildAll(args: string[]): Promise<number> {
 async function runDatasetCoverage(args: string[]): Promise<number> {
   const flags = parseFlags(args);
   const coveragePath = getFlag(flags, "input") ?? "datasets/registry/coverage.json";
+  const selectedLevels = readCountryLevelsFlag(flags);
+
+  if (isCliIssueArray(selectedLevels)) {
+    printJson({ ok: false, command: "dataset coverage", issues: selectedLevels });
+    return 2;
+  }
 
   try {
-    const coverage = flags.has("from-artifacts")
+    const coverageInput = flags.has("from-artifacts")
       ? await buildTerritoryCoverageRegistryFromArtifacts({
           generatedAt: getFlag(flags, "build-date") ?? new Date().toISOString(),
           artifactRoot: getFlag(flags, "artifact-root") ?? "datasets/generated/countries",
@@ -1241,6 +1257,9 @@ async function runDatasetCoverage(args: string[]): Promise<number> {
             : {})
         })
       : await readCoverageRegistry(coveragePath, flags.has("input"));
+    const coverage = selectedLevels
+      ? filterCoverageRegistryLevels(coverageInput, selectedLevels)
+      : coverageInput;
     const outputPath = getFlag(flags, "output");
 
     if (outputPath) {
@@ -1680,6 +1699,56 @@ async function runDatasetInfo(args: string[]): Promise<number> {
   return 0;
 }
 
+async function runDatasetResolve(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const country = getFlag(flags, "country");
+  const level = readAdminLevelFlag(flags, "level");
+
+  if (!country || isCliIssueArray(level)) {
+    printJson({
+      ok: false,
+      command: "dataset resolve",
+      issues: [
+        ...(!country ? [createCliIssue("--country is required.")] : []),
+        ...(isCliIssueArray(level) ? level : [])
+      ]
+    });
+    return 2;
+  }
+
+  const client = createCliRegistryClient(flags);
+  const purpose = getFlag(flags, "purpose") ?? "render";
+  const formatPreference = getFlag(flags, "format-preference")
+    ?.split(",")
+    .map((value) => value.trim())
+    .filter(Boolean);
+  const result = flags.has("deepest-available")
+    ? await client.resolveDeepestAvailableTerritoryArtifact({
+        country,
+        requestedLevel: level,
+        purpose: purpose as "query" | "render" | "metadata" | "adjacency" | "debug",
+        fallback: "deepest-available",
+        ...(formatPreference
+          ? { formatPreference: formatPreference as Array<"mvt" | "geojson"> }
+          : {})
+      })
+    : await client.resolveTerritoryArtifact({
+        country,
+        level,
+        purpose: purpose as "query" | "render" | "metadata" | "adjacency" | "debug",
+        ...(formatPreference
+          ? { formatPreference: formatPreference as Array<"mvt" | "geojson"> }
+          : {})
+      });
+
+  printJson({
+    ok: true,
+    command: "dataset resolve",
+    data: result
+  });
+  return 0;
+}
+
 async function runDatasetInstall(
   args: string[],
   options: { update?: boolean } = {}
@@ -1855,10 +1924,25 @@ async function runSource(args: string[]): Promise<number> {
 
     try {
       const description = getTerritorySourceAdapter(inspectedSourceId).describe();
+      const countryFlag = getFlag(flags, "country");
+      const levelFlag = getFlag(flags, "level");
       const inspectRequest = {
-        ...(getFlag(flags, "country") ? { country: getFlag(flags, "country") } : {}),
-        ...(getFlag(flags, "level") ? { level: getFlag(flags, "level") } : {})
+        ...(countryFlag ? { country: countryFlag } : {}),
+        ...(levelFlag ? { level: levelFlag } : {})
       };
+      const capabilities =
+        subcommand === "inspect"
+          ? inspectTerritorySourceCapabilities({
+              registry: {
+                get: getTerritorySourceAdapter,
+                list: listTerritorySourceAdapters,
+                has: hasTerritorySourceAdapter
+              },
+              provider: inspectedSourceId,
+              ...(countryFlag ? { country: countryFlag } : {}),
+              ...(levelFlag ? { level: levelFlag } : {})
+            })
+          : undefined;
 
       if (json) {
         printJson({
@@ -1866,13 +1950,17 @@ async function runSource(args: string[]): Promise<number> {
           command: subcommand === "inspect" ? "sources inspect" : "source info",
           data: {
             ...description,
-            ...(Object.keys(inspectRequest).length > 0 ? { request: inspectRequest } : {})
+            ...(Object.keys(inspectRequest).length > 0 ? { request: inspectRequest } : {}),
+            ...(capabilities ? { capabilities } : {})
           }
         });
       } else {
         console.log(formatSourceDescription(description));
         if (Object.keys(inspectRequest).length > 0) {
           console.log(`Request: ${JSON.stringify(inspectRequest)}`);
+        }
+        if (capabilities) {
+          console.log(formatSourceCapabilities(capabilities));
         }
       }
 
@@ -2824,8 +2912,8 @@ function readCountryLevelsFlag(
     .split(",")
     .map((entry) => entry.trim().toUpperCase())
     .filter(Boolean);
-  const validLevels = new Set(["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"]);
-  const invalid = levels.find((level) => !validLevels.has(level));
+  const validLevels = new Set<TerritoryAdminLevel>(TERRITORY_ADMIN_LEVELS);
+  const invalid = levels.find((level) => !validLevels.has(level as TerritoryAdminLevel));
 
   if (!invalid && levels.length > 0) {
     return [...new Set(levels)] as TerritoryAdminLevel[];
@@ -2834,9 +2922,30 @@ function readCountryLevelsFlag(
   return [
     createCliIssue(
       invalid
-        ? `Invalid --levels entry '${invalid}'. Expected ADM0, ADM1, ADM2, ADM3, or ADM4.`
+        ? `Invalid --levels entry '${invalid}'. Expected ${TERRITORY_ADMIN_LEVELS.join(", ")}.`
         : "--levels must include at least one admin level."
     )
+  ];
+}
+
+function readAdminLevelFlag(
+  flags: Map<string, string | true>,
+  name: string
+): TerritoryAdminLevel | CliIssue[] {
+  const value = getFlag(flags, name);
+
+  if (!value) {
+    return [createCliIssue(`--${name} is required.`)];
+  }
+
+  const level = value.trim().toUpperCase();
+
+  if (TERRITORY_ADMIN_LEVELS.includes(level as TerritoryAdminLevel)) {
+    return level as TerritoryAdminLevel;
+  }
+
+  return [
+    createCliIssue(`Invalid --${name} '${value}'. Expected ${TERRITORY_ADMIN_LEVELS.join(", ")}.`)
   ];
 }
 
@@ -2924,8 +3033,8 @@ function formatAdminLevels(description: TerritorySourceDescription): string {
     return "configurable";
   }
 
-  if (levels.length === 5) {
-    return "ADM0-ADM4";
+  if (levels.length === TERRITORY_ADMIN_LEVELS.length) {
+    return "ADM0-ADM5";
   }
 
   return levels.join(",");
@@ -2943,6 +3052,15 @@ function formatSourceDescription(description: TerritorySourceDescription): strin
     `Options: ${description.options.map((option) => option.name).join(", ") || "none"}`,
     `Example: ${description.exampleCommand}`
   ].join("\n");
+}
+
+function formatSourceCapabilities(capabilities: TerritoryProviderCapabilitiesResult): string {
+  const rows = Object.values(capabilities.levels)
+    .filter((level) => Boolean(level))
+    .map((level) => `${level.level}: ${level.status}${level.reason ? ` (${level.reason})` : ""}`)
+    .join("\n");
+
+  return ["", "Capabilities:", rows].join("\n");
 }
 
 function formatCountryConfig(config: ReturnType<typeof getTerritoryCountryConfig>): string {
@@ -3052,8 +3170,17 @@ function parseLevelsFlag(input: string | undefined): TerritoryAdminLevel[] | und
 
   return input
     .split(",")
-    .map((value) => value.trim())
-    .filter(Boolean) as TerritoryAdminLevel[];
+    .map((value) => value.trim().toUpperCase())
+    .filter(Boolean)
+    .map((value) => {
+      if (TERRITORY_ADMIN_LEVELS.includes(value as TerritoryAdminLevel)) {
+        return value as TerritoryAdminLevel;
+      }
+
+      throw new Error(
+        `Invalid --levels entry '${value}'. Expected ${TERRITORY_ADMIN_LEVELS.join(", ")}.`
+      );
+    });
 }
 
 async function writeJsonOutput(path: string, payload: unknown, force: boolean): Promise<void> {
@@ -3295,6 +3422,62 @@ function printDatasetCoverageSummary(input: unknown): void {
   }
 }
 
+function filterCoverageRegistryLevels(
+  input: unknown,
+  levels: readonly TerritoryAdminLevel[]
+): unknown {
+  if (!isRecordValue(input)) {
+    return input;
+  }
+
+  const selected = new Set(levels);
+  const summary = isRecordValue(input.summary)
+    ? {
+        ...input.summary,
+        ...(isRecordValue(input.summary.levels)
+          ? { levels: filterRecordByKeys(input.summary.levels, selected) }
+          : {}),
+        ...(isRecordValue(input.summary.sourceStatus)
+          ? { sourceStatus: filterRecordByKeys(input.summary.sourceStatus, selected) }
+          : {}),
+        ...(isRecordValue(input.summary.validationStatus)
+          ? { validationStatus: filterRecordByKeys(input.summary.validationStatus, selected) }
+          : {}),
+        ...(isRecordValue(input.summary.semanticReviewStatus)
+          ? {
+              semanticReviewStatus: filterRecordByKeys(input.summary.semanticReviewStatus, selected)
+            }
+          : {})
+      }
+    : input.summary;
+
+  return {
+    ...input,
+    ...(Array.isArray(input.levels)
+      ? { levels: input.levels.filter((level) => selected.has(level as TerritoryAdminLevel)) }
+      : {}),
+    ...(summary ? { summary } : {}),
+    ...(Array.isArray(input.countries)
+      ? {
+          countries: input.countries.map((country) =>
+            isRecordValue(country) && isRecordValue(country.levels)
+              ? { ...country, levels: filterRecordByKeys(country.levels, selected) }
+              : country
+          )
+        }
+      : {})
+  };
+}
+
+function filterRecordByKeys(
+  input: Record<string, unknown>,
+  keys: ReadonlySet<TerritoryAdminLevel>
+): Record<string, unknown> {
+  return Object.fromEntries(
+    Object.entries(input).filter(([key]) => keys.has(key as TerritoryAdminLevel))
+  );
+}
+
 function printJson(payload: unknown): void {
   console.log(JSON.stringify(payload, null, 2));
 }
@@ -3380,7 +3563,7 @@ function printCountrySourceLockHelp(): void {
   console.log(`territory country source lock <country> --output <sources.lock.json>
 
 Options:
-  --levels ADM0,ADM1,ADM2
+  --levels ADM0,ADM1,ADM2,ADM3,ADM4,ADM5
   --release-type gbOpen
   --metadata <metadata.json>
   --metadata-url <metadata-url>
@@ -3404,10 +3587,11 @@ function printCountryBuildHelp(): void {
   console.log(`territory country build <country> --source-lock <sources.lock.json> --output <dir>
 
 Options:
-  --levels ADM0,ADM1,ADM2
+  --levels ADM0,ADM1,ADM2,ADM3,ADM4,ADM5
   --build-adjacency
   --strict
   --allow-non-publish-ready
+  --allow-partial
   --build-date <iso-date>
   --batch-size <integer>
   --force
@@ -3536,7 +3720,7 @@ Commands:
 
 Options:
   --country <ISO2>
-  --level <ADM0|ADM1|ADM2>
+  --level <ADM0|ADM1|ADM2|ADM3|ADM4|ADM5>
   --json               Emit machine-readable JSON`);
 }
 
@@ -3546,7 +3730,7 @@ function printSourceInfoHelp(): void {
 Examples:
   territory source info natural-earth
   territory source info geoboundaries --json
-  territory sources inspect --provider geoboundaries --country TR --level ADM2 --json`);
+  territory sources inspect --provider geoboundaries --country TR --level ADM3 --json`);
 }
 
 function printImportHelp(): void {
@@ -3570,6 +3754,7 @@ Commands:
   coverage         Print or generate global coverage lifecycle summary
   search           Search registry datasets
   info             Show registry dataset metadata
+  resolve          Resolve a country/level artifact, optionally with deepest-available fallback
   install          Install dataset artifacts into the local cache
   update           Refresh or switch installed dataset artifacts
   verify           Verify an installed dataset
@@ -3584,6 +3769,7 @@ territory dataset build global-admin --output datasets/generated/global/ADM0
 Options:
   --detail low|medium|high
   --country-artifact-root <dir[,dir]>   Optional country-detail artifact roots for coverage.
+  --levels <ADM0[,ADM1...ADM5]>         Filter coverage output by administrative level.
   --build-report <report.json>
   --source-version <version>
   --source-url <url>
@@ -3597,7 +3783,7 @@ function printDatasetBuildAllHelp(): void {
   console.log(`territory dataset build-all --levels ADM0 --output datasets/generated/global-adm0-countries --report reports/global-adm0-build-all.json
 
 Options:
-  --levels <ADM0[,ADM1...]>
+  --levels <ADM0[,ADM1...ADM5]>
   --countries <ISO2[,ISO2...]>
   --exclude <ISO2[,ISO2...]>
   --output <dir>
@@ -3607,6 +3793,7 @@ Options:
   --phase-timeout-ms <ms>
   --skip-adjacency                      Build country datasets without adjacency artifacts.
   --continue-on-error
+  --allow-partial
   --concurrency <number>
   --cache-dir <dir>
   --offline

@@ -5,6 +5,7 @@ import { dirname, join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { createSampleTerritoryDataset } from "@territory-kit/shared-testkit";
 import { describe, expect, it } from "vitest";
+import { createTerritoryRegistryClient } from "../src/index.js";
 import { createNodeTerritoryRegistryClient } from "../src/node.js";
 import { validateTerritoryDatasetRegistry } from "../src/schema.js";
 import type { TerritoryDatasetRegistry } from "../src/types.js";
@@ -134,6 +135,99 @@ describe("territory dataset registry", () => {
     } finally {
       await rm(tempDir, { recursive: true, force: true });
     }
+  });
+
+  it("resolves country-level artifacts and reports deepest-available fallback explicitly", async () => {
+    const registry: TerritoryDatasetRegistry = {
+      registryVersion: "1",
+      generatedAt: "2026-01-01T00:00:00.000Z",
+      baseUrl: "https://cdn.example.test/territory/",
+      datasets: [
+        {
+          id: "tr-demo",
+          displayName: "Turkey Demo",
+          version: "1.0.0",
+          schemaVersion: "territory-schema@1",
+          country: { alpha2: "TR", alpha3: "TUR", name: "Turkiye" },
+          levels: ["ADM0", "ADM1", "ADM2", "ADM3"],
+          source: { provider: "fixture" },
+          license: { id: "Apache-2.0", attribution: "fixture" },
+          artifacts: [
+            {
+              id: "tr-adm2-geojson",
+              purpose: "render",
+              format: "geojson",
+              levels: ["ADM2"],
+              url: "tr/adm2.geojson",
+              sha256: "1".repeat(64),
+              sizeBytes: 10,
+              coverageStatus: "generated"
+            },
+            {
+              id: "tr-adm3-mvt",
+              purpose: "render",
+              format: "mvt",
+              levels: ["ADM3"],
+              url: "tr/adm3.pmtiles",
+              sha256: "2".repeat(64),
+              sizeBytes: 10,
+              coverageStatus: "partial",
+              semanticType: "neighbourhood",
+              localTypeName: "Mahalle",
+              partialCoverage: true
+            }
+          ]
+        }
+      ]
+    };
+    const client = createTerritoryRegistryClient({ registry });
+
+    await expect(
+      client.resolveTerritoryArtifact({
+        country: "TR",
+        level: "ADM3",
+        purpose: "render",
+        formatPreference: ["mvt", "geojson"]
+      })
+    ).resolves.toMatchObject({
+      requestedLevel: "ADM3",
+      resolvedLevel: "ADM3",
+      exactMatch: true,
+      reason: "exact-match",
+      coverageStatus: "partial",
+      artifact: { id: "tr-adm3-mvt" }
+    });
+
+    const fallbackClient = createTerritoryRegistryClient({
+      registry: {
+        ...registry,
+        datasets: [
+          {
+            ...registry.datasets[0]!,
+            levels: ["ADM0", "ADM1", "ADM2"],
+            artifacts: registry.datasets[0]!.artifacts.filter((artifact) =>
+              artifact.levels?.includes("ADM2")
+            )
+          }
+        ]
+      }
+    });
+
+    await expect(
+      fallbackClient.resolveDeepestAvailableTerritoryArtifact({
+        country: "TUR",
+        requestedLevel: "ADM3",
+        purpose: "render",
+        fallback: "deepest-available"
+      })
+    ).resolves.toMatchObject({
+      requestedLevel: "ADM3",
+      resolvedLevel: "ADM2",
+      exactMatch: false,
+      reason: "requested-level-unavailable",
+      coverageStatus: "source-unavailable",
+      artifact: { id: "tr-adm2-geojson" }
+    });
   });
 });
 

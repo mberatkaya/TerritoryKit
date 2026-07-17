@@ -126,6 +126,8 @@ export {
 export * from "./countries/index.js";
 export { verifySourceArtifact } from "./sources/verification.js";
 export { getDefaultSourceCacheDir, createSourceCacheKey } from "./sources/cache.js";
+export { inspectTerritorySourceCapabilities } from "./sources/capabilities.js";
+export { validateOfficialOpenDataSourceManifest } from "./sources/open-data-manifest.js";
 export { fetchHttpSourceArtifact } from "./sources/transports/http.js";
 export { resolveFileSourceArtifact, sha256File } from "./sources/transports/file.js";
 export type {
@@ -139,6 +141,9 @@ export type {
   TerritorySourceIssue,
   TerritorySourceGeometryQualityMode,
   TerritorySourceOptionDescription,
+  TerritoryProviderCapabilitiesResult,
+  TerritoryProviderLevelCapability,
+  TerritoryProviderLevelCapabilityStatus,
   TerritorySourcePipelineEvent,
   TerritorySourcePipelineOptions,
   TerritorySourcePipelineOutput,
@@ -151,6 +156,11 @@ export type {
   TerritorySourceTransformResult,
   TerritorySourceVerificationResult
 } from "./sources/types.js";
+export type { InspectTerritorySourceCapabilitiesOptions } from "./sources/capabilities.js";
+export type {
+  TerritoryOfficialOpenDataSourceManifest,
+  TerritoryOfficialOpenDataSourceManifestValidationResult
+} from "./sources/open-data-manifest.js";
 export type {
   GeometryQualityPathRepairOptions,
   TerritoryDatasetPathInput

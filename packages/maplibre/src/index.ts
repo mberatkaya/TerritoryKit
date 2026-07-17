@@ -1,6 +1,10 @@
 import type { Feature, FeatureCollection } from "geojson";
-import { loadTerritoryDataset } from "@territory-kit/dataset";
-import type { TerritoryAdminLevel, TerritoryZone } from "@territory-kit/dataset";
+import { getAdminLevelDepth, loadTerritoryDataset } from "@territory-kit/dataset";
+import type {
+  TerritoryAdminLevel,
+  TerritoryCoverageStatus,
+  TerritoryZone
+} from "@territory-kit/dataset";
 import type { TerritoryRegistryClient } from "@territory-kit/core";
 
 export interface TerritoryMapLibreState {
@@ -63,6 +67,14 @@ export interface TerritoryMapLibreMap {
   removeLayer(id: string): void;
   removeSource(id: string): void;
   setPaintProperty?(layerId: string, property: string, value: unknown): void;
+  setFeatureState?(
+    target: { source: string; sourceLayer?: string; id: string | number },
+    state: Record<string, unknown>
+  ): void;
+  removeFeatureState?(
+    target: { source: string; sourceLayer?: string; id: string | number },
+    key?: string
+  ): void;
   on?(type: string, layerId: string, listener: (event: unknown) => void): void;
   off?(type: string, layerId: string, listener: (event: unknown) => void): void;
 }
@@ -89,9 +101,33 @@ export interface TerritoryMapLibreLayerBundle {
   layers: Array<Record<string, unknown>>;
 }
 
+export interface TerritoryMapLibreLevelPolicy {
+  level: TerritoryAdminLevel;
+  minZoom: number;
+  maxZoom?: number;
+}
+
+export const DEFAULT_TERRITORY_MAPLIBRE_LEVEL_POLICY: readonly TerritoryMapLibreLevelPolicy[] = [
+  { level: "ADM0", minZoom: 0, maxZoom: 4 },
+  { level: "ADM1", minZoom: 5, maxZoom: 7 },
+  { level: "ADM2", minZoom: 8, maxZoom: 11 },
+  { level: "ADM3", minZoom: 12, maxZoom: 14 },
+  { level: "ADM4", minZoom: 15, maxZoom: 17 },
+  { level: "ADM5", minZoom: 18 }
+];
+
 export interface TerritoryMapLibreRegistrySourceOptions {
-  registry: Pick<TerritoryRegistryClient, "resolveArtifact">;
-  datasetId: string;
+  registry: Pick<TerritoryRegistryClient, "resolveArtifact"> &
+    Partial<
+      Pick<
+        TerritoryRegistryClient,
+        "resolveTerritoryArtifact" | "resolveDeepestAvailableTerritoryArtifact"
+      >
+    >;
+  datasetId?: string;
+  country?: string;
+  level?: TerritoryAdminLevel;
+  fallback?: "none" | "deepest-available";
   levels?: readonly TerritoryAdminLevel[];
   sourceId?: string;
   sourceLayer?: string;
@@ -105,6 +141,12 @@ export interface TerritoryMapLibreRegistrySourceBundle {
   };
   sourceLayer: string;
   artifact: unknown;
+  requestedLevel?: TerritoryAdminLevel;
+  renderedLevel?: TerritoryAdminLevel;
+  exactMatch?: boolean;
+  fallbackReason?: string;
+  coverageStatus?: TerritoryCoverageStatus;
+  format?: "mvt" | "geojson" | string;
 }
 
 export interface TerritoryMapLibreRegistryLayerOptions {
@@ -221,14 +263,29 @@ export async function createTerritoryMapLibreSource(
   options: TerritoryMapLibreRegistrySourceOptions
 ): Promise<TerritoryMapLibreRegistrySourceBundle> {
   const sourceId = options.sourceId ?? "territory-kit-render";
-  const sourceLayer = options.sourceLayer ?? "territory";
-  const resolved = await options.registry.resolveArtifact({
-    datasetId: options.datasetId,
-    purpose: "render",
-    ...(options.levels ? { levels: options.levels } : {}),
-    formatPreference: options.formatPreference ?? ["mvt", "geojson"]
-  });
-  const artifact = resolved.artifact as { format?: string; tileUrlTemplate?: unknown };
+  const formatPreference =
+    options.formatPreference ?? defaultFormatPreferenceForLevel(options.level);
+  const resolved =
+    options.country && options.level && options.registry.resolveTerritoryArtifact
+      ? await resolveRegistryTerritorySource(options, formatPreference)
+      : await resolveRegistryDatasetSource(options, formatPreference);
+  const artifact = resolved.artifact as {
+    format?: string;
+    layer?: unknown;
+    tileUrlTemplate?: unknown;
+  };
+  const sourceLayer =
+    options.sourceLayer ?? (typeof artifact.layer === "string" ? artifact.layer : "territory");
+  const metadata = {
+    ...(resolved.requestedLevel ? { requestedLevel: resolved.requestedLevel } : {}),
+    ...(resolved.resolvedLevel ? { renderedLevel: resolved.resolvedLevel } : {}),
+    ...(resolved.exactMatch !== undefined ? { exactMatch: resolved.exactMatch } : {}),
+    ...(resolved.reason && resolved.reason !== "exact-match"
+      ? { fallbackReason: resolved.reason }
+      : {}),
+    ...(resolved.coverageStatus ? { coverageStatus: resolved.coverageStatus } : {}),
+    ...(artifact.format ? { format: artifact.format } : {})
+  };
 
   if (artifact.format === "geojson") {
     return {
@@ -241,7 +298,8 @@ export async function createTerritoryMapLibreSource(
         }
       },
       sourceLayer,
-      artifact: resolved.artifact
+      artifact: resolved.artifact,
+      ...metadata
     };
   }
 
@@ -260,8 +318,80 @@ export async function createTerritoryMapLibreSource(
       }
     },
     sourceLayer,
-    artifact: resolved.artifact
+    artifact: resolved.artifact,
+    ...metadata
   };
+}
+
+interface TerritoryMapLibreResolvedRegistrySource {
+  artifact: unknown;
+  url: string;
+  requestedLevel?: TerritoryAdminLevel;
+  resolvedLevel?: TerritoryAdminLevel;
+  exactMatch?: boolean;
+  reason?: string;
+  coverageStatus?: TerritoryCoverageStatus;
+}
+
+async function resolveRegistryTerritorySource(
+  options: TerritoryMapLibreRegistrySourceOptions,
+  formatPreference: readonly ["mvt" | "geojson", ...Array<"mvt" | "geojson">]
+): Promise<TerritoryMapLibreResolvedRegistrySource> {
+  if (!options.country || !options.level || !options.registry.resolveTerritoryArtifact) {
+    throw new Error(
+      "MapLibre country-level source resolution requires country, level, and registry support."
+    );
+  }
+
+  const resolved =
+    options.fallback === "deepest-available" &&
+    options.registry.resolveDeepestAvailableTerritoryArtifact
+      ? await options.registry.resolveDeepestAvailableTerritoryArtifact({
+          country: options.country,
+          requestedLevel: options.level,
+          purpose: "render",
+          fallback: "deepest-available",
+          formatPreference
+        })
+      : await options.registry.resolveTerritoryArtifact({
+          country: options.country,
+          level: options.level,
+          purpose: "render",
+          fallback: options.fallback ?? "none",
+          formatPreference
+        });
+
+  return {
+    artifact: resolved.artifact,
+    url: resolved.url,
+    requestedLevel: resolved.requestedLevel,
+    resolvedLevel: resolved.resolvedLevel,
+    exactMatch: resolved.exactMatch,
+    reason: resolved.reason,
+    coverageStatus: resolved.coverageStatus
+  };
+}
+
+async function resolveRegistryDatasetSource(
+  options: TerritoryMapLibreRegistrySourceOptions,
+  formatPreference: readonly ["mvt" | "geojson", ...Array<"mvt" | "geojson">]
+): Promise<TerritoryMapLibreResolvedRegistrySource> {
+  if (!options.datasetId) {
+    throw new Error("MapLibre registry source resolution requires datasetId or country and level.");
+  }
+
+  return options.registry.resolveArtifact({
+    datasetId: options.datasetId,
+    purpose: "render",
+    ...(options.levels ? { levels: options.levels } : {}),
+    formatPreference
+  });
+}
+
+function defaultFormatPreferenceForLevel(
+  level: TerritoryAdminLevel | undefined
+): readonly ["mvt" | "geojson", ...Array<"mvt" | "geojson">] {
+  return !level || getAdminLevelDepth(level) >= 3 ? ["mvt", "geojson"] : ["geojson", "mvt"];
 }
 
 export function createTerritoryMapLibreLayer(
@@ -284,7 +414,14 @@ export function createTerritoryMapLibreLayer(
       "source-layer": sourceLayer,
       ...zoomRange,
       paint: {
-        "fill-color": options.fillColor ?? "#1f8a70",
+        "fill-color": [
+          "case",
+          ["boolean", ["feature-state", "selected"], false],
+          "#f97316",
+          ["boolean", ["feature-state", "hover"], false],
+          "#fbbf24",
+          options.fillColor ?? "#1f8a70"
+        ],
         "fill-opacity": options.fillOpacity ?? 0.35
       }
     },
@@ -300,6 +437,86 @@ export function createTerritoryMapLibreLayer(
       }
     }
   ];
+}
+
+export function createTerritoryMapLibreLevelLayers(
+  options: TerritoryMapLibreRegistryLayerOptions & {
+    levelPolicy?: readonly TerritoryMapLibreLevelPolicy[];
+  } = {}
+): Array<Record<string, unknown>> {
+  const policies = options.levelPolicy ?? DEFAULT_TERRITORY_MAPLIBRE_LEVEL_POLICY;
+
+  return policies.flatMap((policy) =>
+    createTerritoryMapLibreLayer({
+      ...options,
+      fillLayerId: `${options.fillLayerId ?? "territory-kit-render-fill"}-${policy.level.toLowerCase()}`,
+      lineLayerId: `${options.lineLayerId ?? "territory-kit-render-line"}-${policy.level.toLowerCase()}`,
+      minZoom: policy.minZoom,
+      ...(policy.maxZoom !== undefined ? { maxZoom: policy.maxZoom } : {})
+    })
+  );
+}
+
+export function setTerritoryMapLibreFeatureState(
+  map: TerritoryMapLibreMap,
+  input: {
+    sourceId: string;
+    territoryId: string | number;
+    sourceLayer?: string;
+    state: Record<string, unknown>;
+  }
+): void {
+  map.setFeatureState?.(
+    {
+      source: input.sourceId,
+      ...(input.sourceLayer ? { sourceLayer: input.sourceLayer } : {}),
+      id: input.territoryId
+    },
+    input.state
+  );
+}
+
+export function setTerritoryMapLibreHoverState(
+  map: TerritoryMapLibreMap,
+  input: { sourceId: string; territoryId: string | number; sourceLayer?: string; hover: boolean }
+): void {
+  setTerritoryMapLibreFeatureState(map, {
+    sourceId: input.sourceId,
+    territoryId: input.territoryId,
+    ...(input.sourceLayer ? { sourceLayer: input.sourceLayer } : {}),
+    state: { hover: input.hover }
+  });
+}
+
+export function setTerritoryMapLibreSelectedState(
+  map: TerritoryMapLibreMap,
+  input: {
+    sourceId: string;
+    territoryId: string | number;
+    sourceLayer?: string;
+    selected: boolean;
+  }
+): void {
+  setTerritoryMapLibreFeatureState(map, {
+    sourceId: input.sourceId,
+    territoryId: input.territoryId,
+    ...(input.sourceLayer ? { sourceLayer: input.sourceLayer } : {}),
+    state: { selected: input.selected }
+  });
+}
+
+export function removeTerritoryMapLibreFeatureState(
+  map: TerritoryMapLibreMap,
+  input: { sourceId: string; territoryId: string | number; sourceLayer?: string; key?: string }
+): void {
+  map.removeFeatureState?.(
+    {
+      source: input.sourceId,
+      ...(input.sourceLayer ? { sourceLayer: input.sourceLayer } : {}),
+      id: input.territoryId
+    },
+    input.key
+  );
 }
 
 export function createTerritoryMapLibreController(

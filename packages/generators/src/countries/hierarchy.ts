@@ -1,4 +1,4 @@
-import { classifyTerritoryGeometryRelation } from "@territory-kit/dataset";
+import { classifyTerritoryGeometryRelation, getParentAdminLevel } from "@territory-kit/dataset";
 import type {
   LngLat,
   TerritoryAdminLevel,
@@ -25,7 +25,12 @@ export function resolveTerritoryCountryHierarchy(input: {
       continue;
     }
 
-    const parentLevel = previousAdminLevel(level);
+    const parentLevel = getParentAdminLevel(level);
+
+    if (!parentLevel) {
+      continue;
+    }
+
     const parents = input.parentsByLevel[parentLevel] ?? [];
 
     for (const child of children) {
@@ -83,7 +88,14 @@ export function applyHierarchyResolutions<T extends BuiltCountryZone>(
       },
       zone: {
         ...built.zone,
-        parentId
+        parentId,
+        properties: {
+          ...built.zone.properties,
+          territory: {
+            ...(isRecord(built.zone.properties.territory) ? built.zone.properties.territory : {}),
+            parentId
+          }
+        }
       }
     };
   });
@@ -245,27 +257,21 @@ function resolveSpatialCandidates(
   }
 
   if (candidates.length > 1) {
-    const resolved = resolveAmbiguousSpatialParent(candidates);
-
-    if (resolved) {
-      return {
-        childId: child.zone.id,
-        parentId: resolved.zone.id,
-        method: "spatial-containment",
-        confidence: 0.9,
-        candidateParentIds: candidates.map((candidate) => candidate.zone.id),
-        issues: [
-          {
-            code: "PARENT_AMBIGUOUS_RESOLVED",
-            severity: "warning",
-            message:
-              mode === "center"
-                ? "Multiple spatial parent candidates covered this child center; chose the most specific parent by bbox area."
-                : "Multiple spatial parent candidates covered this child; chose the most specific parent by bbox area."
-          }
-        ]
-      };
-    }
+    return {
+      childId: child.zone.id,
+      method: "ambiguous",
+      candidateParentIds: candidates.map((candidate) => candidate.zone.id),
+      issues: [
+        {
+          code: "PARENT_AMBIGUOUS",
+          severity: "error",
+          message:
+            mode === "center"
+              ? "Multiple spatial parent candidates cover this child center."
+              : "Multiple spatial parent candidates cover this child geometry."
+        }
+      ]
+    };
   }
 
   return undefined;
@@ -276,21 +282,6 @@ function compareParentSpecificity(left: BuiltCountryZone, right: BuiltCountryZon
     bboxArea(left.zone.bbox) - bboxArea(right.zone.bbox) ||
     left.zone.id.localeCompare(right.zone.id)
   );
-}
-
-function resolveAmbiguousSpatialParent(
-  candidates: readonly BuiltCountryZone[]
-): BuiltCountryZone | undefined {
-  const [first, second] = candidates;
-
-  if (!first || !second) {
-    return first;
-  }
-
-  const firstArea = bboxArea(first.zone.bbox);
-  const secondArea = bboxArea(second.zone.bbox);
-
-  return firstArea > 0 && firstArea <= secondArea * 0.75 ? first : undefined;
 }
 
 function findExplicitParent(
@@ -364,6 +355,10 @@ function pointIntersectsGeometry(point: LngLat, geometry: TerritoryGeometry): bo
   );
 }
 
+function isRecord(input: unknown): input is Record<string, unknown> {
+  return typeof input === "object" && input !== null && !Array.isArray(input);
+}
+
 function pointIntersectsPolygon(point: LngLat, polygon: LngLat[][]): boolean {
   const [outer, ...holes] = polygon;
 
@@ -389,11 +384,6 @@ function pointInRing(point: LngLat, ring: LngLat[]): boolean {
   }
 
   return inside;
-}
-
-function previousAdminLevel(level: TerritoryAdminLevel): TerritoryAdminLevel {
-  const numericLevel = Number(level.slice(3));
-  return `ADM${Math.max(0, numericLevel - 1)}` as TerritoryAdminLevel;
 }
 
 function bboxesIntersect(left: TerritoryBBox, right: TerritoryBBox, epsilon: number): boolean {

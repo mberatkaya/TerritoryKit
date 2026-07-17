@@ -22,13 +22,17 @@ export type {
   TerritoryRegistryInstallOptions,
   TerritoryRegistryIssue,
   TerritoryRegistryLicenseInfo,
+  TerritoryRegistryResolveDeepestAvailableTerritoryArtifactOptions,
   TerritoryRegistryResolveArtifactOptions,
+  TerritoryRegistryResolvedTerritoryArtifact,
+  TerritoryRegistryResolveTerritoryArtifactOptions,
   TerritoryRegistryResolvedArtifact,
   TerritoryRegistrySnapshot,
   TerritoryRegistrySourceInfo,
   TerritoryRegistryTransport,
   TerritoryRegistryTransportRequest,
   TerritoryRegistryTransportResponse,
+  TerritoryRegistryTerritoryArtifactFallback,
   TerritoryRegistryValidationResult,
   TerritoryRegistryVersion
 } from "./types.js";
