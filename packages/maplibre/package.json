@@ -47,8 +47,9 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@territory-kit/core": "workspace:*",
+    "@territory-kit/adapter-core": "workspace:*",
     "@territory-kit/dataset": "workspace:*",
+    "@territory-kit/registry": "workspace:*",
     "@types/geojson": "^7946.0.16"
   },
   "devDependencies": {

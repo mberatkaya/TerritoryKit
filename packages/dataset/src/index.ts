@@ -28,7 +28,14 @@ export {
   typescriptGeometryQualityBackend,
   validateGeometryDataset
 } from "./quality.js";
-export { TerritoryDatasetValidationError } from "./errors.js";
+export {
+  TERRITORY_ERROR_CODES,
+  TerritoryDatasetValidationError,
+  TerritoryError,
+  deserializeTerritoryError,
+  isTerritoryError,
+  serializeTerritoryError
+} from "./errors.js";
 export {
   TERRITORY_ADMIN_LEVELS,
   TERRITORY_COVERAGE_STATUSES,
@@ -112,6 +119,14 @@ export type {
   TerritoryValidationSeverity,
   TerritoryZone
 } from "./types.js";
+export type {
+  SerializedTerritoryError,
+  SerializedTerritoryErrorCause,
+  TerritoryErrorCode,
+  TerritoryErrorDetails,
+  TerritoryErrorDetailValue,
+  TerritoryErrorOptions
+} from "./errors.js";
 export type {
   TerritoryQueryArtifact,
   TerritoryQueryRenderCompatibilityIssue,

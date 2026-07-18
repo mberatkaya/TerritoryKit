@@ -1,11 +1,24 @@
 import type { Feature, FeatureCollection } from "geojson";
-import { getAdminLevelDepth, loadTerritoryDataset } from "@territory-kit/dataset";
+import {
+  assertTerritoryAdapterAttached,
+  assertTerritoryAdapterCapability,
+  defineTerritoryAdapterCapabilities
+} from "@territory-kit/adapter-core";
+import type {
+  TerritoryAdapterCapabilities,
+  TerritoryAdapterLifecycleState,
+  TerritoryRendererAdapter,
+  TerritoryRenderSource,
+  TerritoryRenderState,
+  TerritoryRenderTheme
+} from "@territory-kit/adapter-core";
+import { TerritoryError, getAdminLevelDepth, loadTerritoryDataset } from "@territory-kit/dataset";
 import type {
   TerritoryAdminLevel,
   TerritoryCoverageStatus,
   TerritoryZone
 } from "@territory-kit/dataset";
-import type { TerritoryRegistryClient } from "@territory-kit/core";
+import type { TerritoryRegistryClient } from "@territory-kit/registry";
 
 export interface TerritoryMapLibreState {
   faction?: string;
@@ -34,7 +47,7 @@ export interface TerritoryMapLibreLayerOptions {
   stateByZoneId?: ReadonlyMap<string, TerritoryMapLibreState>;
 }
 
-export interface TerritoryMapLibreTheme {
+export interface TerritoryMapLibreTheme extends TerritoryRenderTheme {
   fillColor?: string;
   fillOpacity?: number;
   lineColor?: string;
@@ -79,9 +92,13 @@ export interface TerritoryMapLibreMap {
   off?(type: string, layerId: string, listener: (event: unknown) => void): void;
 }
 
-export interface TerritoryMapLibreAdapter {
+export interface TerritoryMapLibreAdapter extends TerritoryRendererAdapter<TerritoryMapLibreMap> {
+  readonly capabilities: TerritoryAdapterCapabilities;
+  readonly lifecycleState: TerritoryAdapterLifecycleState;
   attach(map: TerritoryMapLibreMap): void;
   detach(): void;
+  setSource(source: TerritoryRenderSource): void;
+  updateState(state: TerritoryRenderState): void;
   updateData(
     zones: TerritoryZone[],
     stateByZoneId?: ReadonlyMap<string, TerritoryMapLibreState>
@@ -115,6 +132,20 @@ export const DEFAULT_TERRITORY_MAPLIBRE_LEVEL_POLICY: readonly TerritoryMapLibre
   { level: "ADM4", minZoom: 15, maxZoom: 17 },
   { level: "ADM5", minZoom: 18 }
 ];
+
+export const TERRITORY_MAPLIBRE_ADAPTER_CAPABILITIES = defineTerritoryAdapterCapabilities({
+  geoJson: true,
+  vectorTiles: false,
+  featureState: true,
+  hover: true,
+  click: true,
+  selection: true,
+  symbols: false,
+  transitions: false,
+  runtimeThemeUpdates: true,
+  sourceReplacement: true,
+  viewportEvents: false
+});
 
 export interface TerritoryMapLibreRegistrySourceOptions {
   registry: Pick<TerritoryRegistryClient, "resolveArtifact"> &
@@ -586,6 +617,7 @@ export function createTerritoryMapLibreAdapter(
   const fillLayerId = options.fillLayerId ?? "territory-kit-zones-fill";
   const lineLayerId = options.lineLayerId ?? "territory-kit-zones-line";
   let map: TerritoryMapLibreMap | undefined;
+  let lifecycleState: TerritoryAdapterLifecycleState = "detached";
   let zones = [...options.zones];
   let stateByZoneId = options.stateByZoneId ?? new Map<string, TerritoryMapLibreState>();
 
@@ -614,9 +646,11 @@ export function createTerritoryMapLibreAdapter(
 
   function detachCurrentMap(): void {
     if (!map) {
+      lifecycleState = lifecycleState === "disposed" ? "disposed" : "detached";
       return;
     }
 
+    lifecycleState = "detaching";
     map.off?.("click", fillLayerId, clickListener);
     map.off?.("mousemove", fillLayerId, hoverListener);
     map.off?.("mouseleave", fillLayerId, leaveListener);
@@ -632,6 +666,7 @@ export function createTerritoryMapLibreAdapter(
     }
 
     map = undefined;
+    lifecycleState = "detached";
   }
 
   function dispatchZoneEvent(
@@ -657,8 +692,18 @@ export function createTerritoryMapLibreAdapter(
   }
 
   return {
+    get capabilities() {
+      return TERRITORY_MAPLIBRE_ADAPTER_CAPABILITIES;
+    },
+
+    get lifecycleState() {
+      return lifecycleState;
+    },
+
     attach(nextMap) {
+      lifecycleState = "attaching";
       detachCurrentMap();
+      lifecycleState = "attaching";
       map = nextMap;
       const bundle = currentBundle();
 
@@ -677,10 +722,107 @@ export function createTerritoryMapLibreAdapter(
       map.on?.("click", fillLayerId, clickListener);
       map.on?.("mousemove", fillLayerId, hoverListener);
       map.on?.("mouseleave", fillLayerId, leaveListener);
+      lifecycleState = "attached";
     },
 
     detach() {
       detachCurrentMap();
+    },
+
+    setSource(source) {
+      assertTerritoryAdapterAttached(lifecycleState, "set source");
+      const attachedMap = requireAttachedMap(map, "set source");
+      const capability =
+        source.type === "geojson"
+          ? "geoJson"
+          : source.type === "vector-tiles"
+            ? "vectorTiles"
+            : undefined;
+
+      if (!capability) {
+        throw new TerritoryError(
+          "RUNTIME_CONFIGURATION_INVALID",
+          "MapLibre source type is unsupported.",
+          {
+            details: { sourceId: source.id, sourceType: source.type }
+          }
+        );
+      }
+
+      assertTerritoryAdapterCapability(
+        TERRITORY_MAPLIBRE_ADAPTER_CAPABILITIES,
+        capability,
+        "set source"
+      );
+
+      if (source.id !== sourceId) {
+        throw new TerritoryError(
+          "ADAPTER_TARGET_INVALID",
+          "MapLibre source id does not match the configured adapter source id.",
+          { details: { configuredSourceId: sourceId, sourceId: source.id } }
+        );
+      }
+
+      if (!isFeatureCollection(source.data)) {
+        throw new TerritoryError(
+          "RUNTIME_CONFIGURATION_INVALID",
+          "MapLibre source replacement requires a GeoJSON FeatureCollection.",
+          { details: { sourceId: source.id, sourceType: source.type } }
+        );
+      }
+
+      const mapSource = attachedMap.getSource(source.id);
+
+      if (!mapSource) {
+        throw new TerritoryError(
+          "ADAPTER_TARGET_INVALID",
+          "MapLibre source is not present on the attached map.",
+          {
+            details: { sourceId: source.id }
+          }
+        );
+      }
+
+      mapSource.setData(source.data);
+    },
+
+    updateState(state) {
+      assertTerritoryAdapterAttached(lifecycleState, "update state");
+      const attachedMap = requireAttachedMap(map, "update state");
+
+      assertTerritoryAdapterCapability(
+        TERRITORY_MAPLIBRE_ADAPTER_CAPABILITIES,
+        "featureState",
+        "update state"
+      );
+
+      for (const territoryId of state.selectedTerritoryIds ?? []) {
+        setTerritoryMapLibreSelectedState(attachedMap, {
+          sourceId,
+          territoryId,
+          selected: true
+        });
+      }
+
+      if (state.hoverTerritoryId) {
+        setTerritoryMapLibreHoverState(attachedMap, {
+          sourceId,
+          territoryId: state.hoverTerritoryId,
+          hover: true
+        });
+      }
+
+      for (const [territoryId, selection] of state.stateByTerritoryId ?? new Map()) {
+        setTerritoryMapLibreFeatureState(attachedMap, {
+          sourceId,
+          territoryId,
+          state: {
+            ...(selection.selected !== undefined ? { selected: selection.selected } : {}),
+            ...(selection.hover !== undefined ? { hover: selection.hover } : {}),
+            ...(selection.properties ?? {})
+          }
+        });
+      }
     },
 
     updateData(nextZones, nextStateByZoneId = stateByZoneId) {
@@ -711,6 +853,27 @@ export function createTerritoryMapLibreAdapter(
       }
     }
   };
+}
+
+function isFeatureCollection(input: unknown): input is FeatureCollection {
+  return isRecord(input) && input.type === "FeatureCollection" && Array.isArray(input.features);
+}
+
+function requireAttachedMap(
+  map: TerritoryMapLibreMap | undefined,
+  action: string
+): TerritoryMapLibreMap {
+  if (!map) {
+    throw new TerritoryError(
+      "ADAPTER_NOT_ATTACHED",
+      `Cannot ${action} before the adapter is attached.`,
+      {
+        details: { action }
+      }
+    );
+  }
+
+  return map;
 }
 
 function readFirstFeature(event: unknown): Feature | undefined {

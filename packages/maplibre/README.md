@@ -5,7 +5,7 @@ MapLibre GL JS adapter utilities for rendering TerritoryKit zones as GeoJSON sou
 ## Installation
 
 ```sh
-pnpm add @territory-kit/maplibre @territory-kit/core @territory-kit/dataset maplibre-gl
+pnpm add @territory-kit/maplibre @territory-kit/adapter-core @territory-kit/dataset maplibre-gl
 ```
 
 ## Basic Usage
@@ -31,7 +31,11 @@ adapter.attach(map);
   policy.
 - `setTerritoryMapLibreHoverState` and `setTerritoryMapLibreSelectedState` wrap MapLibre feature
   state for vector-tile interactions.
-- `createTerritoryMapLibreAdapter(options)` manages attach, detach, data updates, and theme updates.
+- `createTerritoryMapLibreAdapter(options)` implements the shared adapter contract and manages
+  attach, detach, source, state, data, and theme updates.
+- `sourceReplacement` means `setSource` updates the configured existing GeoJSON source with
+  `setData`. The source id must match the adapter `sourceId`; missing or mismatched sources throw
+  coded `TerritoryError`s instead of silently no-oping.
 - `TerritoryMapLibreState` describes optional visual state per zone.
 
 ADM3 and deeper sources prefer MVT when available and may fall back to GeoJSON for small fixtures.

@@ -16,6 +16,11 @@ package boundaries required for MapLibre, NestJS/PostGIS, generators, and CLI to
 - [Benchmarks](./benchmarks.md)
 - [Real-world benchmarks](./real-world-benchmarks.md)
 - [Release check](./release-check.md)
+- [Runtime architecture audit](./architecture/runtime-architecture-audit.md)
+- [Runtime contract](./architecture/runtime-contract.md)
+- [Adapter contract](./architecture/adapter-contract.md)
+- [Core/registry boundary](./architecture/core-registry-boundary.md)
+- [Errors](./errors.md)
 - [Global datasets](./global-datasets.md)
 - [Lower administrative levels](./datasets/lower-admin-levels.md)
 - [Administrative semantics](./datasets/admin-semantics.md)
@@ -75,6 +80,6 @@ pnpm add @territory-kit/core @territory-kit/dataset
 
 ## Package Boundary
 
-The core engine has no dependency on renderers, backend frameworks, or game-specific
-state. Dynamic ownership, faction, and score data should be layered through adapters or
-application state.
+The core engine has no dependency on renderers, backend frameworks, or game-specific state.
+Dynamic ownership, faction, and score data should be layered through adapters, runtime
+coordination, or application state.

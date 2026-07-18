@@ -1,5 +1,6 @@
 import {
   TERRITORY_COVERAGE_STATUSES,
+  TerritoryError,
   compareAdminLevels,
   getAdminLevelDepth
 } from "@territory-kit/dataset";
@@ -63,7 +64,11 @@ export function createTerritoryRegistryClient(
       const snapshot = await cache.readRegistrySnapshot(registryUrl);
 
       if (!snapshot) {
-        throw new Error(`Registry '${registryUrl}' is not available in offline cache.`);
+        throw new TerritoryError(
+          "CACHE_CORRUPTED",
+          `Registry '${registryUrl}' is not available in offline cache.`,
+          { details: { registryUrl } }
+        );
       }
 
       loadedRegistry = snapshot.registry;
@@ -77,8 +82,10 @@ export function createTerritoryRegistryClient(
     const validation = validateTerritoryDatasetRegistry(registryInput);
 
     if (!validation.ok || !validation.registry) {
-      throw new Error(
-        `Registry validation failed: ${validation.issues.map((issue) => issue.message).join("; ")}`
+      throw new TerritoryError(
+        "DATASET_INVALID",
+        `Registry validation failed: ${validation.issues.map((issue) => issue.message).join("; ")}`,
+        { details: { issueCount: validation.issues.length } }
       );
     }
 
@@ -111,7 +118,13 @@ export function createTerritoryRegistryClient(
       });
 
     if (candidates.length === 0) {
-      throw new Error(`No registry artifact matches ${request.datasetId}.`);
+      throw new TerritoryError(
+        "ARTIFACT_NOT_FOUND",
+        `No registry artifact matches ${request.datasetId}.`,
+        {
+          details: { datasetId: request.datasetId }
+        }
+      );
     }
 
     if (!request.formatPreference && candidates.length > 1 && !request.path) {
@@ -124,14 +137,24 @@ export function createTerritoryRegistryClient(
       );
 
       if (!equivalent) {
-        throw new Error(`Registry artifact request for ${request.datasetId} is ambiguous.`);
+        throw new TerritoryError(
+          "RUNTIME_CONFIGURATION_INVALID",
+          `Registry artifact request for ${request.datasetId} is ambiguous.`,
+          { details: { datasetId: request.datasetId } }
+        );
       }
     }
 
     const artifact = candidates[0];
 
     if (!artifact) {
-      throw new Error(`No registry artifact matches ${request.datasetId}.`);
+      throw new TerritoryError(
+        "ARTIFACT_NOT_FOUND",
+        `No registry artifact matches ${request.datasetId}.`,
+        {
+          details: { datasetId: request.datasetId }
+        }
+      );
     }
 
     return {
@@ -203,8 +226,10 @@ export function createTerritoryRegistryClient(
     }
 
     if (request.fallback !== "deepest-available") {
-      throw new Error(
-        `No ${request.requestedLevel} artifact is available for country '${request.country}'.`
+      throw new TerritoryError(
+        "ARTIFACT_NOT_FOUND",
+        `No ${request.requestedLevel} artifact is available for country '${request.country}'.`,
+        { details: { country: request.country, requestedLevel: request.requestedLevel } }
       );
     }
 
@@ -215,8 +240,10 @@ export function createTerritoryRegistryClient(
     });
 
     if (!fallback) {
-      throw new Error(
-        `No artifact at or above ${request.requestedLevel} is available for country '${request.country}'.`
+      throw new TerritoryError(
+        "ARTIFACT_NOT_FOUND",
+        `No artifact at or above ${request.requestedLevel} is available for country '${request.country}'.`,
+        { details: { country: request.country, requestedLevel: request.requestedLevel } }
       );
     }
 
@@ -282,7 +309,11 @@ export function createTerritoryRegistryClient(
       }
 
       if (options.offline) {
-        throw new Error(`Artifact ${artifact.id} is not installed and registry client is offline.`);
+        throw new TerritoryError(
+          "ARTIFACT_NOT_FOUND",
+          `Artifact ${artifact.id} is not installed and registry client is offline.`,
+          { details: { artifactId: artifact.id, datasetId: dataset.id } }
+        );
       }
 
       const sourceUrl = joinUrl(registry.baseUrl, artifact.url);
@@ -369,7 +400,11 @@ export function createTerritoryRegistryClient(
     );
 
     if (matches.length === 0) {
-      throw new Error(`Dataset ${datasetId}${version ? `@${version}` : ""} is not installed.`);
+      throw new TerritoryError(
+        "DATASET_NOT_FOUND",
+        `Dataset ${datasetId}${version ? `@${version}` : ""} is not installed.`,
+        { details: { datasetId, ...(version ? { version } : {}) } }
+      );
     }
 
     return matches.sort((left, right) => compareSemver(right.version, left.version))[0]!;
@@ -383,7 +418,10 @@ export function createTerritoryRegistryClient(
     await loadRegistry();
 
     if (!loadedRegistryHash) {
-      throw new Error("Registry hash was not initialized.");
+      throw new TerritoryError(
+        "RUNTIME_CONFIGURATION_INVALID",
+        "Registry hash was not initialized."
+      );
     }
 
     return loadedRegistryHash;
@@ -392,7 +430,11 @@ export function createTerritoryRegistryClient(
   async function fetchBytes(url: string, context: { purpose: string; signal?: AbortSignal }) {
     if (!options.transport) {
       if (!globalThis.fetch) {
-        throw new Error(`No registry transport is configured for ${context.purpose}.`);
+        throw new TerritoryError(
+          "RUNTIME_CONFIGURATION_INVALID",
+          `No registry transport is configured for ${context.purpose}.`,
+          { details: { purpose: context.purpose } }
+        );
       }
 
       return createFetchTransport().fetch({
@@ -416,14 +458,24 @@ export function createTerritoryRegistryClient(
     bytes: Uint8Array
   ): Promise<void> {
     if (bytes.byteLength !== artifact.sizeBytes) {
-      throw new Error(`Size mismatch for artifact ${artifact.id}.`);
+      throw new TerritoryError("ARTIFACT_CORRUPTED", `Size mismatch for artifact ${artifact.id}.`, {
+        details: {
+          artifactId: artifact.id,
+          expectedSizeBytes: artifact.sizeBytes,
+          actualSizeBytes: bytes.byteLength
+        }
+      });
     }
 
     if (verifyChecksums) {
       const actual = await sha256Hex(bytes);
 
       if (actual !== artifact.sha256) {
-        throw new Error(`Checksum mismatch for artifact ${artifact.id}.`);
+        throw new TerritoryError(
+          "CHECKSUM_MISMATCH",
+          `Checksum mismatch for artifact ${artifact.id}.`,
+          { details: { artifactId: artifact.id } }
+        );
       }
     }
   }
@@ -557,7 +609,11 @@ function selectDataset(
     .sort((left, right) => compareSemver(right.version, left.version));
 
   if (candidates.length === 0) {
-    throw new Error(`Dataset ${request.datasetId}@${requestedVersion} was not found in registry.`);
+    throw new TerritoryError(
+      "DATASET_NOT_FOUND",
+      `Dataset ${request.datasetId}@${requestedVersion} was not found in registry.`,
+      { details: { datasetId: request.datasetId, requestedVersion } }
+    );
   }
 
   return candidates[0]!;
@@ -592,7 +648,11 @@ function selectCountryDatasets(
     .sort((left, right) => compareSemver(right.version, left.version));
 
   if (candidates.length === 0) {
-    throw new Error(`No registry dataset is available for country '${request.country}'.`);
+    throw new TerritoryError(
+      "DATASET_NOT_FOUND",
+      `No registry dataset is available for country '${request.country}'.`,
+      { details: { country: request.country } }
+    );
   }
 
   return candidates;
@@ -785,7 +845,11 @@ function selectInstallArtifacts(
   });
 
   if (selected.length === 0) {
-    throw new Error(`Registry dataset ${dataset.id} has no installable query artifacts.`);
+    throw new TerritoryError(
+      "ARTIFACT_NOT_FOUND",
+      `Registry dataset ${dataset.id} has no installable query artifacts.`,
+      { details: { datasetId: dataset.id } }
+    );
   }
 
   return selected;

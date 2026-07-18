@@ -2,8 +2,10 @@ import {
   createSampleTerritoryDataset,
   createTurkeyAdm3DemoDataset
 } from "@territory-kit/shared-testkit";
+import { isTerritoryError } from "@territory-kit/dataset";
 import { describe, expect, it, vi } from "vitest";
 import {
+  TERRITORY_MAPLIBRE_ADAPTER_CAPABILITIES,
   createTerritoryMapLibreAdapter,
   createTerritoryMapLibreController,
   createTerritoryMapLibreLayer,
@@ -15,7 +17,8 @@ import {
   zonesToFeatureCollection
 } from "../src/index.js";
 import type { TerritoryMapLibreGeoJsonSource, TerritoryMapLibreMap } from "../src/index.js";
-import type { TerritoryRegistryClient } from "@territory-kit/core";
+import type { TerritoryRendererAdapter } from "@territory-kit/adapter-core";
+import type { TerritoryRegistryClient } from "@territory-kit/registry";
 
 describe("maplibre adapter", () => {
   it("converts zones into a GeoJSON feature collection", () => {
@@ -103,17 +106,42 @@ describe("maplibre adapter", () => {
         clicked.push(event.zoneId);
       }
     });
+    const contractAdapter: TerritoryRendererAdapter<TerritoryMapLibreMap> = adapter;
 
+    expect(contractAdapter.capabilities).toBe(TERRITORY_MAPLIBRE_ADAPTER_CAPABILITIES);
+    expect(adapter.lifecycleState).toBe("detached");
+    expectTerritoryError(
+      () =>
+        adapter.setSource({
+          id: "zones",
+          type: "geojson",
+          data: { type: "FeatureCollection", features: [] }
+        }),
+      "ADAPTER_NOT_ATTACHED"
+    );
     adapter.attach(map);
+    expect(adapter.lifecycleState).toBe("attached");
     adapter.attach(map);
     adapter.updateData(dataset.zones.slice(0, 1));
+    adapter.setSource({
+      id: "zones",
+      type: "geojson",
+      data: zonesToFeatureCollection(dataset.zones.slice(0, 1))
+    });
+    adapter.updateState({
+      selectedTerritoryIds: ["tr:34"],
+      hoverTerritoryId: "tr:34",
+      stateByTerritoryId: new Map([
+        ["tr:34", { territoryId: "tr:34", selected: true, properties: { score: 9 } }]
+      ])
+    });
     adapter.updateTheme({ fillColor: "#ff0000" });
     listeners.get("click:zones-fill")?.({
       features: [{ type: "Feature", id: "tr:34", properties: {}, geometry: null }]
     });
     adapter.detach();
 
-    expect(source.setData).toHaveBeenCalledOnce();
+    expect(source.setData).toHaveBeenCalledTimes(2);
     expect(addedSources.zones).toMatchObject({
       data: {
         features: expect.arrayContaining([
@@ -144,9 +172,98 @@ describe("maplibre adapter", () => {
       { source: "zones", id: "tr:34" },
       { selected: true }
     );
+    expect(map.setFeatureState).toHaveBeenCalledWith(
+      { source: "zones", id: "tr:34" },
+      { selected: true, score: 9 }
+    );
     expect(clicked).toEqual(["tr:34"]);
     expect(layers.size).toBe(0);
     expect(sources.size).toBe(0);
+    expect(adapter.lifecycleState).toBe("detached");
+  });
+
+  it("throws when setSource cannot find the configured source on the map", () => {
+    const dataset = createSampleTerritoryDataset();
+    const { map, source } = createMapLibreHarness({ resolveSources: false });
+    const adapter = createTerritoryMapLibreAdapter({
+      zones: dataset.zones,
+      sourceId: "zones"
+    });
+
+    adapter.attach(map);
+
+    expectTerritoryError(
+      () =>
+        adapter.setSource({
+          id: "zones",
+          type: "geojson",
+          data: zonesToFeatureCollection(dataset.zones)
+        }),
+      "ADAPTER_TARGET_INVALID"
+    );
+
+    expect(source.setData).not.toHaveBeenCalled();
+  });
+
+  it("throws when setSource uses a source id different from the configured adapter source", () => {
+    const dataset = createSampleTerritoryDataset();
+    const { map, source } = createMapLibreHarness();
+    const adapter = createTerritoryMapLibreAdapter({
+      zones: dataset.zones,
+      sourceId: "zones"
+    });
+
+    adapter.attach(map);
+
+    expectTerritoryError(
+      () =>
+        adapter.setSource({
+          id: "other-zones",
+          type: "geojson",
+          data: zonesToFeatureCollection(dataset.zones)
+        }),
+      "ADAPTER_TARGET_INVALID"
+    );
+
+    expect(source.setData).not.toHaveBeenCalled();
+  });
+
+  it("updates the configured source data exactly once for a valid GeoJSON source", () => {
+    const dataset = createSampleTerritoryDataset();
+    const { map, source } = createMapLibreHarness();
+    const adapter = createTerritoryMapLibreAdapter({
+      zones: dataset.zones,
+      sourceId: "zones"
+    });
+    const data = zonesToFeatureCollection(dataset.zones.slice(0, 1));
+
+    adapter.attach(map);
+    adapter.setSource({ id: "zones", type: "geojson", data });
+
+    expect(source.setData).toHaveBeenCalledTimes(1);
+    expect(source.setData).toHaveBeenCalledWith(data);
+  });
+
+  it("throws coded errors for unsupported source types and invalid GeoJSON data", () => {
+    const dataset = createSampleTerritoryDataset();
+    const { map, source } = createMapLibreHarness();
+    const adapter = createTerritoryMapLibreAdapter({
+      zones: dataset.zones,
+      sourceId: "zones"
+    });
+
+    adapter.attach(map);
+
+    expectTerritoryError(
+      () => adapter.setSource({ id: "zones", type: "vector-tiles" }),
+      "CAPABILITY_UNSUPPORTED"
+    );
+    expectTerritoryError(
+      () => adapter.setSource({ id: "zones", type: "geojson", data: { type: "Feature" } }),
+      "RUNTIME_CONFIGURATION_INVALID"
+    );
+
+    expect(source.setData).not.toHaveBeenCalled();
   });
 
   it("creates registry-backed vector sources and lazy territory resolution", async () => {
@@ -389,3 +506,47 @@ describe("maplibre adapter", () => {
     expect(clicked).toEqual(["tr:34"]);
   });
 });
+
+function createMapLibreHarness(options: { resolveSources?: boolean } = {}): {
+  map: TerritoryMapLibreMap;
+  source: TerritoryMapLibreGeoJsonSource;
+} {
+  const source: TerritoryMapLibreGeoJsonSource = { setData: vi.fn() };
+  const layers = new Set<string>();
+  const sources = new Set<string>();
+  const resolveSources = options.resolveSources ?? true;
+
+  return {
+    source,
+    map: {
+      addLayer(layer) {
+        layers.add(String(layer.id));
+      },
+      addSource(id) {
+        sources.add(id);
+      },
+      getLayer(id) {
+        return layers.has(id) ? { id } : undefined;
+      },
+      getSource(id) {
+        return resolveSources && sources.has(id) ? source : undefined;
+      },
+      removeLayer(id) {
+        layers.delete(id);
+      },
+      removeSource(id) {
+        sources.delete(id);
+      }
+    }
+  };
+}
+
+function expectTerritoryError(action: () => void, code: string): void {
+  try {
+    action();
+    throw new Error("Expected action to throw.");
+  } catch (error) {
+    expect(isTerritoryError(error)).toBe(true);
+    expect(error).toMatchObject({ code });
+  }
+}

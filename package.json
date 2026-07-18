@@ -1,6 +1,6 @@
 {
   "name": "territory-kit",
-  "version": "0.0.1",
+  "version": "0.0.0-private",
   "private": true,
   "description": "TypeScript-first geospatial territory engine for hierarchical polygon datasets.",
   "license": "Apache-2.0",

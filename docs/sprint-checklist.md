@@ -120,6 +120,7 @@ typecheck`, and `pnpm test:visual:maplibre`.
 - [x] `0.6.0` - Sprint 8 - Generator and CLI tools.
 - [x] `0.9.0-rc.1` - Sprint 9 - Quality, security, performance, docs.
 - [x] `1.0.0` - Sprint 10 - Stable open source release preparation.
+- [x] `1.2.0` - Sprint 11 - Runtime and adapter architecture foundations.
 
 ## MVP Scope
 
@@ -162,8 +163,10 @@ typecheck`, and `pnpm test:visual:maplibre`.
 
 ## Target Architecture Package Map
 
+- [x] `packages/adapter-core`.
 - [x] `packages/core`.
 - [x] `packages/dataset`.
+- [x] `packages/runtime`.
 - [x] `packages/generators`.
 - [x] `packages/nestjs`.
 - [x] `packages/maplibre`.

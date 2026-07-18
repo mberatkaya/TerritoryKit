@@ -128,6 +128,13 @@ Recorded on 2026-07-14 for `hardening/runtime-integrations`:
 - External npm registry verification, `v1.0.0` tag creation, GitHub Release creation, and live docs
   deployment remain maintainer handoff actions and were not executed from this branch.
 
+## Runtime Architecture Verification
+
+Sprint 11 work on `refactor/runtime-architecture` adds `@territory-kit/adapter-core`,
+`@territory-kit/runtime`, shared coded errors, core registry compatibility isolation, and MapLibre
+contract conformance. Final command results for this branch are recorded in its pull request rather
+than in the historical `1.0.0` closure sections above.
+
 ## Triage And Security
 
 - New release blockers are tracked as GitHub issues or PR review comments and triaged before a

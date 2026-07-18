@@ -6,7 +6,11 @@ export {
 } from "./country-loader.js";
 export { loadTerritoryQueryDataset } from "./query-loader.js";
 export { defaultZoomLevelStrategy, zoomToDefaultLevel } from "./zoom.js";
-export { createTerritoryRegistryClient } from "@territory-kit/registry";
+/**
+ * @deprecated Import registry APIs from `@territory-kit/registry` or
+ * `@territory-kit/core/legacy-registry` for compatibility-only code.
+ */
+export { createTerritoryRegistryClient } from "./legacy-registry.js";
 export type {
   TerritoryDatasetRegistry,
   TerritoryInstalledDatasetHandle,
@@ -26,7 +30,7 @@ export type {
   TerritoryRegistryResolvedArtifact,
   TerritoryRegistryTerritoryArtifactFallback,
   TerritoryRegistryTransport
-} from "@territory-kit/registry";
+} from "./legacy-registry.js";
 export type {
   TerritoryCountryDatasetDescriptor,
   TerritoryCountryDatasetHandle,
