@@ -270,6 +270,10 @@ importers:
       '@territory-kit/registry':
         specifier: workspace:*
         version: link:../registry
+    devDependencies:
+      '@territory-kit/shared-testkit':
+        specifier: workspace:*
+        version: link:../shared-testkit
 
   packages/shared-testkit:
     dependencies:

@@ -56,7 +56,8 @@ NestJS, runtime catalogs, or worker orchestration.
 ## Runtime Responsibilities
 
 Runtime will coordinate registry, dataset, cache, engine, request, worker, viewport, and adapter
-lifecycle work. Sprint 11 only implements create/state/subscribe/dispose behavior.
+lifecycle work. Sprint 11 implemented create/state/subscribe/dispose behavior; Sprint 12 adds the
+viewport request lifecycle described in ADR-004.
 
 ## Adapter-Core Responsibilities
 
@@ -103,7 +104,6 @@ remain available.
 
 ## Follow-Up Work
 
-- Runtime viewport lifecycle
 - multi-dataset catalog
 - request cancellation and cache strategy
 - worker-based loading

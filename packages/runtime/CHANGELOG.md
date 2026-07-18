@@ -6,3 +6,5 @@
 
 - Add the minimal runtime lifecycle foundation with state inspection, deterministic event
   subscriptions, listener error isolation, and idempotent disposal.
+- Add viewport request orchestration with debounce, cancellation, stale-response guards, timeout
+  errors, lazy engine reuse, async memory LRU cache, and renderer-independent adapter updates.

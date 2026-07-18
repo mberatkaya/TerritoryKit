@@ -67,6 +67,26 @@ verification, or an explicit handoff/backlog classification that proves the item
       `pnpm --filter @territory-kit/nestjs test`, `pnpm --filter @territory-kit/example-web-maplibre
 typecheck`, and `pnpm test:visual:maplibre`.
 
+## Sprint 12 Runtime Viewport Lifecycle Evidence
+
+- [x] `feat/runtime-viewport-lifecycle` adds `setViewport`, `refresh`,
+      `cancelActiveRequest`, scheduler/clock injection, request timeout, request deduplication,
+      and stale-response guards.
+- [x] Runtime state snapshots include status, revision, event sequence, active request metadata,
+      last completed request, last error, result summary, and cache summary.
+- [x] `createMemoryTerritoryRuntimeCache` implements async get/set/delete/clear, deterministic LRU
+      eviction, max-entry and max-byte policies, byte accounting, hit/miss/eviction stats, and
+      default `Uint8Array` mutation protection.
+- [x] Direct dataset mode lazily creates and reuses core engines; resolver and engine factory
+      injection are covered by package tests.
+- [x] Optional adapters are updated only when attached and capability-compatible through
+      `@territory-kit/adapter-core`; detached adapters do not fail viewport requests.
+- [x] Runtime package tests cover state transitions, invalid viewport input, debounce, duplicate
+      viewport suppression, force refresh, cancellation, stale and late responses, timeout,
+      dispose cancellation, cache hit/miss, LRU eviction, maxBytes, engine reuse, request
+      deduplication, latest-request-only adapter updates, adapter failure, deterministic event
+      ordering, injected clock, and import safety.
+
 ## Sprint 5 Pilot Country Dataset Evidence
 
 - [x] Pilot configs exist for `TR`, `US`, `DE`, `JP`, and `ID` at ADM0/ADM1/ADM2.
@@ -121,6 +141,8 @@ typecheck`, and `pnpm test:visual:maplibre`.
 - [x] `0.9.0-rc.1` - Sprint 9 - Quality, security, performance, docs.
 - [x] `1.0.0` - Sprint 10 - Stable open source release preparation.
 - [x] `1.2.0` - Sprint 11 - Runtime and adapter architecture foundations.
+- [x] `1.3.0` - Sprint 12 - Runtime viewport lifecycle.
+- [future backlog] `1.4.0` - Sprint 13 - Catalogs, binary indexes, and worker loading.
 
 ## MVP Scope
 
@@ -132,6 +154,8 @@ typecheck`, and `pnpm test:visual:maplibre`.
 - [x] Neighbor graph traversal baseline.
 - [x] Zoom-to-level strategy baseline.
 - [x] Viewport-based zone query baseline.
+- [x] Runtime viewport request lifecycle baseline.
+- [x] Runtime memory LRU cache baseline.
 - [x] MapLibre package boundary baseline.
 - [x] NestJS package boundary baseline.
 - [x] Turkey, Istanbul, and Fatih sample datasets.

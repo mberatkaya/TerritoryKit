@@ -55,10 +55,19 @@
 
 ## `@territory-kit/runtime`
 
-- `createTerritoryRuntime(options)` creates an isolated minimal runtime.
-- Runtime state is currently `idle` or `disposed`.
+- `createTerritoryRuntime(options)` creates an isolated viewport orchestration runtime.
+- `setViewport({ bounds, zoom, level, metadata }, options)` validates bounds, debounces when
+  configured, resolves a dataset, creates/reuses an engine, uses the runtime cache, queries visible
+  zones, and updates an attached capable adapter.
+- `refresh(options)` reruns the active viewport with `force: true`.
+- `cancelActiveRequest(reason)` aborts scheduled or active work and reports a normal
+  `REQUEST_ABORTED` lifecycle result.
+- `getState()` returns immutable snapshots with status, revision, event sequence, active request
+  metadata, last result/error, and cache summary.
 - `subscribe`, `unsubscribe`, and `dispose` provide deterministic lifecycle events with
   `occurredAt` sourced from the injected runtime clock.
+- `createMemoryTerritoryRuntimeCache({ maxEntries, maxBytes })` creates an async LRU cache with
+  byte tracking, hit/miss/eviction stats, and default `Uint8Array` copy-on-read/write protection.
 
 ## `@territory-kit/maplibre`
 
