@@ -2,7 +2,7 @@
 
 All notable changes will be tracked here until Changesets generates release notes.
 
-## 1.1.0 - 2026-07-18
+## 1.2.0 - Unreleased
 
 - Added `@territory-kit/adapter-core` renderer-independent adapter contracts.
 - Added `@territory-kit/runtime` minimal lifecycle contracts.

@@ -245,10 +245,16 @@ export function createTerritoryAdapterLifecycle<TTarget = unknown>(
       return "disposed";
     },
     fail(error) {
-      lifecycleState = "error";
-      return error instanceof TerritoryError
-        ? error
-        : new TerritoryError("UNKNOWN", "Adapter operation failed.", { cause: error });
+      const territoryError =
+        error instanceof TerritoryError
+          ? error
+          : new TerritoryError("UNKNOWN", "Adapter operation failed.", { cause: error });
+
+      if (lifecycleState !== "disposed") {
+        lifecycleState = "error";
+      }
+
+      return territoryError;
     },
     assertAttached(action) {
       assertTerritoryAdapterAttached(lifecycleState, action);

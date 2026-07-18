@@ -57,7 +57,8 @@
 
 - `createTerritoryRuntime(options)` creates an isolated minimal runtime.
 - Runtime state is currently `idle` or `disposed`.
-- `subscribe`, `unsubscribe`, and `dispose` provide deterministic lifecycle events.
+- `subscribe`, `unsubscribe`, and `dispose` provide deterministic lifecycle events with
+  `occurredAt` sourced from the injected runtime clock.
 
 ## `@territory-kit/maplibre`
 
@@ -66,6 +67,8 @@
 - `createTerritoryMapLibreAdapter({ zones, onZoneClick, onZoneHover })`
 - Adapter lifecycle: `attach`, `detach`, `setSource`, `updateState`, `updateData`, `updateTheme`
 - Adapter conformance: `capabilities` and `lifecycleState`
+- `setSource` replaces the configured existing GeoJSON source data and throws coded errors for
+  missing, mismatched, invalid, or unsupported sources.
 
 ## `@territory-kit/nestjs`
 

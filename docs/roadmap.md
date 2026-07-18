@@ -13,7 +13,7 @@
 | `0.6.0`         | Sprint 8  | Generator and CLI tools                        | Hardened on roadmap branch |
 | `0.9.0-rc.1`    | Sprint 9  | Docs, quality, performance                     | Verified on roadmap branch |
 | `1.0.0`         | Sprint 10 | Stable release                                 | Prepared on release branch |
-| `1.1.0`         | Sprint 11 | Runtime contracts and adapter boundaries       | In progress on branch      |
+| `1.2.0`         | Sprint 11 | Runtime contracts and adapter boundaries       | In progress on branch      |
 
 The table above describes the historical sprint track, not blanket production availability for
 every adapter or dataset. Current implementation gaps and partial items are tracked in

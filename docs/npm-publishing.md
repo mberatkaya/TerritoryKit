@@ -5,6 +5,10 @@ workspace remains private so `npm publish` from the repository root fails safely
 
 ## Public Packages
 
+The package manifests currently remain on the published `1.1.0` line. The pending Sprint 11 minor
+Changeset resolves the next fixed-group release to `1.2.0`, including `@territory-kit/adapter-core`
+and `@territory-kit/runtime`.
+
 | Package                       | Version | Internal dependencies                                                                                     | Output                                                     | Publish |
 | ----------------------------- | ------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ------- |
 | `@territory-kit/dataset`      | `1.1.0` | none                                                                                                      | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |

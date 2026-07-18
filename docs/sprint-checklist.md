@@ -120,7 +120,7 @@ typecheck`, and `pnpm test:visual:maplibre`.
 - [x] `0.6.0` - Sprint 8 - Generator and CLI tools.
 - [x] `0.9.0-rc.1` - Sprint 9 - Quality, security, performance, docs.
 - [x] `1.0.0` - Sprint 10 - Stable open source release preparation.
-- [x] `1.1.0` - Sprint 11 - Runtime and adapter architecture foundations.
+- [x] `1.2.0` - Sprint 11 - Runtime and adapter architecture foundations.
 
 ## MVP Scope
 

@@ -732,14 +732,38 @@ export function createTerritoryMapLibreAdapter(
     setSource(source) {
       assertTerritoryAdapterAttached(lifecycleState, "set source");
       const attachedMap = requireAttachedMap(map, "set source");
+      const capability =
+        source.type === "geojson"
+          ? "geoJson"
+          : source.type === "vector-tiles"
+            ? "vectorTiles"
+            : undefined;
+
+      if (!capability) {
+        throw new TerritoryError(
+          "RUNTIME_CONFIGURATION_INVALID",
+          "MapLibre source type is unsupported.",
+          {
+            details: { sourceId: source.id, sourceType: source.type }
+          }
+        );
+      }
 
       assertTerritoryAdapterCapability(
         TERRITORY_MAPLIBRE_ADAPTER_CAPABILITIES,
-        source.type === "geojson" ? "geoJson" : "vectorTiles",
+        capability,
         "set source"
       );
 
-      if (source.type !== "geojson" || !isFeatureCollection(source.data)) {
+      if (source.id !== sourceId) {
+        throw new TerritoryError(
+          "ADAPTER_TARGET_INVALID",
+          "MapLibre source id does not match the configured adapter source id.",
+          { details: { configuredSourceId: sourceId, sourceId: source.id } }
+        );
+      }
+
+      if (!isFeatureCollection(source.data)) {
         throw new TerritoryError(
           "RUNTIME_CONFIGURATION_INVALID",
           "MapLibre source replacement requires a GeoJSON FeatureCollection.",
@@ -747,7 +771,19 @@ export function createTerritoryMapLibreAdapter(
         );
       }
 
-      attachedMap.getSource(source.id)?.setData(source.data);
+      const mapSource = attachedMap.getSource(source.id);
+
+      if (!mapSource) {
+        throw new TerritoryError(
+          "ADAPTER_TARGET_INVALID",
+          "MapLibre source is not present on the attached map.",
+          {
+            details: { sourceId: source.id }
+          }
+        );
+      }
+
+      mapSource.setData(source.data);
     },
 
     updateState(state) {

@@ -64,15 +64,40 @@ describe("adapter-core contracts", () => {
     expect(lifecycle.dispose()).toBe("disposed");
     expect(lifecycle.dispose()).toBe("noop");
     expect(() => lifecycle.attach(first)).toThrow(TerritoryError);
+  });
+
+  it("marks non-disposed lifecycle failures as error", () => {
+    const lifecycle = createTerritoryAdapterLifecycle<object>({});
+
     expect(lifecycle.fail("renderer failed")).toMatchObject({
       code: "UNKNOWN",
       message: "Adapter operation failed."
     });
+    expect(lifecycle.lifecycleState).toBe("error");
     expect(
       lifecycle.fail(new TerritoryError("ADAPTER_TARGET_INVALID", "Bad target."))
     ).toMatchObject({
       code: "ADAPTER_TARGET_INVALID"
     });
+  });
+
+  it("keeps disposed terminal after fail and rejects later attach", () => {
+    const lifecycle = createTerritoryAdapterLifecycle<object>();
+    const target = {};
+
+    lifecycle.attach(target);
+    lifecycle.dispose();
+    const error = lifecycle.fail("renderer failed after disposal");
+
+    expect(isTerritoryError(error)).toBe(true);
+    expect(lifecycle.lifecycleState).toBe("disposed");
+
+    try {
+      lifecycle.attach(target);
+    } catch (attachError) {
+      expect(isTerritoryError(attachError)).toBe(true);
+      expect(attachError).toMatchObject({ code: "ADAPTER_DISPOSED" });
+    }
   });
 
   it("guards updates before attach", () => {

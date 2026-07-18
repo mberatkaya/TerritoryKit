@@ -17,10 +17,14 @@ describe("territory runtime lifecycle", () => {
   });
 
   it("subscribes, deduplicates, unsubscribes, and reports deterministic dispose events", () => {
-    const runtime = createTerritoryRuntime();
+    const fixedDate = new Date("2026-07-18T12:00:00.000Z");
+    const clock = { now: vi.fn(() => fixedDate) };
+    const runtime = createTerritoryRuntime({ clock });
     const events: string[] = [];
+    const occurredAt: Date[] = [];
     const listener = (event: TerritoryRuntimeEvent): void => {
       events.push(`${event.sequence}:${event.type}:${event.state.status}`);
+      occurredAt.push(event.occurredAt);
     };
     const firstSubscription = runtime.subscribe(listener);
     const secondSubscription = runtime.subscribe(listener);
@@ -33,6 +37,8 @@ describe("territory runtime lifecycle", () => {
       listenerCount: 1
     });
     expect(events).toEqual(["1:state-change:disposed", "2:disposed:disposed"]);
+    expect(occurredAt).toEqual([fixedDate, fixedDate]);
+    expect(clock.now).toHaveBeenCalledTimes(2);
     expect(firstSubscription.active).toBe(false);
     expect(secondSubscription.unsubscribe()).toBe(false);
   });

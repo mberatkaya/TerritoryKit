@@ -44,6 +44,8 @@ for future adapters.
 - Attaching the same target twice must be deterministic and must not duplicate listeners.
 - Attaching a different target replaces the previous target or detaches it first.
 - `detach()` is idempotent when already detached.
+- `disposed` is terminal: later failure normalization must not move lifecycle state back to
+  `error`, and later attach attempts must fail with `ADAPTER_DISPOSED`.
 - `setSource`, `updateState`, and `updateTheme` require `attached` unless an adapter documents a
   separate legacy method.
 - Calls after disposal throw `TerritoryError` with `ADAPTER_DISPOSED`.
@@ -58,3 +60,7 @@ the original error should be preserved as `cause`.
 `@territory-kit/maplibre` now implements `TerritoryRendererAdapter<TerritoryMapLibreMap>` while
 keeping `updateData` and the previous callback behavior. The package exposes immutable capability
 metadata through `TERRITORY_MAPLIBRE_ADAPTER_CAPABILITIES`.
+
+For MapLibre, `sourceReplacement` means replacing the data of the configured existing GeoJSON source
+with `setData`. It does not remove and re-add renderer sources or implement vector source lifecycle
+replacement in Sprint 11.

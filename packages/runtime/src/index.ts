@@ -23,6 +23,7 @@ export interface TerritoryRuntimeEvent {
   readonly type: TerritoryRuntimeEventType;
   readonly state: TerritoryRuntimeState;
   readonly sequence: number;
+  readonly occurredAt: Date;
   readonly error?: TerritoryError;
 }
 
@@ -139,6 +140,7 @@ export function createTerritoryRuntime<TTarget = unknown>(
       type,
       state,
       sequence: eventSequence,
+      occurredAt: clock.now(),
       ...(error ? { error } : {})
     };
   }
@@ -215,7 +217,6 @@ export function createTerritoryRuntime<TTarget = unknown>(
       emit(createEvent("state-change"), true);
       emit(createEvent("disposed"), true);
       listeners.clear();
-      clock.now();
 
       return {
         status: "disposed",
