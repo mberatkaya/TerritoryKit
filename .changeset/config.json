@@ -7,10 +7,12 @@
   "fixed": [
     [
       "@territory-kit/cli",
+      "@territory-kit/adapter-core",
       "@territory-kit/core",
       "@territory-kit/dataset",
       "@territory-kit/generators",
       "@territory-kit/registry",
+      "@territory-kit/runtime",
       "@territory-kit/maplibre",
       "@territory-kit/nestjs",
       "@territory-kit/data-tr",

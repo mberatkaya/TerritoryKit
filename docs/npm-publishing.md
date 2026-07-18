@@ -5,20 +5,26 @@ workspace remains private so `npm publish` from the repository root fails safely
 
 ## Public Packages
 
-| Package                     | Version | Internal dependencies                                                        | Output                                                     | Publish |
-| --------------------------- | ------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------- | ------- |
-| `@territory-kit/dataset`    | `1.0.0` | none                                                                         | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/core`       | `1.0.0` | `@territory-kit/dataset`                                                     | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/generators` | `1.0.0` | `@territory-kit/core`, `@territory-kit/dataset`                              | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/maplibre`   | `1.0.0` | `@territory-kit/core`, `@territory-kit/dataset`                              | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/nestjs`     | `1.0.0` | `@territory-kit/core`, `@territory-kit/dataset`                              | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/cli`        | `1.0.0` | `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/generators` | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| Package                       | Version | Internal dependencies                                                                                     | Output                                                     | Publish |
+| ----------------------------- | ------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ------- |
+| `@territory-kit/dataset`      | `1.1.0` | none                                                                                                      | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/adapter-core` | `1.1.0` | `@territory-kit/dataset`                                                                                  | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/core`         | `1.1.0` | `@territory-kit/dataset`, deprecated registry compatibility                                               | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/registry`     | `1.1.0` | `@territory-kit/dataset`                                                                                  | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/runtime`      | `1.1.0` | `@territory-kit/adapter-core`, `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/registry` | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/generators`   | `1.1.0` | `@territory-kit/core`, `@territory-kit/dataset`                                                           | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/maplibre`     | `1.1.0` | `@territory-kit/adapter-core`, `@territory-kit/dataset`, `@territory-kit/registry`                        | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/nestjs`       | `1.1.0` | `@territory-kit/core`, `@territory-kit/dataset`                                                           | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/cli`          | `1.1.0` | `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/generators`                              | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
 
 The correct first-publish order is:
 
 ```text
 @territory-kit/dataset
+@territory-kit/adapter-core
+@territory-kit/registry
 @territory-kit/core
+@territory-kit/runtime
 @territory-kit/generators
 @territory-kit/maplibre
 @territory-kit/nestjs
@@ -60,7 +66,10 @@ will be during publish:
 
 ```sh
 pnpm --filter @territory-kit/dataset publish --dry-run --json --access public --no-git-checks
+pnpm --filter @territory-kit/adapter-core publish --dry-run --json --access public --no-git-checks
+pnpm --filter @territory-kit/registry publish --dry-run --json --access public --no-git-checks
 pnpm --filter @territory-kit/core publish --dry-run --json --access public --no-git-checks
+pnpm --filter @territory-kit/runtime publish --dry-run --json --access public --no-git-checks
 pnpm --filter @territory-kit/generators publish --dry-run --json --access public --no-git-checks
 pnpm --filter @territory-kit/maplibre publish --dry-run --json --access public --no-git-checks
 pnpm --filter @territory-kit/nestjs publish --dry-run --json --access public --no-git-checks
@@ -87,7 +96,10 @@ After verification and dry-runs pass, publish public packages in topological ord
 
 ```sh
 pnpm --filter @territory-kit/dataset publish --access public --no-git-checks
+pnpm --filter @territory-kit/adapter-core publish --access public --no-git-checks
+pnpm --filter @territory-kit/registry publish --access public --no-git-checks
 pnpm --filter @territory-kit/core publish --access public --no-git-checks
+pnpm --filter @territory-kit/runtime publish --access public --no-git-checks
 pnpm --filter @territory-kit/generators publish --access public --no-git-checks
 pnpm --filter @territory-kit/maplibre publish --access public --no-git-checks
 pnpm --filter @territory-kit/nestjs publish --access public --no-git-checks
@@ -116,7 +128,10 @@ The release workflow is `.github/workflows/release.yml`.
 Configure npm Trusted Publishing on npmjs.com for each public package:
 
 - `@territory-kit/dataset`
+- `@territory-kit/adapter-core`
 - `@territory-kit/core`
+- `@territory-kit/registry`
+- `@territory-kit/runtime`
 - `@territory-kit/generators`
 - `@territory-kit/maplibre`
 - `@territory-kit/nestjs`
