@@ -1,4 +1,4 @@
-import { loadTerritoryDataset } from "@territory-kit/dataset";
+import { TerritoryError, loadTerritoryDataset } from "@territory-kit/dataset";
 import type { TerritoryAdminLevel, TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
 import { createTerritoryEngine } from "./engine.js";
 import type { LatLng, TerritoryEngine } from "./types.js";
@@ -116,6 +116,9 @@ function assertInstalledDatasetHandle(
   readText(path: string): Promise<string>;
 } {
   if (!input.installedArtifacts || !input.readText) {
-    throw new Error("Registry query loading requires an installed dataset handle.");
+    throw new TerritoryError(
+      "RUNTIME_CONFIGURATION_INVALID",
+      "Registry query loading requires an installed dataset handle."
+    );
   }
 }

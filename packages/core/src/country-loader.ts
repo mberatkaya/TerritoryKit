@@ -1,4 +1,5 @@
 import {
+  TerritoryError,
   createTerritoryAdjacencyIndex,
   loadTerritoryDataset,
   validateTerritoryAdjacencyArtifact
@@ -90,8 +91,10 @@ export async function loadTerritoryCountryDataset(
       : undefined);
 
   if (!resolver) {
-    throw new Error(
-      `${descriptor.packageName} does not embed geometry artifacts. Pass resolveArtifact to load datasets.`
+    throw new TerritoryError(
+      "RUNTIME_CONFIGURATION_INVALID",
+      `${descriptor.packageName} does not embed geometry artifacts. Pass resolveArtifact to load datasets.`,
+      { details: { packageName: descriptor.packageName, datasetId: descriptor.datasetId } }
     );
   }
 
@@ -116,7 +119,13 @@ export async function loadTerritoryCountryDataset(
       const validation = validateTerritoryAdjacencyArtifact(dataset, artifact);
 
       if (!validation.ok) {
-        throw new Error(`Adjacency artifact for ${level} failed validation.`);
+        throw new TerritoryError(
+          "DATASET_INVALID",
+          `Adjacency artifact for ${level} failed validation.`,
+          {
+            details: { datasetId: descriptor.datasetId, level }
+          }
+        );
       }
 
       adjacency[level] = artifact;
@@ -152,7 +161,13 @@ function normalizeRequestedLevels(
 
   for (const level of levels) {
     if (!supported.has(level)) {
-      throw new Error(`${descriptor.datasetId} does not support ${level}.`);
+      throw new TerritoryError(
+        "INVALID_LEVEL",
+        `${descriptor.datasetId} does not support ${level}.`,
+        {
+          details: { datasetId: descriptor.datasetId, level }
+        }
+      );
     }
   }
 
@@ -179,7 +194,7 @@ async function readChecksums(
     return input as Record<string, string>;
   }
 
-  throw new Error("Invalid checksums artifact.");
+  throw new TerritoryError("ARTIFACT_CORRUPTED", "Invalid checksums artifact.");
 }
 
 async function readJsonArtifact(
@@ -195,7 +210,9 @@ async function readJsonArtifact(
     const actualChecksum = await sha256Hex(text);
 
     if (actualChecksum !== expectedChecksum) {
-      throw new Error(`Checksum mismatch for ${path}.`);
+      throw new TerritoryError("CHECKSUM_MISMATCH", `Checksum mismatch for ${path}.`, {
+        details: { path }
+      });
     }
   }
 
@@ -218,7 +235,10 @@ async function sha256Hex(input: string): Promise<string> {
   const subtle = globalThis.crypto?.subtle;
 
   if (!subtle) {
-    throw new Error("Checksum verification requires Web Crypto.");
+    throw new TerritoryError(
+      "RUNTIME_CONFIGURATION_INVALID",
+      "Checksum verification requires Web Crypto."
+    );
   }
 
   const digest = await subtle.digest("SHA-256", new TextEncoder().encode(input));
