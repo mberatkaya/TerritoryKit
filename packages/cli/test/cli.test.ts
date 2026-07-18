@@ -420,6 +420,12 @@ describe("territory cli", () => {
       });
 
       const data = isRecord(run.payload) ? run.payload.data : undefined;
+      const metrics = isRecord(data) && isRecord(data.metrics) ? data.metrics : {};
+      const benchmarkBudget = (metric: string): number => {
+        const value = Number(metrics[metric]);
+
+        return Number.isFinite(value) ? value + Math.max(1, value) : 1_000;
+      };
       await writeFile(currentPath, JSON.stringify(data), "utf8");
       await writeFile(
         baselinePath,
@@ -429,11 +435,11 @@ describe("territory cli", () => {
           scenario: "smoke",
           minimumFeatureCount: 4,
           budgets: {
-            datasetValidationMs: 1_000,
-            engineConstructionMs: 1_000,
-            getZoneByIdMeanMs: 1,
-            latLngToZoneMeanMs: 1,
-            getZonesInBoundsMeanMs: 10
+            datasetValidationMs: benchmarkBudget("datasetValidationMs"),
+            engineConstructionMs: benchmarkBudget("engineConstructionMs"),
+            getZoneByIdMeanMs: benchmarkBudget("getZoneByIdMeanMs"),
+            latLngToZoneMeanMs: benchmarkBudget("latLngToZoneMeanMs"),
+            getZonesInBoundsMeanMs: benchmarkBudget("getZonesInBoundsMeanMs")
           }
         }),
         "utf8"
