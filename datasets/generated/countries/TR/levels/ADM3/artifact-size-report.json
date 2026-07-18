@@ -1,0 +1,141 @@
+{
+  "budget": {
+    "committedGeometryTiers": [
+      "full"
+    ],
+    "datasetId": "territory-kit-tr-adm3-gaziantep-pilot",
+    "disallowDuplicateGeojsonTierHashes": true,
+    "maxSingleReportSizeBytes": 2000000,
+    "maxTileCount": 192,
+    "maxTileSizeBytes": 64000,
+    "maxTotalSizeBytes": 55000000,
+    "omittedGeometryTiers": {
+      "low": "No shared-boundary-aware simplifier is approved for ADM3 neighbourhoods yet.",
+      "medium": "No shared-boundary-aware simplifier is approved for ADM3 neighbourhoods yet."
+    },
+    "schemaVersion": "territorykit-artifact-policy@1"
+  },
+  "generatedAt": "2026-07-18T00:00:00.000Z",
+  "largestFiles": [
+    {
+      "path": "dataset.json",
+      "sha256": "c363a77b7c43b3cd7db08cbdfca3d244477d77673a338d43ab76b6d115f953bb",
+      "sizeBytes": 15891308
+    },
+    {
+      "path": "full.geojson",
+      "sha256": "6a4a3549fd5ed18982b28ee2bf773ae146e69ef2f96f277228f80031c19078d3",
+      "sizeBytes": 14724918
+    },
+    {
+      "path": "query/query-artifact.json",
+      "sha256": "4f0d826f9ac76cbb46105692f3aa1398ae9efab31767f94f64bec453f07a02ac",
+      "sizeBytes": 14163068
+    },
+    {
+      "path": "adjacency/adjacency.json",
+      "sha256": "62789d1de4428e16266981599c92c25118ca8cb519975703171d9fa90898a834",
+      "sizeBytes": 546403
+    },
+    {
+      "path": "repair-details.json",
+      "sha256": "e583bdb001c44e83281f758e52c3b300fe677309e497e02277e17d5cf83b5b8c",
+      "sizeBytes": 378540
+    },
+    {
+      "path": "index.json",
+      "sha256": "3aff0242b04cb6f722b342a864084e888ccf1e03ad32ce2a13606a87b6ba7e5c",
+      "sizeBytes": 298563
+    },
+    {
+      "path": "parent-containment-report.json",
+      "sha256": "4e96984600844a8112e23163593009782698b5bc90e82dc19499d8479093f34e",
+      "sizeBytes": 258624
+    },
+    {
+      "path": "production-quality-report.json",
+      "sha256": "0379bab85bfd02f8b7a82049253df765f84658913de2d4f3936907befc530980",
+      "sizeBytes": 165830
+    },
+    {
+      "path": "identity-map.json",
+      "sha256": "4d0fb7ae0a2b532795811c5910ec45b0025ec272c9361d8e450cc4b5080ade5d",
+      "sizeBytes": 145929
+    },
+    {
+      "path": "overlap-audit.json",
+      "sha256": "f8fd0d4dff7f977d5952f059feb5ffe5cb43b9d8af3231bbf6022be9cb19a4da",
+      "sizeBytes": 60726
+    },
+    {
+      "path": "render/tiles/12/2473/1593.mvt",
+      "sha256": "9e581b99c2c053df049473a07e12277698dd78ce154884aca0def7b61ce0e9fb",
+      "sizeBytes": 27168
+    },
+    {
+      "path": "adjacency/build-report.json",
+      "sha256": "dca2e07f73ffface5008c51ede0cac0401f3935bed6723bb18d209da22bcb522",
+      "sizeBytes": 23060
+    },
+    {
+      "path": "render/tiles/12/2470/1594.mvt",
+      "sha256": "0a68f54adb7cad8f869e9a22078de1e564e48ec70fbd6ee85c6b00ef8fda39ea",
+      "sizeBytes": 12371
+    },
+    {
+      "path": "render/tiles/12/2469/1593.mvt",
+      "sha256": "2da065a7b137dc1db20815223b11a69ca9c4279d51c9b672b53da9f19507a16c",
+      "sizeBytes": 11923
+    },
+    {
+      "path": "render/tiles/12/2470/1593.mvt",
+      "sha256": "a9a1cf18485e74eee543ca81d48d425170dfa7e11e8af1a619faa50e1c699ddb",
+      "sizeBytes": 11007
+    },
+    {
+      "path": "render/tiles/12/2469/1594.mvt",
+      "sha256": "f7e65654fb7060f03c0fe01db4613a1fc7e4e909c9657b4a08357b4ff6855416",
+      "sizeBytes": 10797
+    },
+    {
+      "path": "render/tiles/12/2477/1594.mvt",
+      "sha256": "c1c17c530e73678705911389e46442458f12541e9733bd2b00702a5fcbe3e763",
+      "sizeBytes": 9925
+    },
+    {
+      "path": "render/tiles/12/2472/1593.mvt",
+      "sha256": "b148806a1d64736de1f215cf81b214cb1af6bfcf62f34561a97d1189e5f4d664",
+      "sizeBytes": 9270
+    },
+    {
+      "path": "render/tiles/12/2478/1592.mvt",
+      "sha256": "f3d383771067ced900d85f23f55c94d2e27a3696026371403f57ef8f35f21bf1",
+      "sizeBytes": 8589
+    },
+    {
+      "path": "render/tiles/12/2470/1595.mvt",
+      "sha256": "fdf0c5c845c084996a647ce19004a3fc257618d1dc1f28a13f276035b751d3b4",
+      "sizeBytes": 8576
+    }
+  ],
+  "measurementScope": {
+    "excludedGeneratedFiles": [
+      "artifact-size-report.json",
+      "checksums.json"
+    ],
+    "finalOnDiskPolicyGate": "pnpm data:tr:adm3:artifact-policy",
+    "included": "All in-memory artifacts known before artifact-size-report.json and checksums.json are appended."
+  },
+  "ok": true,
+  "schemaVersion": "territorykit-artifact-size-report@1",
+  "summary": {
+    "duplicateGeojsonTierHashCount": 0,
+    "fileCount": 182,
+    "largestFileBytes": 15891308,
+    "largestTileBytes": 27168,
+    "tileCount": 155,
+    "tileTotalSizeBytes": 621373,
+    "totalSizeBytes": 47304670
+  },
+  "violations": []
+}

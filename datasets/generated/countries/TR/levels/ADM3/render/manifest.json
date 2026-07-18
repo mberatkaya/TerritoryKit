@@ -24,38 +24,11 @@
   "layers": [
     {
       "adminLevels": [
-        "ADM0"
-      ],
-      "featureCount": 0,
-      "id": "territory-adm0",
-      "maxZoom": 4,
-      "minZoom": 0
-    },
-    {
-      "adminLevels": [
-        "ADM1"
-      ],
-      "featureCount": 0,
-      "id": "territory-adm1",
-      "maxZoom": 7,
-      "minZoom": 5
-    },
-    {
-      "adminLevels": [
-        "ADM2"
-      ],
-      "featureCount": 0,
-      "id": "territory-adm2",
-      "maxZoom": 11,
-      "minZoom": 8
-    },
-    {
-      "adminLevels": [
         "ADM3"
       ],
       "featureCount": 786,
       "id": "territory-adm3",
-      "maxZoom": 14,
+      "maxZoom": 12,
       "minZoom": 12
     }
   ],

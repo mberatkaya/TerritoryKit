@@ -1,0 +1,3585 @@
+{
+  "backendAvailability": {
+    "geosShapely": {
+      "engineVersion": "Shapely 2.1.2; GEOS 3.13.1",
+      "status": "available-for-repair"
+    },
+    "primary": "typescript"
+  },
+  "checkStatuses": [
+    {
+      "backend": "typescript",
+      "check": "coordinates",
+      "issueCount": 0,
+      "status": "passed"
+    },
+    {
+      "backend": "typescript",
+      "check": "rings",
+      "issueCount": 0,
+      "status": "passed"
+    },
+    {
+      "backend": "typescript",
+      "check": "bbox",
+      "issueCount": 0,
+      "status": "passed"
+    },
+    {
+      "backend": "typescript",
+      "check": "center",
+      "issueCount": 0,
+      "status": "passed"
+    },
+    {
+      "backend": "typescript",
+      "check": "holes",
+      "issueCount": 0,
+      "status": "passed"
+    },
+    {
+      "backend": "typescript",
+      "check": "selfIntersections",
+      "issueCount": 20,
+      "status": "failed"
+    },
+    {
+      "backend": "typescript",
+      "check": "parentContainment",
+      "issueCount": 261,
+      "status": "failed"
+    },
+    {
+      "backend": "typescript",
+      "check": "siblingOverlaps",
+      "issueCount": 55,
+      "status": "failed"
+    },
+    {
+      "backend": "typescript",
+      "check": "duplicateGeometries",
+      "issueCount": 0,
+      "status": "passed"
+    },
+    {
+      "backend": "typescript",
+      "check": "degenerateComponents",
+      "issueCount": 0,
+      "status": "passed"
+    },
+    {
+      "backend": "typescript",
+      "check": "emptyGeometries",
+      "issueCount": 0,
+      "status": "passed"
+    },
+    {
+      "backend": "typescript",
+      "check": "invalidMultiPolygonMembers",
+      "issueCount": 0,
+      "status": "passed"
+    }
+  ],
+  "fullQualityIssues": [
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm1:tr-27",
+      "message": "Parent 'tr' geometry does not cover child 'tr:adm1:tr-27' geometry.",
+      "parentId": "tr",
+      "path": "$.zones[1].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm1:tr-27"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm2:54988432b19771634656837",
+      "message": "Parent 'tr:adm1:tr-27' geometry does not cover child 'tr:adm2:54988432b19771634656837' geometry.",
+      "parentId": "tr:adm1:tr-27",
+      "path": "$.zones[2].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm2:54988432b19771634656837"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm2:54988432b26387222249237",
+      "message": "Parent 'tr:adm1:tr-27' geometry does not cover child 'tr:adm2:54988432b26387222249237' geometry.",
+      "parentId": "tr:adm1:tr-27",
+      "path": "$.zones[3].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm2:54988432b26387222249237"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm2:54988432b32789090404224",
+      "message": "Parent 'tr:adm1:tr-27' geometry does not cover child 'tr:adm2:54988432b32789090404224' geometry.",
+      "parentId": "tr:adm1:tr-27",
+      "path": "$.zones[4].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm2:54988432b32789090404224"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm2:54988432b41731057290221",
+      "message": "Parent 'tr:adm1:tr-27' geometry does not cover child 'tr:adm2:54988432b41731057290221' geometry.",
+      "parentId": "tr:adm1:tr-27",
+      "path": "$.zones[5].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm2:54988432b41731057290221"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm2:54988432b54960387029794",
+      "message": "Parent 'tr:adm1:tr-27' geometry does not cover child 'tr:adm2:54988432b54960387029794' geometry.",
+      "parentId": "tr:adm1:tr-27",
+      "path": "$.zones[6].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm2:54988432b54960387029794"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm2:54988432b72028378604273",
+      "message": "Parent 'tr:adm1:tr-27' geometry does not cover child 'tr:adm2:54988432b72028378604273' geometry.",
+      "parentId": "tr:adm1:tr-27",
+      "path": "$.zones[8].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm2:54988432b72028378604273"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm2:54988432b85612149706662",
+      "message": "Parent 'tr:adm1:tr-27' geometry does not cover child 'tr:adm2:54988432b85612149706662' geometry.",
+      "parentId": "tr:adm1:tr-27",
+      "path": "$.zones[9].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm2:54988432b85612149706662"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm2:54988432b99023740963316",
+      "message": "Parent 'tr:adm1:tr-27' geometry does not cover child 'tr:adm2:54988432b99023740963316' geometry.",
+      "parentId": "tr:adm1:tr-27",
+      "path": "$.zones[10].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm2:54988432b99023740963316"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180167",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' geometry does not cover child 'tr:adm3:27:54988432b19771634656837:180167' geometry.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[11].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180167"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180169",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' bbox does not cover child 'tr:adm3:27:54988432b19771634656837:180169' bbox.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[12].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180169"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180177",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' geometry does not cover child 'tr:adm3:27:54988432b19771634656837:180177' geometry.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[16].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180177"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180185",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' bbox does not cover child 'tr:adm3:27:54988432b19771634656837:180185' bbox.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[20].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180185"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180193",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' geometry does not cover child 'tr:adm3:27:54988432b19771634656837:180193' geometry.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[24].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180193"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180195",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' geometry does not cover child 'tr:adm3:27:54988432b19771634656837:180195' geometry.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[25].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180195"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180199",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' geometry does not cover child 'tr:adm3:27:54988432b19771634656837:180199' geometry.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[27].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180199"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180201",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' bbox does not cover child 'tr:adm3:27:54988432b19771634656837:180201' bbox.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[28].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180201"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180209",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' geometry does not cover child 'tr:adm3:27:54988432b19771634656837:180209' geometry.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[31].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180209"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180211",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' geometry does not cover child 'tr:adm3:27:54988432b19771634656837:180211' geometry.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[32].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180211"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180215",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' geometry does not cover child 'tr:adm3:27:54988432b19771634656837:180215' geometry.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[34].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180215"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180219",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' geometry does not cover child 'tr:adm3:27:54988432b19771634656837:180219' geometry.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[36].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180219"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180221",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' geometry does not cover child 'tr:adm3:27:54988432b19771634656837:180221' geometry.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[37].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180221"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180223",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' geometry does not cover child 'tr:adm3:27:54988432b19771634656837:180223' geometry.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[38].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180223"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 87,
+        "segmentB": 89
+      },
+      "featureId": "tr:adm3:27:54988432b19771634656837:180227",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[40].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180227"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180227",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' bbox does not cover child 'tr:adm3:27:54988432b19771634656837:180227' bbox.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[40].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180227"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180229",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' geometry does not cover child 'tr:adm3:27:54988432b19771634656837:180229' geometry.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[41].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180229"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180233",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' geometry does not cover child 'tr:adm3:27:54988432b19771634656837:180233' geometry.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[43].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180233"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180235",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' geometry does not cover child 'tr:adm3:27:54988432b19771634656837:180235' geometry.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[44].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180235"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b19771634656837:180245",
+      "message": "Parent 'tr:adm2:54988432b19771634656837' geometry does not cover child 'tr:adm3:27:54988432b19771634656837:180245' geometry.",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "path": "$.zones[49].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b19771634656837:180245"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:104836",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:104836' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[56].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:104836"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 949,
+        "segmentB": 951
+      },
+      "featureId": "tr:adm3:27:54988432b26387222249237:179233",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[61].geometry.coordinates[1][0]",
+      "polygonIndex": 1,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179233"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179235",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179235' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[62].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179235"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179241",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179241' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[65].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179241"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179249",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179249' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[69].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179249"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179251",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179251' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[70].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179251"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179255",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179255' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[72].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179255"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179257",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179257' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[73].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179257"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179269",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179269' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[79].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179269"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179271",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179271' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[80].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179271"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179275",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' bbox does not cover child 'tr:adm3:27:54988432b26387222249237:179275' bbox.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[82].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179275"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179277",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179277' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[83].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179277"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179281",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179281' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[85].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179281"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179285",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179285' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[87].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179285"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179289",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' bbox does not cover child 'tr:adm3:27:54988432b26387222249237:179289' bbox.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[89].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179289"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 517,
+        "segmentB": 515
+      },
+      "featureId": "tr:adm3:27:54988432b26387222249237:179291",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[90].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179291"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179293",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179293' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[91].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179293"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179295",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179295' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[92].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179295"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 0,
+        "segmentB": 772
+      },
+      "featureId": "tr:adm3:27:54988432b26387222249237:179309",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[99].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179309"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179309",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179309' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[99].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179309"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179311",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179311' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[100].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179311"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179313",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' bbox does not cover child 'tr:adm3:27:54988432b26387222249237:179313' bbox.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[101].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179313"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 27,
+        "segmentB": 29
+      },
+      "featureId": "tr:adm3:27:54988432b26387222249237:179315",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[102].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179315"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179317",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' bbox does not cover child 'tr:adm3:27:54988432b26387222249237:179317' bbox.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[103].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179317"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179319",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179319' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[104].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179319"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179321",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179321' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[105].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179321"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179323",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179323' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[106].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179323"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179327",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179327' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[108].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179327"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:179331",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:179331' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[110].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:179331"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30338",
+      "message": "Sibling zones 'tr:adm3:27:54988432b26387222249237:30338' and 'tr:adm3:27:54988432b26387222249237:30392' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b26387222249237:30392",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b26387222249237:30338\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30338"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30338",
+      "message": "Sibling zones 'tr:adm3:27:54988432b26387222249237:30338' and 'tr:adm3:27:54988432b26387222249237:30414' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b26387222249237:30414",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b26387222249237:30338\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30338"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30341",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30341' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[116].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30341"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30346",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30346' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[121].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30346"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30348",
+      "message": "Sibling zones 'tr:adm3:27:54988432b26387222249237:30348' and 'tr:adm3:27:54988432b26387222249237:30357' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b26387222249237:30357",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b26387222249237:30348\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30348"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30350",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30350' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[125].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30350"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30351",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30351' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[126].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30351"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30354",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30354' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[129].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30354"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30357",
+      "message": "Sibling zones 'tr:adm3:27:54988432b26387222249237:30357' and 'tr:adm3:27:54988432b26387222249237:30371' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b26387222249237:30371",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b26387222249237:30357\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30357"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30365",
+      "message": "Sibling zones 'tr:adm3:27:54988432b26387222249237:30365' and 'tr:adm3:27:54988432b26387222249237:30377' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b26387222249237:30377",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b26387222249237:30365\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30365"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30367",
+      "message": "Sibling zones 'tr:adm3:27:54988432b26387222249237:30367' and 'tr:adm3:27:54988432b26387222249237:30405' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b26387222249237:30405",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b26387222249237:30367\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30367"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30369",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30369' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[140].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30369"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30374",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30374' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[143].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30374"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30376",
+      "message": "Sibling zones 'tr:adm3:27:54988432b26387222249237:30376' and 'tr:adm3:27:54988432b26387222249237:30366' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b26387222249237:30366",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b26387222249237:30376\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30376"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30376",
+      "message": "Sibling zones 'tr:adm3:27:54988432b26387222249237:30376' and 'tr:adm3:27:54988432b26387222249237:30407' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b26387222249237:30407",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b26387222249237:30376\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30376"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30377",
+      "message": "Sibling zones 'tr:adm3:27:54988432b26387222249237:30377' and 'tr:adm3:27:54988432b26387222249237:30450' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b26387222249237:30450",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b26387222249237:30377\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30377"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30379",
+      "message": "Sibling zones 'tr:adm3:27:54988432b26387222249237:30379' and 'tr:adm3:27:54988432b26387222249237:30357' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b26387222249237:30357",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b26387222249237:30379\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30379"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30385",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30385' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[153].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30385"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30389",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30389' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[157].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30389"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30390",
+      "message": "Sibling zones 'tr:adm3:27:54988432b26387222249237:30390' and 'tr:adm3:27:54988432b26387222249237:30357' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b26387222249237:30357",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b26387222249237:30390\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30390"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30394",
+      "message": "Sibling zones 'tr:adm3:27:54988432b26387222249237:30394' and 'tr:adm3:27:54988432b26387222249237:30398' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b26387222249237:30398",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b26387222249237:30394\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30394"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30394",
+      "message": "Sibling zones 'tr:adm3:27:54988432b26387222249237:30394' and 'tr:adm3:27:54988432b26387222249237:30406' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b26387222249237:30406",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b26387222249237:30394\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30394"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30402",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30402' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[168].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30402"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30404",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30404' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[169].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30404"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30405",
+      "message": "Sibling zones 'tr:adm3:27:54988432b26387222249237:30405' and 'tr:adm3:27:54988432b26387222249237:30339' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b26387222249237:30339",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b26387222249237:30405\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30405"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30408",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30408' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[173].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30408"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30409",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30409' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[174].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30409"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30428",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30428' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[189].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30428"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30430",
+      "message": "Sibling zones 'tr:adm3:27:54988432b26387222249237:30430' and 'tr:adm3:27:54988432b26387222249237:30366' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b26387222249237:30366",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b26387222249237:30430\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30430"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30431",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30431' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[192].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30431"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30432",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30432' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[193].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30432"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30436",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30436' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[197].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30436"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30438",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30438' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[199].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30438"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30442",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30442' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[203].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30442"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30444",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30444' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[205].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30444"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30445",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30445' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[206].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30445"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30447",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30447' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[208].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30447"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30449",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30449' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[210].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30449"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30453",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30453' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[214].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30453"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30455",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30455' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[216].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30455"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30457",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30457' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[218].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30457"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:30458",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:30458' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[219].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:30458"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b26387222249237:388991",
+      "message": "Sibling zones 'tr:adm3:27:54988432b26387222249237:388991' and 'tr:adm3:27:54988432b26387222249237:30447' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b26387222249237:30447",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b26387222249237:388991\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:388991"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b26387222249237:776195",
+      "message": "Parent 'tr:adm2:54988432b26387222249237' geometry does not cover child 'tr:adm3:27:54988432b26387222249237:776195' geometry.",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "path": "$.zones[236].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b26387222249237:776195"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179689",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179689' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[239].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179689"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179691",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179691' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[240].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179691"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179693",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179693' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[241].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179693"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179697",
+      "message": "Sibling zones 'tr:adm3:27:54988432b32789090404224:179697' and 'tr:adm3:27:54988432b32789090404224:179895' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b32789090404224:179895",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b32789090404224:179697\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179697"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179697",
+      "message": "Sibling zones 'tr:adm3:27:54988432b32789090404224:179697' and 'tr:adm3:27:54988432b32789090404224:179903' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b32789090404224:179903",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b32789090404224:179697\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179697"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179697",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179697' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[243].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179697"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179709",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179709' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[247].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179709"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179711",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179711' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[248].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179711"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179713",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179713' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[249].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179713"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179721",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179721' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[253].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179721"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179723",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' bbox does not cover child 'tr:adm3:27:54988432b32789090404224:179723' bbox.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[254].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179723"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 12,
+        "segmentB": 10
+      },
+      "featureId": "tr:adm3:27:54988432b32789090404224:179727",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[256].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179727"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179733",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' bbox does not cover child 'tr:adm3:27:54988432b32789090404224:179733' bbox.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[259].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179733"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179737",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179737' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[260].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179737"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179739",
+      "message": "Sibling zones 'tr:adm3:27:54988432b32789090404224:179739' and 'tr:adm3:27:54988432b32789090404224:100252' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b32789090404224:100252",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b32789090404224:179739\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179739"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179741",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' bbox does not cover child 'tr:adm3:27:54988432b32789090404224:179741' bbox.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[262].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179741"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179745",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' bbox does not cover child 'tr:adm3:27:54988432b32789090404224:179745' bbox.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[264].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179745"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179747",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179747' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[265].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179747"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179749",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179749' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[266].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179749"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179757",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179757' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[269].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179757"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179759",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179759' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[270].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179759"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179763",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179763' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[272].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179763"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179765",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179765' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[273].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179765"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179771",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179771' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[275].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179771"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179779",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179779' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[279].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179779"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179781",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179781' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[280].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179781"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179785",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' bbox does not cover child 'tr:adm3:27:54988432b32789090404224:179785' bbox.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[282].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179785"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179795",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179795' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[286].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179795"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179797",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179797' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[287].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179797"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179799",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179799' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[288].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179799"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179809",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179809' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[292].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179809"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179811",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179811' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[293].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179811"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 313,
+        "segmentB": 315
+      },
+      "featureId": "tr:adm3:27:54988432b32789090404224:179827",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[296].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179827"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179857",
+      "message": "Sibling zones 'tr:adm3:27:54988432b32789090404224:179857' and 'tr:adm3:27:54988432b32789090404224:179871' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b32789090404224:179871",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b32789090404224:179857\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179857"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179857",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179857' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[303].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179857"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179871",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179871' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[306].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179871"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179895",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179895' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[312].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179895"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179911",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179911' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[316].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179911"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179919",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179919' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[318].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179919"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b32789090404224:179931",
+      "message": "Parent 'tr:adm2:54988432b32789090404224' geometry does not cover child 'tr:adm3:27:54988432b32789090404224:179931' geometry.",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "path": "$.zones[321].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b32789090404224:179931"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b41731057290221:139893",
+      "message": "Sibling zones 'tr:adm3:27:54988432b41731057290221:139893' and 'tr:adm3:27:54988432b41731057290221:30587' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b41731057290221:30587",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b41731057290221:139893\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:139893"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179527",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179527' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[357].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179527"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179535",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179535' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[361].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179535"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179547",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179547' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[367].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179547"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179551",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179551' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[369].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179551"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179553",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179553' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[370].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179553"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179555",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179555' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[371].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179555"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179559",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179559' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[373].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179559"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179563",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179563' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[375].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179563"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179573",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179573' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[380].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179573"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179585",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179585' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[386].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179585"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179591",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179591' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[389].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179591"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179595",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179595' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[391].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179595"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179599",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179599' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[393].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179599"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179601",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179601' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[394].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179601"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179603",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179603' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[395].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179603"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179605",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179605' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[396].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179605"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179607",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179607' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[397].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179607"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179609",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179609' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[398].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179609"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179613",
+      "message": "Sibling zones 'tr:adm3:27:54988432b41731057290221:179613' and 'tr:adm3:27:54988432b41731057290221:210401' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b41731057290221:210401",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b41731057290221:179613\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179613"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179615",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179615' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[401].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179615"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b41731057290221:179617",
+      "message": "Parent 'tr:adm2:54988432b41731057290221' geometry does not cover child 'tr:adm3:27:54988432b41731057290221:179617' geometry.",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "path": "$.zones[402].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:179617"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b41731057290221:210401",
+      "message": "Sibling zones 'tr:adm3:27:54988432b41731057290221:210401' and 'tr:adm3:27:54988432b41731057290221:179519' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b41731057290221:179519",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b41731057290221:210401\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b41731057290221:210401"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:179621",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' bbox does not cover child 'tr:adm3:27:54988432b54960387029794:179621' bbox.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[421].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:179621"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:179627",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' bbox does not cover child 'tr:adm3:27:54988432b54960387029794:179627' bbox.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[424].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:179627"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:179629",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' bbox does not cover child 'tr:adm3:27:54988432b54960387029794:179629' bbox.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[425].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:179629"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:179631",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' bbox does not cover child 'tr:adm3:27:54988432b54960387029794:179631' bbox.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[426].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:179631"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:179633",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' geometry does not cover child 'tr:adm3:27:54988432b54960387029794:179633' geometry.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[427].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:179633"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:179637",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' bbox does not cover child 'tr:adm3:27:54988432b54960387029794:179637' bbox.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[429].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:179637"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:179641",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' bbox does not cover child 'tr:adm3:27:54988432b54960387029794:179641' bbox.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[431].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:179641"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:179645",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' geometry does not cover child 'tr:adm3:27:54988432b54960387029794:179645' geometry.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[433].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:179645"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:179647",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' geometry does not cover child 'tr:adm3:27:54988432b54960387029794:179647' geometry.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[434].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:179647"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:179651",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' geometry does not cover child 'tr:adm3:27:54988432b54960387029794:179651' geometry.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[436].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:179651"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:179655",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' geometry does not cover child 'tr:adm3:27:54988432b54960387029794:179655' geometry.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[438].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:179655"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:179657",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' geometry does not cover child 'tr:adm3:27:54988432b54960387029794:179657' geometry.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[439].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:179657"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:179663",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' geometry does not cover child 'tr:adm3:27:54988432b54960387029794:179663' geometry.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[442].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:179663"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:179669",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' geometry does not cover child 'tr:adm3:27:54988432b54960387029794:179669' geometry.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[445].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:179669"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:179673",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' geometry does not cover child 'tr:adm3:27:54988432b54960387029794:179673' geometry.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[447].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:179673"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:179683",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' geometry does not cover child 'tr:adm3:27:54988432b54960387029794:179683' geometry.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[452].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:179683"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:179685",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' geometry does not cover child 'tr:adm3:27:54988432b54960387029794:179685' geometry.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[453].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:179685"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:30613",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' geometry does not cover child 'tr:adm3:27:54988432b54960387029794:30613' geometry.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[455].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:30613"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:30614",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' geometry does not cover child 'tr:adm3:27:54988432b54960387029794:30614' geometry.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[456].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:30614"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b54960387029794:30615",
+      "message": "Parent 'tr:adm2:54988432b54960387029794' geometry does not cover child 'tr:adm3:27:54988432b54960387029794:30615' geometry.",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "path": "$.zones[457].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b54960387029794:30615"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179341",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' bbox does not cover child 'tr:adm3:27:54988432b61004264745956:179341' bbox.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[463].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179341"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179347",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:179347' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[466].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179347"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179349",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:179349' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[467].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179349"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179351",
+      "message": "Sibling zones 'tr:adm3:27:54988432b61004264745956:179351' and 'tr:adm3:27:54988432b61004264745956:30562' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b61004264745956:30562",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b61004264745956:179351\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179351"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179355",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:179355' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[470].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179355"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179365",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:179365' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[475].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179365"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179369",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:179369' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[477].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179369"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179375",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:179375' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[480].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179375"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179379",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:179379' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[482].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179379"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179381",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:179381' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[483].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179381"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179385",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:179385' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[485].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179385"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179389",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:179389' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[487].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179389"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179393",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:179393' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[489].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179393"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179397",
+      "message": "Sibling zones 'tr:adm3:27:54988432b61004264745956:179397' and 'tr:adm3:27:54988432b61004264745956:30478' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b61004264745956:30478",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b61004264745956:179397\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179397"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179397",
+      "message": "Sibling zones 'tr:adm3:27:54988432b61004264745956:179397' and 'tr:adm3:27:54988432b61004264745956:30562' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b61004264745956:30562",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b61004264745956:179397\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179397"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179399",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:179399' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[492].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179399"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179401",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:179401' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[493].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179401"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179407",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:179407' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[496].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179407"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179411",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:179411' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[498].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179411"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179413",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' bbox does not cover child 'tr:adm3:27:54988432b61004264745956:179413' bbox.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[499].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179413"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179415",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:179415' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[500].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179415"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:179423",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:179423' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[504].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:179423"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:181832",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:181832' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[509].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:181832"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:265637",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:265637' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[511].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:265637"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30482",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30482' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[518].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30482"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30483",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30483' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[519].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30483"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30484",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30484' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[520].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30484"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30487",
+      "message": "Sibling zones 'tr:adm3:27:54988432b61004264745956:30487' and 'tr:adm3:27:54988432b61004264745956:30508' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b61004264745956:30508",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b61004264745956:30487\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30487"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30491",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30491' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[526].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30491"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30501",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30501' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[536].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30501"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30513",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30513' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[548].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30513"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30515",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30515' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[550].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30515"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 22,
+        "segmentB": 24
+      },
+      "featureId": "tr:adm3:27:54988432b61004264745956:30516",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[551].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30516"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30517",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30517' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[552].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30517"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30520",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30520' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[554].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30520"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30525",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30525' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[558].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30525"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 80,
+        "segmentB": 78
+      },
+      "featureId": "tr:adm3:27:54988432b61004264745956:30526",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[559].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30526"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30528",
+      "message": "Sibling zones 'tr:adm3:27:54988432b61004264745956:30528' and 'tr:adm3:27:54988432b61004264745956:767418' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b61004264745956:767418",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b61004264745956:30528\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30528"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 28,
+        "segmentB": 26
+      },
+      "featureId": "tr:adm3:27:54988432b61004264745956:30528",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[561].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30528"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30532",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30532' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[565].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30532"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30533",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30533' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[566].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30533"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30534",
+      "message": "Sibling zones 'tr:adm3:27:54988432b61004264745956:30534' and 'tr:adm3:27:54988432b61004264745956:30513' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b61004264745956:30513",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b61004264745956:30534\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30534"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30534",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30534' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[567].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30534"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30541",
+      "message": "Sibling zones 'tr:adm3:27:54988432b61004264745956:30541' and 'tr:adm3:27:54988432b61004264745956:30513' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b61004264745956:30513",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b61004264745956:30541\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30541"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30544",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30544' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[577].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30544"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30549",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30549' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[582].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30549"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30550",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30550' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[583].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30550"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30552",
+      "message": "Sibling zones 'tr:adm3:27:54988432b61004264745956:30552' and 'tr:adm3:27:54988432b61004264745956:181832' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b61004264745956:181832",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b61004264745956:30552\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30552"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30552",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' bbox does not cover child 'tr:adm3:27:54988432b61004264745956:30552' bbox.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[585].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30552"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30553",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30553' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[586].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30553"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30555",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30555' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[588].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30555"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30556",
+      "message": "Sibling zones 'tr:adm3:27:54988432b61004264745956:30556' and 'tr:adm3:27:54988432b61004264745956:767418' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b61004264745956:767418",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b61004264745956:30556\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30556"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30562",
+      "message": "Sibling zones 'tr:adm3:27:54988432b61004264745956:30562' and 'tr:adm3:27:54988432b61004264745956:30478' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b61004264745956:30478",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b61004264745956:30562\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30562"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:30568",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:30568' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[599].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:30568"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:354803",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:354803' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[601].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:354803"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b61004264745956:697318",
+      "message": "Parent 'tr:adm2:54988432b61004264745956' geometry does not cover child 'tr:adm3:27:54988432b61004264745956:697318' geometry.",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "path": "$.zones[602].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:697318"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 35,
+        "segmentB": 37
+      },
+      "featureId": "tr:adm3:27:54988432b61004264745956:767418",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[603].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b61004264745956:767418"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:139479",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:139479' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[608].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:139479"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:180033",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' bbox does not cover child 'tr:adm3:27:54988432b72028378604273:180033' bbox.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[611].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180033"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 154,
+        "segmentB": 156
+      },
+      "featureId": "tr:adm3:27:54988432b72028378604273:180041",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[614].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180041"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 140,
+        "segmentB": 142
+      },
+      "featureId": "tr:adm3:27:54988432b72028378604273:180047",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[617].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180047"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 394,
+        "segmentB": 392
+      },
+      "featureId": "tr:adm3:27:54988432b72028378604273:180051",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[619].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180051"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:180057",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' bbox does not cover child 'tr:adm3:27:54988432b72028378604273:180057' bbox.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[621].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180057"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:180059",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:180059' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[622].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180059"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b72028378604273:180069",
+      "message": "Sibling zones 'tr:adm3:27:54988432b72028378604273:180069' and 'tr:adm3:27:54988432b72028378604273:180055' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b72028378604273:180055",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b72028378604273:180069\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180069"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:180083",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:180083' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[634].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180083"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b72028378604273:180087",
+      "message": "Sibling zones 'tr:adm3:27:54988432b72028378604273:180087' and 'tr:adm3:27:54988432b72028378604273:180089' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b72028378604273:180089",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b72028378604273:180087\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180087"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:180107",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:180107' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[645].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180107"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b72028378604273:180113",
+      "message": "Sibling zones 'tr:adm3:27:54988432b72028378604273:180113' and 'tr:adm3:27:54988432b72028378604273:180087' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b72028378604273:180087",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b72028378604273:180113\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180113"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:180113",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:180113' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[648].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180113"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:180115",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:180115' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[649].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180115"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:180123",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:180123' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[653].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180123"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:180125",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:180125' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[654].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180125"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:180131",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:180131' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[657].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180131"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:180137",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:180137' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[660].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180137"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:180139",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:180139' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[661].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180139"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:180161",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' bbox does not cover child 'tr:adm3:27:54988432b72028378604273:180161' bbox.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[672].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:180161"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:30463",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' bbox does not cover child 'tr:adm3:27:54988432b72028378604273:30463' bbox.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[675].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:30463"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:30464",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:30464' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[676].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:30464"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:30465",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' bbox does not cover child 'tr:adm3:27:54988432b72028378604273:30465' bbox.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[677].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:30465"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:30466",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' bbox does not cover child 'tr:adm3:27:54988432b72028378604273:30466' bbox.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[678].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:30466"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b72028378604273:30678",
+      "message": "Sibling zones 'tr:adm3:27:54988432b72028378604273:30678' and 'tr:adm3:27:54988432b72028378604273:30690' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b72028378604273:30690",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b72028378604273:30678\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:30678"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:30683",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:30683' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[687].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:30683"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:30687",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:30687' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[691].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:30687"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:30688",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:30688' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[692].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:30688"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 71,
+        "segmentB": 73
+      },
+      "featureId": "tr:adm3:27:54988432b72028378604273:30690",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[694].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:30690"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:30691",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:30691' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[695].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:30691"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:30692",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:30692' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[696].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:30692"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:30693",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:30693' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[697].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:30693"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:30694",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:30694' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[698].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:30694"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b72028378604273:30695",
+      "message": "Parent 'tr:adm2:54988432b72028378604273' geometry does not cover child 'tr:adm3:27:54988432b72028378604273:30695' geometry.",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "path": "$.zones[699].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b72028378604273:30695"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b85612149706662:179953",
+      "message": "Parent 'tr:adm2:54988432b85612149706662' geometry does not cover child 'tr:adm3:27:54988432b85612149706662:179953' geometry.",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "path": "$.zones[701].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:179953"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b85612149706662:179961",
+      "message": "Parent 'tr:adm2:54988432b85612149706662' geometry does not cover child 'tr:adm3:27:54988432b85612149706662:179961' geometry.",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "path": "$.zones[704].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:179961"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b85612149706662:179963",
+      "message": "Parent 'tr:adm2:54988432b85612149706662' geometry does not cover child 'tr:adm3:27:54988432b85612149706662:179963' geometry.",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "path": "$.zones[705].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:179963"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b85612149706662:179965",
+      "message": "Parent 'tr:adm2:54988432b85612149706662' geometry does not cover child 'tr:adm3:27:54988432b85612149706662:179965' geometry.",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "path": "$.zones[706].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:179965"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b85612149706662:179969",
+      "message": "Parent 'tr:adm2:54988432b85612149706662' geometry does not cover child 'tr:adm3:27:54988432b85612149706662:179969' geometry.",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "path": "$.zones[708].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:179969"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b85612149706662:179971",
+      "message": "Parent 'tr:adm2:54988432b85612149706662' geometry does not cover child 'tr:adm3:27:54988432b85612149706662:179971' geometry.",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "path": "$.zones[709].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:179971"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b85612149706662:179973",
+      "message": "Parent 'tr:adm2:54988432b85612149706662' geometry does not cover child 'tr:adm3:27:54988432b85612149706662:179973' geometry.",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "path": "$.zones[710].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:179973"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b85612149706662:179977",
+      "message": "Parent 'tr:adm2:54988432b85612149706662' bbox does not cover child 'tr:adm3:27:54988432b85612149706662:179977' bbox.",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "path": "$.zones[712].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:179977"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b85612149706662:179979",
+      "message": "Parent 'tr:adm2:54988432b85612149706662' geometry does not cover child 'tr:adm3:27:54988432b85612149706662:179979' geometry.",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "path": "$.zones[713].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:179979"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b85612149706662:179981",
+      "message": "Sibling zones 'tr:adm3:27:54988432b85612149706662:179981' and 'tr:adm3:27:54988432b85612149706662:179935' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b85612149706662:179935",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b85612149706662:179981\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:179981"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b85612149706662:179985",
+      "message": "Parent 'tr:adm2:54988432b85612149706662' geometry does not cover child 'tr:adm3:27:54988432b85612149706662:179985' geometry.",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "path": "$.zones[716].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:179985"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b85612149706662:179999",
+      "message": "Parent 'tr:adm2:54988432b85612149706662' geometry does not cover child 'tr:adm3:27:54988432b85612149706662:179999' geometry.",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "path": "$.zones[722].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:179999"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b85612149706662:180001",
+      "message": "Parent 'tr:adm2:54988432b85612149706662' geometry does not cover child 'tr:adm3:27:54988432b85612149706662:180001' geometry.",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "path": "$.zones[723].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:180001"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b85612149706662:180003",
+      "message": "Parent 'tr:adm2:54988432b85612149706662' geometry does not cover child 'tr:adm3:27:54988432b85612149706662:180003' geometry.",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "path": "$.zones[724].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:180003"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b85612149706662:180013",
+      "message": "Parent 'tr:adm2:54988432b85612149706662' bbox does not cover child 'tr:adm3:27:54988432b85612149706662:180013' bbox.",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "path": "$.zones[729].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:180013"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b85612149706662:180021",
+      "message": "Sibling zones 'tr:adm3:27:54988432b85612149706662:180021' and 'tr:adm3:27:54988432b85612149706662:180017' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b85612149706662:180017",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b85612149706662:180021\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:180021"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b85612149706662:180023",
+      "message": "Parent 'tr:adm2:54988432b85612149706662' geometry does not cover child 'tr:adm3:27:54988432b85612149706662:180023' geometry.",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "path": "$.zones[733].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:180023"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 54,
+        "segmentB": 52
+      },
+      "featureId": "tr:adm3:27:54988432b85612149706662:30656",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[737].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:30656"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 14,
+        "segmentB": 16
+      },
+      "featureId": "tr:adm3:27:54988432b85612149706662:30657",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[738].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:30657"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b85612149706662:30659",
+      "message": "Sibling zones 'tr:adm3:27:54988432b85612149706662:30659' and 'tr:adm3:27:54988432b85612149706662:30656' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b85612149706662:30656",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b85612149706662:30659\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:30659"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b85612149706662:30660",
+      "message": "Sibling zones 'tr:adm3:27:54988432b85612149706662:30660' and 'tr:adm3:27:54988432b85612149706662:30656' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b85612149706662:30656",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b85612149706662:30660\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:30660"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b85612149706662:30662",
+      "message": "Sibling zones 'tr:adm3:27:54988432b85612149706662:30662' and 'tr:adm3:27:54988432b85612149706662:30663' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b85612149706662:30663",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b85612149706662:30662\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:30662"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b85612149706662:30664",
+      "message": "Sibling zones 'tr:adm3:27:54988432b85612149706662:30664' and 'tr:adm3:27:54988432b85612149706662:30655' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b85612149706662:30655",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b85612149706662:30664\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:30664"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b85612149706662:688200",
+      "message": "Sibling zones 'tr:adm3:27:54988432b85612149706662:688200' and 'tr:adm3:27:54988432b85612149706662:179935' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b85612149706662:179935",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b85612149706662:688200\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:688200"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b85612149706662:688200",
+      "message": "Sibling zones 'tr:adm3:27:54988432b85612149706662:688200' and 'tr:adm3:27:54988432b85612149706662:180025' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b85612149706662:180025",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b85612149706662:688200\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b85612149706662:688200"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b99023740963316:146712",
+      "message": "Sibling zones 'tr:adm3:27:54988432b99023740963316:146712' and 'tr:adm3:27:54988432b99023740963316:179483' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b99023740963316:179483",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b99023740963316:146712\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:146712"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b99023740963316:146712",
+      "message": "Sibling zones 'tr:adm3:27:54988432b99023740963316:146712' and 'tr:adm3:27:54988432b99023740963316:30573' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b99023740963316:30573",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b99023740963316:146712\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:146712"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179433",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' bbox does not cover child 'tr:adm3:27:54988432b99023740963316:179433' bbox.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[749].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179433"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179435",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' geometry does not cover child 'tr:adm3:27:54988432b99023740963316:179435' geometry.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[750].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179435"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179437",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' geometry does not cover child 'tr:adm3:27:54988432b99023740963316:179437' geometry.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[751].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179437"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179439",
+      "message": "Sibling zones 'tr:adm3:27:54988432b99023740963316:179439' and 'tr:adm3:27:54988432b99023740963316:179475' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b99023740963316:179475",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b99023740963316:179439\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179439"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179445",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' geometry does not cover child 'tr:adm3:27:54988432b99023740963316:179445' geometry.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[755].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179445"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179447",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' bbox does not cover child 'tr:adm3:27:54988432b99023740963316:179447' bbox.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[756].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179447"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179449",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' geometry does not cover child 'tr:adm3:27:54988432b99023740963316:179449' geometry.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[757].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179449"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179451",
+      "message": "Sibling zones 'tr:adm3:27:54988432b99023740963316:179451' and 'tr:adm3:27:54988432b99023740963316:146712' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b99023740963316:146712",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b99023740963316:179451\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179451"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179451",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' geometry does not cover child 'tr:adm3:27:54988432b99023740963316:179451' geometry.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[758].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179451"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179455",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' bbox does not cover child 'tr:adm3:27:54988432b99023740963316:179455' bbox.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[760].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179455"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179459",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' geometry does not cover child 'tr:adm3:27:54988432b99023740963316:179459' geometry.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[762].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179459"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179461",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' geometry does not cover child 'tr:adm3:27:54988432b99023740963316:179461' geometry.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[763].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179461"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179463",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' geometry does not cover child 'tr:adm3:27:54988432b99023740963316:179463' geometry.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[764].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179463"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179465",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' bbox does not cover child 'tr:adm3:27:54988432b99023740963316:179465' bbox.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[765].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179465"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179471",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' geometry does not cover child 'tr:adm3:27:54988432b99023740963316:179471' geometry.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[768].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179471"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179473",
+      "message": "Sibling zones 'tr:adm3:27:54988432b99023740963316:179473' and 'tr:adm3:27:54988432b99023740963316:179451' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b99023740963316:179451",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b99023740963316:179473\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179473"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179473",
+      "message": "Sibling zones 'tr:adm3:27:54988432b99023740963316:179473' and 'tr:adm3:27:54988432b99023740963316:179467' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b99023740963316:179467",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b99023740963316:179473\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179473"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179473",
+      "message": "Sibling zones 'tr:adm3:27:54988432b99023740963316:179473' and 'tr:adm3:27:54988432b99023740963316:179485' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b99023740963316:179485",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b99023740963316:179473\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179473"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179473",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' geometry does not cover child 'tr:adm3:27:54988432b99023740963316:179473' geometry.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[769].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179473"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179475",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' geometry does not cover child 'tr:adm3:27:54988432b99023740963316:179475' geometry.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[770].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179475"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179477",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' geometry does not cover child 'tr:adm3:27:54988432b99023740963316:179477' geometry.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[771].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179477"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179479",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' geometry does not cover child 'tr:adm3:27:54988432b99023740963316:179479' geometry.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[772].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179479"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179481",
+      "message": "Sibling zones 'tr:adm3:27:54988432b99023740963316:179481' and 'tr:adm3:27:54988432b99023740963316:179475' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b99023740963316:179475",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b99023740963316:179481\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179481"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179485",
+      "message": "Sibling zones 'tr:adm3:27:54988432b99023740963316:179485' and 'tr:adm3:27:54988432b99023740963316:146712' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b99023740963316:146712",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b99023740963316:179485\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179485"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179491",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' geometry does not cover child 'tr:adm3:27:54988432b99023740963316:179491' geometry.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[778].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179491"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179495",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' bbox does not cover child 'tr:adm3:27:54988432b99023740963316:179495' bbox.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[780].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179495"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179499",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' geometry does not cover child 'tr:adm3:27:54988432b99023740963316:179499' geometry.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[782].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179499"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179503",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' bbox does not cover child 'tr:adm3:27:54988432b99023740963316:179503' bbox.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[784].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179503"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 80,
+        "segmentB": 78
+      },
+      "featureId": "tr:adm3:27:54988432b99023740963316:179505",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[785].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179505"
+    },
+    {
+      "check": "parentContainment",
+      "code": "PARENT_DOES_NOT_COVER_CHILD",
+      "featureId": "tr:adm3:27:54988432b99023740963316:179507",
+      "message": "Parent 'tr:adm2:54988432b99023740963316' geometry does not cover child 'tr:adm3:27:54988432b99023740963316:179507' geometry.",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "path": "$.zones[786].parentId",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:179507"
+    },
+    {
+      "check": "siblingOverlaps",
+      "code": "SIBLING_GEOMETRY_OVERLAP",
+      "featureId": "tr:adm3:27:54988432b99023740963316:30575",
+      "message": "Sibling zones 'tr:adm3:27:54988432b99023740963316:30575' and 'tr:adm3:27:54988432b99023740963316:146712' overlap.",
+      "otherZoneId": "tr:adm3:27:54988432b99023740963316:146712",
+      "path": "$.zones[?(@.id==\"tr:adm3:27:54988432b99023740963316:30575\")].geometry",
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:30575"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 2,
+        "segmentB": 0
+      },
+      "featureId": "tr:adm3:27:54988432b99023740963316:30575",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[794].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:30575"
+    },
+    {
+      "check": "selfIntersections",
+      "code": "SELF_INTERSECTION",
+      "details": {
+        "segmentA": 39,
+        "segmentB": 1
+      },
+      "featureId": "tr:adm3:27:54988432b99023740963316:30577",
+      "message": "Linear ring self-intersects.",
+      "path": "$.zones[796].geometry.coordinates[0][0]",
+      "polygonIndex": 0,
+      "ringIndex": 0,
+      "severity": "error",
+      "zoneId": "tr:adm3:27:54988432b99023740963316:30577"
+    }
+  ],
+  "generatedAt": "2026-07-18T00:00:00.000Z",
+  "manualIssues": [],
+  "productionReady": false,
+  "repairSummary": {
+    "componentsDiscarded": 9,
+    "featuresWithDiscardedComponents": 7,
+    "genuinelyRepairedFeatureCount": 11,
+    "normalizedOnlyFeatureCount": 775,
+    "precisionNormalizedFeatureCount": 775,
+    "ringNormalizedFeatureCount": 0
+  },
+  "schemaVersion": "territorykit-production-quality-report@1",
+  "strictMode": {
+    "failedCheckCount": 3,
+    "notSupportedCheckCount": 0,
+    "policy": "This report is strict evidence for production readiness. The draft PR may still emit deterministic artifacts while productionReady is false.",
+    "requiredChecks": [
+      "coordinates",
+      "rings",
+      "bbox",
+      "center",
+      "holes",
+      "selfIntersections",
+      "parentContainment",
+      "siblingOverlaps",
+      "duplicateGeometries",
+      "degenerateComponents",
+      "emptyGeometries",
+      "invalidMultiPolygonMembers"
+    ]
+  },
+  "summary": {
+    "adjacencyOverlapRejectedCount": 62,
+    "coordinateCount": 177781,
+    "fullQualityIssueCount": 336,
+    "manualIssueCount": 0,
+    "rejectedRepairCount": 0,
+    "unsafeDiscardedComponentCount": 0,
+    "zoneCount": 797
+  }
+}

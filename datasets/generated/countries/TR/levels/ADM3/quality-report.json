@@ -36,7 +36,7 @@
     "multiPolygonCount": 7,
     "performance": {
       "candidatePairCount": 0,
-      "durationMs": 5,
+      "durationMs": 0,
       "exactComparisonCount": 0
     },
     "polygonCount": 1033,

@@ -65,6 +65,7 @@ describe("geometry repair", () => {
     expect(report.engineVersion).toContain("GEOS");
     expect(report.featuresRepaired).toBe(1);
     expect(report.featuresRejected).toBe(0);
+    expect(repaired?.status).toBe("geometry-repaired");
     expect(repaired?.geometry?.type).toBe("MultiPolygon");
     expect(
       repaired?.center &&
@@ -97,6 +98,40 @@ describe("geometry repair", () => {
       expect(allLongitudesInRange(result.geometry)).toBe(true);
     }
   });
+
+  maybeShapelyIt(
+    "classifies tiny discarded components separately from ordinary repair",
+    async () => {
+      const report = await repairTerritoryGeometries(
+        [
+          {
+            id: "tiny-component",
+            sourceFeatureId: "source-1",
+            geometry: {
+              type: "MultiPolygon",
+              coordinates: [polygonRing(0, 0, 1, 1), polygonRing(2, 2, 2.000001, 2.000001)]
+            }
+          }
+        ],
+        {
+          engine: "shapely",
+          pythonPath: SHAPELY_PYTHON!
+        }
+      );
+      const repaired = report.results[0];
+
+      expect(repaired?.status).toBe("component-discarded");
+      expect(repaired?.discardedComponents).toEqual([
+        expect.objectContaining({
+          territoryId: "tiny-component",
+          sourceFeatureId: "source-1",
+          geometryType: "Polygon",
+          safeToDiscard: true
+        })
+      ]);
+      expect(report.featuresWithDiscardedComponents).toBe(1);
+    }
+  );
 });
 
 function antimeridianFixtures(): Array<{ id: string; geometry: TerritoryGeometry }> {

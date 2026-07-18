@@ -20,8 +20,8 @@ const maxBytesByFile = new Map([
   // Global ADM0-ADM2 completion adds GEOS repair orchestration, phased country builds,
   // source-lock reuse, lifecycle reporting, and Natural Earth overview artifact generation.
   // Lower-admin support adds provider capability inspection and open-data manifest gates.
-  // Turkey ADM3 pilot adds a source-locked official open-data builder and reports.
-  ["packages/generators/dist/index.mjs", 360_000],
+  // Turkey ADM3 hardening adds production-quality, repair, overlap, containment, and artifact gates.
+  ["packages/generators/dist/index.mjs", 390_000],
   // Dataset build-all/global-admin CLI commands now expose ADM0 completion controls and reports.
   // Lower-admin support adds level filtering, source capability output, and artifact fallback.
   ["packages/cli/dist/index.mjs", 96_000]

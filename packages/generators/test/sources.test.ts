@@ -463,6 +463,26 @@ describe("Turkey Gaziantep ADM3 pilot source", () => {
     await expect(readFile(join(outputPath, "coverage.json"), "utf8")).resolves.toContain(
       '"status": "partial"'
     );
+    const renderManifest = JSON.parse(
+      await readFile(join(outputPath, "render", "manifest.json"), "utf8")
+    ) as { layers: Array<{ adminLevels: string[]; minZoom: number; maxZoom: number }> };
+    const adm3Layer = renderManifest.layers.find((layer) => layer.adminLevels.includes("ADM3"));
+
+    expect(adm3Layer).toMatchObject({ minZoom: 12, maxZoom: 12 });
+    await expect(readFile(join(outputPath, "medium.geojson"), "utf8")).rejects.toThrow();
+    await expect(readFile(join(outputPath, "low.geojson"), "utf8")).rejects.toThrow();
+    await expect(
+      readFile(join(outputPath, "simplification-report.json"), "utf8")
+    ).resolves.toContain('"emitted": false');
+    await expect(
+      readFile(join(outputPath, "artifact-size-report.json"), "utf8")
+    ).resolves.toContain("territorykit-artifact-size-report@1");
+    await expect(
+      readFile(join(outputPath, "production-quality-report.json"), "utf8")
+    ).resolves.toContain('"checkStatuses"');
+    await expect(readFile(join(outputPath, "overlap-audit.json"), "utf8")).resolves.toContain(
+      "territorykit-overlap-audit@1"
+    );
   }, 20_000);
 
   it("rejects duplicate official neighbourhood codes", async () => {

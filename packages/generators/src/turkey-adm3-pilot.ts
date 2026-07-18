@@ -3,11 +3,13 @@ import { dirname, join, resolve } from "node:path";
 import {
   createTerritoryRenderFeatureCollection,
   computeGeometryBBox,
+  geometryToPolygons,
   validateGeometryDataset,
   validateTerritoryDataset
 } from "@territory-kit/dataset";
 import type {
   GeometryQualityChecks,
+  GeometryQualityIssue,
   GeometryQualityReport,
   LngLat,
   TerritoryAdminLevel,
@@ -65,6 +67,39 @@ const TURKEY_GAZIANTEP_ADM3_ADJACENCY_GEOMETRY_CHECKS: GeometryQualityChecks = {
   ...TURKEY_GAZIANTEP_ADM3_GEOMETRY_CHECKS,
   center: false
 };
+const TURKEY_GAZIANTEP_ADM3_RENDER_POLICY = {
+  adminLevel: "ADM3" as const,
+  minZoom: 12,
+  maxZoom: 12
+};
+const TURKEY_GAZIANTEP_ADM3_ARTIFACT_POLICY = {
+  schemaVersion: "territorykit-artifact-policy@1",
+  datasetId: TURKEY_GAZIANTEP_ADM3_DATASET_ID,
+  maxTotalSizeBytes: 55_000_000,
+  maxSingleReportSizeBytes: 2_000_000,
+  maxTileCount: 192,
+  maxTileSizeBytes: 64_000,
+  disallowDuplicateGeojsonTierHashes: true,
+  committedGeometryTiers: ["full"],
+  omittedGeometryTiers: {
+    medium: "No shared-boundary-aware simplifier is approved for ADM3 neighbourhoods yet.",
+    low: "No shared-boundary-aware simplifier is approved for ADM3 neighbourhoods yet."
+  }
+} as const;
+const PRODUCTION_REQUIRED_CHECKS = [
+  "coordinates",
+  "rings",
+  "bbox",
+  "center",
+  "holes",
+  "selfIntersections",
+  "parentContainment",
+  "siblingOverlaps",
+  "duplicateGeometries",
+  "degenerateComponents",
+  "emptyGeometries",
+  "invalidMultiPolygonMembers"
+] as const;
 
 export interface TurkeyGaziantepAdm3ParentMapping {
   sourceDistrictId: string;
@@ -329,6 +364,16 @@ export async function buildTurkeyGaziantepAdm3Pilot(
     checks: TURKEY_GAZIANTEP_ADM3_GEOMETRY_CHECKS,
     strict: true
   });
+  const productionQualityReport = createProductionQualityReport({
+    dataset: finalized,
+    qualityReport: validateGeometryDataset(finalized, {
+      checks: "full",
+      strict: true
+    }),
+    repairReport: repair.report,
+    adjacencyIssues: adjacency.issues,
+    buildDate
+  });
 
   if (!qualityReport.ok) {
     for (const issue of qualityReport.issues.filter((issue) => issue.severity === "error")) {
@@ -340,15 +385,31 @@ export async function buildTurkeyGaziantepAdm3Pilot(
     }
   }
 
+  if (!productionQualityReport.productionReady) {
+    issues.push({
+      code: "PRODUCTION_QUALITY_NOT_READY",
+      severity: "warning",
+      message:
+        "Gaziantep ADM3 pilot built deterministic artifacts, but production strict geometry checks still have unresolved findings. See production-quality-report.json."
+    });
+  }
+
   const buildOk = issues.every((issue) => issue.severity !== "error");
   const coverage = createCoverageReport(finalized);
   const hierarchyReport = createHierarchyReport(parsed);
   const sourceLock = createSourceLock({ sourceSha256, sourceSizeBytes });
   const sourceEvaluation = createSourceEvaluationRecord();
+  const fullGeojson = serializeJsonStable(createTerritoryRenderFeatureCollection(finalized));
+  const simplificationReport = createSimplificationReport({
+    buildDate,
+    fullGeojson,
+    dataset: finalized
+  });
   const renderArtifacts = buildTerritoryRenderArtifacts({
     dataset: adm3OnlyFinalized,
     format: "mvt",
     layerId: "territory_adm3",
+    policies: [TURKEY_GAZIANTEP_ADM3_RENDER_POLICY],
     minZoom: 12,
     maxZoom: 12,
     buildDate
@@ -361,9 +422,8 @@ export async function buildTurkeyGaziantepAdm3Pilot(
       serializeJsonStable(createDatasetValidationReport(validation, qualityReport))
     ],
     ["manifest.json", serializeJsonStable(createPilotManifest(finalized))],
-    ["full.geojson", serializeJsonStable(createTerritoryRenderFeatureCollection(finalized))],
-    ["medium.geojson", serializeJsonStable(createTerritoryRenderFeatureCollection(finalized))],
-    ["low.geojson", serializeJsonStable(createTerritoryRenderFeatureCollection(finalized))],
+    ["full.geojson", fullGeojson],
+    ["simplification-report.json", serializeJsonStable(simplificationReport)],
     ["source-metadata.json", serializeJsonStable(createTurkeyGaziantepAdm3SourceManifest())],
     ["sources.lock.json", serializeJsonStable(sourceLock)],
     ["source-evaluation.json", serializeJsonStable(sourceEvaluation)],
@@ -371,8 +431,31 @@ export async function buildTurkeyGaziantepAdm3Pilot(
     ["coverage.json", serializeJsonStable(coverage)],
     ["hierarchy-report.json", serializeJsonStable(hierarchyReport)],
     ["identity-map.json", serializeJsonStable(createIdentityMap(finalized))],
-    ["quality-report.json", serializeJsonStable(qualityReport)],
+    [
+      "quality-report.json",
+      serializeJsonStable(createDeterministicGeometryQualityReport(qualityReport))
+    ],
+    ["production-quality-report.json", serializeJsonStable(productionQualityReport)],
+    [
+      "overlap-audit.json",
+      serializeJsonStable(createOverlapAuditReport(buildDate, finalized, adjacency.issues))
+    ],
+    [
+      "parent-containment-report.json",
+      serializeJsonStable(
+        createParentContainmentReport(
+          buildDate,
+          finalized,
+          productionQualityReport.fullQualityIssues
+        )
+      )
+    ],
+    ["artifact-policy.json", serializeJsonStable(createArtifactPolicyReport(buildDate))],
     ["repair-report.json", serializeJsonStable(createRepairReport(buildDate, repair.report))],
+    [
+      "repair-details.json",
+      serializeJsonStable(createRepairDetailReport(buildDate, repair.report))
+    ],
     ["rejection-report.json", serializeJsonStable(createRejectionReport(buildDate, repair.report))],
     ["adjacency/adjacency.json", serializeJsonStable(adjacency.artifact)],
     [
@@ -399,6 +482,11 @@ export async function buildTurkeyGaziantepAdm3Pilot(
   for (const [path, content] of renderArtifacts.files) {
     files.set(path, content);
   }
+
+  files.set(
+    "artifact-size-report.json",
+    serializeJsonStable(createArtifactSizeReport(buildDate, files))
+  );
 
   const checksums = createChecksums(files);
   files.set("checksums.json", serializeJsonStable(checksums));
@@ -766,7 +854,14 @@ async function repairPilotAdm3Geometries(
 ): Promise<{ dataset: TerritoryDataset; report: TerritoryGeometryRepairReport }> {
   const adm3Features = dataset.zones
     .filter((zone) => zone.sourceAdminLevel === "ADM3")
-    .map((zone) => ({ id: zone.id, geometry: zone.geometry }));
+    .map((zone) => ({
+      id: zone.id,
+      sourceFeatureId:
+        typeof zone.properties.sourceObjectId === "string"
+          ? zone.properties.sourceObjectId
+          : zone.id,
+      geometry: zone.geometry
+    }));
   const report = await repairTerritoryGeometries(adm3Features, {
     engine: "auto",
     cwd: options.root,
@@ -1049,7 +1144,19 @@ function createPilotManifest(dataset: TerritoryDataset): Record<string, unknown>
     sourceDate: dataset.manifest.sourceDate,
     license: dataset.manifest.license,
     attribution: dataset.manifest.attribution,
-    publishReady: true
+    artifactPolicy: {
+      committedGeometryTiers: TURKEY_GAZIANTEP_ADM3_ARTIFACT_POLICY.committedGeometryTiers,
+      omittedGeometryTiers: TURKEY_GAZIANTEP_ADM3_ARTIFACT_POLICY.omittedGeometryTiers,
+      renderZooms: {
+        ADM3: {
+          minZoom: TURKEY_GAZIANTEP_ADM3_RENDER_POLICY.minZoom,
+          maxZoom: TURKEY_GAZIANTEP_ADM3_RENDER_POLICY.maxZoom
+        }
+      }
+    },
+    publishReady: false,
+    releaseReadiness:
+      "draft-pilot; deterministic artifacts are available, but production strict geometry findings remain unresolved"
   };
 }
 
@@ -1078,9 +1185,565 @@ function createDatasetValidationReport(
 ): Record<string, unknown> {
   return {
     reportVersion: "1",
-    dataset: validation,
-    geometry: qualityReport
+    dataset: {
+      ok: validation.ok,
+      issueCount: validation.issues.length,
+      issues: validation.issues
+    },
+    geometry: summarizeGeometryQualityReport(qualityReport)
   };
+}
+
+function createProductionQualityReport(input: {
+  dataset: TerritoryDataset;
+  qualityReport: GeometryQualityReport;
+  repairReport: TerritoryGeometryRepairReport;
+  adjacencyIssues: Array<{ code: string; zoneId?: string; otherZoneId?: string }>;
+  buildDate: string;
+}): Record<string, unknown> & {
+  fullQualityIssues: Record<string, unknown>[];
+  productionReady: boolean;
+} {
+  const fullQualityIssues = input.qualityReport.issues.map(compactQualityIssue);
+  const manualIssues = createManualProductionQualityIssues(input.dataset);
+  const allIssues = [...fullQualityIssues, ...manualIssues];
+  const checkStatuses = PRODUCTION_REQUIRED_CHECKS.map((check) => {
+    const checkIssues = allIssues.filter((issue) => issue.check === check);
+
+    return {
+      check,
+      status: checkIssues.length > 0 ? "failed" : "passed",
+      backend: "typescript",
+      issueCount: checkIssues.length
+    };
+  });
+  const unsafeDiscardedComponents = input.repairReport.results.flatMap((result) =>
+    result.discardedComponents.filter((component) => !component.safeToDiscard)
+  );
+  const productionReady =
+    checkStatuses.every((status) => status.status === "passed") &&
+    input.repairReport.featuresRejected === 0 &&
+    unsafeDiscardedComponents.length === 0;
+
+  return {
+    schemaVersion: "territorykit-production-quality-report@1",
+    generatedAt: input.buildDate,
+    productionReady,
+    strictMode: {
+      requiredChecks: PRODUCTION_REQUIRED_CHECKS,
+      failedCheckCount: checkStatuses.filter((status) => status.status === "failed").length,
+      notSupportedCheckCount: 0,
+      policy:
+        "This report is strict evidence for production readiness. The draft PR may still emit deterministic artifacts while productionReady is false."
+    },
+    backendAvailability: {
+      primary: "typescript",
+      geosShapely:
+        input.repairReport.engine === "GEOS/Shapely"
+          ? {
+              status: "available-for-repair",
+              engineVersion: input.repairReport.engineVersion
+            }
+          : {
+              status: "not-available-in-this-build",
+              engineVersion: input.repairReport.engineVersion
+            }
+    },
+    checkStatuses,
+    summary: {
+      zoneCount: input.qualityReport.summary.zoneCount,
+      coordinateCount: input.qualityReport.summary.coordinateCount,
+      fullQualityIssueCount: fullQualityIssues.length,
+      manualIssueCount: manualIssues.length,
+      adjacencyOverlapRejectedCount: input.adjacencyIssues.filter((issue) =>
+        issue.code.startsWith("RELATION_")
+      ).length,
+      rejectedRepairCount: input.repairReport.featuresRejected,
+      unsafeDiscardedComponentCount: unsafeDiscardedComponents.length
+    },
+    repairSummary: {
+      genuinelyRepairedFeatureCount: input.repairReport.featuresRepaired,
+      normalizedOnlyFeatureCount:
+        input.repairReport.featuresPrecisionNormalized + input.repairReport.featuresRingNormalized,
+      precisionNormalizedFeatureCount: input.repairReport.featuresPrecisionNormalized,
+      ringNormalizedFeatureCount: input.repairReport.featuresRingNormalized,
+      featuresWithDiscardedComponents: input.repairReport.featuresWithDiscardedComponents,
+      componentsDiscarded: input.repairReport.componentsDiscarded
+    },
+    fullQualityIssues,
+    manualIssues
+  };
+}
+
+function createManualProductionQualityIssues(dataset: TerritoryDataset): Record<string, unknown>[] {
+  const issues: Record<string, unknown>[] = [];
+  const geometryHashOwners = new Map<string, string>();
+
+  for (const zone of dataset.zones) {
+    const geometryHash = sha256Hex(serializeJsonStable(zone.geometry));
+    const duplicate = geometryHashOwners.get(geometryHash);
+
+    if (duplicate) {
+      issues.push({
+        code: "DUPLICATE_GEOMETRY",
+        severity: "error",
+        check: "duplicateGeometries",
+        zoneId: zone.id,
+        otherZoneId: duplicate,
+        message: `Zone '${zone.id}' duplicates geometry from '${duplicate}'.`
+      });
+    } else {
+      geometryHashOwners.set(geometryHash, zone.id);
+    }
+
+    try {
+      const polygons = geometryToPolygons(zone.geometry);
+
+      if (polygons.length === 0) {
+        issues.push({
+          code: "EMPTY_GEOMETRY",
+          severity: "error",
+          check: "emptyGeometries",
+          zoneId: zone.id,
+          message: `Zone '${zone.id}' has no polygon components.`
+        });
+      }
+
+      for (const [polygonIndex, polygon] of polygons.entries()) {
+        const shell = polygon[0];
+
+        if (!shell || shell.length < 4) {
+          issues.push({
+            code: "INVALID_MULTIPOLYGON_MEMBER",
+            severity: "error",
+            check: "invalidMultiPolygonMembers",
+            zoneId: zone.id,
+            polygonIndex,
+            message: `Zone '${zone.id}' polygon component ${polygonIndex} has no valid shell.`
+          });
+          continue;
+        }
+
+        if (Math.abs(ringArea(shell)) <= 1e-12) {
+          issues.push({
+            code: "DEGENERATE_COMPONENT",
+            severity: "error",
+            check: "degenerateComponents",
+            zoneId: zone.id,
+            polygonIndex,
+            message: `Zone '${zone.id}' polygon component ${polygonIndex} has zero or near-zero area.`
+          });
+        }
+      }
+    } catch (error) {
+      issues.push({
+        code: "INVALID_MULTIPOLYGON_MEMBER",
+        severity: "error",
+        check: "invalidMultiPolygonMembers",
+        zoneId: zone.id,
+        message: error instanceof Error ? error.message : String(error)
+      });
+    }
+  }
+
+  return issues;
+}
+
+function createOverlapAuditReport(
+  buildDate: string,
+  dataset: TerritoryDataset,
+  adjacencyIssues: Array<{ code: string; zoneId?: string; otherZoneId?: string; message: string }>
+): Record<string, unknown> {
+  const zonesById = new Map(dataset.zones.map((zone) => [zone.id, zone]));
+  const records = adjacencyIssues
+    .filter((issue) => issue.code === "RELATION_OVERLAP" || issue.code === "RELATION_WITHIN")
+    .map((issue) => {
+      const left = issue.zoneId ? zonesById.get(issue.zoneId) : undefined;
+      const right = issue.otherZoneId ? zonesById.get(issue.otherZoneId) : undefined;
+      const sameDistrict = Boolean(
+        left?.parentId && right?.parentId && left.parentId === right.parentId
+      );
+      const classification = classifyOverlapRecord(issue.code, sameDistrict);
+
+      return {
+        zoneA: issue.zoneId,
+        zoneB: issue.otherZoneId,
+        parentDistrictA: left?.parentId,
+        parentDistrictB: right?.parentId,
+        parentDistrictNameA: readStringProperty(left?.properties.districtName),
+        parentDistrictNameB: readStringProperty(right?.properties.districtName),
+        intersectionArea: null,
+        intersectionAreaPercentOfA: null,
+        intersectionAreaPercentOfB: null,
+        sameDistrict,
+        classification,
+        recommendedAction:
+          classification === "cross-district-conflict"
+            ? "Review parent mapping and source boundary conflict before enabling as production-ready."
+            : "Review source polygons with a GEOS-backed area audit before overriding.",
+        adjacencyExcluded: true,
+        qualityFindingRetained: true,
+        areaMeasurementStatus: "not-computed-without-geos",
+        relationCode: issue.code,
+        message: issue.message
+      };
+    })
+    .sort((left, right) => String(left.zoneA).localeCompare(String(right.zoneA)));
+
+  return {
+    schemaVersion: "territorykit-overlap-audit@1",
+    generatedAt: buildDate,
+    backend: "typescript-adjacency-classifier",
+    tolerances: {
+      precisionSliverAbsoluteAreaThreshold: 1e-10,
+      precisionSliverRelativeAreaThreshold: 1e-6,
+      note: "GEOS/Shapely is required before an overlap can be downgraded to precision-sliver by measured area."
+    },
+    summary: {
+      overlapCount: records.length,
+      byClassification: countRecordsBy(records, (record) => record.classification)
+    },
+    overlaps: records
+  };
+}
+
+function createParentContainmentReport(
+  buildDate: string,
+  dataset: TerritoryDataset,
+  fullQualityIssues: Record<string, unknown>[]
+): Record<string, unknown> {
+  const parentIssues = new Set(
+    fullQualityIssues
+      .filter((issue) => issue.code === "PARENT_DOES_NOT_COVER_CHILD")
+      .flatMap((issue) => (typeof issue.zoneId === "string" ? [issue.zoneId] : []))
+  );
+  const zonesById = new Map(dataset.zones.map((zone) => [zone.id, zone]));
+  const records = dataset.zones
+    .filter((zone) => zone.sourceAdminLevel === "ADM3")
+    .map((zone) => {
+      const parent = zone.parentId ? zonesById.get(zone.parentId) : undefined;
+      const classification = parentIssues.has(zone.id) ? "substantive-overflow" : "fully-contained";
+
+      return {
+        territoryId: zone.id,
+        parentId: zone.parentId,
+        parentName: parent?.name,
+        districtName: readStringProperty(zone.properties.districtName),
+        classification,
+        multipleParentIntersection: false,
+        reviewedToleranceException: false
+      };
+    })
+    .sort((left, right) => left.territoryId.localeCompare(right.territoryId));
+
+  return {
+    schemaVersion: "territorykit-parent-containment-report@1",
+    generatedAt: buildDate,
+    backend: "typescript-geometry-coverage",
+    requirements: {
+      unresolvedParentMappingsMustBeZero: true,
+      ambiguousParentMappingsMustBeZero: true,
+      substantiveOverflowMustBeZeroForProductionReady: true
+    },
+    summary: {
+      totalAdm3FeatureCount: records.length,
+      fullyContained: records.filter((record) => record.classification === "fully-contained")
+        .length,
+      boundaryTouching: 0,
+      smallToleranceOverflow: 0,
+      substantiveOverflow: records.filter(
+        (record) => record.classification === "substantive-overflow"
+      ).length,
+      multipleParentIntersection: 0,
+      unresolvedParentMappings: records.filter((record) => !record.parentId).length,
+      ambiguousParentMappings: 0
+    },
+    records
+  };
+}
+
+function createSimplificationReport(input: {
+  buildDate: string;
+  fullGeojson: string;
+  dataset: TerritoryDataset;
+}): Record<string, unknown> {
+  const fullCoordinateCount = input.dataset.zones.reduce(
+    (sum, zone) => sum + countGeometryCoordinates(zone.geometry),
+    0
+  );
+
+  return {
+    schemaVersion: "territorykit-simplification-report@1",
+    generatedAt: input.buildDate,
+    policy:
+      "Only safe, topology-preserving tiers are emitted. Identical medium/low copies are forbidden.",
+    acceptanceThresholds: {
+      maxInvalidFeatureCount: 0,
+      maxSiblingOverlapBeyondTolerance: 0,
+      maxRelativeAreaChange: 0.0025,
+      sharedBoundaryAwareRequired: true
+    },
+    tiers: {
+      full: {
+        emitted: true,
+        path: "full.geojson",
+        coordinateCount: fullCoordinateCount,
+        fileSizeBytes: Buffer.byteLength(input.fullGeojson),
+        sha256: sha256Hex(input.fullGeojson),
+        areaDrift: 0,
+        invalidFeatureCount: 0,
+        maximumRelativeAreaChange: 0
+      },
+      medium: omittedSimplificationTier("medium"),
+      low: omittedSimplificationTier("low")
+    }
+  };
+}
+
+function createArtifactPolicyReport(buildDate: string): Record<string, unknown> {
+  return {
+    ...TURKEY_GAZIANTEP_ADM3_ARTIFACT_POLICY,
+    generatedAt: buildDate,
+    productionStoragePolicy:
+      "Keep this pilot under an explicit size budget in Git; larger lower-admin artifacts must move to generated CI/release artifacts or a compressed deterministic bundle.",
+    artifactClasses: {
+      sourceLocksAndProvenance: [
+        "sources.lock.json",
+        "source-metadata.json",
+        "source-evaluation.json"
+      ],
+      qualityAndSummaryReports: [
+        "validation-report.json",
+        "quality-report.json",
+        "production-quality-report.json",
+        "repair-report.json",
+        "overlap-audit.json",
+        "parent-containment-report.json",
+        "simplification-report.json"
+      ],
+      artifactGovernanceReports: [
+        "artifact-policy.json",
+        "artifact-size-report.json",
+        "checksums.json"
+      ],
+      productionQueryArtifacts: ["dataset.json", "index.json", "query/query-artifact.json"],
+      productionRenderArtifacts: ["full.geojson", "render/manifest.json", "render/tiles/**/*.mvt"]
+    }
+  };
+}
+
+function createArtifactSizeReport(
+  buildDate: string,
+  files: ReadonlyMap<string, string | Uint8Array>
+): Record<string, unknown> {
+  const entries = [...files.entries()].map(([path, content]) => ({
+    path,
+    sizeBytes: typeof content === "string" ? Buffer.byteLength(content) : content.byteLength,
+    sha256: sha256Hex(typeof content === "string" ? content : content)
+  }));
+  const tileEntries = entries.filter((entry) => entry.path.endsWith(".mvt"));
+  const reportEntries = entries.filter((entry) => entry.path.endsWith("report.json"));
+  const geojsonEntries = entries.filter((entry) => entry.path.endsWith(".geojson"));
+  const duplicateGeojsonHashes = findDuplicateHashes(geojsonEntries);
+  const violations = [
+    ...duplicateGeojsonHashes.map((duplicate) => ({
+      code: "DUPLICATE_GEOJSON_TIER",
+      severity: "error",
+      message: `GeoJSON artifacts share checksum ${duplicate.sha256}: ${duplicate.paths.join(", ")}.`
+    })),
+    ...reportEntries
+      .filter(
+        (entry) => entry.sizeBytes > TURKEY_GAZIANTEP_ADM3_ARTIFACT_POLICY.maxSingleReportSizeBytes
+      )
+      .map((entry) => ({
+        code: "REPORT_TOO_LARGE",
+        severity: "error",
+        message: `${entry.path} is ${entry.sizeBytes} bytes.`
+      })),
+    ...(tileEntries.length > TURKEY_GAZIANTEP_ADM3_ARTIFACT_POLICY.maxTileCount
+      ? [
+          {
+            code: "TILE_COUNT_EXCEEDED",
+            severity: "error",
+            message: `${tileEntries.length} tiles exceeds ${TURKEY_GAZIANTEP_ADM3_ARTIFACT_POLICY.maxTileCount}.`
+          }
+        ]
+      : []),
+    ...tileEntries
+      .filter((entry) => entry.sizeBytes > TURKEY_GAZIANTEP_ADM3_ARTIFACT_POLICY.maxTileSizeBytes)
+      .map((entry) => ({
+        code: "TILE_TOO_LARGE",
+        severity: "error",
+        message: `${entry.path} is ${entry.sizeBytes} bytes.`
+      }))
+  ];
+  const totalSizeBytes = entries.reduce((sum, entry) => sum + entry.sizeBytes, 0);
+
+  if (totalSizeBytes > TURKEY_GAZIANTEP_ADM3_ARTIFACT_POLICY.maxTotalSizeBytes) {
+    violations.push({
+      code: "TOTAL_SIZE_EXCEEDED",
+      severity: "error",
+      message: `${totalSizeBytes} bytes exceeds ${TURKEY_GAZIANTEP_ADM3_ARTIFACT_POLICY.maxTotalSizeBytes}.`
+    });
+  }
+
+  return {
+    schemaVersion: "territorykit-artifact-size-report@1",
+    generatedAt: buildDate,
+    ok: violations.length === 0,
+    budget: TURKEY_GAZIANTEP_ADM3_ARTIFACT_POLICY,
+    measurementScope: {
+      included:
+        "All in-memory artifacts known before artifact-size-report.json and checksums.json are appended.",
+      excludedGeneratedFiles: ["artifact-size-report.json", "checksums.json"],
+      finalOnDiskPolicyGate: "pnpm data:tr:adm3:artifact-policy"
+    },
+    summary: {
+      fileCount: entries.length,
+      totalSizeBytes,
+      tileCount: tileEntries.length,
+      tileTotalSizeBytes: tileEntries.reduce((sum, entry) => sum + entry.sizeBytes, 0),
+      largestTileBytes: Math.max(0, ...tileEntries.map((entry) => entry.sizeBytes)),
+      largestFileBytes: Math.max(0, ...entries.map((entry) => entry.sizeBytes)),
+      duplicateGeojsonTierHashCount: duplicateGeojsonHashes.length
+    },
+    violations,
+    largestFiles: entries
+      .sort(
+        (left, right) => right.sizeBytes - left.sizeBytes || left.path.localeCompare(right.path)
+      )
+      .slice(0, 20)
+  };
+}
+
+function summarizeGeometryQualityReport(report: GeometryQualityReport): Record<string, unknown> {
+  const deterministic = createDeterministicGeometryQualityReport(report);
+
+  return {
+    ok: deterministic.ok,
+    mode: deterministic.mode,
+    strict: deterministic.strict,
+    backend: deterministic.backend,
+    checks: deterministic.checks,
+    summary: deterministic.summary,
+    issueCount: deterministic.issues.length,
+    issues: deterministic.issues.map(compactQualityIssue)
+  };
+}
+
+function createDeterministicGeometryQualityReport(
+  report: GeometryQualityReport
+): GeometryQualityReport {
+  return {
+    ...report,
+    summary: {
+      ...report.summary,
+      performance: {
+        ...report.summary.performance,
+        durationMs: 0
+      }
+    }
+  };
+}
+
+function compactQualityIssue(issue: GeometryQualityIssue): Record<string, unknown> {
+  return {
+    code: issue.code,
+    severity: issue.severity,
+    check: issue.check,
+    message: issue.message,
+    path: issue.path,
+    ...(issue.zoneId ? { zoneId: issue.zoneId } : {}),
+    ...(issue.featureId ? { featureId: issue.featureId } : {}),
+    ...(issue.otherZoneId ? { otherZoneId: issue.otherZoneId } : {}),
+    ...(issue.parentId ? { parentId: issue.parentId } : {}),
+    ...(issue.polygonIndex !== undefined ? { polygonIndex: issue.polygonIndex } : {}),
+    ...(issue.ringIndex !== undefined ? { ringIndex: issue.ringIndex } : {}),
+    ...(issue.coordinateIndex !== undefined ? { coordinateIndex: issue.coordinateIndex } : {}),
+    ...(issue.details ? { details: issue.details } : {})
+  };
+}
+
+function classifyOverlapRecord(code: string, sameDistrict: boolean): string {
+  if (code === "RELATION_WITHIN" || code === "RELATION_CONTAINS" || code === "RELATION_EQUAL") {
+    return "duplicate-or-near-duplicate";
+  }
+
+  return sameDistrict ? "source-boundary-conflict" : "cross-district-conflict";
+}
+
+function omittedSimplificationTier(tier: "medium" | "low"): Record<string, unknown> {
+  return {
+    emitted: false,
+    path: null,
+    coordinateCount: null,
+    fileSizeBytes: null,
+    sha256: null,
+    areaDrift: null,
+    invalidFeatureCount: null,
+    maximumRelativeAreaChange: null,
+    omissionReason: TURKEY_GAZIANTEP_ADM3_ARTIFACT_POLICY.omittedGeometryTiers[tier],
+    requiredBeforeEmission:
+      "Implement and test shared-boundary-aware simplification that preserves topology and parent/neighbor semantics."
+  };
+}
+
+function countGeometryCoordinates(geometry: TerritoryGeometry): number {
+  return geometryToPolygons(geometry).reduce(
+    (polygonSum, polygon) =>
+      polygonSum + polygon.reduce((ringSum, ring) => ringSum + ring.length, 0),
+    0
+  );
+}
+
+function ringArea(ring: LngLat[]): number {
+  let area = 0;
+
+  for (let index = 0; index < ring.length - 1; index += 1) {
+    const current = ring[index];
+    const next = ring[index + 1];
+
+    if (!current || !next) {
+      continue;
+    }
+
+    area += current[0] * next[1] - next[0] * current[1];
+  }
+
+  return area / 2;
+}
+
+function countRecordsBy<T>(
+  records: readonly T[],
+  readKey: (record: T) => string
+): Record<string, number> {
+  const counts: Record<string, number> = {};
+
+  for (const record of records) {
+    const key = readKey(record);
+    counts[key] = (counts[key] ?? 0) + 1;
+  }
+
+  return counts;
+}
+
+function readStringProperty(value: unknown): string | undefined {
+  return typeof value === "string" && value.length > 0 ? value : undefined;
+}
+
+function findDuplicateHashes(
+  entries: Array<{ path: string; sha256: string }>
+): Array<{ sha256: string; paths: string[] }> {
+  const pathsByHash = new Map<string, string[]>();
+
+  for (const entry of entries) {
+    pathsByHash.set(entry.sha256, [...(pathsByHash.get(entry.sha256) ?? []), entry.path]);
+  }
+
+  return [...pathsByHash.entries()]
+    .filter(([, paths]) => paths.length > 1)
+    .map(([sha256, paths]) => ({ sha256, paths: paths.sort() }))
+    .sort((left, right) => left.sha256.localeCompare(right.sha256));
 }
 
 function createSourceLock(input: {
@@ -1233,6 +1896,9 @@ function createRepairReport(
   buildDate: string,
   report: TerritoryGeometryRepairReport
 ): Record<string, unknown> {
+  const statusCounts = countRecordsBy(report.results, (result) => result.status);
+  const discardedComponents = report.results.flatMap((result) => result.discardedComponents);
+
   return {
     schemaVersion: "territorykit-repair-report@1",
     generatedAt: buildDate,
@@ -1240,15 +1906,40 @@ function createRepairReport(
     engineVersion: report.engineVersion,
     mode: report.mode,
     precision: report.precision,
-    repairedFeatureCount: report.featuresRepaired,
+    genuinelyRepairedFeatureCount: report.featuresRepaired,
     unchangedFeatureCount: report.featuresUnchanged,
+    precisionNormalizedFeatureCount: report.featuresPrecisionNormalized,
+    ringNormalizedFeatureCount: report.featuresRingNormalized,
+    normalizedOnlyFeatureCount: report.featuresPrecisionNormalized + report.featuresRingNormalized,
+    featuresWithDiscardedComponents: report.featuresWithDiscardedComponents,
     rejectedRepairCount: report.featuresRejected,
     areaDifference: report.areaDifference,
     componentsDiscarded: report.componentsDiscarded,
+    statusCounts,
+    discardedComponentSummary: {
+      count: discardedComponents.length,
+      polygonalAreaDiscardedCount: discardedComponents.filter((component) => component.area > 0)
+        .length,
+      unsafeDiscardedCount: discardedComponents.filter((component) => !component.safeToDiscard)
+        .length
+    },
+    detailReportPath: "repair-details.json",
+    note: "Precision normalization is reported separately from geometry repair. See repair-details.json for per-feature records."
+  };
+}
+
+function createRepairDetailReport(
+  buildDate: string,
+  report: TerritoryGeometryRepairReport
+): Record<string, unknown> {
+  return {
+    schemaVersion: "territorykit-repair-details@1",
+    generatedAt: buildDate,
     repairs: report.results
       .filter((result) => result.status !== "unchanged")
       .map((result) => ({
         id: result.id,
+        ...(result.sourceFeatureId ? { sourceFeatureId: result.sourceFeatureId } : {}),
         status: result.status,
         engine: result.engine,
         engineVersion: result.engineVersion,
@@ -1258,6 +1949,7 @@ function createRepairReport(
         areaAfter: result.areaAfter,
         areaDifference: result.areaDifference,
         componentsDiscarded: result.componentsDiscarded,
+        discardedComponents: result.discardedComponents,
         ...(result.message ? { message: result.message } : {})
       }))
   };
@@ -1275,6 +1967,7 @@ function createRejectionReport(
     rejectedFeatureCount: rejections.length,
     rejections: rejections.map((result) => ({
       id: result.id,
+      ...(result.sourceFeatureId ? { sourceFeatureId: result.sourceFeatureId } : {}),
       reason: result.message ?? "Geometry repair rejected the source feature."
     }))
   };

@@ -1,7 +1,7 @@
 # Turkey Neighbourhoods
 
 TerritoryKit includes reviewed Turkey semantics for `ADM3 -> neighbourhood / Mahalle` and one
-official partial production pilot for Gaziantep.
+official partial Gaziantep pilot. This is not nationwide Turkey neighbourhood coverage.
 
 ## Gaziantep Pilot
 
@@ -12,6 +12,8 @@ Akıllı Şehir Açık Veri Platformu.
 
 - Coverage: 786 `ADM3` neighbourhoods for the 9 Gaziantep `ADM2` district parents.
 - Status: `partial`; no nationwide Turkey ADM3 coverage is claimed.
+- Production strict status: `not ready`; `production-quality-report.json` records unresolved
+  self-intersection, parent-containment, and sibling-overlap findings.
 - License: CC BY 4.0.
 - Source URL: <https://ulasav.csb.gov.tr/dataset/27-mahalle-sinir-alanlari>
 - Download URL:
@@ -22,8 +24,32 @@ Akıllı Şehir Açık Veri Platformu.
 
 The raw KML is cached under `.territory/cache/` during local builds and is not committed. The
 committed artifacts include `sources.lock.json`, `source-metadata.json`, `source-evaluation.json`,
-`coverage.json`, `repair-report.json`, `quality-report.json`, adjacency, query, and MVT render
-outputs.
+`coverage.json`, `repair-report.json`, `repair-details.json`, `production-quality-report.json`,
+`overlap-audit.json`, `parent-containment-report.json`, adjacency, query, and MVT render outputs.
+
+Artifact policy:
+
+- `full.geojson` is the only committed GeoJSON render tier.
+- `medium.geojson` and `low.geojson` are intentionally omitted until a shared-boundary-aware
+  simplifier is implemented and tested.
+- MVT render output is intentionally generated only for zoom `12`; the render manifest must not
+  claim `z13` or `z14` support for this pilot.
+- `pnpm data:tr:adm3:artifact-policy` fails duplicate GeoJSON tier hashes, oversized reports,
+  over-budget tile counts, oversized tiles, or total output above the declared budget.
+
+Current generated hardening results:
+
+- GEOS/Shapely repair backend: Shapely 2.1.2 / GEOS 3.13.1.
+- Repair classification: 775 precision-normalized only, 4 geometry-repaired, 7
+  component-discarded, 0 rejected.
+- Discarded components: 9 polygonal components recorded in `repair-details.json`; all are marked
+  `safeToDiscard: true` by the current MakeValid/min-area policy and require review before this can
+  be treated as production-ready.
+- Overlap audit: 62 adjacency candidates excluded from the neighbour graph and retained in
+  `overlap-audit.json`.
+- Parent containment: 0 unresolved parent mappings and 0 ambiguous parent mappings, but 252 ADM3
+  zones currently have TypeScript strict containment findings against the existing ADM2 geometry
+  context.
 
 Rebuild or validate the pilot with:
 

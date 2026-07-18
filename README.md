@@ -74,6 +74,8 @@ administrative levels when a suitable source exists, but it does not guarantee n
 coverage for every country. Municipality and neighbourhood are semantic types on ADM records, not
 pseudo-administrative levels. Turkey includes a partial official Gaziantep ADM3 neighbourhood pilot
 documented in [docs/datasets/turkey-neighbourhoods.md](./docs/datasets/turkey-neighbourhoods.md).
+The current product gap analysis is tracked in
+[docs/product-gap-analysis.md](./docs/product-gap-analysis.md).
 
 ## Development
 
@@ -107,6 +109,7 @@ items.
 - [Release governance](./docs/release-governance.md)
 - [Roadmap](./docs/roadmap.md)
 - [Release check](./docs/release-check.md)
+- [Product gap analysis](./docs/product-gap-analysis.md)
 - [Dataset compatibility](./docs/dataset-compatibility.md)
 - [Source adapters](./docs/source-adapters.md)
 - [Source pipeline](./docs/source-pipeline.md)

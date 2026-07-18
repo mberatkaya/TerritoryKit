@@ -1,6 +1,6 @@
 # TerritoryKit Master Sprint Checklist
 
-Last updated: 2026-07-14
+Last updated: 2026-07-18
 
 This is the source of truth for the sprint roadmap from `TerritoryKit_Teknik_Sprint_Dokumani.pdf`.
 A checkbox is marked when the repo contains implementation, documentation, tests, ADRs, release
@@ -13,10 +13,10 @@ verification, or an explicit handoff/backlog classification that proves the item
       verification.
 - [x] Repo-owned pending: all remaining repo-owned items are closed by
       `hardening/runtime-integrations`.
-- [x] External handoff: maintainer publish, tag, release, and hosted-docs actions are recorded
-      outside a normal PR; they are not executed here.
-- [x] Future roadmap: post-`1.0.0` work is classified into the public roadmap/backlog and is not a
-      blocker for release readiness.
+- `[future backlog]`: post-`1.0.0` work is classified into the public roadmap/backlog and is not a
+  claim of implementation.
+- `[external handoff]`: maintainer publish, tag, release, and hosted-docs actions are recorded
+  outside a normal PR; they are not executed here.
 
 ## Master Adoption Evidence
 
@@ -90,12 +90,11 @@ typecheck`, and `pnpm test:visual:maplibre`.
 - [x] `hardening/runtime-integrations`: close MapLibre visual/event/zoom evidence, CLI diagnostic
       reporting, PostGIS integration harness, endpoint acceptance, and full OpenAPI
       documentation gaps.
-- [x] External maintainer handoff: publish npm packages, verify registry versions, create the
-      `v1.0.0` tag/GitHub Release, and deploy live docs if desired. Handoff is documented; actions
-      are intentionally not executed in this PR.
-- [x] Future product roadmap: Leaflet, OpenLayers, React Native Maps, game package, MVT support,
-      Studio editor, dataset diff tooling, plugin generators, and advanced geodesic work are
-      accepted as post-`1.0.0` roadmap work.
+- [external handoff] Publish npm packages, verify registry versions, create the `v1.0.0`
+  tag/GitHub Release, and deploy live docs if desired. Handoff is documented; actions are
+  intentionally not executed in this PR.
+- [future backlog] Leaflet, OpenLayers, React Native Maps, game package, Studio editor, dataset
+  diff tooling, plugin generators, and advanced geodesic work.
 
 ## Ready-To-Tick Rules
 
@@ -170,15 +169,15 @@ typecheck`, and `pnpm test:visual:maplibre`.
 - [x] `packages/maplibre`.
 - [x] `packages/cli`.
 - [x] `packages/shared-testkit`.
-- [x] `packages/game`. Future roadmap backlog item accepted; not part of `1.0.0`.
-- [x] `packages/leaflet`. Future roadmap backlog item accepted; not part of `1.0.0`.
-- [x] `packages/openlayers`. Future roadmap backlog item accepted; not part of `1.0.0`.
-- [x] `packages/react-native-maps`. Future roadmap backlog item accepted; not part of `1.0.0`.
+- [future backlog] `packages/game`; not part of `1.0.0`.
+- [future backlog] `packages/leaflet`; not part of `1.0.0`.
+- [future backlog] `packages/openlayers`; not part of `1.0.0`.
+- [future backlog] `packages/react-native-maps`; not part of `1.0.0`.
 - [x] `examples/web-maplibre`.
 - [x] `examples/nestjs-postgis`.
 - [x] `examples/node-basic`.
-- [x] `examples/react-native`. Future roadmap backlog item accepted; not part of `1.0.0`.
-- [x] `datasets/world-example`. Future roadmap backlog item accepted; not part of `1.0.0`.
+- [future backlog] `examples/react-native`; not part of `1.0.0`.
+- [future backlog] `datasets/world-example`; not part of `1.0.0`.
 - [x] `datasets/turkey-example`.
 - [x] `datasets/istanbul-example`.
 - [x] `datasets/fatih-example`.
@@ -215,8 +214,8 @@ typecheck`, and `pnpm test:visual:maplibre`.
 - [x] `getZonesInBounds({ west, south, east, north, level })`.
 - [x] `getVisibleZones({ bounds, zoom })`.
 - [x] `polygonToZones`.
-- [x] Stable spatial index interface. Future roadmap decision recorded; current `1.0.0` spatial
-      index remains an internal engine detail.
+- [partial] Stable spatial index interface. Current `1.0.0` spatial index remains an internal
+  engine detail.
 - [x] Debug-only brute-force lookup option.
 - [x] Transition payload API for parent fade-out and child fade-in.
 - [x] Typed adjacency connection metadata.
@@ -277,8 +276,7 @@ typecheck`, and `pnpm test:visual:maplibre`.
 - [x] Add viewport, simplification, and MVT roadmap for world-scale data.
 - [x] Add adapter capability interface and fallback style policy.
 - [x] Add cycle/orphan validator docs and schema rules.
-- [x] Add `game` package boundary before any game state feature. Future roadmap backlog item
-      accepted before any game state work starts.
+- [future backlog] Add `game` package boundary before any game state work starts.
 - [x] Add experimental labels during `0.x`. Historical `0.x` governance follow-up; superseded by
       the `1.0.0` release-readiness branch.
 - [x] Separate code and dataset license review.
@@ -487,8 +485,9 @@ Estimated duration: 2 weeks
 
 - [x] `@territory-kit/maplibre` package baseline.
 - [x] Web demo baseline.
-- [x] Real MapLibre web demo.
-- [x] React Native example screen. Future roadmap backlog item accepted; not part of `1.0.0`.
+- [partial] Real MapLibre web demo. Runtime example exists, but the real Gaziantep MVT flow is not
+  implemented yet.
+- [future backlog] React Native example screen; not part of `1.0.0`.
 
 ### Acceptance Criteria
 
@@ -608,8 +607,7 @@ Estimated duration: 1 week
       GitHub Release is created in this PR.
 - [x] Define issue triage and maintenance process.
 - [x] Define security channel.
-- [x] Prepare first community adapter template repo. Future roadmap backlog item accepted; not part
-      of `1.0.0`.
+- [future backlog] Prepare first community adapter template repo; not part of `1.0.0`.
 
 ### Deliverables
 
@@ -646,11 +644,10 @@ Estimated duration: 1 week
 
 ## Post-1.0 Roadmap
 
-- [x] `1.1` - Leaflet and OpenLayers adapters. Future roadmap backlog item accepted.
-- [x] `1.2` - React Native Maps adapter. Future roadmap backlog item accepted.
-- [x] `1.3` - Vector tile/MVT support. Future roadmap backlog item accepted.
-- [x] `1.4` - Web-based Territory Studio editor. Future roadmap backlog item accepted.
-- [x] `1.5` - Dataset diff, migration, and zone ID mapping tools. Future roadmap backlog item
-      accepted.
-- [x] `2.0` - Plugin-based generator system and advanced geodesic operations. Future roadmap
-      backlog item accepted.
+- [future backlog] `1.1` - Leaflet and OpenLayers adapters.
+- [future backlog] `1.2` - React Native Maps adapter.
+- [partial] `1.3` - Vector tile/MVT support. Gaziantep ADM3 emits z12 MVT; broad production MVT
+  orchestration remains future work.
+- [future backlog] `1.4` - Web-based Territory Studio editor.
+- [future backlog] `1.5` - Dataset diff, migration, and zone ID mapping tools.
+- [future backlog] `2.0` - Plugin-based generator system and advanced geodesic operations.

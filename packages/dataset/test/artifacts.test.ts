@@ -20,7 +20,15 @@ describe("query and render artifacts", () => {
       tileTemplate: "tiles/{z}/{x}/{y}.mvt"
     });
 
-    expect(features.features[0]?.properties.territoryId).toBe("world:europe");
+    expect(features.features[0]?.properties).toMatchObject({
+      territoryId: "world:europe",
+      parentId: "world",
+      sourceAdminLevel: "ADM1",
+      semanticType: "region",
+      localName: "Europe",
+      sourceProvider: "fixture",
+      sourceAttribution: "fixture attribution"
+    });
     expect(manifest.tileTemplate).toBe("tiles/{z}/{x}/{y}.mvt");
     expect(validateTerritoryQueryRenderCompatibility(query, { manifest, features })).toMatchObject({
       ok: true,
@@ -44,9 +52,12 @@ function createArtifactDataset(): TerritoryDataset {
       datasetVersion: "1.0.0",
       schemaVersion: "territory-schema@1",
       sourceDate: "2026-01",
-      geometryHash: "hash"
+      geometryHash: "hash",
+      sourceProvider: "fixture",
+      attribution: "fixture attribution",
+      license: "Apache-2.0"
     },
-    zones: [square("world:europe", 0, 0, 0, 1, 1)]
+    zones: [square("world:europe", 1, 0, 0, 1, 1)]
   };
 }
 
@@ -61,7 +72,11 @@ function square(
   return {
     id,
     datasetId: "artifact-test",
+    parentId: "world",
     level,
+    sourceAdminLevel: "ADM1",
+    semanticType: "region",
+    localName: "Europe",
     neighborIds: [],
     geometry: {
       type: "Polygon",
@@ -77,6 +92,15 @@ function square(
     },
     center: [(west + east) / 2, (south + north) / 2],
     bbox: [west, south, east, north],
-    properties: { name: id }
+    properties: {
+      name: id,
+      territory: {
+        adminLevel: "ADM1",
+        source: {
+          provider: "fixture",
+          attribution: "fixture attribution"
+        }
+      }
+    }
   };
 }

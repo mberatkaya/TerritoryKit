@@ -9,7 +9,13 @@ import {
 import type { LngLat, TerritoryBBox, TerritoryGeometry } from "@territory-kit/dataset";
 
 export type TerritoryGeometryRepairEngine = "auto" | "shapely" | "typescript";
-export type TerritoryGeometryRepairStatus = "unchanged" | "repaired" | "rejected";
+export type TerritoryGeometryRepairStatus =
+  | "unchanged"
+  | "precision-normalized"
+  | "ring-normalized"
+  | "geometry-repaired"
+  | "component-discarded"
+  | "rejected";
 
 export interface TerritoryGeometryRepairOptions {
   engine?: TerritoryGeometryRepairEngine;
@@ -21,11 +27,22 @@ export interface TerritoryGeometryRepairOptions {
 
 export interface TerritoryGeometryRepairInputFeature {
   id: string;
+  sourceFeatureId?: string;
   geometry: TerritoryGeometry;
+}
+
+export interface TerritoryGeometryDiscardedComponent {
+  territoryId: string;
+  sourceFeatureId?: string;
+  geometryType: string;
+  area: number;
+  reason: string;
+  safeToDiscard: boolean;
 }
 
 export interface TerritoryGeometryRepairFeatureResult {
   id: string;
+  sourceFeatureId?: string;
   status: TerritoryGeometryRepairStatus;
   geometry?: TerritoryGeometry;
   bbox?: TerritoryBBox;
@@ -38,6 +55,7 @@ export interface TerritoryGeometryRepairFeatureResult {
   areaAfter: number;
   areaDifference: number;
   componentsDiscarded: number;
+  discardedComponents: TerritoryGeometryDiscardedComponent[];
   message?: string;
 }
 
@@ -48,6 +66,9 @@ export interface TerritoryGeometryRepairReport {
   precision: number;
   featuresRepaired: number;
   featuresUnchanged: number;
+  featuresPrecisionNormalized: number;
+  featuresRingNormalized: number;
+  featuresWithDiscardedComponents: number;
   featuresRejected: number;
   areaDifference: number;
   componentsDiscarded: number;
@@ -57,6 +78,7 @@ export interface TerritoryGeometryRepairReport {
 interface ShapelyRepairPayload {
   features: Array<{
     id: string;
+    sourceFeatureId?: string;
     geometry: TerritoryGeometry;
   }>;
   precision: number;
@@ -69,6 +91,7 @@ interface ShapelyRepairResult {
   precision: number;
   results: Array<{
     id: string;
+    sourceFeatureId?: string;
     status: TerritoryGeometryRepairStatus;
     geometry?: TerritoryGeometry;
     center?: LngLat;
@@ -76,6 +99,12 @@ interface ShapelyRepairResult {
     areaAfter: number;
     areaDifference: number;
     componentsDiscarded: number;
+    discardedComponents?: Array<{
+      geometryType: string;
+      area: number;
+      reason: string;
+      safeToDiscard: boolean;
+    }>;
     message?: string;
   }>;
 }
@@ -96,22 +125,31 @@ except Exception as error:
     sys.exit(0)
 
 
+def discarded_component(geometry, reason, safe_to_discard=True):
+    return {
+        "geometryType": geometry.geom_type,
+        "area": float(getattr(geometry, "area", 0.0) or 0.0),
+        "reason": reason,
+        "safeToDiscard": bool(safe_to_discard)
+    }
+
+
 def collect_area_components(geometry):
     if geometry.is_empty:
-        return [], 0
+        return [], []
     if isinstance(geometry, Polygon):
-        return [geometry], 0
+        return [geometry], []
     if isinstance(geometry, MultiPolygon):
-        return list(geometry.geoms), 0
+        return list(geometry.geoms), []
     if isinstance(geometry, GeometryCollection):
         polygons = []
-        discarded = 0
+        discarded = []
         for part in geometry.geoms:
             part_polygons, part_discarded = collect_area_components(part)
             polygons.extend(part_polygons)
-            discarded += part_discarded
+            discarded.extend(part_discarded)
         return polygons, discarded
-    return [], 1
+    return [], [discarded_component(geometry, "make-valid-produced-non-polygonal-component", True)]
 
 
 MIN_POLYGON_AREA = 1e-8
@@ -119,21 +157,28 @@ MIN_POLYGON_AREA = 1e-8
 
 def clean_polygon_components(polygons):
     cleaned = []
-    discarded = 0
+    discarded = []
     for polygon in polygons:
         if polygon.is_empty or polygon.area <= MIN_POLYGON_AREA:
-            discarded += 1
+            discarded.append(
+                discarded_component(polygon, "polygonal-component-area-below-threshold", True)
+            )
             continue
         shell = polygon.exterior
         holes = []
         for hole in polygon.interiors:
-            if Polygon(hole).area <= MIN_POLYGON_AREA:
-                discarded += 1
+            hole_polygon = Polygon(hole)
+            if hole_polygon.area <= MIN_POLYGON_AREA:
+                discarded.append(
+                    discarded_component(hole_polygon, "hole-area-below-threshold", True)
+                )
                 continue
             holes.append(hole)
         cleaned_polygon = Polygon(shell, holes)
         if cleaned_polygon.is_empty or cleaned_polygon.area <= MIN_POLYGON_AREA:
-            discarded += 1
+            discarded.append(
+                discarded_component(cleaned_polygon, "cleaned-polygon-area-below-threshold", True)
+            )
             continue
         cleaned.append(orient(cleaned_polygon, sign=1.0))
     return cleaned, discarded
@@ -157,6 +202,7 @@ def area_geometry_from_components(polygons):
 
 def repair_one(feature, precision):
     feature_id = feature["id"]
+    source_feature_id = feature.get("sourceFeatureId")
     try:
         original = shape(feature["geometry"])
         area_before = float(original.area)
@@ -173,11 +219,13 @@ def repair_one(feature, precision):
         if area_geometry is None or area_geometry.is_empty:
             return {
                 "id": feature_id,
+                "sourceFeatureId": source_feature_id,
                 "status": "rejected",
                 "areaBefore": area_before,
                 "areaAfter": 0,
                 "areaDifference": area_before,
-                "componentsDiscarded": discarded,
+                "componentsDiscarded": len(discarded),
+                "discardedComponents": discarded,
                 "message": "MakeValid produced no polygonal components."
             }
 
@@ -190,42 +238,55 @@ def repair_one(feature, precision):
         if area_geometry is None or area_geometry.is_empty or not area_geometry.is_valid:
             return {
                 "id": feature_id,
+                "sourceFeatureId": source_feature_id,
                 "status": "rejected",
                 "areaBefore": area_before,
                 "areaAfter": 0,
                 "areaDifference": area_before,
-                "componentsDiscarded": discarded,
+                "componentsDiscarded": len(discarded),
+                "discardedComponents": discarded,
                 "message": "MakeValid output remained invalid or empty after polygon extraction."
             }
 
         area_after = float(area_geometry.area)
-        changed = (
-            discarded > 0
-            or not original.is_valid
-            or (abs(area_after - area_before) / max(abs(area_before), 1)) > 10 ** (-max(precision, 1))
+        area_delta_ratio = abs(area_after - area_before) / max(abs(area_before), 1)
+        materially_changed = (
+            not original.is_valid
+            or area_delta_ratio > 10 ** (-max(precision, 1))
             or original.geom_type != area_geometry.geom_type
-            or not original.equals_exact(area_geometry, 0.0)
         )
+        if discarded:
+            status = "component-discarded"
+        elif materially_changed:
+            status = "geometry-repaired"
+        elif not original.equals_exact(area_geometry, 0.0):
+            status = "precision-normalized"
+        else:
+            status = "unchanged"
         point = area_geometry.representative_point()
         result = {
             "id": feature_id,
-            "status": "repaired" if changed else "unchanged",
+            "sourceFeatureId": source_feature_id,
+            "status": status,
             "geometry": mapping(area_geometry),
             "center": [float(point.x), float(point.y)],
             "areaBefore": area_before,
             "areaAfter": area_after,
             "areaDifference": abs(area_after - area_before),
-            "componentsDiscarded": discarded
+            "componentsDiscarded": len(discarded),
+            "discardedComponents": discarded
         }
         return result
     except Exception as error:
         return {
             "id": feature_id,
+            "sourceFeatureId": source_feature_id,
             "status": "rejected",
             "areaBefore": 0,
             "areaAfter": 0,
             "areaDifference": 0,
             "componentsDiscarded": 0,
+            "discardedComponents": [],
             "message": str(error)
         }
 
@@ -306,10 +367,24 @@ function summarizeRepairResults(
   originalFeatures: readonly TerritoryGeometryRepairInputFeature[]
 ): TerritoryGeometryRepairReport {
   const originalById = new Map(originalFeatures.map((feature) => [feature.id, feature.geometry]));
+  const sourceFeatureIdById = new Map(
+    originalFeatures.map((feature) => [feature.id, feature.sourceFeatureId])
+  );
   const results = result.results.map((item) => {
+    const sourceFeatureId = item.sourceFeatureId ?? sourceFeatureIdById.get(item.id);
+    const discardedComponents = (item.discardedComponents ?? []).map((component) => ({
+      territoryId: item.id,
+      ...(sourceFeatureId ? { sourceFeatureId } : {}),
+      geometryType: component.geometryType,
+      area: component.area,
+      reason: component.reason,
+      safeToDiscard: component.safeToDiscard
+    }));
+
     if (item.status === "rejected") {
       return {
         id: item.id,
+        ...(sourceFeatureId ? { sourceFeatureId } : {}),
         status: "rejected" as const,
         engine: result.engine,
         engineVersion: result.engineVersion,
@@ -319,6 +394,7 @@ function summarizeRepairResults(
         areaAfter: item.areaAfter,
         areaDifference: item.areaDifference,
         componentsDiscarded: item.componentsDiscarded,
+        discardedComponents,
         ...(item.message ? { message: item.message } : {})
       };
     }
@@ -333,6 +409,7 @@ function summarizeRepairResults(
     if (!geometry) {
       return {
         id: item.id,
+        ...(sourceFeatureId ? { sourceFeatureId } : {}),
         status: "rejected" as const,
         engine: result.engine,
         engineVersion: result.engineVersion,
@@ -342,12 +419,14 @@ function summarizeRepairResults(
         areaAfter: item.areaAfter,
         areaDifference: item.areaDifference,
         componentsDiscarded: item.componentsDiscarded,
+        discardedComponents,
         message: "Repair engine did not return geometry and original geometry was unavailable."
       };
     }
 
     return {
       id: item.id,
+      ...(sourceFeatureId ? { sourceFeatureId } : {}),
       status: item.status,
       geometry,
       bbox: computeGeometryBBox(geometry),
@@ -359,17 +438,26 @@ function summarizeRepairResults(
       areaBefore: item.areaBefore,
       areaAfter: item.areaAfter,
       areaDifference: item.areaDifference,
-      componentsDiscarded: item.componentsDiscarded
+      componentsDiscarded: item.componentsDiscarded,
+      discardedComponents
     };
   });
+  const repairedStatuses = new Set<TerritoryGeometryRepairStatus>([
+    "geometry-repaired",
+    "component-discarded"
+  ]);
 
   return {
     engine: result.engine,
     engineVersion: result.engineVersion,
     mode: result.mode,
     precision: result.precision,
-    featuresRepaired: results.filter((item) => item.status === "repaired").length,
+    featuresRepaired: results.filter((item) => repairedStatuses.has(item.status)).length,
     featuresUnchanged: results.filter((item) => item.status === "unchanged").length,
+    featuresPrecisionNormalized: results.filter((item) => item.status === "precision-normalized")
+      .length,
+    featuresRingNormalized: results.filter((item) => item.status === "ring-normalized").length,
+    featuresWithDiscardedComponents: results.filter((item) => item.componentsDiscarded > 0).length,
     featuresRejected: results.filter((item) => item.status === "rejected").length,
     areaDifference: roundCoordinate(
       results.reduce((sum, item) => sum + item.areaDifference, 0),
@@ -389,6 +477,7 @@ async function runShapelyRepair(
     precision: options.precision,
     features: features.map((feature) => ({
       id: feature.id,
+      ...(feature.sourceFeatureId ? { sourceFeatureId: feature.sourceFeatureId } : {}),
       geometry: unwrapAntimeridianGeometry(feature.geometry)
     }))
   };
@@ -446,13 +535,15 @@ function createTypescriptRepairResult(
       const geometry = normalizeGeoJsonGeometry(feature.geometry);
       return {
         id: feature.id,
+        ...(feature.sourceFeatureId ? { sourceFeatureId: feature.sourceFeatureId } : {}),
         status: "unchanged",
         geometry,
         center: computeGeometryRepresentativePoint(geometry),
         areaBefore: computeGeometryArea(geometry),
         areaAfter: computeGeometryArea(geometry),
         areaDifference: 0,
-        componentsDiscarded: 0
+        componentsDiscarded: 0,
+        discardedComponents: []
       };
     })
   };

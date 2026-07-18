@@ -1,5 +1,20 @@
 {
   "adm3FeatureCount": 786,
+  "artifactPolicy": {
+    "committedGeometryTiers": [
+      "full"
+    ],
+    "omittedGeometryTiers": {
+      "low": "No shared-boundary-aware simplifier is approved for ADM3 neighbourhoods yet.",
+      "medium": "No shared-boundary-aware simplifier is approved for ADM3 neighbourhoods yet."
+    },
+    "renderZooms": {
+      "ADM3": {
+        "maxZoom": 12,
+        "minZoom": 12
+      }
+    }
+  },
   "attribution": "Gaziantep Büyükşehir Belediyesi, Mahalle Sınır Alanları, CC BY 4.0; ADM0-ADM2 hierarchy context from existing TerritoryKit Turkey artifacts.",
   "country": {
     "alpha2": "TR",
@@ -30,7 +45,8 @@
   },
   "license": "CC BY 4.0",
   "manifestVersion": "territorykit-country-artifact@1",
-  "publishReady": true,
+  "publishReady": false,
+  "releaseReadiness": "draft-pilot; deterministic artifacts are available, but production strict geometry findings remain unresolved",
   "schemaVersion": "territory-schema@1",
   "sourceDate": "2026-02-18T13:52:03Z",
   "sourceProvider": "Gaziantep Büyükşehir Belediyesi",

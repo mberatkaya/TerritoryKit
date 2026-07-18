@@ -14,6 +14,12 @@
 | `0.9.0-rc.1`    | Sprint 9  | Docs, quality, performance                     | Verified on roadmap branch |
 | `1.0.0`         | Sprint 10 | Stable release                                 | Prepared on release branch |
 
+The table above describes the historical sprint track, not blanket production availability for
+every adapter or dataset. Current implementation gaps and partial items are tracked in
+[Product Gap Analysis](./product-gap-analysis.md). In particular, Leaflet, OpenLayers, React Native,
+`@territory-kit/game`, hosted production registry, hosted live demo, and dataset diff/migration
+tooling remain future-roadmap items unless their package or workflow exists in this repository.
+
 Maintainers track completion status against sprint tasks, deliverables, acceptance criteria,
 tests, documentation, release handoff, and future roadmap work in the master sprint checklist.
 

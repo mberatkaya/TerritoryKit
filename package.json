@@ -22,6 +22,7 @@
     "country:smoke": "node scripts/country-smoke.mjs",
     "coverage": "vitest run --coverage",
     "data:tr:adm3:build": "pnpm --filter @territory-kit/generators build && node scripts/data-tr-adm3.mjs build",
+    "data:tr:adm3:artifact-policy": "node scripts/check-tr-adm3-artifact-policy.mjs",
     "data:tr:adm3:update": "pnpm --filter @territory-kit/generators build && node scripts/data-tr-adm3.mjs update",
     "data:tr:adm3:validate": "pnpm --filter @territory-kit/generators build && node scripts/data-tr-adm3.mjs validate",
     "docs:build": "pnpm --filter @territory-kit/docs build",
@@ -42,7 +43,7 @@
     "test": "turbo run test",
     "test:visual:maplibre": "pnpm --filter @territory-kit/example-web-maplibre test:visual",
     "typecheck": "turbo run typecheck",
-    "verify": "pnpm format:check && pnpm lint && pnpm package:boundaries && pnpm typecheck && pnpm test && pnpm build && pnpm bundle:size",
+    "verify": "pnpm format:check && pnpm lint && pnpm package:boundaries && pnpm typecheck && pnpm test && pnpm build && pnpm bundle:size && pnpm data:tr:adm3:artifact-policy",
     "version-packages": "changeset version"
   },
   "devDependencies": {
