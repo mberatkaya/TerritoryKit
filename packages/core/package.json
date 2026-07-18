@@ -34,6 +34,11 @@
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
+    },
+    "./legacy-registry": {
+      "types": "./dist/legacy-registry.d.mts",
+      "import": "./dist/legacy-registry.mjs",
+      "require": "./dist/legacy-registry.cjs"
     }
   },
   "scripts": {

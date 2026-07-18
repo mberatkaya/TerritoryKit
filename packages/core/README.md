@@ -38,6 +38,10 @@ const sharedBorderNeighbors = engine.zoneNeighbors("tr:adm2:fatih", {
 - `createTerritoryCountryDatasetDescriptor` and `loadTerritoryCountryDataset` support thin
   resolver-driven country loader packages.
 
+Registry client exports from the core root are deprecated compatibility exports. New code should
+import registry APIs from `@territory-kit/registry`; migration-only code can use
+`@territory-kit/core/legacy-registry`.
+
 ## License
 
 Apache-2.0

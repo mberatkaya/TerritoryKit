@@ -10,7 +10,7 @@ admin levels, source metadata, license attribution, and artifacts. Artifact purp
 artifacts.
 
 ```ts
-import { createTerritoryRegistryClient } from "@territory-kit/core";
+import { createTerritoryRegistryClient } from "@territory-kit/registry";
 
 const registry = createTerritoryRegistryClient({
   registryUrl: "https://cdn.example.test/registry.json"
