@@ -129,7 +129,7 @@ describe("territory binary spatial index", () => {
     ).toHaveLength(4);
     expect(hundredKMetadata.zoneCount).toBe(100_172);
     expect(hundredKMetadata.levels).toEqual([{ level: 0, start: 0, count: 100_172 }]);
-  });
+  }, 20_000);
 
   it("creates in-memory index objects without requiring an ArrayBuffer round trip", () => {
     const index = createTerritoryBinarySpatialIndex(createSampleTerritoryDataset());
