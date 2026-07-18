@@ -1,9 +1,11 @@
-# @territory-kit/maplibre
+# @territory-kit/registry
 
 ## 1.2.0
 
 ### Minor Changes
 
+- 03b4c95: Add the Sprint 6 dataset registry package with schema validation, registry-backed artifact
+  installation, verified Node cache, core loader integration, and CLI registry/dataset/cache commands.
 - 8f7995e: Add Sprint 7 query/render artifact separation with MVT render artifact generation, query dataset
   loading, registry render descriptors, MapLibre registry-backed sources, CLI render commands, and
   compatibility coverage.
@@ -17,32 +19,8 @@
 
 ### Patch Changes
 
-- Updated dependencies [03b4c95]
 - Updated dependencies [998c806]
 - Updated dependencies [8f7995e]
 - Updated dependencies [f905c34]
 - Updated dependencies [bd112bf]
-  - @territory-kit/registry@1.2.0
   - @territory-kit/dataset@1.2.0
-  - @territory-kit/adapter-core@1.2.0
-
-## 1.1.0
-
-### Patch Changes
-
-- Updated dependencies [0e48877]
-- Updated dependencies [dabf1f1]
-  - @territory-kit/dataset@1.1.0
-  - @territory-kit/core@1.1.0
-
-## 1.0.0
-
-### Major Changes
-
-- Prepare TerritoryKit 1.0.0 stable release with the current public API surface frozen.
-
-### Patch Changes
-
-- Updated dependencies
-  - @territory-kit/core@1.0.0
-  - @territory-kit/dataset@1.0.0
