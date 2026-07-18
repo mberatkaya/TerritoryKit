@@ -10,6 +10,7 @@ describe("territory cli", () => {
   it("validates a dataset file", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-"));
     const filePath = join(tempDir, "dataset.json");
+    const indexPath = join(tempDir, "dataset.tksi");
 
     await writeFile(filePath, JSON.stringify(createSampleTerritoryDataset()), "utf8");
 
@@ -29,6 +30,39 @@ describe("territory cli", () => {
           }
         }
       });
+      await expect(
+        captureCli(["index", "build", filePath, "--output", indexPath])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "index build",
+          data: {
+            magic: "TKSI",
+            datasetId: "territorykit-sample",
+            zoneCount: 5
+          }
+        }
+      });
+      await expect(captureCli(["index", "inspect", indexPath])).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "index inspect",
+          data: { datasetId: "territorykit-sample", bboxRecordCount: 5 }
+        }
+      });
+      await expect(
+        captureCli(["index", "validate", indexPath, "--dataset", filePath])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "index validate",
+          data: { geometryHash: "sample-fixture-v1" }
+        }
+      });
+      expect((await readFile(indexPath)).byteLength).toBeGreaterThan(0);
     } finally {
       await rm(tempDir, { force: true, recursive: true });
     }

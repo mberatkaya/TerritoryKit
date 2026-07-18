@@ -5,6 +5,9 @@ The CLI is JSON-first so import pipelines can parse every command.
 ```sh
 territory validate dataset.json
 territory index dataset.json
+territory index build dataset.json --output dataset.tksi
+territory index inspect dataset.tksi
+territory index validate dataset.tksi --dataset dataset.json
 territory adjacency build ./dist/regions --output ./dist/regions-adjacency
 territory adjacency validate ./dist/regions ./dist/regions-adjacency
 territory adjacency inspect ./dist/regions-adjacency tr:adm2:fatih --type shared-border --json
@@ -67,6 +70,10 @@ separate adjacency artifact. Directory outputs contain `adjacency.json`, `build-
 `point-touch` relations use exact polygon boundary checks. Use `--include-point-touches`,
 `--minimum-shared-boundary-meters`, `--overrides`, `--build-date`, and `--strict` to tune builds.
 `territory adjacency <dataset.json>` remains a legacy bbox helper for fixture work.
+
+`territory index build` writes a versioned `.tksi` binary spatial index. `inspect` prints metadata
+without a dataset, and `validate` checks checksum plus optional dataset id, version, and geometry
+hash when `--dataset` is provided. `territory index <dataset.json>` remains a compatibility summary.
 
 `territory dataset build world-countries` builds Natural Earth ADM0 artifacts from a local GeoJSON
 source. It writes `manifest.json`, `attribution.txt`, `checksums.json`, `build-report.json`, and

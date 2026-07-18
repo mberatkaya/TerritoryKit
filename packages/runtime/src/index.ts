@@ -6,8 +6,17 @@ import type {
   TerritoryAdapterOperationContext,
   TerritoryRendererAdapter
 } from "@territory-kit/adapter-core";
-import { createTerritoryEngine, defaultZoomLevelStrategy } from "@territory-kit/core";
-import type { TerritoryEngine, TerritoryEngineOptions } from "@territory-kit/core";
+import {
+  createTerritoryEngine,
+  defaultZoomLevelStrategy,
+  isTerritoryBinarySpatialIndex
+} from "@territory-kit/core";
+import type {
+  TerritoryBinarySpatialIndex,
+  TerritoryBinarySpatialIndexBuffer,
+  TerritoryEngine,
+  TerritoryEngineOptions
+} from "@territory-kit/core";
 import { TerritoryError, isTerritoryError, loadTerritoryDataset } from "@territory-kit/dataset";
 import type { TerritoryAdminLevel, TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
 import type {
@@ -16,6 +25,74 @@ import type {
   TerritoryRegistryResolveArtifactOptions,
   TerritoryRegistryResolvedArtifact
 } from "@territory-kit/registry";
+import {
+  createTerritoryCatalog,
+  isTerritoryCatalog,
+  type TerritoryCatalog,
+  type TerritoryCatalogDatasetRegistration,
+  type TerritoryCatalogResolutionPlan,
+  type TerritoryCatalogSelectedArtifact
+} from "./catalog.js";
+import {
+  createTerritoryEnginePool,
+  datasetEnginePoolKey,
+  type TerritoryEnginePool,
+  type TerritoryEnginePoolOptions
+} from "./engine-pool.js";
+import {
+  createTerritoryWorkerClient,
+  type TerritoryWorkerClient,
+  type TerritoryWorkerTransport
+} from "./worker.js";
+
+export { createTerritoryCatalog, isTerritoryCatalog } from "./catalog.js";
+export { createTerritoryEnginePool, datasetEnginePoolKey } from "./engine-pool.js";
+export { createTerritoryWorkerClient } from "./worker.js";
+export type {
+  TerritoryCatalog,
+  TerritoryCatalogArtifactPurpose,
+  TerritoryCatalogCoverage,
+  TerritoryCatalogDatasetRegistration,
+  TerritoryCatalogEntry,
+  TerritoryCatalogMatch,
+  TerritoryCatalogPriorityDecision,
+  TerritoryCatalogResolutionOptions,
+  TerritoryCatalogResolutionPlan,
+  TerritoryCatalogSelectedArtifact,
+  TerritoryCatalogTerritoryMatch,
+  TerritoryCatalogTerritoryResolution,
+  TerritoryCatalogUnavailableCoverage,
+  TerritoryCatalogViewport
+} from "./catalog.js";
+export type {
+  TerritoryEnginePool,
+  TerritoryEnginePoolEntry,
+  TerritoryEnginePoolFactory,
+  TerritoryEnginePoolGetOptions,
+  TerritoryEnginePoolMemoryEstimator,
+  TerritoryEnginePoolOptions,
+  TerritoryEnginePoolSummary
+} from "./engine-pool.js";
+export type {
+  TerritoryWorkerCancelMessage,
+  TerritoryWorkerCancelledResponse,
+  TerritoryWorkerClient,
+  TerritoryWorkerClientContext,
+  TerritoryWorkerClientInitializeInput,
+  TerritoryWorkerClientQueryInput,
+  TerritoryWorkerDisposedResponse,
+  TerritoryWorkerDisposeMessage,
+  TerritoryWorkerErrorResponse,
+  TerritoryWorkerInitializedResponse,
+  TerritoryWorkerInitializeMessage,
+  TerritoryWorkerMessage,
+  TerritoryWorkerMessageBase,
+  TerritoryWorkerMessageType,
+  TerritoryWorkerQueryMessage,
+  TerritoryWorkerQueryResponse,
+  TerritoryWorkerResponse,
+  TerritoryWorkerTransport
+} from "./worker.js";
 
 export type TerritoryRuntimeStatus =
   | "idle"
@@ -52,9 +129,21 @@ export interface TerritoryRuntimeResultSummary {
   readonly level: number;
   readonly zoneCount: number;
   readonly cached: boolean;
+  readonly datasets?: readonly TerritoryRuntimeDatasetSummary[];
+  readonly catalogPlanId?: string;
   readonly startedAt: Date;
   readonly completedAt: Date;
   readonly durationMs: number;
+}
+
+export interface TerritoryRuntimeDatasetSummary {
+  readonly datasetId: string;
+  readonly datasetVersion: string;
+  readonly geometryHash: string;
+  readonly level: number;
+  readonly zoneCount: number;
+  readonly indexHash?: string;
+  readonly cached?: boolean;
 }
 
 export interface TerritoryRuntimeCacheSummary {
@@ -101,6 +190,7 @@ export type TerritoryRuntimeEventType =
   | "adapter-updated"
   | "viewport-ready"
   | "cache-dispose-failed"
+  | "worker-dispose-failed"
   | "request-failed";
 
 export interface TerritoryRuntimeEvent {
@@ -225,12 +315,17 @@ export type TerritoryRuntimeEngineFactory = (
 export interface TerritoryRuntimeOptions<TTarget = unknown> {
   readonly adapter?: TerritoryRendererAdapter<TTarget>;
   readonly adapterSourceId?: string;
+  readonly catalog?: TerritoryCatalog | readonly TerritoryCatalogDatasetRegistration[];
   readonly registry?: TerritoryRegistryClient;
   readonly datasetId?: string;
   readonly dataset?: TerritoryDataset;
   readonly engine?: TerritoryEngine;
   readonly engineOptions?: Omit<TerritoryEngineOptions, "dataset">;
   readonly createEngine?: TerritoryRuntimeEngineFactory;
+  readonly enginePool?: TerritoryEnginePool;
+  readonly enginePoolOptions?: TerritoryEnginePoolOptions;
+  readonly worker?: TerritoryWorkerClient;
+  readonly workerTransport?: TerritoryWorkerTransport;
   readonly datasetResolver?: TerritoryRuntimeDatasetResolver;
   readonly cache?: TerritoryRuntimeCache | false;
   readonly cacheOwnership?: "runtime" | "external";
@@ -274,11 +369,13 @@ interface RuntimeRequestRecord {
   readonly startedAt: Date;
   readonly requestTimeoutMs?: number;
   readonly promise: Promise<TerritoryRuntimeRequestResult>;
+  readonly catalogRevision?: number;
   resolve(result: TerritoryRuntimeRequestResult): void;
   scheduledTask?: TerritoryRuntimeScheduledTask;
   cacheKey?: string;
   selectedLevel?: number;
   datasetId?: string;
+  catalogPlan?: TerritoryCatalogResolutionPlan;
   finished: boolean;
   aborted: boolean;
   abortEmitted: boolean;
@@ -298,6 +395,20 @@ interface CachedViewportPayload {
   readonly geometryHash: string;
   readonly level: number;
   readonly zones: readonly TerritoryZone[];
+  readonly datasets?: readonly TerritoryRuntimeDatasetSummary[];
+  readonly catalogPlanId?: string;
+}
+
+interface RuntimeCatalogQueryEntry {
+  readonly artifact: TerritoryCatalogSelectedArtifact;
+  readonly engine: TerritoryEngine;
+}
+
+interface RuntimeViewportQueryResult {
+  readonly zones: readonly TerritoryZone[];
+  readonly cached: boolean;
+  readonly datasets?: readonly TerritoryRuntimeDatasetSummary[];
+  readonly catalogPlanId?: string;
 }
 
 const SYSTEM_CLOCK: TerritoryRuntimeClock = {
@@ -477,12 +588,26 @@ export function createTerritoryRuntime<TTarget = unknown>(
   const clock = options.clock ?? SYSTEM_CLOCK;
   const scheduler = options.scheduler ?? SYSTEM_SCHEDULER;
   const logger = options.logger;
+  const catalog = normalizeCatalogOption(options.catalog);
   const cache =
     options.cache === false ? undefined : (options.cache ?? createMemoryTerritoryRuntimeCache());
   const cacheOwnership =
     options.cacheOwnership ?? (options.cache === undefined ? "runtime" : "external");
   const ownsCache = Boolean(cache) && cacheOwnership === "runtime";
   const createEngineFactory = options.createEngine ?? createTerritoryEngine;
+  const internalEnginePool =
+    options.enginePool === undefined
+      ? createTerritoryEnginePool({
+          ...options.enginePoolOptions,
+          createEngine: (engineOptions, context) =>
+            createEngineFactory(engineOptions, context as TerritoryRuntimeRequestContext)
+        })
+      : undefined;
+  const enginePool = options.enginePool ?? internalEnginePool;
+  const worker =
+    options.worker ??
+    (options.workerTransport ? createTerritoryWorkerClient(options.workerTransport) : undefined);
+  const ownsWorker = options.worker === undefined && options.workerTransport !== undefined;
   const cancelPreviousRequest = options.cancelPreviousRequest !== false;
   const deduplicateRequests = options.deduplicateRequests !== false;
   const enginesByDatasetKey = new Map<string, TerritoryEngine>();
@@ -652,8 +777,8 @@ export function createTerritoryRuntime<TTarget = unknown>(
     const requestId = `runtime-request-${revision + 1}`;
     const requestRevision = revision + 1;
     const controller = new AbortController();
-    const signature = viewportSignature(viewport);
-    const requestKey = createTentativeRequestKey(viewport, options);
+    const signature = viewportSignature(viewport, catalog?.revision);
+    const requestKey = createTentativeRequestKey(viewport, options, catalog?.revision);
     const startedAt = clock.now();
     let resolveRequest: (result: TerritoryRuntimeRequestResult) => void = () => undefined;
     const promise = new Promise<TerritoryRuntimeRequestResult>((resolve) => {
@@ -671,6 +796,7 @@ export function createTerritoryRuntime<TTarget = unknown>(
       ...(requestOptions.requestTimeoutMs !== undefined
         ? { requestTimeoutMs: requestOptions.requestTimeoutMs }
         : {}),
+      ...(catalog?.revision !== undefined ? { catalogRevision: catalog.revision } : {}),
       promise,
       resolve: resolveRequest,
       finished: false,
@@ -785,7 +911,7 @@ export function createTerritoryRuntime<TTarget = unknown>(
         : toRuntimeError(error, "Runtime viewport request failed.");
 
       if (!record.timedOut && runtimeError.code === "REQUEST_ABORTED") {
-        return abortRequest(record, "aborted", { updateState: false });
+        return abortRequest(record, "aborted", { updateState: isCurrentRequest(record) });
       }
 
       if (isCurrentRequest(record)) {
@@ -807,6 +933,10 @@ export function createTerritoryRuntime<TTarget = unknown>(
   async function executeRequestSteps(
     record: RuntimeRequestRecord
   ): Promise<TerritoryRuntimeRequestResult> {
+    if (catalog) {
+      return executeCatalogRequestSteps(record, catalog);
+    }
+
     assertRequestFresh(record);
     const resolution = await resolveDataset(record);
     assertRequestFresh(record);
@@ -894,6 +1024,129 @@ export function createTerritoryRuntime<TTarget = unknown>(
     };
   }
 
+  async function executeCatalogRequestSteps(
+    record: RuntimeRequestRecord,
+    activeCatalog: TerritoryCatalog
+  ): Promise<TerritoryRuntimeRequestResult> {
+    assertRequestFresh(record);
+    const plan = activeCatalog.createResolutionPlan(record.viewport, { artifactPurpose: "query" });
+    record.catalogPlan = plan;
+    assertRequestFresh(record);
+
+    if (plan.selectedArtifacts.length === 0) {
+      throw new TerritoryError(
+        "ARTIFACT_NOT_FOUND",
+        "Catalog resolution did not select any query dataset for the viewport.",
+        {
+          details: {
+            requestId: record.requestId,
+            unavailableCoverage: plan.unavailableCoverage.map((coverage) => coverage.reason)
+          }
+        }
+      );
+    }
+
+    const datasetId = catalogDatasetId(plan);
+    record.datasetId = datasetId;
+
+    if (isCurrentRequest(record)) {
+      activeDatasetId = datasetId;
+      status = "loading";
+    }
+
+    emitEvent("dataset-resolved", { request: record });
+
+    const entries: RuntimeCatalogQueryEntry[] = [];
+
+    for (const artifact of plan.selectedArtifacts) {
+      const engine = await getEngine(artifact.dataset, record, {
+        ...(artifact.spatialIndex ? { spatialIndex: artifact.spatialIndex } : {}),
+        ...(artifact.indexHash ? { indexHash: artifact.indexHash } : {})
+      });
+      entries.push({ artifact, engine });
+      assertRequestFresh(record);
+    }
+
+    const selectedLevel = plan.selectedLevels[0] ?? plan.selectedArtifacts[0]?.level;
+
+    if (selectedLevel === undefined) {
+      throw new TerritoryError(
+        "ARTIFACT_NOT_FOUND",
+        "Catalog resolution selected artifacts without a queryable level.",
+        {
+          details: { requestId: record.requestId, planId: plan.planId }
+        }
+      );
+    }
+
+    record.selectedLevel = selectedLevel;
+    record.cacheKey = createCatalogViewportCacheKey(plan, record.viewport);
+
+    if (isCurrentRequest(record)) {
+      activeLevel = selectedLevel;
+      status = "querying";
+    }
+
+    emitEvent("engine-ready", { request: record });
+    const query = await readOrQueryCatalogVisibleZones(entries, plan, record);
+    assertRequestFresh(record);
+    emitEvent("query-completed", { request: record });
+    assertRequestFresh(record);
+
+    if (options.adapter && options.adapter.lifecycleState === "attached") {
+      status = "updating-adapter";
+      await updateAdapter(options.adapter, query.zones, record);
+      assertRequestFresh(record);
+      emitEvent("adapter-updated", { request: record });
+    }
+
+    assertRequestFresh(record);
+    const completedAt = clock.now();
+    const summary: TerritoryRuntimeResultSummary = freezeResultSummary({
+      requestId: record.requestId,
+      revision: record.revision,
+      datasetId,
+      datasetVersion: catalogDatasetVersion(plan),
+      geometryHash: catalogGeometryHash(plan),
+      cacheKey: record.cacheKey,
+      level: selectedLevel ?? 0,
+      zoneCount: query.zones.length,
+      cached: query.cached,
+      ...(query.datasets ? { datasets: query.datasets } : {}),
+      catalogPlanId: plan.planId,
+      startedAt: record.startedAt,
+      completedAt,
+      durationMs: Math.max(0, completedAt.getTime() - record.startedAt.getTime())
+    });
+
+    if (isCurrentRequest(record)) {
+      committedViewport = cloneViewport(record.viewport);
+      committedLevel = selectedLevel;
+      committedDatasetId = datasetId;
+      committedResultSummary = summary;
+      lastCompletedRequestId = record.requestId;
+      lastCompletedSignature = record.signature;
+      lastResultSummary = summary;
+      lastRequestResult = {
+        requestId: record.requestId,
+        revision: record.revision,
+        status: "ready",
+        summary
+      };
+      lastError = undefined;
+      setTerminalStatus("ready");
+    }
+
+    emitEvent("viewport-ready", { request: record });
+
+    return {
+      requestId: record.requestId,
+      revision: record.revision,
+      status: "ready",
+      summary
+    };
+  }
+
   async function withRequestTimeout<T>(
     record: RuntimeRequestRecord,
     operation: () => Promise<T>
@@ -939,6 +1192,20 @@ export function createTerritoryRuntime<TTarget = unknown>(
         `Runtime request '${record.requestId}' was aborted.`,
         {
           details: { requestId: record.requestId }
+        }
+      );
+    }
+
+    if (catalog && record.catalogRevision !== catalog.revision) {
+      throw new TerritoryError(
+        "REQUEST_ABORTED",
+        `Runtime request '${record.requestId}' has a stale catalog plan.`,
+        {
+          details: {
+            requestId: record.requestId,
+            requestCatalogRevision: record.catalogRevision ?? -1,
+            currentCatalogRevision: catalog.revision
+          }
         }
       );
     }
@@ -1010,10 +1277,28 @@ export function createTerritoryRuntime<TTarget = unknown>(
 
   async function getEngine(
     dataset: TerritoryDataset,
-    record: RuntimeRequestRecord
+    record: RuntimeRequestRecord,
+    input: {
+      readonly spatialIndex?: TerritoryBinarySpatialIndex | TerritoryBinarySpatialIndexBuffer;
+      readonly indexHash?: string;
+    } = {}
   ): Promise<TerritoryEngine> {
     if (options.engine) {
       return options.engine;
+    }
+
+    const { spatialIndex: configuredSpatialIndex, ...engineOptions } = options.engineOptions ?? {};
+    const spatialIndex = input.spatialIndex ?? configuredSpatialIndex;
+    const indexHash = input.indexHash;
+
+    if (enginePool) {
+      return enginePool.getEngine(dataset, {
+        key: datasetEnginePoolKey(dataset, indexHash),
+        engineOptions,
+        ...(spatialIndex ? { spatialIndex } : {}),
+        ...(indexHash ? { indexHash } : {}),
+        context: createRequestContext(record)
+      });
     }
 
     const key = datasetEngineKey(dataset);
@@ -1023,11 +1308,12 @@ export function createTerritoryRuntime<TTarget = unknown>(
       return cachedEngine;
     }
 
-    const engineOptions: TerritoryEngineOptions = {
+    const engineInputOptions: TerritoryEngineOptions = {
       dataset,
-      ...options.engineOptions
+      ...engineOptions,
+      ...(spatialIndex ? { spatialIndex } : {})
     };
-    const engine = await createEngineFactory(engineOptions, createRequestContext(record));
+    const engine = await createEngineFactory(engineInputOptions, createRequestContext(record));
     enginesByDatasetKey.set(key, engine);
     return engine;
   }
@@ -1072,6 +1358,137 @@ export function createTerritoryRuntime<TTarget = unknown>(
     assertRequestFresh(record);
 
     return { zones, cached: false };
+  }
+
+  async function readOrQueryCatalogVisibleZones(
+    entries: readonly RuntimeCatalogQueryEntry[],
+    plan: TerritoryCatalogResolutionPlan,
+    record: RuntimeRequestRecord
+  ): Promise<RuntimeViewportQueryResult> {
+    const cacheKey = record.cacheKey;
+
+    if (!cacheKey || !cache) {
+      return queryCatalogVisibleZones(entries, plan, record, false);
+    }
+
+    const context = createRequestContext(record);
+    const cachedBytes = await cache.get(cacheKey, context);
+    assertRequestFresh(record);
+
+    if (cachedBytes) {
+      emitEvent("cache-hit", { request: record });
+      const payload = readCachedViewportPayload(cachedBytes, cacheKey);
+      return {
+        zones: payload.zones,
+        cached: true,
+        ...(payload.datasets
+          ? {
+              datasets: payload.datasets.map((dataset) =>
+                freezeDatasetSummary({ ...dataset, cached: true })
+              )
+            }
+          : {}),
+        ...(payload.catalogPlanId ? { catalogPlanId: payload.catalogPlanId } : {})
+      };
+    }
+
+    emitEvent("cache-miss", { request: record });
+    const result = await queryCatalogVisibleZones(entries, plan, record, false);
+    await cache.set(
+      cacheKey,
+      writeCachedViewportPayload({
+        datasetId: catalogDatasetId(plan),
+        datasetVersion: catalogDatasetVersion(plan),
+        geometryHash: catalogGeometryHash(plan),
+        level: plan.selectedLevels[0] ?? 0,
+        zones: result.zones,
+        ...(result.datasets ? { datasets: result.datasets } : {}),
+        catalogPlanId: plan.planId
+      }),
+      context
+    );
+    assertRequestFresh(record);
+
+    return result;
+  }
+
+  async function queryCatalogVisibleZones(
+    entries: readonly RuntimeCatalogQueryEntry[],
+    plan: TerritoryCatalogResolutionPlan,
+    record: RuntimeRequestRecord,
+    cached: boolean
+  ): Promise<RuntimeViewportQueryResult> {
+    const results: Array<{
+      readonly artifact: TerritoryCatalogSelectedArtifact;
+      readonly zones: readonly TerritoryZone[];
+    }> = [];
+
+    for (const entry of entries) {
+      const zones = await queryCatalogEntry(entry, record);
+      assertRequestFresh(record);
+      results.push({ artifact: entry.artifact, zones });
+    }
+
+    const datasets = results.map(({ artifact, zones }) =>
+      freezeDatasetSummary({
+        datasetId: artifact.datasetId,
+        datasetVersion: artifact.datasetVersion,
+        geometryHash: artifact.geometryHash,
+        level: artifact.level,
+        zoneCount: zones.length,
+        ...(artifact.indexHash ? { indexHash: artifact.indexHash } : {}),
+        cached
+      })
+    );
+
+    return {
+      zones: mergeCatalogZones(results),
+      cached,
+      datasets,
+      catalogPlanId: plan.planId
+    };
+  }
+
+  async function queryCatalogEntry(
+    entry: RuntimeCatalogQueryEntry,
+    record: RuntimeRequestRecord
+  ): Promise<readonly TerritoryZone[]> {
+    const indexBuffer = toTransferableIndexBuffer(entry.artifact.spatialIndex);
+
+    if (worker && indexBuffer) {
+      await worker.initialize(
+        {
+          datasetId: entry.artifact.datasetId,
+          datasetVersion: entry.artifact.datasetVersion,
+          geometryHash: entry.artifact.geometryHash,
+          ...(entry.artifact.indexHash ? { indexHash: entry.artifact.indexHash } : {}),
+          indexBuffer,
+          transfer: false
+        },
+        {
+          requestId: `${record.requestId}:${entry.artifact.entryId}:initialize`,
+          signal: record.controller.signal
+        }
+      );
+      const response = await worker.query(
+        {
+          datasetId: entry.artifact.datasetId,
+          bounds: record.viewport.bounds,
+          level: entry.artifact.level
+        },
+        {
+          requestId: `${record.requestId}:${entry.artifact.entryId}:query`,
+          signal: record.controller.signal
+        }
+      );
+
+      return response.zones;
+    }
+
+    return entry.engine.getZonesInBounds({
+      ...record.viewport.bounds,
+      level: entry.artifact.level
+    });
   }
 
   async function updateAdapter(
@@ -1188,9 +1605,9 @@ export function createTerritoryRuntime<TTarget = unknown>(
     setViewport(viewport, requestOptions = {}) {
       assertUsable("set runtime viewport");
       const normalizedViewport = normalizeViewport(viewport);
-      const signature = viewportSignature(normalizedViewport);
+      const signature = viewportSignature(normalizedViewport, catalog?.revision);
       const force = requestOptions.force === true;
-      const requestKey = createTentativeRequestKey(normalizedViewport, options);
+      const requestKey = createTentativeRequestKey(normalizedViewport, options, catalog?.revision);
 
       if (!force) {
         if (scheduledRequest?.signature === signature) {
@@ -1322,6 +1739,7 @@ export function createTerritoryRuntime<TTarget = unknown>(
       emitEvent("disposed");
       listeners.clear();
       disposeOwnedCache();
+      disposeOwnedRuntimeHelpers();
 
       return {
         status: "disposed",
@@ -1350,6 +1768,19 @@ export function createTerritoryRuntime<TTarget = unknown>(
   function reportCacheDisposeFailure(error: unknown): void {
     const runtimeError = toRuntimeError(error, "Runtime cache disposal failed.");
     logEvent(createEvent("cache-dispose-failed", { error: runtimeError }), logger);
+  }
+
+  function disposeOwnedRuntimeHelpers(): void {
+    internalEnginePool?.dispose();
+
+    if (ownsWorker && worker) {
+      void worker.dispose().catch(reportWorkerDisposeFailure);
+    }
+  }
+
+  function reportWorkerDisposeFailure(error: unknown): void {
+    const runtimeError = toRuntimeError(error, "Runtime worker disposal failed.");
+    logEvent(createEvent("worker-dispose-failed", { error: runtimeError }), logger);
   }
 
   return runtime;
@@ -1475,6 +1906,144 @@ function queryViewportZones(
   });
 }
 
+function normalizeCatalogOption(
+  catalog: TerritoryRuntimeOptions["catalog"]
+): TerritoryCatalog | undefined {
+  if (!catalog) {
+    return undefined;
+  }
+
+  if (isTerritoryCatalog(catalog)) {
+    return catalog;
+  }
+
+  return createTerritoryCatalog(catalog);
+}
+
+function createCatalogViewportCacheKey(
+  plan: TerritoryCatalogResolutionPlan,
+  viewport: TerritoryRuntimeViewport
+): string {
+  return [
+    "catalog",
+    shortStableHash(plan.planId),
+    viewport.zoom,
+    viewport.level ?? "*",
+    viewport.bounds.west,
+    viewport.bounds.south,
+    viewport.bounds.east,
+    viewport.bounds.north
+  ].join(":");
+}
+
+function catalogDatasetId(plan: TerritoryCatalogResolutionPlan): string {
+  return plan.selectedArtifacts
+    .map((artifact) => artifact.datasetId)
+    .sort()
+    .join("+");
+}
+
+function catalogDatasetVersion(plan: TerritoryCatalogResolutionPlan): string {
+  return plan.selectedArtifacts
+    .map((artifact) => `${artifact.datasetId}@${artifact.datasetVersion}`)
+    .sort()
+    .join("+");
+}
+
+function catalogGeometryHash(plan: TerritoryCatalogResolutionPlan): string {
+  return shortStableHash(
+    plan.selectedArtifacts
+      .map((artifact) => `${artifact.datasetId}:${artifact.geometryHash}:${artifact.level}`)
+      .sort()
+      .join("|")
+  );
+}
+
+function mergeCatalogZones(
+  results: readonly {
+    readonly artifact: TerritoryCatalogSelectedArtifact;
+    readonly zones: readonly TerritoryZone[];
+  }[]
+): readonly TerritoryZone[] {
+  const idCounts = new Map<string, number>();
+
+  for (const result of results) {
+    for (const zone of result.zones) {
+      idCounts.set(zone.id, (idCounts.get(zone.id) ?? 0) + 1);
+    }
+  }
+
+  const merged: TerritoryZone[] = [];
+
+  for (const result of [...results].sort(compareCatalogQueryResults)) {
+    for (const zone of sortRuntimeZones(result.zones)) {
+      const hasCollision = (idCounts.get(zone.id) ?? 0) > 1;
+      const id = hasCollision ? `${result.artifact.datasetId}:${zone.id}` : zone.id;
+      merged.push(
+        Object.freeze({
+          ...zone,
+          id,
+          properties: {
+            ...zone.properties,
+            datasetId: result.artifact.datasetId,
+            ...(hasCollision ? { sourceZoneId: zone.id } : {})
+          }
+        })
+      );
+    }
+  }
+
+  return Object.freeze(sortRuntimeZones(merged));
+}
+
+function compareCatalogQueryResults(
+  left: { readonly artifact: TerritoryCatalogSelectedArtifact },
+  right: { readonly artifact: TerritoryCatalogSelectedArtifact }
+): number {
+  return (
+    right.artifact.priority - left.artifact.priority ||
+    left.artifact.datasetId.localeCompare(right.artifact.datasetId) ||
+    left.artifact.datasetVersion.localeCompare(right.artifact.datasetVersion) ||
+    left.artifact.entryId.localeCompare(right.artifact.entryId)
+  );
+}
+
+function sortRuntimeZones(zones: readonly TerritoryZone[]): TerritoryZone[] {
+  return [...zones].sort(
+    (left, right) =>
+      left.level - right.level ||
+      left.datasetId.localeCompare(right.datasetId) ||
+      left.id.localeCompare(right.id)
+  );
+}
+
+function toTransferableIndexBuffer(
+  spatialIndex: TerritoryBinarySpatialIndex | TerritoryBinarySpatialIndexBuffer | undefined
+): ArrayBuffer | undefined {
+  if (!spatialIndex || isTerritoryBinarySpatialIndex(spatialIndex)) {
+    return undefined;
+  }
+
+  if (spatialIndex instanceof ArrayBuffer) {
+    return spatialIndex.slice(0);
+  }
+
+  if (!(spatialIndex.buffer instanceof ArrayBuffer)) {
+    return undefined;
+  }
+
+  return spatialIndex.buffer.slice(
+    spatialIndex.byteOffset,
+    spatialIndex.byteOffset + spatialIndex.byteLength
+  );
+}
+
+function freezeDatasetSummary(
+  summary: TerritoryRuntimeDatasetSummary
+): TerritoryRuntimeDatasetSummary {
+  return Object.freeze(summary);
+}
+
 function resolveAdapterSourceId(
   adapter: TerritoryRendererAdapter,
   configuredSourceId: string | undefined
@@ -1589,13 +2158,16 @@ function zonesToFeatureCollection(zones: readonly TerritoryZone[]): unknown {
 
 function createTentativeRequestKey(
   viewport: TerritoryRuntimeViewport,
-  options: TerritoryRuntimeOptions
+  options: TerritoryRuntimeOptions,
+  catalogRevision: number | undefined
 ): string {
   const datasetKey =
-    options.engine?.dataset.manifest.datasetId ??
-    options.dataset?.manifest.datasetId ??
-    options.datasetId ??
-    "resolver";
+    catalogRevision !== undefined
+      ? `catalog:${catalogRevision}`
+      : (options.engine?.dataset.manifest.datasetId ??
+        options.dataset?.manifest.datasetId ??
+        options.datasetId ??
+        "resolver");
 
   return stableJson({
     datasetKey,
@@ -1605,8 +2177,14 @@ function createTentativeRequestKey(
   });
 }
 
-function viewportSignature(viewport: TerritoryRuntimeViewport): string {
-  return stableJson(viewport);
+function viewportSignature(
+  viewport: TerritoryRuntimeViewport,
+  catalogRevision: number | undefined
+): string {
+  return stableJson({
+    viewport,
+    ...(catalogRevision !== undefined ? { catalogRevision } : {})
+  });
 }
 
 function datasetEngineKey(dataset: TerritoryDataset): string {
@@ -1660,7 +2238,8 @@ function logEvent(event: TerritoryRuntimeEvent, logger: TerritoryRuntimeLogger |
   if (
     event.type === "request-failed" ||
     event.type === "listener-error" ||
-    event.type === "cache-dispose-failed"
+    event.type === "cache-dispose-failed" ||
+    event.type === "worker-dispose-failed"
   ) {
     logger.error?.(event);
     return;
@@ -1693,7 +2272,14 @@ function freezeCacheSummary(summary: TerritoryRuntimeCacheSummary): TerritoryRun
 function freezeResultSummary(
   summary: TerritoryRuntimeResultSummary
 ): TerritoryRuntimeResultSummary {
-  return Object.freeze(summary);
+  return Object.freeze({
+    ...summary,
+    ...(summary.datasets
+      ? {
+          datasets: Object.freeze(summary.datasets.map((dataset) => freezeDatasetSummary(dataset)))
+        }
+      : {})
+  });
 }
 
 function cloneViewport(viewport: TerritoryRuntimeViewport): TerritoryRuntimeViewport {
@@ -1710,6 +2296,11 @@ function cloneViewport(viewport: TerritoryRuntimeViewport): TerritoryRuntimeView
 function cloneResultSummary(summary: TerritoryRuntimeResultSummary): TerritoryRuntimeResultSummary {
   return freezeResultSummary({
     ...summary,
+    ...(summary.datasets
+      ? {
+          datasets: Object.freeze(summary.datasets.map((dataset) => freezeDatasetSummary(dataset)))
+        }
+      : {}),
     startedAt: new Date(summary.startedAt.getTime()),
     completedAt: new Date(summary.completedAt.getTime())
   });
@@ -1717,6 +2308,18 @@ function cloneResultSummary(summary: TerritoryRuntimeResultSummary): TerritoryRu
 
 function stableJson(input: unknown): string {
   return JSON.stringify(sortStable(input));
+}
+
+function shortStableHash(input: unknown): string {
+  const text = typeof input === "string" ? input : stableJson(input);
+  let hash = 0x811c9dc5;
+
+  for (let index = 0; index < text.length; index += 1) {
+    hash ^= text.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193) >>> 0;
+  }
+
+  return hash.toString(16).padStart(8, "0");
 }
 
 function sortStable(input: unknown): unknown {

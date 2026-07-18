@@ -1,7 +1,11 @@
 import { createSyntheticGridDataset } from "@territory-kit/shared-testkit";
 import { loadTerritoryDataset } from "@territory-kit/dataset";
 import { bench, describe } from "vitest";
-import { createTerritoryEngine } from "../src/index.js";
+import {
+  createTerritoryEngine,
+  decodeTerritoryBinarySpatialIndex,
+  encodeTerritoryBinarySpatialIndex
+} from "../src/index.js";
 
 const grid10k = createSyntheticGridDataset({
   rows: 100,
@@ -16,6 +20,11 @@ const grid100k = createSyntheticGridDataset({
 });
 const engine10k = createTerritoryEngine({ dataset: grid10k });
 const engine100k = createTerritoryEngine({ dataset: grid100k });
+const binaryIndex10k = encodeTerritoryBinarySpatialIndex(grid10k);
+const binaryEngine10k = createTerritoryEngine({
+  dataset: grid10k,
+  spatialIndex: binaryIndex10k
+});
 const lookupZoneId = "z:50:50";
 
 describe("TerritoryEngine spatial lookup", () => {
@@ -39,6 +48,24 @@ describe("TerritoryEngine spatial lookup", () => {
 
   bench("createTerritoryEngine index construction, 10K polygons", () => {
     createTerritoryEngine({ dataset: grid10k });
+  });
+
+  bench("encode binary spatial index, 10K polygons", () => {
+    encodeTerritoryBinarySpatialIndex(grid10k);
+  });
+
+  bench("decode binary spatial index, 10K polygons", () => {
+    decodeTerritoryBinarySpatialIndex(binaryIndex10k);
+  });
+
+  bench("getZonesInBounds binary bbox query, 10K polygons", () => {
+    binaryEngine10k.getZonesInBounds({
+      west: 0.2,
+      south: 0.2,
+      east: 0.4,
+      north: 0.4,
+      level: 0
+    });
   });
 
   bench("loadTerritoryDataset validation, 10K polygons", () => {

@@ -13,6 +13,9 @@ pnpm add -g @territory-kit/cli
 ```sh
 territory validate dataset.json
 territory index dataset.json
+territory index build dataset.json --output dataset.tksi
+territory index inspect dataset.tksi
+territory index validate dataset.tksi --dataset dataset.json
 territory generate grid --rows 4 --columns 4
 territory source list
 territory import geojson --input ./regions.geojson --country TR --admin-level ADM2 --name-property name --output ./dist/regions
@@ -40,6 +43,10 @@ territory country validate ./dist/tr --strict
 - `territory adjacency validate <dataset-path> <dir|json>` validates an adjacency artifact.
 - `territory adjacency inspect <dir|json> <zone-id>` inspects typed neighbors.
 - `territory index <file>` builds engine metadata and reports dataset stats.
+- `territory index build <dataset.json> --output <index.tksi>` writes a binary spatial index.
+- `territory index inspect <index.tksi>` prints index metadata.
+- `territory index validate <index.tksi> [--dataset <dataset.json>]` checks checksum and optional
+  dataset metadata.
 - `territory adjacency <file>` remains a legacy bounding-box development helper.
 - `territory generate grid` and `territory generate weighted-voronoi` create deterministic datasets.
 - `territory dataset build world-countries` builds Natural Earth ADM0 artifacts from a local source

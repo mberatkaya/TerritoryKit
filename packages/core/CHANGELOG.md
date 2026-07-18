@@ -1,5 +1,12 @@
 # @territory-kit/core
 
+## 1.2.0 - Unreleased
+
+### Minor Changes
+
+- Add versioned binary spatial index encode/decode/inspect/validate APIs and allow
+  `createTerritoryEngine({ spatialIndex })` to use prebuilt bbox records.
+
 ## 1.1.0
 
 ### Patch Changes

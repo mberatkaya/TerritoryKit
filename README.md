@@ -8,8 +8,9 @@ independent from map renderers, backend frameworks, and game-specific state.
 
 Public packages in this workspace are currently on the `1.1.0` package line. The root workspace is
 private; its `0.0.0-private` version is tooling metadata and is not a public product version.
-Sprint 11 and Sprint 12 changesets are pending one fixed-group minor release; Changesets currently
-reports the next public package line as `1.2.0` until maintainers run the release flow.
+Sprint 11, Sprint 12, and Sprint 13 changesets are pending one fixed-group minor release;
+Changesets currently reports the next public package line as `1.2.0` until maintainers run the
+release flow.
 
 ## Package Maturity
 
@@ -39,21 +40,24 @@ The table below is historical roadmap context, not a claim that every future ada
 | `1.0.0`         | Sprint 10    | Prepared on release branch     |
 | Pending `1.2.0` | Sprint 11    | Runtime and adapter boundaries |
 | Pending `1.2.0` | Sprint 12    | Runtime viewport lifecycle     |
+| Pending `1.2.0` | Sprint 13    | Catalog and binary indexes     |
 
 ## Packages
 
 - `@territory-kit/dataset`: dataset manifest, schema, validation, and loading.
 - `@territory-kit/adapter-core`: renderer-independent adapter contracts and capability helpers.
-- `@territory-kit/core`: engine APIs, spatial lookup, hierarchy, adjacency, viewport queries.
+- `@territory-kit/core`: engine APIs, spatial lookup, hierarchy, adjacency, viewport queries, and
+  binary spatial indexes.
 - `@territory-kit/registry`: registry discovery, artifact resolution, verified cache, and Node
   download helpers.
-- `@territory-kit/runtime`: viewport request orchestration across datasets, core engines, runtime
-  cache, cancellation, scheduler, and renderer-independent adapters.
+- `@territory-kit/runtime`: viewport request orchestration across catalog datasets, core engines,
+  engine pool, runtime cache, worker loading, cancellation, scheduler, and renderer-independent
+  adapters.
 - `@territory-kit/maplibre`: first map adapter boundary for MapLibre GL JS.
 - `@territory-kit/nestjs`: NestJS integration boundary and PostGIS repository contracts.
 - `@territory-kit/generators`: deterministic dataset helper, source, and adjacency utilities.
-- `@territory-kit/cli`: `territory validate`, `territory geometry`, `territory index`, and
-  adjacency artifact tools.
+- `@territory-kit/cli`: `territory validate`, `territory geometry`, `territory index`, binary
+  index artifact tools, and adjacency artifact tools.
 - `@territory-kit/data-tr`, `@territory-kit/data-us`, `@territory-kit/data-de`,
   `@territory-kit/data-jp`, `@territory-kit/data-id`: thin resolver-driven pilot country loaders
   without embedded geometry artifacts.
@@ -141,6 +145,9 @@ items.
 - [Runtime viewport audit](./docs/architecture/runtime-viewport-audit.md)
 - [Runtime viewport lifecycle](./docs/architecture/runtime-viewport-lifecycle.md)
 - [Runtime cache](./docs/runtime-cache.md)
+- [Multi-dataset catalog](./docs/catalog.md)
+- [Binary spatial index](./docs/binary-spatial-index.md)
+- [Worker loading](./docs/worker-loading.md)
 - [Adapter contract](./docs/architecture/adapter-contract.md)
 - [Core/registry boundary](./docs/architecture/core-registry-boundary.md)
 - [Errors](./docs/errors.md)

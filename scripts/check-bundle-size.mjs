@@ -16,7 +16,9 @@ const maxBytesByFile = new Map([
   // Sprint 12 turns runtime from lifecycle contracts into viewport request orchestration with
   // scheduler injection, cancellation, cache, lazy engine reuse, adapter updates, stale adapter
   // operation guards, managed source binding, and cache ownership handling.
-  ["packages/runtime/dist/index.mjs", 34_000],
+  // Sprint 13 adds catalog resolution, engine pool, binary-index-aware queries, deterministic
+  // multi-dataset merging, and injectable worker loading contracts.
+  ["packages/runtime/dist/index.mjs", 70_000],
   ["packages/maplibre/dist/index.mjs", 45_000],
   ["packages/nestjs/dist/index.mjs", 45_000],
   ["packages/data-tr/dist/index.mjs", 8_000],
@@ -31,7 +33,8 @@ const maxBytesByFile = new Map([
   ["packages/generators/dist/index.mjs", 390_000],
   // Dataset build-all/global-admin CLI commands now expose ADM0 completion controls and reports.
   // Lower-admin support adds level filtering, source capability output, and artifact fallback.
-  ["packages/cli/dist/index.mjs", 96_000]
+  // Sprint 13 adds binary spatial index build/inspect/validate commands.
+  ["packages/cli/dist/index.mjs", 100_000]
 ]);
 
 const failures = [];

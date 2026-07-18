@@ -7,6 +7,10 @@ import type {
   TerritoryGeometry,
   TerritoryZone
 } from "@territory-kit/dataset";
+import type {
+  TerritoryBinarySpatialIndex,
+  TerritoryBinarySpatialIndexBuffer
+} from "./binary-index.js";
 
 export interface LatLng {
   lat: number;
@@ -66,6 +70,15 @@ export interface TerritoryEngineDebugOptions {
   bruteForceLookup?: boolean;
 }
 
+export interface TerritoryEngineSpatialIndexSummary {
+  source: "flatbush" | "binary";
+  levels: number[];
+  zoneCount: number;
+  estimatedBytes: number;
+  indexHash?: string;
+  byteLength?: number;
+}
+
 export interface ViewportCacheKeyQuery {
   bounds: TerritoryBounds;
   zoom?: number;
@@ -104,6 +117,7 @@ export interface TerritoryEngineOptions {
   levelStrategy?: ZoomLevelStrategy;
   adjacencyConnections?: TerritoryAdjacencyConnection[];
   debug?: TerritoryEngineDebugOptions;
+  spatialIndex?: TerritoryBinarySpatialIndex | TerritoryBinarySpatialIndexBuffer;
   viewportCacheRevision?: string;
 }
 
@@ -120,6 +134,7 @@ export interface TerritoryEngine {
     zoneId: string,
     options?: Pick<NeighborOptions, "types">
   ): TerritoryAdjacencyEdge[];
+  getSpatialIndexSummary(): TerritoryEngineSpatialIndexSummary;
   getLevelTransition(query: LevelTransitionQuery): LevelTransitionPayload;
   getZonesInBounds(query: BoundsQuery): TerritoryZone[];
   getViewportCacheKey(query: ViewportCacheKeyQuery): string;

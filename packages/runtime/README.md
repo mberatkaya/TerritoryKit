@@ -46,6 +46,43 @@ Attached adapters use `options.adapterSourceId` first, then `adapter.managedSour
 adapter operations receive `{ requestId, revision, signal }`; adapters should check the signal
 before committing renderer-visible source changes.
 
+## Catalog, Pool, and Worker Loading
+
+```ts
+import {
+  createTerritoryCatalog,
+  createTerritoryEnginePool,
+  createTerritoryRuntime
+} from "@territory-kit/runtime";
+
+const catalog = createTerritoryCatalog([
+  {
+    dataset,
+    country: "TR",
+    levels: ["ADM2", "ADM3"],
+    fallbackLevel: "ADM2",
+    priority: 10,
+    spatialIndex: indexBuffer,
+    indexHash: "..."
+  }
+]);
+
+const runtime = createTerritoryRuntime({
+  catalog,
+  enginePool: createTerritoryEnginePool({ maxActiveEngines: 4 }),
+  workerTransport
+});
+```
+
+Catalog mode resolves every dataset that intersects a viewport, supports exact and fallback level
+matches, selects priority winners, and rejects stale plans if the catalog changes before commit.
+Runtime merges selected dataset results deterministically and namespaces duplicate zone ids in
+renderer output as `<datasetId>:<zoneId>`.
+
+`createTerritoryEnginePool` provides per-dataset engine reuse, max-active LRU eviction, pinned
+engines, memory estimates, and disposal. `createTerritoryWorkerClient` defines the injectable
+worker transport used for binary-index-backed catalog artifacts.
+
 ## Cache
 
 ```ts
@@ -73,4 +110,5 @@ filesystem helpers, renderer targets, or worker implementations.
 
 See [runtime viewport lifecycle](../../docs/architecture/runtime-viewport-lifecycle.md),
 [runtime cache](../../docs/runtime-cache.md), and
+[catalog](../../docs/catalog.md), [worker loading](../../docs/worker-loading.md), and
 [runtime viewport audit](../../docs/architecture/runtime-viewport-audit.md) for architecture notes.
