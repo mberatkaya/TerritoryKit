@@ -4,6 +4,7 @@ import {
 } from "@territory-kit/shared-testkit";
 import { describe, expect, it, vi } from "vitest";
 import {
+  TERRITORY_MAPLIBRE_ADAPTER_CAPABILITIES,
   createTerritoryMapLibreAdapter,
   createTerritoryMapLibreController,
   createTerritoryMapLibreLayer,
@@ -15,7 +16,8 @@ import {
   zonesToFeatureCollection
 } from "../src/index.js";
 import type { TerritoryMapLibreGeoJsonSource, TerritoryMapLibreMap } from "../src/index.js";
-import type { TerritoryRegistryClient } from "@territory-kit/core";
+import type { TerritoryRendererAdapter } from "@territory-kit/adapter-core";
+import type { TerritoryRegistryClient } from "@territory-kit/registry";
 
 describe("maplibre adapter", () => {
   it("converts zones into a GeoJSON feature collection", () => {
@@ -103,17 +105,40 @@ describe("maplibre adapter", () => {
         clicked.push(event.zoneId);
       }
     });
+    const contractAdapter: TerritoryRendererAdapter<TerritoryMapLibreMap> = adapter;
 
+    expect(contractAdapter.capabilities).toBe(TERRITORY_MAPLIBRE_ADAPTER_CAPABILITIES);
+    expect(adapter.lifecycleState).toBe("detached");
+    expect(() =>
+      adapter.setSource({
+        id: "zones",
+        type: "geojson",
+        data: { type: "FeatureCollection", features: [] }
+      })
+    ).toThrow(/before the adapter is attached/);
     adapter.attach(map);
+    expect(adapter.lifecycleState).toBe("attached");
     adapter.attach(map);
     adapter.updateData(dataset.zones.slice(0, 1));
+    adapter.setSource({
+      id: "zones",
+      type: "geojson",
+      data: zonesToFeatureCollection(dataset.zones.slice(0, 1))
+    });
+    adapter.updateState({
+      selectedTerritoryIds: ["tr:34"],
+      hoverTerritoryId: "tr:34",
+      stateByTerritoryId: new Map([
+        ["tr:34", { territoryId: "tr:34", selected: true, properties: { score: 9 } }]
+      ])
+    });
     adapter.updateTheme({ fillColor: "#ff0000" });
     listeners.get("click:zones-fill")?.({
       features: [{ type: "Feature", id: "tr:34", properties: {}, geometry: null }]
     });
     adapter.detach();
 
-    expect(source.setData).toHaveBeenCalledOnce();
+    expect(source.setData).toHaveBeenCalledTimes(2);
     expect(addedSources.zones).toMatchObject({
       data: {
         features: expect.arrayContaining([
@@ -144,9 +169,14 @@ describe("maplibre adapter", () => {
       { source: "zones", id: "tr:34" },
       { selected: true }
     );
+    expect(map.setFeatureState).toHaveBeenCalledWith(
+      { source: "zones", id: "tr:34" },
+      { selected: true, score: 9 }
+    );
     expect(clicked).toEqual(["tr:34"]);
     expect(layers.size).toBe(0);
     expect(sources.size).toBe(0);
+    expect(adapter.lifecycleState).toBe("detached");
   });
 
   it("creates registry-backed vector sources and lazy territory resolution", async () => {
