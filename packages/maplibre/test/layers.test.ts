@@ -251,12 +251,16 @@ describe("maplibre adapter", () => {
       },
       sourceLayer: "territory"
     });
+    const territoryArtifactRequests: unknown[] = [];
+    const deepestAvailableRequests: unknown[] = [];
     const lowerRegistry: Pick<
       TerritoryRegistryClient,
       "resolveArtifact" | "resolveTerritoryArtifact" | "resolveDeepestAvailableTerritoryArtifact"
     > = {
       ...registry,
-      async resolveTerritoryArtifact() {
+      async resolveTerritoryArtifact(options) {
+        territoryArtifactRequests.push(options);
+
         return {
           requestedLevel: "ADM3",
           resolvedLevel: "ADM3",
@@ -289,7 +293,9 @@ describe("maplibre adapter", () => {
           registryHash: "hash"
         };
       },
-      async resolveDeepestAvailableTerritoryArtifact() {
+      async resolveDeepestAvailableTerritoryArtifact(options) {
+        deepestAvailableRequests.push(options);
+
         return {
           requestedLevel: "ADM3",
           resolvedLevel: "ADM2",
@@ -338,6 +344,22 @@ describe("maplibre adapter", () => {
         registry: lowerRegistry,
         country: "TR",
         level: "ADM3",
+        parentId: "tr:adm2:covered"
+      })
+    ).resolves.toMatchObject({
+      requestedLevel: "ADM3",
+      renderedLevel: "ADM3",
+      exactMatch: true
+    });
+    expect(territoryArtifactRequests.at(-1)).toMatchObject({
+      parentId: "tr:adm2:covered"
+    });
+    await expect(
+      createTerritoryMapLibreSource({
+        registry: lowerRegistry,
+        country: "TR",
+        level: "ADM3",
+        parentId: "tr:adm2:uncovered",
         fallback: "deepest-available"
       })
     ).resolves.toMatchObject({
@@ -348,6 +370,9 @@ describe("maplibre adapter", () => {
       fallbackReason: "requested-level-unavailable",
       coverageStatus: "source-unavailable",
       format: "geojson"
+    });
+    expect(deepestAvailableRequests.at(-1)).toMatchObject({
+      parentId: "tr:adm2:uncovered"
     });
 
     expect(createTerritoryMapLibreLayer({ sourceId: "render" })).toHaveLength(2);

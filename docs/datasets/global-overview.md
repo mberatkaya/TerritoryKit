@@ -26,7 +26,8 @@ Coverage is intentionally conservative:
 
 - ADM0 is source-available for 249 ISO countries/areas through the Natural Earth ADM0 pipeline.
 - ADM1 and ADM2 are reviewed only for DE, ID, JP, TR, and US in this repository state.
-- Turkey also has reviewed ADM3 semantics for `neighbourhood / Mahalle`.
+- Turkey also has reviewed ADM3 semantics for `neighbourhood / Mahalle` and a partial Gaziantep
+  artifact.
 - Non-pilot ADM1-ADM5 entries are `not-reviewed` and use `semanticType: "unknown"`.
 - Municipality and neighbourhood meanings are stored as semantic types on ADM records.
 - Missing local data must not be silently replaced with broader ADM2 geometry.

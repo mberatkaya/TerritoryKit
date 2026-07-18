@@ -191,6 +191,7 @@ export type TerritoryRegistryTerritoryArtifactFallback = "none" | "deepest-avail
 export interface TerritoryRegistryResolveTerritoryArtifactOptions {
   country: string;
   level: TerritoryAdminLevel;
+  parentId?: string;
   purpose?: TerritoryRegistryArtifactPurpose;
   detail?: string;
   formatPreference?: readonly TerritoryRegistryArtifactFormat[];
@@ -202,6 +203,7 @@ export interface TerritoryRegistryResolveTerritoryArtifactOptions {
 export interface TerritoryRegistryResolveDeepestAvailableTerritoryArtifactOptions {
   country: string;
   requestedLevel: TerritoryAdminLevel;
+  parentId?: string;
   purpose?: TerritoryRegistryArtifactPurpose;
   detail?: string;
   formatPreference?: readonly TerritoryRegistryArtifactFormat[];
@@ -214,7 +216,7 @@ export interface TerritoryRegistryResolvedTerritoryArtifact {
   requestedLevel: TerritoryAdminLevel;
   resolvedLevel: TerritoryAdminLevel;
   exactMatch: boolean;
-  reason: "exact-match" | "requested-level-unavailable";
+  reason: "exact-match" | "requested-level-unavailable" | "requested-level-unavailable-for-area";
   coverageStatus: TerritoryCoverageStatus;
   dataset: TerritoryRegistryDataset;
   artifact: TerritoryRegistryArtifact;

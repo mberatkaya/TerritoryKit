@@ -11,4 +11,10 @@ pilot area. Use `source-unavailable` when no redistributable source manifest is 
 requested country and level.
 
 Clients that opt into fallback should display the resolved level explicitly. For example, a request
-for `TR ADM3` may render `ADM2` with reason `requested-level-unavailable`.
+for an uncovered `TR ADM3` parent may render `ADM2` with reason
+`requested-level-unavailable-for-area`, while a country with no ADM3 artifact at all reports
+`requested-level-unavailable`.
+
+For Turkey ADM3, check `coveredParents` in
+`datasets/generated/countries/TR/levels/ADM3/coverage.json` or use the
+`@territory-kit/data-tr` coverage helpers before requesting neighbourhood geometry.

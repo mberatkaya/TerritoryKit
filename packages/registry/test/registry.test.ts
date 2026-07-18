@@ -174,7 +174,8 @@ describe("territory dataset registry", () => {
               coverageStatus: "partial",
               semanticType: "neighbourhood",
               localTypeName: "Mahalle",
-              partialCoverage: true
+              partialCoverage: true,
+              coveredParentIds: ["tr:adm2:covered"]
             }
           ]
         }
@@ -186,6 +187,7 @@ describe("territory dataset registry", () => {
       client.resolveTerritoryArtifact({
         country: "TR",
         level: "ADM3",
+        parentId: "tr:adm2:covered",
         purpose: "render",
         formatPreference: ["mvt", "geojson"]
       })
@@ -198,25 +200,11 @@ describe("territory dataset registry", () => {
       artifact: { id: "tr-adm3-mvt" }
     });
 
-    const fallbackClient = createTerritoryRegistryClient({
-      registry: {
-        ...registry,
-        datasets: [
-          {
-            ...registry.datasets[0]!,
-            levels: ["ADM0", "ADM1", "ADM2"],
-            artifacts: registry.datasets[0]!.artifacts.filter((artifact) =>
-              artifact.levels?.includes("ADM2")
-            )
-          }
-        ]
-      }
-    });
-
     await expect(
-      fallbackClient.resolveDeepestAvailableTerritoryArtifact({
+      client.resolveDeepestAvailableTerritoryArtifact({
         country: "TUR",
         requestedLevel: "ADM3",
+        parentId: "tr:adm2:not-covered",
         purpose: "render",
         fallback: "deepest-available"
       })
@@ -224,10 +212,19 @@ describe("territory dataset registry", () => {
       requestedLevel: "ADM3",
       resolvedLevel: "ADM2",
       exactMatch: false,
-      reason: "requested-level-unavailable",
-      coverageStatus: "source-unavailable",
+      reason: "requested-level-unavailable-for-area",
+      coverageStatus: "partial",
       artifact: { id: "tr-adm2-geojson" }
     });
+
+    await expect(
+      client.resolveTerritoryArtifact({
+        country: "TR",
+        level: "ADM3",
+        parentId: "tr:adm2:not-covered",
+        purpose: "render"
+      })
+    ).rejects.toThrow("No ADM3 artifact");
   });
 });
 

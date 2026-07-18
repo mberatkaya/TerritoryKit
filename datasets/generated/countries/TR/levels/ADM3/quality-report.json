@@ -1,0 +1,49 @@
+{
+  "backend": "typescript",
+  "checks": {
+    "antimeridian": true,
+    "bbox": true,
+    "center": true,
+    "coordinates": true,
+    "holes": false,
+    "parentContainment": false,
+    "rings": true,
+    "selfIntersections": false,
+    "siblingOverlaps": false
+  },
+  "issues": [],
+  "mode": "validate-only",
+  "ok": true,
+  "strict": true,
+  "summary": {
+    "backend": "typescript",
+    "checks": {
+      "antimeridian": true,
+      "bbox": true,
+      "center": true,
+      "coordinates": true,
+      "holes": false,
+      "parentContainment": false,
+      "rings": true,
+      "selfIntersections": false,
+      "siblingOverlaps": false
+    },
+    "coordinateCount": 177781,
+    "errorCount": 0,
+    "infoCount": 0,
+    "invalidFeatureCount": 0,
+    "issueCount": 0,
+    "multiPolygonCount": 7,
+    "performance": {
+      "candidatePairCount": 0,
+      "durationMs": 0,
+      "exactComparisonCount": 0
+    },
+    "polygonCount": 1033,
+    "repairedFeatureCount": 0,
+    "ringCount": 1034,
+    "validFeatureCount": 797,
+    "warningCount": 0,
+    "zoneCount": 797
+  }
+}

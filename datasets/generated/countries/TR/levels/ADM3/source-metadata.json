@@ -1,0 +1,22 @@
+{
+  "adminLevel": "ADM3",
+  "attribution": "Gaziantep Büyükşehir Belediyesi, Mahalle Sınır Alanları, CC BY 4.0",
+  "commercialUseStatus": "allowed",
+  "countryCode": "TR",
+  "datasetTitle": "Mahalle Sınır Alanları",
+  "downloadUrl": "https://acikveri.gaziantep.bel.tr/dataset/5fac9bc5-8cc0-4883-8805-1f71149319db/resource/df82c9ce-f69d-4cc2-bf57-d4a36ed1c144/download/mahalle_sinirlari-1.kml",
+  "expectedSha256": "f145ae9edd2db7a341634e14d59060a535258461794d361c3f49bdec2bcbfa9a",
+  "format": "KML",
+  "license": "CC BY 4.0",
+  "localTypeName": "Mahalle",
+  "manifestVersion": "territory-source-manifest@1",
+  "modificationStatus": "allowed",
+  "provider": "official-open-data",
+  "publisher": "Gaziantep Büyükşehir Belediyesi",
+  "redistributionStatus": "allowed",
+  "retrievedAt": "2026-07-18T00:00:00.000Z",
+  "semanticType": "neighbourhood",
+  "sourceDate": "2026-02-18T13:52:03Z",
+  "sourceUrl": "https://ulasav.csb.gov.tr/dataset/27-mahalle-sinir-alanlari",
+  "sourceVersion": "2026-02-18T13:52:03Z"
+}

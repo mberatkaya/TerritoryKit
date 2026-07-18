@@ -9,6 +9,7 @@ import {
   validateTerritoryAdjacencyArtifact
 } from "@territory-kit/dataset";
 import type {
+  GeometryQualityChecks,
   GeometryQualityIssueCode,
   TerritoryAdjacencyArtifact,
   TerritoryAdjacencyBuildOptions,
@@ -86,6 +87,17 @@ const INVALID_GEOMETRY_CODES = new Set<GeometryQualityIssueCode>([
   "MULTIPOLYGON_COMPONENT_OVERLAP",
   "DUPLICATE_MULTIPOLYGON_COMPONENT"
 ]);
+const DEFAULT_ADJACENCY_GEOMETRY_CHECKS: GeometryQualityChecks = {
+  coordinates: true,
+  rings: true,
+  selfIntersections: true,
+  holes: true,
+  bbox: true,
+  center: false,
+  antimeridian: true,
+  parentContainment: false,
+  siblingOverlaps: false
+};
 
 export async function buildTerritoryAdjacency(
   dataset: TerritoryDataset,
@@ -113,17 +125,7 @@ export async function buildTerritoryAdjacency(
   options.onProgress?.({ phase: "quality" });
   throwIfAborted(options.signal);
   const quality = validateGeometryDataset(dataset, {
-    checks: {
-      coordinates: true,
-      rings: true,
-      selfIntersections: true,
-      holes: true,
-      bbox: true,
-      center: false,
-      antimeridian: true,
-      parentContainment: false,
-      siblingOverlaps: false
-    },
+    checks: normalizedOptions.qualityChecks,
     epsilon: normalizedOptions.epsilon
   });
   const skippedZoneIds = new Set<string>();
@@ -492,6 +494,7 @@ function normalizeAdjacencyBuildOptions(
     epsilon,
     batchSize: readPositiveInteger(options.batchSize, 500),
     strict: options.strict ?? false,
+    qualityChecks: options.qualityChecks ?? DEFAULT_ADJACENCY_GEOMETRY_CHECKS,
     overrides: options.overrides ?? {}
   };
 }

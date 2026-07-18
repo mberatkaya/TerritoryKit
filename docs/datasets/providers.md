@@ -6,11 +6,12 @@ and license/attribution records.
 
 Implemented provider adapters:
 
-| Provider        | Levels    | License Metadata           | Notes                                          |
-| --------------- | --------- | -------------------------- | ---------------------------------------------- |
-| `natural-earth` | ADM0      | Public Domain              | Used for the world-countries ADM0 pipeline.    |
-| `geoboundaries` | ADM0-ADM5 | CC BY 4.0 release metadata | Used by pilot country source locks and builds. |
-| `geojson`       | ADM0-ADM5 | User supplied              | Generic local/manual import path.              |
+| Provider              | Levels    | License Metadata           | Notes                                          |
+| --------------------- | --------- | -------------------------- | ---------------------------------------------- |
+| `natural-earth`       | ADM0      | Public Domain              | Used for the world-countries ADM0 pipeline.    |
+| `geoboundaries`       | ADM0-ADM5 | CC BY 4.0 release metadata | Used by pilot country source locks and builds. |
+| `gaziantep-open-data` | ADM3      | CC BY 4.0                  | Official partial Turkey neighbourhood pilot.   |
+| `geojson`             | ADM0-ADM5 | User supplied              | Generic local/manual import path.              |
 
 Provider registry metadata is generated into `datasets/registry/providers.json`.
 

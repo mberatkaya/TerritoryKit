@@ -1,0 +1,29 @@
+{
+  "areaDifference": 0.000001,
+  "componentsDiscarded": 9,
+  "detailReportPath": "repair-details.json",
+  "discardedComponentSummary": {
+    "count": 9,
+    "polygonalAreaDiscardedCount": 9,
+    "unsafeDiscardedCount": 0
+  },
+  "engine": "GEOS/Shapely",
+  "engineVersion": "Shapely 2.1.2; GEOS 3.13.1",
+  "featuresWithDiscardedComponents": 7,
+  "generatedAt": "2026-07-18T00:00:00.000Z",
+  "genuinelyRepairedFeatureCount": 11,
+  "mode": "make-valid",
+  "normalizedOnlyFeatureCount": 775,
+  "note": "Precision normalization is reported separately from geometry repair. See repair-details.json for per-feature records.",
+  "precision": 6,
+  "precisionNormalizedFeatureCount": 775,
+  "rejectedRepairCount": 0,
+  "ringNormalizedFeatureCount": 0,
+  "schemaVersion": "territorykit-repair-report@1",
+  "statusCounts": {
+    "component-discarded": 7,
+    "geometry-repaired": 4,
+    "precision-normalized": 775
+  },
+  "unchangedFeatureCount": 0
+}

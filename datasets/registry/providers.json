@@ -29,6 +29,21 @@
       "notes": ["Used by pilot country source locks and country build pipeline."]
     },
     {
+      "id": "gaziantep-open-data",
+      "name": "Gaziantep Büyükşehir Belediyesi Open Data",
+      "status": "implemented",
+      "sourceUrl": "https://ulasav.csb.gov.tr/dataset/27-mahalle-sinir-alanlari",
+      "license": "CC BY 4.0",
+      "attribution": "Gaziantep Büyükşehir Belediyesi, Mahalle Sınır Alanları",
+      "redistributionAllowed": true,
+      "commercialUseAllowed": true,
+      "modificationAllowed": true,
+      "supportedLevels": ["ADM3"],
+      "notes": [
+        "Official partial Turkey ADM3 neighbourhood pilot covering Gaziantep province districts."
+      ]
+    },
+    {
       "id": "geojson",
       "name": "Generic GeoJSON",
       "status": "implemented",

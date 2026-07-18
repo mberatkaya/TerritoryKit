@@ -10,13 +10,20 @@ export interface TerritoryOfficialOpenDataSourceManifest {
   provider: string;
   countryCode: string;
   adminLevel: TerritoryAdminLevel | string;
+  semanticType?: string;
+  localTypeName?: string;
+  publisher?: string;
+  datasetTitle?: string;
   sourceUrl: string;
+  downloadUrl?: string;
   sourceDate: string;
   license: string;
   attribution: string;
   redistributionStatus?: "allowed" | "restricted" | "unknown";
   commercialUseStatus?: "allowed" | "restricted" | "unknown";
+  modificationStatus?: "allowed" | "restricted" | "unknown";
   sourceVersion?: string;
+  retrievedAt?: string;
   expectedSha256?: string;
   format?: string;
 }
@@ -56,6 +63,11 @@ export function validateOfficialOpenDataSourceManifest(
   const commercialUseStatus = readOptionalStatus(
     input.commercialUseStatus,
     "commercialUseStatus",
+    issues
+  );
+  const modificationStatus = readOptionalStatus(
+    input.modificationStatus,
+    "modificationStatus",
     issues
   );
   let countryCode: string | undefined;
@@ -120,6 +132,24 @@ export function validateOfficialOpenDataSourceManifest(
         )
       );
     }
+
+    if (commercialUseStatus !== "allowed") {
+      issues.push(
+        createManifestIssue(
+          "SOURCE_MANIFEST_COMMERCIAL_USE_RESTRICTED",
+          "Strict source manifests require commercialUseStatus: allowed."
+        )
+      );
+    }
+
+    if (!input.expectedSha256 || typeof input.expectedSha256 !== "string") {
+      issues.push(
+        createManifestIssue(
+          "SOURCE_MANIFEST_CHECKSUM_MISSING",
+          "Strict source manifests require expectedSha256."
+        )
+      );
+    }
   }
 
   if (
@@ -145,9 +175,16 @@ export function validateOfficialOpenDataSourceManifest(
       sourceDate,
       license,
       attribution,
+      ...(typeof input.semanticType === "string" ? { semanticType: input.semanticType } : {}),
+      ...(typeof input.localTypeName === "string" ? { localTypeName: input.localTypeName } : {}),
+      ...(typeof input.publisher === "string" ? { publisher: input.publisher } : {}),
+      ...(typeof input.datasetTitle === "string" ? { datasetTitle: input.datasetTitle } : {}),
+      ...(typeof input.downloadUrl === "string" ? { downloadUrl: input.downloadUrl } : {}),
       ...(redistributionStatus ? { redistributionStatus } : {}),
       ...(commercialUseStatus ? { commercialUseStatus } : {}),
+      ...(modificationStatus ? { modificationStatus } : {}),
       ...(typeof input.sourceVersion === "string" ? { sourceVersion: input.sourceVersion } : {}),
+      ...(typeof input.retrievedAt === "string" ? { retrievedAt: input.retrievedAt } : {}),
       ...(typeof input.expectedSha256 === "string" ? { expectedSha256: input.expectedSha256 } : {}),
       ...(typeof input.format === "string" ? { format: input.format } : {}),
       ...(input.manifestVersion === "territory-source-manifest@1"

@@ -55,6 +55,15 @@ export interface TerritoryRenderFeatureProperties extends Record<string, unknown
   territoryId: string;
   adminLevel: TerritoryAdminLevel;
   name?: string;
+  parentId?: string;
+  sourceAdminLevel?: TerritoryAdminLevel;
+  semanticType?: string;
+  localName?: string;
+  districtName?: string;
+  provinceName?: string;
+  sourceProvider?: string;
+  sourceAttribution?: string;
+  license?: string;
   datasetId: string;
   datasetVersion: string;
 }
@@ -105,6 +114,16 @@ export function createTerritoryRenderFeatureCollection(
       .map((zone): Feature<TerritoryGeometry, TerritoryRenderFeatureProperties> => {
         const adminLevel = zoneToAdminLevel(zone);
         const name = readZoneName(zone);
+        const territory = readRecord(zone.properties.territory);
+        const source = readRecord(territory?.source);
+        const sourceProvider = readString(source?.provider) ?? dataset.manifest.sourceProvider;
+        const sourceAttribution = readString(source?.attribution) ?? dataset.manifest.attribution;
+        const license = readString(source?.license) ?? dataset.manifest.license;
+        const sourceAdminLevel = isTerritoryAdminLevel(zone.sourceAdminLevel)
+          ? zone.sourceAdminLevel
+          : undefined;
+        const districtName = readString(zone.properties.districtName);
+        const provinceName = readString(zone.properties.provinceName);
 
         return {
           type: "Feature",
@@ -115,7 +134,16 @@ export function createTerritoryRenderFeatureCollection(
             adminLevel,
             datasetId: dataset.manifest.datasetId,
             datasetVersion: dataset.manifest.datasetVersion,
-            ...(name ? { name } : {})
+            ...(name ? { name } : {}),
+            ...(zone.parentId ? { parentId: zone.parentId } : {}),
+            ...(sourceAdminLevel ? { sourceAdminLevel } : {}),
+            ...(zone.semanticType ? { semanticType: zone.semanticType } : {}),
+            ...(zone.localName ? { localName: zone.localName } : {}),
+            ...(districtName ? { districtName } : {}),
+            ...(provinceName ? { provinceName } : {}),
+            ...(sourceProvider ? { sourceProvider } : {}),
+            ...(sourceAttribution ? { sourceAttribution } : {}),
+            ...(license ? { license } : {})
           }
         };
       })
@@ -276,6 +304,27 @@ function readAdminLevel(properties: Record<string, unknown>): TerritoryAdminLeve
   }
 
   return undefined;
+}
+
+function readRecord(value: unknown): Record<string, unknown> | undefined {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : undefined;
+}
+
+function readString(value: unknown): string | undefined {
+  return typeof value === "string" && value.length > 0 ? value : undefined;
+}
+
+function isTerritoryAdminLevel(value: unknown): value is TerritoryAdminLevel {
+  return (
+    value === "ADM0" ||
+    value === "ADM1" ||
+    value === "ADM2" ||
+    value === "ADM3" ||
+    value === "ADM4" ||
+    value === "ADM5"
+  );
 }
 
 function readZoneName(zone: TerritoryZone): string | undefined {

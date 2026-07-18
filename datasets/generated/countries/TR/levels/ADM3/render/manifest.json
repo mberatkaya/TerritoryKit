@@ -1,0 +1,38 @@
+{
+  "bounds": [
+    36.443416,
+    36.703884,
+    38.08512,
+    37.537303
+  ],
+  "center": [
+    37.57065908136701,
+    37.382182
+  ],
+  "datasetContentHash": "6c575dadec0b9c8e594622320963ef87c37dd47b31cb329db00036ff4d4cd580",
+  "datasetId": "territory-kit-tr-adm3-gaziantep-pilot",
+  "datasetVersion": "2026.02.18",
+  "featureCounts": {
+    "ADM0": 0,
+    "ADM1": 0,
+    "ADM2": 0,
+    "ADM3": 786
+  },
+  "format": "mvt",
+  "generatedAt": "2026-07-18T00:00:00.000Z",
+  "identityMapHash": "6c575dadec0b9c8e594622320963ef87c37dd47b31cb329db00036ff4d4cd580",
+  "layers": [
+    {
+      "adminLevels": [
+        "ADM3"
+      ],
+      "featureCount": 786,
+      "id": "territory-adm3",
+      "maxZoom": 12,
+      "minZoom": 12
+    }
+  ],
+  "renderArtifactVersion": "1",
+  "schemaVersion": "territory-schema@1",
+  "tileTemplate": "tiles/{z}/{x}/{y}.mvt"
+}

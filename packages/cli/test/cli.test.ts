@@ -910,7 +910,7 @@ describe("territory cli", () => {
                 "not-reviewed": 244
               },
               ADM3: {
-                "source-unavailable": 1,
+                partial: 1,
                 "not-reviewed": 248
               },
               ADM4: { "not-reviewed": 249 },
@@ -943,7 +943,7 @@ describe("territory cli", () => {
                 "not-reviewed": 244
               },
               ADM3: {
-                unavailable: 1,
+                available: 1,
                 "not-reviewed": 248
               }
             }

@@ -9,7 +9,7 @@
     "countriesWithNoAdm0Source": 20,
     "countriesWithAdm0ValidationFailure": 0,
     "countriesWithAdm0PerformanceDeferred": 1,
-    "countriesWithAnyOptionalLevelUnavailable": 1,
+    "countriesWithAnyOptionalLevelUnavailable": 0,
     "countriesWithReviewedAdm1": 5,
     "countriesWithReviewedAdm2": 5,
     "countriesWithReviewedAdm3": 1,
@@ -18,7 +18,7 @@
       "ADM0": { "built": 228, "source-unavailable": 20, "performance-deferred": 1 },
       "ADM1": { "not-reviewed": 244, "built": 5 },
       "ADM2": { "not-reviewed": 244, "built": 5 },
-      "ADM3": { "not-reviewed": 248, "source-unavailable": 1 },
+      "ADM3": { "not-reviewed": 248, "partial": 1 },
       "ADM4": { "not-reviewed": 249 },
       "ADM5": { "not-reviewed": 249 }
     },
@@ -26,7 +26,7 @@
       "ADM0": { "available": 229, "unavailable": 20 },
       "ADM1": { "not-reviewed": 244, "available": 5 },
       "ADM2": { "not-reviewed": 244, "available": 5 },
-      "ADM3": { "not-reviewed": 248, "unavailable": 1 },
+      "ADM3": { "not-reviewed": 248, "available": 1 },
       "ADM4": { "not-reviewed": 249 },
       "ADM5": { "not-reviewed": 249 }
     },
@@ -34,7 +34,7 @@
       "ADM0": { "passed": 228, "not-run": 20, "deferred": 1 },
       "ADM1": { "passed": 5 },
       "ADM2": { "passed": 5 },
-      "ADM3": { "not-run": 1 },
+      "ADM3": { "passed": 1 },
       "ADM4": {},
       "ADM5": {}
     },
@@ -54,7 +54,7 @@
       "ADM0": 228,
       "ADM1": 234,
       "ADM2": 6481,
-      "ADM3": 0,
+      "ADM3": 786,
       "ADM4": 0,
       "ADM5": 0
     },
@@ -14423,14 +14423,29 @@
           "coverageScope": "complete"
         },
         "ADM3": {
-          "status": "source-unavailable",
-          "provider": "geoboundaries",
-          "sourceStatus": "unavailable",
-          "validationStatus": "not-run",
+          "status": "partial",
+          "provider": "gaziantep-open-data",
+          "license": "CC BY 4.0",
+          "sourceStatus": "available",
+          "validationStatus": "passed",
+          "artifactPath": "datasets/generated/countries/TR/levels/ADM3",
+          "featureCount": 786,
+          "coveredParents": [
+            "tr:adm2:54988432b19771634656837",
+            "tr:adm2:54988432b26387222249237",
+            "tr:adm2:54988432b32789090404224",
+            "tr:adm2:54988432b41731057290221",
+            "tr:adm2:54988432b54960387029794",
+            "tr:adm2:54988432b61004264745956",
+            "tr:adm2:54988432b72028378604273",
+            "tr:adm2:54988432b85612149706662",
+            "tr:adm2:54988432b99023740963316"
+          ],
+          "sourceProvider": "Gaziantep Büyükşehir Belediyesi",
           "semanticType": "neighbourhood",
           "localTypeName": "Mahalle",
           "semanticReviewStatus": "reviewed",
-          "coverageScope": "unknown"
+          "coverageScope": "partial"
         },
         "ADM4": {
           "status": "not-reviewed",

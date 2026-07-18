@@ -1,0 +1,49 @@
+{
+  "artifactClasses": {
+    "artifactGovernanceReports": [
+      "artifact-policy.json",
+      "artifact-size-report.json",
+      "checksums.json"
+    ],
+    "productionQueryArtifacts": [
+      "dataset.json",
+      "index.json",
+      "query/query-artifact.json"
+    ],
+    "productionRenderArtifacts": [
+      "full.geojson",
+      "render/manifest.json",
+      "render/tiles/**/*.mvt"
+    ],
+    "qualityAndSummaryReports": [
+      "validation-report.json",
+      "quality-report.json",
+      "production-quality-report.json",
+      "repair-report.json",
+      "overlap-audit.json",
+      "parent-containment-report.json",
+      "simplification-report.json"
+    ],
+    "sourceLocksAndProvenance": [
+      "sources.lock.json",
+      "source-metadata.json",
+      "source-evaluation.json"
+    ]
+  },
+  "committedGeometryTiers": [
+    "full"
+  ],
+  "datasetId": "territory-kit-tr-adm3-gaziantep-pilot",
+  "disallowDuplicateGeojsonTierHashes": true,
+  "generatedAt": "2026-07-18T00:00:00.000Z",
+  "maxSingleReportSizeBytes": 2000000,
+  "maxTileCount": 192,
+  "maxTileSizeBytes": 64000,
+  "maxTotalSizeBytes": 55000000,
+  "omittedGeometryTiers": {
+    "low": "No shared-boundary-aware simplifier is approved for ADM3 neighbourhoods yet.",
+    "medium": "No shared-boundary-aware simplifier is approved for ADM3 neighbourhoods yet."
+  },
+  "productionStoragePolicy": "Keep this pilot under an explicit size budget in Git; larger lower-admin artifacts must move to generated CI/release artifacts or a compressed deterministic bundle.",
+  "schemaVersion": "territorykit-artifact-policy@1"
+}

@@ -1,0 +1,47 @@
+{
+  "acceptanceThresholds": {
+    "maxInvalidFeatureCount": 0,
+    "maxRelativeAreaChange": 0.0025,
+    "maxSiblingOverlapBeyondTolerance": 0,
+    "sharedBoundaryAwareRequired": true
+  },
+  "generatedAt": "2026-07-18T00:00:00.000Z",
+  "policy": "Only safe, topology-preserving tiers are emitted. Identical medium/low copies are forbidden.",
+  "schemaVersion": "territorykit-simplification-report@1",
+  "tiers": {
+    "full": {
+      "areaDrift": 0,
+      "coordinateCount": 177781,
+      "emitted": true,
+      "fileSizeBytes": 14724918,
+      "invalidFeatureCount": 0,
+      "maximumRelativeAreaChange": 0,
+      "path": "full.geojson",
+      "sha256": "6a4a3549fd5ed18982b28ee2bf773ae146e69ef2f96f277228f80031c19078d3"
+    },
+    "low": {
+      "areaDrift": null,
+      "coordinateCount": null,
+      "emitted": false,
+      "fileSizeBytes": null,
+      "invalidFeatureCount": null,
+      "maximumRelativeAreaChange": null,
+      "omissionReason": "No shared-boundary-aware simplifier is approved for ADM3 neighbourhoods yet.",
+      "path": null,
+      "requiredBeforeEmission": "Implement and test shared-boundary-aware simplification that preserves topology and parent/neighbor semantics.",
+      "sha256": null
+    },
+    "medium": {
+      "areaDrift": null,
+      "coordinateCount": null,
+      "emitted": false,
+      "fileSizeBytes": null,
+      "invalidFeatureCount": null,
+      "maximumRelativeAreaChange": null,
+      "omissionReason": "No shared-boundary-aware simplifier is approved for ADM3 neighbourhoods yet.",
+      "path": null,
+      "requiredBeforeEmission": "Implement and test shared-boundary-aware simplification that preserves topology and parent/neighbor semantics.",
+      "sha256": null
+    }
+  }
+}

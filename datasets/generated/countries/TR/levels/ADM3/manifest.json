@@ -1,0 +1,59 @@
+{
+  "adm3FeatureCount": 786,
+  "artifactPolicy": {
+    "committedGeometryTiers": [
+      "full"
+    ],
+    "omittedGeometryTiers": {
+      "low": "No shared-boundary-aware simplifier is approved for ADM3 neighbourhoods yet.",
+      "medium": "No shared-boundary-aware simplifier is approved for ADM3 neighbourhoods yet."
+    },
+    "renderZooms": {
+      "ADM3": {
+        "maxZoom": 12,
+        "minZoom": 12
+      }
+    }
+  },
+  "attribution": "Gaziantep Büyükşehir Belediyesi, Mahalle Sınır Alanları, CC BY 4.0; ADM0-ADM2 hierarchy context from existing TerritoryKit Turkey artifacts.",
+  "country": {
+    "alpha2": "TR",
+    "alpha3": "TUR",
+    "name": "Turkey"
+  },
+  "coverageStatus": "partial",
+  "coveredParents": [
+    "tr:adm2:54988432b19771634656837",
+    "tr:adm2:54988432b26387222249237",
+    "tr:adm2:54988432b32789090404224",
+    "tr:adm2:54988432b41731057290221",
+    "tr:adm2:54988432b54960387029794",
+    "tr:adm2:54988432b61004264745956",
+    "tr:adm2:54988432b72028378604273",
+    "tr:adm2:54988432b85612149706662",
+    "tr:adm2:54988432b99023740963316"
+  ],
+  "datasetId": "territory-kit-tr-adm3-gaziantep-pilot",
+  "datasetVersion": "2026.02.18",
+  "featureCountByLevel": {
+    "ADM0": 1,
+    "ADM1": 1,
+    "ADM2": 9,
+    "ADM3": 786,
+    "ADM4": 0,
+    "ADM5": 0
+  },
+  "license": "CC BY 4.0",
+  "manifestVersion": "territorykit-country-artifact@1",
+  "publishReady": false,
+  "releaseReadiness": "draft-pilot; deterministic artifacts are available, but production strict geometry findings remain unresolved",
+  "schemaVersion": "territory-schema@1",
+  "sourceDate": "2026-02-18T13:52:03Z",
+  "sourceProvider": "Gaziantep Büyükşehir Belediyesi",
+  "supportedLevels": [
+    "ADM0",
+    "ADM1",
+    "ADM2",
+    "ADM3"
+  ]
+}

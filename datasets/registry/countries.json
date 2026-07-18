@@ -17538,7 +17538,7 @@
           "localTypeName": "Mahalle",
           "label": "ADM3 administrative unit",
           "parentSourceLevel": "ADM2",
-          "provider": "geoboundaries",
+          "provider": "gaziantep-open-data",
           "required": false,
           "reviewRequired": false
         },

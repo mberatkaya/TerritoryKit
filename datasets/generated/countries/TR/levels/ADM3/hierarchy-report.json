@@ -1,0 +1,97 @@
+{
+  "crossProvinceMismatches": 0,
+  "explicitCodeMatches": 0,
+  "generatedAt": "2026-07-18T00:00:00.000Z",
+  "manualOverrideMatches": 0,
+  "multipleParentMatches": 0,
+  "parentMappings": [
+    {
+      "districtName": "Yavuzeli",
+      "featureCount": 44,
+      "provinceCode": "TR-27",
+      "provinceName": "Gaziantep",
+      "resolutionMethod": "reviewed-spatial-containment",
+      "sourceDistrictId": "{48C8E95D-CD95-444A-8D02-722147A859A4}",
+      "territoryAdm2Id": "tr:adm2:54988432b19771634656837"
+    },
+    {
+      "districtName": "Şahinbey",
+      "featureCount": 183,
+      "provinceCode": "TR-27",
+      "provinceName": "Gaziantep",
+      "resolutionMethod": "reviewed-spatial-containment",
+      "sourceDistrictId": "{CCECD7A9-7F9F-421B-9DDC-33920592CE42}",
+      "territoryAdm2Id": "tr:adm2:54988432b26387222249237"
+    },
+    {
+      "districtName": "Nizip",
+      "featureCount": 111,
+      "provinceCode": "TR-27",
+      "provinceName": "Gaziantep",
+      "resolutionMethod": "reviewed-spatial-containment",
+      "sourceDistrictId": "{D34E09C3-2479-4A5D-A923-546908520744}",
+      "territoryAdm2Id": "tr:adm2:54988432b32789090404224"
+    },
+    {
+      "districtName": "İslahiye",
+      "featureCount": 71,
+      "provinceCode": "TR-27",
+      "provinceName": "Gaziantep",
+      "resolutionMethod": "reviewed-spatial-containment",
+      "sourceDistrictId": "{622A6409-5CF2-4AFC-9BFF-09AD53B76AE5}",
+      "territoryAdm2Id": "tr:adm2:54988432b41731057290221"
+    },
+    {
+      "districtName": "Karkamış",
+      "featureCount": 39,
+      "provinceCode": "TR-27",
+      "provinceName": "Gaziantep",
+      "resolutionMethod": "reviewed-spatial-containment",
+      "sourceDistrictId": "{460503BF-0C83-4365-AC2E-CA607C45B043}",
+      "territoryAdm2Id": "tr:adm2:54988432b54960387029794"
+    },
+    {
+      "districtName": "Şehitkamil",
+      "featureCount": 149,
+      "provinceCode": "TR-27",
+      "provinceName": "Gaziantep",
+      "resolutionMethod": "reviewed-spatial-containment",
+      "sourceDistrictId": "{8F014A2B-53F9-4823-9FAE-E51D55B81A67}",
+      "territoryAdm2Id": "tr:adm2:54988432b61004264745956"
+    },
+    {
+      "districtName": "Oğuzeli",
+      "featureCount": 92,
+      "provinceCode": "TR-27",
+      "provinceName": "Gaziantep",
+      "resolutionMethod": "reviewed-spatial-containment",
+      "sourceDistrictId": "{E2A0D610-4A82-4138-941E-9E6C785BFA53}",
+      "territoryAdm2Id": "tr:adm2:54988432b72028378604273"
+    },
+    {
+      "districtName": "Nurdağı",
+      "featureCount": 48,
+      "provinceCode": "TR-27",
+      "provinceName": "Gaziantep",
+      "resolutionMethod": "reviewed-spatial-containment",
+      "sourceDistrictId": "{43FA2512-DB22-41C0-A03E-0A2561941EE6}",
+      "territoryAdm2Id": "tr:adm2:54988432b85612149706662"
+    },
+    {
+      "districtName": "Araban",
+      "featureCount": 49,
+      "provinceCode": "TR-27",
+      "provinceName": "Gaziantep",
+      "resolutionMethod": "reviewed-spatial-containment",
+      "sourceDistrictId": "{4F692FBF-DD8E-4C6D-93E4-D4C49CACC4C9}",
+      "territoryAdm2Id": "tr:adm2:54988432b99023740963316"
+    }
+  ],
+  "reviewedExactNameMatches": 0,
+  "reviewedMappingMatches": 786,
+  "schemaVersion": "territorykit-hierarchy-report@1",
+  "sourceIdMatches": 786,
+  "spatialContainmentMatches": 0,
+  "totalAdm3Features": 786,
+  "zeroParentMatches": 0
+}

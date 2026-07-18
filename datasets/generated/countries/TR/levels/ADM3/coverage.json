@@ -1,0 +1,28 @@
+{
+  "country": "TR",
+  "coveredParents": [
+    "tr:adm2:54988432b19771634656837",
+    "tr:adm2:54988432b26387222249237",
+    "tr:adm2:54988432b32789090404224",
+    "tr:adm2:54988432b41731057290221",
+    "tr:adm2:54988432b54960387029794",
+    "tr:adm2:54988432b61004264745956",
+    "tr:adm2:54988432b72028378604273",
+    "tr:adm2:54988432b85612149706662",
+    "tr:adm2:54988432b99023740963316"
+  ],
+  "coveredProvince": "tr:adm1:tr-27",
+  "featureCount": 786,
+  "level": "ADM3",
+  "licence": "CC BY 4.0",
+  "localTypeName": "Mahalle",
+  "missingParents": "All Turkey ADM2 parent IDs outside Gaziantep are intentionally not covered by this pilot.",
+  "schemaVersion": "territorykit-partial-coverage@1",
+  "scopeDescription": "All Gaziantep province neighbourhood polygons published in the selected source.",
+  "scopeType": "complete-selected-parents",
+  "semanticReviewStatus": "reviewed",
+  "semanticType": "neighbourhood",
+  "sourceProvider": "Gaziantep Büyükşehir Belediyesi",
+  "sourceVersion": "2026-02-18T13:52:03Z",
+  "status": "partial"
+}

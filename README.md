@@ -72,7 +72,10 @@ The generated coverage registry lives in `datasets/registry/coverage.json` and i
 [docs/datasets/coverage.md](./docs/datasets/coverage.md). TerritoryKit supports lower
 administrative levels when a suitable source exists, but it does not guarantee neighbourhood-level
 coverage for every country. Municipality and neighbourhood are semantic types on ADM records, not
-pseudo-administrative levels.
+pseudo-administrative levels. Turkey includes a partial official Gaziantep ADM3 neighbourhood pilot
+documented in [docs/datasets/turkey-neighbourhoods.md](./docs/datasets/turkey-neighbourhoods.md).
+The current product gap analysis is tracked in
+[docs/product-gap-analysis.md](./docs/product-gap-analysis.md).
 
 ## Development
 
@@ -106,6 +109,7 @@ items.
 - [Release governance](./docs/release-governance.md)
 - [Roadmap](./docs/roadmap.md)
 - [Release check](./docs/release-check.md)
+- [Product gap analysis](./docs/product-gap-analysis.md)
 - [Dataset compatibility](./docs/dataset-compatibility.md)
 - [Source adapters](./docs/source-adapters.md)
 - [Source pipeline](./docs/source-pipeline.md)
@@ -123,6 +127,7 @@ items.
 - [Render artifacts](./docs/render-artifacts.md)
 - [Vector tile pipeline](./docs/vector-tile-pipeline.md)
 - [MapLibre registry integration](./docs/maplibre-registry-integration.md)
+- [Turkey neighbourhood MapLibre example](./docs/examples/turkey-neighbourhood-maplibre.md)
 - [Render/query compatibility](./docs/render-query-compatibility.md)
 - [Mobile map loading](./docs/mobile-map-loading.md)
 - [Adjacency artifacts](./docs/adjacency.md)
@@ -139,6 +144,7 @@ items.
 - [Turkey neighbourhoods](./docs/datasets/turkey-neighbourhoods.md)
 - [Dataset providers](./docs/datasets/providers.md)
 - [Lower-admin providers](./docs/sources/lower-admin-providers.md)
+- [Gaziantep ADM3 source](./docs/sources/gaziantep-open-data.md)
 - [Benchmarks](./docs/benchmarks.md)
 - [Real-world benchmarks](./docs/real-world-benchmarks.md)
 - [NestJS and PostGIS](./docs/nestjs-postgis.md)

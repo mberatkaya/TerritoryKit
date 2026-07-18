@@ -1,5 +1,6 @@
 import { computeGeometryBBox, geometryToPolygons } from "./geometry.js";
 import type { LngLat, TerritoryBBox, TerritoryDataset, TerritoryGeometry } from "./types.js";
+import type { GeometryQualityChecks } from "./quality.js";
 
 export type TerritoryAdjacencyType = "shared-border" | "point-touch" | "maritime" | "logical";
 export type TerritoryAdjacencySource = "computed" | "manual";
@@ -86,6 +87,7 @@ export interface TerritoryAdjacencyBuildOptions {
   includePointTouches?: boolean;
   minimumSharedBoundaryMeters?: number;
   epsilon?: number;
+  qualityChecks?: GeometryQualityChecks;
   batchSize?: number;
   strict?: boolean;
   overrides?: TerritoryAdjacencyOverrides;
