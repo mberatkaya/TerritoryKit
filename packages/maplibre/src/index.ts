@@ -5,6 +5,7 @@ import {
   defineTerritoryAdapterCapabilities
 } from "@territory-kit/adapter-core";
 import type {
+  TerritoryAdapterOperationContext,
   TerritoryAdapterCapabilities,
   TerritoryAdapterLifecycleState,
   TerritoryRendererAdapter,
@@ -95,9 +96,10 @@ export interface TerritoryMapLibreMap {
 export interface TerritoryMapLibreAdapter extends TerritoryRendererAdapter<TerritoryMapLibreMap> {
   readonly capabilities: TerritoryAdapterCapabilities;
   readonly lifecycleState: TerritoryAdapterLifecycleState;
+  readonly managedSourceId: string;
   attach(map: TerritoryMapLibreMap): void;
   detach(): void;
-  setSource(source: TerritoryRenderSource): void;
+  setSource(source: TerritoryRenderSource, context?: TerritoryAdapterOperationContext): void;
   updateState(state: TerritoryRenderState): void;
   updateData(
     zones: TerritoryZone[],
@@ -700,6 +702,10 @@ export function createTerritoryMapLibreAdapter(
       return lifecycleState;
     },
 
+    get managedSourceId() {
+      return sourceId;
+    },
+
     attach(nextMap) {
       lifecycleState = "attaching";
       detachCurrentMap();
@@ -729,7 +735,7 @@ export function createTerritoryMapLibreAdapter(
       detachCurrentMap();
     },
 
-    setSource(source) {
+    setSource(source, context) {
       assertTerritoryAdapterAttached(lifecycleState, "set source");
       const attachedMap = requireAttachedMap(map, "set source");
       const capability =
@@ -754,6 +760,10 @@ export function createTerritoryMapLibreAdapter(
         capability,
         "set source"
       );
+
+      if (context?.signal?.aborted) {
+        return;
+      }
 
       if (source.id !== sourceId) {
         throw new TerritoryError(
@@ -781,6 +791,10 @@ export function createTerritoryMapLibreAdapter(
             details: { sourceId: source.id }
           }
         );
+      }
+
+      if (context?.signal?.aborted) {
+        return;
       }
 
       mapSource.setData(source.data);

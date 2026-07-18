@@ -1,8 +1,10 @@
 import {
   createSampleTerritoryDataset,
+  createSyntheticGridDataset,
   createTurkeyAdm3DemoDataset
 } from "@territory-kit/shared-testkit";
 import { isTerritoryError } from "@territory-kit/dataset";
+import { createTerritoryRuntime } from "@territory-kit/runtime";
 import { describe, expect, it, vi } from "vitest";
 import {
   TERRITORY_MAPLIBRE_ADAPTER_CAPABILITIES,
@@ -19,6 +21,12 @@ import {
 import type { TerritoryMapLibreGeoJsonSource, TerritoryMapLibreMap } from "../src/index.js";
 import type { TerritoryRendererAdapter } from "@territory-kit/adapter-core";
 import type { TerritoryRegistryClient } from "@territory-kit/registry";
+
+const RUNTIME_VIEWPORT = {
+  bounds: { west: 0, south: 0, east: 2, north: 2 },
+  zoom: 4,
+  level: 0
+};
 
 describe("maplibre adapter", () => {
   it("converts zones into a GeoJSON feature collection", () => {
@@ -242,6 +250,58 @@ describe("maplibre adapter", () => {
 
     expect(source.setData).toHaveBeenCalledTimes(1);
     expect(source.setData).toHaveBeenCalledWith(data);
+  });
+
+  it("lets runtime default options bind to the MapLibre default managed source", async () => {
+    const dataset = createRuntimeDataset();
+    const { map, source } = createMapLibreHarness();
+    const adapter = createTerritoryMapLibreAdapter({ zones: dataset.zones });
+
+    adapter.attach(map);
+    expect(adapter.managedSourceId).toBe("territory-kit-zones");
+
+    const runtime = createTerritoryRuntime({
+      dataset,
+      adapter,
+      cache: false
+    });
+
+    await expect(runtime.setViewport(RUNTIME_VIEWPORT)).resolves.toMatchObject({
+      status: "ready"
+    });
+    expect(source.setData).toHaveBeenCalledTimes(1);
+    expect(source.setData).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: "FeatureCollection",
+        features: expect.arrayContaining([
+          expect.objectContaining({
+            properties: expect.objectContaining({ datasetId: "maplibre-runtime-grid" })
+          })
+        ])
+      })
+    );
+  });
+
+  it("lets runtime adapterSourceId override the MapLibre managed source", async () => {
+    const dataset = createRuntimeDataset();
+    const { map, source } = createMapLibreHarness();
+    const adapter = createTerritoryMapLibreAdapter({
+      zones: dataset.zones,
+      sourceId: "custom-runtime-zones"
+    });
+
+    adapter.attach(map);
+    const runtime = createTerritoryRuntime({
+      dataset,
+      adapter,
+      adapterSourceId: "custom-runtime-zones",
+      cache: false
+    });
+
+    await expect(runtime.setViewport(RUNTIME_VIEWPORT)).resolves.toMatchObject({
+      status: "ready"
+    });
+    expect(source.setData).toHaveBeenCalledTimes(1);
   });
 
   it("throws coded errors for unsupported source types and invalid GeoJSON data", () => {
@@ -506,6 +566,16 @@ describe("maplibre adapter", () => {
     expect(clicked).toEqual(["tr:34"]);
   });
 });
+
+function createRuntimeDataset() {
+  return createSyntheticGridDataset({
+    datasetId: "maplibre-runtime-grid",
+    rows: 2,
+    columns: 2,
+    level: 0,
+    cellSize: 1
+  });
+}
 
 function createMapLibreHarness(options: { resolveSources?: boolean } = {}): {
   map: TerritoryMapLibreMap;

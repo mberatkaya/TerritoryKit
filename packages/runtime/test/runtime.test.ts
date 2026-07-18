@@ -1,5 +1,9 @@
 import { defineTerritoryAdapterCapabilities } from "@territory-kit/adapter-core";
-import type { TerritoryRendererAdapter } from "@territory-kit/adapter-core";
+import type {
+  TerritoryAdapterOperationContext,
+  TerritoryRenderSource,
+  TerritoryRendererAdapter
+} from "@territory-kit/adapter-core";
 import { createTerritoryEngine } from "@territory-kit/core";
 import { TerritoryError, isTerritoryError } from "@territory-kit/dataset";
 import type { TerritoryDataset } from "@territory-kit/dataset";
@@ -298,6 +302,72 @@ describe("territory runtime viewport lifecycle", () => {
       error: expect.objectContaining({ code: "REQUEST_ABORTED" })
     });
     expect(runtime.getState().status).toBe("idle");
+    expect(runtime.getState().activeRequestId).toBeUndefined();
+    expect(runtime.getState().activeViewport).toBeUndefined();
+  });
+
+  it("restores the previous committed viewport after cancellation and refreshes it", async () => {
+    const dataset = createDataset();
+    const deferred = createDeferred<TerritoryDataset>();
+    const adapter = createAdapter();
+    const resolver = vi.fn((_viewport: TerritoryRuntimeViewport) =>
+      resolver.mock.calls.length === 2 ? deferred.promise : Promise.resolve(dataset)
+    );
+    const runtime = createTerritoryRuntime({
+      cache: false,
+      adapter,
+      datasetResolver: { resolveDataset: resolver }
+    });
+
+    await expect(runtime.setViewport(viewportAt(0))).resolves.toMatchObject({
+      status: "ready",
+      requestId: "runtime-request-1"
+    });
+    const second = runtime.setViewport(viewportAt(1));
+    await waitForCondition(() => runtime.getState().activeRequestId === "runtime-request-2");
+
+    expect(runtime.cancelActiveRequest("user-pan")).toMatchObject({
+      cancelled: true,
+      requestId: "runtime-request-2",
+      status: "ready"
+    });
+    await expect(second).resolves.toMatchObject({
+      status: "aborted",
+      requestId: "runtime-request-2"
+    });
+    expect(runtime.getState()).toMatchObject({
+      status: "ready",
+      activeViewport: viewportAt(0),
+      activeLevel: 0,
+      activeDatasetId: dataset.manifest.datasetId,
+      lastResultSummary: expect.objectContaining({
+        requestId: "runtime-request-1",
+        revision: 1
+      })
+    });
+    expect(adapter.setSource).toHaveBeenCalledTimes(1);
+
+    deferred.resolve(dataset);
+    await flushPromises();
+    await expect(runtime.refresh()).resolves.toMatchObject({
+      status: "ready",
+      requestId: "runtime-request-3"
+    });
+
+    expect(resolver.mock.calls.at(-1)?.[0]).toEqual(viewportAt(0));
+    expect(adapter.setSource).toHaveBeenCalledTimes(2);
+    expect(adapter.setSource).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        metadata: expect.objectContaining({
+          requestId: "runtime-request-3",
+          revision: 3
+        })
+      }),
+      expect.objectContaining({
+        requestId: "runtime-request-3",
+        revision: 3
+      })
+    );
   });
 
   it("rejects stale and late responses without updating state or adapter", async () => {
@@ -412,6 +482,63 @@ describe("territory runtime viewport lifecycle", () => {
     });
   });
 
+  it("keeps injected caches external by default and allows shared cache reuse", async () => {
+    const cache = createMemoryTerritoryRuntimeCache();
+    const firstRuntime = createTerritoryRuntime({ dataset: createDataset(), cache });
+    const secondRuntime = createTerritoryRuntime({ dataset: createDataset(), cache });
+
+    await expect(firstRuntime.setViewport(VIEWPORT)).resolves.toMatchObject({
+      status: "ready",
+      summary: expect.objectContaining({ cached: false })
+    });
+    expect(firstRuntime.dispose().status).toBe("disposed");
+    await expect(cache.set("manual", new Uint8Array([1]), fakeContext())).resolves.toBeUndefined();
+    await expect(secondRuntime.setViewport(VIEWPORT)).resolves.toMatchObject({
+      status: "ready",
+      summary: expect.objectContaining({ cached: true })
+    });
+    expect(cache.getSummary?.()).toMatchObject({
+      hits: 1,
+      entries: 2
+    });
+    secondRuntime.dispose();
+  });
+
+  it("disposes runtime-owned caches and isolates async dispose failures", async () => {
+    const ownedCache = createMemoryTerritoryRuntimeCache();
+    const ownedRuntime = createTerritoryRuntime({
+      dataset: createDataset(),
+      cache: ownedCache,
+      cacheOwnership: "runtime"
+    });
+
+    ownedRuntime.dispose();
+    await expect(ownedCache.get("after-dispose", fakeContext())).rejects.toMatchObject({
+      code: "RUNTIME_DISPOSED"
+    });
+
+    const logger = { error: vi.fn() };
+    const failingCache: ReturnType<typeof createMemoryTerritoryRuntimeCache> = {
+      ...createMemoryTerritoryRuntimeCache(),
+      dispose: vi.fn(() => Promise.reject(new Error("dispose failed")))
+    };
+    const failingRuntime = createTerritoryRuntime({
+      dataset: createDataset(),
+      cache: failingCache,
+      cacheOwnership: "runtime",
+      logger
+    });
+
+    expect(() => failingRuntime.dispose()).not.toThrow();
+    await flushPromises();
+    expect(logger.error).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: "cache-dispose-failed",
+        error: expect.objectContaining({ code: "UNKNOWN" })
+      })
+    );
+  });
+
   it("implements deterministic LRU eviction and maxEntries", async () => {
     const cache = createMemoryTerritoryRuntimeCache({ maxEntries: 2 });
     const context = fakeContext();
@@ -457,6 +584,40 @@ describe("territory runtime viewport lifecycle", () => {
     expect(cache.getSummary?.().bytes).toBeLessThanOrEqual(3);
   });
 
+  it("validates memory cache capacity options and supports zero-capacity caches", async () => {
+    for (const maxEntries of [Number.NaN, Number.POSITIVE_INFINITY, -1, 1.5]) {
+      expect(() => createMemoryTerritoryRuntimeCache({ maxEntries })).toThrow(
+        expect.objectContaining({ code: "RUNTIME_CONFIGURATION_INVALID" })
+      );
+    }
+
+    for (const maxBytes of [Number.NaN, Number.POSITIVE_INFINITY, -1, 1.5]) {
+      expect(() => createMemoryTerritoryRuntimeCache({ maxBytes })).toThrow(
+        expect.objectContaining({ code: "RUNTIME_CONFIGURATION_INVALID" })
+      );
+    }
+
+    const context = fakeContext();
+    const zeroEntries = createMemoryTerritoryRuntimeCache({ maxEntries: 0 });
+    await zeroEntries.set("a", new Uint8Array([1]), context);
+    await expect(zeroEntries.get("a", context)).resolves.toBeUndefined();
+    expect(zeroEntries.getSummary?.()).toMatchObject({
+      entries: 0,
+      maxEntries: 0,
+      evictions: 1
+    });
+
+    const zeroBytes = createMemoryTerritoryRuntimeCache({ maxBytes: 0 });
+    await zeroBytes.set("a", new Uint8Array([1]), context);
+    await expect(zeroBytes.get("a", context)).resolves.toBeUndefined();
+    expect(zeroBytes.getSummary?.()).toMatchObject({
+      entries: 0,
+      bytes: 0,
+      maxBytes: 0,
+      evictions: 1
+    });
+  });
+
   it("reuses lazy engines for a direct dataset", async () => {
     const createEngine = vi.fn((options) => {
       return createTerritoryEngine(options);
@@ -499,7 +660,121 @@ describe("territory runtime viewport lifecycle", () => {
     expect(adapter.setSource).toHaveBeenCalledWith(
       expect.objectContaining({
         metadata: expect.objectContaining({ requestId: "runtime-request-2" })
+      }),
+      expect.objectContaining({
+        requestId: "runtime-request-2",
+        revision: 2
       })
+    );
+  });
+
+  it("prevents out-of-order async adapter completion from becoming the final renderer source", async () => {
+    const dataset = createDataset();
+    const events: TerritoryRuntimeEvent[] = [];
+    const deferredAdapter = createDeferredAdapter();
+    const runtime = createTerritoryRuntime({
+      cache: false,
+      cancelPreviousRequest: false,
+      adapter: deferredAdapter.adapter,
+      dataset
+    });
+    runtime.subscribe((event) => events.push(event));
+
+    const first = runtime.setViewport(viewportAt(0));
+    await waitForCondition(() => deferredAdapter.calls.length === 1);
+    const second = runtime.setViewport(viewportAt(1));
+    await waitForCondition(() => deferredAdapter.calls.length === 2);
+
+    expect(deferredAdapter.calls[0]?.context?.signal?.aborted).toBe(true);
+    deferredAdapter.calls[1]?.deferred.resolve();
+    await expect(second).resolves.toMatchObject({
+      status: "ready",
+      requestId: "runtime-request-2"
+    });
+
+    deferredAdapter.calls[0]?.deferred.resolve();
+    await expect(first).resolves.toMatchObject({
+      status: "aborted",
+      requestId: "runtime-request-1"
+    });
+
+    expect(deferredAdapter.committedRevisions).toEqual([2]);
+    expect(events).not.toContainEqual(
+      expect.objectContaining({ type: "adapter-updated", requestId: "runtime-request-1" })
+    );
+    expect(events).not.toContainEqual(
+      expect.objectContaining({ type: "viewport-ready", requestId: "runtime-request-1" })
+    );
+    expect(runtime.getState()).toMatchObject({
+      status: "ready",
+      activeViewport: viewportAt(1),
+      lastCompletedRequestId: "runtime-request-2",
+      lastResultSummary: expect.objectContaining({ revision: 2 })
+    });
+    expect(deferredAdapter.committedRevisions.at(-1)).toBe(
+      runtime.getState().lastResultSummary?.revision
+    );
+  });
+
+  it("prevents cancelled and timed-out adapter operations from producing ready results", async () => {
+    const cancelAdapter = createDeferredAdapter();
+    const cancelEvents: TerritoryRuntimeEvent[] = [];
+    const cancelRuntime = createTerritoryRuntime({
+      cache: false,
+      adapter: cancelAdapter.adapter,
+      dataset: createDataset()
+    });
+    cancelRuntime.subscribe((event) => cancelEvents.push(event));
+
+    const cancelled = cancelRuntime.setViewport(VIEWPORT);
+    await waitForCondition(() => cancelAdapter.calls.length === 1);
+    expect(cancelRuntime.cancelActiveRequest("user-pan")).toMatchObject({
+      cancelled: true,
+      status: "idle",
+      requestId: "runtime-request-1"
+    });
+    await expect(cancelled).resolves.toMatchObject({
+      status: "aborted",
+      requestId: "runtime-request-1"
+    });
+    expect(cancelAdapter.calls[0]?.context?.signal?.aborted).toBe(true);
+    cancelAdapter.calls[0]?.deferred.resolve();
+    await flushPromises();
+    expect(cancelAdapter.committedRevisions).toEqual([]);
+    expect(cancelEvents).not.toContainEqual(
+      expect.objectContaining({ type: "adapter-updated", requestId: "runtime-request-1" })
+    );
+    expect(cancelEvents).not.toContainEqual(
+      expect.objectContaining({ type: "viewport-ready", requestId: "runtime-request-1" })
+    );
+
+    const scheduler = new FakeScheduler();
+    const timeoutAdapter = createDeferredAdapter();
+    const timeoutEvents: TerritoryRuntimeEvent[] = [];
+    const timeoutRuntime = createTerritoryRuntime({
+      cache: false,
+      scheduler,
+      adapter: timeoutAdapter.adapter,
+      dataset: createDataset()
+    });
+    timeoutRuntime.subscribe((event) => timeoutEvents.push(event));
+
+    const timedOut = timeoutRuntime.setViewport(VIEWPORT, { requestTimeoutMs: 10 });
+    await waitForCondition(() => timeoutAdapter.calls.length === 1);
+    scheduler.advance(10);
+    await expect(timedOut).resolves.toMatchObject({
+      status: "failed",
+      error: expect.objectContaining({ code: "DOWNLOAD_TIMEOUT" })
+    });
+    expect(timeoutAdapter.calls[0]?.context?.signal?.aborted).toBe(true);
+    timeoutAdapter.calls[0]?.deferred.resolve();
+    await flushPromises();
+    expect(timeoutAdapter.committedRevisions).toEqual([]);
+    expect(timeoutEvents).not.toContainEqual(
+      expect.objectContaining({ type: "adapter-updated", requestId: "runtime-request-1" })
+    );
+    expect(timeoutEvents).not.toContainEqual(
+      expect.objectContaining({ type: "viewport-ready", requestId: "runtime-request-1" })
     );
   });
 
@@ -552,6 +827,40 @@ describe("territory runtime viewport lifecycle", () => {
       type: "request-failed",
       error: expect.objectContaining({ code: "CAPABILITY_UNSUPPORTED" })
     });
+  });
+
+  it("uses explicit adapter source overrides and rejects unmanaged attached adapters", async () => {
+    const adapter = createAdapter("attached", {}, "runtime-override-source");
+    const runtime = createTerritoryRuntime({
+      dataset: createDataset(),
+      cache: false,
+      adapter,
+      adapterSourceId: "runtime-override-source"
+    });
+
+    await expect(runtime.setViewport(VIEWPORT)).resolves.toMatchObject({ status: "ready" });
+    expect(adapter.setSource).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: "runtime-override-source"
+      }),
+      expect.objectContaining({
+        requestId: "runtime-request-1",
+        revision: 1
+      })
+    );
+
+    const unmanaged = createAdapter("attached", {}, false);
+    const invalidRuntime = createTerritoryRuntime({
+      dataset: createDataset(),
+      cache: false,
+      adapter: unmanaged
+    });
+
+    await expect(invalidRuntime.setViewport(VIEWPORT)).resolves.toMatchObject({
+      status: "failed",
+      error: expect.objectContaining({ code: "RUNTIME_CONFIGURATION_INVALID" })
+    });
+    expect(unmanaged.setSource).not.toHaveBeenCalled();
   });
 
   it("uses the injected clock for deterministic event timestamps", async () => {
@@ -685,7 +994,8 @@ function fakeContext(): TerritoryRuntimeRequestContext {
 
 function createAdapter(
   lifecycleState: "attached" | "detached" = "attached",
-  capabilities: { readonly sourceReplacement?: boolean } = {}
+  capabilities: { readonly sourceReplacement?: boolean } = {},
+  managedSourceId: string | false = "runtime-test-source"
 ): TerritoryRendererAdapter {
   return {
     capabilities: defineTerritoryAdapterCapabilities({
@@ -693,6 +1003,7 @@ function createAdapter(
       sourceReplacement: capabilities.sourceReplacement ?? true
     }),
     lifecycleState,
+    ...(managedSourceId ? { managedSourceId } : {}),
     attach: vi.fn(),
     detach: vi.fn(),
     setSource: vi.fn(),
@@ -701,6 +1012,55 @@ function createAdapter(
   };
 }
 
+function createDeferredAdapter(): {
+  readonly adapter: TerritoryRendererAdapter;
+  readonly calls: Array<{
+    readonly source: TerritoryRenderSource;
+    readonly context: TerritoryAdapterOperationContext | undefined;
+    readonly deferred: ReturnType<typeof createDeferred<void>>;
+  }>;
+  readonly committedRevisions: number[];
+} {
+  const calls: Array<{
+    readonly source: TerritoryRenderSource;
+    readonly context: TerritoryAdapterOperationContext | undefined;
+    readonly deferred: ReturnType<typeof createDeferred<void>>;
+  }> = [];
+  const committedRevisions: number[] = [];
+
+  return {
+    calls,
+    committedRevisions,
+    adapter: {
+      ...createAdapter("attached"),
+      setSource: vi.fn((source, context) => {
+        const deferred = createDeferred<void>();
+        calls.push({ source, context, deferred });
+
+        return deferred.promise.then(() => {
+          if (context?.signal?.aborted) {
+            return;
+          }
+
+          committedRevisions.push(context?.revision ?? 0);
+        });
+      })
+    }
+  };
+}
+
 function flushPromises(): Promise<void> {
   return Promise.resolve();
+}
+
+async function waitForCondition(predicate: () => boolean): Promise<void> {
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    if (predicate()) {
+      return;
+    }
+
+    await flushPromises();
+  }
+
+  throw new Error("Timed out waiting for test condition.");
 }

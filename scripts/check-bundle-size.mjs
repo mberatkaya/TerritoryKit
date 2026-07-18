@@ -14,8 +14,9 @@ const maxBytesByFile = new Map([
   ["packages/registry/dist/index.mjs", 5_000],
   ["packages/registry/dist/node.mjs", 28_000],
   // Sprint 12 turns runtime from lifecycle contracts into viewport request orchestration with
-  // scheduler injection, cancellation, cache, lazy engine reuse, and adapter updates.
-  ["packages/runtime/dist/index.mjs", 32_000],
+  // scheduler injection, cancellation, cache, lazy engine reuse, adapter updates, stale adapter
+  // operation guards, managed source binding, and cache ownership handling.
+  ["packages/runtime/dist/index.mjs", 34_000],
   ["packages/maplibre/dist/index.mjs", 45_000],
   ["packages/nestjs/dist/index.mjs", 45_000],
   ["packages/data-tr/dist/index.mjs", 8_000],

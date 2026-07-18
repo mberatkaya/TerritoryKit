@@ -2,7 +2,10 @@ import {
   assertTerritoryAdapterCapability,
   hasTerritoryAdapterCapability
 } from "@territory-kit/adapter-core";
-import type { TerritoryRendererAdapter } from "@territory-kit/adapter-core";
+import type {
+  TerritoryAdapterOperationContext,
+  TerritoryRendererAdapter
+} from "@territory-kit/adapter-core";
 import { createTerritoryEngine, defaultZoomLevelStrategy } from "@territory-kit/core";
 import type { TerritoryEngine, TerritoryEngineOptions } from "@territory-kit/core";
 import { TerritoryError, isTerritoryError, loadTerritoryDataset } from "@territory-kit/dataset";
@@ -97,6 +100,7 @@ export type TerritoryRuntimeEventType =
   | "query-completed"
   | "adapter-updated"
   | "viewport-ready"
+  | "cache-dispose-failed"
   | "request-failed";
 
 export interface TerritoryRuntimeEvent {
@@ -229,6 +233,7 @@ export interface TerritoryRuntimeOptions<TTarget = unknown> {
   readonly createEngine?: TerritoryRuntimeEngineFactory;
   readonly datasetResolver?: TerritoryRuntimeDatasetResolver;
   readonly cache?: TerritoryRuntimeCache | false;
+  readonly cacheOwnership?: "runtime" | "external";
   readonly debounceMs?: number;
   readonly requestTimeoutMs?: number;
   readonly cancelPreviousRequest?: boolean;
@@ -280,6 +285,13 @@ interface RuntimeRequestRecord {
   timedOut: boolean;
 }
 
+interface RuntimeAdapterOperation {
+  readonly record: RuntimeRequestRecord;
+  readonly controller: AbortController;
+  readonly context: TerritoryAdapterOperationContext;
+  cleanup(): void;
+}
+
 interface CachedViewportPayload {
   readonly datasetId: string;
   readonly datasetVersion: string;
@@ -316,9 +328,29 @@ const EMPTY_CACHE_SUMMARY: TerritoryRuntimeCacheSummary = Object.freeze({
   evictions: 0
 });
 
+function validateCacheCapacityOption(value: number | undefined, name: string): number | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (!Number.isFinite(value) || value < 0 || !Number.isInteger(value)) {
+    throw new TerritoryError(
+      "RUNTIME_CONFIGURATION_INVALID",
+      `Runtime cache option '${name}' must be a finite non-negative integer.`,
+      {
+        details: { option: name, value }
+      }
+    );
+  }
+
+  return value;
+}
+
 export function createMemoryTerritoryRuntimeCache(
   options: TerritoryRuntimeCacheOptions = {}
 ): TerritoryRuntimeCache {
+  const maxEntries = validateCacheCapacityOption(options.maxEntries, "maxEntries");
+  const maxBytes = validateCacheCapacityOption(options.maxBytes, "maxBytes");
   const entries = new Map<string, Uint8Array>();
   const sizes = new Map<string, number>();
   const copyOnRead = options.copyOnRead !== false;
@@ -360,9 +392,6 @@ export function createMemoryTerritoryRuntimeCache(
   }
 
   function evictIfNeeded(): void {
-    const maxEntries = options.maxEntries;
-    const maxBytes = options.maxBytes;
-
     while (
       (maxEntries !== undefined && entries.size > maxEntries) ||
       (maxBytes !== undefined && bytes > maxBytes)
@@ -422,8 +451,8 @@ export function createMemoryTerritoryRuntimeCache(
       return freezeCacheSummary({
         entries: entries.size,
         bytes,
-        ...(options.maxEntries !== undefined ? { maxEntries: options.maxEntries } : {}),
-        ...(options.maxBytes !== undefined ? { maxBytes: options.maxBytes } : {}),
+        ...(maxEntries !== undefined ? { maxEntries } : {}),
+        ...(maxBytes !== undefined ? { maxBytes } : {}),
         hits,
         misses,
         sets,
@@ -450,6 +479,9 @@ export function createTerritoryRuntime<TTarget = unknown>(
   const logger = options.logger;
   const cache =
     options.cache === false ? undefined : (options.cache ?? createMemoryTerritoryRuntimeCache());
+  const cacheOwnership =
+    options.cacheOwnership ?? (options.cache === undefined ? "runtime" : "external");
+  const ownsCache = Boolean(cache) && cacheOwnership === "runtime";
   const createEngineFactory = options.createEngine ?? createTerritoryEngine;
   const cancelPreviousRequest = options.cancelPreviousRequest !== false;
   const deduplicateRequests = options.deduplicateRequests !== false;
@@ -470,6 +502,11 @@ export function createTerritoryRuntime<TTarget = unknown>(
   let lastRequestResult: TerritoryRuntimeRequestResult | undefined;
   let scheduledRequest: RuntimeRequestRecord | undefined;
   let activeRequest: RuntimeRequestRecord | undefined;
+  let activeAdapterOperation: RuntimeAdapterOperation | undefined;
+  let committedViewport: TerritoryRuntimeViewport | undefined;
+  let committedLevel: number | undefined;
+  let committedDatasetId: string | undefined;
+  let committedResultSummary: TerritoryRuntimeResultSummary | undefined;
 
   const readState = (): TerritoryRuntimeState =>
     freezeState({
@@ -561,6 +598,7 @@ export function createTerritoryRuntime<TTarget = unknown>(
   }
 
   function setActiveRequest(record: RuntimeRequestRecord): void {
+    abortStaleAdapterOperation(record);
     activeRequestId = record.requestId;
     activeViewport = cloneViewport(record.viewport);
     activeLevel = record.selectedLevel ?? record.viewport.level;
@@ -570,6 +608,41 @@ export function createTerritoryRuntime<TTarget = unknown>(
   function setTerminalStatus(nextStatus: TerritoryRuntimeStatus): void {
     status = nextStatus;
     activeRequestId = undefined;
+  }
+
+  function restoreCommittedState(): void {
+    activeRequestId = undefined;
+
+    if (!committedViewport || !committedResultSummary) {
+      status = "idle";
+      activeViewport = undefined;
+      activeLevel = undefined;
+      activeDatasetId = undefined;
+      lastError = undefined;
+      return;
+    }
+
+    status = "ready";
+    activeViewport = cloneViewport(committedViewport);
+    activeLevel = committedLevel;
+    activeDatasetId = committedDatasetId;
+    lastCompletedRequestId = committedResultSummary.requestId;
+    lastResultSummary = committedResultSummary;
+    lastError = undefined;
+  }
+
+  function abortStaleAdapterOperation(nextRecord: RuntimeRequestRecord): void {
+    const operation = activeAdapterOperation;
+
+    if (
+      !operation ||
+      operation.record === nextRecord ||
+      operation.record.revision >= nextRecord.revision
+    ) {
+      return;
+    }
+
+    abortAdapterOperation(operation, "superseded");
   }
 
   function createRequest(
@@ -642,7 +715,7 @@ export function createTerritoryRuntime<TTarget = unknown>(
     }
 
     if (options.updateState && isCurrentRequest(record)) {
-      setTerminalStatus(lastResultSummary ? "ready" : "idle");
+      restoreCommittedState();
     }
 
     const abortError = new TerritoryError(
@@ -772,6 +845,7 @@ export function createTerritoryRuntime<TTarget = unknown>(
     if (options.adapter && options.adapter.lifecycleState === "attached") {
       status = "updating-adapter";
       await updateAdapter(options.adapter, query.zones, record);
+      assertRequestFresh(record);
       emitEvent("adapter-updated", { request: record });
     }
 
@@ -793,6 +867,10 @@ export function createTerritoryRuntime<TTarget = unknown>(
     });
 
     if (isCurrentRequest(record)) {
+      committedViewport = cloneViewport(record.viewport);
+      committedLevel = selectedLevel;
+      committedDatasetId = datasetId;
+      committedResultSummary = summary;
       lastCompletedRequestId = record.requestId;
       lastCompletedSignature = record.signature;
       lastResultSummary = summary;
@@ -991,6 +1069,7 @@ export function createTerritoryRuntime<TTarget = unknown>(
       }),
       context
     );
+    assertRequestFresh(record);
 
     return { zones, cached: false };
   }
@@ -1010,17 +1089,81 @@ export function createTerritoryRuntime<TTarget = unknown>(
       );
     }
 
-    await adapter.setSource({
-      id: options.adapterSourceId ?? "territory-runtime",
-      type: "geojson",
-      data: zonesToFeatureCollection(zones),
-      metadata: {
+    const operation = beginAdapterOperation(record);
+
+    try {
+      assertRequestFresh(record);
+      await adapter.setSource(
+        {
+          id: resolveAdapterSourceId(adapter, options.adapterSourceId),
+          type: "geojson",
+          data: zonesToFeatureCollection(zones),
+          metadata: {
+            requestId: record.requestId,
+            revision: record.revision,
+            cacheKey: record.cacheKey ?? "",
+            level: record.selectedLevel ?? record.viewport.level ?? 0
+          }
+        },
+        operation.context
+      );
+      assertRequestFresh(record);
+    } finally {
+      operation.cleanup();
+    }
+  }
+
+  function beginAdapterOperation(record: RuntimeRequestRecord): RuntimeAdapterOperation {
+    abortStaleAdapterOperation(record);
+    const controller = new AbortController();
+    const abortFromRequest = (): void => {
+      abortAdapterOperation(operation, "aborted");
+    };
+    const operation: RuntimeAdapterOperation = {
+      record,
+      controller,
+      context: {
         requestId: record.requestId,
         revision: record.revision,
-        cacheKey: record.cacheKey ?? "",
-        level: record.selectedLevel ?? record.viewport.level ?? 0
+        signal: controller.signal
+      },
+      cleanup() {
+        record.controller.signal.removeEventListener("abort", abortFromRequest);
+
+        if (activeAdapterOperation === operation) {
+          activeAdapterOperation = undefined;
+        }
       }
-    });
+    };
+
+    if (record.controller.signal.aborted) {
+      abortAdapterOperation(operation, "aborted");
+    } else {
+      record.controller.signal.addEventListener("abort", abortFromRequest, { once: true });
+    }
+
+    activeAdapterOperation = operation;
+    return operation;
+  }
+
+  function abortAdapterOperation(operation: RuntimeAdapterOperation, reason: string): void {
+    if (operation.controller.signal.aborted) {
+      return;
+    }
+
+    operation.controller.abort(
+      new TerritoryError(
+        "REQUEST_ABORTED",
+        `Runtime adapter operation for '${operation.record.requestId}' was aborted.`,
+        {
+          details: {
+            requestId: operation.record.requestId,
+            revision: operation.record.revision,
+            reason
+          }
+        }
+      )
+    );
   }
 
   function createRequestContext(record: RuntimeRequestRecord): TerritoryRuntimeRequestContext {
@@ -1178,7 +1321,7 @@ export function createTerritoryRuntime<TTarget = unknown>(
       emitEvent("state-change");
       emitEvent("disposed");
       listeners.clear();
-      void cache?.dispose?.();
+      disposeOwnedCache();
 
       return {
         status: "disposed",
@@ -1187,6 +1330,27 @@ export function createTerritoryRuntime<TTarget = unknown>(
       };
     }
   };
+
+  function disposeOwnedCache(): void {
+    if (!ownsCache || !cache?.dispose) {
+      return;
+    }
+
+    try {
+      const result = cache.dispose();
+
+      if (isPromiseLike(result)) {
+        void result.catch(reportCacheDisposeFailure);
+      }
+    } catch (error) {
+      reportCacheDisposeFailure(error);
+    }
+  }
+
+  function reportCacheDisposeFailure(error: unknown): void {
+    const runtimeError = toRuntimeError(error, "Runtime cache disposal failed.");
+    logEvent(createEvent("cache-dispose-failed", { error: runtimeError }), logger);
+  }
 
   return runtime;
 }
@@ -1309,6 +1473,30 @@ function queryViewportZones(
     ...viewport.bounds,
     level: selectedLevel
   });
+}
+
+function resolveAdapterSourceId(
+  adapter: TerritoryRendererAdapter,
+  configuredSourceId: string | undefined
+): string {
+  if (configuredSourceId) {
+    return configuredSourceId;
+  }
+
+  if (adapter.managedSourceId) {
+    return adapter.managedSourceId;
+  }
+
+  throw new TerritoryError(
+    "RUNTIME_CONFIGURATION_INVALID",
+    "Runtime adapter updates require options.adapterSourceId or adapter.managedSourceId.",
+    {
+      details: {
+        hasConfiguredSourceId: false,
+        hasManagedSourceId: false
+      }
+    }
+  );
 }
 
 function levelToAdminLevel(level: number): TerritoryAdminLevel {
@@ -1469,7 +1657,11 @@ function logEvent(event: TerritoryRuntimeEvent, logger: TerritoryRuntimeLogger |
     return;
   }
 
-  if (event.type === "request-failed" || event.type === "listener-error") {
+  if (
+    event.type === "request-failed" ||
+    event.type === "listener-error" ||
+    event.type === "cache-dispose-failed"
+  ) {
     logger.error?.(event);
     return;
   }
@@ -1484,6 +1676,10 @@ function logEvent(event: TerritoryRuntimeEvent, logger: TerritoryRuntimeLogger |
 
 function readCacheSummary(cache: TerritoryRuntimeCache | undefined): TerritoryRuntimeCacheSummary {
   return cache?.getSummary?.() ?? EMPTY_CACHE_SUMMARY;
+}
+
+function isPromiseLike(input: unknown): input is PromiseLike<unknown> {
+  return isRecord(input) && typeof input.then === "function";
 }
 
 function freezeState(state: TerritoryRuntimeState): TerritoryRuntimeState {
