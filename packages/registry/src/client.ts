@@ -148,6 +148,7 @@ export function createTerritoryRegistryClient(
     return resolveTerritoryArtifactInternal({
       country: request.country,
       requestedLevel: request.level,
+      ...(request.parentId ? { parentId: request.parentId } : {}),
       purpose: request.purpose ?? "query",
       ...(request.detail ? { detail: request.detail } : {}),
       ...(request.formatPreference ? { formatPreference: request.formatPreference } : {}),
@@ -163,6 +164,7 @@ export function createTerritoryRegistryClient(
     return resolveTerritoryArtifactInternal({
       country: request.country,
       requestedLevel: request.requestedLevel,
+      ...(request.parentId ? { parentId: request.parentId } : {}),
       purpose: request.purpose ?? "query",
       ...(request.detail ? { detail: request.detail } : {}),
       ...(request.formatPreference ? { formatPreference: request.formatPreference } : {}),
@@ -175,6 +177,7 @@ export function createTerritoryRegistryClient(
   async function resolveTerritoryArtifactInternal(request: {
     country: string;
     requestedLevel: TerritoryAdminLevel;
+    parentId?: string;
     purpose: TerritoryRegistryArtifactPurpose;
     detail?: string;
     formatPreference?: readonly string[];
@@ -217,11 +220,16 @@ export function createTerritoryRegistryClient(
       );
     }
 
+    const areaRestrictedFallback = hasAreaRestrictedArtifact(datasets, request);
+
     return createResolvedTerritoryArtifact({
       registry,
       match: fallback,
       requestedLevel: request.requestedLevel,
-      reason: "requested-level-unavailable"
+      reason: areaRestrictedFallback
+        ? "requested-level-unavailable-for-area"
+        : "requested-level-unavailable",
+      ...(areaRestrictedFallback ? { coverageStatus: "partial" } : {})
     });
   }
 
@@ -230,6 +238,7 @@ export function createTerritoryRegistryClient(
     match: TerritoryArtifactCandidate;
     requestedLevel: TerritoryAdminLevel;
     reason: TerritoryRegistryResolvedTerritoryArtifact["reason"];
+    coverageStatus?: TerritoryCoverageStatus;
   }): Promise<TerritoryRegistryResolvedTerritoryArtifact> {
     const exactMatch = input.reason === "exact-match";
 
@@ -240,7 +249,7 @@ export function createTerritoryRegistryClient(
       reason: input.reason,
       coverageStatus: exactMatch
         ? readCoverageStatus(input.match.artifact, input.match.dataset)
-        : "source-unavailable",
+        : (input.coverageStatus ?? "source-unavailable"),
       dataset: input.match.dataset,
       artifact: input.match.artifact,
       url: joinUrl(input.registry.baseUrl, input.match.artifact.url),
@@ -593,6 +602,7 @@ function selectBestTerritoryArtifactCandidate(
   datasets: readonly TerritoryRegistryDataset[],
   request: {
     level: TerritoryAdminLevel;
+    parentId?: string;
     purpose: TerritoryRegistryArtifactPurpose;
     detail?: string;
     formatPreference?: readonly string[];
@@ -611,6 +621,10 @@ function selectBestTerritoryArtifactCandidate(
       }
 
       if (request.formatPreference && !request.formatPreference.includes(artifact.format)) {
+        return [];
+      }
+
+      if (!artifactCoversParent(artifact, request.parentId)) {
         return [];
       }
 
@@ -648,6 +662,39 @@ function selectBestTerritoryArtifactCandidate(
       left.artifact.id.localeCompare(right.artifact.id)
     );
   })[0];
+}
+
+function hasAreaRestrictedArtifact(
+  datasets: readonly TerritoryRegistryDataset[],
+  request: {
+    requestedLevel: TerritoryAdminLevel;
+    parentId?: string;
+    purpose: TerritoryRegistryArtifactPurpose;
+  }
+): boolean {
+  if (!request.parentId) {
+    return false;
+  }
+
+  return datasets.some((dataset) =>
+    dataset.artifacts.some(
+      (artifact) =>
+        artifact.purpose === request.purpose &&
+        normalizeLevels(artifact.levels ?? dataset.levels).includes(request.requestedLevel) &&
+        Array.isArray(artifact.coveredParentIds)
+    )
+  );
+}
+
+function artifactCoversParent(
+  artifact: TerritoryRegistryArtifact,
+  parentId: string | undefined
+): boolean {
+  if (!parentId || !Array.isArray(artifact.coveredParentIds)) {
+    return true;
+  }
+
+  return artifact.coveredParentIds.includes(parentId);
 }
 
 function readCoverageStatus(

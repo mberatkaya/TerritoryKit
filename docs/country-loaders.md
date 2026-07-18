@@ -27,3 +27,7 @@ const neighbors = handle.adjacencyIndexes.ADM2?.getNeighbors("tr:adm2:tr-01-a");
 `verifyChecksums` reads `checksums.json` before loading artifacts. `loadAdjacency` validates each
 requested adjacency artifact against the corresponding level dataset before creating an adjacency
 index.
+
+`@territory-kit/data-tr` advertises `ADM3` support for the partial Gaziantep neighbourhood pilot,
+but its default levels remain ADM0-ADM2. Use `turkeyAdm3NeighbourhoodCoverage` or
+`isTurkeyAdm3ParentCovered(parentId)` before resolving ADM3 artifacts for Turkey.

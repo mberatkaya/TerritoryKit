@@ -114,17 +114,40 @@ def collect_area_components(geometry):
     return [], 1
 
 
+MIN_POLYGON_AREA = 1e-8
+
+
 def clean_polygon_components(polygons):
-    return [orient(polygon, sign=1.0) for polygon in polygons if not polygon.is_empty and polygon.area > 0]
+    cleaned = []
+    discarded = 0
+    for polygon in polygons:
+        if polygon.is_empty or polygon.area <= MIN_POLYGON_AREA:
+            discarded += 1
+            continue
+        shell = polygon.exterior
+        holes = []
+        for hole in polygon.interiors:
+            if Polygon(hole).area <= MIN_POLYGON_AREA:
+                discarded += 1
+                continue
+            holes.append(hole)
+        cleaned_polygon = Polygon(shell, holes)
+        if cleaned_polygon.is_empty or cleaned_polygon.area <= MIN_POLYGON_AREA:
+            discarded += 1
+            continue
+        cleaned.append(orient(cleaned_polygon, sign=1.0))
+    return cleaned, discarded
 
 
 def area_geometry_from_components(polygons):
-    polygons = clean_polygon_components(polygons)
+    polygons, discarded = clean_polygon_components(polygons)
     if not polygons:
-        return None, 0
+        return None, discarded
     geometry = polygons[0] if len(polygons) == 1 else unary_union(polygons)
-    polygons, discarded = collect_area_components(geometry)
-    polygons = clean_polygon_components(polygons)
+    polygons, extra_discarded = collect_area_components(geometry)
+    discarded += extra_discarded
+    polygons, extra_discarded = clean_polygon_components(polygons)
+    discarded += extra_discarded
     if not polygons:
         return None, discarded
     if len(polygons) == 1:
@@ -139,7 +162,10 @@ def repair_one(feature, precision):
         area_before = float(original.area)
         repaired = make_valid(original)
         if precision > 0:
-            repaired = set_precision(repaired, 10 ** (-precision))
+            grid_size = 10 ** (-precision)
+            repaired = set_precision(repaired, grid_size)
+            repaired = repaired.simplify(grid_size, preserve_topology=False)
+            repaired = set_precision(make_valid(repaired), grid_size)
         polygons, discarded = collect_area_components(repaired)
         area_geometry, extra_discarded = area_geometry_from_components(polygons)
         discarded += extra_discarded
@@ -178,6 +204,7 @@ def repair_one(feature, precision):
             or not original.is_valid
             or (abs(area_after - area_before) / max(abs(area_before), 1)) > 10 ** (-max(precision, 1))
             or original.geom_type != area_geometry.geom_type
+            or not original.equals_exact(area_geometry, 0.0)
         )
         point = area_geometry.representative_point()
         result = {

@@ -50,6 +50,31 @@ describe("validateGeometryDataset", () => {
     );
     expect(hashTerritoryGeometry(dataset.zones[1]!.geometry)).toBe(hashBeforeValidation);
   });
+
+  it("does not flag the closing segment as intersecting the first segment after bbox sorting", () => {
+    const dataset = validDataset();
+    dataset.zones[1] = {
+      ...dataset.zones[1]!,
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [
+            [4, 0],
+            [4, 4],
+            [0, 4],
+            [0, 0],
+            [4, 0]
+          ]
+        ]
+      }
+    };
+
+    const result = validateGeometryDataset(dataset, {
+      checks: { coordinates: true, rings: true, selfIntersections: true }
+    });
+
+    expect(result.ok).toBe(true);
+  });
 });
 
 describe("repairGeometryDataset", () => {

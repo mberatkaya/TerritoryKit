@@ -11,3 +11,11 @@ const handle = await loadTurkeyDataset({
   loadAdjacency: true
 });
 ```
+
+`supportedLevels` includes `ADM3` because TerritoryKit now publishes a partial Gaziantep
+neighbourhood pilot. `defaultLevels` remains `["ADM0", "ADM1", "ADM2"]` so callers do not
+accidentally assume nationwide neighbourhood coverage.
+
+Use `turkeyAdm3NeighbourhoodCoverage` or `isTurkeyAdm3ParentCovered(parentId)` before requesting
+ADM3 data for a district. Covered parent IDs are the nine Gaziantep ADM2 districts in
+`datasets/generated/countries/TR/levels/ADM3/coverage.json`.

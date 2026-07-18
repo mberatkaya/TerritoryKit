@@ -51,6 +51,21 @@ const PROVIDERS = [
     notes: ["Used by pilot country source locks and country build pipeline."]
   },
   {
+    id: "gaziantep-open-data",
+    name: "Gaziantep Büyükşehir Belediyesi Open Data",
+    status: "implemented",
+    sourceUrl: "https://ulasav.csb.gov.tr/dataset/27-mahalle-sinir-alanlari",
+    license: "CC BY 4.0",
+    attribution: "Gaziantep Büyükşehir Belediyesi, Mahalle Sınır Alanları",
+    redistributionAllowed: true,
+    commercialUseAllowed: true,
+    modificationAllowed: true,
+    supportedLevels: ["ADM3"],
+    notes: [
+      "Official partial Turkey ADM3 neighbourhood pilot covering Gaziantep province districts."
+    ]
+  },
+  {
     id: "geojson",
     name: "Generic GeoJSON",
     status: "implemented",
@@ -141,7 +156,7 @@ function createCountryRegistryEntry(country) {
     defaultProvider: "geoboundaries",
     reviewRequired,
     levels: ADMIN_LEVELS.map((level) =>
-      createCountryRegistryLevelEntry({ level, pilot, localTypeNames })
+      createCountryRegistryLevelEntry({ iso2: country.iso2, level, pilot, localTypeNames })
     ),
     notes: reviewRequired
       ? ["Fallback ISO config. Sub-country semantic mappings require review before publishing."]
@@ -151,10 +166,16 @@ function createCountryRegistryEntry(country) {
   };
 }
 
-function createCountryRegistryLevelEntry({ level, pilot, localTypeNames }) {
+function createCountryRegistryLevelEntry({ iso2, level, pilot, localTypeNames }) {
   const depth = Number(level.slice(3));
   const semanticType = level === "ADM0" ? "country" : (pilot?.[level] ?? "unknown");
   const reviewed = level === "ADM0" || Boolean(pilot?.[level]);
+  const provider =
+    iso2 === "TR" && level === "ADM3"
+      ? "gaziantep-open-data"
+      : level === "ADM0"
+        ? "natural-earth"
+        : "geoboundaries";
 
   return {
     sourceLevel: level,
@@ -169,7 +190,7 @@ function createCountryRegistryLevelEntry({ level, pilot, localTypeNames }) {
           ? `${level} administrative unit`
           : `Unreviewed ${level}`,
     ...(depth > 0 ? { parentSourceLevel: `ADM${depth - 1}` } : {}),
-    provider: level === "ADM0" ? "natural-earth" : "geoboundaries",
+    provider,
     required: level === "ADM0" || Boolean(pilot && (level === "ADM1" || level === "ADM2")),
     reviewRequired: !reviewed
   };
@@ -300,16 +321,31 @@ async function inferCountryLevelStatus(iso2, level, pilot) {
   }
 
   const root = resolve(ROOT, "datasets/generated/countries", iso2);
+  const levelRoot = join(root, "levels", level);
   const manifest = await readJsonOptional(join(root, "manifest.json"));
-  const [dataset, index, validation, checksums, attributionJson, attributionText] =
-    await Promise.all([
-      fileExists(join(root, "levels", level, "dataset.json")),
-      fileExists(join(root, "levels", level, "index.json")),
-      fileExists(join(root, "levels", level, "validation-report.json")),
-      fileExists(join(root, "checksums.json")),
-      fileExists(join(root, "attribution.json")),
-      fileExists(join(root, "attribution.txt"))
-    ]);
+  const levelManifest = await readJsonOptional(join(levelRoot, "manifest.json"));
+  const levelCoverage = await readJsonOptional(join(levelRoot, "coverage.json"));
+  const [
+    dataset,
+    index,
+    validation,
+    checksums,
+    levelChecksums,
+    attributionJson,
+    attributionText,
+    levelAttributionJson,
+    levelAttributionText
+  ] = await Promise.all([
+    fileExists(join(levelRoot, "dataset.json")),
+    fileExists(join(levelRoot, "index.json")),
+    fileExists(join(levelRoot, "validation-report.json")),
+    fileExists(join(root, "checksums.json")),
+    fileExists(join(levelRoot, "checksums.json")),
+    fileExists(join(root, "attribution.json")),
+    fileExists(join(root, "attribution.txt")),
+    fileExists(join(levelRoot, "attribution.json")),
+    fileExists(join(levelRoot, "attribution.txt"))
+  ]);
   const built =
     manifest?.supportedLevels?.includes?.(level) &&
     dataset &&
@@ -327,6 +363,29 @@ async function inferCountryLevelStatus(iso2, level, pilot) {
       validationStatus: "passed",
       artifactPath: `datasets/generated/countries/${iso2}/levels/${level}`,
       featureCount: manifest.featureCountByLevel?.[level]
+    };
+  }
+
+  if (
+    iso2 === "TR" &&
+    level === "ADM3" &&
+    levelManifest?.coverageStatus === "partial" &&
+    dataset &&
+    index &&
+    validation &&
+    levelChecksums &&
+    (levelAttributionJson || levelAttributionText)
+  ) {
+    return {
+      status: "partial",
+      provider: "gaziantep-open-data",
+      license: levelManifest.license ?? "CC BY 4.0",
+      sourceStatus: "available",
+      validationStatus: "passed",
+      artifactPath: `datasets/generated/countries/${iso2}/levels/${level}`,
+      featureCount: levelManifest.adm3FeatureCount ?? levelCoverage?.featureCount,
+      coveredParents: levelManifest.coveredParents ?? levelCoverage?.coveredParents,
+      sourceProvider: levelManifest.sourceProvider ?? levelCoverage?.sourceProvider
     };
   }
 
@@ -476,6 +535,7 @@ function renderCoverageMarkdown(coverage) {
   const rows = Object.entries(coverage.summary.levels)
     .map(([level, statuses]) => {
       const built = statuses.built ?? 0;
+      const partial = statuses.partial ?? 0;
       const sourceAvailable = statuses["source-available"] ?? 0;
       const sourceUnavailable = statuses["source-unavailable"] ?? 0;
       const validationFailed = statuses["validation-failed"] ?? 0;
@@ -483,7 +543,7 @@ function renderCoverageMarkdown(coverage) {
       const notReviewed = statuses["not-reviewed"] ?? 0;
       const licenseRestricted = statuses["license-restricted"] ?? 0;
 
-      return `| ${level.padEnd(13)} | ${String(built).padStart(5)} | ${String(sourceAvailable).padStart(16)} | ${String(sourceUnavailable).padStart(18)} | ${String(validationFailed).padStart(17)} | ${String(performanceDeferred).padStart(20)} | ${String(notReviewed).padStart(12)} | ${String(licenseRestricted).padStart(18)} |`;
+      return `| ${level.padEnd(13)} | ${String(built).padStart(5)} | ${String(partial).padStart(7)} | ${String(sourceAvailable).padStart(16)} | ${String(sourceUnavailable).padStart(18)} | ${String(validationFailed).padStart(17)} | ${String(performanceDeferred).padStart(20)} | ${String(notReviewed).padStart(12)} | ${String(licenseRestricted).padStart(18)} |`;
     })
     .join("\n");
 
@@ -498,11 +558,11 @@ Administrative availability is represented with ADM0 through ADM5 only. Municipa
 | -------------------------------------------- | ----: |
 ${metricRows}
 
-| Level         | Built | Source available | Source unavailable | Validation failed | Performance deferred | Not reviewed | License restricted |
-| ------------- | ----: | ---------------: | -----------------: | ----------------: | -------------------: | -----------: | -----------------: |
+| Level         | Built | Partial | Source available | Source unavailable | Validation failed | Performance deferred | Not reviewed | License restricted |
+| ------------- | ----: | ------: | ---------------: | -----------------: | ----------------: | -------------------: | -----------: | -----------------: |
 ${rows}
 
-Pilot countries with reviewed ADM1/ADM2 mappings: DE, ID, JP, TR, US. Turkey also has reviewed ADM3 semantics for neighbourhood / Mahalle, without claiming nationwide ADM3 source coverage.
+Pilot countries with reviewed ADM1/ADM2 mappings: DE, ID, JP, TR, US. Turkey also has reviewed ADM3 semantics for neighbourhood / Mahalle and a partial Gaziantep ADM3 artifact, without claiming nationwide ADM3 source coverage.
 
 Sources:
 

@@ -1424,7 +1424,11 @@ function ringSegments(ring: LngLat[]): Segment[] {
 }
 
 function areAdjacentRingSegments(left: number, right: number, lastSegmentIndex: number): boolean {
-  return Math.abs(left - right) <= 1 || (left === 0 && right === lastSegmentIndex);
+  return (
+    Math.abs(left - right) <= 1 ||
+    (left === 0 && right === lastSegmentIndex) ||
+    (right === 0 && left === lastSegmentIndex)
+  );
 }
 
 function bboxCandidatePairs<T extends IndexedBBox>(

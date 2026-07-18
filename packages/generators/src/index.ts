@@ -130,6 +130,26 @@ export { inspectTerritorySourceCapabilities } from "./sources/capabilities.js";
 export { validateOfficialOpenDataSourceManifest } from "./sources/open-data-manifest.js";
 export { fetchHttpSourceArtifact } from "./sources/transports/http.js";
 export { resolveFileSourceArtifact, sha256File } from "./sources/transports/file.js";
+export {
+  TURKEY_GAZIANTEP_ADM3_ATTRIBUTION,
+  TURKEY_GAZIANTEP_ADM3_BUILD_DATE,
+  TURKEY_GAZIANTEP_ADM3_DATASET_ID,
+  TURKEY_GAZIANTEP_ADM3_DATASET_VERSION,
+  TURKEY_GAZIANTEP_ADM3_DOWNLOAD_URL,
+  TURKEY_GAZIANTEP_ADM3_LICENSE_URL,
+  TURKEY_GAZIANTEP_ADM3_PARENT_MAPPINGS,
+  TURKEY_GAZIANTEP_ADM3_RETRIEVED_AT,
+  TURKEY_GAZIANTEP_ADM3_SOURCE_DATE,
+  TURKEY_GAZIANTEP_ADM3_SOURCE_SHA256,
+  TURKEY_GAZIANTEP_ADM3_SOURCE_SIZE_BYTES,
+  TURKEY_GAZIANTEP_ADM3_SOURCE_URL,
+  buildTurkeyGaziantepAdm3Pilot,
+  createTurkeyGaziantepAdm3SourceManifest,
+  createTurkeyGaziantepAdm3TerritoryId,
+  parseTurkeyGaziantepAdm3Kml,
+  stableTurkeyGaziantepAdm3Json,
+  validateTurkeyGaziantepAdm3SourceManifest
+} from "./turkey-adm3-pilot.js";
 export type {
   DatasetAttribution,
   TerritorySourceAdapter,
@@ -161,6 +181,12 @@ export type {
   TerritoryOfficialOpenDataSourceManifest,
   TerritoryOfficialOpenDataSourceManifestValidationResult
 } from "./sources/open-data-manifest.js";
+export type {
+  TurkeyGaziantepAdm3BuildOptions,
+  TurkeyGaziantepAdm3BuildResult,
+  TurkeyGaziantepAdm3ParentMapping,
+  TurkeyGaziantepAdm3SourceFeature
+} from "./turkey-adm3-pilot.js";
 export type {
   GeometryQualityPathRepairOptions,
   TerritoryDatasetPathInput

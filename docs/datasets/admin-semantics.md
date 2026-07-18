@@ -16,5 +16,5 @@ Turkey currently has reviewed semantic mappings for:
 | ADM2  | district      | İlçe       |
 | ADM3  | neighbourhood | Mahalle    |
 
-This is semantic mapping only. It is not a claim of complete official Turkey ADM3 geometry
-coverage.
+Turkey has a partial official Gaziantep ADM3 artifact, but this is not a claim of complete official
+Turkey ADM3 geometry coverage.

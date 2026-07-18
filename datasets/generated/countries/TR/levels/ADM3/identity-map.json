@@ -1,0 +1,4722 @@
+{
+  "generatedAt": "2026-07-18T00:00:00.000Z",
+  "ids": [
+    {
+      "name": "AKBAYIR",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180167",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180167"
+    },
+    {
+      "name": "AŞAĞIHÖÇÜKLÜ",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180169",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180169"
+    },
+    {
+      "name": "AŞAĞIKAYABAŞI",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180171",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180171"
+    },
+    {
+      "name": "AŞAĞIKEKLİKTEPE",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180173",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180173"
+    },
+    {
+      "name": "BAĞTEPE",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180175",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180175"
+    },
+    {
+      "name": "BAKIRCA",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180177",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180177"
+    },
+    {
+      "name": "BALLIK",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180179",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180179"
+    },
+    {
+      "name": "BEĞENDİK",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180181",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180181"
+    },
+    {
+      "name": "BÜLBÜL",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180183",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180183"
+    },
+    {
+      "name": "BÜYÜKKARAKUYU",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180185",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180185"
+    },
+    {
+      "name": "ÇİLTOPRAK",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180187",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180187"
+    },
+    {
+      "name": "ÇİMENLİ",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180189",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180189"
+    },
+    {
+      "name": "DEĞİRMİTAŞ",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180191",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180191"
+    },
+    {
+      "name": "DÜZCE",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180193",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180193"
+    },
+    {
+      "name": "GÖÇMEZ",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180195",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180195"
+    },
+    {
+      "name": "HACIMALLI",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180197",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180197"
+    },
+    {
+      "name": "HAVUZ",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180199",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180199"
+    },
+    {
+      "name": "ILICAK",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180201",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180201"
+    },
+    {
+      "name": "KARABEY",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180205",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180205"
+    },
+    {
+      "name": "KARAHÜSEYİNLİ",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180207",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180207"
+    },
+    {
+      "name": "KASABA",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180209",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180209"
+    },
+    {
+      "name": "KEŞROBASI",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180211",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180211"
+    },
+    {
+      "name": "GÜLPINAR",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180213",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180213"
+    },
+    {
+      "name": "KUZUYATAĞI",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180215",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180215"
+    },
+    {
+      "name": "KÜÇÜKKARAKUYU",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180217",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180217"
+    },
+    {
+      "name": "KARAHAN",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180219",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180219"
+    },
+    {
+      "name": "ÖRENLİ",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180221",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180221"
+    },
+    {
+      "name": "SARAYMAĞARA",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180223",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180223"
+    },
+    {
+      "name": "SARIBUĞDAY",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180225",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180225"
+    },
+    {
+      "name": "SARILAR",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180227",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180227"
+    },
+    {
+      "name": "SÜLEYMANOBASI",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180229",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180229"
+    },
+    {
+      "name": "ŞENLİKÇE",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180231",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180231"
+    },
+    {
+      "name": "TOKAÇLI",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180233",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180233"
+    },
+    {
+      "name": "ÜÇGÖL",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180235",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180235"
+    },
+    {
+      "name": "YARIMCA",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180237",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180237"
+    },
+    {
+      "name": "YÖRELİ",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180239",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180239"
+    },
+    {
+      "name": "YUKARIKEKLİKTEPE",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180241",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180241"
+    },
+    {
+      "name": "YUKARIYENİKÖY",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180243",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180243"
+    },
+    {
+      "name": "YENİYURT",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "180245",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:180245"
+    },
+    {
+      "name": "CİNGİFE",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "30696",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:30696"
+    },
+    {
+      "name": "CUMHURİYET",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "30697",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:30697"
+    },
+    {
+      "name": "FEVZİ ÇAKMAK",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "30698",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:30698"
+    },
+    {
+      "name": "HÜRRİYET",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "30699",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:30699"
+    },
+    {
+      "name": "SULTAN SELİM",
+      "parentId": "tr:adm2:54988432b19771634656837",
+      "sourceId": "30700",
+      "territoryId": "tr:adm3:27:54988432b19771634656837:30700"
+    },
+    {
+      "name": "ŞAHİNTEPE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "100020",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:100020"
+    },
+    {
+      "name": "MALAZGİRT",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "104836",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:104836"
+    },
+    {
+      "name": "GAZİTEPE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "138057",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:138057"
+    },
+    {
+      "name": "AKKENT",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "139579",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:139579"
+    },
+    {
+      "name": "BÜLBÜLZADE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "140420",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:140420"
+    },
+    {
+      "name": "MAVİKENT",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "140422",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:140422"
+    },
+    {
+      "name": "CEVİZLİ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179233",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179233"
+    },
+    {
+      "name": "AKYAZI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179235",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179235"
+    },
+    {
+      "name": "ALMALI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179237",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179237"
+    },
+    {
+      "name": "BOZCA",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179239",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179239"
+    },
+    {
+      "name": "ÇAPALI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179241",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179241"
+    },
+    {
+      "name": "EKİNLİ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179243",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179243"
+    },
+    {
+      "name": "GERCİĞİN",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179245",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179245"
+    },
+    {
+      "name": "HACIKÖPRÜ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179247",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179247"
+    },
+    {
+      "name": "KAZIKLI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179249",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179249"
+    },
+    {
+      "name": "KİLLİK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179251",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179251"
+    },
+    {
+      "name": "KAPÇAĞIZ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179253",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179253"
+    },
+    {
+      "name": "KUMRUHAMURKESEN",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179255",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179255"
+    },
+    {
+      "name": "KÜLECİK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179257",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179257"
+    },
+    {
+      "name": "PANCARLI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179259",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179259"
+    },
+    {
+      "name": "TÖRELİ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179261",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179261"
+    },
+    {
+      "name": "TÜRKÖZÜ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179263",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179263"
+    },
+    {
+      "name": "YAMAÇTEPE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179265",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179265"
+    },
+    {
+      "name": "YENİKÖY",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179267",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179267"
+    },
+    {
+      "name": "YIĞMATEPE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179269",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179269"
+    },
+    {
+      "name": "YOĞUNTAŞ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179271",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179271"
+    },
+    {
+      "name": "ZEYTİNLİ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179273",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179273"
+    },
+    {
+      "name": "AKBAYIR",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179275",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179275"
+    },
+    {
+      "name": "BEKİŞLİ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179277",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179277"
+    },
+    {
+      "name": "BELENKÖY",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179279",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179279"
+    },
+    {
+      "name": "BEŞKUYU",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179281",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179281"
+    },
+    {
+      "name": "ÇEVRELİ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179283",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179283"
+    },
+    {
+      "name": "ÇİMENLİ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179285",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179285"
+    },
+    {
+      "name": "ÇÖREKLİK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179287",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179287"
+    },
+    {
+      "name": "ÇUBUKDİKEN",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179289",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179289"
+    },
+    {
+      "name": "DOĞANCA",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179291",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179291"
+    },
+    {
+      "name": "DOKUR",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179293",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179293"
+    },
+    {
+      "name": "GÜLLÜCE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179295",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179295"
+    },
+    {
+      "name": "HACIARSLAN",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179297",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179297"
+    },
+    {
+      "name": "HACIKÖY",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179299",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179299"
+    },
+    {
+      "name": "KAVŞAK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179301",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179301"
+    },
+    {
+      "name": "KAYAKENT",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179303",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179303"
+    },
+    {
+      "name": "KUŞÇU",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179305",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179305"
+    },
+    {
+      "name": "KÜRÜM",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179307",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179307"
+    },
+    {
+      "name": "MORCALI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179309",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179309"
+    },
+    {
+      "name": "NARLICA",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179311",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179311"
+    },
+    {
+      "name": "ORTAKLAR",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179313",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179313"
+    },
+    {
+      "name": "OZANLI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179315",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179315"
+    },
+    {
+      "name": "SARIKAYA",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179317",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179317"
+    },
+    {
+      "name": "SIRASÖĞÜT",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179319",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179319"
+    },
+    {
+      "name": "ŞAHİNBEY MÜLK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179321",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179321"
+    },
+    {
+      "name": "TİYEKLİ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179323",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179323"
+    },
+    {
+      "name": "UFACIK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179325",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179325"
+    },
+    {
+      "name": "UĞURTEPE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179327",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179327"
+    },
+    {
+      "name": "YAYCI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179329",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179329"
+    },
+    {
+      "name": "YAYLACIK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179331",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179331"
+    },
+    {
+      "name": "YEŞİLKÖY",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "179333",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:179333"
+    },
+    {
+      "name": "BEŞTEPE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "249458",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:249458"
+    },
+    {
+      "name": "AKYOL",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30338",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30338"
+    },
+    {
+      "name": "ALAYBEY",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30339",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30339"
+    },
+    {
+      "name": "ALİBABA",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30340",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30340"
+    },
+    {
+      "name": "ALLEBEN",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30341",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30341"
+    },
+    {
+      "name": "AYDINBABA",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30342",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30342"
+    },
+    {
+      "name": "BAHÇELİEVLER",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30343",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30343"
+    },
+    {
+      "name": "BARAK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30344",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30344"
+    },
+    {
+      "name": "BARIŞ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30345",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30345"
+    },
+    {
+      "name": "BEKİRBEY",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30346",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30346"
+    },
+    {
+      "name": "BEY",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30347",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30347"
+    },
+    {
+      "name": "BEYAZLAR",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30348",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30348"
+    },
+    {
+      "name": "BEYDİLLİ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30349",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30349"
+    },
+    {
+      "name": "BİNEVLER",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30350",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30350"
+    },
+    {
+      "name": "BOSTANCI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30351",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30351"
+    },
+    {
+      "name": "BOYACI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30352",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30352"
+    },
+    {
+      "name": "BOZOKLAR",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30353",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30353"
+    },
+    {
+      "name": "CABİ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30354",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30354"
+    },
+    {
+      "name": "CEMAL GÜRSEL",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30355",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30355"
+    },
+    {
+      "name": "CENGİZ TOPEL",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30356",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30356"
+    },
+    {
+      "name": "CUMHURİYET",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30357",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30357"
+    },
+    {
+      "name": "ÇAMLICA",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30358",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30358"
+    },
+    {
+      "name": "DENİZ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30362",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30362"
+    },
+    {
+      "name": "DUMLUPINAR",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30363",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30363"
+    },
+    {
+      "name": "DÜZTEPE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30365",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30365"
+    },
+    {
+      "name": "ETİLER",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30366",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30366"
+    },
+    {
+      "name": "EYÜPOĞLU",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30367",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30367"
+    },
+    {
+      "name": "FIRAT",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30368",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30368"
+    },
+    {
+      "name": "FİDANLIK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30369",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30369"
+    },
+    {
+      "name": "GÜMÜŞTEKİN",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30371",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30371"
+    },
+    {
+      "name": "GÜNEŞ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30373",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30373"
+    },
+    {
+      "name": "GÜNEYKENT",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30374",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30374"
+    },
+    {
+      "name": "GÜZELVADİ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30375",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30375"
+    },
+    {
+      "name": "HOŞGÖR",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30376",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30376"
+    },
+    {
+      "name": "İNÖNÜ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30377",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30377"
+    },
+    {
+      "name": "İSTİKLAL",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30379",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30379"
+    },
+    {
+      "name": "KAHVELİPINAR",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30380",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30380"
+    },
+    {
+      "name": "KANALICI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30381",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30381"
+    },
+    {
+      "name": "KARAGÖZ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30382",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30382"
+    },
+    {
+      "name": "KARATARLA",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30383",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30383"
+    },
+    {
+      "name": "KARAYILAN",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30384",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30384"
+    },
+    {
+      "name": "KAVAKLIK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30385",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30385"
+    },
+    {
+      "name": "KEPENEK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30386",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30386"
+    },
+    {
+      "name": "KIBRIS",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30387",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30387"
+    },
+    {
+      "name": "KILINÇOĞLU",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30388",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30388"
+    },
+    {
+      "name": "TEKSTİLKENT",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30389",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30389"
+    },
+    {
+      "name": "KOLEJTEPE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30390",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30390"
+    },
+    {
+      "name": "KONAK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30391",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30391"
+    },
+    {
+      "name": "KOZANLI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30392",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30392"
+    },
+    {
+      "name": "KOZLUCA",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30393",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30393"
+    },
+    {
+      "name": "KURBANBABA",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30394",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30394"
+    },
+    {
+      "name": "MİMAR SİNAN",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30396",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30396"
+    },
+    {
+      "name": "NARLITEPE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30397",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30397"
+    },
+    {
+      "name": "NURİPAZARBAŞI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30398",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30398"
+    },
+    {
+      "name": "OCAKLAR",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30399",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30399"
+    },
+    {
+      "name": "ONUR",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30401",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30401"
+    },
+    {
+      "name": "ÖĞRETMENEVLERİ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30402",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30402"
+    },
+    {
+      "name": "PERİLİKAYA",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30404",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30404"
+    },
+    {
+      "name": "SAÇAKLI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30405",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30405"
+    },
+    {
+      "name": "SAKARYA",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30406",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30406"
+    },
+    {
+      "name": "SAVCILI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30407",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30407"
+    },
+    {
+      "name": "SEFERPAŞA",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30408",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30408"
+    },
+    {
+      "name": "SERİNEVLER",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30409",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30409"
+    },
+    {
+      "name": "SULTAN SELİM",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30410",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30410"
+    },
+    {
+      "name": "SUYABATMAZ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30411",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30411"
+    },
+    {
+      "name": "ŞAHVELİ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30414",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30414"
+    },
+    {
+      "name": "ŞEKEROĞLU",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30415",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30415"
+    },
+    {
+      "name": "ŞENYURT",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30416",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30416"
+    },
+    {
+      "name": "TIŞLAKİ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30418",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30418"
+    },
+    {
+      "name": "TURAN EMEKSİZ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30419",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30419"
+    },
+    {
+      "name": "TÜRKMENLER",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30420",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30420"
+    },
+    {
+      "name": "TÜRKTEPE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30421",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30421"
+    },
+    {
+      "name": "ULAŞ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30422",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30422"
+    },
+    {
+      "name": "ÜÇOKLAR",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30424",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30424"
+    },
+    {
+      "name": "ÜNALDI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30425",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30425"
+    },
+    {
+      "name": "VATAN",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30426",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30426"
+    },
+    {
+      "name": "YAVUZLAR",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30427",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30427"
+    },
+    {
+      "name": "YAZICIK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30428",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30428"
+    },
+    {
+      "name": "YEŞİLEVLER",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30429",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30429"
+    },
+    {
+      "name": "YUKARIBAYIR",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30430",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30430"
+    },
+    {
+      "name": "23 NİSAN",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30431",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30431"
+    },
+    {
+      "name": "25 ARALIK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30432",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30432"
+    },
+    {
+      "name": "60.YIL",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30433",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30433"
+    },
+    {
+      "name": "75.YIL",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30434",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30434"
+    },
+    {
+      "name": "KARATAŞ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30435",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30435"
+    },
+    {
+      "name": "AKBULUT",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30436",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30436"
+    },
+    {
+      "name": "BAĞLARBAŞI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30437",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30437"
+    },
+    {
+      "name": "BAYRAMLI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30438",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30438"
+    },
+    {
+      "name": "BOSTANCIK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30439",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30439"
+    },
+    {
+      "name": "DEREDÜZÜ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30440",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30440"
+    },
+    {
+      "name": "GENEYİK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30441",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30441"
+    },
+    {
+      "name": "KARAÇOMAK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30442",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30442"
+    },
+    {
+      "name": "KÜÇÜKKIZILHİSAR",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30443",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30443"
+    },
+    {
+      "name": "SARIBAŞAK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30444",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30444"
+    },
+    {
+      "name": "SARISALKIM",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30445",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30445"
+    },
+    {
+      "name": "YAĞDÖVER",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30446",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30446"
+    },
+    {
+      "name": "YEŞİLKENT",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30447",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30447"
+    },
+    {
+      "name": "ÇAĞDAŞ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30448",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30448"
+    },
+    {
+      "name": "YEDİTEPE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30449",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30449"
+    },
+    {
+      "name": "ESENTEPE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30450",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30450"
+    },
+    {
+      "name": "AKDERE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30451",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30451"
+    },
+    {
+      "name": "BEYBAHÇE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30452",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30452"
+    },
+    {
+      "name": "KERER",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30453",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30453"
+    },
+    {
+      "name": "KALEBOYNU",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30454",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30454"
+    },
+    {
+      "name": "OSMANLI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30455",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30455"
+    },
+    {
+      "name": "MUHACİROSMAN",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30456",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30456"
+    },
+    {
+      "name": "SARIT",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30457",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30457"
+    },
+    {
+      "name": "DAMLACIK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30458",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30458"
+    },
+    {
+      "name": "SERİNCE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30459",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30459"
+    },
+    {
+      "name": "CEBELER",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30460",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30460"
+    },
+    {
+      "name": "KABARCIK",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30461",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30461"
+    },
+    {
+      "name": "BURÇ KARAKUYU",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30462",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30462"
+    },
+    {
+      "name": "BURÇ ESENTEPE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30467",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30467"
+    },
+    {
+      "name": "KALE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30468",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30468"
+    },
+    {
+      "name": "YEŞİLPINAR",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30469",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30469"
+    },
+    {
+      "name": "AKPINAR",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30470",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30470"
+    },
+    {
+      "name": "DURANTAŞ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30471",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30471"
+    },
+    {
+      "name": "GÜLPINAR",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30472",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30472"
+    },
+    {
+      "name": "YAZIBAĞI",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "30473",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:30473"
+    },
+    {
+      "name": "YEŞİLYURT",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "324137",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:324137"
+    },
+    {
+      "name": "İBN-İ SİNA",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "388991",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:388991"
+    },
+    {
+      "name": "ABDÜLHAMİD HAN",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "603787",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:603787"
+    },
+    {
+      "name": "GEYLANİ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "705269",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:705269"
+    },
+    {
+      "name": "SELÇUKLU",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "775221",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:775221"
+    },
+    {
+      "name": "ÇAMTEPE",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "776195",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:776195"
+    },
+    {
+      "name": "ERTUĞRULGAZİ",
+      "parentId": "tr:adm2:54988432b26387222249237",
+      "sourceId": "842278",
+      "territoryId": "tr:adm3:27:54988432b26387222249237:842278"
+    },
+    {
+      "name": "NİZİP OSB",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "100252",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:100252"
+    },
+    {
+      "name": "KOCATEPE",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179689",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179689"
+    },
+    {
+      "name": "SALKIM",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179691",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179691"
+    },
+    {
+      "name": "SEKİLİ",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179693",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179693"
+    },
+    {
+      "name": "TATLICAK",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179695",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179695"
+    },
+    {
+      "name": "ULUYATIR",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179697",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179697"
+    },
+    {
+      "name": "AKÇAKENT",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179701",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179701"
+    },
+    {
+      "name": "AKKUYU",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179703",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179703"
+    },
+    {
+      "name": "ALAHACI",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179705",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179705"
+    },
+    {
+      "name": "ALTINDAĞ",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179709",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179709"
+    },
+    {
+      "name": "AŞAĞIBAYINDIR",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179711",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179711"
+    },
+    {
+      "name": "AŞAĞIÇARDAK",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179713",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179713"
+    },
+    {
+      "name": "BAĞLICA",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179715",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179715"
+    },
+    {
+      "name": "BAHÇELİ",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179717",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179717"
+    },
+    {
+      "name": "BALLI",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179719",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179719"
+    },
+    {
+      "name": "BELKIS (MERKEZ)",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179721",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179721"
+    },
+    {
+      "name": "BOYLUCA",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179723",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179723"
+    },
+    {
+      "name": "BOZALİOĞLU",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179725",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179725"
+    },
+    {
+      "name": "ÇAKMAKTEPE",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179727",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179727"
+    },
+    {
+      "name": "ÇANAKÇI",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179729",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179729"
+    },
+    {
+      "name": "ÇATALCA",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179731",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179731"
+    },
+    {
+      "name": "DAYIDAĞI",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179733",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179733"
+    },
+    {
+      "name": "DAZHÜYÜK",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179737",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179737"
+    },
+    {
+      "name": "DOĞRULAR",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179739",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179739"
+    },
+    {
+      "name": "DURAKLI",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179741",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179741"
+    },
+    {
+      "name": "DUTLU",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179743",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179743"
+    },
+    {
+      "name": "DÜZBAYIR",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179745",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179745"
+    },
+    {
+      "name": "EKİNCİ",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179747",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179747"
+    },
+    {
+      "name": "ERENKÖY",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179749",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179749"
+    },
+    {
+      "name": "ESKİKONAK",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179751",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179751"
+    },
+    {
+      "name": "GAZİLER",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179753",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179753"
+    },
+    {
+      "name": "GEVENCE",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179757",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179757"
+    },
+    {
+      "name": "GÖKÇELİ",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179759",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179759"
+    },
+    {
+      "name": "GÜDER",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179761",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179761"
+    },
+    {
+      "name": "GÜLKAYA",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179763",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179763"
+    },
+    {
+      "name": "GÜMÜŞGÜN",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179765",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179765"
+    },
+    {
+      "name": "GÜNALTI",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179769",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179769"
+    },
+    {
+      "name": "GÜRBAŞAK",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179771",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179771"
+    },
+    {
+      "name": "GÜZELKÖY",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179773",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179773"
+    },
+    {
+      "name": "HANCAĞIZ",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179775",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179775"
+    },
+    {
+      "name": "HAZIMOĞLU",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179777",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179777"
+    },
+    {
+      "name": "İKİZCE",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179779",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179779"
+    },
+    {
+      "name": "İNTEPE",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179781",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179781"
+    },
+    {
+      "name": "KALEKÖY",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179783",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179783"
+    },
+    {
+      "name": "KAMIŞLI",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179785",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179785"
+    },
+    {
+      "name": "KARABURÇ",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179787",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179787"
+    },
+    {
+      "name": "KAYALAR",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179791",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179791"
+    },
+    {
+      "name": "KEKLİK",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179793",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179793"
+    },
+    {
+      "name": "KESİKTAŞ",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179795",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179795"
+    },
+    {
+      "name": "KIRAÇGÜLÜ",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179797",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179797"
+    },
+    {
+      "name": "KIRATLI",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179799",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179799"
+    },
+    {
+      "name": "KIZILCAKENT",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179801",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179801"
+    },
+    {
+      "name": "KIZILİN",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179805",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179805"
+    },
+    {
+      "name": "KORUCAK",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179807",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179807"
+    },
+    {
+      "name": "KÖSELER",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179809",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179809"
+    },
+    {
+      "name": "KUMLA",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179811",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179811"
+    },
+    {
+      "name": "KURUCAHÜYÜK",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179815",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179815"
+    },
+    {
+      "name": "MAĞARACIK",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179821",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179821"
+    },
+    {
+      "name": "MEHMETOBASI",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179827",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179827"
+    },
+    {
+      "name": "MERCANLI",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179833",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179833"
+    },
+    {
+      "name": "MİHRAP",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179837",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179837"
+    },
+    {
+      "name": "NAHIRTEPE",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179841",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179841"
+    },
+    {
+      "name": "ÖZYURT",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179845",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179845"
+    },
+    {
+      "name": "SAMANDÖKEN",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179849",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179849"
+    },
+    {
+      "name": "SAMANLI",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179851",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179851"
+    },
+    {
+      "name": "SARAY",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179857",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179857"
+    },
+    {
+      "name": "SARIKOÇ",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179863",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179863"
+    },
+    {
+      "name": "SÖĞÜTLÜ",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179867",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179867"
+    },
+    {
+      "name": "SUBOYU",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179871",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179871"
+    },
+    {
+      "name": "TANIR",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179875",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179875"
+    },
+    {
+      "name": "TOYDEMİR",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179879",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179879"
+    },
+    {
+      "name": "TULUKTAŞ",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179883",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179883"
+    },
+    {
+      "name": "TURLU",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179887",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179887"
+    },
+    {
+      "name": "TURNALI",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179891",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179891"
+    },
+    {
+      "name": "YAĞCILAR",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179895",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179895"
+    },
+    {
+      "name": "YAĞMURALAN",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179899",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179899"
+    },
+    {
+      "name": "YARIMTEPE",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179903",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179903"
+    },
+    {
+      "name": "YENİYAPAN",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179907",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179907"
+    },
+    {
+      "name": "YENİYAZI",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179911",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179911"
+    },
+    {
+      "name": "YOLÇATI",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179915",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179915"
+    },
+    {
+      "name": "YUKARIBAYINDIR",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179919",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179919"
+    },
+    {
+      "name": "YUKARIÇARDAK",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179925",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179925"
+    },
+    {
+      "name": "DERNEK",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179927",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179927"
+    },
+    {
+      "name": "TOSUNLU",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "179931",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:179931"
+    },
+    {
+      "name": "SULTAN ABDÜLHAMİT",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "180756",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:180756"
+    },
+    {
+      "name": "EYÜP SULTAN",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "180758",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:180758"
+    },
+    {
+      "name": "MEVLANA",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "180760",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:180760"
+    },
+    {
+      "name": "ADAKLI",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "197147",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:197147"
+    },
+    {
+      "name": "ATATÜRK",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30617",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30617"
+    },
+    {
+      "name": "BELKIS",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30618",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30618"
+    },
+    {
+      "name": "CUMHURİYET",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30619",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30619"
+    },
+    {
+      "name": "FATİH SULTAN",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30620",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30620"
+    },
+    {
+      "name": "FEVKANİ",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30621",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30621"
+    },
+    {
+      "name": "FEVZİ PAŞA",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30622",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30622"
+    },
+    {
+      "name": "FIRAT",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30623",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30623"
+    },
+    {
+      "name": "HAFIZPAŞA",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30624",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30624"
+    },
+    {
+      "name": "İSTASYON",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30625",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30625"
+    },
+    {
+      "name": "İSTİKLAL",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30626",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30626"
+    },
+    {
+      "name": "KARŞIYAKA",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30627",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30627"
+    },
+    {
+      "name": "KIBRIS",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30628",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30628"
+    },
+    {
+      "name": "MENDERES",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30629",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30629"
+    },
+    {
+      "name": "MİMAR SİNAN",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30630",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30630"
+    },
+    {
+      "name": "NAMIK KEMAL",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30631",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30631"
+    },
+    {
+      "name": "PAZAR CAMİİ",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30632",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30632"
+    },
+    {
+      "name": "SAHA",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30633",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30633"
+    },
+    {
+      "name": "ŞAHİNBEY",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30634",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30634"
+    },
+    {
+      "name": "ŞIHLAR",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30635",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30635"
+    },
+    {
+      "name": "TAHTANİ",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30636",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30636"
+    },
+    {
+      "name": "YEŞİLEVLER",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30637",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30637"
+    },
+    {
+      "name": "YUNUS EMRE",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30638",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30638"
+    },
+    {
+      "name": "ZEYTİNLİK",
+      "parentId": "tr:adm2:54988432b32789090404224",
+      "sourceId": "30639",
+      "territoryId": "tr:adm3:27:54988432b32789090404224:30639"
+    },
+    {
+      "name": "SERİNEVLER",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "139893",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:139893"
+    },
+    {
+      "name": "ALTINÜZÜM",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179513",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179513"
+    },
+    {
+      "name": "BOĞAZİÇİ",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179515",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179515"
+    },
+    {
+      "name": "YEŞİLYURT",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179517",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179517"
+    },
+    {
+      "name": "FEVZİPAŞA",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179519",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179519"
+    },
+    {
+      "name": "AĞABEY",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179521",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179521"
+    },
+    {
+      "name": "AĞALAROBASI",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179523",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179523"
+    },
+    {
+      "name": "AKINYOLU",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179525",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179525"
+    },
+    {
+      "name": "ALACA",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179527",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179527"
+    },
+    {
+      "name": "ARPALI",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179529",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179529"
+    },
+    {
+      "name": "ŞERİKANLI",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179531",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179531"
+    },
+    {
+      "name": "YUKARIBİLENLER",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179533",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179533"
+    },
+    {
+      "name": "BURUNSUZLAR",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179535",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179535"
+    },
+    {
+      "name": "ÇERÇİLİ",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179537",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179537"
+    },
+    {
+      "name": "ÇINARLI",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179539",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179539"
+    },
+    {
+      "name": "ÇOLAKLAR",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179541",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179541"
+    },
+    {
+      "name": "ÇUBUK",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179543",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179543"
+    },
+    {
+      "name": "DEĞİRMENCİK",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179545",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179545"
+    },
+    {
+      "name": "ESENLER",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179547",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179547"
+    },
+    {
+      "name": "GÜLLÜHÜYÜK",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179549",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179549"
+    },
+    {
+      "name": "GÜNGÖREN",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179551",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179551"
+    },
+    {
+      "name": "HANAĞZI",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179553",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179553"
+    },
+    {
+      "name": "HASANLÖK",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179555",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179555"
+    },
+    {
+      "name": "İDİLLİ",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179557",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179557"
+    },
+    {
+      "name": "KABAKLAR",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179559",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179559"
+    },
+    {
+      "name": "KALAYCIK",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179561",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179561"
+    },
+    {
+      "name": "KARACAÖREN",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179563",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179563"
+    },
+    {
+      "name": "KARAKAYA",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179565",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179565"
+    },
+    {
+      "name": "KARAPINAR",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179567",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179567"
+    },
+    {
+      "name": "KARAPOLAT",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179569",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179569"
+    },
+    {
+      "name": "KAYABAŞI",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179571",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179571"
+    },
+    {
+      "name": "KAZIKLI",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179573",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179573"
+    },
+    {
+      "name": "KIRIKÇALI",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179575",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179575"
+    },
+    {
+      "name": "KOÇCAĞIZ",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179577",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179577"
+    },
+    {
+      "name": "KÖKLÜ",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179579",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179579"
+    },
+    {
+      "name": "ORTAKLI",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179581",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179581"
+    },
+    {
+      "name": "ŞAHMARAN",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179583",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179583"
+    },
+    {
+      "name": "TANDIR",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179585",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179585"
+    },
+    {
+      "name": "TELLİ",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179587",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179587"
+    },
+    {
+      "name": "YELLİBURUN",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179589",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179589"
+    },
+    {
+      "name": "YENİCELİ",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179591",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179591"
+    },
+    {
+      "name": "YENİKÖY",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179593",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179593"
+    },
+    {
+      "name": "YESEMEK",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179595",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179595"
+    },
+    {
+      "name": "YEŞİLOVA",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179597",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179597"
+    },
+    {
+      "name": "YOLBAŞI",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179599",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179599"
+    },
+    {
+      "name": "YAĞIZLAR",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179601",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179601"
+    },
+    {
+      "name": "KALE",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179603",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179603"
+    },
+    {
+      "name": "BAYRAKTEPE",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179605",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179605"
+    },
+    {
+      "name": "KOZDERE",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179607",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179607"
+    },
+    {
+      "name": "KUŞÇUMUSTAFA",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179609",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179609"
+    },
+    {
+      "name": "ÖRTÜLÜ",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179611",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179611"
+    },
+    {
+      "name": "TÜRKBAHÇE",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179613",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179613"
+    },
+    {
+      "name": "ZİNCİRLİ",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179615",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179615"
+    },
+    {
+      "name": "ELBİSTANHÜYÜĞÜ",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "179617",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:179617"
+    },
+    {
+      "name": "SULUMAĞARA",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "181388",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:181388"
+    },
+    {
+      "name": "GÖLTEPE",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "210401",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:210401"
+    },
+    {
+      "name": "ATATÜRK",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "30582",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:30582"
+    },
+    {
+      "name": "AYDINLIK",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "30583",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:30583"
+    },
+    {
+      "name": "BAHÇELİEVLER",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "30584",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:30584"
+    },
+    {
+      "name": "BEYLER",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "30585",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:30585"
+    },
+    {
+      "name": "BURHANİYE",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "30586",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:30586"
+    },
+    {
+      "name": "CEVDETPAŞA",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "30587",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:30587"
+    },
+    {
+      "name": "CUMHURİYET",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "30588",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:30588"
+    },
+    {
+      "name": "ÇAMLICA",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "30589",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:30589"
+    },
+    {
+      "name": "HACİ ALİ ÖZTÜRK",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "30590",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:30590"
+    },
+    {
+      "name": "DERVİŞPAŞA",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "30591",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:30591"
+    },
+    {
+      "name": "ERENLER",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "30592",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:30592"
+    },
+    {
+      "name": "FEVZİ ÇAKMAK",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "30593",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:30593"
+    },
+    {
+      "name": "HÜRRİYET",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "30594",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:30594"
+    },
+    {
+      "name": "PINARBAŞI",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "30595",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:30595"
+    },
+    {
+      "name": "YENİ",
+      "parentId": "tr:adm2:54988432b41731057290221",
+      "sourceId": "30596",
+      "territoryId": "tr:adm3:27:54988432b41731057290221:30596"
+    },
+    {
+      "name": "AKÇAKÖY",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179619",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179619"
+    },
+    {
+      "name": "ALAÇALI",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179621",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179621"
+    },
+    {
+      "name": "ALAGÖZ",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179623",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179623"
+    },
+    {
+      "name": "ARIKDERE",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179625",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179625"
+    },
+    {
+      "name": "AYYILDIZ",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179627",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179627"
+    },
+    {
+      "name": "BALABAN",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179629",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179629"
+    },
+    {
+      "name": "BEŞKILIÇ",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179631",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179631"
+    },
+    {
+      "name": "ÇİFTLİK",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179633",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179633"
+    },
+    {
+      "name": "ECELER",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179635",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179635"
+    },
+    {
+      "name": "ELİFOĞLU",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179637",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179637"
+    },
+    {
+      "name": "ERENYOLU",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179639",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179639"
+    },
+    {
+      "name": "GÜRÇAY",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179641",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179641"
+    },
+    {
+      "name": "KARACURUN",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179643",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179643"
+    },
+    {
+      "name": "KARANFİL",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179645",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179645"
+    },
+    {
+      "name": "KELEKLİ",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179647",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179647"
+    },
+    {
+      "name": "KEPİRLER",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179649",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179649"
+    },
+    {
+      "name": "KIVIRCIK",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179651",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179651"
+    },
+    {
+      "name": "KORKMAZLAR",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179653",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179653"
+    },
+    {
+      "name": "KURUYAZI",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179655",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179655"
+    },
+    {
+      "name": "ÖNCÜLER",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179657",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179657"
+    },
+    {
+      "name": "ÖRMETAŞ",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179659",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179659"
+    },
+    {
+      "name": "SAVAŞ",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179661",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179661"
+    },
+    {
+      "name": "SOYLU",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179663",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179663"
+    },
+    {
+      "name": "SUBAĞI",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179665",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179665"
+    },
+    {
+      "name": "ŞENLİK",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179667",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179667"
+    },
+    {
+      "name": "TEKETAŞI",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179669",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179669"
+    },
+    {
+      "name": "TOSUNLU",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179671",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179671"
+    },
+    {
+      "name": "TÜRKYURDU",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179673",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179673"
+    },
+    {
+      "name": "YARIMCA",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179675",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179675"
+    },
+    {
+      "name": "YAŞAR",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179677",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179677"
+    },
+    {
+      "name": "YAZIR",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179679",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179679"
+    },
+    {
+      "name": "YEŞERTİ",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179681",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179681"
+    },
+    {
+      "name": "YOLAĞZI",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179683",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179683"
+    },
+    {
+      "name": "YURTBAĞI",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179685",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179685"
+    },
+    {
+      "name": "ZÜHRECİK",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "179687",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:179687"
+    },
+    {
+      "name": "ÇARŞI",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "30613",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:30613"
+    },
+    {
+      "name": "KARŞIYAKA",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "30614",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:30614"
+    },
+    {
+      "name": "LOJMANLAR",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "30615",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:30615"
+    },
+    {
+      "name": "ETİLER",
+      "parentId": "tr:adm2:54988432b54960387029794",
+      "sourceId": "30616",
+      "territoryId": "tr:adm3:27:54988432b54960387029794:30616"
+    },
+    {
+      "name": "AKTOPRAK SB",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "140048",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:140048"
+    },
+    {
+      "name": "ACAROBA",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179335",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179335"
+    },
+    {
+      "name": "AKÇABURÇ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179337",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179337"
+    },
+    {
+      "name": "AKÇAGÖZE",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179339",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179339"
+    },
+    {
+      "name": "ATALAR",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179341",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179341"
+    },
+    {
+      "name": "BAĞBAŞI",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179343",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179343"
+    },
+    {
+      "name": "BATTAL",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179345",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179345"
+    },
+    {
+      "name": "BAYATLI",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179347",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179347"
+    },
+    {
+      "name": "BEYRELİ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179349",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179349"
+    },
+    {
+      "name": "AĞAÇLIBOYNO",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179351",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179351"
+    },
+    {
+      "name": "BOZOBASI",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179353",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179353"
+    },
+    {
+      "name": "ÇAĞKUYU",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179355",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179355"
+    },
+    {
+      "name": "CERİTYENİYAPAN",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179357",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179357"
+    },
+    {
+      "name": "DURNALIK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179359",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179359"
+    },
+    {
+      "name": "DÜLÜK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179361",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179361"
+    },
+    {
+      "name": "DÜNDARLI",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179363",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179363"
+    },
+    {
+      "name": "ESKİŞARKAYA",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179365",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179365"
+    },
+    {
+      "name": "GÜNBULUR",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179367",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179367"
+    },
+    {
+      "name": "GÜNGÜRGE",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179369",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179369"
+    },
+    {
+      "name": "İNCESU",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179371",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179371"
+    },
+    {
+      "name": "İSKENDERLİ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179373",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179373"
+    },
+    {
+      "name": "KABASAKIZ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179375",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179375"
+    },
+    {
+      "name": "KARACAÖREN",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179377",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179377"
+    },
+    {
+      "name": "KARAKESEK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179379",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179379"
+    },
+    {
+      "name": "KARAYUSUFLU",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179381",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179381"
+    },
+    {
+      "name": "KARPUZKAYA",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179383",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179383"
+    },
+    {
+      "name": "SERİNTEPE",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179385",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179385"
+    },
+    {
+      "name": "KOÇLU",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179387",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179387"
+    },
+    {
+      "name": "KÖKSALAN",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179389",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179389"
+    },
+    {
+      "name": "MEDEGÖZ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179391",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179391"
+    },
+    {
+      "name": "ÖĞÜMSÖĞÜT",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179393",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179393"
+    },
+    {
+      "name": "ÖVÜNDÜK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179395",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179395"
+    },
+    {
+      "name": "BÜYÜKPINAR",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179397",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179397"
+    },
+    {
+      "name": "SARILAR",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179399",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179399"
+    },
+    {
+      "name": "SEYMENLİ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179401",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179401"
+    },
+    {
+      "name": "SOFALICI",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179403",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179403"
+    },
+    {
+      "name": "SUBOĞAZ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179405",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179405"
+    },
+    {
+      "name": "SÜLÜKLÜ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179407",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179407"
+    },
+    {
+      "name": "TEKİRSİN",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179409",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179409"
+    },
+    {
+      "name": "TOKDEMİR",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179411",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179411"
+    },
+    {
+      "name": "TÜRKYURDU",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179413",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179413"
+    },
+    {
+      "name": "UĞRUCA",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179415",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179415"
+    },
+    {
+      "name": "ÜÇGÖZE",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179417",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179417"
+    },
+    {
+      "name": "ÜLKERLİ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179419",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179419"
+    },
+    {
+      "name": "YALANKOZ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179421",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179421"
+    },
+    {
+      "name": "YAMAÇOBA",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179423",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179423"
+    },
+    {
+      "name": "YAYIKTAŞ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179425",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179425"
+    },
+    {
+      "name": "YENİŞARKAYA",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179427",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179427"
+    },
+    {
+      "name": "YEŞİLCE",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179429",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179429"
+    },
+    {
+      "name": "YIĞINLI",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "179431",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:179431"
+    },
+    {
+      "name": "SİNAN OSB",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "181832",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:181832"
+    },
+    {
+      "name": "GÖKTÜRK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "211037",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:211037"
+    },
+    {
+      "name": "15 TEMMUZ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "265637",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:265637"
+    },
+    {
+      "name": "HUMANIZ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "299966",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:299966"
+    },
+    {
+      "name": "AYDINLAR",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30476",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30476"
+    },
+    {
+      "name": "AYDINTEPE",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30477",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30477"
+    },
+    {
+      "name": "BAŞPINAR(ORGANİZE)OSB",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30478",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30478"
+    },
+    {
+      "name": "BOYNO",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30479",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30479"
+    },
+    {
+      "name": "ÇAĞLAYAN",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30481",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30481"
+    },
+    {
+      "name": "ÇAKMAK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30482",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30482"
+    },
+    {
+      "name": "ÇIKSORUT",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30483",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30483"
+    },
+    {
+      "name": "DEĞİRMİÇEM",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30484",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30484"
+    },
+    {
+      "name": "DÜLÜKBABA",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30485",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30485"
+    },
+    {
+      "name": "EMEK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30486",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30486"
+    },
+    {
+      "name": "EYDİBABA",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30487",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30487"
+    },
+    {
+      "name": "EYÜPSULTAN",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30488",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30488"
+    },
+    {
+      "name": "FATİH",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30489",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30489"
+    },
+    {
+      "name": "GAZİ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30491",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30491"
+    },
+    {
+      "name": "GAZİKENT",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30492",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30492"
+    },
+    {
+      "name": "GİRNE",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30493",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30493"
+    },
+    {
+      "name": "GÖLLÜCE",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30494",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30494"
+    },
+    {
+      "name": "GÖZTEPE",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30495",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30495"
+    },
+    {
+      "name": "GÜVENEVLER",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30496",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30496"
+    },
+    {
+      "name": "GÜZELYURT",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30497",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30497"
+    },
+    {
+      "name": "HACIBABA",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30498",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30498"
+    },
+    {
+      "name": "HASIRCIOĞLU",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30499",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30499"
+    },
+    {
+      "name": "HÜRRİYET",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30500",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30500"
+    },
+    {
+      "name": "İNCİLİ PINAR",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30501",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30501"
+    },
+    {
+      "name": "KARACAOĞLAN",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30502",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30502"
+    },
+    {
+      "name": "KARAOĞLAN",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30503",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30503"
+    },
+    {
+      "name": "KARŞIYAKA",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30504",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30504"
+    },
+    {
+      "name": "KAYAÖNÜ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30505",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30505"
+    },
+    {
+      "name": "KOCATEPE",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30506",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30506"
+    },
+    {
+      "name": "MEVLANA",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30507",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30507"
+    },
+    {
+      "name": "MİTHATPAŞA",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30508",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30508"
+    },
+    {
+      "name": "MÜCAHİTLER",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30509",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30509"
+    },
+    {
+      "name": "MÜNÜFPAŞA",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30510",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30510"
+    },
+    {
+      "name": "NURTEPE",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30511",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30511"
+    },
+    {
+      "name": "ÖZGÜRLÜK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30512",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30512"
+    },
+    {
+      "name": "PANCARLI",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30513",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30513"
+    },
+    {
+      "name": "SANAYİ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30514",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30514"
+    },
+    {
+      "name": "SARIGÜLLÜK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30515",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30515"
+    },
+    {
+      "name": "SELİMİYE",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30516",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30516"
+    },
+    {
+      "name": "ŞİRİNEVLER",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30517",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30517"
+    },
+    {
+      "name": "UMUT",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30519",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30519"
+    },
+    {
+      "name": "YAPRAK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30520",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30520"
+    },
+    {
+      "name": "YENİ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30521",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30521"
+    },
+    {
+      "name": "YUNUS EMRE",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30523",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30523"
+    },
+    {
+      "name": "ZEYTİNLİ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30524",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30524"
+    },
+    {
+      "name": "29 EKİM",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30525",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30525"
+    },
+    {
+      "name": "8 ŞUBAT",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30526",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30526"
+    },
+    {
+      "name": "ŞEHİRGÖSTEREN",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30527",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30527"
+    },
+    {
+      "name": "KARACAAHMET",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30528",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30528"
+    },
+    {
+      "name": "ONAT KUTLAR",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30529",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30529"
+    },
+    {
+      "name": "MERVEŞEHİR",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30530",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30530"
+    },
+    {
+      "name": "SEYRANTEPE",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30531",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30531"
+    },
+    {
+      "name": "İNCİLİKAYA",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30532",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30532"
+    },
+    {
+      "name": "SELAHATTİN EYYUBİ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30533",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30533"
+    },
+    {
+      "name": "OSMANGAZİ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30534",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30534"
+    },
+    {
+      "name": "SEFAŞEHİR",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30535",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30535"
+    },
+    {
+      "name": "BURAK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30536",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30536"
+    },
+    {
+      "name": "BELKIZ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30537",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30537"
+    },
+    {
+      "name": "ATAKENT",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30538",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30538"
+    },
+    {
+      "name": "PİRSULTAN",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30539",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30539"
+    },
+    {
+      "name": "ATATÜRK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30540",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30540"
+    },
+    {
+      "name": "BATIKENT",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30541",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30541"
+    },
+    {
+      "name": "ATABEK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30542",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30542"
+    },
+    {
+      "name": "BİLEK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30543",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30543"
+    },
+    {
+      "name": "IŞIKLI",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30544",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30544"
+    },
+    {
+      "name": "İBRAHİMLİ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30545",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30545"
+    },
+    {
+      "name": "KARADEDE",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30546",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30546"
+    },
+    {
+      "name": "KARAHÜYÜK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30547",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30547"
+    },
+    {
+      "name": "KIZIK KARASAKAL",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30548",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30548"
+    },
+    {
+      "name": "KOZLUYAZI",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30549",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30549"
+    },
+    {
+      "name": "KÜLLÜ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30550",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30550"
+    },
+    {
+      "name": "SAM",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30551",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30551"
+    },
+    {
+      "name": "SİNAN",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30552",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30552"
+    },
+    {
+      "name": "TAŞLICA",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30553",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30553"
+    },
+    {
+      "name": "TUĞLU",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30554",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30554"
+    },
+    {
+      "name": "ZÜLFİKAR",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30555",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30555"
+    },
+    {
+      "name": "BEYLERBEYİ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30556",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30556"
+    },
+    {
+      "name": "DIMIŞKILI",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30557",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30557"
+    },
+    {
+      "name": "BEDİRKÖY",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30558",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30558"
+    },
+    {
+      "name": "AKTOPRAK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30560",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30560"
+    },
+    {
+      "name": "NESİMİ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30562",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30562"
+    },
+    {
+      "name": "ERİKLİ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30563",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30563"
+    },
+    {
+      "name": "GÖKSÜNCÜK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30564",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30564"
+    },
+    {
+      "name": "KARACABURÇ",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30565",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30565"
+    },
+    {
+      "name": "KIZIKHAMURKESEN",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30566",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30566"
+    },
+    {
+      "name": "YUKARI ARIL",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30567",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30567"
+    },
+    {
+      "name": "AŞAĞI ARIL",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30568",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30568"
+    },
+    {
+      "name": "İBRAHİMŞEHİR",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "30569",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:30569"
+    },
+    {
+      "name": "SANCAKTEPE",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "354803",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:354803"
+    },
+    {
+      "name": "SACIR",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "697318",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:697318"
+    },
+    {
+      "name": "FISTIKLIK",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "767418",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:767418"
+    },
+    {
+      "name": "GAZİLER",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "836569",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:836569"
+    },
+    {
+      "name": "ÇAMLITEPE",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "897827",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:897827"
+    },
+    {
+      "name": "BEYKENT",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "98789",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:98789"
+    },
+    {
+      "name": "ALPASLAN",
+      "parentId": "tr:adm2:54988432b61004264745956",
+      "sourceId": "997122",
+      "territoryId": "tr:adm3:27:54988432b61004264745956:997122"
+    },
+    {
+      "name": "ÇAYBAŞI OSB",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "139479",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:139479"
+    },
+    {
+      "name": "ACER",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180029",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180029"
+    },
+    {
+      "name": "BELÖREN",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180031",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180031"
+    },
+    {
+      "name": "ÇATALSU",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180033",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180033"
+    },
+    {
+      "name": "DOKUZYOL",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180037",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180037"
+    },
+    {
+      "name": "DURUKÖY",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180039",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180039"
+    },
+    {
+      "name": "DUTLUCA",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180041",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180041"
+    },
+    {
+      "name": "EKİNVEREN",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180043",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180043"
+    },
+    {
+      "name": "GÜNDOĞAN",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180045",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180045"
+    },
+    {
+      "name": "İKİZKUYU",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180047",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180047"
+    },
+    {
+      "name": "KARAMAN",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180049",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180049"
+    },
+    {
+      "name": "KAŞYOLU",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180051",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180051"
+    },
+    {
+      "name": "KAVUNLUK",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180055",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180055"
+    },
+    {
+      "name": "KAYALIPINAR",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180057",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180057"
+    },
+    {
+      "name": "KEÇİKUYUSU",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180059",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180059"
+    },
+    {
+      "name": "KOÇAKLAR",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180061",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180061"
+    },
+    {
+      "name": "SERGİLİ",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180063",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180063"
+    },
+    {
+      "name": "TINAZDERE",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180065",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180065"
+    },
+    {
+      "name": "UĞUROVA",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180067",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180067"
+    },
+    {
+      "name": "YAKACIK",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180069",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180069"
+    },
+    {
+      "name": "YAZILI",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180071",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180071"
+    },
+    {
+      "name": "YENİKÖY",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180073",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180073"
+    },
+    {
+      "name": "KARATAŞ",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180075",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180075"
+    },
+    {
+      "name": "DOĞANPINAR",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180077",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180077"
+    },
+    {
+      "name": "AKÇAMEZRA",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180079",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180079"
+    },
+    {
+      "name": "AMBARCIK",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180081",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180081"
+    },
+    {
+      "name": "ARSLANLI",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180083",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180083"
+    },
+    {
+      "name": "ASMACIK",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180087",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180087"
+    },
+    {
+      "name": "AŞAĞI GÜNEYSE",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180089",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180089"
+    },
+    {
+      "name": "AŞAĞI YENİYAPAN",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180091",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180091"
+    },
+    {
+      "name": "AYDINKAYA",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180093",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180093"
+    },
+    {
+      "name": "BÜYÜKKARACAVİRAN",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180095",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180095"
+    },
+    {
+      "name": "YENİ CUMHURİYET",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180097",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180097"
+    },
+    {
+      "name": "ÇATALÇAM",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180099",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180099"
+    },
+    {
+      "name": "ÇAVUŞBAŞI",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180101",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180101"
+    },
+    {
+      "name": "ÇAYBEYİ",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180103",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180103"
+    },
+    {
+      "name": "DEMİRKONAK",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180105",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180105"
+    },
+    {
+      "name": "DEVEHÜYÜĞÜ",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180107",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180107"
+    },
+    {
+      "name": "DİBECİK",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180109",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180109"
+    },
+    {
+      "name": "DİKMETAŞ",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180111",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180111"
+    },
+    {
+      "name": "ERMİŞ",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180113",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180113"
+    },
+    {
+      "name": "GEBE",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180115",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180115"
+    },
+    {
+      "name": "GÜVEÇLİ",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180117",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180117"
+    },
+    {
+      "name": "HATUNLU",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180119",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180119"
+    },
+    {
+      "name": "HÖTOĞLU",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180121",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180121"
+    },
+    {
+      "name": "İNCEYOL",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180123",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180123"
+    },
+    {
+      "name": "İNKILAP",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180125",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180125"
+    },
+    {
+      "name": "KABACAAĞAÇ",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180127",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180127"
+    },
+    {
+      "name": "KARABURUN",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180129",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180129"
+    },
+    {
+      "name": "DERO KÜÇÜKKARACAVİRAN",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180131",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180131"
+    },
+    {
+      "name": "KARADİBEK",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180133",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180133"
+    },
+    {
+      "name": "KAYACIK",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180135",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180135"
+    },
+    {
+      "name": "KEÇİLİ",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180137",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180137"
+    },
+    {
+      "name": "KERSENTAŞ",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180139",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180139"
+    },
+    {
+      "name": "KILAVUZ",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180141",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180141"
+    },
+    {
+      "name": "KOVANLI",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180143",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180143"
+    },
+    {
+      "name": "KURUÇAY",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180145",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180145"
+    },
+    {
+      "name": "SEVİNDİ",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180147",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180147"
+    },
+    {
+      "name": "SÜTLÜCE",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180149",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180149"
+    },
+    {
+      "name": "TAŞÇANAK",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180151",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180151"
+    },
+    {
+      "name": "TAŞLI",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180153",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180153"
+    },
+    {
+      "name": "TÜZEL",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180155",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180155"
+    },
+    {
+      "name": "ULAŞLI",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180157",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180157"
+    },
+    {
+      "name": "ÜÇDAMLAR",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180159",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180159"
+    },
+    {
+      "name": "ÜÇKUBBE",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180161",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180161"
+    },
+    {
+      "name": "YUKARIGÜNEYSE",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180163",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180163"
+    },
+    {
+      "name": "YEŞİLTEPE",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "180165",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:180165"
+    },
+    {
+      "name": "KÖRKÜN",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30463",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30463"
+    },
+    {
+      "name": "İNÖNÜ",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30464",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30464"
+    },
+    {
+      "name": "ŞAHİNBEY",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30465",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30465"
+    },
+    {
+      "name": "MİMAR SİNAN",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30466",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30466"
+    },
+    {
+      "name": "BULDUK",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30675",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30675"
+    },
+    {
+      "name": "FATİH",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30676",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30676"
+    },
+    {
+      "name": "GÜLLÜK",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30677",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30677"
+    },
+    {
+      "name": "HÜRRİYET",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30678",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30678"
+    },
+    {
+      "name": "KURTULUŞ",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30679",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30679"
+    },
+    {
+      "name": "OĞUZLAR",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30680",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30680"
+    },
+    {
+      "name": "SUBAŞI",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30681",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30681"
+    },
+    {
+      "name": "ALTINYURT",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30682",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30682"
+    },
+    {
+      "name": "SAZGIN",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30683",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30683"
+    },
+    {
+      "name": "CUMHURİYET",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30684",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30684"
+    },
+    {
+      "name": "GEDİK",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30685",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30685"
+    },
+    {
+      "name": "BEŞDELİ",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30686",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30686"
+    },
+    {
+      "name": "TAŞYAZI",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30687",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30687"
+    },
+    {
+      "name": "GÜZELCE",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30688",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30688"
+    },
+    {
+      "name": "ŞIH KÜÇÜKKARACAVİRAN",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30689",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30689"
+    },
+    {
+      "name": "DİREKLİ",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30690",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30690"
+    },
+    {
+      "name": "YEŞİLDERE",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30691",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30691"
+    },
+    {
+      "name": "GÜRSU",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30692",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30692"
+    },
+    {
+      "name": "HACAR",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30693",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30693"
+    },
+    {
+      "name": "YALNIZBAĞ",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30694",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30694"
+    },
+    {
+      "name": "ÇAYBAŞI",
+      "parentId": "tr:adm2:54988432b72028378604273",
+      "sourceId": "30695",
+      "territoryId": "tr:adm3:27:54988432b72028378604273:30695"
+    },
+    {
+      "name": "SAKÇAGÖZÜ",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179935",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179935"
+    },
+    {
+      "name": "ŞATIRHÜYÜK",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179953",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179953"
+    },
+    {
+      "name": "GÖKÇEDERE",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179957",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179957"
+    },
+    {
+      "name": "GÖZLÜHÜYÜK",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179959",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179959"
+    },
+    {
+      "name": "İNCEGEDİK",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179961",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179961"
+    },
+    {
+      "name": "KARABURÇLU",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179963",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179963"
+    },
+    {
+      "name": "TORUNLAR",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179965",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179965"
+    },
+    {
+      "name": "KÖMÜRLER",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179967",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179967"
+    },
+    {
+      "name": "OLUCAK",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179969",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179969"
+    },
+    {
+      "name": "ALTINOVA",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179971",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179971"
+    },
+    {
+      "name": "BADEMLİ",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179973",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179973"
+    },
+    {
+      "name": "BAŞPINAR",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179975",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179975"
+    },
+    {
+      "name": "BALIKALAN",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179977",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179977"
+    },
+    {
+      "name": "BELPINAR",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179979",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179979"
+    },
+    {
+      "name": "ÇAKMAK",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179981",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179981"
+    },
+    {
+      "name": "DURMUŞLAR",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179983",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179983"
+    },
+    {
+      "name": "EMİRLER",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179985",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179985"
+    },
+    {
+      "name": "GEDİKLİ",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179987",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179987"
+    },
+    {
+      "name": "HAMİDİYE",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179989",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179989"
+    },
+    {
+      "name": "İÇERİSU",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179991",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179991"
+    },
+    {
+      "name": "İKİZKUYU",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179995",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179995"
+    },
+    {
+      "name": "İNCİRLİ",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179997",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179997"
+    },
+    {
+      "name": "KARTAL",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "179999",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:179999"
+    },
+    {
+      "name": "KIRIŞKAL",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "180001",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:180001"
+    },
+    {
+      "name": "KIRKPINAR",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "180003",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:180003"
+    },
+    {
+      "name": "KUZOLUK",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "180005",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:180005"
+    },
+    {
+      "name": "MESTHÜYÜK",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "180007",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:180007"
+    },
+    {
+      "name": "NAİMLER",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "180009",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:180009"
+    },
+    {
+      "name": "NOGAYLAR",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "180011",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:180011"
+    },
+    {
+      "name": "TERKEN",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "180013",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:180013"
+    },
+    {
+      "name": "TÜLLÜCE",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "180015",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:180015"
+    },
+    {
+      "name": "ATAKÖY",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "180017",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:180017"
+    },
+    {
+      "name": "ATMALI",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "180021",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:180021"
+    },
+    {
+      "name": "DEMİRLER",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "180023",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:180023"
+    },
+    {
+      "name": "TANDIRLI",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "180025",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:180025"
+    },
+    {
+      "name": "YAYLACIK",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "180027",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:180027"
+    },
+    {
+      "name": "ASLANLI",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "30655",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:30655"
+    },
+    {
+      "name": "ATATÜRK",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "30656",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:30656"
+    },
+    {
+      "name": "BAHÇELİEVLER",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "30657",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:30657"
+    },
+    {
+      "name": "KURUDERE",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "30658",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:30658"
+    },
+    {
+      "name": "YENİ",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "30659",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:30659"
+    },
+    {
+      "name": "FATİH",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "30660",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:30660"
+    },
+    {
+      "name": "MEHMET AKİF ERSOY",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "30661",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:30661"
+    },
+    {
+      "name": "ALPASLAN TÜRKEŞ",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "30662",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:30662"
+    },
+    {
+      "name": "ESENYURT",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "30663",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:30663"
+    },
+    {
+      "name": "YAVUZSELİM",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "30664",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:30664"
+    },
+    {
+      "name": "HİSAR",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "688200",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:688200"
+    },
+    {
+      "name": "SAYBURUN",
+      "parentId": "tr:adm2:54988432b85612149706662",
+      "sourceId": "798447",
+      "territoryId": "tr:adm3:27:54988432b85612149706662:798447"
+    },
+    {
+      "name": "ŞERİF PERİ",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "146712",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:146712"
+    },
+    {
+      "name": "ELİF",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179433",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179433"
+    },
+    {
+      "name": "AKBUDAK",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179435",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179435"
+    },
+    {
+      "name": "AKKOÇ",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179437",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179437"
+    },
+    {
+      "name": "ALTINPINAR",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179439",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179439"
+    },
+    {
+      "name": "AŞAĞIKARAVAİZ",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179441",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179441"
+    },
+    {
+      "name": "AŞAĞIYUFKALI",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179443",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179443"
+    },
+    {
+      "name": "BAŞPINAR",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179445",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179445"
+    },
+    {
+      "name": "BEYDİLİ",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179447",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179447"
+    },
+    {
+      "name": "ÇİFTEKOZ",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179449",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179449"
+    },
+    {
+      "name": "DAĞDANCIK",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179451",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179451"
+    },
+    {
+      "name": "DOĞAN",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179453",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179453"
+    },
+    {
+      "name": "EMİRHAYDAR",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179455",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179455"
+    },
+    {
+      "name": "ERENBAĞ",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179457",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179457"
+    },
+    {
+      "name": "ESENTEPE",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179459",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179459"
+    },
+    {
+      "name": "ESKİALTINTAŞ",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179461",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179461"
+    },
+    {
+      "name": "FAKILI",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179463",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179463"
+    },
+    {
+      "name": "FISTIKLIDAĞ",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179465",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179465"
+    },
+    {
+      "name": "GELİNBUĞDAY",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179467",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179467"
+    },
+    {
+      "name": "GÖKÇEPAYAM",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179469",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179469"
+    },
+    {
+      "name": "GÜZEY",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179471",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179471"
+    },
+    {
+      "name": "GÜLLÜCE",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179473",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179473"
+    },
+    {
+      "name": "GÜMÜŞPINAR",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179475",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179475"
+    },
+    {
+      "name": "HASANOĞLU",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179477",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179477"
+    },
+    {
+      "name": "HİSAR",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179479",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179479"
+    },
+    {
+      "name": "KARABABA",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179481",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179481"
+    },
+    {
+      "name": "KARACAÖREN",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179483",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179483"
+    },
+    {
+      "name": "KÖKLÜCE",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179485",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179485"
+    },
+    {
+      "name": "KÖRHACIOBASI",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179487",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179487"
+    },
+    {
+      "name": "KÜÇÜKLÜ",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179489",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179489"
+    },
+    {
+      "name": "MURATLI",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179491",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179491"
+    },
+    {
+      "name": "NURETTİN",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179493",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179493"
+    },
+    {
+      "name": "SARIKAYA",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179495",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179495"
+    },
+    {
+      "name": "SARITEPE",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179497",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179497"
+    },
+    {
+      "name": "TARLABAŞI",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179499",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179499"
+    },
+    {
+      "name": "TAŞDEĞİRMEN",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179501",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179501"
+    },
+    {
+      "name": "YAYLACIK",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179503",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179503"
+    },
+    {
+      "name": "YOLVEREN",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179505",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179505"
+    },
+    {
+      "name": "YUKARIKARAVAİZ",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179507",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179507"
+    },
+    {
+      "name": "YUKARIYUFKALI",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179509",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179509"
+    },
+    {
+      "name": "ZİYARET",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "179511",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:179511"
+    },
+    {
+      "name": "BAĞLICA",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "30570",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:30570"
+    },
+    {
+      "name": "DUMLUPINAR",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "30571",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:30571"
+    },
+    {
+      "name": "FEVZİ ÇAKMAK",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "30572",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:30572"
+    },
+    {
+      "name": "KALE",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "30573",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:30573"
+    },
+    {
+      "name": "MEHMET GÖKÇEK",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "30574",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:30574"
+    },
+    {
+      "name": "TURGUT ÖZAL",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "30575",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:30575"
+    },
+    {
+      "name": "YENİ ALTINTAŞ",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "30576",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:30576"
+    },
+    {
+      "name": "YEŞİLOVA",
+      "parentId": "tr:adm2:54988432b99023740963316",
+      "sourceId": "30577",
+      "territoryId": "tr:adm3:27:54988432b99023740963316:30577"
+    }
+  ],
+  "schemaVersion": "territorykit-identity-map@1"
+}

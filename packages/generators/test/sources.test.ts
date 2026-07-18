@@ -5,15 +5,20 @@ import { join } from "node:path";
 import { loadTerritoryDataset } from "@territory-kit/dataset";
 import { afterEach, describe, expect, it } from "vitest";
 import {
+  TURKEY_GAZIANTEP_ADM3_PARENT_MAPPINGS,
+  buildTurkeyGaziantepAdm3Pilot,
   createDefaultTerritorySourceRegistry,
   createSourceCacheKey,
+  createTurkeyGaziantepAdm3TerritoryId,
   createTerritorySourceRegistry,
   fetchHttpSourceArtifact,
   inspectTerritorySourceCapabilities,
   listTerritorySourceAdapters,
+  parseTurkeyGaziantepAdm3Kml,
   resolveFileSourceArtifact,
   runTerritorySourcePipeline,
   sha256Hex,
+  validateTurkeyGaziantepAdm3SourceManifest,
   validateOfficialOpenDataSourceManifest
 } from "../src/index.js";
 import { readCachedSourceArtifact, writeSourceCacheEntry } from "../src/sources/cache.js";
@@ -76,6 +81,7 @@ describe("source adapter registry", () => {
         attribution: "Synthetic official-open-data fixture",
         redistributionStatus: "allowed",
         commercialUseStatus: "allowed",
+        expectedSha256: "0".repeat(64),
         sourceVersion: "fixture-1"
       },
       { strict: true }
@@ -116,7 +122,9 @@ describe("source adapter registry", () => {
       ok: false,
       issues: expect.arrayContaining([
         expect.objectContaining({ code: "SOURCE_MANIFEST_LICENSE_RESTRICTED" }),
-        expect.objectContaining({ code: "SOURCE_MANIFEST_REDISTRIBUTION_RESTRICTED" })
+        expect.objectContaining({ code: "SOURCE_MANIFEST_REDISTRIBUTION_RESTRICTED" }),
+        expect.objectContaining({ code: "SOURCE_MANIFEST_COMMERCIAL_USE_RESTRICTED" }),
+        expect.objectContaining({ code: "SOURCE_MANIFEST_CHECKSUM_MISSING" })
       ])
     });
   });
@@ -388,6 +396,99 @@ describe("source pipeline adapters", () => {
   });
 });
 
+describe("Turkey Gaziantep ADM3 pilot source", () => {
+  it("parses KML properties and keeps same-name neighbourhood ids source-code stable", () => {
+    const features = parseTurkeyGaziantepAdm3Kml(createGaziantepKmlFixture());
+
+    expect(features).toMatchObject([
+      {
+        neighbourhoodName: "İSTİKLAL",
+        neighbourhoodCode: "100001",
+        sourceDistrictId: "{CCECD7A9-7F9F-421B-9DDC-33920592CE42}"
+      },
+      {
+        neighbourhoodName: "İSTİKLAL",
+        neighbourhoodCode: "100002",
+        sourceDistrictId: "{8F014A2B-53F9-4823-9FAE-E51D55B81A67}"
+      }
+    ]);
+    expect(
+      createTurkeyGaziantepAdm3TerritoryId({
+        neighbourhoodCode: "100001",
+        parentId: "tr:adm2:54988432b26387222249237"
+      })
+    ).toBe("tr:adm3:27:54988432b26387222249237:100001");
+  });
+
+  it("validates the strict official manifest and builds from network-free fixtures", async () => {
+    const tempDir = await createTempDir("territory-tr-adm3-");
+    const sourcePath = join(tempDir, "gaziantep.kml");
+    const outputPath = join(tempDir, "out");
+    const adm0Path = join(tempDir, "adm0.json");
+    const adm1Path = join(tempDir, "adm1.json");
+    const adm2Path = join(tempDir, "adm2.json");
+    await writeFile(sourcePath, createGaziantepKmlFixture(), "utf8");
+    await writeFile(adm0Path, JSON.stringify(hierarchyDataset("ADM0")), "utf8");
+    await writeFile(adm1Path, JSON.stringify(hierarchyDataset("ADM1")), "utf8");
+    await writeFile(adm2Path, JSON.stringify(hierarchyDataset("ADM2")), "utf8");
+
+    expect(validateTurkeyGaziantepAdm3SourceManifest()).toMatchObject({ ok: true });
+
+    const result = await buildTurkeyGaziantepAdm3Pilot({
+      sourcePath,
+      outputPath,
+      adm0DatasetPath: adm0Path,
+      adm1DatasetPath: adm1Path,
+      adm2DatasetPath: adm2Path,
+      approveUnexpectedSource: true
+    });
+
+    expect(result.ok).toBe(true);
+    expect(result.featureCount).toBe(2);
+    expect(result.coveredParentIds).toHaveLength(9);
+    const dataset = loadTerritoryDataset(
+      JSON.parse(await readFile(join(outputPath, "dataset.json"), "utf8")) as unknown
+    );
+    const adm3 = dataset.zones.filter((zone) => zone.sourceAdminLevel === "ADM3");
+
+    expect(adm3.map((zone) => zone.id)).toEqual([
+      "tr:adm3:27:54988432b26387222249237:100001",
+      "tr:adm3:27:54988432b61004264745956:100002"
+    ]);
+    expect(adm3.map((zone) => zone.name)).toEqual(["İSTİKLAL", "İSTİKLAL"]);
+    expect(adm3.map((zone) => zone.parentId)).toEqual([
+      "tr:adm2:54988432b26387222249237",
+      "tr:adm2:54988432b61004264745956"
+    ]);
+    await expect(readFile(join(outputPath, "coverage.json"), "utf8")).resolves.toContain(
+      '"status": "partial"'
+    );
+  });
+
+  it("rejects duplicate official neighbourhood codes", async () => {
+    const tempDir = await createTempDir("territory-tr-adm3-duplicate-");
+    const sourcePath = join(tempDir, "gaziantep.kml");
+    const adm0Path = join(tempDir, "adm0.json");
+    const adm1Path = join(tempDir, "adm1.json");
+    const adm2Path = join(tempDir, "adm2.json");
+    await writeFile(sourcePath, createGaziantepKmlFixture({ duplicateCode: true }), "utf8");
+    await writeFile(adm0Path, JSON.stringify(hierarchyDataset("ADM0")), "utf8");
+    await writeFile(adm1Path, JSON.stringify(hierarchyDataset("ADM1")), "utf8");
+    await writeFile(adm2Path, JSON.stringify(hierarchyDataset("ADM2")), "utf8");
+
+    await expect(
+      buildTurkeyGaziantepAdm3Pilot({
+        sourcePath,
+        outputPath: join(tempDir, "out"),
+        adm0DatasetPath: adm0Path,
+        adm1DatasetPath: adm1Path,
+        adm2DatasetPath: adm2Path,
+        approveUnexpectedSource: true
+      })
+    ).rejects.toThrow("Duplicate Gaziantep ADM3 KIMLIKNO");
+  });
+});
+
 async function createTempDir(prefix: string): Promise<string> {
   const dir = await mkdtemp(join(tmpdir(), prefix));
   tempDirs.push(dir);
@@ -457,6 +558,99 @@ function square(west: number, south: number): unknown {
         [west, south]
       ]
     ]
+  };
+}
+
+function createGaziantepKmlFixture(options: { duplicateCode?: boolean } = {}): string {
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    ${placemark("ID_00001", "İSTİKLAL", "100001", "{CCECD7A9-7F9F-421B-9DDC-33920592CE42}", 37, 37)}
+    ${placemark(
+      "ID_00002",
+      "İSTİKLAL",
+      options.duplicateCode ? "100001" : "100002",
+      "{8F014A2B-53F9-4823-9FAE-E51D55B81A67}",
+      38,
+      37
+    )}
+  </Document>
+</kml>`;
+}
+
+function placemark(
+  id: string,
+  name: string,
+  code: string,
+  districtId: string,
+  west: number,
+  south: number
+): string {
+  return `<Placemark id="${id}">
+  <description><![CDATA[
+    <table>
+      <tr><td>FID</td><td>${id}</td></tr>
+      <tr><td>AD</td><td>${name}</td></tr>
+      <tr><td>KIMLIKNO</td><td>${code}</td></tr>
+      <tr><td>ILCEID</td><td>${districtId}</td></tr>
+    </table>
+  ]]></description>
+  <MultiGeometry>
+    <Polygon>
+      <outerBoundaryIs><LinearRing><coordinates>
+        ${west},${south},0 ${west + 1},${south},0 ${west + 1},${south + 1},0 ${west},${south + 1},0 ${west},${south},0
+      </coordinates></LinearRing></outerBoundaryIs>
+    </Polygon>
+  </MultiGeometry>
+</Placemark>`;
+}
+
+function hierarchyDataset(level: "ADM0" | "ADM1" | "ADM2"): unknown {
+  const zones =
+    level === "ADM0"
+      ? [hierarchyZone("tr", 0, "Turkey")]
+      : level === "ADM1"
+        ? [hierarchyZone("tr:adm1:tr-27", 1, "Gaziantep")]
+        : TURKEY_GAZIANTEP_ADM3_PARENT_MAPPINGS.map((mapping, index) =>
+            hierarchyZone(mapping.territoryAdm2Id, 2, mapping.districtName, index)
+          );
+
+  return {
+    manifest: {
+      datasetId: `fixture-${level.toLowerCase()}`,
+      datasetVersion: "1.0.0",
+      schemaVersion: "territory-schema@1",
+      sourceDate: "fixture",
+      geometryHash: "fixture"
+    },
+    zones
+  };
+}
+
+function hierarchyZone(
+  id: string,
+  level: number,
+  name: string,
+  offset = 0
+): Record<string, unknown> {
+  return {
+    id,
+    datasetId: "hierarchy-fixture",
+    level,
+    sourceAdminLevel: `ADM${level}`,
+    semanticType: level === 0 ? "country" : level === 1 ? "province" : "district",
+    name,
+    neighborIds: [],
+    geometry: square(offset, offset),
+    center: [offset + 0.5, offset + 0.5],
+    bbox: [offset, offset, offset + 1, offset + 1],
+    properties: {
+      name,
+      territory: {
+        adminLevel: `ADM${level}`,
+        semanticType: level === 0 ? "country" : level === 1 ? "province" : "district"
+      }
+    }
   };
 }
 

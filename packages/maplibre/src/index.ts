@@ -127,6 +127,7 @@ export interface TerritoryMapLibreRegistrySourceOptions {
   datasetId?: string;
   country?: string;
   level?: TerritoryAdminLevel;
+  parentId?: string;
   fallback?: "none" | "deepest-available";
   levels?: readonly TerritoryAdminLevel[];
   sourceId?: string;
@@ -349,6 +350,7 @@ async function resolveRegistryTerritorySource(
       ? await options.registry.resolveDeepestAvailableTerritoryArtifact({
           country: options.country,
           requestedLevel: options.level,
+          ...(options.parentId ? { parentId: options.parentId } : {}),
           purpose: "render",
           fallback: "deepest-available",
           formatPreference
@@ -356,6 +358,7 @@ async function resolveRegistryTerritorySource(
       : await options.registry.resolveTerritoryArtifact({
           country: options.country,
           level: options.level,
+          ...(options.parentId ? { parentId: options.parentId } : {}),
           purpose: "render",
           fallback: options.fallback ?? "none",
           formatPreference

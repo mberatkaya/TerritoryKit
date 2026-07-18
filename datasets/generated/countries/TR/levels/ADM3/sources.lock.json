@@ -1,0 +1,23 @@
+{
+  "contentType": "application/vnd.google-earth.kml+xml",
+  "downloadUrl": "https://acikveri.gaziantep.bel.tr/dataset/5fac9bc5-8cc0-4883-8805-1f71149319db/resource/df82c9ce-f69d-4cc2-bf57-d4a36ed1c144/download/mahalle_sinirlari-1.kml",
+  "fileSizeBytes": 7439237,
+  "licence": {
+    "attributionRequired": true,
+    "attributionText": "Gaziantep Büyükşehir Belediyesi, Mahalle Sınır Alanları, CC BY 4.0",
+    "commercialUseAllowed": true,
+    "id": "CC-BY-4.0",
+    "modificationAllowed": true,
+    "name": "Creative Commons Attribution 4.0 International",
+    "redistributionAllowed": true,
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+  },
+  "lockVersion": "territorykit-source-lock@1",
+  "pilotGeographicScope": "Gaziantep province: complete selected ADM2 parents",
+  "provider": "official-open-data",
+  "retrievalDate": "2026-07-18T00:00:00.000Z",
+  "selectedAdministrativeLevel": "ADM3",
+  "sha256": "f145ae9edd2db7a341634e14d59060a535258461794d361c3f49bdec2bcbfa9a",
+  "sourceUrl": "https://ulasav.csb.gov.tr/dataset/27-mahalle-sinir-alanlari",
+  "sourceVersion": "2026-02-18T13:52:03Z"
+}

@@ -1,0 +1,227 @@
+{
+  "coordinateReferenceSystem": "EPSG:4326",
+  "duplicateFeatureCodes": 0,
+  "duplicateNeighbourhoodNames": [
+    {
+      "count": 2,
+      "name": "AKBAYIR"
+    },
+    {
+      "count": 4,
+      "name": "ATATÜRK"
+    },
+    {
+      "count": 2,
+      "name": "BAĞLICA"
+    },
+    {
+      "count": 3,
+      "name": "BAHÇELİEVLER"
+    },
+    {
+      "count": 2,
+      "name": "BAŞPINAR"
+    },
+    {
+      "count": 2,
+      "name": "ÇAKMAK"
+    },
+    {
+      "count": 2,
+      "name": "ÇAMLICA"
+    },
+    {
+      "count": 2,
+      "name": "ÇİMENLİ"
+    },
+    {
+      "count": 5,
+      "name": "CUMHURİYET"
+    },
+    {
+      "count": 2,
+      "name": "DUMLUPINAR"
+    },
+    {
+      "count": 2,
+      "name": "ESENTEPE"
+    },
+    {
+      "count": 2,
+      "name": "ETİLER"
+    },
+    {
+      "count": 3,
+      "name": "FATİH"
+    },
+    {
+      "count": 3,
+      "name": "FEVZİ ÇAKMAK"
+    },
+    {
+      "count": 2,
+      "name": "FIRAT"
+    },
+    {
+      "count": 2,
+      "name": "GAZİLER"
+    },
+    {
+      "count": 2,
+      "name": "GÜLLÜCE"
+    },
+    {
+      "count": 2,
+      "name": "GÜLPINAR"
+    },
+    {
+      "count": 2,
+      "name": "HİSAR"
+    },
+    {
+      "count": 4,
+      "name": "HÜRRİYET"
+    },
+    {
+      "count": 2,
+      "name": "İKİZKUYU"
+    },
+    {
+      "count": 2,
+      "name": "İNÖNÜ"
+    },
+    {
+      "count": 2,
+      "name": "İSTİKLAL"
+    },
+    {
+      "count": 3,
+      "name": "KALE"
+    },
+    {
+      "count": 3,
+      "name": "KARACAÖREN"
+    },
+    {
+      "count": 2,
+      "name": "KARATAŞ"
+    },
+    {
+      "count": 3,
+      "name": "KARŞIYAKA"
+    },
+    {
+      "count": 2,
+      "name": "KAZIKLI"
+    },
+    {
+      "count": 2,
+      "name": "KIBRIS"
+    },
+    {
+      "count": 2,
+      "name": "KOCATEPE"
+    },
+    {
+      "count": 2,
+      "name": "MEVLANA"
+    },
+    {
+      "count": 3,
+      "name": "MİMAR SİNAN"
+    },
+    {
+      "count": 2,
+      "name": "PANCARLI"
+    },
+    {
+      "count": 2,
+      "name": "ŞAHİNBEY"
+    },
+    {
+      "count": 2,
+      "name": "SARIKAYA"
+    },
+    {
+      "count": 2,
+      "name": "SARILAR"
+    },
+    {
+      "count": 2,
+      "name": "SERİNEVLER"
+    },
+    {
+      "count": 2,
+      "name": "SULTAN SELİM"
+    },
+    {
+      "count": 2,
+      "name": "TOSUNLU"
+    },
+    {
+      "count": 2,
+      "name": "TÜRKYURDU"
+    },
+    {
+      "count": 2,
+      "name": "YARIMCA"
+    },
+    {
+      "count": 3,
+      "name": "YAYLACIK"
+    },
+    {
+      "count": 3,
+      "name": "YENİ"
+    },
+    {
+      "count": 3,
+      "name": "YENİKÖY"
+    },
+    {
+      "count": 2,
+      "name": "YEŞİLEVLER"
+    },
+    {
+      "count": 2,
+      "name": "YEŞİLOVA"
+    },
+    {
+      "count": 2,
+      "name": "YEŞİLYURT"
+    },
+    {
+      "count": 2,
+      "name": "YUNUS EMRE"
+    },
+    {
+      "count": 2,
+      "name": "ZEYTİNLİ"
+    }
+  ],
+  "encoding": "UTF-8",
+  "featureCount": 786,
+  "generatedAt": "2026-07-18T00:00:00.000Z",
+  "geometryType": "Polygon/MultiPolygon from KML Polygon/MultiGeometry",
+  "nullGeometries": 0,
+  "schemaVersion": "territorykit-tr-adm3-source-schema-report@1",
+  "sourceDistrictIdCount": 9,
+  "sourceDistrictIds": [
+    "{43FA2512-DB22-41C0-A03E-0A2561941EE6}",
+    "{460503BF-0C83-4365-AC2E-CA607C45B043}",
+    "{48C8E95D-CD95-444A-8D02-722147A859A4}",
+    "{4F692FBF-DD8E-4C6D-93E4-D4C49CACC4C9}",
+    "{622A6409-5CF2-4AFC-9BFF-09AD53B76AE5}",
+    "{8F014A2B-53F9-4823-9FAE-E51D55B81A67}",
+    "{CCECD7A9-7F9F-421B-9DDC-33920592CE42}",
+    "{D34E09C3-2479-4A5D-A923-546908520744}",
+    "{E2A0D610-4A82-4138-941E-9E6C785BFA53}"
+  ],
+  "sourceProperties": {
+    "idProperty": "description table KIMLIKNO",
+    "nameProperty": "description table AD",
+    "parentIdProperty": "description table ILCEID",
+    "provinceName": "Gaziantep",
+    "sourceObjectIdProperty": "Placemark @id"
+  }
+}
