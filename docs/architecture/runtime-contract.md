@@ -57,10 +57,18 @@ transports remain deferred to Sprint 13.
 - Every request has a request id, revision, `AbortController`, start time, viewport, selected
   level, and cache key once an engine is ready.
 - New requests cancel previous work by default. `cancelPreviousRequest: false` allows overlap, but
-  stale responses cannot update state or adapters.
+  stale responses cannot update state, publish adapter events, or become the final renderer source.
 - `requestTimeoutMs` produces `DOWNLOAD_TIMEOUT`. User/supersede/dispose aborts produce normal
   `REQUEST_ABORTED` results.
+- Cancellation restores the last committed viewport, level, dataset, and result summary when one
+  exists; otherwise the runtime returns to `idle`.
 - Attached adapters are updated only after capability checks through `@territory-kit/adapter-core`.
+  Runtime source ids resolve from `adapterSourceId`, then `adapter.managedSourceId`; attached
+  adapters without either source id fail with `RUNTIME_CONFIGURATION_INVALID`.
+- Async adapter `setSource` calls receive request id, revision, and abort signal. Stale adapter
+  operations cannot emit `adapter-updated`.
+- Runtime-created caches are disposed with the runtime. Injected caches are external by default
+  unless `cacheOwnership: "runtime"` is set.
 
 ## Dependency Boundary
 

@@ -80,11 +80,19 @@ typecheck`, and `pnpm test:visual:maplibre`.
 - [x] Direct dataset mode lazily creates and reuses core engines; resolver and engine factory
       injection are covered by package tests.
 - [x] Optional adapters are updated only when attached and capability-compatible through
-      `@territory-kit/adapter-core`; detached adapters do not fail viewport requests.
+      `@territory-kit/adapter-core`; detached adapters do not fail viewport requests, and attached
+      adapters bind source IDs through `adapterSourceId` or `adapter.managedSourceId`.
+- [x] Async adapter operations receive request id, revision, and abort signal context so stale
+      renderer commits cannot become the final visible source or emit `adapter-updated`.
+- [x] Cancellation restores the previously committed viewport when one exists, returns first
+      request cancellation to `idle`, and refreshes from the committed viewport.
+- [x] Runtime cache ownership distinguishes runtime-owned caches from injected external caches;
+      shared caches survive unrelated runtime disposal and async dispose failures are isolated.
 - [x] Runtime package tests cover state transitions, invalid viewport input, debounce, duplicate
       viewport suppression, force refresh, cancellation, stale and late responses, timeout,
       dispose cancellation, cache hit/miss, LRU eviction, maxBytes, engine reuse, request
-      deduplication, latest-request-only adapter updates, adapter failure, deterministic event
+      deduplication, out-of-order async adapter completion, MapLibre source binding, cache option
+      validation, latest-request-only adapter updates, adapter failure, deterministic event
       ordering, injected clock, and import safety.
 
 ## Sprint 5 Pilot Country Dataset Evidence
@@ -140,9 +148,9 @@ typecheck`, and `pnpm test:visual:maplibre`.
 - [x] `0.6.0` - Sprint 8 - Generator and CLI tools.
 - [x] `0.9.0-rc.1` - Sprint 9 - Quality, security, performance, docs.
 - [x] `1.0.0` - Sprint 10 - Stable open source release preparation.
-- [x] `1.2.0` - Sprint 11 - Runtime and adapter architecture foundations.
-- [x] `1.3.0` - Sprint 12 - Runtime viewport lifecycle.
-- [future backlog] `1.4.0` - Sprint 13 - Catalogs, binary indexes, and worker loading.
+- [x] Pending `1.2.0` - Sprint 11 - Runtime and adapter architecture foundations.
+- [x] Pending `1.2.0` - Sprint 12 - Runtime viewport lifecycle.
+- [future backlog] Future - Sprint 13 - Catalogs, binary indexes, and worker loading.
 
 ## MVP Scope
 

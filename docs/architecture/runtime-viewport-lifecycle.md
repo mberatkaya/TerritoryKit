@@ -13,7 +13,8 @@ network transports, or filesystem access.
 6. Runtime creates or reuses a core engine.
 7. Runtime checks the cache, queries visible zones on miss, and writes cache bytes.
 8. Runtime updates an attached capable adapter, when present.
-9. Only the latest successful request can update state or adapter data.
+9. Only the latest successful request can publish `adapter-updated`, `viewport-ready`, state, or
+   renderer-visible data.
 
 ## Viewport Shape
 
@@ -59,8 +60,24 @@ Runtime accepts renderer-independent adapters only. It does not import MapLibre,
 mobile renderer packages. Detached adapters are skipped. Attached adapters must advertise `geoJson`
 and `sourceReplacement` capabilities before runtime calls `setSource`.
 
+Runtime resolves adapter source identity in this order:
+
+1. `options.adapterSourceId`
+2. `adapter.managedSourceId`
+3. no source id when no adapter is present
+4. `RUNTIME_CONFIGURATION_INVALID` when an attached adapter has neither source identity.
+
+`setSource(source, context?)` receives a renderer-neutral operation context with `requestId`,
+`revision`, and `signal`. Async adapters must check `context.signal` before committing visible
+source changes. The runtime checks freshness immediately before and after adapter work; stale
+adapter operations cannot emit `adapter-updated` or `viewport-ready`.
+
 ## Cancellation Policy
 
 Abort is a normal lifecycle result. `cancelActiveRequest` and superseding viewports emit
 `request-aborted` and resolve the request with `status: "aborted"`. Timeouts are failures and use
 the shared `DOWNLOAD_TIMEOUT` error code.
+
+When a request is cancelled after an earlier viewport has committed, runtime state returns to
+`ready` for that committed viewport, level, dataset, and result summary. If no viewport has
+committed yet, cancellation returns the runtime to `idle` and clears active request fields.

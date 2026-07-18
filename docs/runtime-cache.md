@@ -19,7 +19,11 @@ The cache implements:
 - `delete(key, context): Promise<void>`
 - `clear(): Promise<void>`
 - `getSummary(): TerritoryRuntimeCacheSummary`
-- `dispose(): void`
+- `dispose(): void | Promise<void>`
+
+`maxEntries` and `maxBytes` must be finite non-negative integers. `NaN`, `Infinity`, negative
+values, and fractional values throw `RUNTIME_CONFIGURATION_INVALID`. `maxEntries: 0` retains no
+entries. `maxBytes: 0` retains no non-empty entries.
 
 ## Eviction
 
@@ -38,6 +42,17 @@ deterministic even if callers mutate their original buffers or mutate returned b
 
 Callers can opt out with `copyOnWrite: false` or `copyOnRead: false` when they own the buffers and
 want to avoid copies.
+
+## Ownership
+
+Runtime-created memory caches are runtime-owned and are disposed when `runtime.dispose()` runs.
+Injected cache instances are external by default and are not disposed by the runtime, so a shared
+cache can survive one runtime disposal and continue serving another runtime. Use
+`cacheOwnership: "runtime"` to make an injected cache runtime-owned.
+
+`dispose()` stays synchronous on the runtime API. If a runtime-owned cache returns a rejecting
+dispose promise, the runtime catches the rejection and reports `cache-dispose-failed` through the
+logger instead of leaving an unhandled rejection.
 
 ## Scope
 

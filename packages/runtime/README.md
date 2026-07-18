@@ -35,8 +35,16 @@ await runtime.setViewport({
 - `cancelActiveRequest(reason?)` aborts scheduled or active work as a normal lifecycle result.
 - `getState()` and `state` return immutable snapshots.
 - `subscribe(listener)` and `unsubscribe(listener)` provide deterministic event delivery.
-- `dispose()` aborts active work, clears listeners, disposes the owned memory cache, and enters
+- `dispose()` aborts active work, clears listeners, disposes runtime-owned caches, and enters
   `disposed`.
+
+Cancellation restores the last successfully committed viewport when one exists. If the first
+request is cancelled before a viewport commits, the runtime returns to `idle` with no active
+viewport.
+
+Attached adapters use `options.adapterSourceId` first, then `adapter.managedSourceId`. Async
+adapter operations receive `{ requestId, revision, signal }`; adapters should check the signal
+before committing renderer-visible source changes.
 
 ## Cache
 
@@ -50,7 +58,12 @@ const cache = createMemoryTerritoryRuntimeCache({
 ```
 
 The memory cache is async, deterministic, LRU-based, byte-counted, and copies `Uint8Array` values
-on read/write by default.
+on read/write by default. `maxEntries` and `maxBytes` must be finite non-negative integers; `0`
+creates a zero-capacity policy for that dimension.
+
+Runtime-created caches are disposed by `runtime.dispose()`. Injected caches are external by default
+and remain usable after runtime disposal; pass `cacheOwnership: "runtime"` when a runtime should
+own an injected cache.
 
 ## Boundaries
 

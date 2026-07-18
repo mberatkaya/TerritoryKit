@@ -8,8 +8,8 @@ independent from map renderers, backend frameworks, and game-specific state.
 
 Public packages in this workspace are currently on the `1.1.0` package line. The root workspace is
 private; its `0.0.0-private` version is tooling metadata and is not a public product version.
-Sprint 11 and Sprint 12 changesets are pending minor releases; the next public package line remains
-unpublished from this workspace until maintainers run the release flow.
+Sprint 11 and Sprint 12 changesets are pending one fixed-group minor release; Changesets currently
+reports the next public package line as `1.2.0` until maintainers run the release flow.
 
 ## Package Maturity
 
@@ -37,8 +37,8 @@ The table below is historical roadmap context, not a claim that every future ada
 | `0.6.0`         | Sprint 8     | Hardened on roadmap branch     |
 | `0.9.0-rc.1`    | Sprint 9     | Verified on roadmap branch     |
 | `1.0.0`         | Sprint 10    | Prepared on release branch     |
-| `1.2.0`         | Sprint 11    | Runtime and adapter boundaries |
-| `1.3.0`         | Sprint 12    | Runtime viewport lifecycle     |
+| Pending `1.2.0` | Sprint 11    | Runtime and adapter boundaries |
+| Pending `1.2.0` | Sprint 12    | Runtime viewport lifecycle     |
 
 ## Packages
 

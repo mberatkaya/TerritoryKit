@@ -26,7 +26,9 @@ The runtime owns:
 - direct dataset, resolver, and registry install coordination
 - lazy engine creation and reuse
 - async runtime cache reads/writes
-- renderer-neutral adapter source updates
+- renderer-neutral adapter source updates with managed source binding
+- committed viewport restoration after cancellation
+- cache ownership and safe cache disposal failure handling
 
 The runtime does not own:
 
@@ -42,6 +44,10 @@ The runtime does not own:
 - Consumers can drive viewport updates through one runtime object instead of hand-wiring engines,
   caches, cancellation, and adapters.
 - Runtime requests are deterministic enough for fake-clock and fake-scheduler tests.
+- Async adapters receive a request id, revision, and abort signal. Adapters that perform async
+  renderer commits must check the signal before applying visible source changes.
+- Runtime-owned caches are disposed by `runtime.dispose()`. Injected caches remain external by
+  default so shared caches can outlive any one runtime.
 - Sprint 13 can add catalogs, engine pools, binary indexes, and worker loading behind the existing
   resolver, engine factory, cache, and cancellation contracts.
 
