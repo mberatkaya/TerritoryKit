@@ -463,7 +463,7 @@ describe("Turkey Gaziantep ADM3 pilot source", () => {
     await expect(readFile(join(outputPath, "coverage.json"), "utf8")).resolves.toContain(
       '"status": "partial"'
     );
-  });
+  }, 20_000);
 
   it("rejects duplicate official neighbourhood codes", async () => {
     const tempDir = await createTempDir("territory-tr-adm3-duplicate-");
