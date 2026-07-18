@@ -31,7 +31,7 @@ const publicPackageJsonPaths = [
 ] as const;
 
 describe("release metadata", () => {
-  it("keeps Sprint 11 as the pending 1.2.0 fixed-group minor release", () => {
+  it("keeps Sprint 11 and Sprint 12 as pending 1.2.0 fixed-group minor releases", () => {
     const rootPackage = readJson<PackageJson>("package.json");
     const changesetConfig = readJson<ChangesetConfig>(".changeset/config.json");
     const fixedPackages = new Set(changesetConfig.fixed.flat());
@@ -50,7 +50,9 @@ describe("release metadata", () => {
     expect(sprintChangeset).toContain('"@territory-kit/runtime": minor');
     expect(nextMinor("1.1.0")).toBe("1.2.0");
 
-    expect(readText("README.md")).toContain("| `1.2.0`         | Sprint 11");
+    const readme = readText("README.md");
+    expect(readme).toContain("| Pending `1.2.0` | Sprint 11");
+    expect(readme).toContain("| Pending `1.2.0` | Sprint 12");
     expect(readText("CHANGELOG.md")).toContain("## 1.2.0 - Unreleased");
     expect(readText("packages/adapter-core/CHANGELOG.md")).toContain("## 1.2.0 - Unreleased");
     expect(readText("packages/runtime/CHANGELOG.md")).toContain("## 1.2.0 - Unreleased");

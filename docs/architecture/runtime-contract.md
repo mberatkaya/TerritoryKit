@@ -3,7 +3,8 @@
 `@territory-kit/runtime` is the future coordination boundary for datasets, registry artifacts,
 core engines, cache, request cancellation, workers, viewport lifecycle, and renderer adapters.
 
-Sprint 11 implements only the minimal lifecycle foundation.
+Sprint 11 implemented the minimal lifecycle foundation. Sprint 12 turns that boundary into an
+active viewport request orchestration runtime.
 
 ## Public API
 
@@ -21,10 +22,22 @@ Sprint 11 implements only the minimal lifecycle foundation.
 - `TerritoryRuntimeLogger`
 - `TerritoryRuntimeRequestContext`
 - `TerritoryRuntimeDisposeResult`
+- `TerritoryRuntimeViewport`
+- `TerritoryRuntimeBounds`
+- `TerritoryRuntimeResultSummary`
+- `TerritoryRuntimeCacheSummary`
+- `TerritoryRuntimeScheduler`
+- `TerritoryRuntimeScheduledTask`
+- `TerritoryRuntimeRequestOptions`
+- `TerritoryRuntimeRequestResult`
+- `TerritoryRuntimeCancelResult`
+- `TerritoryRuntimeEngineFactory`
+- `createMemoryTerritoryRuntimeCache`
 - `createTerritoryRuntime`
 
-The only active statuses are `idle` and `disposed`. Initialization, downloads, catalogs, workers,
-and viewport orchestration are intentionally deferred.
+The active statuses are `idle`, `scheduled`, `resolving`, `loading`, `querying`,
+`updating-adapter`, `ready`, `error`, and `disposed`. Catalogs, binary indexes, and worker
+transports remain deferred to Sprint 13.
 
 ## Lifecycle Policy
 
@@ -39,6 +52,23 @@ and viewport orchestration are intentionally deferred.
   `TerritoryRuntimeDisposeResult`.
 - Double dispose is safe and returns `alreadyDisposed: true`.
 - Invalid post-dispose operations throw `TerritoryError` with `RUNTIME_DISPOSED`.
+- `setViewport()` validates bounds and zoom before creating a request. Duplicate completed
+  viewports are skipped unless `force: true`.
+- Every request has a request id, revision, `AbortController`, start time, viewport, selected
+  level, and cache key once an engine is ready.
+- New requests cancel previous work by default. `cancelPreviousRequest: false` allows overlap, but
+  stale responses cannot update state, publish adapter events, or become the final renderer source.
+- `requestTimeoutMs` produces `DOWNLOAD_TIMEOUT`. User/supersede/dispose aborts produce normal
+  `REQUEST_ABORTED` results.
+- Cancellation restores the last committed viewport, level, dataset, and result summary when one
+  exists; otherwise the runtime returns to `idle`.
+- Attached adapters are updated only after capability checks through `@territory-kit/adapter-core`.
+  Runtime source ids resolve from `adapterSourceId`, then `adapter.managedSourceId`; attached
+  adapters without either source id fail with `RUNTIME_CONFIGURATION_INVALID`.
+- Async adapter `setSource` calls receive request id, revision, and abort signal. Stale adapter
+  operations cannot emit `adapter-updated`.
+- Runtime-created caches are disposed with the runtime. Injected caches are external by default
+  unless `cacheOwnership: "runtime"` is set.
 
 ## Dependency Boundary
 

@@ -67,6 +67,34 @@ verification, or an explicit handoff/backlog classification that proves the item
       `pnpm --filter @territory-kit/nestjs test`, `pnpm --filter @territory-kit/example-web-maplibre
 typecheck`, and `pnpm test:visual:maplibre`.
 
+## Sprint 12 Runtime Viewport Lifecycle Evidence
+
+- [x] `feat/runtime-viewport-lifecycle` adds `setViewport`, `refresh`,
+      `cancelActiveRequest`, scheduler/clock injection, request timeout, request deduplication,
+      and stale-response guards.
+- [x] Runtime state snapshots include status, revision, event sequence, active request metadata,
+      last completed request, last error, result summary, and cache summary.
+- [x] `createMemoryTerritoryRuntimeCache` implements async get/set/delete/clear, deterministic LRU
+      eviction, max-entry and max-byte policies, byte accounting, hit/miss/eviction stats, and
+      default `Uint8Array` mutation protection.
+- [x] Direct dataset mode lazily creates and reuses core engines; resolver and engine factory
+      injection are covered by package tests.
+- [x] Optional adapters are updated only when attached and capability-compatible through
+      `@territory-kit/adapter-core`; detached adapters do not fail viewport requests, and attached
+      adapters bind source IDs through `adapterSourceId` or `adapter.managedSourceId`.
+- [x] Async adapter operations receive request id, revision, and abort signal context so stale
+      renderer commits cannot become the final visible source or emit `adapter-updated`.
+- [x] Cancellation restores the previously committed viewport when one exists, returns first
+      request cancellation to `idle`, and refreshes from the committed viewport.
+- [x] Runtime cache ownership distinguishes runtime-owned caches from injected external caches;
+      shared caches survive unrelated runtime disposal and async dispose failures are isolated.
+- [x] Runtime package tests cover state transitions, invalid viewport input, debounce, duplicate
+      viewport suppression, force refresh, cancellation, stale and late responses, timeout,
+      dispose cancellation, cache hit/miss, LRU eviction, maxBytes, engine reuse, request
+      deduplication, out-of-order async adapter completion, MapLibre source binding, cache option
+      validation, latest-request-only adapter updates, adapter failure, deterministic event
+      ordering, injected clock, and import safety.
+
 ## Sprint 5 Pilot Country Dataset Evidence
 
 - [x] Pilot configs exist for `TR`, `US`, `DE`, `JP`, and `ID` at ADM0/ADM1/ADM2.
@@ -120,7 +148,9 @@ typecheck`, and `pnpm test:visual:maplibre`.
 - [x] `0.6.0` - Sprint 8 - Generator and CLI tools.
 - [x] `0.9.0-rc.1` - Sprint 9 - Quality, security, performance, docs.
 - [x] `1.0.0` - Sprint 10 - Stable open source release preparation.
-- [x] `1.2.0` - Sprint 11 - Runtime and adapter architecture foundations.
+- [x] Pending `1.2.0` - Sprint 11 - Runtime and adapter architecture foundations.
+- [x] Pending `1.2.0` - Sprint 12 - Runtime viewport lifecycle.
+- [future backlog] Future - Sprint 13 - Catalogs, binary indexes, and worker loading.
 
 ## MVP Scope
 
@@ -132,6 +162,8 @@ typecheck`, and `pnpm test:visual:maplibre`.
 - [x] Neighbor graph traversal baseline.
 - [x] Zoom-to-level strategy baseline.
 - [x] Viewport-based zone query baseline.
+- [x] Runtime viewport request lifecycle baseline.
+- [x] Runtime memory LRU cache baseline.
 - [x] MapLibre package boundary baseline.
 - [x] NestJS package boundary baseline.
 - [x] Turkey, Istanbul, and Fatih sample datasets.

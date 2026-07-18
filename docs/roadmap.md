@@ -13,7 +13,9 @@
 | `0.6.0`         | Sprint 8  | Generator and CLI tools                        | Hardened on roadmap branch |
 | `0.9.0-rc.1`    | Sprint 9  | Docs, quality, performance                     | Verified on roadmap branch |
 | `1.0.0`         | Sprint 10 | Stable release                                 | Prepared on release branch |
-| `1.2.0`         | Sprint 11 | Runtime contracts and adapter boundaries       | In progress on branch      |
+| Pending `1.2.0` | Sprint 11 | Runtime contracts and adapter boundaries       | Merged to main             |
+| Pending `1.2.0` | Sprint 12 | Runtime viewport lifecycle                     | In progress on branch      |
+| Future          | Sprint 13 | Catalogs, binary indexes, and worker loading   | Future after Sprint 12     |
 
 The table above describes the historical sprint track, not blanket production availability for
 every adapter or dataset. Current implementation gaps and partial items are tracked in
@@ -25,8 +27,12 @@ Maintainers track completion status against sprint tasks, deliverables, acceptan
 tests, documentation, release handoff, and future roadmap work in the master sprint checklist.
 
 Sprint 11 adds `@territory-kit/adapter-core`, `@territory-kit/runtime`, shared coded errors, and a
-deprecated core registry compatibility path. It does not implement full viewport runtime loading,
-catalogs, binary indexes, workers, MVT generation, or additional renderer adapters.
+deprecated core registry compatibility path. Sprint 12 adds runtime viewport request orchestration,
+debounce, cancellation with committed-state restoration, stale response and stale adapter operation
+guards, memory LRU cache ownership policy, lazy engine reuse, managed adapter source binding, and
+renderer-independent adapter updates. Catalogs, binary indexes, workers, MVT generation, and
+additional renderer adapters remain future work unless their package or workflow exists in this
+repository.
 
 See [Master Sprint Checklist](./sprint-checklist.md) for branch-level completion evidence,
 repo-owned hardening work, external handoff, and post-1.0 roadmap items.

@@ -41,6 +41,12 @@ export interface TerritoryRenderSource {
   readonly metadata?: Readonly<Record<string, unknown>>;
 }
 
+export interface TerritoryAdapterOperationContext {
+  readonly requestId: string;
+  readonly revision: number;
+  readonly signal?: AbortSignal;
+}
+
 export interface TerritoryRenderTheme {
   readonly fillColor?: string;
   readonly fillOpacity?: number;
@@ -111,9 +117,13 @@ export interface TerritoryRenderEvent {
 export interface TerritoryRendererAdapter<TTarget = unknown> {
   readonly capabilities: TerritoryAdapterCapabilities;
   readonly lifecycleState: TerritoryAdapterLifecycleState;
+  readonly managedSourceId?: string;
   attach(target: TTarget): void | Promise<void>;
   detach(): void | Promise<void>;
-  setSource(source: TerritoryRenderSource): void | Promise<void>;
+  setSource(
+    source: TerritoryRenderSource,
+    context?: TerritoryAdapterOperationContext
+  ): void | Promise<void>;
   updateState(state: TerritoryRenderState): void | Promise<void>;
   updateTheme(theme: TerritoryRenderTheme): void | Promise<void>;
 }

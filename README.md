@@ -8,15 +8,15 @@ independent from map renderers, backend frameworks, and game-specific state.
 
 Public packages in this workspace are currently on the `1.1.0` package line. The root workspace is
 private; its `0.0.0-private` version is tooling metadata and is not a public product version.
-The Sprint 11 changeset is a pending minor release and resolves the next public package line to
-`1.2.0`.
+Sprint 11 and Sprint 12 changesets are pending one fixed-group minor release; Changesets currently
+reports the next public package line as `1.2.0` until maintainers run the release flow.
 
 ## Package Maturity
 
 - Stable core line: `@territory-kit/dataset`, `@territory-kit/core`, `@territory-kit/registry`,
   `@territory-kit/maplibre`, `@territory-kit/nestjs`, `@territory-kit/generators`,
   `@territory-kit/cli`, and pilot country loader packages.
-- New contract foundations: `@territory-kit/adapter-core` and `@territory-kit/runtime`.
+- New runtime line: `@territory-kit/adapter-core` and `@territory-kit/runtime`.
 - Future packages: Leaflet, OpenLayers, React Native, game, Studio, hosted registry, and dataset
   diff/migration tooling remain roadmap items.
 
@@ -37,7 +37,8 @@ The table below is historical roadmap context, not a claim that every future ada
 | `0.6.0`         | Sprint 8     | Hardened on roadmap branch     |
 | `0.9.0-rc.1`    | Sprint 9     | Verified on roadmap branch     |
 | `1.0.0`         | Sprint 10    | Prepared on release branch     |
-| `1.2.0`         | Sprint 11    | Runtime and adapter boundaries |
+| Pending `1.2.0` | Sprint 11    | Runtime and adapter boundaries |
+| Pending `1.2.0` | Sprint 12    | Runtime viewport lifecycle     |
 
 ## Packages
 
@@ -46,8 +47,8 @@ The table below is historical roadmap context, not a claim that every future ada
 - `@territory-kit/core`: engine APIs, spatial lookup, hierarchy, adjacency, viewport queries.
 - `@territory-kit/registry`: registry discovery, artifact resolution, verified cache, and Node
   download helpers.
-- `@territory-kit/runtime`: minimal runtime lifecycle contracts for future registry, dataset,
-  viewport, cache, worker, and adapter orchestration.
+- `@territory-kit/runtime`: viewport request orchestration across datasets, core engines, runtime
+  cache, cancellation, scheduler, and renderer-independent adapters.
 - `@territory-kit/maplibre`: first map adapter boundary for MapLibre GL JS.
 - `@territory-kit/nestjs`: NestJS integration boundary and PostGIS repository contracts.
 - `@territory-kit/generators`: deterministic dataset helper, source, and adjacency utilities.
@@ -63,7 +64,7 @@ The table below is historical roadmap context, not a claim that every future ada
 New code should import registry APIs from `@territory-kit/registry`. Core still exposes registry
 exports for compatibility, but they are deprecated and mirrored under
 `@territory-kit/core/legacy-registry` for migration work. Runtime orchestration is additive and
-does not replace existing core engine or MapLibre APIs yet.
+does not replace existing core engine or MapLibre APIs.
 
 ## Global Dataset Builds
 
@@ -137,6 +138,9 @@ items.
 - [Release check](./docs/release-check.md)
 - [Runtime architecture audit](./docs/architecture/runtime-architecture-audit.md)
 - [Runtime contract](./docs/architecture/runtime-contract.md)
+- [Runtime viewport audit](./docs/architecture/runtime-viewport-audit.md)
+- [Runtime viewport lifecycle](./docs/architecture/runtime-viewport-lifecycle.md)
+- [Runtime cache](./docs/runtime-cache.md)
 - [Adapter contract](./docs/architecture/adapter-contract.md)
 - [Core/registry boundary](./docs/architecture/core-registry-boundary.md)
 - [Errors](./docs/errors.md)
