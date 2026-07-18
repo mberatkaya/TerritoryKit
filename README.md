@@ -4,31 +4,48 @@ TerritoryKit is a TypeScript-first geospatial SDK for hierarchical, irregular po
 territories. It aims for an H3-like developer experience while keeping the core engine
 independent from map renderers, backend frameworks, and game-specific state.
 
-## Current Version Track
+## Current Release
 
-The repository starts at `0.0.1` and follows the sprint roadmap from the technical sprint
-document:
+Public packages in this workspace are currently on the `1.1.0` package line. The root workspace is
+private; its `0.0.0-private` version is tooling metadata and is not a public product version.
 
-| Product version | Sprint range | Status                     |
-| --------------- | ------------ | -------------------------- |
-| `0.0.1`         | Sprint 0     | Complete                   |
-| `0.1.0-alpha.1` | Sprint 1     | Hardened on roadmap branch |
-| `0.1.0`         | Sprint 2     | Hardened on roadmap branch |
-| `0.2.0-alpha.1` | Sprint 3     | Hardened on roadmap branch |
-| `0.2.0`         | Sprint 4     | Hardened on roadmap branch |
-| `0.3.0`         | Sprint 5     | Hardened on roadmap branch |
-| `0.4.0`         | Sprint 6     | Hardened on roadmap branch |
-| `0.5.0`         | Sprint 7     | Hardened on roadmap branch |
-| `0.6.0`         | Sprint 8     | Hardened on roadmap branch |
-| `0.9.0-rc.1`    | Sprint 9     | Verified on roadmap branch |
-| `1.0.0`         | Sprint 10    | Prepared on release branch |
+## Package Maturity
+
+- Stable core line: `@territory-kit/dataset`, `@territory-kit/core`, `@territory-kit/registry`,
+  `@territory-kit/maplibre`, `@territory-kit/nestjs`, `@territory-kit/generators`,
+  `@territory-kit/cli`, and pilot country loader packages.
+- New contract foundations: `@territory-kit/adapter-core` and `@territory-kit/runtime`.
+- Future packages: Leaflet, OpenLayers, React Native, game, Studio, hosted registry, and dataset
+  diff/migration tooling remain roadmap items.
+
+## Historical Sprint Track
+
+The table below is historical roadmap context, not a claim that every future adapter exists today:
+
+| Product version | Sprint range | Status                         |
+| --------------- | ------------ | ------------------------------ |
+| `0.0.1`         | Sprint 0     | Complete                       |
+| `0.1.0-alpha.1` | Sprint 1     | Hardened on roadmap branch     |
+| `0.1.0`         | Sprint 2     | Hardened on roadmap branch     |
+| `0.2.0-alpha.1` | Sprint 3     | Hardened on roadmap branch     |
+| `0.2.0`         | Sprint 4     | Hardened on roadmap branch     |
+| `0.3.0`         | Sprint 5     | Hardened on roadmap branch     |
+| `0.4.0`         | Sprint 6     | Hardened on roadmap branch     |
+| `0.5.0`         | Sprint 7     | Hardened on roadmap branch     |
+| `0.6.0`         | Sprint 8     | Hardened on roadmap branch     |
+| `0.9.0-rc.1`    | Sprint 9     | Verified on roadmap branch     |
+| `1.0.0`         | Sprint 10    | Prepared on release branch     |
+| `1.1.0`         | Sprint 11    | Runtime and adapter boundaries |
 
 ## Packages
 
 - `@territory-kit/dataset`: dataset manifest, schema, validation, and loading.
+- `@territory-kit/adapter-core`: renderer-independent adapter contracts and capability helpers.
 - `@territory-kit/core`: engine APIs, spatial lookup, hierarchy, adjacency, viewport queries.
 - `@territory-kit/registry`: registry discovery, artifact resolution, verified cache, and Node
   download helpers.
+- `@territory-kit/runtime`: minimal runtime lifecycle contracts for future registry, dataset,
+  viewport, cache, worker, and adapter orchestration.
 - `@territory-kit/maplibre`: first map adapter boundary for MapLibre GL JS.
 - `@territory-kit/nestjs`: NestJS integration boundary and PostGIS repository contracts.
 - `@territory-kit/generators`: deterministic dataset helper, source, and adjacency utilities.
@@ -38,6 +55,13 @@ document:
   `@territory-kit/data-jp`, `@territory-kit/data-id`: thin resolver-driven pilot country loaders
   without embedded geometry artifacts.
 - `@territory-kit/shared-testkit`: private fixtures for tests and examples.
+
+## Migration And Deprecation
+
+New code should import registry APIs from `@territory-kit/registry`. Core still exposes registry
+exports for compatibility, but they are deprecated and mirrored under
+`@territory-kit/core/legacy-registry` for migration work. Runtime orchestration is additive and
+does not replace existing core engine or MapLibre APIs yet.
 
 ## Global Dataset Builds
 
@@ -109,6 +133,11 @@ items.
 - [Release governance](./docs/release-governance.md)
 - [Roadmap](./docs/roadmap.md)
 - [Release check](./docs/release-check.md)
+- [Runtime architecture audit](./docs/architecture/runtime-architecture-audit.md)
+- [Runtime contract](./docs/architecture/runtime-contract.md)
+- [Adapter contract](./docs/architecture/adapter-contract.md)
+- [Core/registry boundary](./docs/architecture/core-registry-boundary.md)
+- [Errors](./docs/errors.md)
 - [Product gap analysis](./docs/product-gap-analysis.md)
 - [Dataset compatibility](./docs/dataset-compatibility.md)
 - [Source adapters](./docs/source-adapters.md)

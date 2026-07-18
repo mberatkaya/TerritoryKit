@@ -13,6 +13,7 @@
 | `0.6.0`         | Sprint 8  | Generator and CLI tools                        | Hardened on roadmap branch |
 | `0.9.0-rc.1`    | Sprint 9  | Docs, quality, performance                     | Verified on roadmap branch |
 | `1.0.0`         | Sprint 10 | Stable release                                 | Prepared on release branch |
+| `1.1.0`         | Sprint 11 | Runtime contracts and adapter boundaries       | In progress on branch      |
 
 The table above describes the historical sprint track, not blanket production availability for
 every adapter or dataset. Current implementation gaps and partial items are tracked in
@@ -23,9 +24,9 @@ tooling remain future-roadmap items unless their package or workflow exists in t
 Maintainers track completion status against sprint tasks, deliverables, acceptance criteria,
 tests, documentation, release handoff, and future roadmap work in the master sprint checklist.
 
-Sprint 10 does not add new public API or schema behavior. It freezes the current package
-surface, prepares the `1.0.0` version plan, refreshes release evidence, and leaves package
-publishing to the post-merge Release workflow.
+Sprint 11 adds `@territory-kit/adapter-core`, `@territory-kit/runtime`, shared coded errors, and a
+deprecated core registry compatibility path. It does not implement full viewport runtime loading,
+catalogs, binary indexes, workers, MVT generation, or additional renderer adapters.
 
 See [Master Sprint Checklist](./sprint-checklist.md) for branch-level completion evidence,
 repo-owned hardening work, external handoff, and post-1.0 roadmap items.

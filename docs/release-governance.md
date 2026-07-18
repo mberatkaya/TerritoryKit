@@ -11,14 +11,17 @@ leak into lower-level packages.
 
 The enforced source dependency direction is:
 
-| Package                     | Allowed workspace imports                                                                               |
-| --------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `@territory-kit/dataset`    | none                                                                                                    |
-| `@territory-kit/core`       | `@territory-kit/dataset`, `@territory-kit/registry`                                                     |
-| `@territory-kit/generators` | `@territory-kit/core`, `@territory-kit/dataset`                                                         |
-| `@territory-kit/maplibre`   | `@territory-kit/core`, `@territory-kit/dataset`                                                         |
-| `@territory-kit/nestjs`     | `@territory-kit/core`, `@territory-kit/dataset`                                                         |
-| `@territory-kit/cli`        | `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/generators`, `@territory-kit/registry` |
+| Package                       | Allowed workspace imports                                                                                 |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `@territory-kit/dataset`      | none                                                                                                      |
+| `@territory-kit/adapter-core` | `@territory-kit/dataset`                                                                                  |
+| `@territory-kit/registry`     | `@territory-kit/dataset`                                                                                  |
+| `@territory-kit/core`         | `@territory-kit/dataset`; `@territory-kit/registry` only through deprecated compatibility exports         |
+| `@territory-kit/runtime`      | `@territory-kit/adapter-core`, `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/registry` |
+| `@territory-kit/generators`   | `@territory-kit/core`, `@territory-kit/dataset`                                                           |
+| `@territory-kit/maplibre`     | `@territory-kit/adapter-core`, `@territory-kit/dataset`, `@territory-kit/registry`                        |
+| `@territory-kit/nestjs`       | `@territory-kit/core`, `@territory-kit/dataset`                                                           |
+| `@territory-kit/cli`          | `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/generators`, `@territory-kit/registry`   |
 
 Tests and examples can import higher-level packages when they are proving an integration flow.
 
@@ -68,7 +71,8 @@ The first community adapter template repo is a post-1.0 roadmap item. Until then
 copy the MapLibre package shape:
 
 - Keep renderer-specific code outside `@territory-kit/core`.
-- Depend only on `@territory-kit/core` and `@territory-kit/dataset`.
+- Depend only on the documented adapter boundary packages. Renderer adapters should use
+  `@territory-kit/adapter-core`; runtime coordination should use `@territory-kit/runtime`.
 - Provide capability metadata, lifecycle methods, theme/state update helpers, and visual or
   interaction tests for the target runtime.
 

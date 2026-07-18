@@ -15,6 +15,8 @@
 - `computeSharedBoundaryMeters(left, right, options)` measures shared boundary length.
 - `validateTerritoryAdjacencyArtifact(dataset, artifact)` validates adjacency artifact integrity.
 - `createTerritoryAdjacencyIndex(artifact)` creates typed neighbor and relation queries.
+- `TerritoryError`, `TerritoryErrorCode`, `serializeTerritoryError`,
+  `deserializeTerritoryError`, and `isTerritoryError` provide the shared coded error model.
 
 ## `@territory-kit/core`
 
@@ -39,13 +41,31 @@
 - `engine.polygonToZones(geometry, { level })`
 - `defaultZoomLevelStrategy` and `zoomToDefaultLevel(zoom)` expose the default zoom mapping.
 - `TerritoryZoneNotFoundError` is thrown by programmer-error APIs when a zone id is missing.
+- Registry re-exports from the core root are deprecated. Import registry APIs from
+  `@territory-kit/registry` or use `@territory-kit/core/legacy-registry` for compatibility-only
+  migration work.
+
+## `@territory-kit/adapter-core`
+
+- `TerritoryRendererAdapter<TTarget>` defines attach/detach/source/state/theme methods.
+- `defineTerritoryAdapterCapabilities`, `hasTerritoryAdapterCapability`, and
+  `assertTerritoryAdapterCapability` model immutable renderer capabilities.
+- `createTerritoryAdapterLifecycle` and `assertTerritoryAdapterAttached` provide shared lifecycle
+  guards.
+
+## `@territory-kit/runtime`
+
+- `createTerritoryRuntime(options)` creates an isolated minimal runtime.
+- Runtime state is currently `idle` or `disposed`.
+- `subscribe`, `unsubscribe`, and `dispose` provide deterministic lifecycle events.
 
 ## `@territory-kit/maplibre`
 
 - `zonesToFeatureCollection(zones, stateByZoneId)`
 - `createTerritoryMapLibreLayers(zones, options)` supports initial `stateByZoneId`.
 - `createTerritoryMapLibreAdapter({ zones, onZoneClick, onZoneHover })`
-- Adapter lifecycle: `attach`, `detach`, `updateData`, `updateTheme`
+- Adapter lifecycle: `attach`, `detach`, `setSource`, `updateState`, `updateData`, `updateTheme`
+- Adapter conformance: `capabilities` and `lifecycleState`
 
 ## `@territory-kit/nestjs`
 
