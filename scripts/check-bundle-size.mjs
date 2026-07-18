@@ -16,9 +16,11 @@ const maxBytesByFile = new Map([
   // Sprint 12 turns runtime from lifecycle contracts into viewport request orchestration with
   // scheduler injection, cancellation, cache, lazy engine reuse, adapter updates, stale adapter
   // operation guards, managed source binding, and cache ownership handling.
-  // Sprint 13 adds catalog resolution, engine pool, binary-index-aware queries, deterministic
-  // multi-dataset merging, and injectable worker loading contracts.
-  ["packages/runtime/dist/index.mjs", 70_000],
+  // Sprint 13 merge-blocker hardening keeps the root runtime export self-contained while adding
+  // strict catalog registration invariants, overlap-aware shard selection, namespace collision
+  // rewrites, in-flight engine creation dedupe, worker protocol correlation, and worker binary
+  // index initialization reuse.
+  ["packages/runtime/dist/index.mjs", 82_000],
   ["packages/maplibre/dist/index.mjs", 45_000],
   ["packages/nestjs/dist/index.mjs", 45_000],
   ["packages/data-tr/dist/index.mjs", 8_000],

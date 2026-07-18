@@ -81,11 +81,15 @@
   external by default; runtime-created caches are runtime-owned.
 - `createTerritoryCatalog`, `registerDataset`, `unregisterDataset`, `resolveViewport`,
   `resolveTerritory`, `getCoverage`, and `createResolutionPlan` provide multi-dataset catalog
-  resolution.
+  resolution with strict registration invariants, disjoint shard selection, priority variants, and
+  optional `selectionGroup` handling.
+- `zoneIdCollisionPolicy: "error" | "namespace"` controls catalog result ID collisions. The
+  default rejects duplicate IDs; namespace mode emits `<entryId>::<sourceZoneId>`.
 - `createTerritoryEnginePool({ maxActiveEngines })` provides per-dataset engine reuse, LRU
-  eviction, pinned entries, memory estimates, and disposal.
+  eviction, pinned entries, memory estimates, concurrent creation dedupe, custom-key signature
+  checks, and disposal.
 - `createTerritoryWorkerClient(workerTransport)` provides `initialize`, `query`, `cancel`, and
-  `dispose` message handling for injectable worker loading.
+  `dispose` message handling with response correlation and abort-aware initialize/query support.
 - `createMemoryTerritoryRuntimeCache({ maxEntries, maxBytes })` creates an async LRU cache with
   byte tracking, hit/miss/eviction stats, and default `Uint8Array` copy-on-read/write protection.
   `maxEntries` and `maxBytes` must be finite non-negative integers.

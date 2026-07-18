@@ -36,10 +36,11 @@ const sharedBorderNeighbors = engine.zoneNeighbors("tr:adm2:fatih", {
 - `getVisibleZones(query)` and `getViewportCacheKey(query)` support viewport flows.
 - `encodeTerritoryBinarySpatialIndex`, `decodeTerritoryBinarySpatialIndex`,
   `inspectTerritoryBinarySpatialIndex`, and `validateTerritoryBinarySpatialIndex` provide the
-  versioned `.tksi` binary bbox index contract.
+  versioned `.tksi` binary spatial index contract with packed Flatbush tree data.
 - `createTerritoryEngine({ dataset, spatialIndex })` accepts a prebuilt binary index and falls back
   to runtime Flatbush construction when no index is provided.
-- `getSpatialIndexSummary()` reports whether an engine is using `flatbush` or `binary` lookup.
+- `getSpatialIndexSummary()` reports whether an engine is using `flatbush` or
+  `binary-flatbush` lookup.
 - `zoomToDefaultLevel` and `defaultZoomLevelStrategy` provide default zoom mapping.
 - `createTerritoryCountryDatasetDescriptor` and `loadTerritoryCountryDataset` support thin
   resolver-driven country loader packages.

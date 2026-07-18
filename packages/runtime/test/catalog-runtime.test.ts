@@ -1,6 +1,10 @@
 import { defineTerritoryAdapterCapabilities } from "@territory-kit/adapter-core";
 import type { TerritoryRenderSource, TerritoryRendererAdapter } from "@territory-kit/adapter-core";
-import { createTerritoryEngine, encodeTerritoryBinarySpatialIndex } from "@territory-kit/core";
+import {
+  createTerritoryEngine,
+  decodeTerritoryBinarySpatialIndex,
+  encodeTerritoryBinarySpatialIndex
+} from "@territory-kit/core";
 import type { TerritoryEngine, TerritoryEngineOptions } from "@territory-kit/core";
 import { createSquareZone } from "@territory-kit/shared-testkit";
 import { TerritoryError } from "@territory-kit/dataset";
@@ -106,7 +110,13 @@ describe("Territory runtime catalog integration", () => {
   it("filters catalog coverage and unregisters entries deterministically", () => {
     const catalog = createTerritoryCatalog([
       {
-        dataset: createDataset({ datasetId: "query-a", country: "AA", west: 0, east: 1 }),
+        dataset: createDataset({
+          datasetId: "query-a",
+          country: "AA",
+          west: 0,
+          east: 1,
+          extraLevels: [1]
+        }),
         country: "aa",
         levels: [0, "ADM1"],
         parentId: "parent-a",
@@ -214,6 +224,187 @@ describe("Territory runtime catalog integration", () => {
     expect(() => createTerritoryCatalog([{ dataset, level: -1 }])).toThrow(TerritoryError);
   });
 
+  it("rejects catalog registrations that conflict with dataset or index invariants", () => {
+    const dataset = createDataset({
+      datasetId: "catalog-invariants",
+      country: "AA",
+      west: 0,
+      east: 1
+    });
+    const otherDataset = createDataset({
+      datasetId: "catalog-other",
+      country: "AA",
+      west: 0,
+      east: 1
+    });
+    const spatialIndex = encodeTerritoryBinarySpatialIndex(dataset);
+    const indexHash = decodeTerritoryBinarySpatialIndex(spatialIndex).metadata.indexHash;
+
+    const cases: Array<[string, Parameters<typeof createTerritoryCatalog>[0]]> = [
+      ["datasetId override", [{ dataset, datasetId: "other-id", level: 0 }]],
+      ["datasetVersion override", [{ dataset, datasetVersion: "2.0.0", level: 0 }]],
+      ["geometryHash override", [{ dataset, geometryHash: "other-geometry", level: 0 }]],
+      ["country conflict", [{ dataset, country: "BB", level: 0 }]],
+      ["missing level", [{ dataset, level: 2 }]],
+      ["fallback outside levels", [{ dataset, level: 0, fallbackLevel: 1 }]],
+      ["non-finite priority", [{ dataset, level: 0, priority: Number.NaN }]],
+      [
+        "non-finite bounds",
+        [{ dataset, level: 0, bounds: { west: 0, south: 0, east: Number.NaN, north: 1 } }]
+      ],
+      [
+        "reversed bounds",
+        [{ dataset, level: 0, bounds: { west: 1, south: 0, east: 0, north: 1 } }]
+      ],
+      [
+        "bounds excluding coverage",
+        [{ dataset, level: 0, bounds: { west: 0.2, south: 0, east: 1, north: 1 } }]
+      ],
+      [
+        "spatial index metadata mismatch",
+        [{ dataset, level: 0, spatialIndex: encodeTerritoryBinarySpatialIndex(otherDataset) }]
+      ],
+      ["indexHash mismatch", [{ dataset, level: 0, spatialIndex, indexHash: "wrong-index" }]]
+    ];
+
+    for (const [label, registrations] of cases) {
+      expect(() => createTerritoryCatalog(registrations), label).toThrow(TerritoryError);
+    }
+
+    const catalog = createTerritoryCatalog();
+    const entry = catalog.registerDataset({ dataset, level: 0, spatialIndex });
+    const revision = catalog.revision;
+
+    expect(entry.indexHash).toBe(indexHash);
+    expect(catalog.registerDataset({ dataset, level: 0, spatialIndex })).toBe(entry);
+    expect(catalog.revision).toBe(revision);
+    expect(() =>
+      catalog.registerDataset({
+        dataset,
+        level: 0,
+        spatialIndex,
+        bounds: { west: -1, south: 0, east: 2, north: 1 }
+      })
+    ).toThrow(TerritoryError);
+  });
+
+  it("selects disjoint catalog shards independently and priority-wins overlapping variants", () => {
+    const catalog = createTerritoryCatalog([
+      {
+        dataset: createDataset({ datasetId: "aa-west", country: "AA", west: 0, east: 1 }),
+        country: "AA",
+        level: 0,
+        priority: 1
+      },
+      {
+        dataset: createDataset({ datasetId: "aa-east", country: "AA", west: 2, east: 3 }),
+        country: "AA",
+        level: 0,
+        priority: 1
+      },
+      {
+        dataset: createDataset({ datasetId: "aa-overlap-low", country: "AA", west: 4, east: 6 }),
+        country: "AA",
+        level: 0,
+        priority: 1
+      },
+      {
+        dataset: createDataset({ datasetId: "aa-overlap-high", country: "AA", west: 5, east: 7 }),
+        country: "AA",
+        level: 0,
+        priority: 10
+      },
+      {
+        dataset: createDataset({ datasetId: "aa-parent-a", country: "AA", west: 8, east: 9 }),
+        country: "AA",
+        level: 0,
+        parentId: "parent-a"
+      },
+      {
+        dataset: createDataset({ datasetId: "aa-parent-b", country: "AA", west: 8, east: 9 }),
+        country: "AA",
+        level: 0,
+        parentId: "parent-b"
+      },
+      {
+        dataset: createDataset({ datasetId: "bb-country", country: "BB", west: 0, east: 1 }),
+        country: "BB",
+        level: 0
+      }
+    ]);
+    const disjointPlan = catalog.resolveViewport(
+      {
+        bounds: { west: 0, south: 0, east: 3, north: 1 },
+        level: 0
+      },
+      { country: "AA" }
+    );
+    const overlapPlan = catalog.resolveViewport({
+      bounds: { west: 5.5, south: 0, east: 5.6, north: 1 },
+      level: 0
+    });
+    const parentPlan = catalog.resolveViewport({
+      bounds: { west: 8, south: 0, east: 9, north: 1 },
+      level: 0
+    });
+    const multiCountryPlan = catalog.resolveViewport({
+      bounds: { west: 0, south: 0, east: 1, north: 1 },
+      level: 0
+    });
+
+    expect(disjointPlan.selectedArtifacts.map((artifact) => artifact.datasetId)).toEqual([
+      "aa-east",
+      "aa-west"
+    ]);
+    expect(overlapPlan.selectedArtifacts.map((artifact) => artifact.datasetId)).toEqual([
+      "aa-overlap-high"
+    ]);
+    expect(overlapPlan.priorityDecisions).toEqual([
+      expect.objectContaining({
+        excludedEntryId: expect.stringContaining("aa-overlap-low"),
+        reason: "lower-priority"
+      })
+    ]);
+    expect(parentPlan.selectedArtifacts.map((artifact) => artifact.datasetId)).toEqual([
+      "aa-parent-a",
+      "aa-parent-b"
+    ]);
+    expect(multiCountryPlan.selectedArtifacts.map((artifact) => artifact.country)).toEqual([
+      "AA",
+      "BB"
+    ]);
+  });
+
+  it("uses explicit selectionGroup to model mutually exclusive variants", () => {
+    const catalog = createTerritoryCatalog([
+      {
+        dataset: createDataset({ datasetId: "variant-a", country: "AA", west: 0, east: 1 }),
+        country: "AA",
+        level: 0,
+        selectionGroup: "aa-variant"
+      },
+      {
+        dataset: createDataset({ datasetId: "variant-b", country: "AA", west: 2, east: 3 }),
+        country: "AA",
+        level: 0,
+        selectionGroup: "aa-variant"
+      }
+    ]);
+    const plan = catalog.resolveViewport({
+      bounds: { west: 0, south: 0, east: 3, north: 1 },
+      level: 0
+    });
+
+    expect(plan.selectedArtifacts.map((artifact) => artifact.datasetId)).toEqual(["variant-a"]);
+    expect(plan.priorityDecisions).toEqual([
+      expect.objectContaining({
+        excludedEntryId: expect.stringContaining("variant-b"),
+        groupKey: "AA::0:query:aa-variant",
+        reason: "tie-breaker"
+      })
+    ]);
+  });
+
   it("queries multiple catalog engines and emits collision-safe deterministic adapter output", async () => {
     const sourceRecorder = createSourceRecorder();
     const catalog = createTerritoryCatalog([
@@ -230,7 +421,8 @@ describe("Territory runtime catalog integration", () => {
     ]);
     const runtime = createTerritoryRuntime({
       catalog,
-      adapter: sourceRecorder.adapter
+      adapter: sourceRecorder.adapter,
+      zoneIdCollisionPolicy: "namespace"
     });
 
     const result = await runtime.setViewport({
@@ -246,9 +438,73 @@ describe("Territory runtime catalog integration", () => {
     ]);
     expect(result?.summary?.zoneCount).toBe(2);
     expect(readFeatureIds(sourceRecorder.sources.at(-1))).toEqual([
-      "country-a:shared",
-      "country-b:shared"
+      "country-a:1.0.0:AA:0:*:query::shared",
+      "country-b:1.0.0:BB:0:*:query::shared"
     ]);
+  });
+
+  it("rejects catalog zone id collisions by default before adapter updates", async () => {
+    const sourceRecorder = createSourceRecorder();
+    const runtime = createTerritoryRuntime({
+      catalog: createTerritoryCatalog([
+        {
+          dataset: createDataset({ datasetId: "country-a", country: "AA", west: 0, east: 1 }),
+          country: "AA",
+          level: 0
+        },
+        {
+          dataset: createDataset({ datasetId: "country-b", country: "BB", west: 1, east: 2 }),
+          country: "BB",
+          level: 0
+        }
+      ]),
+      adapter: sourceRecorder.adapter
+    });
+
+    const result = await runtime.setViewport({
+      bounds: { west: 0, south: 0, east: 2, north: 1 },
+      zoom: 1,
+      level: 0
+    });
+
+    expect(result?.status).toBe("failed");
+    expect(result?.error?.code).toBe("RUNTIME_CONFIGURATION_INVALID");
+    expect(sourceRecorder.sources).toEqual([]);
+  });
+
+  it("namespaces catalog zones from the start and rewrites local references", async () => {
+    const sourceRecorder = createSourceRecorder();
+    const runtime = createTerritoryRuntime({
+      catalog: createTerritoryCatalog([
+        {
+          dataset: createLinkedDataset("linked-a", "AA"),
+          country: "AA",
+          level: 1
+        }
+      ]),
+      adapter: sourceRecorder.adapter,
+      zoneIdCollisionPolicy: "namespace"
+    });
+
+    const result = await runtime.setViewport({
+      bounds: { west: 0, south: 0, east: 1, north: 1 },
+      zoom: 1,
+      level: 1
+    });
+    const features = readFeatures(sourceRecorder.sources.at(-1));
+    const parentId = "linked-a:1.0.0:AA:1:*:query::parent";
+    const childId = "linked-a:1.0.0:AA:1:*:query::child";
+
+    expect(result?.status).toBe("ready");
+    expect(features.map((feature) => feature.id).sort()).toEqual([childId]);
+    expect(features.find((feature) => feature.id === childId)?.properties).toMatchObject({
+      parentId,
+      linkedZoneId: parentId,
+      siblingIds: [parentId],
+      sourceZoneId: "child",
+      sourceDatasetId: "linked-a",
+      sourceEntryId: "linked-a:1.0.0:AA:1:*:query"
+    });
   });
 
   it("uses catalog cache entries across repeated viewports", async () => {
@@ -314,7 +570,6 @@ describe("Territory runtime catalog integration", () => {
         dataset,
         country: "AA",
         level: 0,
-        indexHash: "fixture-index",
         spatialIndex: indexBuffer
       }
     ]);
@@ -338,6 +593,89 @@ describe("Territory runtime catalog integration", () => {
     expect(transport.messages.map((message) => message.type)).toContain("initialize");
     expect(transport.messages.map((message) => message.type)).toContain("query");
     expect(transport.messages.map((message) => message.type)).toContain("cancel");
+  });
+
+  it("reuses worker binary index initialization across repeated catalog queries", async () => {
+    const dataset = createDataset({ datasetId: "worker-reuse", country: "AA", west: 0, east: 1 });
+    const indexBuffer = encodeTerritoryBinarySpatialIndex(dataset);
+    const transport = createImmediateWorkerTransport(dataset.zones);
+    const runtime = createTerritoryRuntime({
+      catalog: createTerritoryCatalog([
+        {
+          dataset,
+          country: "AA",
+          level: 0,
+          spatialIndex: indexBuffer
+        }
+      ]),
+      cache: false,
+      workerTransport: transport
+    });
+
+    await expect(
+      runtime.setViewport({
+        bounds: { west: 0, south: 0, east: 1, north: 1 },
+        zoom: 1,
+        level: 0
+      })
+    ).resolves.toMatchObject({ status: "ready" });
+    await expect(
+      runtime.setViewport(
+        {
+          bounds: { west: 0, south: 0, east: 1, north: 1 },
+          zoom: 1,
+          level: 0
+        },
+        { force: true }
+      )
+    ).resolves.toMatchObject({ status: "ready" });
+
+    expect(transport.messages.filter((message) => message.type === "initialize")).toHaveLength(1);
+    expect(transport.messages.filter((message) => message.type === "query")).toHaveLength(2);
+    expect(transport.transferables.filter((transferables) => transferables.length > 0)).toEqual([]);
+    expect(indexBuffer.byteLength).toBeGreaterThan(0);
+  });
+
+  it("deduplicates concurrent worker initialization for the same binary index", async () => {
+    const dataset = createDataset({
+      datasetId: "worker-concurrent",
+      country: "AA",
+      west: 0,
+      east: 1
+    });
+    const indexBuffer = encodeTerritoryBinarySpatialIndex(dataset);
+    const transport = createDeferredInitializeWorkerTransport(dataset.zones);
+    const runtime = createTerritoryRuntime({
+      catalog: createTerritoryCatalog([
+        {
+          dataset,
+          country: "AA",
+          level: 0,
+          spatialIndex: indexBuffer
+        }
+      ]),
+      cache: false,
+      cancelPreviousRequest: false,
+      workerTransport: transport
+    });
+
+    const first = runtime.setViewport({
+      bounds: { west: 0, south: 0, east: 0.5, north: 1 },
+      zoom: 1,
+      level: 0
+    });
+    const second = runtime.setViewport({
+      bounds: { west: 0.5, south: 0, east: 1, north: 1 },
+      zoom: 1,
+      level: 0
+    });
+
+    await transport.waitForInitialize();
+    await Promise.resolve();
+    expect(transport.messages.filter((message) => message.type === "initialize")).toHaveLength(1);
+    transport.resolveInitialize();
+    await expect(first).resolves.toMatchObject({ status: "aborted" });
+    await expect(second).resolves.toMatchObject({ status: "ready" });
   });
 });
 
@@ -440,6 +778,106 @@ describe("Territory engine pool and worker client", () => {
     expect(disposedDatasets).toEqual(["disposable-a", "disposable-b", "disposable-c"]);
   });
 
+  it("deduplicates concurrent same-key engine creation", async () => {
+    const dataset = createDataset({ datasetId: "concurrent", country: "AA", west: 0, east: 1 });
+    const deferredEngine = createDeferred<TerritoryEngine>();
+    let createCount = 0;
+    const pool = createTerritoryEnginePool({
+      createEngine(options) {
+        createCount += 1;
+        return deferredEngine.promise.then(() => createTerritoryEngine(options));
+      }
+    });
+    const requests = Array.from({ length: 20 }, () => pool.getEngine(dataset));
+
+    await Promise.resolve();
+    expect(createCount).toBe(1);
+    deferredEngine.resolve(createTerritoryEngine({ dataset }));
+    const engines = await Promise.all(requests);
+
+    expect(new Set(engines).size).toBe(1);
+    expect(pool.summary).toMatchObject({
+      activeEngines: 1,
+      hits: 19,
+      misses: 1
+    });
+  });
+
+  it("cleans up rejected engine factories so later requests can retry", async () => {
+    const dataset = createDataset({ datasetId: "retry", country: "AA", west: 0, east: 1 });
+    let attempts = 0;
+    const pool = createTerritoryEnginePool({
+      createEngine(options) {
+        attempts += 1;
+
+        if (attempts === 1) {
+          throw new Error("factory boom");
+        }
+
+        return createTerritoryEngine(options);
+      }
+    });
+
+    await expect(pool.getEngine(dataset)).rejects.toThrow("factory boom");
+    await expect(pool.getEngine(dataset)).resolves.toBeTruthy();
+    expect(attempts).toBe(2);
+    expect(pool.summary.activeEngines).toBe(1);
+  });
+
+  it("does not restore late in-flight engines after delete or dispose", async () => {
+    const deletedDataset = createDataset({
+      datasetId: "late-delete",
+      country: "AA",
+      west: 0,
+      east: 1
+    });
+    const disposedDataset = createDataset({
+      datasetId: "late-dispose",
+      country: "BB",
+      west: 1,
+      east: 2
+    });
+    const deleteDeferred = createDeferred<TerritoryEngine>();
+    const disposeDeferred = createDeferred<TerritoryEngine>();
+    const disposedEngines: string[] = [];
+    const pool = createTerritoryEnginePool({
+      createEngine(options) {
+        const engine = createTerritoryEngine(options) as TerritoryEngine & { dispose(): void };
+        engine.dispose = () => {
+          disposedEngines.push(options.dataset.manifest.datasetId);
+        };
+
+        return options.dataset.manifest.datasetId === "late-delete"
+          ? deleteDeferred.promise.then(() => engine)
+          : disposeDeferred.promise.then(() => engine);
+      }
+    });
+
+    const deletedRequest = pool.getEngine(deletedDataset);
+    expect(pool.delete(datasetEnginePoolKey(deletedDataset))).toBe(true);
+    deleteDeferred.resolve(createTerritoryEngine({ dataset: deletedDataset }));
+    await expect(deletedRequest).resolves.toBeTruthy();
+    expect(pool.summary.activeEngines).toBe(0);
+
+    const disposedRequest = pool.getEngine(disposedDataset);
+    pool.dispose();
+    disposeDeferred.resolve(createTerritoryEngine({ dataset: disposedDataset }));
+    await expect(disposedRequest).rejects.toThrow("disposed");
+    expect(disposedEngines).toEqual(["late-delete", "late-dispose"]);
+    expect(pool.summary.activeEngines).toBe(0);
+  });
+
+  it("rejects custom engine pool key collisions across dataset signatures", async () => {
+    const pool = createTerritoryEnginePool();
+    const firstDataset = createDataset({ datasetId: "key-a", country: "AA", west: 0, east: 1 });
+    const secondDataset = createDataset({ datasetId: "key-b", country: "BB", west: 1, east: 2 });
+
+    await pool.getEngine(firstDataset, { key: "custom-key" });
+    await expect(pool.getEngine(secondDataset, { key: "custom-key" })).rejects.toThrow(
+      "different dataset"
+    );
+  });
+
   it("passes transferable buffers through the worker client", async () => {
     const transport = createImmediateWorkerTransport([]);
     const client = createTerritoryWorkerClient(transport);
@@ -491,7 +929,7 @@ describe("Territory engine pool and worker client", () => {
         datasetVersion: "1.0.0",
         geometryHash: "geometry"
       })
-    ).rejects.toThrow("unexpected response");
+    ).rejects.toThrow("protocol invalid");
 
     await expect(disposableClient.dispose()).resolves.toMatchObject({ type: "disposed" });
     await expect(
@@ -504,6 +942,60 @@ describe("Territory engine pool and worker client", () => {
     await expect(disposableClient.dispose()).resolves.toMatchObject({
       requestId: "territory-worker-dispose-already"
     });
+  });
+
+  it("rejects worker response correlation mismatches", async () => {
+    const requestMismatchClient = createTerritoryWorkerClient({
+      async send(message) {
+        return {
+          type: "query-result",
+          requestId: `${message.requestId}:stale`,
+          datasetId: "worker-dataset",
+          zones: []
+        };
+      }
+    });
+    const initializeDatasetMismatchClient = createTerritoryWorkerClient({
+      async send(message) {
+        return {
+          type: "initialized",
+          requestId: message.requestId,
+          datasetId: "other-dataset"
+        };
+      }
+    });
+    const queryDatasetMismatchClient = createTerritoryWorkerClient({
+      async send(message) {
+        return {
+          type: "query-result",
+          requestId: message.requestId,
+          datasetId: "other-dataset",
+          zones: []
+        };
+      }
+    });
+
+    await expect(
+      requestMismatchClient.query({
+        datasetId: "worker-dataset",
+        bounds: { west: 0, south: 0, east: 1, north: 1 },
+        level: 0
+      })
+    ).rejects.toThrow("requestId");
+    await expect(
+      initializeDatasetMismatchClient.initialize({
+        datasetId: "worker-dataset",
+        datasetVersion: "1.0.0",
+        geometryHash: "geometry"
+      })
+    ).rejects.toThrow("datasetId");
+    await expect(
+      queryDatasetMismatchClient.query({
+        datasetId: "worker-dataset",
+        bounds: { west: 0, south: 0, east: 1, north: 1 },
+        level: 0
+      })
+    ).rejects.toThrow("datasetId");
   });
 
   it("cancels worker queries when the signal is already aborted", async () => {
@@ -526,6 +1018,76 @@ describe("Territory engine pool and worker client", () => {
       expect.objectContaining({ type: "cancel", requestId: "worker-query-aborted" })
     ]);
   });
+
+  it("cancels worker initialize requests before and during abort signals", async () => {
+    const preAbortTransport = createImmediateWorkerTransport([]);
+    const preAbortClient = createTerritoryWorkerClient(preAbortTransport);
+    const preAbortController = new AbortController();
+    preAbortController.abort();
+
+    await expect(
+      preAbortClient.initialize(
+        {
+          datasetId: "worker-dataset",
+          datasetVersion: "1.0.0",
+          geometryHash: "geometry"
+        },
+        { requestId: "worker-init-pre-abort", signal: preAbortController.signal }
+      )
+    ).rejects.toThrow("aborted");
+    expect(preAbortTransport.messages).toEqual([
+      expect.objectContaining({ type: "cancel", requestId: "worker-init-pre-abort" })
+    ]);
+
+    const midAbortTransport = createHangingInitializeTransport();
+    const midAbortClient = createTerritoryWorkerClient(midAbortTransport);
+    const midAbortController = new AbortController();
+    const request = midAbortClient.initialize(
+      {
+        datasetId: "worker-dataset",
+        datasetVersion: "1.0.0",
+        geometryHash: "geometry"
+      },
+      { requestId: "worker-init-mid-abort", signal: midAbortController.signal }
+    );
+
+    await Promise.resolve();
+    midAbortController.abort();
+    await expect(request).rejects.toThrow("aborted");
+    expect(midAbortTransport.messages).toContainEqual(
+      expect.objectContaining({ type: "cancel", requestId: "worker-init-mid-abort" })
+    );
+  });
+
+  it("rejects new worker operations while dispose is in flight", async () => {
+    const disposeDeferred = createDeferred<TerritoryWorkerResponse>();
+    const client = createTerritoryWorkerClient({
+      async send(message) {
+        if (message.type === "dispose") {
+          return disposeDeferred.promise;
+        }
+
+        return {
+          type: "query-result",
+          requestId: message.requestId,
+          datasetId: "worker-dataset",
+          zones: []
+        };
+      }
+    });
+    const dispose = client.dispose();
+
+    await Promise.resolve();
+    await expect(
+      client.query({
+        datasetId: "worker-dataset",
+        bounds: { west: 0, south: 0, east: 1, north: 1 },
+        level: 0
+      })
+    ).rejects.toThrow("disposed");
+    disposeDeferred.resolve({ type: "disposed", requestId: "territory-worker-dispose-1" });
+    await expect(dispose).resolves.toMatchObject({ type: "disposed" });
+  });
 });
 
 function createDataset(input: {
@@ -535,8 +1097,10 @@ function createDataset(input: {
   east: number;
   level?: number;
   priority?: number;
+  extraLevels?: readonly number[];
 }): TerritoryDataset {
   const level = input.level ?? 0;
+  const levels = [level, ...(input.extraLevels ?? [])];
 
   return {
     manifest: {
@@ -547,12 +1111,12 @@ function createDataset(input: {
       geometryHash: `${input.datasetId}-geometry`,
       countryCodes: [input.country]
     },
-    zones: [
+    zones: levels.map((zoneLevel, index) =>
       createSquareZone({
-        id: "shared",
+        id: index === 0 ? "shared" : `shared-l${zoneLevel}`,
         datasetId: input.datasetId,
         countryCode: input.country,
-        level,
+        level: zoneLevel,
         west: input.west,
         south: 0,
         east: input.east,
@@ -561,7 +1125,7 @@ function createDataset(input: {
           priority: input.priority ?? 0
         }
       })
-    ]
+    )
   };
 }
 
@@ -576,6 +1140,53 @@ function createEmptyDataset(datasetId: string, country: string): TerritoryDatase
       countryCodes: [country]
     },
     zones: []
+  };
+}
+
+function createLinkedDataset(datasetId: string, country: string): TerritoryDataset {
+  return {
+    manifest: {
+      datasetId,
+      datasetVersion: "1.0.0",
+      schemaVersion: "territory-schema@1",
+      sourceDate: "synthetic",
+      geometryHash: `${datasetId}-geometry`,
+      countryCodes: [country]
+    },
+    zones: [
+      createSquareZone({
+        id: "parent",
+        datasetId,
+        countryCode: country,
+        level: 0,
+        west: 0,
+        south: 0,
+        east: 1,
+        north: 1,
+        childIds: ["child"],
+        neighborIds: ["child"],
+        properties: {
+          linkedZoneId: "child",
+          siblingIds: ["child"]
+        }
+      }),
+      createSquareZone({
+        id: "child",
+        datasetId,
+        countryCode: country,
+        level: 1,
+        west: 0.1,
+        south: 0.1,
+        east: 0.9,
+        north: 0.9,
+        parentId: "parent",
+        neighborIds: ["parent"],
+        properties: {
+          linkedZoneId: "parent",
+          siblingIds: ["parent"]
+        }
+      })
+    ]
   };
 }
 
@@ -618,12 +1229,100 @@ function readFeatureIds(source: TerritoryRenderSource | undefined): string[] {
   return (data?.features ?? []).map((feature) => String(feature.id)).sort();
 }
 
+function readFeatures(
+  source: TerritoryRenderSource | undefined
+): Array<{ id: string; properties: Record<string, unknown> }> {
+  const data = source?.data as
+    { features?: Array<{ id?: string; properties?: Record<string, unknown> }> } | undefined;
+
+  return (data?.features ?? []).map((feature) => ({
+    id: String(feature.id),
+    properties: feature.properties ?? {}
+  }));
+}
+
 function createImmediateWorkerTransport(zones: readonly TerritoryZone[]): TestWorkerTransport {
   return createTestWorkerTransport(zones, false);
 }
 
 function createDeferredWorkerTransport(zones: readonly TerritoryZone[]): TestWorkerTransport {
   return createTestWorkerTransport(zones, true);
+}
+
+function createDeferredInitializeWorkerTransport(
+  zones: readonly TerritoryZone[]
+): TestWorkerTransport & {
+  resolveInitialize(): void;
+  waitForInitialize(): Promise<void>;
+} {
+  const transport = createTestWorkerTransport(zones, false);
+  let initializeSeen: (() => void) | undefined;
+  let initializeResolved: (() => void) | undefined;
+  const initializeSeenPromise = new Promise<void>((resolve) => {
+    initializeSeen = resolve;
+  });
+  const initializeDeferred = new Promise<void>((resolve) => {
+    initializeResolved = resolve;
+  });
+
+  return {
+    ...transport,
+    async send(message, transferables = []) {
+      if (message.type === "initialize") {
+        transport.messages.push(message);
+        (transport.transferables as Transferable[][]).push([...transferables]);
+        initializeSeen?.();
+        await initializeDeferred;
+        return {
+          type: "initialized",
+          requestId: message.requestId,
+          datasetId: message.datasetId,
+          ...(message.indexHash ? { indexHash: message.indexHash } : {})
+        };
+      }
+
+      return transport.send(message, transferables);
+    },
+    resolveInitialize() {
+      initializeResolved?.();
+    },
+    waitForInitialize() {
+      return initializeSeenPromise;
+    }
+  };
+}
+
+function createHangingInitializeTransport(): TestWorkerTransport {
+  const messages: TerritoryWorkerMessage[] = [];
+  const transferables: Transferable[][] = [];
+
+  return {
+    messages,
+    transferables,
+    async send(message, messageTransferables = []) {
+      messages.push(message);
+      transferables.push([...messageTransferables]);
+
+      if (message.type === "initialize") {
+        await new Promise(() => undefined);
+      }
+
+      if (message.type === "cancel") {
+        return {
+          type: "cancelled",
+          requestId: message.requestId
+        };
+      }
+
+      return {
+        type: "disposed",
+        requestId: message.requestId
+      };
+    },
+    async waitForQuery() {
+      return undefined;
+    }
+  };
 }
 
 interface TestWorkerTransport extends TerritoryWorkerTransport {
@@ -692,5 +1391,24 @@ function createTestWorkerTransport(
     waitForQuery() {
       return querySeenPromise;
     }
+  };
+}
+
+function createDeferred<T>(): {
+  readonly promise: Promise<T>;
+  resolve(value: T): void;
+  reject(error: unknown): void;
+} {
+  let resolvePromise: (value: T) => void = () => undefined;
+  let rejectPromise: (error: unknown) => void = () => undefined;
+  const promise = new Promise<T>((resolve, reject) => {
+    resolvePromise = resolve;
+    rejectPromise = reject;
+  });
+
+  return {
+    promise,
+    resolve: resolvePromise,
+    reject: rejectPromise
   };
 }

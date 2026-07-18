@@ -71,7 +71,7 @@ export interface TerritoryEngineDebugOptions {
 }
 
 export interface TerritoryEngineSpatialIndexSummary {
-  source: "flatbush" | "binary";
+  source: "flatbush" | "binary-flatbush";
   levels: number[];
   zoneCount: number;
   estimatedBytes: number;

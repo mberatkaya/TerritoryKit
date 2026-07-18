@@ -1,5 +1,4 @@
 import {
-  TerritoryError,
   computeGeometryBBox,
   createTerritoryAdjacencyIndex,
   loadTerritoryDataset
@@ -12,10 +11,7 @@ import type {
   TerritoryZone
 } from "@territory-kit/dataset";
 import Flatbush from "flatbush";
-import {
-  decodeTerritoryBinarySpatialIndex,
-  isTerritoryBinarySpatialIndex
-} from "./binary-index.js";
+import { normalizeTerritoryBinarySpatialIndex } from "./binary-index.js";
 import type {
   TerritoryBinarySpatialIndex,
   TerritoryBinarySpatialIndexBuffer
@@ -43,7 +39,7 @@ import type {
 } from "./types.js";
 
 interface LevelIndex {
-  source: "flatbush" | "binary";
+  source: "flatbush" | "binary-flatbush";
   estimatedBytes: number;
   search(west: number, south: number, east: number, north: number): string[];
 }
@@ -476,32 +472,14 @@ function buildBinaryIndexesByLevel(
   dataset: TerritoryDataset,
   spatialIndex: TerritoryBinarySpatialIndex | TerritoryBinarySpatialIndexBuffer
 ): SpatialIndexBuildResult {
-  const index = isTerritoryBinarySpatialIndex(spatialIndex)
-    ? spatialIndex
-    : decodeTerritoryBinarySpatialIndex(spatialIndex, {
-        datasetId: dataset.manifest.datasetId,
-        datasetVersion: dataset.manifest.datasetVersion,
-        geometryHash: dataset.manifest.geometryHash
-      });
-  const zonesById = new Set(dataset.zones.map((zone) => zone.id));
-  const unknownZoneId = index.zoneOrdinals.find((zoneId) => !zonesById.has(zoneId));
-
-  if (unknownZoneId) {
-    throw new TerritoryError(
-      "ARTIFACT_CORRUPTED",
-      `Binary spatial index references unknown zone '${unknownZoneId}'.`,
-      {
-        details: { zoneId: unknownZoneId }
-      }
-    );
-  }
+  const index = normalizeTerritoryBinarySpatialIndex(spatialIndex, dataset);
 
   const indexesByLevel = new Map<number, LevelIndex>();
 
   for (const level of index.metadata.levels) {
     indexesByLevel.set(level.level, {
-      source: "binary",
-      estimatedBytes: level.count * 40,
+      source: "binary-flatbush",
+      estimatedBytes: level.treeByteLength + level.count * 40,
       search(west, south, east, north) {
         return index.search({ west, south, east, north }, level.level);
       }
@@ -511,10 +489,10 @@ function buildBinaryIndexesByLevel(
   return {
     indexesByLevel,
     summary: {
-      source: "binary",
+      source: "binary-flatbush",
       levels: index.metadata.levels.map((level) => level.level),
       zoneCount: index.metadata.zoneCount,
-      estimatedBytes: index.metadata.bboxRecordCount * 40,
+      estimatedBytes: index.metadata.treeByteLength + index.metadata.bboxRecordCount * 40,
       indexHash: index.metadata.indexHash,
       byteLength: index.metadata.byteLength
     }

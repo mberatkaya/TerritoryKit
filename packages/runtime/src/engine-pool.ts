@@ -83,6 +83,13 @@ interface MutablePoolEntry {
   uses: number;
 }
 
+interface PoolKeySignature {
+  readonly datasetId: string;
+  readonly datasetVersion: string;
+  readonly geometryHash: string;
+  readonly indexHash?: string;
+}
+
 export function createTerritoryEnginePool(
   options: TerritoryEnginePoolOptions = {}
 ): TerritoryEnginePool {
@@ -91,6 +98,9 @@ export function createTerritoryEnginePool(
   const estimateMemory = options.estimateMemory ?? defaultEstimateMemory;
   const clock = options.clock ?? (() => Date.now());
   const entries = new Map<string, MutablePoolEntry>();
+  const keySignatures = new Map<string, PoolKeySignature>();
+  const inFlightByKey = new Map<string, Promise<TerritoryEngine>>();
+  const inFlightTokensByKey = new Map<string, symbol>();
   let hits = 0;
   let misses = 0;
   let evictions = 0;
@@ -103,6 +113,8 @@ export function createTerritoryEnginePool(
     async getEngine(dataset, getOptions = {}) {
       assertUsable();
       const key = getOptions.key ?? datasetEnginePoolKey(dataset, getOptions.indexHash);
+      const signature = createKeySignature(dataset, getOptions.indexHash);
+      assertKeyCompatible(key, signature);
       const cached = entries.get(key);
 
       if (cached) {
@@ -117,37 +129,94 @@ export function createTerritoryEnginePool(
         return cached.engine;
       }
 
-      misses += 1;
+      const inFlight = inFlightByKey.get(key);
 
-      const engine = await createEngine(
-        {
-          dataset,
-          ...(options.engineOptions ?? {}),
-          ...(getOptions.engineOptions ?? {}),
-          ...(getOptions.spatialIndex ? { spatialIndex: getOptions.spatialIndex } : {})
-        },
-        getOptions.context
-      );
-
-      if (maxActiveEngines === 0) {
-        return engine;
+      if (inFlight) {
+        hits += 1;
+        return inFlight;
       }
 
-      const entry: MutablePoolEntry = {
-        key,
-        datasetId: dataset.manifest.datasetId,
-        datasetVersion: dataset.manifest.datasetVersion,
-        geometryHash: dataset.manifest.geometryHash,
-        engine,
-        pinned: getOptions.pinned === true,
-        estimatedBytes: estimateMemory(dataset, engine),
-        lastUsed: clock(),
-        uses: 1
-      };
+      misses += 1;
 
-      entries.set(key, entry);
-      evictIfNeeded();
-      return engine;
+      const token = Symbol(key);
+      inFlightTokensByKey.set(key, token);
+
+      const creation = Promise.resolve()
+        .then(() =>
+          createEngine(
+            {
+              dataset,
+              ...(options.engineOptions ?? {}),
+              ...(getOptions.engineOptions ?? {}),
+              ...(getOptions.spatialIndex ? { spatialIndex: getOptions.spatialIndex } : {})
+            },
+            getOptions.context
+          )
+        )
+        .then((engine) => {
+          const stillCurrent = inFlightTokensByKey.get(key) === token;
+          inFlightByKey.delete(key);
+
+          if (stillCurrent) {
+            inFlightTokensByKey.delete(key);
+          }
+
+          if (!stillCurrent) {
+            disposeEngine(engine);
+            if (disposed) {
+              throw new TerritoryError(
+                "RUNTIME_DISPOSED",
+                "Territory engine pool was disposed while creating an engine."
+              );
+            }
+
+            return engine;
+          }
+
+          if (disposed) {
+            disposeEngine(engine);
+            throw new TerritoryError(
+              "RUNTIME_DISPOSED",
+              "Territory engine pool was disposed while creating an engine."
+            );
+          }
+
+          if (maxActiveEngines === 0) {
+            return engine;
+          }
+
+          const entry: MutablePoolEntry = {
+            key,
+            datasetId: dataset.manifest.datasetId,
+            datasetVersion: dataset.manifest.datasetVersion,
+            geometryHash: dataset.manifest.geometryHash,
+            engine,
+            pinned: getOptions.pinned === true,
+            estimatedBytes: estimateMemory(dataset, engine),
+            lastUsed: clock(),
+            uses: 1
+          };
+
+          entries.set(key, entry);
+          keySignatures.set(key, signature);
+          evictIfNeeded();
+          return engine;
+        })
+        .catch((error) => {
+          if (inFlightTokensByKey.get(key) === token) {
+            inFlightByKey.delete(key);
+            inFlightTokensByKey.delete(key);
+          }
+
+          if (!entries.has(key)) {
+            keySignatures.delete(key);
+          }
+
+          throw error;
+        });
+
+      inFlightByKey.set(key, creation);
+      return creation;
     },
     pin(key) {
       const entry = entries.get(key);
@@ -176,10 +245,18 @@ export function createTerritoryEnginePool(
       const entry = entries.get(key);
 
       if (!entry) {
-        return false;
+        const deletedInFlight = inFlightByKey.delete(key);
+
+        if (deletedInFlight) {
+          inFlightTokensByKey.delete(key);
+          keySignatures.delete(key);
+        }
+
+        return deletedInFlight;
       }
 
       disposeEngine(entry.engine);
+      keySignatures.delete(key);
       return entries.delete(key);
     },
     dispose() {
@@ -194,6 +271,9 @@ export function createTerritoryEnginePool(
       }
 
       entries.clear();
+      keySignatures.clear();
+      inFlightByKey.clear();
+      inFlightTokensByKey.clear();
     },
     getSummary() {
       return readSummary();
@@ -218,6 +298,7 @@ export function createTerritoryEnginePool(
 
       disposeEngine(candidate.engine);
       entries.delete(candidate.key);
+      keySignatures.delete(candidate.key);
       evictions += 1;
     }
   }
@@ -256,7 +337,53 @@ export function createTerritoryEnginePool(
     }
   }
 
+  function assertKeyCompatible(key: string, signature: PoolKeySignature): void {
+    const existing = keySignatures.get(key);
+
+    if (!existing) {
+      keySignatures.set(key, signature);
+      return;
+    }
+
+    if (poolKeySignaturesEqual(existing, signature)) {
+      return;
+    }
+
+    throw new TerritoryError(
+      "RUNTIME_CONFIGURATION_INVALID",
+      "Engine pool key is already associated with a different dataset or spatial index.",
+      {
+        details: {
+          key,
+          expected: existing,
+          actual: signature
+        }
+      }
+    );
+  }
+
   return pool;
+}
+
+function createKeySignature(
+  dataset: TerritoryDataset,
+  indexHash: string | undefined
+): PoolKeySignature {
+  return {
+    datasetId: dataset.manifest.datasetId,
+    datasetVersion: dataset.manifest.datasetVersion,
+    geometryHash: dataset.manifest.geometryHash,
+    ...(indexHash ? { indexHash } : {})
+  };
+}
+
+function poolKeySignaturesEqual(left: PoolKeySignature, right: PoolKeySignature): boolean {
+  return (
+    left.datasetId === right.datasetId &&
+    left.datasetVersion === right.datasetVersion &&
+    left.geometryHash === right.geometryHash &&
+    (left.indexHash ?? "") === (right.indexHash ?? "")
+  );
 }
 
 export function datasetEnginePoolKey(

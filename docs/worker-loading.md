@@ -22,6 +22,12 @@ Responses are:
 - `disposed`
 - `error`
 
+The client validates every response before resolving user code: `requestId` must match the request,
+the response type must match the operation, `initialized.datasetId` must match the initialize
+message, and `query-result.datasetId` must match the query message. Protocol mismatches are
+reported as coded `TerritoryError`s before stale data can update runtime state. Worker `error`
+responses are converted to `TerritoryError` with the worker code retained in details.
+
 ## Transport
 
 ```ts
@@ -49,9 +55,18 @@ buffer. Otherwise it queries the pooled core engine directly.
 
 ## Cancellation
 
-Runtime request cancellation aborts the worker query through the request `AbortSignal`. The worker
-client sends `cancel` with the same request id and rejects the runtime query with
-`REQUEST_ABORTED`, so stale worker results cannot commit viewport state.
+Runtime request cancellation aborts worker initialize and query operations through the request
+`AbortSignal`. The worker client sends best-effort `cancel` with the same request id and rejects
+with `REQUEST_ABORTED`, so stale worker results cannot commit viewport state. New initialize/query
+operations are rejected while disposal is in flight.
+
+## Initialization Reuse
+
+Runtime keeps a per-client registry keyed by dataset id, dataset version, geometry hash, and index
+hash. The same binary catalog artifact is initialized once per worker and concurrent requests share
+the same initialization promise. Failed initialization entries are removed so later requests can
+retry, and runtime disposal clears the registry. Runtime copies catalog-owned buffers before
+sending them and uses `transfer: false`, preserving the original artifact for future viewports.
 
 ## Transferables
 

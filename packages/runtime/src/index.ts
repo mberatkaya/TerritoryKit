@@ -285,6 +285,7 @@ export interface TerritoryRuntimeRequestOptions {
 }
 
 export type TerritoryRuntimeRequestStatus = "ready" | "aborted" | "failed";
+export type TerritoryRuntimeZoneIdCollisionPolicy = "error" | "namespace";
 
 export interface TerritoryRuntimeRequestResult {
   readonly requestId: string;
@@ -333,6 +334,7 @@ export interface TerritoryRuntimeOptions<TTarget = unknown> {
   readonly requestTimeoutMs?: number;
   readonly cancelPreviousRequest?: boolean;
   readonly deduplicateRequests?: boolean;
+  readonly zoneIdCollisionPolicy?: TerritoryRuntimeZoneIdCollisionPolicy;
   readonly clock?: TerritoryRuntimeClock;
   readonly scheduler?: TerritoryRuntimeScheduler;
   readonly logger?: TerritoryRuntimeLogger;
@@ -610,8 +612,10 @@ export function createTerritoryRuntime<TTarget = unknown>(
   const ownsWorker = options.worker === undefined && options.workerTransport !== undefined;
   const cancelPreviousRequest = options.cancelPreviousRequest !== false;
   const deduplicateRequests = options.deduplicateRequests !== false;
+  const zoneIdCollisionPolicy = options.zoneIdCollisionPolicy ?? "error";
   const enginesByDatasetKey = new Map<string, TerritoryEngine>();
   const inFlightByRequestKey = new Map<string, RuntimeRequestRecord>();
+  const workerInitializationsByKey = new Map<string, Promise<void>>();
   let status: TerritoryRuntimeStatus = "idle";
   let revision = 0;
   let eventSequence = 0;
@@ -1442,7 +1446,7 @@ export function createTerritoryRuntime<TTarget = unknown>(
     );
 
     return {
-      zones: mergeCatalogZones(results),
+      zones: mergeCatalogZones(results, zoneIdCollisionPolicy),
       cached,
       datasets,
       catalogPlanId: plan.planId
@@ -1453,23 +1457,9 @@ export function createTerritoryRuntime<TTarget = unknown>(
     entry: RuntimeCatalogQueryEntry,
     record: RuntimeRequestRecord
   ): Promise<readonly TerritoryZone[]> {
-    const indexBuffer = toTransferableIndexBuffer(entry.artifact.spatialIndex);
-
-    if (worker && indexBuffer) {
-      await worker.initialize(
-        {
-          datasetId: entry.artifact.datasetId,
-          datasetVersion: entry.artifact.datasetVersion,
-          geometryHash: entry.artifact.geometryHash,
-          ...(entry.artifact.indexHash ? { indexHash: entry.artifact.indexHash } : {}),
-          indexBuffer,
-          transfer: false
-        },
-        {
-          requestId: `${record.requestId}:${entry.artifact.entryId}:initialize`,
-          signal: record.controller.signal
-        }
-      );
+    if (worker && canWorkerLoadSpatialIndex(entry.artifact.spatialIndex)) {
+      await ensureWorkerIndexInitialized(entry.artifact, record);
+      assertRequestFresh(record);
       const response = await worker.query(
         {
           datasetId: entry.artifact.datasetId,
@@ -1489,6 +1479,53 @@ export function createTerritoryRuntime<TTarget = unknown>(
       ...record.viewport.bounds,
       level: entry.artifact.level
     });
+  }
+
+  async function ensureWorkerIndexInitialized(
+    artifact: TerritoryCatalogSelectedArtifact,
+    record: RuntimeRequestRecord
+  ): Promise<void> {
+    const key = workerIndexKey(artifact);
+    const existing = workerInitializationsByKey.get(key);
+
+    if (existing) {
+      await existing;
+      return;
+    }
+
+    const indexBuffer = toTransferableIndexBuffer(artifact.spatialIndex);
+
+    if (!indexBuffer) {
+      return;
+    }
+
+    const initialization = worker
+      ?.initialize(
+        {
+          datasetId: artifact.datasetId,
+          datasetVersion: artifact.datasetVersion,
+          geometryHash: artifact.geometryHash,
+          ...(artifact.indexHash ? { indexHash: artifact.indexHash } : {}),
+          indexBuffer,
+          transfer: false
+        },
+        {
+          requestId: `${record.requestId}:${artifact.entryId}:initialize`,
+          signal: record.controller.signal
+        }
+      )
+      .then(() => undefined)
+      .catch((error) => {
+        workerInitializationsByKey.delete(key);
+        throw error;
+      });
+
+    if (!initialization) {
+      return;
+    }
+
+    workerInitializationsByKey.set(key, initialization);
+    await initialization;
   }
 
   async function updateAdapter(
@@ -1772,6 +1809,7 @@ export function createTerritoryRuntime<TTarget = unknown>(
 
   function disposeOwnedRuntimeHelpers(): void {
     internalEnginePool?.dispose();
+    workerInitializationsByKey.clear();
 
     if (ownsWorker && worker) {
       void worker.dispose().catch(reportWorkerDisposeFailure);
@@ -1963,7 +2001,8 @@ function mergeCatalogZones(
   results: readonly {
     readonly artifact: TerritoryCatalogSelectedArtifact;
     readonly zones: readonly TerritoryZone[];
-  }[]
+  }[],
+  collisionPolicy: TerritoryRuntimeZoneIdCollisionPolicy
 ): readonly TerritoryZone[] {
   const idCounts = new Map<string, number>();
 
@@ -1973,27 +2012,108 @@ function mergeCatalogZones(
     }
   }
 
+  const duplicateIds = [...idCounts.entries()]
+    .filter(([, count]) => count > 1)
+    .map(([zoneId]) => zoneId)
+    .sort();
+
+  if (duplicateIds.length > 0 && collisionPolicy === "error") {
+    throw new TerritoryError(
+      "RUNTIME_CONFIGURATION_INVALID",
+      "Catalog query produced duplicate zone ids. Use zoneIdCollisionPolicy 'namespace' to merge overlapping id spaces.",
+      {
+        details: { zoneIds: duplicateIds }
+      }
+    );
+  }
+
   const merged: TerritoryZone[] = [];
 
   for (const result of [...results].sort(compareCatalogQueryResults)) {
+    const sourceZoneIds = new Set(result.artifact.dataset.zones.map((zone) => zone.id));
+
     for (const zone of sortRuntimeZones(result.zones)) {
-      const hasCollision = (idCounts.get(zone.id) ?? 0) > 1;
-      const id = hasCollision ? `${result.artifact.datasetId}:${zone.id}` : zone.id;
       merged.push(
-        Object.freeze({
-          ...zone,
-          id,
-          properties: {
-            ...zone.properties,
-            datasetId: result.artifact.datasetId,
-            ...(hasCollision ? { sourceZoneId: zone.id } : {})
-          }
-        })
+        collisionPolicy === "namespace"
+          ? namespaceCatalogZone(zone, result.artifact, sourceZoneIds)
+          : Object.freeze({
+              ...zone,
+              properties: {
+                ...zone.properties,
+                datasetId: result.artifact.datasetId
+              }
+            })
       );
     }
   }
 
   return Object.freeze(sortRuntimeZones(merged));
+}
+
+function namespaceCatalogZone(
+  zone: TerritoryZone,
+  artifact: TerritoryCatalogSelectedArtifact,
+  sourceZoneIds: ReadonlySet<string>
+): TerritoryZone {
+  const qualify = (zoneId: string): string => qualifyCatalogZoneId(artifact.entryId, zoneId);
+  const rewriteId = (zoneId: string | undefined): string | undefined =>
+    zoneId && sourceZoneIds.has(zoneId) ? qualify(zoneId) : zoneId;
+  const parentId = rewriteId(zone.parentId);
+  const childIds = zone.childIds?.map((childId) => rewriteId(childId) ?? childId);
+  const neighborIds = zone.neighborIds.map((neighborId) => rewriteId(neighborId) ?? neighborId);
+
+  return Object.freeze({
+    ...zone,
+    id: qualify(zone.id),
+    datasetId: artifact.datasetId,
+    ...(parentId ? { parentId } : {}),
+    ...(childIds ? { childIds } : {}),
+    neighborIds,
+    properties: {
+      ...rewriteZoneReferenceProperties(zone.properties, artifact, sourceZoneIds),
+      datasetId: artifact.datasetId,
+      sourceZoneId: zone.id,
+      sourceDatasetId: zone.datasetId,
+      sourceEntryId: artifact.entryId
+    }
+  });
+}
+
+function rewriteZoneReferenceProperties(
+  value: Record<string, unknown>,
+  artifact: TerritoryCatalogSelectedArtifact,
+  sourceZoneIds: ReadonlySet<string>
+): Record<string, unknown> {
+  return rewriteReferenceValue(value, artifact, sourceZoneIds) as Record<string, unknown>;
+}
+
+function rewriteReferenceValue(
+  value: unknown,
+  artifact: TerritoryCatalogSelectedArtifact,
+  sourceZoneIds: ReadonlySet<string>
+): unknown {
+  if (typeof value === "string") {
+    return sourceZoneIds.has(value) ? qualifyCatalogZoneId(artifact.entryId, value) : value;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => rewriteReferenceValue(entry, artifact, sourceZoneIds));
+  }
+
+  if (!isRecord(value)) {
+    return value;
+  }
+
+  return Object.fromEntries(
+    Object.entries(value).map(([key, entry]) => [
+      key,
+      rewriteReferenceValue(entry, artifact, sourceZoneIds)
+    ])
+  );
+}
+
+function qualifyCatalogZoneId(entryId: string, sourceZoneId: string): string {
+  return `${entryId}::${sourceZoneId}`;
 }
 
 function compareCatalogQueryResults(
@@ -2036,6 +2156,21 @@ function toTransferableIndexBuffer(
     spatialIndex.byteOffset,
     spatialIndex.byteOffset + spatialIndex.byteLength
   );
+}
+
+function canWorkerLoadSpatialIndex(
+  spatialIndex: TerritoryBinarySpatialIndex | TerritoryBinarySpatialIndexBuffer | undefined
+): boolean {
+  return Boolean(spatialIndex) && !isTerritoryBinarySpatialIndex(spatialIndex);
+}
+
+function workerIndexKey(artifact: TerritoryCatalogSelectedArtifact): string {
+  return [
+    artifact.datasetId,
+    artifact.datasetVersion,
+    artifact.geometryHash,
+    artifact.indexHash ?? "binary"
+  ].join(":");
 }
 
 function freezeDatasetSummary(

@@ -16,6 +16,7 @@ catalog.registerDataset({
   country: "TR",
   levels: ["ADM2", "ADM3"],
   priority: 10,
+  selectionGroup: "tr-official-adm",
   fallbackLevel: "ADM2",
   artifactPurpose: "query",
   spatialIndex: binaryIndexBuffer,
@@ -37,10 +38,19 @@ Catalog entries contain:
 - coverage bounds
 - optional parent scope
 - priority
+- optional `selectionGroup` for mutually exclusive variants
 - fallback level
 - artifact purpose
 - geometry hash
 - optional binary index hash and buffer
+
+Registration is intentionally strict. Dataset id, dataset version, and geometry hash overrides must
+match the dataset manifest; country must not conflict with manifest or zone country codes; levels
+must exist in the dataset; fallback level must be one of the registered levels; priority must be
+finite; bounds must be finite, sorted, and contain the dataset coverage; and binary spatial index
+metadata plus registration `indexHash` must match the dataset. Registering the same entry id with
+identical data is idempotent. Reusing that id with different dataset, bounds, priority, hash, or
+index data fails with `RUNTIME_CONFIGURATION_INVALID`.
 
 ## Resolution Plans
 
@@ -53,9 +63,11 @@ Catalog entries contain:
 - `selectedLevels`: levels used by the selected artifacts
 - `priorityDecisions`: lower-priority or lexical tie-break exclusions
 
-A viewport can select more than one country. Entries are grouped by country, parent scope, selected
-level, and artifact purpose, so adjacent countries can both be selected while overlapping entries
-inside the same country resolve by priority.
+A viewport can select more than one country. Entries with different countries or parent scopes can
+both be selected. Same-country, same-parent, same-level entries compete only when their coverage
+bounds overlap, which lets disjoint country shards load together. Entries with the same explicit
+`selectionGroup` always compete, even when their bounds are disjoint, so applications can model
+mutually exclusive variants.
 
 ## Runtime Behavior
 
@@ -68,5 +80,8 @@ When `createTerritoryRuntime({ catalog })` is used, runtime requests:
 5. merge results deterministically
 6. reject stale plans if the catalog changes before commit
 
-Duplicate zone ids across datasets are namespaced in runtime render output as
-`<datasetId>:<zoneId>` with the original id preserved in `properties.sourceZoneId`.
+Duplicate zone ids across selected artifacts are rejected by default before adapter updates. Pass
+`zoneIdCollisionPolicy: "namespace"` to `createTerritoryRuntime` to namespace every catalog output
+zone from the start as `<entryId>::<sourceZoneId>`. Namespace mode rewrites local `parentId`,
+`childIds`, `neighborIds`, and string references in zone properties, and preserves
+`sourceZoneId`, `sourceDatasetId`, and `sourceEntryId`.

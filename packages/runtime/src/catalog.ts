@@ -1,4 +1,5 @@
 import {
+  decodeTerritoryBinarySpatialIndex,
   isTerritoryBinarySpatialIndex,
   type TerritoryBinarySpatialIndex,
   type TerritoryBinarySpatialIndexBuffer,
@@ -27,6 +28,7 @@ export interface TerritoryCatalogDatasetRegistration {
   readonly priority?: number;
   readonly fallbackLevel?: number | TerritoryAdminLevel;
   readonly artifactPurpose?: TerritoryCatalogArtifactPurpose;
+  readonly selectionGroup?: string;
   readonly geometryHash?: string;
   readonly indexHash?: string;
   readonly spatialIndex?: TerritoryBinarySpatialIndex | TerritoryBinarySpatialIndexBuffer;
@@ -44,6 +46,7 @@ export interface TerritoryCatalogEntry {
   readonly priority: number;
   readonly fallbackLevel?: number;
   readonly artifactPurpose: TerritoryCatalogArtifactPurpose;
+  readonly selectionGroup?: string;
   readonly geometryHash: string;
   readonly indexHash?: string;
   readonly spatialIndex?: TerritoryBinarySpatialIndex | TerritoryBinarySpatialIndexBuffer;
@@ -58,6 +61,7 @@ export interface TerritoryCatalogCoverage {
   readonly parentId?: string;
   readonly priority: number;
   readonly artifactPurpose: TerritoryCatalogArtifactPurpose;
+  readonly selectionGroup?: string;
   readonly geometryHash: string;
   readonly indexHash?: string;
 }
@@ -101,6 +105,7 @@ export interface TerritoryCatalogSelectedArtifact {
   readonly bounds: TerritoryBounds;
   readonly priority: number;
   readonly artifactPurpose: TerritoryCatalogArtifactPurpose;
+  readonly selectionGroup?: string;
   readonly geometryHash: string;
   readonly indexHash?: string;
   readonly spatialIndex?: TerritoryBinarySpatialIndex | TerritoryBinarySpatialIndexBuffer;
@@ -166,6 +171,26 @@ export function createTerritoryCatalog(
     },
     registerDataset(input) {
       const entry = normalizeRegistration(input);
+      const existing = entries.get(entry.id);
+
+      if (existing) {
+        if (catalogEntriesEquivalent(existing, entry)) {
+          return existing;
+        }
+
+        throw new TerritoryError(
+          "RUNTIME_CONFIGURATION_INVALID",
+          "Catalog entry id is already registered with a conflicting configuration.",
+          {
+            details: {
+              entryId: entry.id,
+              datasetId: entry.datasetId,
+              datasetVersion: entry.datasetVersion
+            }
+          }
+        );
+      }
+
       entries.set(entry.id, entry);
       revision += 1;
       return entry;
@@ -247,6 +272,7 @@ export function createTerritoryCatalog(
               ...(entry.parentId ? { parentId: entry.parentId } : {}),
               priority: entry.priority,
               artifactPurpose: entry.artifactPurpose,
+              ...(entry.selectionGroup ? { selectionGroup: entry.selectionGroup } : {}),
               geometryHash: entry.geometryHash,
               ...(entry.indexHash ? { indexHash: entry.indexHash } : {})
             })
@@ -358,23 +384,79 @@ export function isTerritoryCatalog(input: unknown): input is TerritoryCatalog {
 
 function normalizeRegistration(input: TerritoryCatalogDatasetRegistration): TerritoryCatalogEntry {
   const dataset = loadTerritoryDataset(input.dataset);
-  const levels = normalizeLevels(input);
-  const datasetId = input.datasetId ?? dataset.manifest.datasetId;
-  const datasetVersion = input.datasetVersion ?? dataset.manifest.datasetVersion;
+  assertRegistrationIdentity(input, dataset);
+  const levels = normalizeLevels(input, dataset);
+  const datasetId = dataset.manifest.datasetId;
+  const datasetVersion = dataset.manifest.datasetVersion;
   const country =
     input.country ??
     (dataset.manifest.countryCodes?.length === 1 ? dataset.manifest.countryCodes[0] : undefined);
-  const geometryHash = input.geometryHash ?? dataset.manifest.geometryHash;
-  const indexHash =
-    input.indexHash ??
-    (isTerritoryBinarySpatialIndex(input.spatialIndex)
-      ? input.spatialIndex.metadata.indexHash
-      : undefined);
+  const normalizedCountry = country ? normalizeCountry(country) : undefined;
+  assertRegistrationCountry(normalizedCountry, dataset);
+  const geometryHash = dataset.manifest.geometryHash;
+  const spatialIndexMetadata = input.spatialIndex
+    ? readSpatialIndexMetadata(input.spatialIndex)
+    : undefined;
+  assertSpatialIndexMetadata(spatialIndexMetadata, dataset);
+  const indexHash = input.indexHash ?? spatialIndexMetadata?.indexHash;
+
+  if (
+    input.indexHash !== undefined &&
+    spatialIndexMetadata?.indexHash !== undefined &&
+    input.indexHash !== spatialIndexMetadata.indexHash
+  ) {
+    throw new TerritoryError(
+      "RUNTIME_CONFIGURATION_INVALID",
+      "Catalog registration indexHash does not match the binary spatial index metadata.",
+      {
+        details: { expected: spatialIndexMetadata.indexHash, actual: input.indexHash }
+      }
+    );
+  }
+
+  const priority = input.priority ?? 0;
+
+  if (!Number.isFinite(priority)) {
+    throw new TerritoryError(
+      "RUNTIME_CONFIGURATION_INVALID",
+      "Catalog registration priority must be finite.",
+      {
+        details: { priority }
+      }
+    );
+  }
+
+  const bounds = normalizeCatalogBounds(input.bounds ?? boundsForDataset(dataset));
+  const datasetBounds = boundsForDataset(dataset);
+
+  if (!boundsContain(bounds, datasetBounds)) {
+    throw new TerritoryError(
+      "RUNTIME_CONFIGURATION_INVALID",
+      "Catalog registration bounds must contain the dataset coverage bounds.",
+      {
+        details: { bounds, datasetBounds }
+      }
+    );
+  }
+
+  const fallbackLevel =
+    input.fallbackLevel !== undefined ? normalizeLevel(input.fallbackLevel) : undefined;
+
+  if (fallbackLevel !== undefined && !levels.includes(fallbackLevel)) {
+    throw new TerritoryError(
+      "RUNTIME_CONFIGURATION_INVALID",
+      "Catalog fallbackLevel must be present in the registered levels.",
+      {
+        details: { fallbackLevel, levels }
+      }
+    );
+  }
+
   const entry: TerritoryCatalogEntry = {
     id: createEntryId({
       datasetId,
       datasetVersion,
-      ...(country ? { country } : {}),
+      ...(normalizedCountry ? { country: normalizedCountry } : {}),
       levels,
       ...(input.parentId ? { parentId: input.parentId } : {}),
       artifactPurpose: input.artifactPurpose ?? "query"
@@ -382,15 +464,14 @@ function normalizeRegistration(input: TerritoryCatalogDatasetRegistration): Terr
     dataset,
     datasetId,
     datasetVersion,
-    ...(country ? { country: normalizeCountry(country) } : {}),
+    ...(normalizedCountry ? { country: normalizedCountry } : {}),
     levels,
-    bounds: freezeBounds(input.bounds ?? boundsForDataset(dataset)),
+    bounds,
     ...(input.parentId ? { parentId: input.parentId } : {}),
-    priority: input.priority ?? 0,
-    ...(input.fallbackLevel !== undefined
-      ? { fallbackLevel: normalizeLevel(input.fallbackLevel) }
-      : {}),
+    priority,
+    ...(fallbackLevel !== undefined ? { fallbackLevel } : {}),
     artifactPurpose: input.artifactPurpose ?? "query",
+    ...(input.selectionGroup ? { selectionGroup: input.selectionGroup } : {}),
     geometryHash,
     ...(indexHash ? { indexHash } : {}),
     ...(input.spatialIndex ? { spatialIndex: input.spatialIndex } : {})
@@ -399,17 +480,37 @@ function normalizeRegistration(input: TerritoryCatalogDatasetRegistration): Terr
   return Object.freeze(entry);
 }
 
-function normalizeLevels(input: TerritoryCatalogDatasetRegistration): readonly number[] {
+function normalizeLevels(
+  input: TerritoryCatalogDatasetRegistration,
+  dataset: TerritoryDataset
+): readonly number[] {
   const levels = input.levels ?? (input.level !== undefined ? [input.level] : undefined);
   const normalized = levels?.map(normalizeLevel) ?? [
-    ...new Set(input.dataset.zones.map((zone) => zone.level))
+    ...new Set(dataset.zones.map((zone) => zone.level))
   ];
+  const availableLevels = new Set(dataset.zones.map((zone) => zone.level));
 
   if (normalized.length === 0) {
     return Object.freeze([]);
   }
 
-  return Object.freeze([...new Set(normalized)].sort((left, right) => left - right));
+  const uniqueLevels = [...new Set(normalized)].sort((left, right) => left - right);
+  const missingLevel = uniqueLevels.find((level) => !availableLevels.has(level));
+
+  if (missingLevel !== undefined) {
+    throw new TerritoryError(
+      "RUNTIME_CONFIGURATION_INVALID",
+      "Catalog registration levels must exist in the dataset.",
+      {
+        details: {
+          level: missingLevel,
+          availableLevels: [...availableLevels].sort((left, right) => left - right)
+        }
+      }
+    );
+  }
+
+  return Object.freeze(uniqueLevels);
 }
 
 function normalizeLevel(level: number | TerritoryAdminLevel): number {
@@ -428,6 +529,101 @@ function normalizeLevel(level: number | TerritoryAdminLevel): number {
   }
 
   return level;
+}
+
+function assertRegistrationIdentity(
+  input: TerritoryCatalogDatasetRegistration,
+  dataset: TerritoryDataset
+): void {
+  const mismatches = [
+    ["datasetId", input.datasetId, dataset.manifest.datasetId],
+    ["datasetVersion", input.datasetVersion, dataset.manifest.datasetVersion],
+    ["geometryHash", input.geometryHash, dataset.manifest.geometryHash]
+  ].filter(
+    ([, expectedValue, actualValue]) => expectedValue !== undefined && expectedValue !== actualValue
+  );
+
+  if (mismatches.length === 0) {
+    return;
+  }
+
+  throw new TerritoryError(
+    "RUNTIME_CONFIGURATION_INVALID",
+    "Catalog registration metadata must match the dataset manifest.",
+    {
+      details: Object.fromEntries(
+        mismatches.map(([field, expectedValue, actualValue]) => [
+          String(field),
+          { expected: String(actualValue), actual: String(expectedValue) }
+        ])
+      )
+    }
+  );
+}
+
+function assertRegistrationCountry(country: string | undefined, dataset: TerritoryDataset): void {
+  const manifestCountries = dataset.manifest.countryCodes?.map(normalizeCountry) ?? [];
+  const zoneCountries = [
+    ...new Set(
+      dataset.zones
+        .map((zone) => zone.countryCode)
+        .filter((countryCode): countryCode is string => Boolean(countryCode))
+        .map(normalizeCountry)
+    )
+  ];
+  const knownCountries = manifestCountries.length > 0 ? manifestCountries : zoneCountries;
+
+  if (!country || knownCountries.length === 0 || knownCountries.includes(country)) {
+    return;
+  }
+
+  throw new TerritoryError(
+    "RUNTIME_CONFIGURATION_INVALID",
+    "Catalog registration country conflicts with the dataset manifest countryCodes.",
+    {
+      details: { country, countryCodes: knownCountries }
+    }
+  );
+}
+
+function readSpatialIndexMetadata(
+  spatialIndex: TerritoryBinarySpatialIndex | TerritoryBinarySpatialIndexBuffer
+): TerritoryBinarySpatialIndex["metadata"] {
+  return isTerritoryBinarySpatialIndex(spatialIndex)
+    ? spatialIndex.metadata
+    : decodeTerritoryBinarySpatialIndex(spatialIndex).metadata;
+}
+
+function assertSpatialIndexMetadata(
+  metadata: TerritoryBinarySpatialIndex["metadata"] | undefined,
+  dataset: TerritoryDataset
+): void {
+  if (!metadata) {
+    return;
+  }
+
+  const mismatches = [
+    ["datasetId", metadata.datasetId, dataset.manifest.datasetId],
+    ["datasetVersion", metadata.datasetVersion, dataset.manifest.datasetVersion],
+    ["geometryHash", metadata.geometryHash, dataset.manifest.geometryHash]
+  ].filter(([, actualValue, expectedValue]) => actualValue !== expectedValue);
+
+  if (mismatches.length === 0) {
+    return;
+  }
+
+  throw new TerritoryError(
+    "RUNTIME_CONFIGURATION_INVALID",
+    "Catalog spatialIndex metadata must match the dataset manifest.",
+    {
+      details: Object.fromEntries(
+        mismatches.map(([field, actualValue, expectedValue]) => [
+          String(field),
+          { expected: String(expectedValue), actual: String(actualValue) }
+        ])
+      )
+    }
+  );
 }
 
 function normalizeViewport(viewport: TerritoryCatalogViewport): TerritoryCatalogViewport {
@@ -502,44 +698,26 @@ function selectMatches(matches: readonly TerritoryCatalogMatch[]): {
   readonly selectedMatches: readonly TerritoryCatalogMatch[];
   readonly priorityDecisions: readonly TerritoryCatalogPriorityDecision[];
 } {
-  const groups = new Map<string, TerritoryCatalogMatch[]>();
-
-  for (const match of matches) {
-    const groupKey = [
-      match.entry.country ?? match.entry.datasetId,
-      match.entry.parentId ?? "",
-      match.level,
-      match.entry.artifactPurpose
-    ].join(":");
-    const group = groups.get(groupKey) ?? [];
-    group.push(match);
-    groups.set(groupKey, group);
-  }
-
   const selectedMatches: TerritoryCatalogMatch[] = [];
   const priorityDecisions: TerritoryCatalogPriorityDecision[] = [];
 
-  for (const [groupKey, group] of groups.entries()) {
-    const sorted = [...group].sort(compareMatches);
-    const selected = sorted[0];
+  for (const candidate of [...matches].sort(compareMatches)) {
+    const selected = selectedMatches.find((match) => matchesCompete(match, candidate));
 
     if (!selected) {
+      selectedMatches.push(candidate);
       continue;
     }
 
-    selectedMatches.push(selected);
-
-    for (const excluded of sorted.slice(1)) {
-      priorityDecisions.push(
-        Object.freeze({
-          selectedEntryId: selected.entry.id,
-          excludedEntryId: excluded.entry.id,
-          reason:
-            selected.entry.priority === excluded.entry.priority ? "tie-breaker" : "lower-priority",
-          groupKey
-        })
-      );
-    }
+    priorityDecisions.push(
+      Object.freeze({
+        selectedEntryId: selected.entry.id,
+        excludedEntryId: candidate.entry.id,
+        reason:
+          selected.entry.priority === candidate.entry.priority ? "tie-breaker" : "lower-priority",
+        groupKey: selectionGroupKey(selected, candidate)
+      })
+    );
   }
 
   return {
@@ -561,6 +739,7 @@ function createSelectedArtifact(match: TerritoryCatalogMatch): TerritoryCatalogS
     bounds: freezeBounds(entry.bounds),
     priority: entry.priority,
     artifactPurpose: entry.artifactPurpose,
+    ...(entry.selectionGroup ? { selectionGroup: entry.selectionGroup } : {}),
     geometryHash: entry.geometryHash,
     ...(entry.indexHash ? { indexHash: entry.indexHash } : {}),
     ...(entry.spatialIndex ? { spatialIndex: entry.spatialIndex } : {})
@@ -589,12 +768,52 @@ function freezeBounds(bounds: TerritoryBounds): TerritoryBounds {
   });
 }
 
+function normalizeCatalogBounds(bounds: TerritoryBounds): TerritoryBounds {
+  const normalized = freezeBounds(bounds);
+
+  if (
+    !Number.isFinite(normalized.west) ||
+    !Number.isFinite(normalized.south) ||
+    !Number.isFinite(normalized.east) ||
+    !Number.isFinite(normalized.north)
+  ) {
+    throw new TerritoryError(
+      "RUNTIME_CONFIGURATION_INVALID",
+      "Catalog registration bounds must be finite.",
+      {
+        details: { bounds: normalized }
+      }
+    );
+  }
+
+  if (normalized.west > normalized.east || normalized.south > normalized.north) {
+    throw new TerritoryError(
+      "RUNTIME_CONFIGURATION_INVALID",
+      "Catalog registration bounds must be sorted west/east and south/north.",
+      {
+        details: { bounds: normalized }
+      }
+    );
+  }
+
+  return normalized;
+}
+
 function boundsIntersect(left: TerritoryBounds, right: TerritoryBounds): boolean {
   return (
     left.west <= right.east &&
     left.east >= right.west &&
     left.south <= right.north &&
     left.north >= right.south
+  );
+}
+
+function boundsContain(outer: TerritoryBounds, inner: TerritoryBounds): boolean {
+  return (
+    outer.west <= inner.west &&
+    outer.south <= inner.south &&
+    outer.east >= inner.east &&
+    outer.north >= inner.north
   );
 }
 
@@ -624,6 +843,37 @@ function compareMatches(left: TerritoryCatalogMatch, right: TerritoryCatalogMatc
   );
 }
 
+function matchesCompete(left: TerritoryCatalogMatch, right: TerritoryCatalogMatch): boolean {
+  if (
+    (left.entry.country ?? left.entry.datasetId) !==
+      (right.entry.country ?? right.entry.datasetId) ||
+    (left.entry.parentId ?? "") !== (right.entry.parentId ?? "") ||
+    left.level !== right.level ||
+    left.entry.artifactPurpose !== right.entry.artifactPurpose
+  ) {
+    return false;
+  }
+
+  if (left.entry.selectionGroup || right.entry.selectionGroup) {
+    return (
+      left.entry.selectionGroup !== undefined &&
+      left.entry.selectionGroup === right.entry.selectionGroup
+    );
+  }
+
+  return boundsIntersect(left.entry.bounds, right.entry.bounds);
+}
+
+function selectionGroupKey(left: TerritoryCatalogMatch, right: TerritoryCatalogMatch): string {
+  return [
+    left.entry.country ?? left.entry.datasetId,
+    left.entry.parentId ?? "",
+    left.level,
+    left.entry.artifactPurpose,
+    left.entry.selectionGroup ?? right.entry.selectionGroup ?? "overlap"
+  ].join(":");
+}
+
 function matchTypeRank(matchType: TerritoryCatalogMatch["matchType"]): number {
   return matchType === "exact" ? 0 : 1;
 }
@@ -643,6 +893,34 @@ function compareTerritoryMatches(
   right: TerritoryCatalogTerritoryMatch
 ): number {
   return compareEntries(left.entry, right.entry) || left.zone.id.localeCompare(right.zone.id);
+}
+
+function catalogEntriesEquivalent(
+  left: TerritoryCatalogEntry,
+  right: TerritoryCatalogEntry
+): boolean {
+  return stableJson(entryComparisonPayload(left)) === stableJson(entryComparisonPayload(right));
+}
+
+function entryComparisonPayload(entry: TerritoryCatalogEntry): unknown {
+  return {
+    id: entry.id,
+    datasetId: entry.datasetId,
+    datasetVersion: entry.datasetVersion,
+    geometryHash: entry.geometryHash,
+    indexHash: entry.indexHash ?? "",
+    country: entry.country ?? "",
+    levels: entry.levels,
+    bounds: entry.bounds,
+    parentId: entry.parentId ?? "",
+    priority: entry.priority,
+    fallbackLevel: entry.fallbackLevel ?? "",
+    artifactPurpose: entry.artifactPurpose,
+    selectionGroup: entry.selectionGroup ?? "",
+    hasSpatialIndex: Boolean(entry.spatialIndex),
+    manifest: entry.dataset.manifest,
+    zones: entry.dataset.zones
+  };
 }
 
 function freezeEntries(

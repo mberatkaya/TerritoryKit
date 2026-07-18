@@ -70,18 +70,33 @@ const catalog = createTerritoryCatalog([
 const runtime = createTerritoryRuntime({
   catalog,
   enginePool: createTerritoryEnginePool({ maxActiveEngines: 4 }),
-  workerTransport
+  workerTransport,
+  zoneIdCollisionPolicy: "namespace"
 });
 ```
 
 Catalog mode resolves every dataset that intersects a viewport, supports exact and fallback level
 matches, selects priority winners, and rejects stale plans if the catalog changes before commit.
-Runtime merges selected dataset results deterministically and namespaces duplicate zone ids in
-renderer output as `<datasetId>:<zoneId>`.
+Registration rejects manifest override conflicts, unknown levels, invalid fallback levels,
+non-finite priorities, bounds that exclude dataset coverage, and binary index metadata/hash
+mismatches. Re-registering an identical entry id is idempotent; conflicting registrations with the
+same entry id fail with `RUNTIME_CONFIGURATION_INVALID`.
+
+Priority selection treats overlapping same-country/parent/level artifacts as alternatives while
+allowing disjoint shards to be selected together. Use `selectionGroup` when disjoint artifacts are
+intentional variants that should still compete.
+
+Runtime rejects duplicate zone ids by default before adapter updates. Set
+`zoneIdCollisionPolicy: "namespace"` to emit deterministic ids as
+`<entryId>::<sourceZoneId>` and preserve `sourceZoneId`, `sourceDatasetId`, and `sourceEntryId`
+properties.
 
 `createTerritoryEnginePool` provides per-dataset engine reuse, max-active LRU eviction, pinned
-engines, memory estimates, and disposal. `createTerritoryWorkerClient` defines the injectable
-worker transport used for binary-index-backed catalog artifacts.
+engines, memory estimates, concurrent same-key creation dedupe, and disposal. Custom pool keys are
+validated against dataset id, dataset version, geometry hash, and index hash to avoid accidental
+engine reuse across incompatible artifacts. `createTerritoryWorkerClient` defines the injectable
+worker transport used for binary-index-backed catalog artifacts and validates response request ids,
+types, and dataset ids.
 
 ## Cache
 

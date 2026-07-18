@@ -123,6 +123,7 @@ export function createTerritoryWorkerClient(
 ): TerritoryWorkerClient {
   let sequence = 0;
   let disposed = false;
+  let disposing = false;
 
   function nextRequestId(prefix: string): string {
     sequence += 1;
@@ -134,25 +135,16 @@ export function createTerritoryWorkerClient(
     expectedType: T["type"],
     transferables: readonly Transferable[] = []
   ): Promise<T> {
-    if (disposed && message.type !== "dispose") {
+    if ((disposed || disposing) && message.type !== "dispose" && message.type !== "cancel") {
       throw new TerritoryError("RUNTIME_DISPOSED", "Territory worker client has been disposed.");
     }
 
     const response = await transport.send(message, transferables);
+    assertWorkerResponseProtocol(message, response, expectedType);
 
     if (response.type === "error") {
       throw new TerritoryError("UNKNOWN", response.message, {
         details: { workerCode: response.code ?? "UNKNOWN", requestId: response.requestId }
-      });
-    }
-
-    if (response.type !== expectedType) {
-      throw new TerritoryError("ARTIFACT_CORRUPTED", "Worker returned an unexpected response.", {
-        details: {
-          requestId: message.requestId,
-          expectedType,
-          actualType: response.type
-        }
       });
     }
 
@@ -164,10 +156,53 @@ export function createTerritoryWorkerClient(
       return;
     }
 
-    await client.cancel(requestId, "aborted");
+    await cancelSafely(requestId, "aborted");
     throw new TerritoryError("REQUEST_ABORTED", `Worker request '${requestId}' was aborted.`, {
       details: { requestId }
     });
+  }
+
+  function createAbortError(requestId: string): TerritoryError {
+    return new TerritoryError("REQUEST_ABORTED", `Worker request '${requestId}' was aborted.`, {
+      details: { requestId }
+    });
+  }
+
+  async function cancelSafely(requestId: string, reason: string): Promise<void> {
+    try {
+      await client.cancel(requestId, reason);
+    } catch {
+      // Cancellation is best-effort; the original abort/dispose path owns the visible result.
+    }
+  }
+
+  async function sendAbortableExpected<T extends TerritoryWorkerResponse>(
+    message: TerritoryWorkerMessage,
+    expectedType: T["type"],
+    input: {
+      readonly signal?: AbortSignal;
+      readonly transferables?: readonly Transferable[];
+    } = {}
+  ): Promise<T> {
+    await throwIfAborted(input.signal, message.requestId);
+
+    let abortListener: (() => void) | undefined;
+    const abortPromise = new Promise<never>((_, reject) => {
+      abortListener = () => {
+        void cancelSafely(message.requestId, "aborted");
+        reject(createAbortError(message.requestId));
+      };
+      input.signal?.addEventListener("abort", abortListener, { once: true });
+    });
+    const responsePromise = sendExpected<T>(message, expectedType, input.transferables ?? []);
+
+    try {
+      return await (input.signal ? Promise.race([responsePromise, abortPromise]) : responsePromise);
+    } finally {
+      if (abortListener) {
+        input.signal?.removeEventListener("abort", abortListener);
+      }
+    }
   }
 
   const client: TerritoryWorkerClient = {
@@ -175,7 +210,7 @@ export function createTerritoryWorkerClient(
       const requestId = context.requestId ?? nextRequestId("initialize");
       const transferables = input.transfer === true && input.indexBuffer ? [input.indexBuffer] : [];
 
-      return sendExpected<TerritoryWorkerInitializedResponse>(
+      return sendAbortableExpected<TerritoryWorkerInitializedResponse>(
         {
           type: "initialize",
           requestId,
@@ -186,26 +221,15 @@ export function createTerritoryWorkerClient(
           ...(input.indexBuffer ? { indexBuffer: input.indexBuffer } : {})
         },
         "initialized",
-        transferables
+        {
+          ...(context.signal ? { signal: context.signal } : {}),
+          transferables
+        }
       );
     },
     async query(input, context = {}) {
       const requestId = context.requestId ?? nextRequestId("query");
-      await throwIfAborted(context.signal, requestId);
-
-      let abortListener: (() => void) | undefined;
-      const abortPromise = new Promise<never>((_, reject) => {
-        abortListener = () => {
-          void client.cancel(requestId, "aborted");
-          reject(
-            new TerritoryError("REQUEST_ABORTED", `Worker request '${requestId}' was aborted.`, {
-              details: { requestId }
-            })
-          );
-        };
-        context.signal?.addEventListener("abort", abortListener, { once: true });
-      });
-      const queryPromise = sendExpected<TerritoryWorkerQueryResponse>(
+      return sendAbortableExpected<TerritoryWorkerQueryResponse>(
         {
           type: "query",
           requestId,
@@ -213,16 +237,11 @@ export function createTerritoryWorkerClient(
           bounds: input.bounds,
           level: input.level
         },
-        "query-result"
-      );
-
-      try {
-        return await (context.signal ? Promise.race([queryPromise, abortPromise]) : queryPromise);
-      } finally {
-        if (abortListener) {
-          context.signal?.removeEventListener("abort", abortListener);
+        "query-result",
+        {
+          ...(context.signal ? { signal: context.signal } : {})
         }
-      }
+      );
     },
     cancel(requestId, reason = "cancelled") {
       return sendExpected<TerritoryWorkerCancelledResponse>(
@@ -242,18 +261,94 @@ export function createTerritoryWorkerClient(
         };
       }
 
+      disposing = true;
       const requestId = nextRequestId("dispose");
-      const response = await sendExpected<TerritoryWorkerDisposedResponse>(
-        {
-          type: "dispose",
-          requestId
-        },
-        "disposed"
-      );
-      disposed = true;
-      return response;
+      try {
+        const response = await sendExpected<TerritoryWorkerDisposedResponse>(
+          {
+            type: "dispose",
+            requestId
+          },
+          "disposed"
+        );
+        disposed = true;
+        return response;
+      } finally {
+        disposing = false;
+      }
     }
   };
 
   return client;
+}
+
+function assertWorkerResponseProtocol(
+  message: TerritoryWorkerMessage,
+  response: TerritoryWorkerResponse,
+  expectedType: TerritoryWorkerResponse["type"]
+): void {
+  if (response.requestId !== message.requestId) {
+    throw new TerritoryError(
+      "ARTIFACT_CORRUPTED",
+      "Worker protocol invalid: response requestId does not match the request.",
+      {
+        details: {
+          expectedRequestId: message.requestId,
+          actualRequestId: response.requestId,
+          expectedType,
+          actualType: response.type
+        }
+      }
+    );
+  }
+
+  if (response.type !== expectedType && response.type !== "error") {
+    throw new TerritoryError(
+      "ARTIFACT_CORRUPTED",
+      "Worker protocol invalid: response type does not match the request.",
+      {
+        details: {
+          requestId: message.requestId,
+          expectedType,
+          actualType: response.type
+        }
+      }
+    );
+  }
+
+  if (
+    message.type === "initialize" &&
+    response.type === "initialized" &&
+    response.datasetId !== message.datasetId
+  ) {
+    throw new TerritoryError(
+      "ARTIFACT_CORRUPTED",
+      "Worker protocol invalid: initialized datasetId does not match the request.",
+      {
+        details: {
+          requestId: message.requestId,
+          expectedDatasetId: message.datasetId,
+          actualDatasetId: response.datasetId
+        }
+      }
+    );
+  }
+
+  if (
+    message.type === "query" &&
+    response.type === "query-result" &&
+    response.datasetId !== message.datasetId
+  ) {
+    throw new TerritoryError(
+      "ARTIFACT_CORRUPTED",
+      "Worker protocol invalid: query-result datasetId does not match the request.",
+      {
+        details: {
+          requestId: message.requestId,
+          expectedDatasetId: message.datasetId,
+          actualDatasetId: response.datasetId
+        }
+      }
+    );
+  }
 }
