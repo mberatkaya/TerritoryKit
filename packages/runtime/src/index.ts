@@ -399,6 +399,7 @@ interface CachedViewportPayload {
   readonly zones: readonly TerritoryZone[];
   readonly datasets?: readonly TerritoryRuntimeDatasetSummary[];
   readonly catalogPlanId?: string;
+  readonly catalogCollisionPolicy?: TerritoryRuntimeZoneIdCollisionPolicy;
 }
 
 interface RuntimeCatalogQueryEntry {
@@ -1084,7 +1085,7 @@ export function createTerritoryRuntime<TTarget = unknown>(
     }
 
     record.selectedLevel = selectedLevel;
-    record.cacheKey = createCatalogViewportCacheKey(plan, record.viewport);
+    record.cacheKey = createCatalogViewportCacheKey(plan, record.viewport, zoneIdCollisionPolicy);
 
     if (isCurrentRequest(record)) {
       activeLevel = selectedLevel;
@@ -1380,20 +1381,26 @@ export function createTerritoryRuntime<TTarget = unknown>(
     assertRequestFresh(record);
 
     if (cachedBytes) {
-      emitEvent("cache-hit", { request: record });
       const payload = readCachedViewportPayload(cachedBytes, cacheKey);
-      return {
-        zones: payload.zones,
-        cached: true,
-        ...(payload.datasets
-          ? {
-              datasets: payload.datasets.map((dataset) =>
-                freezeDatasetSummary({ ...dataset, cached: true })
-              )
-            }
-          : {}),
-        ...(payload.catalogPlanId ? { catalogPlanId: payload.catalogPlanId } : {})
-      };
+
+      if (payload.catalogCollisionPolicy === zoneIdCollisionPolicy) {
+        emitEvent("cache-hit", { request: record });
+        return {
+          zones: payload.zones,
+          cached: true,
+          ...(payload.datasets
+            ? {
+                datasets: payload.datasets.map((dataset) =>
+                  freezeDatasetSummary({ ...dataset, cached: true })
+                )
+              }
+            : {}),
+          ...(payload.catalogPlanId ? { catalogPlanId: payload.catalogPlanId } : {})
+        };
+      }
+
+      await cache.delete?.(cacheKey, context);
+      assertRequestFresh(record);
     }
 
     emitEvent("cache-miss", { request: record });
@@ -1407,7 +1414,8 @@ export function createTerritoryRuntime<TTarget = unknown>(
         level: plan.selectedLevels[0] ?? 0,
         zones: result.zones,
         ...(result.datasets ? { datasets: result.datasets } : {}),
-        catalogPlanId: plan.planId
+        catalogPlanId: plan.planId,
+        catalogCollisionPolicy: zoneIdCollisionPolicy
       }),
       context
     );
@@ -1960,11 +1968,13 @@ function normalizeCatalogOption(
 
 function createCatalogViewportCacheKey(
   plan: TerritoryCatalogResolutionPlan,
-  viewport: TerritoryRuntimeViewport
+  viewport: TerritoryRuntimeViewport,
+  collisionPolicy: TerritoryRuntimeZoneIdCollisionPolicy
 ): string {
   return [
     "catalog",
     shortStableHash(plan.planId),
+    `collision=${collisionPolicy}`,
     viewport.zoom,
     viewport.level ?? "*",
     viewport.bounds.west,

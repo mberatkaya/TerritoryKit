@@ -21,8 +21,16 @@ without leaking renderer, filesystem, or network code into browser-safe packages
 - Flatbush remains the default core fallback when no binary index is provided.
 - Runtime rejects stale catalog plans by comparing the request-captured catalog revision with the
   current catalog revision before commit.
+- Catalog viewport cache identity includes `zoneIdCollisionPolicy`, and cached catalog payloads
+  record the policy that produced them. Policy mismatches are treated as cache misses instead of
+  corrupted data.
+- The engine pool deduplicates same-key creation but treats delete/dispose as in-flight
+  invalidation: deleted callers receive `REQUEST_ABORTED`, pool-disposed callers receive
+  `RUNTIME_DISPOSED`, and late engines are disposed instead of returned.
 - Worker loading is injectable. Runtime sends message-schema objects and transferables through a
   transport interface instead of importing a concrete Worker implementation.
+- Worker client disposal is deduplicated so concurrent `dispose()` calls share one transport
+  operation. Failed dispose attempts are retryable.
 
 ## Consequences
 
@@ -31,8 +39,8 @@ without leaking renderer, filesystem, or network code into browser-safe packages
 - A viewport can select multiple country datasets and query/merge them deterministically.
 - Binary index artifacts are portable across browser and Node consumers because the format uses
   `ArrayBuffer`, `DataView`, `TextEncoder`, and `TextDecoder`.
-- The v1 binary format is level-partitioned bbox records, not a persisted Flatbush tree. Future
-  schema versions can add tree pages without changing the rejection behavior for unsupported
+- The v1 binary format is level-partitioned bbox records plus packed Flatbush tree bytes. Future
+  schema versions can add more sections without changing the rejection behavior for unsupported
   versions.
 - Worker tests use deterministic fake transports; applications can bind the same contract to real
   browser Workers.

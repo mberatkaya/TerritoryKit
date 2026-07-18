@@ -90,6 +90,14 @@ interface PoolKeySignature {
   readonly indexHash?: string;
 }
 
+type EnginePoolInvalidationReason = "deleted" | "disposed" | "superseded";
+
+interface EnginePoolInvalidation {
+  readonly key: string;
+  readonly datasetId: string;
+  readonly reason: EnginePoolInvalidationReason;
+}
+
 export function createTerritoryEnginePool(
   options: TerritoryEnginePoolOptions = {}
 ): TerritoryEnginePool {
@@ -101,6 +109,7 @@ export function createTerritoryEnginePool(
   const keySignatures = new Map<string, PoolKeySignature>();
   const inFlightByKey = new Map<string, Promise<TerritoryEngine>>();
   const inFlightTokensByKey = new Map<string, symbol>();
+  const invalidationsByToken = new Map<symbol, EnginePoolInvalidation>();
   let hits = 0;
   let misses = 0;
   let evictions = 0;
@@ -155,22 +164,22 @@ export function createTerritoryEnginePool(
         )
         .then((engine) => {
           const stillCurrent = inFlightTokensByKey.get(key) === token;
-          inFlightByKey.delete(key);
 
           if (stillCurrent) {
+            inFlightByKey.delete(key);
             inFlightTokensByKey.delete(key);
           }
 
           if (!stillCurrent) {
             disposeEngine(engine);
-            if (disposed) {
-              throw new TerritoryError(
-                "RUNTIME_DISPOSED",
-                "Territory engine pool was disposed while creating an engine."
-              );
-            }
-
-            return engine;
+            const invalidation =
+              takeInvalidation(token) ??
+              ({
+                key,
+                datasetId: dataset.manifest.datasetId,
+                reason: disposed ? "disposed" : "superseded"
+              } as const);
+            throw createInvalidatedInFlightError(invalidation);
           }
 
           if (disposed) {
@@ -203,13 +212,20 @@ export function createTerritoryEnginePool(
           return engine;
         })
         .catch((error) => {
-          if (inFlightTokensByKey.get(key) === token) {
+          const invalidation = takeInvalidation(token);
+          const stillCurrent = inFlightTokensByKey.get(key) === token;
+
+          if (stillCurrent) {
             inFlightByKey.delete(key);
             inFlightTokensByKey.delete(key);
+
+            if (!entries.has(key)) {
+              keySignatures.delete(key);
+            }
           }
 
-          if (!entries.has(key)) {
-            keySignatures.delete(key);
+          if (invalidation) {
+            throw createInvalidatedInFlightError(invalidation);
           }
 
           throw error;
@@ -243,11 +259,17 @@ export function createTerritoryEnginePool(
     },
     delete(key) {
       const entry = entries.get(key);
+      const inFlightToken = inFlightTokensByKey.get(key);
 
       if (!entry) {
         const deletedInFlight = inFlightByKey.delete(key);
 
-        if (deletedInFlight) {
+        if (deletedInFlight && inFlightToken) {
+          invalidationsByToken.set(inFlightToken, {
+            key,
+            datasetId: keySignatures.get(key)?.datasetId ?? "",
+            reason: "deleted"
+          });
           inFlightTokensByKey.delete(key);
           keySignatures.delete(key);
         }
@@ -265,6 +287,14 @@ export function createTerritoryEnginePool(
       }
 
       disposed = true;
+
+      for (const [key, token] of inFlightTokensByKey.entries()) {
+        invalidationsByToken.set(token, {
+          key,
+          datasetId: keySignatures.get(key)?.datasetId ?? "",
+          reason: "disposed"
+        });
+      }
 
       for (const entry of entries.values()) {
         disposeEngine(entry.engine);
@@ -362,7 +392,42 @@ export function createTerritoryEnginePool(
     );
   }
 
+  function takeInvalidation(
+    token: symbol,
+    fallback?: EnginePoolInvalidation
+  ): EnginePoolInvalidation | undefined {
+    const invalidation = invalidationsByToken.get(token) ?? fallback;
+    invalidationsByToken.delete(token);
+    return invalidation;
+  }
+
   return pool;
+}
+
+function createInvalidatedInFlightError(invalidation: EnginePoolInvalidation): TerritoryError {
+  const details = {
+    key: invalidation.key,
+    datasetId: invalidation.datasetId,
+    reason: invalidation.reason
+  };
+
+  if (invalidation.reason === "disposed") {
+    return new TerritoryError(
+      "RUNTIME_DISPOSED",
+      "Territory engine pool was disposed while creating an engine.",
+      {
+        details
+      }
+    );
+  }
+
+  return new TerritoryError(
+    "REQUEST_ABORTED",
+    `Territory engine pool request for key '${invalidation.key}' was invalidated.`,
+    {
+      details
+    }
+  );
 }
 
 function createKeySignature(

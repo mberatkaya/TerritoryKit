@@ -75,13 +75,21 @@ When `createTerritoryRuntime({ catalog })` is used, runtime requests:
 
 1. capture the catalog revision
 2. build a resolution plan
-3. load/reuse one engine per selected artifact through the engine pool
-4. query all selected datasets
-5. merge results deterministically
-6. reject stale plans if the catalog changes before commit
+3. create a catalog viewport cache key from the plan, collision policy, zoom, level, and bounds
+4. load/reuse one engine per selected artifact through the engine pool
+5. query all selected datasets
+6. merge results deterministically
+7. reject stale plans if the catalog changes before commit
 
 Duplicate zone ids across selected artifacts are rejected by default before adapter updates. Pass
 `zoneIdCollisionPolicy: "namespace"` to `createTerritoryRuntime` to namespace every catalog output
 zone from the start as `<entryId>::<sourceZoneId>`. Namespace mode rewrites local `parentId`,
 `childIds`, `neighborIds`, and string references in zone properties, and preserves
 `sourceZoneId`, `sourceDatasetId`, and `sourceEntryId`.
+
+Collision policy is part of catalog cache identity. Catalog cache keys include
+`collision=error` or `collision=namespace`, and cached catalog payloads record the policy that
+created them. If a payload policy does not match the runtime policy, runtime treats the entry as a
+miss and deletes it when the cache supports deletion. This keeps `error` and `namespace` runtimes
+isolated even when they share the same external cache. Direct single-dataset viewport cache keys do
+not include catalog collision policy.

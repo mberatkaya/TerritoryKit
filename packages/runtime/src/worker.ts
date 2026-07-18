@@ -124,6 +124,8 @@ export function createTerritoryWorkerClient(
   let sequence = 0;
   let disposed = false;
   let disposing = false;
+  let disposePromise: Promise<TerritoryWorkerDisposedResponse> | undefined;
+  let disposedResponse: TerritoryWorkerDisposedResponse | undefined;
 
   function nextRequestId(prefix: string): string {
     sequence += 1;
@@ -255,27 +257,41 @@ export function createTerritoryWorkerClient(
     },
     async dispose() {
       if (disposed) {
-        return {
-          type: "disposed",
-          requestId: "territory-worker-dispose-already"
-        };
+        return (
+          disposedResponse ?? {
+            type: "disposed",
+            requestId: "territory-worker-dispose-already"
+          }
+        );
+      }
+
+      if (disposePromise) {
+        return disposePromise;
       }
 
       disposing = true;
       const requestId = nextRequestId("dispose");
-      try {
-        const response = await sendExpected<TerritoryWorkerDisposedResponse>(
-          {
-            type: "dispose",
-            requestId
-          },
-          "disposed"
-        );
-        disposed = true;
-        return response;
-      } finally {
-        disposing = false;
-      }
+      disposePromise = sendExpected<TerritoryWorkerDisposedResponse>(
+        {
+          type: "dispose",
+          requestId
+        },
+        "disposed"
+      )
+        .then((response) => {
+          disposed = true;
+          disposedResponse = response;
+          return response;
+        })
+        .catch((error) => {
+          disposePromise = undefined;
+          throw error;
+        })
+        .finally(() => {
+          disposing = false;
+        });
+
+      return disposePromise;
     }
   };
 

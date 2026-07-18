@@ -60,6 +60,15 @@ Runtime request cancellation aborts worker initialize and query operations throu
 with `REQUEST_ABORTED`, so stale worker results cannot commit viewport state. New initialize/query
 operations are rejected while disposal is in flight.
 
+## Disposal
+
+`createTerritoryWorkerClient().dispose()` is deduplicated. The first call sends one transport
+`dispose` message and concurrent callers receive the same promise/result. After a successful
+dispose, later calls return the recorded disposed response without sending another transport
+message. If the transport dispose operation fails, the stored promise is cleared, the client remains
+retryable, and a later `dispose()` call can send a new dispose message. Initialize and query calls
+are rejected while disposal is in flight or after disposal has completed.
+
 ## Initialization Reuse
 
 Runtime keeps a per-client registry keyed by dataset id, dataset version, geometry hash, and index

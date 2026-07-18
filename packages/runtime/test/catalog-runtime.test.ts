@@ -13,6 +13,7 @@ import { describe, expect, it } from "vitest";
 import {
   createTerritoryCatalog,
   createTerritoryEnginePool,
+  createMemoryTerritoryRuntimeCache,
   createTerritoryRuntime,
   createTerritoryWorkerClient,
   datasetEnginePoolKey,
@@ -526,6 +527,89 @@ describe("Territory runtime catalog integration", () => {
     expect(second?.summary?.datasets?.[0]?.cached).toBe(true);
   });
 
+  it("isolates catalog cache entries by zone id collision policy", async () => {
+    const catalog = createTerritoryCatalog([
+      {
+        dataset: createDataset({ datasetId: "cache-country-a", country: "AA", west: 0, east: 1 }),
+        country: "AA",
+        level: 0
+      },
+      {
+        dataset: createDataset({ datasetId: "cache-country-b", country: "BB", west: 1, east: 2 }),
+        country: "BB",
+        level: 0
+      }
+    ]);
+    const viewport = {
+      bounds: { west: 0, south: 0, east: 2, north: 1 },
+      zoom: 1,
+      level: 0
+    };
+    const cache = createMemoryTerritoryRuntimeCache();
+    const namespaceRuntime = createTerritoryRuntime({
+      catalog,
+      cache,
+      zoneIdCollisionPolicy: "namespace"
+    });
+    const firstNamespace = await namespaceRuntime.setViewport(viewport);
+    const secondNamespace = await namespaceRuntime.setViewport(viewport, { force: true });
+    const namespaceKey = secondNamespace?.summary?.cacheKey ?? "";
+    const errorKey = namespaceKey.replace("collision=namespace", "collision=error");
+    const errorRuntime = createTerritoryRuntime({ catalog, cache });
+
+    expect(firstNamespace?.status).toBe("ready");
+    expect(firstNamespace?.summary?.cached).toBe(false);
+    expect(secondNamespace?.status).toBe("ready");
+    expect(secondNamespace?.summary?.cached).toBe(true);
+    expect(namespaceKey).toContain("collision=namespace");
+    expect(errorKey).toContain("collision=error");
+    expect(errorKey).not.toBe(namespaceKey);
+
+    const errorResult = await errorRuntime.setViewport(viewport);
+    expect(errorResult?.status).toBe("failed");
+    expect(errorResult?.error?.code).toBe("RUNTIME_CONFIGURATION_INVALID");
+    expect(errorResult?.error?.message).toContain("duplicate zone ids");
+
+    const cacheContext = {
+      requestId: "cache-policy-test",
+      revision: 0,
+      startedAt: new Date(0),
+      viewport
+    };
+    const namespaceBytes = await cache.get(namespaceKey, cacheContext);
+    expect(namespaceBytes).toBeDefined();
+
+    if (!namespaceBytes) {
+      throw new Error("Expected namespace cache payload.");
+    }
+
+    await cache.set(errorKey, namespaceBytes, cacheContext);
+    const mismatchResult = await errorRuntime.setViewport(viewport, { force: true });
+    expect(mismatchResult?.status).toBe("failed");
+    expect(mismatchResult?.error?.code).toBe("RUNTIME_CONFIGURATION_INVALID");
+    expect(await cache.get(errorKey, cacheContext)).toBeUndefined();
+
+    const reverseCache = createMemoryTerritoryRuntimeCache();
+    const reverseErrorRuntime = createTerritoryRuntime({ catalog, cache: reverseCache });
+    const reverseNamespaceRuntime = createTerritoryRuntime({
+      catalog,
+      cache: reverseCache,
+      zoneIdCollisionPolicy: "namespace"
+    });
+    const reverseError = await reverseErrorRuntime.setViewport(viewport);
+    const reverseNamespaceFirst = await reverseNamespaceRuntime.setViewport(viewport);
+    const reverseNamespaceSecond = await reverseNamespaceRuntime.setViewport(viewport, {
+      force: true
+    });
+
+    expect(reverseError?.status).toBe("failed");
+    expect(reverseError?.error?.code).toBe("RUNTIME_CONFIGURATION_INVALID");
+    expect(reverseNamespaceFirst?.status).toBe("ready");
+    expect(reverseNamespaceFirst?.summary?.cached).toBe(false);
+    expect(reverseNamespaceSecond?.status).toBe("ready");
+    expect(reverseNamespaceSecond?.summary?.cached).toBe(true);
+  });
+
   it("rejects stale catalog plans before commit", async () => {
     const catalog = createTerritoryCatalog([
       {
@@ -856,7 +940,14 @@ describe("Territory engine pool and worker client", () => {
     const deletedRequest = pool.getEngine(deletedDataset);
     expect(pool.delete(datasetEnginePoolKey(deletedDataset))).toBe(true);
     deleteDeferred.resolve(createTerritoryEngine({ dataset: deletedDataset }));
-    await expect(deletedRequest).resolves.toBeTruthy();
+    await expect(deletedRequest).rejects.toMatchObject({
+      code: "REQUEST_ABORTED",
+      details: {
+        key: datasetEnginePoolKey(deletedDataset),
+        datasetId: "late-delete",
+        reason: "deleted"
+      }
+    });
     expect(pool.summary.activeEngines).toBe(0);
 
     const disposedRequest = pool.getEngine(disposedDataset);
@@ -865,6 +956,117 @@ describe("Territory engine pool and worker client", () => {
     await expect(disposedRequest).rejects.toThrow("disposed");
     expect(disposedEngines).toEqual(["late-delete", "late-dispose"]);
     expect(pool.summary.activeEngines).toBe(0);
+  });
+
+  it("rejects all waiters when in-flight engine creation is deleted and supports retry", async () => {
+    const dataset = createDataset({
+      datasetId: "delete-waiters",
+      country: "AA",
+      west: 0,
+      east: 1
+    });
+    const key = datasetEnginePoolKey(dataset);
+    const firstAttempt = createDeferred<void>();
+    let attempts = 0;
+    let disposeCount = 0;
+    const pool = createTerritoryEnginePool({
+      createEngine(options) {
+        attempts += 1;
+        const engine = createTerritoryEngine(options) as TerritoryEngine & { dispose(): void };
+        engine.dispose = () => {
+          disposeCount += 1;
+        };
+
+        return attempts === 1 ? firstAttempt.promise.then(() => engine) : engine;
+      }
+    });
+    const requests = Array.from({ length: 20 }, () => pool.getEngine(dataset));
+
+    await Promise.resolve();
+    expect(attempts).toBe(1);
+    expect(pool.delete(key)).toBe(true);
+    firstAttempt.resolve();
+    const results = await Promise.allSettled(requests);
+
+    expect(results.every((result) => result.status === "rejected")).toBe(true);
+    for (const result of results) {
+      expect(result).toMatchObject({
+        status: "rejected",
+        reason: {
+          code: "REQUEST_ABORTED",
+          details: {
+            key,
+            datasetId: "delete-waiters",
+            reason: "deleted"
+          }
+        }
+      });
+    }
+    expect(disposeCount).toBe(1);
+    expect(pool.summary.activeEngines).toBe(0);
+
+    await expect(pool.getEngine(dataset)).resolves.toBeTruthy();
+    expect(attempts).toBe(2);
+    expect(pool.summary.activeEngines).toBe(1);
+  });
+
+  it("keeps new in-flight engine creation isolated from an older deleted completion", async () => {
+    const dataset = createDataset({
+      datasetId: "delete-overwrite",
+      country: "AA",
+      west: 0,
+      east: 1
+    });
+    const key = datasetEnginePoolKey(dataset);
+    const firstAttempt = createDeferred<void>();
+    const secondAttempt = createDeferred<void>();
+    const engines: TerritoryEngine[] = [];
+    let attempts = 0;
+    let disposedEngines = 0;
+    const pool = createTerritoryEnginePool({
+      createEngine(options) {
+        attempts += 1;
+        const engine = createTerritoryEngine(options) as TerritoryEngine & { dispose(): void };
+        engine.dispose = () => {
+          disposedEngines += 1;
+        };
+        engines.push(engine);
+
+        if (attempts === 1) {
+          return firstAttempt.promise.then(() => engine);
+        }
+
+        return secondAttempt.promise.then(() => engine);
+      }
+    });
+
+    const deletedRequest = pool.getEngine(dataset);
+    await Promise.resolve();
+    expect(pool.delete(key)).toBe(true);
+    const replacementRequest = pool.getEngine(dataset);
+    await Promise.resolve();
+    expect(attempts).toBe(2);
+
+    firstAttempt.resolve();
+    await expect(deletedRequest).rejects.toMatchObject({
+      code: "REQUEST_ABORTED",
+      details: { key, reason: "deleted" }
+    });
+    expect(disposedEngines).toBe(1);
+
+    const sharedReplacementRequest = pool.getEngine(dataset);
+    await Promise.resolve();
+    expect(attempts).toBe(2);
+    secondAttempt.resolve();
+    const [replacement, sharedReplacement] = await Promise.all([
+      replacementRequest,
+      sharedReplacementRequest
+    ]);
+
+    expect(replacement).toBe(engines[1]);
+    expect(sharedReplacement).toBe(replacement);
+    expect(pool.summary.activeEngines).toBe(1);
+    expect(await pool.getEngine(dataset)).toBe(replacement);
   });
 
   it("rejects custom engine pool key collisions across dataset signatures", async () => {
@@ -931,7 +1133,8 @@ describe("Territory engine pool and worker client", () => {
       })
     ).rejects.toThrow("protocol invalid");
 
-    await expect(disposableClient.dispose()).resolves.toMatchObject({ type: "disposed" });
+    const disposedResult = await disposableClient.dispose();
+    expect(disposedResult).toMatchObject({ type: "disposed" });
     await expect(
       disposableClient.query({
         datasetId: "worker-dataset",
@@ -939,9 +1142,7 @@ describe("Territory engine pool and worker client", () => {
         level: 0
       })
     ).rejects.toThrow("disposed");
-    await expect(disposableClient.dispose()).resolves.toMatchObject({
-      requestId: "territory-worker-dispose-already"
-    });
+    await expect(disposableClient.dispose()).resolves.toEqual(disposedResult);
   });
 
   it("rejects worker response correlation mismatches", async () => {
@@ -1087,6 +1288,102 @@ describe("Territory engine pool and worker client", () => {
     ).rejects.toThrow("disposed");
     disposeDeferred.resolve({ type: "disposed", requestId: "territory-worker-dispose-1" });
     await expect(dispose).resolves.toMatchObject({ type: "disposed" });
+  });
+
+  it("deduplicates concurrent worker dispose calls", async () => {
+    const disposeDeferred = createDeferred<TerritoryWorkerResponse>();
+    const messages: TerritoryWorkerMessage[] = [];
+    const client = createTerritoryWorkerClient({
+      async send(message) {
+        messages.push(message);
+
+        if (message.type === "dispose") {
+          return disposeDeferred.promise;
+        }
+
+        return {
+          type: "query-result",
+          requestId: message.requestId,
+          datasetId: "worker-dataset",
+          zones: []
+        };
+      }
+    });
+    const disposeCalls = Array.from({ length: 20 }, () => client.dispose());
+
+    await Promise.resolve();
+    const disposeMessages = messages.filter((message) => message.type === "dispose");
+    expect(disposeMessages).toHaveLength(1);
+    await expect(
+      client.query({
+        datasetId: "worker-dataset",
+        bounds: { west: 0, south: 0, east: 1, north: 1 },
+        level: 0
+      })
+    ).rejects.toThrow("disposed");
+    await expect(
+      client.initialize({
+        datasetId: "worker-dataset",
+        datasetVersion: "1.0.0",
+        geometryHash: "geometry"
+      })
+    ).rejects.toThrow("disposed");
+
+    disposeDeferred.resolve({
+      type: "disposed",
+      requestId: disposeMessages[0]?.requestId ?? "dispose-missing"
+    });
+    const results = await Promise.all(disposeCalls);
+
+    expect(new Set(results.map((result) => result.requestId))).toEqual(
+      new Set([disposeMessages[0]?.requestId])
+    );
+    expect(results.every((result) => result.type === "disposed")).toBe(true);
+    await expect(client.dispose()).resolves.toEqual(results[0]);
+    expect(messages.filter((message) => message.type === "dispose")).toHaveLength(1);
+  });
+
+  it("clears failed worker dispose attempts so dispose can retry", async () => {
+    let disposeAttempts = 0;
+    const messages: TerritoryWorkerMessage[] = [];
+    const client = createTerritoryWorkerClient({
+      async send(message) {
+        messages.push(message);
+
+        if (message.type === "dispose") {
+          disposeAttempts += 1;
+
+          if (disposeAttempts === 1) {
+            throw new Error("dispose boom");
+          }
+
+          return {
+            type: "disposed",
+            requestId: message.requestId
+          };
+        }
+
+        return {
+          type: "query-result",
+          requestId: message.requestId,
+          datasetId: "worker-dataset",
+          zones: []
+        };
+      }
+    });
+
+    await expect(client.dispose()).rejects.toThrow("dispose boom");
+    await expect(
+      client.query({
+        datasetId: "worker-dataset",
+        bounds: { west: 0, south: 0, east: 1, north: 1 },
+        level: 0
+      })
+    ).resolves.toMatchObject({ type: "query-result" });
+    await expect(client.dispose()).resolves.toMatchObject({ type: "disposed" });
+    await expect(client.dispose()).resolves.toMatchObject({ type: "disposed" });
+    expect(disposeAttempts).toBe(2);
+    expect(messages.filter((message) => message.type === "dispose")).toHaveLength(2);
   });
 });
 

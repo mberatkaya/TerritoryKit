@@ -84,7 +84,7 @@ Recorded on 2026-07-18 after the Sprint 13 catalog and binary-index runtime work
 | `dataset`    | `132,919 bytes` | `140,000 bytes` | Exact polygon relations and artifact index.                  |
 | `generators` | `373,084 bytes` | `390,000 bytes` | Global ADM0-ADM2 build orchestration and source locks.       |
 | `core`       | `60,843 bytes`  | `65,000 bytes`  | Binary spatial index encode/decode API.                      |
-| `runtime`    | `79,272 bytes`  | `82,000 bytes`  | Catalog invariants, collision policy, pool/worker hardening. |
+| `runtime`    | `81,083 bytes`  | `82,000 bytes`  | Catalog invariants, collision policy, pool/worker hardening. |
 | `cli`        | `96,896 bytes`  | `100,000 bytes` | Binary index build/inspect/validate commands.                |
 
 The `maplibre`, `nestjs`, and data loader packages remain within their previous bundle budgets.
