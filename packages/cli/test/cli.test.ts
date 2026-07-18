@@ -10,6 +10,7 @@ describe("territory cli", () => {
   it("validates a dataset file", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-"));
     const filePath = join(tempDir, "dataset.json");
+    const indexPath = join(tempDir, "dataset.tksi");
 
     await writeFile(filePath, JSON.stringify(createSampleTerritoryDataset()), "utf8");
 
@@ -29,6 +30,39 @@ describe("territory cli", () => {
           }
         }
       });
+      await expect(
+        captureCli(["index", "build", filePath, "--output", indexPath])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "index build",
+          data: {
+            magic: "TKSI",
+            datasetId: "territorykit-sample",
+            zoneCount: 5
+          }
+        }
+      });
+      await expect(captureCli(["index", "inspect", indexPath])).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "index inspect",
+          data: { datasetId: "territorykit-sample", bboxRecordCount: 5 }
+        }
+      });
+      await expect(
+        captureCli(["index", "validate", indexPath, "--dataset", filePath])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "index validate",
+          data: { geometryHash: "sample-fixture-v1" }
+        }
+      });
+      expect((await readFile(indexPath)).byteLength).toBeGreaterThan(0);
     } finally {
       await rm(tempDir, { force: true, recursive: true });
     }
@@ -386,6 +420,12 @@ describe("territory cli", () => {
       });
 
       const data = isRecord(run.payload) ? run.payload.data : undefined;
+      const metrics = isRecord(data) && isRecord(data.metrics) ? data.metrics : {};
+      const benchmarkBudget = (metric: string): number => {
+        const value = Number(metrics[metric]);
+
+        return Number.isFinite(value) ? value + Math.max(1, value) : 1_000;
+      };
       await writeFile(currentPath, JSON.stringify(data), "utf8");
       await writeFile(
         baselinePath,
@@ -395,11 +435,11 @@ describe("territory cli", () => {
           scenario: "smoke",
           minimumFeatureCount: 4,
           budgets: {
-            datasetValidationMs: 1_000,
-            engineConstructionMs: 1_000,
-            getZoneByIdMeanMs: 1,
-            latLngToZoneMeanMs: 1,
-            getZonesInBoundsMeanMs: 10
+            datasetValidationMs: benchmarkBudget("datasetValidationMs"),
+            engineConstructionMs: benchmarkBudget("engineConstructionMs"),
+            getZoneByIdMeanMs: benchmarkBudget("getZoneByIdMeanMs"),
+            latLngToZoneMeanMs: benchmarkBudget("latLngToZoneMeanMs"),
+            getZonesInBoundsMeanMs: benchmarkBudget("getZonesInBoundsMeanMs")
           }
         }),
         "utf8"

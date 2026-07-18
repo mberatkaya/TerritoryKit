@@ -1,6 +1,17 @@
 export { createTerritoryEngine } from "./engine.js";
 export { TerritoryZoneNotFoundError } from "./errors.js";
 export {
+  TERRITORY_BINARY_SPATIAL_INDEX_FORMAT,
+  TERRITORY_BINARY_SPATIAL_INDEX_MAGIC,
+  TERRITORY_BINARY_SPATIAL_INDEX_SCHEMA_VERSION,
+  createTerritoryBinarySpatialIndex,
+  decodeTerritoryBinarySpatialIndex,
+  encodeTerritoryBinarySpatialIndex,
+  inspectTerritoryBinarySpatialIndex,
+  isTerritoryBinarySpatialIndex,
+  validateTerritoryBinarySpatialIndex
+} from "./binary-index.js";
+export {
   createTerritoryCountryDatasetDescriptor,
   loadTerritoryCountryDataset
 } from "./country-loader.js";
@@ -57,6 +68,7 @@ export type {
   TerritoryAdjacencyConnection,
   TerritoryAdjacencyConnectionType,
   TerritoryBounds,
+  TerritoryEngineSpatialIndexSummary,
   TerritoryEngine,
   TerritoryEngineDebugOptions,
   TerritoryEngineOptions,
@@ -64,3 +76,14 @@ export type {
   VisibleZonesQuery,
   ZoomLevelStrategy
 } from "./types.js";
+export type {
+  TerritoryBinarySpatialIndex,
+  TerritoryBinarySpatialIndexBBoxRecord,
+  TerritoryBinarySpatialIndexBuffer,
+  TerritoryBinarySpatialIndexByteOrder,
+  TerritoryBinarySpatialIndexLevelRecord,
+  TerritoryBinarySpatialIndexMetadata,
+  TerritoryBinarySpatialIndexValidationIssue,
+  TerritoryBinarySpatialIndexValidationOptions,
+  TerritoryBinarySpatialIndexValidationResult
+} from "./binary-index.js";

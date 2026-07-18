@@ -46,6 +46,67 @@ Attached adapters use `options.adapterSourceId` first, then `adapter.managedSour
 adapter operations receive `{ requestId, revision, signal }`; adapters should check the signal
 before committing renderer-visible source changes.
 
+## Catalog, Pool, and Worker Loading
+
+```ts
+import {
+  createTerritoryCatalog,
+  createTerritoryEnginePool,
+  createTerritoryRuntime
+} from "@territory-kit/runtime";
+
+const catalog = createTerritoryCatalog([
+  {
+    dataset,
+    country: "TR",
+    levels: ["ADM2", "ADM3"],
+    fallbackLevel: "ADM2",
+    priority: 10,
+    spatialIndex: indexBuffer,
+    indexHash: "..."
+  }
+]);
+
+const runtime = createTerritoryRuntime({
+  catalog,
+  enginePool: createTerritoryEnginePool({ maxActiveEngines: 4 }),
+  workerTransport,
+  zoneIdCollisionPolicy: "namespace"
+});
+```
+
+Catalog mode resolves every dataset that intersects a viewport, supports exact and fallback level
+matches, selects priority winners, and rejects stale plans if the catalog changes before commit.
+Registration rejects manifest override conflicts, unknown levels, invalid fallback levels,
+non-finite priorities, bounds that exclude dataset coverage, and binary index metadata/hash
+mismatches. Re-registering an identical entry id is idempotent; conflicting registrations with the
+same entry id fail with `RUNTIME_CONFIGURATION_INVALID`.
+
+Priority selection treats overlapping same-country/parent/level artifacts as alternatives while
+allowing disjoint shards to be selected together. Use `selectionGroup` when disjoint artifacts are
+intentional variants that should still compete.
+
+Runtime rejects duplicate zone ids by default before adapter updates. Set
+`zoneIdCollisionPolicy: "namespace"` to emit deterministic ids as
+`<entryId>::<sourceZoneId>` and preserve `sourceZoneId`, `sourceDatasetId`, and `sourceEntryId`
+properties. Catalog viewport cache identity includes this policy and cached catalog payloads record
+the policy that produced them, so `error` and `namespace` runtimes can safely share one external
+cache without bypassing duplicate-id validation.
+
+`createTerritoryEnginePool` provides per-dataset engine reuse, max-active LRU eviction, pinned
+engines, memory estimates, concurrent same-key creation dedupe, and disposal. Custom pool keys are
+validated against dataset id, dataset version, geometry hash, and index hash to avoid accidental
+engine reuse across incompatible artifacts. In-flight waiters count as hits; the first creation and
+post-invalidation retries count as misses. Deleting an in-flight key rejects all waiting callers
+with `REQUEST_ABORTED`, disposes the late engine exactly once, and never returns a disposed engine;
+pool disposal rejects in-flight callers with `RUNTIME_DISPOSED`.
+
+`createTerritoryWorkerClient` defines the injectable worker transport used for binary-index-backed
+catalog artifacts and validates response request ids, types, and dataset ids. Concurrent
+`dispose()` calls share one transport dispose operation. If that operation fails, the dispose
+promise is cleared so a later call can retry; initialize/query calls are rejected while disposal is
+in flight.
+
 ## Cache
 
 ```ts
@@ -73,4 +134,5 @@ filesystem helpers, renderer targets, or worker implementations.
 
 See [runtime viewport lifecycle](../../docs/architecture/runtime-viewport-lifecycle.md),
 [runtime cache](../../docs/runtime-cache.md), and
+[catalog](../../docs/catalog.md), [worker loading](../../docs/worker-loading.md), and
 [runtime viewport audit](../../docs/architecture/runtime-viewport-audit.md) for architecture notes.

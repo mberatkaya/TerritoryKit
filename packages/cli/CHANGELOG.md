@@ -1,5 +1,12 @@
 # @territory-kit/cli
 
+## 1.2.0 - Unreleased
+
+### Minor Changes
+
+- Add `territory index build`, `territory index inspect`, and `territory index validate` for
+  versioned binary spatial index artifacts.
+
 ## 1.1.0
 
 ### Minor Changes

@@ -20,7 +20,7 @@
 
 ## `@territory-kit/core`
 
-- `createTerritoryEngine({ dataset, adjacency, levelStrategy })`
+- `createTerritoryEngine({ dataset, adjacency, levelStrategy, spatialIndex })`
 - `engine.latLngToZone({ lat, lng }, { level })`
 - `engine.latLngToZones([{ lat, lng }], { level })`
 - `engine.zoneToBoundary(zoneId)`
@@ -38,7 +38,12 @@
 - `engine.getVisibleZones({ bounds, zoom })`
 - `engine.getViewportCacheKey({ bounds, zoom, level })`
 - `engine.getLevelTransition({ bounds, fromZoom, toZoom })`
+- `engine.getSpatialIndexSummary()` reports `flatbush` or `binary` index usage.
 - `engine.polygonToZones(geometry, { level })`
+- `encodeTerritoryBinarySpatialIndex(dataset)`,
+  `decodeTerritoryBinarySpatialIndex(buffer, expected)`,
+  `inspectTerritoryBinarySpatialIndex(buffer)`, and
+  `validateTerritoryBinarySpatialIndex(buffer, expected)` expose the versioned `.tksi` contract.
 - `defaultZoomLevelStrategy` and `zoomToDefaultLevel(zoom)` expose the default zoom mapping.
 - `TerritoryZoneNotFoundError` is thrown by programmer-error APIs when a zone id is missing.
 - Registry re-exports from the core root are deprecated. Import registry APIs from
@@ -74,6 +79,17 @@
   `adapter.managedSourceId` for attached adapter updates.
 - `cacheOwnership: "runtime" | "external"` controls injected cache disposal. Injected caches are
   external by default; runtime-created caches are runtime-owned.
+- `createTerritoryCatalog`, `registerDataset`, `unregisterDataset`, `resolveViewport`,
+  `resolveTerritory`, `getCoverage`, and `createResolutionPlan` provide multi-dataset catalog
+  resolution with strict registration invariants, disjoint shard selection, priority variants, and
+  optional `selectionGroup` handling.
+- `zoneIdCollisionPolicy: "error" | "namespace"` controls catalog result ID collisions. The
+  default rejects duplicate IDs; namespace mode emits `<entryId>::<sourceZoneId>`.
+- `createTerritoryEnginePool({ maxActiveEngines })` provides per-dataset engine reuse, LRU
+  eviction, pinned entries, memory estimates, concurrent creation dedupe, custom-key signature
+  checks, and disposal.
+- `createTerritoryWorkerClient(workerTransport)` provides `initialize`, `query`, `cancel`, and
+  `dispose` message handling with response correlation and abort-aware initialize/query support.
 - `createMemoryTerritoryRuntimeCache({ maxEntries, maxBytes })` creates an async LRU cache with
   byte tracking, hit/miss/eviction stats, and default `Uint8Array` copy-on-read/write protection.
   `maxEntries` and `maxBytes` must be finite non-negative integers.
@@ -109,5 +125,6 @@
 ## `@territory-kit/cli`
 
 - JSON-first commands: `validate`, `index`, `adjacency build`, `adjacency validate`,
-  `adjacency inspect`, `import`, `simplify`, `generate`
+- JSON-first commands: `validate`, `index`, `index build`, `index inspect`, `index validate`,
+  `adjacency build`, `adjacency validate`, `adjacency inspect`, `import`, `simplify`, `generate`
 - `import` emits a deterministic `manifest.geometryHash` in the returned dataset.

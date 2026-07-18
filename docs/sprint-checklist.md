@@ -95,6 +95,31 @@ typecheck`, and `pnpm test:visual:maplibre`.
       validation, latest-request-only adapter updates, adapter failure, deterministic event
       ordering, injected clock, and import safety.
 
+## Sprint 13 Catalog, Binary Index, and Worker Loading Evidence
+
+- [x] `feat/catalog-binary-spatial-index` adds `createTerritoryCatalog`, dataset registration,
+      unregister, viewport resolution, territory resolution, coverage summaries, and immutable
+      resolution plans.
+- [x] Catalog plans cover exact matches, fallback levels, missing coverage, priority decisions,
+      multi-country viewports, selected artifacts, selected levels, geometry hashes, and optional
+      binary index hashes.
+- [x] Runtime catalog mode queries multiple selected engines, merges results deterministically,
+      namespaces duplicate zone ids for renderer output, and rejects stale catalog plans before
+      commit.
+- [x] `createTerritoryEnginePool` provides per-dataset engine reuse, max-active LRU eviction,
+      pinned engines, estimated memory summaries, and disposal.
+- [x] `@territory-kit/core` exposes versioned `.tksi` binary spatial index encode/decode/inspect/
+      validate APIs and `createTerritoryEngine({ spatialIndex })` for prebuilt-index lookup.
+- [x] `territory index build`, `territory index inspect`, and `territory index validate` produce
+      and verify binary spatial index artifacts while preserving `territory index <dataset.json>`.
+- [x] Worker loading is covered by an injectable transport/client contract with initialize, query,
+      cancel, dispose, transferable buffer support, and runtime cancellation propagation.
+- [x] Tests cover catalog exact match, fallback level, multi-country viewport, missing coverage,
+      priority resolution, ID collision, engine pool reuse/eviction/pinning, binary encode/decode,
+      unsupported version, corrupt header, checksum mismatch, geometry hash mismatch, empty index,
+      10K/100K index fixtures, worker initialization, transferable buffer, worker cancellation,
+      stale plan rejection, and deterministic merged results.
+
 ## Sprint 5 Pilot Country Dataset Evidence
 
 - [x] Pilot configs exist for `TR`, `US`, `DE`, `JP`, and `ID` at ADM0/ADM1/ADM2.
@@ -150,7 +175,7 @@ typecheck`, and `pnpm test:visual:maplibre`.
 - [x] `1.0.0` - Sprint 10 - Stable open source release preparation.
 - [x] Pending `1.2.0` - Sprint 11 - Runtime and adapter architecture foundations.
 - [x] Pending `1.2.0` - Sprint 12 - Runtime viewport lifecycle.
-- [future backlog] Future - Sprint 13 - Catalogs, binary indexes, and worker loading.
+- [x] Pending `1.2.0` - Sprint 13 - Catalogs, binary indexes, and worker loading.
 
 ## MVP Scope
 
@@ -164,6 +189,8 @@ typecheck`, and `pnpm test:visual:maplibre`.
 - [x] Viewport-based zone query baseline.
 - [x] Runtime viewport request lifecycle baseline.
 - [x] Runtime memory LRU cache baseline.
+- [x] Runtime multi-dataset catalog, engine pool, binary spatial index, and worker-loading
+      baseline.
 - [x] MapLibre package boundary baseline.
 - [x] NestJS package boundary baseline.
 - [x] Turkey, Istanbul, and Fatih sample datasets.

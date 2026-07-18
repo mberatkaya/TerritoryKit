@@ -7,13 +7,22 @@ import type { TerritoryEngine } from "../src/index.js";
 describe("public API compatibility", () => {
   it("keeps the stable runtime export surface for 1.0", () => {
     expect(Object.keys(core).sort()).toEqual([
+      "TERRITORY_BINARY_SPATIAL_INDEX_FORMAT",
+      "TERRITORY_BINARY_SPATIAL_INDEX_MAGIC",
+      "TERRITORY_BINARY_SPATIAL_INDEX_SCHEMA_VERSION",
       "TerritoryZoneNotFoundError",
+      "createTerritoryBinarySpatialIndex",
       "createTerritoryCountryDatasetDescriptor",
       "createTerritoryEngine",
       "createTerritoryRegistryClient",
+      "decodeTerritoryBinarySpatialIndex",
       "defaultZoomLevelStrategy",
+      "encodeTerritoryBinarySpatialIndex",
+      "inspectTerritoryBinarySpatialIndex",
+      "isTerritoryBinarySpatialIndex",
       "loadTerritoryCountryDataset",
       "loadTerritoryQueryDataset",
+      "validateTerritoryBinarySpatialIndex",
       "zoomToDefaultLevel"
     ]);
   });

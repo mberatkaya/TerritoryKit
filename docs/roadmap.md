@@ -14,8 +14,8 @@
 | `0.9.0-rc.1`    | Sprint 9  | Docs, quality, performance                     | Verified on roadmap branch |
 | `1.0.0`         | Sprint 10 | Stable release                                 | Prepared on release branch |
 | Pending `1.2.0` | Sprint 11 | Runtime contracts and adapter boundaries       | Merged to main             |
-| Pending `1.2.0` | Sprint 12 | Runtime viewport lifecycle                     | In progress on branch      |
-| Future          | Sprint 13 | Catalogs, binary indexes, and worker loading   | Future after Sprint 12     |
+| Pending `1.2.0` | Sprint 12 | Runtime viewport lifecycle                     | Merged to main             |
+| Pending `1.2.0` | Sprint 13 | Catalogs, binary indexes, and worker loading   | In progress on branch      |
 
 The table above describes the historical sprint track, not blanket production availability for
 every adapter or dataset. Current implementation gaps and partial items are tracked in
@@ -30,9 +30,10 @@ Sprint 11 adds `@territory-kit/adapter-core`, `@territory-kit/runtime`, shared c
 deprecated core registry compatibility path. Sprint 12 adds runtime viewport request orchestration,
 debounce, cancellation with committed-state restoration, stale response and stale adapter operation
 guards, memory LRU cache ownership policy, lazy engine reuse, managed adapter source binding, and
-renderer-independent adapter updates. Catalogs, binary indexes, workers, MVT generation, and
-additional renderer adapters remain future work unless their package or workflow exists in this
-repository.
+renderer-independent adapter updates. Sprint 13 adds a runtime multi-dataset catalog, engine pool,
+binary spatial index artifacts, CLI index build/inspect/validate commands, and injectable worker
+loading contracts. MVT generation and additional renderer adapters remain future work unless their
+package or workflow exists in this repository.
 
 See [Master Sprint Checklist](./sprint-checklist.md) for branch-level completion evidence,
 repo-owned hardening work, external handoff, and post-1.0 roadmap items.

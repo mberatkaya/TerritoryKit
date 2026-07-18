@@ -10,3 +10,5 @@
   errors, lazy engine reuse, async memory LRU cache, and renderer-independent adapter updates.
 - Preserve committed viewport state after cancellation, bind adapter source IDs through the
   renderer-neutral adapter contract, and keep injected cache disposal external by default.
+- Add multi-dataset catalog resolution, engine pooling, binary-index-aware runtime queries, and
+  injectable worker loading contracts.

@@ -11,6 +11,11 @@ import type {
   TerritoryZone
 } from "@territory-kit/dataset";
 import Flatbush from "flatbush";
+import { normalizeTerritoryBinarySpatialIndex } from "./binary-index.js";
+import type {
+  TerritoryBinarySpatialIndex,
+  TerritoryBinarySpatialIndexBuffer
+} from "./binary-index.js";
 import { TerritoryZoneNotFoundError } from "./errors.js";
 import {
   bboxIntersectsBounds,
@@ -28,13 +33,20 @@ import type {
   TerritoryBounds,
   TerritoryEngine,
   TerritoryEngineOptions,
+  TerritoryEngineSpatialIndexSummary,
   ViewportCacheKeyQuery,
   VisibleZonesQuery
 } from "./types.js";
 
 interface LevelIndex {
-  index: Flatbush;
-  zoneIds: string[];
+  source: "flatbush" | "binary-flatbush";
+  estimatedBytes: number;
+  search(west: number, south: number, east: number, north: number): string[];
+}
+
+interface SpatialIndexBuildResult {
+  indexesByLevel: Map<number, LevelIndex>;
+  summary: TerritoryEngineSpatialIndexSummary;
 }
 
 export function createTerritoryEngine(options: TerritoryEngineOptions): TerritoryEngine {
@@ -44,7 +56,8 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
     (left, right) => left - right
   );
   const levelStrategy = options.levelStrategy ?? defaultZoomLevelStrategy;
-  const indexesByLevel = buildIndexesByLevel(dataset);
+  const spatialIndexes = buildSpatialIndexes(dataset, options.spatialIndex);
+  const indexesByLevel = spatialIndexes.indexesByLevel;
   const adjacencyIndex = options.adjacency
     ? createTerritoryAdjacencyIndex(options.adjacency)
     : undefined;
@@ -99,13 +112,12 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
         continue;
       }
 
-      for (const indexId of entry.index.search(
+      for (const zoneId of entry.search(
         normalizedBounds.west,
         normalizedBounds.south,
         normalizedBounds.east,
         normalizedBounds.north
       )) {
-        const zoneId = entry.zoneIds[indexId];
         const zone = zoneId ? zonesById.get(zoneId) : undefined;
 
         if (zone && bboxIntersectsBounds(zone.bbox, normalizedBounds)) {
@@ -211,6 +223,13 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
         .getNeighbors(zoneId, queryOptions)
         .flatMap((neighborId) => adjacencyIndex.getRelation(zoneId, neighborId, queryOptions))
         .sort(compareAdjacencyEdges);
+    },
+
+    getSpatialIndexSummary() {
+      return {
+        ...spatialIndexes.summary,
+        levels: [...spatialIndexes.summary.levels]
+      };
     },
 
     getLevelTransition(query) {
@@ -392,7 +411,18 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
   }
 }
 
-function buildIndexesByLevel(dataset: TerritoryDataset): Map<number, LevelIndex> {
+function buildSpatialIndexes(
+  dataset: TerritoryDataset,
+  spatialIndex: TerritoryBinarySpatialIndex | TerritoryBinarySpatialIndexBuffer | undefined
+): SpatialIndexBuildResult {
+  if (spatialIndex) {
+    return buildBinaryIndexesByLevel(dataset, spatialIndex);
+  }
+
+  return buildFlatbushIndexesByLevel(dataset);
+}
+
+function buildFlatbushIndexesByLevel(dataset: TerritoryDataset): SpatialIndexBuildResult {
   const zonesByLevel = new Map<number, TerritoryZone[]>();
 
   for (const zone of dataset.zones) {
@@ -402,6 +432,7 @@ function buildIndexesByLevel(dataset: TerritoryDataset): Map<number, LevelIndex>
   }
 
   const indexesByLevel = new Map<number, LevelIndex>();
+  let estimatedBytes = 0;
 
   for (const [level, zones] of zonesByLevel.entries()) {
     const index = new Flatbush(zones.length);
@@ -413,10 +444,59 @@ function buildIndexesByLevel(dataset: TerritoryDataset): Map<number, LevelIndex>
     }
 
     index.finish();
-    indexesByLevel.set(level, { index, zoneIds });
+    estimatedBytes += zones.length * 40;
+    indexesByLevel.set(level, {
+      source: "flatbush",
+      estimatedBytes: zones.length * 40,
+      search(west, south, east, north) {
+        return index
+          .search(west, south, east, north)
+          .map((indexId) => zoneIds[indexId])
+          .filter((zoneId): zoneId is string => Boolean(zoneId));
+      }
+    });
   }
 
-  return indexesByLevel;
+  return {
+    indexesByLevel,
+    summary: {
+      source: "flatbush",
+      levels: [...indexesByLevel.keys()].sort((left, right) => left - right),
+      zoneCount: dataset.zones.length,
+      estimatedBytes
+    }
+  };
+}
+
+function buildBinaryIndexesByLevel(
+  dataset: TerritoryDataset,
+  spatialIndex: TerritoryBinarySpatialIndex | TerritoryBinarySpatialIndexBuffer
+): SpatialIndexBuildResult {
+  const index = normalizeTerritoryBinarySpatialIndex(spatialIndex, dataset);
+
+  const indexesByLevel = new Map<number, LevelIndex>();
+
+  for (const level of index.metadata.levels) {
+    indexesByLevel.set(level.level, {
+      source: "binary-flatbush",
+      estimatedBytes: level.treeByteLength + level.count * 40,
+      search(west, south, east, north) {
+        return index.search({ west, south, east, north }, level.level);
+      }
+    });
+  }
+
+  return {
+    indexesByLevel,
+    summary: {
+      source: "binary-flatbush",
+      levels: index.metadata.levels.map((level) => level.level),
+      zoneCount: index.metadata.zoneCount,
+      estimatedBytes: index.metadata.treeByteLength + index.metadata.bboxRecordCount * 40,
+      indexHash: index.metadata.indexHash,
+      byteLength: index.metadata.byteLength
+    }
+  };
 }
 
 function sortZones(zones: TerritoryZone[]): TerritoryZone[] {

@@ -3,7 +3,12 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { performance } from "node:perf_hooks";
 import { pathToFileURL } from "node:url";
-import { createTerritoryEngine } from "@territory-kit/core";
+import {
+  createTerritoryEngine,
+  encodeTerritoryBinarySpatialIndex,
+  inspectTerritoryBinarySpatialIndex,
+  validateTerritoryBinarySpatialIndex
+} from "@territory-kit/core";
 import {
   TERRITORY_ADMIN_LEVELS,
   TERRITORY_SCHEMA_VERSION,
@@ -179,6 +184,10 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
       return runGenerate(argv.slice(1));
     }
 
+    if (command === "index") {
+      return runIndex(argv.slice(1));
+    }
+
     const [filePath] = argv.slice(1).filter((value) => !value.startsWith("--"));
 
     if (!filePath) {
@@ -204,21 +213,6 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
     }
 
     const dataset = loadTerritoryDataset(input);
-
-    if (command === "index") {
-      const engine = createTerritoryEngine({ dataset });
-      printJson({
-        ok: true,
-        command,
-        data: {
-          datasetId: dataset.manifest.datasetId,
-          geometryHash: createDatasetGeometryHash(dataset),
-          levels: engine.availableLevels,
-          zoneCount: dataset.zones.length
-        }
-      });
-      return 0;
-    }
 
     if (command === "simplify") {
       printJson({
@@ -249,6 +243,145 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
     });
     return 1;
   }
+}
+
+async function runIndex(args: string[]): Promise<number> {
+  const [subcommand] = args;
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printIndexHelp();
+    return 0;
+  }
+
+  if (subcommand === "build") {
+    return runIndexBuild(args.slice(1));
+  }
+
+  if (subcommand === "inspect") {
+    return runIndexInspect(args.slice(1));
+  }
+
+  if (subcommand === "validate") {
+    return runIndexValidate(args.slice(1));
+  }
+
+  return runIndexSummary(args);
+}
+
+async function runIndexSummary(args: string[]): Promise<number> {
+  const [filePath] = getPositionalArgs(args);
+
+  if (!filePath) {
+    printJson({
+      ok: false,
+      command: "index",
+      issues: [createCliIssue("Missing dataset path for index summary.")]
+    });
+    return 1;
+  }
+
+  const dataset = loadTerritoryDataset(await readJson(filePath));
+  const engine = createTerritoryEngine({ dataset });
+
+  printJson({
+    ok: true,
+    command: "index",
+    data: {
+      datasetId: dataset.manifest.datasetId,
+      geometryHash: createDatasetGeometryHash(dataset),
+      levels: engine.availableLevels,
+      zoneCount: dataset.zones.length,
+      spatialIndex: engine.getSpatialIndexSummary()
+    }
+  });
+  return 0;
+}
+
+async function runIndexBuild(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const [datasetPath] = getPositionalArgs(args);
+  const outputPath = getFlag(flags, "output") ?? getFlag(flags, "out");
+
+  if (!datasetPath || !outputPath) {
+    printJson({
+      ok: false,
+      command: "index build",
+      issues: [createCliIssue("Usage: territory index build <dataset.json> --output <index.tksi>.")]
+    });
+    return 1;
+  }
+
+  const dataset = loadTerritoryDataset(await readJson(datasetPath));
+  const buffer = encodeTerritoryBinarySpatialIndex(dataset);
+  await writeBinaryOutput(outputPath, buffer, flags.has("force"));
+  const metadata = inspectTerritoryBinarySpatialIndex(buffer);
+
+  printJson({
+    ok: true,
+    command: "index build",
+    data: {
+      outputPath,
+      ...metadata
+    }
+  });
+  return 0;
+}
+
+async function runIndexInspect(args: string[]): Promise<number> {
+  const [indexPath] = getPositionalArgs(args);
+
+  if (!indexPath) {
+    printJson({
+      ok: false,
+      command: "index inspect",
+      issues: [createCliIssue("Usage: territory index inspect <index.tksi>.")]
+    });
+    return 1;
+  }
+
+  const metadata = inspectTerritoryBinarySpatialIndex(await readBinary(indexPath));
+
+  printJson({
+    ok: true,
+    command: "index inspect",
+    data: metadata
+  });
+  return 0;
+}
+
+async function runIndexValidate(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const [indexPath] = getPositionalArgs(args);
+
+  if (!indexPath) {
+    printJson({
+      ok: false,
+      command: "index validate",
+      issues: [
+        createCliIssue("Usage: territory index validate <index.tksi> [--dataset <dataset.json>].")
+      ]
+    });
+    return 1;
+  }
+
+  const datasetPath = getFlag(flags, "dataset");
+  const dataset = datasetPath ? loadTerritoryDataset(await readJson(datasetPath)) : undefined;
+  const result = validateTerritoryBinarySpatialIndex(await readBinary(indexPath), {
+    ...(dataset
+      ? {
+          datasetId: dataset.manifest.datasetId,
+          datasetVersion: dataset.manifest.datasetVersion,
+          geometryHash: dataset.manifest.geometryHash
+        }
+      : {})
+  });
+
+  printJson({
+    ok: result.ok,
+    command: "index validate",
+    ...(result.ok ? { data: result.metadata } : { issues: result.issues })
+  });
+  return result.ok ? 0 : 1;
 }
 
 async function runCountry(args: string[]): Promise<number> {
@@ -2211,6 +2344,10 @@ async function readJson(filePath: string): Promise<unknown> {
   return JSON.parse(content) as unknown;
 }
 
+async function readBinary(filePath: string): Promise<Uint8Array> {
+  return readFile(filePath);
+}
+
 function createFixtureBenchmarkResult(flags: Map<string, string | true>): CliBenchmarkResult {
   const rows = getPositiveIntegerFlag(flags, "rows", 50);
   const columns = getPositiveIntegerFlag(flags, "columns", 50);
@@ -3199,6 +3336,26 @@ async function writeJsonOutput(path: string, payload: unknown, force: boolean): 
   await writeFile(path, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
 }
 
+async function writeBinaryOutput(
+  path: string,
+  payload: ArrayBuffer,
+  force: boolean
+): Promise<void> {
+  if (!force) {
+    try {
+      await readFile(path);
+      throw new Error(`Output path '${path}' already exists. Pass --force to overwrite.`);
+    } catch (error) {
+      if (error instanceof Error && error.message.includes("already exists")) {
+        throw error;
+      }
+    }
+  }
+
+  await mkdir(dirname(path), { recursive: true });
+  await writeFile(path, new Uint8Array(payload));
+}
+
 function readOptionalNonNegativeNumberFlag(
   flags: Map<string, string | true>,
   key: string,
@@ -3498,7 +3655,7 @@ Commands:
   validate   Validate a TerritoryKit dataset
   registry   Build, validate, inspect, and list dataset registries
   geometry   Validate or safely repair dataset geometry
-  index      Build a spatial-index metadata summary
+  index      Build, inspect, or validate binary spatial indexes
   adjacency  Build, validate, inspect, or legacy-infer territory adjacency
   render     Build, validate, inspect, or compare render artifacts
   benchmark  Run or compare fixture/local-real benchmark results
@@ -3509,6 +3666,21 @@ Commands:
   cache      List, verify, or clear installed dataset cache artifacts
   simplify   Emit a deterministic no-op simplification result for pipeline wiring
   generate   Generate grid or weighted-voronoi MVP datasets as JSON`);
+}
+
+function printIndexHelp(): void {
+  console.log(`territory index <command>
+
+Commands:
+  build <dataset.json> --output <index.tksi>
+  inspect <index.tksi>
+  validate <index.tksi> [--dataset <dataset.json>]
+
+Compatibility:
+  territory index <dataset.json> emits the legacy spatial-index metadata summary.
+
+Options:
+  --force`);
 }
 
 function printRegistryHelp(): void {

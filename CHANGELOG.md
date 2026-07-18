@@ -10,6 +10,8 @@ All notable changes will be tracked here until Changesets generates release note
 - Deprecated core registry re-exports and added `@territory-kit/core/legacy-registry`.
 - Updated MapLibre to expose shared adapter capabilities and lifecycle state.
 - Strengthened package boundary, circular dependency, browser-safety, and bundle-size checks.
+- Added Sprint 13 multi-dataset catalog, engine pool, binary spatial index, worker-loading
+  contracts, and CLI index artifact commands.
 
 ## 1.0.0 - 2026-07-14
 

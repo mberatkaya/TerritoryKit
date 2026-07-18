@@ -31,7 +31,7 @@ const publicPackageJsonPaths = [
 ] as const;
 
 describe("release metadata", () => {
-  it("keeps Sprint 11 and Sprint 12 as pending 1.2.0 fixed-group minor releases", () => {
+  it("keeps Sprint 11 through Sprint 13 as pending 1.2.0 fixed-group minor releases", () => {
     const rootPackage = readJson<PackageJson>("package.json");
     const changesetConfig = readJson<ChangesetConfig>(".changeset/config.json");
     const fixedPackages = new Set(changesetConfig.fixed.flat());
@@ -53,6 +53,7 @@ describe("release metadata", () => {
     const readme = readText("README.md");
     expect(readme).toContain("| Pending `1.2.0` | Sprint 11");
     expect(readme).toContain("| Pending `1.2.0` | Sprint 12");
+    expect(readme).toContain("| Pending `1.2.0` | Sprint 13");
     expect(readText("CHANGELOG.md")).toContain("## 1.2.0 - Unreleased");
     expect(readText("packages/adapter-core/CHANGELOG.md")).toContain("## 1.2.0 - Unreleased");
     expect(readText("packages/runtime/CHANGELOG.md")).toContain("## 1.2.0 - Unreleased");
