@@ -6,10 +6,14 @@ const maxBytesByFile = new Map([
   // Sprint 4 real adjacency adds exact polygon relation primitives and artifact indexing.
   // Sprint 7 adds query/render artifact metadata and compatibility helpers.
   // Lower-admin support adds ADM5 metadata, semantic review, and coverage statuses.
-  ["packages/dataset/dist/index.mjs", 128_000],
+  // Runtime architecture adds the shared TerritoryError serializer and stable error codes.
+  ["packages/dataset/dist/index.mjs", 140_000],
+  ["packages/adapter-core/dist/index.mjs", 24_000],
   ["packages/core/dist/index.mjs", 65_000],
+  ["packages/core/dist/legacy-registry.mjs", 5_000],
   ["packages/registry/dist/index.mjs", 5_000],
   ["packages/registry/dist/node.mjs", 28_000],
+  ["packages/runtime/dist/index.mjs", 24_000],
   ["packages/maplibre/dist/index.mjs", 45_000],
   ["packages/nestjs/dist/index.mjs", 45_000],
   ["packages/data-tr/dist/index.mjs", 8_000],

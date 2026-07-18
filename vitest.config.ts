@@ -6,7 +6,12 @@ export default defineConfig({
     passWithNoTests: true,
     coverage: {
       provider: "v8",
-      include: ["packages/core/src/**/*.ts", "packages/dataset/src/**/*.ts"],
+      include: [
+        "packages/adapter-core/src/**/*.ts",
+        "packages/core/src/**/*.ts",
+        "packages/dataset/src/**/*.ts",
+        "packages/runtime/src/**/*.ts"
+      ],
       reporter: ["text", "json-summary"],
       thresholds: {
         branches: 75,
