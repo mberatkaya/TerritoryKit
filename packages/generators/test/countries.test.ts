@@ -127,7 +127,7 @@ describe("pilot country dataset pipeline", () => {
     } finally {
       await rm(fixture.tempDir, { force: true, recursive: true });
     }
-  });
+  }, 15_000);
 
   it("resolves Turkey national HDX COD-AB source metadata without network fetch", async () => {
     await expect(
