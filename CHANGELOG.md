@@ -12,6 +12,9 @@ All notable changes will be tracked here until Changesets generates release note
 - Strengthened package boundary, circular dependency, browser-safety, and bundle-size checks.
 - Added Sprint 13 multi-dataset catalog, engine pool, binary spatial index, worker-loading
   contracts, and CLI index artifact commands.
+- Added Turkey national ADM0-ADM2 HDX/OCHA COD-AB source locking, optional query/render/binary
+  country build artifacts, topology-safe simplification CLI, and a registry-backed Turkey MapLibre
+  example while keeping ADM3/ADM4 as partial or blocked.
 
 ## 1.0.0 - 2026-07-14
 

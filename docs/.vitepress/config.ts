@@ -30,6 +30,11 @@ export default defineConfig({
       { text: "Country Identity", link: "/country-identity" },
       { text: "Country Hierarchy", link: "/country-hierarchy" },
       { text: "Country Loaders", link: "/country-loaders" },
+      { text: "Turkey Administrative Model", link: "/datasets/turkey-administrative-model" },
+      { text: "Turkey National Coverage", link: "/datasets/turkey-national-coverage" },
+      { text: "Turkey Sources", link: "/datasets/turkey-sources" },
+      { text: "Geometry Simplification", link: "/geometry-simplification" },
+      { text: "Turkey MapLibre Example", link: "/examples/turkey-maplibre" },
       { text: "Roadmap", link: "/roadmap" }
     ]
   }

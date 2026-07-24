@@ -5,7 +5,8 @@ import {
   loadTurkeyDataset,
   supportedTurkeyAdminLevels,
   turkeyAdm3NeighbourhoodCoverage,
-  turkeyDatasetDescriptor
+  turkeyDatasetDescriptor,
+  turkeyNationalCoverage
 } from "../src/index.js";
 
 describe("@territory-kit/data-tr", () => {
@@ -16,8 +17,12 @@ describe("@territory-kit/data-tr", () => {
       packageName: "@territory-kit/data-tr",
       requiresResolver: true
     });
-    expect(supportedTurkeyAdminLevels).toEqual(["ADM0", "ADM1", "ADM2", "ADM3"]);
+    expect(supportedTurkeyAdminLevels).toEqual(["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"]);
     expect(defaultTurkeyAdminLevels).toEqual(["ADM0", "ADM1", "ADM2"]);
+    expect(turkeyNationalCoverage.levels.ADM2).toMatchObject({
+      status: "verified",
+      featureCount: 973
+    });
     await expect(loadTurkeyDataset({})).rejects.toThrow("does not embed geometry artifacts");
   });
 

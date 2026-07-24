@@ -32,11 +32,14 @@ const maxBytesByFile = new Map([
   // source-lock reuse, lifecycle reporting, and Natural Earth overview artifact generation.
   // Lower-admin support adds provider capability inspection and open-data manifest gates.
   // Turkey ADM3 hardening adds production-quality, repair, overlap, containment, and artifact gates.
-  ["packages/generators/dist/index.mjs", 390_000],
+  // Turkey national source work adds ZIP-member source locks, HDX COD-AB adapter metadata,
+  // topology-safe simplification reports, and optional country query/render/binary artifacts.
+  ["packages/generators/dist/index.mjs", 410_000],
   // Dataset build-all/global-admin CLI commands now expose ADM0 completion controls and reports.
   // Lower-admin support adds level filtering, source capability output, and artifact fallback.
   // Sprint 13 adds binary spatial index build/inspect/validate commands.
-  ["packages/cli/dist/index.mjs", 100_000]
+  // Turkey national source work adds HDX COD-AB import options and simplification/country flags.
+  ["packages/cli/dist/index.mjs", 102_000]
 ]);
 
 const failures = [];

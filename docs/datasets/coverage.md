@@ -1,6 +1,6 @@
 # Dataset Coverage
 
-Generated: 2026-07-15T00:00:00.000Z
+Generated: 2026-07-24T00:00:00.000Z
 
 This registry reports explicit source/artifact lifecycle state, not a claim that every level has a committed artifact.
 Administrative availability is represented with ADM0 through ADM5 only. Municipality, neighbourhood, and similar meanings are stored as semantic metadata on the corresponding ADM record.
@@ -26,10 +26,14 @@ Administrative availability is represented with ADM0 through ADM5 only. Municipa
 | ADM4  |     0 |       0 |                0 |                  0 |                 0 |                    0 |          249 |                  0 |
 | ADM5  |     0 |       0 |                0 |                  0 |                 0 |                    0 |          249 |                  0 |
 
-Pilot countries with reviewed ADM1/ADM2 mappings: DE, ID, JP, TR, US. Turkey also has reviewed ADM3 semantics for neighbourhood / Mahalle and a partial Gaziantep ADM3 artifact, without claiming nationwide ADM3 source coverage.
+Pilot countries with reviewed ADM1/ADM2 mappings: DE, ID, JP, TR, US. Turkey ADM0-ADM2 now resolves
+through reviewed HDX/OCHA COD-AB source metadata. Turkey also has reviewed ADM3 semantics for
+neighbourhood / Mahalle and a partial Gaziantep ADM3 artifact, without claiming nationwide ADM3
+source coverage.
 
 Sources:
 
 - Natural Earth ADM0 source metadata is tracked as Public Domain with attribution.
 - geoBoundaries source metadata is tracked as CC BY 4.0.
+- HDX/OCHA COD-AB Turkey ADM0-ADM2 source metadata is tracked as CC BY-IGO with attribution.
 - Non-pilot ADM1-ADM5 mappings require country-specific review before publishing artifacts.

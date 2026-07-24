@@ -75,16 +75,27 @@ benchmark smoke stays quick.
 benchmarking without committing large source data. When local-real mode has no dataset path,
 automation can use `--allow-skip` to record an explicit skip instead of downloading data.
 
+Turkey national builds should benchmark the generated local artifacts after an explicit source-lock
+or workflow run, for example:
+
+```sh
+pnpm benchmark:run -- --mode local-real --dataset ./dist/tr/levels/ADM2/dataset.json
+```
+
+Record parse, validation, adjacency, simplification, MVT, binary index, engine construction,
+viewport query, lookup, memory, and output-byte evidence with the build artifact rather than
+committing the full national geometry to Git.
+
 ## Bundle Budget Notes
 
 Recorded on 2026-07-18 after the Sprint 13 catalog and binary-index runtime work:
 
-| Package      | ESM size        | Budget          | Reason                                                       |
-| ------------ | --------------- | --------------- | ------------------------------------------------------------ |
-| `dataset`    | `132,919 bytes` | `140,000 bytes` | Exact polygon relations and artifact index.                  |
-| `generators` | `373,084 bytes` | `390,000 bytes` | Global ADM0-ADM2 build orchestration and source locks.       |
-| `core`       | `60,843 bytes`  | `65,000 bytes`  | Binary spatial index encode/decode API.                      |
-| `runtime`    | `81,083 bytes`  | `82,000 bytes`  | Catalog invariants, collision policy, pool/worker hardening. |
-| `cli`        | `96,896 bytes`  | `100,000 bytes` | Binary index build/inspect/validate commands.                |
+| Package      | ESM size        | Budget          | Reason                                                        |
+| ------------ | --------------- | --------------- | ------------------------------------------------------------- |
+| `dataset`    | `132,919 bytes` | `140,000 bytes` | Exact polygon relations and artifact index.                   |
+| `generators` | `403,343 bytes` | `410,000 bytes` | Turkey HDX source locks, ZIP members, simplification, render. |
+| `core`       | `60,843 bytes`  | `65,000 bytes`  | Binary spatial index encode/decode API.                       |
+| `runtime`    | `81,083 bytes`  | `82,000 bytes`  | Catalog invariants, collision policy, pool/worker hardening.  |
+| `cli`        | `100,646 bytes` | `102,000 bytes` | HDX import, country artifact flags, geometry simplification.  |
 
 The `maplibre`, `nestjs`, and data loader packages remain within their previous bundle budgets.

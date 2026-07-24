@@ -14,10 +14,21 @@ territory country source lock DE \
 ```
 
 The resolver accepts geoBoundaries metadata from the live metadata endpoint, `--metadata-url`, or a
-local `--metadata` JSON file. Local metadata is useful for tests and reviewed data drops.
+local `--metadata` JSON file. Local metadata is useful for tests and reviewed data drops. Turkey's
+default `hdx-cod-ab` resolver uses reviewed HDX/OCHA COD-AB metadata for ADM0-ADM2 and records
+ADM3/ADM4 as unavailable until a redistributable national source exists.
 
-Supported source artifact transports are local paths, `file:`, `http:`, and `https:`. Unsupported
-protocols fail before download.
+Supported source artifact transports are local paths, `file:`, `http:`, and `https:`. Source URLs
+may also reference a ZIP member with `archive.zip#member.geojson`; the lock stores the extracted
+member checksum and byte size. Unsupported protocols fail before download.
+
+Turkey national example:
+
+```sh
+territory country source lock TR \
+  --levels ADM0,ADM1,ADM2,ADM3,ADM4 \
+  --output ./dist/tr/sources.lock.json
+```
 
 ## Verify
 

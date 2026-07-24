@@ -12,10 +12,13 @@ const handle = await loadTurkeyDataset({
 });
 ```
 
-`supportedLevels` includes `ADM3` because TerritoryKit now publishes a partial Gaziantep
-neighbourhood pilot. `defaultLevels` remains `["ADM0", "ADM1", "ADM2"]` so callers do not
-accidentally assume nationwide neighbourhood coverage.
+`supportedLevels` includes `ADM0` through `ADM4` so clients can request national artifacts,
+partial fixtures, or future reviewed lower-admin layers through the same resolver contract.
+`defaultLevels` remains `["ADM0", "ADM1", "ADM2"]` because only those levels currently have a
+reviewed national HDX/OCHA COD-AB source path.
 
+Use `turkeyNationalCoverage` to distinguish verified national ADM0-ADM2 from blocked ADM3/ADM4.
 Use `turkeyAdm3NeighbourhoodCoverage` or `isTurkeyAdm3ParentCovered(parentId)` before requesting
 ADM3 data for a district. Covered parent IDs are the nine Gaziantep ADM2 districts in
-`datasets/generated/countries/TR/levels/ADM3/coverage.json`.
+`datasets/generated/countries/TR/levels/ADM3/coverage.json`; this is partial Gaziantep coverage,
+not nationwide Turkey neighbourhood coverage.

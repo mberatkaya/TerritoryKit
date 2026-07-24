@@ -25,6 +25,7 @@ import { readCachedSourceArtifact, writeSourceCacheEntry } from "../src/sources/
 import type {
   GenericGeoJsonSourceOptions,
   GeoBoundariesSourceOptions,
+  HdxCodAbSourceOptions,
   NaturalEarthSourceOptions
 } from "../src/index.js";
 import { createNaturalEarthValidFixture } from "./natural-earth-fixtures.js";
@@ -40,6 +41,7 @@ describe("source adapter registry", () => {
     expect(listTerritorySourceAdapters().map((adapter) => adapter.id)).toEqual([
       "geoboundaries",
       "geojson",
+      "hdx-cod-ab",
       "natural-earth"
     ]);
 
@@ -102,6 +104,19 @@ describe("source adapter registry", () => {
       status: "available",
       provider: "official-open-data",
       license: "CC BY 4.0"
+    });
+
+    expect(
+      inspectTerritorySourceCapabilities({
+        registry,
+        provider: "hdx-cod-ab",
+        country: "TR",
+        level: "ADM2"
+      }).levels.ADM2
+    ).toMatchObject({
+      available: true,
+      status: "available",
+      license: "CC BY-IGO"
     });
 
     expect(
@@ -394,6 +409,42 @@ describe("source pipeline adapters", () => {
       "tr:adm1:tur-adm1-2-fd15314d"
     ]);
   });
+
+  it("imports HDX COD-AB Turkey fixtures with P-code stable ids", async () => {
+    const tempDir = await createTempDir("territory-hdx-cod-ab-");
+    const inputPath = join(tempDir, "tur_admin2.geojson");
+    const outputPath = join(tempDir, "tr-adm2");
+    await writeFile(inputPath, JSON.stringify(createHdxCodAbAdm2Fixture()), "utf8");
+
+    const result = await runTerritorySourcePipeline<HdxCodAbSourceOptions>({
+      adapter: "hdx-cod-ab",
+      request: { input: inputPath },
+      options: {
+        countryCode: "TR",
+        adminLevel: "ADM2",
+        sourceDate: "2026-01-26",
+        buildDate: "2026-01-01T00:00:00.000Z"
+      },
+      outputPath,
+      now: () => "2026-01-01T00:00:00.000Z"
+    });
+
+    expect(result.ok).toBe(true);
+    expect(result.issues.map((issue) => issue.code)).toContain("SOURCE_PARENT_MISSING");
+    const dataset = loadTerritoryDataset(
+      JSON.parse(await readFile(join(outputPath, "dataset.json"), "utf8")) as unknown
+    );
+    expect(dataset.manifest.license).toBe("CC BY-IGO");
+    expect(dataset.zones.map((zone) => zone.id)).toEqual(["tr:adm2:tr0116"]);
+    expect(dataset.zones[0]?.semanticType).toBe("district");
+    expect(dataset.zones[0]?.properties.territory).toMatchObject({
+      localType: "district",
+      source: {
+        provider: "hdx-cod-ab",
+        sourceId: "TR0116"
+      }
+    });
+  });
 });
 
 describe("Turkey Gaziantep ADM3 pilot source", () => {
@@ -559,6 +610,24 @@ function createGeoBoundariesFixture(): unknown {
           shapeName: "Istanbul",
           shapeGroup: "TR",
           shapeType: "ADM1"
+        },
+        geometry: square(28, 40)
+      }
+    ]
+  };
+}
+
+function createHdxCodAbAdm2Fixture(): unknown {
+  return {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        id: "tur-adm2-istanbul-fatih",
+        properties: {
+          adm2_pcode: "TR0116",
+          adm2_name1: "Fatih",
+          adm1_pcode: "TR01"
         },
         geometry: square(28, 40)
       }

@@ -55,3 +55,10 @@ and validation, before serialization. This prevents partial output.
 JSON artifacts use stable key ordering. Build reports normalize elapsed build duration to `0` where
 that field is part of reproducible artifacts. Remote fetch metadata such as `ETag` and
 `Last-Modified` is preserved when available but not invented.
+
+## Remote Source Locks
+
+Normal CI should use local fixtures or reviewed source locks. Real national downloads, including
+Turkey HDX/OCHA COD-AB ZIP members such as `tur_admin2.geojson`, are performed by explicit
+`territory country source lock`, update scripts, or manual workflows. ZIP-member locks checksum the
+extracted member, not only the outer archive, so source replacement cannot silently pass.
