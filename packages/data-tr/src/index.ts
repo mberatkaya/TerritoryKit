@@ -13,7 +13,7 @@ export const turkeyDatasetDescriptor = createTerritoryCountryDatasetDescriptor({
   countryCodeAlpha3: "TUR",
   packageName: "@territory-kit/data-tr",
   schemaVersion: "territory-schema@1",
-  supportedLevels: ["ADM0", "ADM1", "ADM2", "ADM3"],
+  supportedLevels: ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"],
   defaultLevels: ["ADM0", "ADM1", "ADM2"],
   manifestPath: "manifest.json",
   requiresResolver: true
@@ -21,6 +21,40 @@ export const turkeyDatasetDescriptor = createTerritoryCountryDatasetDescriptor({
 
 export const supportedTurkeyAdminLevels = turkeyDatasetDescriptor.supportedLevels;
 export const defaultTurkeyAdminLevels = turkeyDatasetDescriptor.defaultLevels;
+export const turkeyNationalCoverage = {
+  country: "TR",
+  sourceProvider: "hdx-cod-ab",
+  sourceId: "cod-ab-tur",
+  levels: {
+    ADM0: {
+      status: "verified",
+      semanticType: "country",
+      featureCount: 1
+    },
+    ADM1: {
+      status: "verified",
+      semanticType: "province",
+      featureCount: 81
+    },
+    ADM2: {
+      status: "verified",
+      semanticType: "district",
+      featureCount: 973
+    },
+    ADM3: {
+      status: "partial",
+      semanticType: "neighbourhood",
+      blocker:
+        "No redistributable nationwide official ADM3 neighbourhood/village boundary source is locked."
+    },
+    ADM4: {
+      status: "not-applicable",
+      semanticType: "locality",
+      blocker:
+        "ADM4 requires a reviewed source model below neighbourhood/village or municipality/locality boundaries."
+    }
+  }
+} as const;
 export const turkeyAdm3NeighbourhoodCoverage = {
   country: "TR",
   level: "ADM3",

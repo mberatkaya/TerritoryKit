@@ -1,5 +1,6 @@
 import { geoBoundariesSourceAdapter } from "./geoboundaries.js";
 import { genericGeoJsonSourceAdapter } from "./generic-geojson.js";
+import { hdxCodAbSourceAdapter } from "./hdx-cod-ab.js";
 import { naturalEarthSourceAdapter } from "./natural-earth.js";
 import { createTerritorySourceRegistry } from "./registry.js";
 import type { TerritorySourceAdapter } from "./types.js";
@@ -7,6 +8,7 @@ import type { TerritorySourceAdapter } from "./types.js";
 export const BUILTIN_TERRITORY_SOURCE_ADAPTERS: readonly TerritorySourceAdapter[] = [
   naturalEarthSourceAdapter,
   geoBoundariesSourceAdapter,
+  hdxCodAbSourceAdapter,
   genericGeoJsonSourceAdapter
 ];
 

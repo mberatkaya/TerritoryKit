@@ -89,6 +89,8 @@ territory geometry validate ./dist/regions --checks full --report ./geometry-rep
 territory adjacency build ./dist/regions --output ./dist/regions-adjacency
 territory country source lock TR --output ./dist/tr/sources.lock.json
 territory country build TR --source-lock ./dist/tr/sources.lock.json --output ./dist/tr --build-adjacency --strict
+territory country build TR --source-lock ./dist/tr/sources.lock.json --output ./dist/tr --levels ADM0,ADM1,ADM2,ADM3,ADM4 --build-adjacency --build-query-artifacts --build-render-artifacts --build-binary-index --strict --allow-partial
+territory geometry simplify ./dist/tr/levels/ADM2/dataset.json --strategy topology-safe --detail high,medium,low --output ./dist/tr/levels/ADM2/simplified --report ./dist/tr/levels/ADM2/simplification-report.json
 territory registry build --input ./dist --output ./dist/registry.json --base-url https://cdn.example.test/datasets/
 territory dataset install territory-kit-tr --registry ./dist/registry.json --levels ADM0,ADM1 --load-adjacency
 ```
@@ -103,8 +105,12 @@ The generated coverage registry lives in `datasets/registry/coverage.json` and i
 [docs/datasets/coverage.md](./docs/datasets/coverage.md). TerritoryKit supports lower
 administrative levels when a suitable source exists, but it does not guarantee neighbourhood-level
 coverage for every country. Municipality and neighbourhood are semantic types on ADM records, not
-pseudo-administrative levels. Turkey includes a partial official Gaziantep ADM3 neighbourhood pilot
-documented in [docs/datasets/turkey-neighbourhoods.md](./docs/datasets/turkey-neighbourhoods.md).
+pseudo-administrative levels. Turkey now has a reviewed HDX/OCHA COD-AB source path for national
+ADM0-ADM2, while ADM3 remains partial and ADM4 remains source-model blocked. See
+[docs/datasets/turkey-national-coverage.md](./docs/datasets/turkey-national-coverage.md),
+[docs/datasets/turkey-sources.md](./docs/datasets/turkey-sources.md), and the partial Gaziantep
+ADM3 pilot in
+[docs/datasets/turkey-neighbourhoods.md](./docs/datasets/turkey-neighbourhoods.md).
 The current product gap analysis is tracked in
 [docs/product-gap-analysis.md](./docs/product-gap-analysis.md).
 
@@ -138,6 +144,7 @@ items.
 - [H3 comparison](./docs/h3-comparison.md)
 - [Risk register](./docs/risk-register.md)
 - [Release governance](./docs/release-governance.md)
+- [Turkey national source ADR](./adr/ADR-006-turkey-national-administrative-sources.md)
 - [Roadmap](./docs/roadmap.md)
 - [Release check](./docs/release-check.md)
 - [Runtime architecture audit](./docs/architecture/runtime-architecture-audit.md)
@@ -169,6 +176,7 @@ items.
 - [Render artifacts](./docs/render-artifacts.md)
 - [Vector tile pipeline](./docs/vector-tile-pipeline.md)
 - [MapLibre registry integration](./docs/maplibre-registry-integration.md)
+- [Turkey MapLibre example](./docs/examples/turkey-maplibre.md)
 - [Turkey neighbourhood MapLibre example](./docs/examples/turkey-neighbourhood-maplibre.md)
 - [Render/query compatibility](./docs/render-query-compatibility.md)
 - [Mobile map loading](./docs/mobile-map-loading.md)
@@ -183,6 +191,11 @@ items.
 - [Lower administrative levels](./docs/datasets/lower-admin-levels.md)
 - [Administrative semantics](./docs/datasets/admin-semantics.md)
 - [Partial coverage](./docs/datasets/partial-coverage.md)
+- [Turkey administrative model](./docs/datasets/turkey-administrative-model.md)
+- [Turkey national coverage](./docs/datasets/turkey-national-coverage.md)
+- [Turkey sources](./docs/datasets/turkey-sources.md)
+- [Turkey build](./docs/datasets/turkey-build.md)
+- [Turkey licensing](./docs/datasets/turkey-licensing.md)
 - [Turkey neighbourhoods](./docs/datasets/turkey-neighbourhoods.md)
 - [Dataset providers](./docs/datasets/providers.md)
 - [Lower-admin providers](./docs/sources/lower-admin-providers.md)

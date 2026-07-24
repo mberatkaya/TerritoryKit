@@ -10,6 +10,7 @@ import {
   getTerritoryCountryConfig,
   inspectTerritoryCountryDatasetPath,
   listTerritoryCountryConfigs,
+  resolveTerritoryBoundarySource,
   resolveTerritoryCountryHierarchy,
   validateTerritoryCountryDatasetPath,
   verifyTerritoryCountrySourceLock
@@ -31,7 +32,13 @@ describe("pilot country dataset pipeline", () => {
       expect.arrayContaining(["DE", "ID", "JP", "TR", "US"])
     );
     expect(getTerritoryCountryConfig("USA").loaderPackageName).toBe("@territory-kit/data-us");
-    expect(getTerritoryCountryConfig("tr").requestedLevels).toEqual(["ADM0", "ADM1", "ADM2"]);
+    expect(getTerritoryCountryConfig("tr").requestedLevels).toEqual([
+      "ADM0",
+      "ADM1",
+      "ADM2",
+      "ADM3",
+      "ADM4"
+    ]);
     expect(getTerritoryCountryConfig("FR")).toMatchObject({
       reviewRequired: true,
       levelMappings: {
@@ -72,7 +79,11 @@ describe("pilot country dataset pipeline", () => {
         country: "TR",
         sourceLockPath,
         outputPath,
+        levels: ["ADM0", "ADM1", "ADM2"],
         buildAdjacency: true,
+        buildQueryArtifacts: true,
+        buildRenderArtifacts: true,
+        buildBinaryIndex: true,
         strict: true,
         buildDate: FIXTURE_BUILD_DATE
       });
@@ -92,6 +103,12 @@ describe("pilot country dataset pipeline", () => {
         ADM1: 1,
         ADM2: 2
       });
+      expect(build.files.has("levels/ADM1/medium.geojson")).toBe(false);
+      expect(build.files.has("levels/ADM1/low.geojson")).toBe(false);
+      expect(build.files.has("query/query-artifact.json")).toBe(true);
+      expect(build.files.has("index/index.tksi")).toBe(true);
+      expect(build.files.has("levels/ADM2/index/index.tksi")).toBe(true);
+      expect(build.files.has("render/manifest.json")).toBe(true);
 
       await expect(
         validateTerritoryCountryDatasetPath(outputPath, { strict: true })
@@ -110,6 +127,27 @@ describe("pilot country dataset pipeline", () => {
     } finally {
       await rm(fixture.tempDir, { force: true, recursive: true });
     }
+  }, 15_000);
+
+  it("resolves Turkey national HDX COD-AB source metadata without network fetch", async () => {
+    await expect(
+      resolveTerritoryBoundarySource({ country: "TR", adminLevel: "ADM2" })
+    ).resolves.toMatchObject({
+      source: {
+        provider: "hdx-cod-ab",
+        releaseType: "hdx-cod-ab",
+        sourceFeatureCount: 973,
+        sourceUrl: expect.stringContaining("#tur_admin2.geojson"),
+        expectedSha256: "91b0968125b7bf3e2eb1d682697c51154ff3384f78ecf4e5f6e9041a24a287f2"
+      },
+      issues: []
+    });
+
+    await expect(
+      resolveTerritoryBoundarySource({ country: "TR", adminLevel: "ADM3" })
+    ).resolves.toMatchObject({
+      issues: [expect.objectContaining({ code: "SOURCE_METADATA_NOT_FOUND" })]
+    });
   });
 
   it("handles a pilot country source with MultiPolygon ADM0 geometry", async () => {
@@ -121,6 +159,7 @@ describe("pilot country dataset pipeline", () => {
       await createTerritoryCountrySourceLock({
         country: "ID",
         levels: ["ADM0", "ADM1", "ADM2"],
+        releaseType: "gbOpen",
         metadataPath: fixture.metadataPath,
         outputPath: sourceLockPath,
         buildDate: FIXTURE_BUILD_DATE
@@ -249,7 +288,7 @@ describe("pilot country dataset pipeline", () => {
 
   it("classifies a built country with an unavailable sibling level as partial", async () => {
     const fixture = await createCountrySourceFixture("TR", {
-      omittedMetadataLevels: ["ADM2"]
+      omittedMetadataLevels: ["ADM3"]
     });
     const outputRoot = join(fixture.tempDir, "generated");
     const sourceLockPath = join(outputRoot, "TR", "sources.lock.json");
@@ -257,7 +296,7 @@ describe("pilot country dataset pipeline", () => {
     try {
       await createTerritoryCountrySourceLock({
         country: "TR",
-        levels: ["ADM0", "ADM1", "ADM2"],
+        levels: ["ADM0", "ADM1", "ADM2", "ADM3"],
         metadataPath: fixture.metadataPath,
         outputPath: sourceLockPath,
         buildDate: FIXTURE_BUILD_DATE
@@ -265,7 +304,7 @@ describe("pilot country dataset pipeline", () => {
 
       const report = await buildAllTerritoryCountryDatasets({
         countries: ["TR"],
-        levels: ["ADM1", "ADM2"],
+        levels: ["ADM2", "ADM3"],
         outputRoot,
         offline: true,
         concurrency: 1,
@@ -287,7 +326,7 @@ describe("pilot country dataset pipeline", () => {
         outcome: "partial",
         levels: [
           {
-            level: "ADM1",
+            level: "ADM2",
             outcome: "built",
             lifecycle: {
               sourceStatus: "available",
@@ -296,7 +335,7 @@ describe("pilot country dataset pipeline", () => {
             }
           },
           {
-            level: "ADM2",
+            level: "ADM3",
             outcome: "source-unavailable",
             lifecycle: {
               sourceStatus: "unavailable",
@@ -430,11 +469,11 @@ async function createCountrySourceFixture(
         .map((adminLevel) => ({
           countryCodeAlpha3: config.countryCodeAlpha3,
           adminLevel,
-          releaseType: "gbOpen",
+          releaseType: config.defaultReleaseType ?? "gbOpen",
           sourceUrl: files[adminLevel],
           sourceVersion,
           boundaryYearRepresented: "2026",
-          license: "CC BY 4.0",
+          license: config.sourceProvider === "hdx-cod-ab" ? "CC BY-IGO" : "CC BY 4.0",
           licenseDetail: "fixture://license",
           attribution: `Synthetic ${config.countryCodeAlpha2} ${adminLevel} fixture`
         }))
@@ -454,6 +493,8 @@ function sourceFeature(input: {
   officialCode: string;
   geometry: unknown;
 }): unknown {
+  const isAdm2 = input.shapeID.split("-").length > 2;
+
   return {
     type: "Feature",
     ...(input.id ? { id: input.id } : {}),
@@ -462,7 +503,14 @@ function sourceFeature(input: {
       ...(input.parentShapeID ? { parentShapeID: input.parentShapeID } : {}),
       shapeName: input.name,
       shapeType: input.type,
-      officialCode: input.officialCode
+      officialCode: input.officialCode,
+      adm0_pcode: input.parentShapeID ?? input.shapeID,
+      adm0_name1: input.name,
+      adm1_pcode: input.shapeID,
+      adm1_name1: input.name,
+      adm2_pcode: input.shapeID,
+      adm2_name1: input.name,
+      ...(isAdm2 && input.parentShapeID ? { adm1_pcode: input.parentShapeID } : {})
     },
     geometry: input.geometry
   };

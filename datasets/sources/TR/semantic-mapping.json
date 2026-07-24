@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "territorykit-semantic-mapping@1",
+  "country": "TR",
+  "levels": {
+    "ADM0": {
+      "localTypeName": "Ülke",
+      "semanticType": "country",
+      "sourceAdminLevel": "adm0",
+      "sourceIdProperty": "adm0_pcode",
+      "sourceNameProperty": "adm0_name1"
+    },
+    "ADM1": {
+      "localTypeName": "İl",
+      "semanticType": "province",
+      "sourceAdminLevel": "adm1",
+      "sourceIdProperty": "adm1_pcode",
+      "sourceNameProperty": "adm1_name1",
+      "sourceParentProperty": "adm0_pcode"
+    },
+    "ADM2": {
+      "localTypeName": "İlçe",
+      "semanticType": "district",
+      "sourceAdminLevel": "adm2",
+      "sourceIdProperty": "adm2_pcode",
+      "sourceNameProperty": "adm2_name1",
+      "sourceParentProperty": "adm1_pcode"
+    },
+    "ADM3": {
+      "localTypeName": "Mahalle/Köy",
+      "semanticTypesAllowed": ["neighbourhood", "village", "locality"],
+      "status": "source-unavailable"
+    },
+    "ADM4": {
+      "localTypeName": "Yerleşim veya belediye alt birimi",
+      "semanticTypesAllowed": ["municipality", "locality"],
+      "status": "not-applicable-until-source-model-review"
+    }
+  }
+}

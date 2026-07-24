@@ -32,7 +32,9 @@ debounce, cancellation with committed-state restoration, stale response and stal
 guards, memory LRU cache ownership policy, lazy engine reuse, managed adapter source binding, and
 renderer-independent adapter updates. Sprint 13 adds a runtime multi-dataset catalog, engine pool,
 binary spatial index artifacts, CLI index build/inspect/validate commands, and injectable worker
-loading contracts. MVT generation and additional renderer adapters remain future work unless their
+loading contracts. Turkey ADM0-ADM2 national source locking, country-build render/query/index
+outputs, and the Turkey MapLibre example are branch-level additions; nationwide ADM3/ADM4 coverage,
+hosted production registry, and additional renderer adapters remain future work unless their
 package or workflow exists in this repository.
 
 See [Master Sprint Checklist](./sprint-checklist.md) for branch-level completion evidence,

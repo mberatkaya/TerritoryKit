@@ -265,6 +265,50 @@ describe("territory cli", () => {
     }
   });
 
+  it("builds topology-safe simplification tiers without publishing duplicate hashes", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-simplify-"));
+    const filePath = join(tempDir, "dataset.json");
+    const outputPath = join(tempDir, "simplified");
+    const reportPath = join(tempDir, "simplification-report.json");
+
+    await writeFile(filePath, JSON.stringify(createSharedBoundarySimplificationDataset()), "utf8");
+
+    try {
+      const result = await captureCli([
+        "geometry",
+        "simplify",
+        filePath,
+        "--strategy",
+        "topology-safe",
+        "--detail",
+        "medium",
+        "--output",
+        outputPath,
+        "--report",
+        reportPath
+      ]);
+
+      expect(result).toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "geometry simplify",
+          data: {
+            report: {
+              tiers: [expect.objectContaining({ detail: "medium", status: "generated" })]
+            }
+          }
+        }
+      });
+      await expect(readFile(join(outputPath, "medium", "dataset.json"), "utf8")).resolves.toContain(
+        '"geometryDetail": "medium"'
+      );
+      await expect(readFile(reportPath, "utf8")).resolves.toContain("topology-safe");
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
+
   it("builds, validates, and inspects polygon adjacency artifacts", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-adjacency-"));
     const datasetPath = join(tempDir, "dataset.json");
@@ -878,6 +922,7 @@ describe("territory cli", () => {
         data: expect.arrayContaining([
           expect.objectContaining({ id: "geoboundaries" }),
           expect.objectContaining({ id: "geojson" }),
+          expect.objectContaining({ id: "hdx-cod-ab" }),
           expect.objectContaining({ id: "natural-earth" })
         ])
       }
@@ -1020,6 +1065,8 @@ describe("territory cli", () => {
           "TR",
           "--metadata",
           fixture.metadataPath,
+          "--levels",
+          "ADM0,ADM1,ADM2",
           "--output",
           lockPath,
           "--build-date",
@@ -1059,6 +1106,8 @@ describe("territory cli", () => {
           "TR",
           "--source-lock",
           lockPath,
+          "--levels",
+          "ADM0,ADM1,ADM2",
           "--output",
           outputPath,
           "--build-adjacency",
@@ -1197,9 +1246,12 @@ describe("territory cli", () => {
     const adjacentGeojsonOutput = join(tempDir, "adjacent-regions");
     const geoBoundariesPath = join(tempDir, "geoBoundaries-TUR-ADM1.geojson");
     const geoBoundariesOutput = join(tempDir, "tr-adm1");
+    const hdxCodAbPath = join(tempDir, "tur_admin2.geojson");
+    const hdxCodAbOutput = join(tempDir, "tr-adm2-hdx");
     await writeFile(geojsonPath, JSON.stringify(createGenericGeoJsonCliFixture()), "utf8");
     await writeFile(adjacentGeojsonPath, JSON.stringify(createAdjacentGeoJsonCliFixture()), "utf8");
     await writeFile(geoBoundariesPath, JSON.stringify(createGeoBoundariesCliFixture()), "utf8");
+    await writeFile(hdxCodAbPath, JSON.stringify(createHdxCodAbCliFixture()), "utf8");
 
     try {
       await expect(
@@ -1298,6 +1350,32 @@ describe("territory cli", () => {
       });
       await expect(readFile(join(geoBoundariesOutput, "dataset.json"), "utf8")).resolves.toContain(
         "CC BY 4.0"
+      );
+      await expect(
+        captureCli([
+          "import",
+          "hdx-cod-ab",
+          "--input",
+          hdxCodAbPath,
+          "--output",
+          hdxCodAbOutput,
+          "--country",
+          "TR",
+          "--admin-level",
+          "ADM2",
+          "--build-date",
+          "2026-01-01T00:00:00.000Z"
+        ])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "import hdx-cod-ab",
+          data: { datasetId: "hdx-cod-ab-tr-adm2", zoneCount: 1 }
+        }
+      });
+      await expect(readFile(join(hdxCodAbOutput, "dataset.json"), "utf8")).resolves.toContain(
+        "tr:adm2:tr0116"
       );
     } finally {
       await rm(tempDir, { force: true, recursive: true });
@@ -1668,11 +1746,11 @@ async function createCountryCliFixture(tempDir: string): Promise<{ metadataPath:
       ].map(([adminLevel, sourceUrl]) => ({
         countryCodeAlpha3: "TUR",
         adminLevel,
-        releaseType: "gbOpen",
+        releaseType: "hdx-cod-ab",
         sourceUrl,
         sourceVersion: "tr-cli-fixture-1",
         boundaryYearRepresented: "2026",
-        license: "CC BY 4.0",
+        license: "CC BY-IGO",
         attribution: `Synthetic TR ${adminLevel} fixture`
       }))
     ),
@@ -1691,6 +1769,8 @@ function countryCliFeature(
   officialCode: string,
   geometry: unknown
 ): unknown {
+  const isAdm2 = shapeID.split("-").length > 2;
+
   return {
     type: "Feature",
     id,
@@ -1699,9 +1779,96 @@ function countryCliFeature(
       ...(parentShapeID ? { parentShapeID } : {}),
       shapeName,
       shapeType,
-      officialCode
+      officialCode,
+      adm0_pcode: parentShapeID ?? shapeID,
+      adm0_name1: shapeName,
+      adm1_pcode: isAdm2 && parentShapeID ? parentShapeID : shapeID,
+      adm1_name1: shapeName,
+      adm2_pcode: shapeID,
+      adm2_name1: shapeName
     },
     geometry
+  };
+}
+
+function createSharedBoundarySimplificationDataset(): unknown {
+  return {
+    manifest: {
+      datasetId: "simplify-shared-boundary",
+      datasetVersion: "1.0.0",
+      schemaVersion: "territory-schema@1",
+      sourceDate: "2026-01-01",
+      geometryHash: "fixture",
+      adminLevels: ["ADM2"],
+      artifactChecksum: "fixture",
+      attribution: "fixture",
+      boundaryPolicy: "fixture",
+      buildDate: "2026-01-01T00:00:00.000Z",
+      countryCodes: ["tr"],
+      crs: "EPSG:4326",
+      disputedAreaPolicy: "fixture",
+      geometryDetail: "source",
+      license: "Apache-2.0",
+      name: "Simplify shared boundary fixture",
+      sourceProvider: "fixture",
+      worldview: "fixture"
+    },
+    zones: [
+      sharedBoundaryZone("left", [
+        [0, 0],
+        [1, 0],
+        [1, 0.25],
+        [1, 0.5],
+        [1, 0.75],
+        [1, 1],
+        [0, 1],
+        [0, 0]
+      ]),
+      sharedBoundaryZone("right", [
+        [1, 0],
+        [2, 0],
+        [2, 1],
+        [1, 1],
+        [1, 0.75],
+        [1, 0.5],
+        [1, 0.25],
+        [1, 0]
+      ])
+    ]
+  };
+}
+
+function sharedBoundaryZone(id: string, ring: number[][]): unknown {
+  const lngs = ring.map((point) => point[0] ?? 0);
+  const lats = ring.map((point) => point[1] ?? 0);
+  const bbox = [Math.min(...lngs), Math.min(...lats), Math.max(...lngs), Math.max(...lats)] as [
+    number,
+    number,
+    number,
+    number
+  ];
+
+  return {
+    id,
+    datasetId: "simplify-shared-boundary",
+    countryCode: "TR",
+    level: 2,
+    sourceAdminLevel: "ADM2",
+    semanticType: "district",
+    name: id,
+    neighborIds: [],
+    geometry: { type: "Polygon", coordinates: [ring] },
+    center: [(bbox[0] + bbox[2]) / 2, (bbox[1] + bbox[3]) / 2],
+    bbox,
+    properties: {
+      name: id,
+      territory: {
+        adminLevel: "ADM2",
+        sourceAdminLevel: "ADM2",
+        semanticType: "district",
+        coverageStatus: "generated"
+      }
+    }
   };
 }
 
@@ -1848,6 +2015,24 @@ function createGeoBoundariesCliFixture(): unknown {
           shapeName: "Istanbul",
           shapeGroup: "TR",
           shapeType: "ADM1"
+        },
+        geometry: squareCli(28, 40)
+      }
+    ]
+  };
+}
+
+function createHdxCodAbCliFixture(): unknown {
+  return {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        id: "tur-adm2-fatih",
+        properties: {
+          adm2_pcode: "TR0116",
+          adm2_name1: "Fatih",
+          adm1_pcode: "TR01"
         },
         geometry: squareCli(28, 40)
       }

@@ -89,7 +89,7 @@ export function sortJson(input: unknown): unknown {
 
 export async function writeFilesAtomically(
   outputPath: string,
-  files: ReadonlyMap<string, string>,
+  files: ReadonlyMap<string, string | Uint8Array>,
   options: { force?: boolean }
 ): Promise<void> {
   if (await pathExists(outputPath)) {
@@ -108,7 +108,7 @@ export async function writeFilesAtomically(
     )) {
       const targetPath = join(tempPath, relativePath);
       await mkdir(dirname(targetPath), { recursive: true });
-      await writeFile(targetPath, content, "utf8");
+      await writeFile(targetPath, content);
     }
 
     if (await pathExists(outputPath)) {

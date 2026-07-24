@@ -10,6 +10,7 @@ import {
 import { fetchHttpSourceArtifact } from "../sources/transports/http.js";
 import { resolveFileSourceArtifact } from "../sources/transports/file.js";
 import { isRecord, pathExists, serializeJsonStable, sha256Hex } from "../sources/utils.js";
+import { extractZipMember } from "../sources/zip.js";
 import { getTerritoryCountryConfig } from "./registry.js";
 import { resolveTerritoryBoundarySource } from "./source-resolver.js";
 import type {
@@ -61,14 +62,16 @@ export async function createTerritoryCountrySourceLock(
       ...(options.refresh ? { refresh: true } : {}),
       ...(options.cwd ? { cwd: options.cwd } : {})
     });
-    issues.push(...resolvedSource.issues);
+    const sourceIssues = resolvedSource.issues.map((issue) =>
+      downgradeOptionalUnavailableIssue(issue, levelConfig.required)
+    );
+    issues.push(...sourceIssues);
 
     if (!resolvedSource.source) {
       levels[level] = {
         adminLevel: level,
         status: "unavailable",
-        unavailableReason:
-          resolvedSource.issues[0]?.message ?? "No usable source metadata was found."
+        unavailableReason: sourceIssues[0]?.message ?? "No usable source metadata was found."
       };
       continue;
     }
@@ -88,7 +91,6 @@ export async function createTerritoryCountrySourceLock(
         sha256: artifact.sha256,
         sizeBytes: artifact.sizeBytes,
         ...(artifact.sourcePath ? { sourcePath: artifact.sourcePath } : {}),
-        ...(artifact.originalUrl ? { resolvedDownloadUrl: artifact.originalUrl } : {}),
         ...(sourceFeatureCount !== undefined ? { sourceFeatureCount } : {})
       });
     } catch (error) {
@@ -138,6 +140,20 @@ export async function createTerritoryCountrySourceLock(
     ...(options.outputPath
       ? { outputPath: resolve(options.cwd ?? process.cwd(), options.outputPath) }
       : {})
+  };
+}
+
+function downgradeOptionalUnavailableIssue(
+  issue: TerritoryCountryBuildIssue,
+  required: boolean
+): TerritoryCountryBuildIssue {
+  if (required || issue.severity !== "error" || issue.code !== "SOURCE_METADATA_NOT_FOUND") {
+    return issue;
+  }
+
+  return {
+    ...issue,
+    severity: "warning"
   };
 }
 
@@ -317,8 +333,10 @@ export async function acquireBoundarySourceArtifact(
   originalUrl?: string;
 }> {
   const maxSourceSizeBytes = options.maxSourceBytes ?? 100 * 1024 * 1024;
+  const archiveReference = splitArchiveMemberReference(source.sourceUrl);
+  const artifactSourceUrl = archiveReference?.archiveUrl ?? source.sourceUrl;
 
-  if (isRemoteUrl(source.sourceUrl)) {
+  if (isRemoteUrl(artifactSourceUrl)) {
     const cacheEnabled = !options.noCache;
     const request = {
       url: source.sourceUrl,
@@ -363,15 +381,22 @@ export async function acquireBoundarySourceArtifact(
       await mkdir(downloadDir, { recursive: true });
     }
 
-    const artifact = await fetchHttpSourceArtifact({
+    const fetchedArtifact = await fetchHttpSourceArtifact({
       provider: source.provider,
-      url: source.sourceUrl,
+      url: artifactSourceUrl,
       ...(downloadDir ? { destinationDirectory: downloadDir } : {}),
-      ...(source.expectedSha256 ? { expectedSha256: source.expectedSha256 } : {}),
+      ...(source.expectedSha256 && !archiveReference
+        ? { expectedSha256: source.expectedSha256 }
+        : {}),
       ...(source.sourceVersion ? { sourceVersion: source.sourceVersion } : {}),
       maxSourceSizeBytes,
       now: () => resolveBuildTimestamp(options.buildDate)
     });
+    const artifact = archiveReference
+      ? await extractSourceArchiveMember(fetchedArtifact, archiveReference.member, {
+          ...(source.expectedSha256 ? { expectedSha256: source.expectedSha256 } : {})
+        })
+      : fetchedArtifact;
     const cachedArtifact = cacheEnabled
       ? await writeSourceCacheEntry({
           provider: source.provider,
@@ -389,19 +414,26 @@ export async function acquireBoundarySourceArtifact(
     };
   }
 
-  const sourcePath = source.sourceUrl.startsWith("file:")
-    ? new URL(source.sourceUrl).pathname
-    : source.sourceUrl;
-  const artifact = await resolveFileSourceArtifact({
+  const sourcePath = artifactSourceUrl.startsWith("file:")
+    ? new URL(artifactSourceUrl).pathname
+    : artifactSourceUrl;
+  const fileArtifact = await resolveFileSourceArtifact({
     provider: source.provider,
     request: {
       input: sourcePath,
-      ...(source.expectedSha256 ? { expectedSha256: source.expectedSha256 } : {}),
+      ...(source.expectedSha256 && !archiveReference
+        ? { expectedSha256: source.expectedSha256 }
+        : {}),
       ...(source.sourceVersion ? { version: source.sourceVersion } : {})
     },
     cwd: options.cwd,
     maxSourceSizeBytes
   });
+  const artifact = archiveReference
+    ? await extractSourceArchiveMember(fileArtifact, archiveReference.member, {
+        ...(source.expectedSha256 ? { expectedSha256: source.expectedSha256 } : {})
+      })
+    : fileArtifact;
 
   if (source.expectedSha256 && artifact.sha256 !== source.expectedSha256) {
     throw new Error("Local source SHA-256 does not match the expected checksum.");
@@ -411,8 +443,67 @@ export async function acquireBoundarySourceArtifact(
     localPath: artifact.localPath,
     sha256: artifact.sha256,
     sizeBytes: artifact.sizeBytes,
-    sourcePath: sourcePath
+    sourcePath: archiveReference ? `${sourcePath}#${archiveReference.member}` : sourcePath
   };
+}
+
+async function extractSourceArchiveMember(
+  artifact: {
+    provider: string;
+    localPath: string;
+    originalUrl?: string;
+    sourceVersion?: string;
+  },
+  member: string,
+  options: { expectedSha256?: string } = {}
+): Promise<{
+  localPath: string;
+  sha256: string;
+  sizeBytes: number;
+  originalUrl?: string;
+  provider: string;
+  cacheHit: boolean;
+}> {
+  const extraction = extractZipMember(await readFile(artifact.localPath), member);
+  const sha256 = sha256Hex(extraction.bytes);
+
+  if (options.expectedSha256 && options.expectedSha256 !== sha256) {
+    throw new Error("ZIP member SHA-256 does not match the expected checksum.");
+  }
+
+  const outputPath = join(dirname(artifact.localPath), sanitizeArchiveMemberName(member));
+  await writeFile(outputPath, extraction.bytes);
+
+  return {
+    provider: artifact.provider,
+    localPath: outputPath,
+    sha256,
+    sizeBytes: extraction.bytes.byteLength,
+    cacheHit: false
+  };
+}
+
+function splitArchiveMemberReference(
+  sourceUrl: string
+): { archiveUrl: string; member: string } | undefined {
+  const hashIndex = sourceUrl.indexOf("#");
+
+  if (hashIndex === -1) {
+    return undefined;
+  }
+
+  const archiveUrl = sourceUrl.slice(0, hashIndex);
+  const member = decodeURIComponent(sourceUrl.slice(hashIndex + 1));
+
+  if (!archiveUrl.toLowerCase().endsWith(".zip") || !member) {
+    return undefined;
+  }
+
+  return { archiveUrl, member };
+}
+
+function sanitizeArchiveMemberName(member: string): string {
+  return member.split(/[\\/]/).filter(Boolean).at(-1) ?? "artifact.geojson";
 }
 
 function createLockLevel(

@@ -69,6 +69,15 @@ export {
 } from "./sources/generic-geojson.js";
 export type { GenericGeoJsonSourceOptions } from "./sources/generic-geojson.js";
 export {
+  HDX_COD_AB_LICENSE,
+  HDX_COD_AB_SOURCE_ADAPTER_ID,
+  HDX_COD_AB_TURKEY_ATTRIBUTION,
+  HDX_COD_AB_TURKEY_SOURCE_URL,
+  hdxCodAbSourceAdapter,
+  transformHdxCodAb
+} from "./sources/hdx-cod-ab.js";
+export type { HdxCodAbSourceOptions } from "./sources/hdx-cod-ab.js";
+export {
   buildWorldCountriesDatasetFromSourcePipeline,
   naturalEarthSourceAdapter,
   transformNaturalEarthAdm0
@@ -84,6 +93,18 @@ export {
   writeGeometryQualityReport,
   writeTerritoryDatasetOutput
 } from "./geometry-quality.js";
+export {
+  simplifyTerritoryDataset,
+  simplifyTerritoryDatasetPath
+} from "./geometry-simplification.js";
+export type {
+  TerritorySimplificationDetail,
+  TerritorySimplificationOptions,
+  TerritorySimplificationPathResult,
+  TerritorySimplificationReport,
+  TerritorySimplificationStrategy,
+  TerritorySimplificationTierReport
+} from "./geometry-simplification.js";
 export {
   computeGeometryRepresentativePoint,
   pointCoveredByGeometry,

@@ -42,11 +42,15 @@ const realAdjacency = await buildTerritoryAdjacency(dataset, {
 - `buildTerritoryAdjacency(dataset, options)` builds exact polygon adjacency artifacts.
 - `buildTerritoryAdjacencyPath(inputPath, options)` writes `adjacency.json`, `build-report.json`,
   and `checksums.json`.
-- `createTerritoryCountrySourceLock(options)` resolves and checksums pilot country source artifacts.
+- `simplifyTerritoryDatasetPath(inputPath, options)` writes audited topology-safe geometry
+  simplification tiers.
+- `createTerritoryCountrySourceLock(options)` resolves and checksums country source artifacts,
+  including reviewed HDX/OCHA COD-AB Turkey ADM0-ADM2 ZIP members.
 - `buildTerritoryCountryDatasetPath(options)` writes country manifests, per-level datasets,
-  hierarchy reports, identity maps, quality reports, and optional adjacency artifacts.
+  hierarchy reports, identity maps, quality reports, and optional adjacency, query, render, and
+  binary index artifacts.
 - `createDefaultTerritorySourceRegistry()` returns built-in adapters for Natural Earth,
-  geoBoundaries, and generic GeoJSON.
+  geoBoundaries, HDX/OCHA COD-AB, and generic GeoJSON.
 - `parseNaturalEarthAdm0FeatureCollection(input, source)` parses local Natural Earth-like GeoJSON
   without network access.
 - `inferBBoxAdjacency(zones, options)` returns neighbor IDs inferred from bounding boxes for
@@ -80,7 +84,7 @@ import {
 
 await createTerritoryCountrySourceLock({
   country: "TR",
-  levels: ["ADM0", "ADM1", "ADM2"],
+  levels: ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"],
   outputPath: "./dist/tr/sources.lock.json"
 });
 
@@ -89,11 +93,17 @@ await buildTerritoryCountryDatasetPath({
   sourceLockPath: "./dist/tr/sources.lock.json",
   outputPath: "./dist/tr",
   buildAdjacency: true,
-  strict: true
+  buildQueryArtifacts: true,
+  buildRenderArtifacts: true,
+  buildBinaryIndex: true,
+  strict: true,
+  allowPartial: true
 });
 ```
 
 Configured pilot countries are `TR`, `US`, `DE`, `JP`, and `ID`.
+Turkey resolves national ADM0-ADM2 from HDX/OCHA COD-AB by default. ADM3 and ADM4 remain explicit
+unavailable levels unless a reviewed redistributable source is added to the source lock.
 
 ## Source Adapters
 

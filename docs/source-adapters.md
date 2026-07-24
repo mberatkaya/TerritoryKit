@@ -38,6 +38,17 @@ Use `territory sources inspect --provider <id> --country <ISO2> --level <ADM*> -
 provider support without downloading data. See [Lower-admin providers](./sources/lower-admin-providers.md)
 for ADM0-ADM5 source and manifest rules.
 
+Built-in adapters currently include:
+
+- `natural-earth`: local Natural Earth ADM0 FeatureCollections.
+- `geoboundaries`: geoBoundaries-style GeoJSON FeatureCollections.
+- `hdx-cod-ab`: reviewed HDX/OCHA COD-AB GeoJSON members for Turkey ADM0-ADM2.
+- `geojson`: generic manually mapped GeoJSON FeatureCollections.
+
+The HDX adapter is a normal source adapter for local or remote GeoJSON members. Turkey national
+source locks use the same provider id plus reviewed ZIP-member metadata so real downloads remain
+explicit lock/update/workflow operations rather than normal CI requirements.
+
 ## Adapter vs Dataset Builder
 
 An adapter handles source-specific conversion. A dataset builder handles artifact layout and curated

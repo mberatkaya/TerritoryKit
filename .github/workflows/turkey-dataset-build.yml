@@ -1,0 +1,64 @@
+name: Turkey dataset build
+
+on:
+  workflow_dispatch:
+    inputs:
+      levels:
+        description: "Comma-separated ADM levels"
+        required: true
+        default: "ADM0,ADM1,ADM2,ADM3,ADM4"
+      source_lock:
+        description: "Existing source lock path, or empty to create one"
+        required: false
+        default: ""
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v5
+        with:
+          version: 11.7.0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @territory-kit/generators build
+      - name: Create source lock
+        if: ${{ inputs.source_lock == '' }}
+        run: |
+          mkdir -p dist/tr
+          pnpm --filter @territory-kit/cli exec territory country source lock TR \
+            --levels "${{ inputs.levels }}" \
+            --output dist/tr/sources.lock.json \
+            --force \
+            --json
+      - name: Copy provided source lock
+        if: ${{ inputs.source_lock != '' }}
+        run: |
+          mkdir -p dist/tr
+          cp "${{ inputs.source_lock }}" dist/tr/sources.lock.json
+      - name: Build Turkey artifacts
+        run: |
+          pnpm --filter @territory-kit/cli exec territory country build TR \
+            --source-lock dist/tr/sources.lock.json \
+            --levels "${{ inputs.levels }}" \
+            --output dist/tr/artifact \
+            --build-adjacency \
+            --build-query-artifacts \
+            --build-render-artifacts \
+            --build-binary-index \
+            --strict \
+            --allow-partial \
+            --force \
+            --json
+      - name: Validate artifact checksums
+        run: pnpm --filter @territory-kit/cli exec territory country validate dist/tr/artifact
+      - uses: actions/upload-artifact@v5
+        with:
+          name: turkey-dataset-build
+          path: dist/tr

@@ -1,6 +1,6 @@
 # TerritoryKit Master Sprint Checklist
 
-Last updated: 2026-07-18
+Last updated: 2026-07-24
 
 This is the source of truth for the sprint roadmap from `TerritoryKit_Teknik_Sprint_Dokumani.pdf`.
 A checkbox is marked when the repo contains implementation, documentation, tests, ADRs, release
@@ -133,6 +133,10 @@ typecheck`, and `pnpm test:visual:maplibre`.
       embedded geometry.
 - [x] CLI coverage exercises `territory country source lock`, `source verify`, `build`,
       `validate`, and `inspect` with network-free fixtures.
+- [x] Branch `feat/turkey-national-adm2-adm4-production` adds a reviewed Turkey HDX/OCHA COD-AB
+      national source path for ADM0-ADM2, ZIP-member checksums, optional country query/render/index
+      artifacts, topology-safe simplification CLI coverage, and explicit ADM3/ADM4 unavailable
+      blockers rather than synthetic nationwide coverage.
 
 ## Open Item Closure Map
 

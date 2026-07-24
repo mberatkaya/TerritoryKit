@@ -19,14 +19,16 @@ territory index validate dataset.tksi --dataset dataset.json
 territory generate grid --rows 4 --columns 4
 territory source list
 territory import geojson --input ./regions.geojson --country TR --admin-level ADM2 --name-property name --output ./dist/regions
+territory import hdx-cod-ab --input ./tur_admin2.geojson --country TR --admin-level ADM2 --output ./dist/tr-adm2
 territory geometry validate ./dist/regions --checks full --report ./geometry-report.json
 territory geometry repair ./dist/regions --checks basic --output ./dist/regions-repaired --report ./repair-report.json
+territory geometry simplify ./dist/regions --strategy topology-safe --detail high,medium,low --output ./dist/regions-simplified --report ./simplification-report.json
 territory adjacency build ./dist/regions --output ./dist/regions-adjacency --build-date 2026-01-01T00:00:00.000Z
 territory adjacency validate ./dist/regions ./dist/regions-adjacency
 territory adjacency inspect ./dist/regions-adjacency tr:adm2:fatih --type shared-border --json
 territory dataset build world-countries --source ./sources/ne-admin0.geojson --output ./dist/world-countries
 territory country source lock TR --output ./dist/tr/sources.lock.json
-territory country build TR --source-lock ./dist/tr/sources.lock.json --output ./dist/tr --build-adjacency --strict
+territory country build TR --source-lock ./dist/tr/sources.lock.json --output ./dist/tr --build-adjacency --build-query-artifacts --build-render-artifacts --build-binary-index --strict --allow-partial
 territory country validate ./dist/tr --strict
 ```
 
@@ -36,8 +38,12 @@ territory country validate ./dist/tr --strict
 - `territory import <geojson>` converts GeoJSON features into a TerritoryKit dataset.
 - `territory source list` and `territory source info <id>` inspect source adapters.
 - `territory import natural-earth|geoboundaries|geojson` runs the source adapter pipeline.
+- `territory import hdx-cod-ab` imports reviewed HDX/OCHA COD-AB GeoJSON members for Turkey
+  ADM0-ADM2.
 - `territory geometry validate <dataset-path>` runs validate-only geometry quality checks.
 - `territory geometry repair <dataset-path> --output <dir>` applies safe audited repairs.
+- `territory geometry simplify <dataset-path> --strategy topology-safe` writes audited real
+  simplification tiers and omits duplicate-hash placeholders.
 - `territory adjacency build <dataset-path> --output <dir|json>` builds exact polygon adjacency
   artifacts.
 - `territory adjacency validate <dataset-path> <dir|json>` validates an adjacency artifact.
@@ -52,7 +58,9 @@ territory country validate ./dist/tr --strict
 - `territory dataset build world-countries` builds Natural Earth ADM0 artifacts from a local source
   file.
 - `territory country source lock|verify`, `territory country build`, `territory country validate`,
-  and `territory country inspect` manage pilot ADM0/ADM1/ADM2 country artifacts.
+  and `territory country inspect` manage country artifacts. Turkey's default national path verifies
+  ADM0-ADM2 from HDX/OCHA COD-AB and records ADM3/ADM4 as unavailable unless a reviewed source lock
+  provides them.
 
 Dataset build options include `--detail`, `--source-version`, `--source-url`, `--source-sha256`,
 `--build-date`, `--strict`, and `--force`.

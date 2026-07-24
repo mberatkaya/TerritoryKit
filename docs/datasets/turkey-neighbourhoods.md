@@ -30,8 +30,8 @@ committed artifacts include `sources.lock.json`, `source-metadata.json`, `source
 Artifact policy:
 
 - `full.geojson` is the only committed GeoJSON render tier.
-- `medium.geojson` and `low.geojson` are intentionally omitted until a shared-boundary-aware
-  simplifier is implemented and tested.
+- `medium.geojson` and `low.geojson` are intentionally omitted unless an audited topology-safe
+  simplification run emits distinct geometry hashes for those tiers.
 - MVT render output is intentionally generated only for zoom `12`; the render manifest must not
   claim `z13` or `z14` support for this pilot.
 - `pnpm data:tr:adm3:artifact-policy` fails duplicate GeoJSON tier hashes, oversized reports,

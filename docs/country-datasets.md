@@ -1,13 +1,15 @@
 # Country Datasets
 
-Sprint 5 adds a pilot country dataset pipeline for five ADM0/ADM1/ADM2 countries:
+Sprint 5 added a country dataset pipeline for five ADM0/ADM1/ADM2 country families. Turkey now uses
+a reviewed national HDX/OCHA COD-AB source path for ADM0-ADM2; the other pilot countries still use
+geoBoundaries metadata by default.
 
 | Country       | Codes        | Loader package           | Source provider |
 | ------------- | ------------ | ------------------------ | --------------- |
 | Germany       | `DE` / `DEU` | `@territory-kit/data-de` | geoBoundaries   |
 | Indonesia     | `ID` / `IDN` | `@territory-kit/data-id` | geoBoundaries   |
 | Japan         | `JP` / `JPN` | `@territory-kit/data-jp` | geoBoundaries   |
-| Turkiye       | `TR` / `TUR` | `@territory-kit/data-tr` | geoBoundaries   |
+| Turkiye       | `TR` / `TUR` | `@territory-kit/data-tr` | HDX/OCHA COD-AB |
 | United States | `US` / `USA` | `@territory-kit/data-us` | geoBoundaries   |
 
 The loader packages do not embed geometry. They expose descriptors and resolver-driven loaders for
@@ -32,17 +34,21 @@ levels/ADM1/dataset.json
 levels/ADM2/dataset.json
 adjacency/ADM1/adjacency.json
 adjacency/ADM2/adjacency.json
+query/query-artifact.json
+render/manifest.json
+index/index.tksi
 ```
 
 `dataset.json` keeps the combined hierarchy. `levels/<ADM>/dataset.json` files are standalone
 valid datasets for that level. Adjacency artifacts are generated per level and validated against
-the published level dataset fingerprint.
+the published level dataset fingerprint. Query artifacts, render artifacts, and binary indexes are
+optional build outputs.
 
 ## Build Flow
 
 ```sh
 territory country source lock TR \
-  --levels ADM0,ADM1,ADM2 \
+  --levels ADM0,ADM1,ADM2,ADM3,ADM4 \
   --output ./dist/tr/sources.lock.json
 
 territory country source verify ./dist/tr/sources.lock.json
@@ -51,7 +57,11 @@ territory country build TR \
   --source-lock ./dist/tr/sources.lock.json \
   --output ./dist/tr \
   --build-adjacency \
-  --strict
+  --build-query-artifacts \
+  --build-render-artifacts \
+  --build-binary-index \
+  --strict \
+  --allow-partial
 
 territory country validate ./dist/tr --strict
 territory country inspect ./dist/tr
@@ -60,6 +70,9 @@ territory country inspect ./dist/tr
 The build is publish-ready only when required levels are available, source checksums match,
 licenses and attribution are present, geometry quality is clean, hierarchy is resolved, and
 identity fallback stays below the country policy threshold.
+
+For Turkey, `--allow-partial` is required when requesting ADM3/ADM4 today because the national
+source lock records those lower levels as unavailable rather than inventing coverage.
 
 ## Pilot Pages
 

@@ -14,3 +14,16 @@ territory render build ./dist/tr/levels/ADM1/dataset.json \
 
 Sprint 7 supports real MVT directory output and GeoJSON render artifacts. PMTiles remains a
 registry-compatible future format and is not exposed as a supported builder format yet.
+
+Country builds can emit render artifacts directly:
+
+```bash
+territory country build TR \
+  --source-lock ./dist/tr/sources.lock.json \
+  --output ./dist/tr \
+  --build-render-artifacts \
+  --allow-partial
+```
+
+Turkey's default render policy maps available levels to ADM0 z0-z4, ADM1 z5-z7, ADM2 z8-z11,
+ADM3 z12-z14, and ADM4 z15-z17. Only levels present in the source lock are emitted.

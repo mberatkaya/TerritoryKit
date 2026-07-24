@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "territorykit-country-source-catalog@1",
+  "country": "TR",
+  "provider": "hdx-cod-ab",
+  "sourceId": "cod-ab-tur",
+  "sourceUrl": "https://data.humdata.org/dataset/cod-ab-tur",
+  "downloadUrl": "https://data.humdata.org/dataset/d74086a0-f398-4474-9e12-1b9a70907bd0/resource/470bd810-2240-4ce0-b5c4-17434112ce41/download/tur_admin_boundaries.geojson.zip",
+  "sourceDate": "2026-01-26",
+  "retrievedAt": "2026-07-24T00:00:00.000Z",
+  "license": "CC BY-IGO",
+  "licenseUrl": "https://data.humdata.org/dataset/cod-ab-tur",
+  "attribution": "OCHA Common Operational Dataset: Türkiye Administrative Boundaries",
+  "redistributionAllowed": true,
+  "commercialUseAllowed": true,
+  "modificationAllowed": true,
+  "fileFormat": "GeoJSON ZIP",
+  "sha256": "6d45f15de76d53da057312dfaedb60248141a1828ce6a5c7cbfeedc7f51714c3",
+  "byteSize": 22618555,
+  "crs": "EPSG:4326",
+  "coveredCountry": "TR",
+  "coveredProvince": null,
+  "coveredLevels": ["ADM0", "ADM1", "ADM2"],
+  "levels": {
+    "ADM0": {
+      "archiveMember": "tur_admin0.geojson",
+      "expectedFeatureCount": 1,
+      "actualFeatureCount": 1,
+      "sha256": "d346d64aa96ea0ba2b4ad1a71af1db104a10649baf04958dc90b8a36b8e1b069",
+      "byteSize": 11119319
+    },
+    "ADM1": {
+      "archiveMember": "tur_admin1.geojson",
+      "expectedFeatureCount": 81,
+      "actualFeatureCount": 81,
+      "sha256": "56b330a4f7086b4f02f8ddac55ce480c24bf813a1da7e3fb93fe4619fb00f721",
+      "byteSize": 16671095
+    },
+    "ADM2": {
+      "archiveMember": "tur_admin2.geojson",
+      "expectedFeatureCount": 973,
+      "actualFeatureCount": 973,
+      "sha256": "91b0968125b7bf3e2eb1d682697c51154ff3384f78ecf4e5f6e9041a24a287f2",
+      "byteSize": 29223893
+    },
+    "ADM3": {
+      "status": "source-unavailable",
+      "reason": "No redistributable nationwide official ADM3 neighbourhood/village boundary source has been locked."
+    },
+    "ADM4": {
+      "status": "not-applicable-until-source-model-review",
+      "reason": "Turkey has no TerritoryKit ADM4 production mapping without a reviewed source that distinguishes municipality/locality sub-units below ADM3."
+    }
+  }
+}
