@@ -58,6 +58,7 @@ import {
   readTerritoryCountrySourceLockPath,
   readTerritoryAdjacencyArtifactPath,
   repairTerritoryDatasetPath,
+  simplifyTerritoryDatasetPath,
   buildTerritoryRenderArtifactPath,
   compareTerritoryQueryRenderArtifacts,
   runTerritorySourcePipeline,
@@ -79,6 +80,7 @@ import {
 import type {
   GenericGeoJsonSourceOptions,
   GeoBoundariesSourceOptions,
+  HdxCodAbSourceOptions,
   NaturalEarthAdm0Detail,
   NaturalEarthSourceOptions,
   TerritoryProviderCapabilitiesResult,
@@ -658,6 +660,9 @@ async function runCountryBuild(args: string[]): Promise<number> {
       outputPath,
       ...(levels ? { levels } : {}),
       ...(flags.has("build-adjacency") ? { buildAdjacency: true } : {}),
+      ...(flags.has("build-query-artifacts") ? { buildQueryArtifacts: true } : {}),
+      ...(flags.has("build-render-artifacts") ? { buildRenderArtifacts: true } : {}),
+      ...(flags.has("build-binary-index") ? { buildBinaryIndex: true } : {}),
       ...(flags.has("strict") ? { strict: true } : {}),
       ...(flags.has("allow-non-publish-ready") || flags.has("allow-partial")
         ? { allowNonPublishReady: true }
@@ -760,7 +765,7 @@ async function runGeometry(args: string[]): Promise<number> {
     return 0;
   }
 
-  if (subcommand !== "validate" && subcommand !== "repair") {
+  if (subcommand !== "validate" && subcommand !== "repair" && subcommand !== "simplify") {
     printJson({
       ok: false,
       command: "geometry",
@@ -813,10 +818,56 @@ async function runGeometry(args: string[]): Promise<number> {
     if (!outputPath) {
       printJson({
         ok: false,
-        command: "geometry repair",
-        issues: [createCliIssue("--output is required for geometry repair.")]
+        command: `geometry ${subcommand}`,
+        issues: [createCliIssue(`--output is required for geometry ${subcommand}.`)]
       });
       return 2;
+    }
+
+    if (subcommand === "simplify") {
+      const strategy = getFlag(flags, "strategy") ?? "topology-safe";
+
+      if (strategy !== "topology-safe") {
+        printJson({
+          ok: false,
+          command: "geometry simplify",
+          issues: [createCliIssue("--strategy must be topology-safe.")]
+        });
+        return 2;
+      }
+
+      const details = readSimplificationDetailsFlag(flags);
+
+      if (Array.isArray(details) && details.some((detail) => typeof detail !== "string")) {
+        printJson({ ok: false, command: "geometry simplify", issues: details });
+        return 2;
+      }
+
+      const simplifyBuildDate = getFlag(flags, "build-date");
+      const result = await simplifyTerritoryDatasetPath(inputPath, outputPath, {
+        strategy,
+        details: details as Array<"high" | "medium" | "low">,
+        ...(simplifyBuildDate ? { buildDate: simplifyBuildDate } : {}),
+        ...(flags.has("force") ? { force: true } : {})
+      });
+      const reportPath = getFlag(flags, "report");
+
+      if (reportPath) {
+        await writeFile(reportPath, JSON.stringify(result.report, null, 2) + "\n", "utf8");
+      }
+
+      printJson({
+        ok: true,
+        command: "geometry simplify",
+        data: {
+          inputPath: result.inputPath,
+          outputPath: result.outputPath,
+          reportPath,
+          report: result.report
+        },
+        issues: []
+      });
+      return 0;
     }
 
     const repairOptions = readGeometryRepairOptions(flags, commonOptions);
@@ -2243,6 +2294,20 @@ async function runSourceImport(
         options,
         ...commonPipelineOptions
       });
+    } else if (sourceId === "hdx-cod-ab") {
+      const options = readHdxCodAbOptions(flags);
+
+      if (Array.isArray(options)) {
+        printJson({ ok: false, command: "import hdx-cod-ab", issues: options });
+        return 1;
+      }
+
+      result = await runTerritorySourcePipeline<HdxCodAbSourceOptions>({
+        adapter: sourceId,
+        request,
+        options,
+        ...commonPipelineOptions
+      });
     } else if (sourceId === "geojson") {
       const options = readGenericGeoJsonOptions(flags);
 
@@ -2838,6 +2903,44 @@ function readGeoBoundariesOptions(
   };
 }
 
+function readHdxCodAbOptions(
+  flags: Map<string, string | true>
+): HdxCodAbSourceOptions | CliIssue[] {
+  const countryCode = getFlag(flags, "country");
+  const adminLevel = getFlag(flags, "admin-level");
+  const issues: CliIssue[] = [];
+
+  if (!countryCode) {
+    issues.push(createCliIssue("--country is required.", { code: "SOURCE_OPTIONS_INVALID" }));
+  }
+
+  if (!adminLevel) {
+    issues.push(createCliIssue("--admin-level is required.", { code: "SOURCE_OPTIONS_INVALID" }));
+  }
+
+  if (!countryCode || !adminLevel) {
+    return issues;
+  }
+
+  const buildDate = getFlag(flags, "build-date");
+  const sourceDate = getFlag(flags, "source-date");
+  const sourceUrl = getFlag(flags, "source-url");
+  const datasetId = getFlag(flags, "dataset-id");
+  const datasetVersion = getFlag(flags, "dataset-version");
+  const attribution = getFlag(flags, "attribution");
+
+  return {
+    countryCode,
+    adminLevel,
+    ...(sourceDate ? { sourceDate } : {}),
+    ...(sourceUrl ? { sourceUrl } : {}),
+    ...(datasetId ? { datasetId } : {}),
+    ...(datasetVersion ? { datasetVersion } : {}),
+    ...(buildDate ? { buildDate: new Date(buildDate).toISOString() } : {}),
+    ...(attribution ? { attribution } : {})
+  };
+}
+
 function readGenericGeoJsonOptions(
   flags: Map<string, string | true>
 ): GenericGeoJsonSourceOptions | CliIssue[] {
@@ -3033,6 +3136,30 @@ function readAdjacencyTypesFlag(
   }
 
   return types as TerritoryAdjacencyType[];
+}
+
+function readSimplificationDetailsFlag(
+  flags: Map<string, string | true>
+): Array<"high" | "medium" | "low"> | CliIssue[] {
+  const value = getFlag(flags, "detail") ?? "high,medium,low";
+  const details = value
+    .split(",")
+    .map((entry) => entry.trim().toLowerCase())
+    .filter(Boolean);
+  const validDetails = new Set(["high", "medium", "low"]);
+  const invalid = details.find((detail) => !validDetails.has(detail));
+
+  if (!invalid && details.length > 0) {
+    return [...new Set(details)] as Array<"high" | "medium" | "low">;
+  }
+
+  return [
+    createCliIssue(
+      invalid
+        ? `Invalid --detail entry '${invalid}'. Expected high, medium, or low.`
+        : "--detail must include at least one simplification tier."
+    )
+  ];
 }
 
 function readCountryLevelsFlag(
@@ -3761,6 +3888,9 @@ function printCountryBuildHelp(): void {
 Options:
   --levels ADM0,ADM1,ADM2,ADM3,ADM4,ADM5
   --build-adjacency
+  --build-query-artifacts
+  --build-render-artifacts
+  --build-binary-index
   --strict
   --allow-non-publish-ready
   --allow-partial
@@ -3787,6 +3917,7 @@ function printGeometryHelp(): void {
 Commands:
   validate  Validate geometry quality for dataset.json or a dataset directory
   repair    Apply safe, audited geometry repairs and write a repaired dataset
+  simplify  Build topology-safe high, medium, and low geometry tiers
 
 Options:
   --checks basic|full
@@ -3796,6 +3927,8 @@ Options:
   --maximum-area-delta-ratio <number>
   --allow-hole-boundary-touch true|false
   --repair-strategy safe
+  --strategy topology-safe
+  --detail high,medium,low
   --normalize-ring-orientation true|false
   --output <dir>
   --report <report.json>
@@ -3911,6 +4044,7 @@ function printImportHelp(): void {
 Source adapters:
   natural-earth
   geoboundaries
+  hdx-cod-ab
   geojson
 
 Legacy:

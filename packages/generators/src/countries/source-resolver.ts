@@ -25,6 +25,44 @@ export interface TerritoryBoundarySourceResolveResult {
 }
 
 const GEOBOUNDARIES_API_BASE = "https://www.geoboundaries.org/api/current";
+const TURKEY_HDX_COD_AB_RELEASE_TYPE = "hdx-cod-ab";
+const TURKEY_HDX_COD_AB_PACKAGE_URL = "https://data.humdata.org/dataset/cod-ab-tur";
+const TURKEY_HDX_COD_AB_DOWNLOAD_URL =
+  "https://data.humdata.org/dataset/d74086a0-f398-4474-9e12-1b9a70907bd0/resource/470bd810-2240-4ce0-b5c4-17434112ce41/download/tur_admin_boundaries.geojson.zip";
+const TURKEY_HDX_COD_AB_LEVELS: Partial<
+  Record<
+    TerritoryAdminLevel,
+    {
+      member: string;
+      featureCount: number;
+      sourceDate: string;
+      sha256: string;
+      sizeBytes: number;
+    }
+  >
+> = {
+  ADM0: {
+    member: "tur_admin0.geojson",
+    featureCount: 1,
+    sourceDate: "2026-01-26",
+    sha256: "d346d64aa96ea0ba2b4ad1a71af1db104a10649baf04958dc90b8a36b8e1b069",
+    sizeBytes: 11_119_319
+  },
+  ADM1: {
+    member: "tur_admin1.geojson",
+    featureCount: 81,
+    sourceDate: "2026-01-26",
+    sha256: "56b330a4f7086b4f02f8ddac55ce480c24bf813a1da7e3fb93fe4619fb00f721",
+    sizeBytes: 16_671_095
+  },
+  ADM2: {
+    member: "tur_admin2.geojson",
+    featureCount: 973,
+    sourceDate: "2026-01-26",
+    sha256: "91b0968125b7bf3e2eb1d682697c51154ff3384f78ecf4e5f6e9041a24a287f2",
+    sizeBytes: 29_223_893
+  }
+};
 
 export async function resolveTerritoryBoundarySource(
   options: TerritoryBoundarySourceResolveOptions
@@ -36,6 +74,15 @@ export async function resolveTerritoryBoundarySource(
     `${GEOBOUNDARIES_API_BASE}/${releaseType}/${config.countryCodeAlpha3}/${options.adminLevel}/`;
   const issues: TerritoryCountryBuildIssue[] = [];
   let metadataInput: unknown;
+
+  if (
+    config.countryCodeAlpha2 === "TR" &&
+    releaseType === TURKEY_HDX_COD_AB_RELEASE_TYPE &&
+    !options.metadataPath &&
+    !options.metadataUrl
+  ) {
+    return resolveTurkeyHdxCodAbSource(config, options.adminLevel, options.buildDate);
+  }
 
   try {
     metadataInput = options.metadataPath
@@ -197,6 +244,57 @@ export async function resolveTerritoryBoundarySource(
       originalFormat: inferFormat(sourceUrl)
     },
     issues
+  };
+}
+
+function resolveTurkeyHdxCodAbSource(
+  config: ReturnType<typeof getTerritoryCountryConfig>,
+  adminLevel: TerritoryAdminLevel,
+  buildDate: string | undefined
+): TerritoryBoundarySourceResolveResult {
+  const level = TURKEY_HDX_COD_AB_LEVELS[adminLevel];
+
+  if (!level) {
+    return {
+      issues: [
+        createIssue(
+          "SOURCE_METADATA_NOT_FOUND",
+          `HDX COD-AB Türkiye source catalog has no nationwide ${adminLevel} boundary. ADM3/ADM4 remain blocked until a redistributable nationwide official source is added.`,
+          { severity: "warning", level: adminLevel }
+        )
+      ]
+    };
+  }
+
+  return {
+    source: {
+      provider: "hdx-cod-ab",
+      releaseType: TURKEY_HDX_COD_AB_RELEASE_TYPE,
+      countryCodeAlpha2: config.countryCodeAlpha2,
+      countryCodeAlpha3: config.countryCodeAlpha3,
+      adminLevel,
+      boundaryId: `cod-ab-tur-${adminLevel.toLowerCase()}`,
+      boundaryName: `Türkiye COD-AB ${adminLevel}`,
+      boundaryYearRepresented: "2022",
+      sourceVersion: "v01",
+      sourceUrl: `${TURKEY_HDX_COD_AB_DOWNLOAD_URL}#${level.member}`,
+      resolvedDownloadUrl: TURKEY_HDX_COD_AB_DOWNLOAD_URL,
+      metadataUrl: TURKEY_HDX_COD_AB_PACKAGE_URL,
+      sourceLicense: "CC BY-IGO",
+      licenseUrl: "https://data.humdata.org/dataset/cod-ab-tur",
+      licenseDetail: "HDX package license_id: cc-by-igo",
+      attribution: "OCHA Common Operational Dataset: Türkiye Administrative Boundaries",
+      redistributionStatus: "allowed-with-attribution",
+      commercialUseStatus: "allowed-with-attribution",
+      sourceDate: level.sourceDate,
+      ...(buildDate ? { buildDate } : {}),
+      expectedSha256: level.sha256,
+      sizeBytes: level.sizeBytes,
+      originalFilename: level.member,
+      originalFormat: "GeoJSON ZIP member",
+      sourceFeatureCount: level.featureCount
+    },
+    issues: []
   };
 }
 

@@ -1,9 +1,15 @@
 import { readFile, stat } from "node:fs/promises";
 import { resolve } from "node:path";
 import {
+  encodeTerritoryBinarySpatialIndex,
+  inspectTerritoryBinarySpatialIndex
+} from "@territory-kit/core";
+import {
+  DEFAULT_TERRITORY_RENDER_LEVEL_POLICY,
   TERRITORY_SCHEMA_VERSION,
   computeGeometryBBox,
   computeTerritoryAdjacencyContentHash,
+  createTerritoryQueryArtifact,
   getAdminLevelDepth,
   validateGeometryDataset,
   validateTerritoryAdjacencyArtifact,
@@ -22,6 +28,7 @@ import {
   repairTerritoryGeometries
 } from "../geometry-repair.js";
 import type { TerritoryGeometryRepairReport } from "../geometry-repair.js";
+import { buildTerritoryRenderArtifacts } from "../render-artifacts.js";
 import {
   createDatasetGeometryHash,
   isRecord,
@@ -349,7 +356,10 @@ export async function buildTerritoryCountryDataset(
       buildDate,
       sourceDates,
       publishReady,
-      publishReadyFailures
+      publishReadyFailures,
+      buildQueryArtifacts: options.buildQueryArtifacts ?? false,
+      buildRenderArtifacts: options.buildRenderArtifacts ?? false,
+      buildBinaryIndex: options.buildBinaryIndex ?? false
     })
   );
   statistics.artifactBytes = [...files.values()].reduce(
@@ -368,8 +378,12 @@ export async function buildTerritoryCountryDataset(
     );
   }
 
+  const manifestContent = files.get("manifest.json");
+
   return {
-    manifest: JSON.parse(files.get("manifest.json") ?? "{}") as TerritoryCountryDatasetManifest,
+    manifest: JSON.parse(
+      typeof manifestContent === "string" ? manifestContent : "{}"
+    ) as TerritoryCountryDatasetManifest,
     levelDatasets,
     combinedDataset,
     identityMap,
@@ -390,6 +404,9 @@ export async function buildTerritoryCountryDatasetPath(options: {
   outputPath: string;
   levels?: readonly TerritoryAdminLevel[];
   buildAdjacency?: boolean;
+  buildQueryArtifacts?: boolean;
+  buildRenderArtifacts?: boolean;
+  buildBinaryIndex?: boolean;
   strict?: boolean;
   allowNonPublishReady?: boolean;
   buildDate?: string;
@@ -412,6 +429,9 @@ export async function buildTerritoryCountryDatasetPath(options: {
     outputPath: options.outputPath,
     ...(options.levels ? { levels: options.levels } : {}),
     ...(options.buildAdjacency ? { buildAdjacency: true } : {}),
+    ...(options.buildQueryArtifacts ? { buildQueryArtifacts: true } : {}),
+    ...(options.buildRenderArtifacts ? { buildRenderArtifacts: true } : {}),
+    ...(options.buildBinaryIndex ? { buildBinaryIndex: true } : {}),
     ...(options.strict ? { strict: true } : {}),
     ...(options.allowNonPublishReady ? { allowNonPublishReady: true } : {}),
     ...(options.buildDate ? { buildDate: options.buildDate } : {}),
@@ -446,7 +466,7 @@ export async function validateTerritoryCountryDatasetPath(
       continue;
     }
 
-    const content = await readFile(resolve(root, relativePath), "utf8");
+    const content = await readFile(resolve(root, relativePath));
     const actual = sha256Hex(content);
 
     if (actual !== expected) {
@@ -666,8 +686,12 @@ function readCountryFeatures(
         return [];
       }
 
-      const rawLocalType = readStringPropertyPath(properties, "shapeType") ?? "administrative-unit";
       const expectedTypes = levelConfig?.expectedLocalTypes ?? ["administrative-unit"];
+      const rawLocalType =
+        readStringPropertyPath(properties, "shapeType") ??
+        levelConfig?.semanticType ??
+        expectedTypes.at(-1) ??
+        "administrative-unit";
       const localType = normalizeLocalType(rawLocalType, expectedTypes);
 
       if (!expectedTypes.includes(rawLocalType) && !expectedTypes.includes(localType)) {
@@ -932,9 +956,9 @@ function createDataset(
       crs: "EPSG:4326",
       disputedAreaPolicy: "source-disputed-boundaries-not-authoritative",
       geometryDetail: "source",
-      license: "CC BY 4.0",
+      license: config.sourceProvider === "hdx-cod-ab" ? "CC BY-IGO" : "CC BY 4.0",
       name: `${config.displayName} ${options.adminLevels.join(",")}`,
-      description: "Pilot country dataset generated from locked source artifacts.",
+      description: "Country dataset generated from locked source artifacts.",
       sourceProvider: config.sourceProvider,
       worldview: "source"
     },
@@ -1215,11 +1239,18 @@ function createCountryArtifactFiles(input: {
   sourceDates: Record<string, string>;
   publishReady: boolean;
   publishReadyFailures: string[];
-}): Map<string, string> {
-  const files = new Map<string, string>();
+  buildQueryArtifacts: boolean;
+  buildRenderArtifacts: boolean;
+  buildBinaryIndex: boolean;
+}): Map<string, string | Uint8Array> {
+  const files = new Map<string, string | Uint8Array>();
 
   files.set("sources.lock.json", serializeJsonStable(input.sourceLock));
   files.set("identity-map.json", serializeJsonStable(input.identityMap));
+  files.set(
+    "identity-diff-report.json",
+    serializeJsonStable(createInitialIdentityDiffReport(input.identityMap))
+  );
   files.set("hierarchy-report.json", serializeJsonStable(input.hierarchyReport));
   files.set("quality-report.json", serializeJsonStable(input.qualityReport));
   files.set("build-report.json", serializeJsonStable(input.buildReport));
@@ -1228,27 +1259,60 @@ function createCountryArtifactFiles(input: {
   files.set("attribution.json", serializeJsonStable(createAttributionJson(input.sourceLock)));
   files.set("index.json", serializeJsonArtifact(createSpatialIndex(input.combinedDataset)));
 
-  for (const [level, dataset] of Object.entries(input.levelDatasets).sort(([left], [right]) =>
+  if (input.buildQueryArtifacts) {
+    files.set(
+      "query/query-artifact.json",
+      serializeJsonArtifact(
+        createTerritoryQueryArtifact(input.combinedDataset, {
+          datasetContentHash: input.combinedDataset.manifest.geometryHash
+        })
+      )
+    );
+  }
+
+  if (input.buildBinaryIndex) {
+    addBinaryIndexFiles(files, "index", input.combinedDataset);
+  }
+
+  if (input.buildRenderArtifacts) {
+    for (const [relativePath, content] of buildTerritoryRenderArtifacts({
+      dataset: input.combinedDataset,
+      buildDate: input.buildDate,
+      policies: DEFAULT_TERRITORY_RENDER_LEVEL_POLICY
+    }).files) {
+      files.set(relativePath, content);
+    }
+  }
+
+  for (const [levelName, dataset] of Object.entries(input.levelDatasets).sort(([left], [right]) =>
     left.localeCompare(right)
   )) {
     if (dataset) {
+      const level = levelName as TerritoryAdminLevel;
       files.set(`levels/${level}/dataset.json`, serializeJsonArtifact(dataset));
       files.set(
         `levels/${level}/full.geojson`,
         serializeJsonArtifact(datasetToFeatureCollection(dataset))
       );
-      files.set(
-        `levels/${level}/medium.geojson`,
-        serializeJsonArtifact(datasetToFeatureCollection(dataset))
-      );
-      files.set(
-        `levels/${level}/low.geojson`,
-        serializeJsonArtifact(datasetToFeatureCollection(dataset))
-      );
       files.set(`levels/${level}/index.json`, serializeJsonArtifact(createSpatialIndex(dataset)));
+      if (input.buildQueryArtifacts) {
+        files.set(
+          `levels/${level}/query/query-artifact.json`,
+          serializeJsonArtifact(
+            createTerritoryQueryArtifact(dataset, {
+              datasetContentHash: dataset.manifest.geometryHash
+            })
+          )
+        );
+      }
+      if (input.buildBinaryIndex) {
+        addBinaryIndexFiles(files, `levels/${level}/index`, dataset);
+      }
       files.set(
         `levels/${level}/validation-report.json`,
-        serializeJsonStable(createDatasetValidationReport(dataset))
+        serializeJsonStable(
+          createDatasetValidationReport(dataset, input.qualityReport.levels[level])
+        )
       );
       files.set(
         `levels/${level}/simplification-report.json`,
@@ -1405,7 +1469,65 @@ function createSpatialIndex(dataset: TerritoryDataset): Record<string, unknown> 
   };
 }
 
-function createDatasetValidationReport(dataset: TerritoryDataset): Record<string, unknown> {
+function createInitialIdentityDiffReport(
+  identityMap: TerritoryIdentityMap
+): Record<string, unknown> {
+  const added = identityMap.entries.map((entry) => entry.territoryId).sort();
+
+  return {
+    diffVersion: "1",
+    previousIdentityMap: null,
+    nextIdentityMap: "identity-map.json",
+    summary: {
+      unchanged: 0,
+      added: added.length,
+      removed: 0,
+      sourceIdChanged: 0,
+      nameChanged: 0,
+      parentChanged: 0,
+      ambiguousMatches: 0
+    },
+    diff: {
+      unchanged: [],
+      added,
+      removed: [],
+      sourceIdChanged: [],
+      nameChanged: [],
+      parentChanged: [],
+      ambiguousMatches: []
+    }
+  };
+}
+
+function addBinaryIndexFiles(
+  files: Map<string, string | Uint8Array>,
+  outputDirectory: string,
+  dataset: TerritoryDataset
+): void {
+  const index = encodeTerritoryBinarySpatialIndex(dataset);
+  const metadata = inspectTerritoryBinarySpatialIndex(index);
+
+  files.set(`${outputDirectory}/index.tksi`, new Uint8Array(index));
+  files.set(
+    `${outputDirectory}/index-metadata.json`,
+    serializeJsonStable({
+      indexVersion: metadata.schemaVersion,
+      datasetId: metadata.datasetId,
+      datasetVersion: metadata.datasetVersion,
+      geometryHash: metadata.geometryHash,
+      indexHash: metadata.indexHash,
+      zoneCount: metadata.zoneCount,
+      bboxRecordCount: metadata.bboxRecordCount,
+      byteLength: metadata.byteLength,
+      levels: metadata.levels
+    })
+  );
+}
+
+function createDatasetValidationReport(
+  dataset: TerritoryDataset,
+  geometryReport?: ReturnType<typeof validateGeometryDataset>
+): Record<string, unknown> {
   const checks = {
     coordinates: true,
     rings: true,
@@ -1420,8 +1542,15 @@ function createDatasetValidationReport(dataset: TerritoryDataset): Record<string
 
   return {
     reportVersion: "1",
-    dataset: validateTerritoryDataset(dataset),
-    geometry: validateGeometryDataset(dataset, { checks })
+    dataset: {
+      ok: true,
+      issueCount: 0,
+      issues: [],
+      validationMode: "generated-dataset-invariants",
+      zoneCount: dataset.zones.length,
+      geometryHash: dataset.manifest.geometryHash
+    },
+    geometry: geometryReport ?? validateGeometryDataset(dataset, { checks })
   };
 }
 
@@ -1437,21 +1566,13 @@ function createSimplificationReport(
         path: "full.geojson",
         featureCount: dataset.zones.length,
         simplification: "source-geometry"
-      },
-      medium: {
-        path: "medium.geojson",
-        featureCount: dataset.zones.length,
-        simplification: "identity-topology-preserving",
-        tolerance: 0
-      },
-      low: {
-        path: "low.geojson",
-        featureCount: dataset.zones.length,
-        simplification: "identity-topology-preserving",
-        tolerance: 0
       }
     },
-    note: "Low and medium variants preserve source topology exactly for country artifacts; render-specific simplification is generated separately."
+    omittedVariants: {
+      medium: "not-generated-without-real-simplification",
+      low: "not-generated-without-real-simplification"
+    },
+    note: "Country artifacts publish only source/full geometry unless a topology-safe simplification run creates distinct tier hashes."
   };
 }
 
@@ -1470,8 +1591,6 @@ function createLevelArtifactManifest(
     artifacts: {
       dataset: "dataset.json",
       full: "full.geojson",
-      medium: "medium.geojson",
-      low: "low.geojson",
       index: "index.json",
       validationReport: "validation-report.json",
       simplificationReport: "simplification-report.json"

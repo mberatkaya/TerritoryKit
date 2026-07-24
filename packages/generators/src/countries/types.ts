@@ -550,7 +550,7 @@ export interface TerritoryCountryBuildResult {
   adjacencyArtifacts: Partial<Record<TerritoryAdminLevel, TerritoryAdjacencyArtifact>>;
   buildReport: TerritoryCountryBuildReport;
   issues: TerritoryCountryBuildIssue[];
-  files: Map<string, string>;
+  files: Map<string, string | Uint8Array>;
   outputPath?: string;
 }
 
@@ -560,6 +560,9 @@ export interface TerritoryCountryBuildOptions {
   levels?: readonly TerritoryAdminLevel[];
   outputPath?: string;
   buildAdjacency?: boolean;
+  buildQueryArtifacts?: boolean;
+  buildRenderArtifacts?: boolean;
+  buildBinaryIndex?: boolean;
   strict?: boolean;
   allowNonPublishReady?: boolean;
   buildDate?: string;

@@ -5,6 +5,11 @@ import type {
   TerritoryProviderLevelCapability,
   TerritorySourceRegistryLike
 } from "./types.js";
+import {
+  HDX_COD_AB_LICENSE,
+  HDX_COD_AB_SOURCE_ADAPTER_ID,
+  HDX_COD_AB_TURKEY_ATTRIBUTION
+} from "./hdx-cod-ab.js";
 import type { TerritoryOfficialOpenDataSourceManifest } from "./open-data-manifest.js";
 import { validateOfficialOpenDataSourceManifest } from "./open-data-manifest.js";
 
@@ -39,6 +44,7 @@ export function inspectTerritorySourceCapabilities(
       createLevelCapability({
         level,
         provider: description.id,
+        ...(options.country ? { country: options.country.toUpperCase() } : {}),
         supported: supportedLevels.has(level),
         ...(manifestValue ? { manifest: manifestValue } : {})
       })
@@ -57,6 +63,7 @@ export function inspectTerritorySourceCapabilities(
 function createLevelCapability(input: {
   level: TerritoryAdminLevel;
   provider: string;
+  country?: string;
   supported: boolean;
   manifest?: TerritoryOfficialOpenDataSourceManifest & {
     countryCode: string;
@@ -89,6 +96,24 @@ function createLevelCapability(input: {
       ...(input.manifest.sourceVersion ? { sourceVersion: input.manifest.sourceVersion } : {}),
       license: input.manifest.license,
       attribution: input.manifest.attribution
+    };
+  }
+
+  if (
+    input.provider === HDX_COD_AB_SOURCE_ADAPTER_ID &&
+    input.country === "TR" &&
+    ["ADM0", "ADM1", "ADM2"].includes(input.level)
+  ) {
+    return {
+      level: input.level,
+      supported: true,
+      available: true,
+      status: "available",
+      reason: "Reviewed HDX/OCHA COD-AB Turkey source mapping is built in.",
+      provider: input.provider,
+      sourceVersion: "v01",
+      license: HDX_COD_AB_LICENSE,
+      attribution: HDX_COD_AB_TURKEY_ATTRIBUTION
     };
   }
 

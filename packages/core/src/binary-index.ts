@@ -1,6 +1,6 @@
 import { TerritoryError, loadTerritoryDataset } from "@territory-kit/dataset";
 import type { TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
-import Flatbush from "flatbush";
+import { Flatbush, type TerritoryFlatbush } from "./flatbush.js";
 import type { TerritoryBounds } from "./types.js";
 
 export const TERRITORY_BINARY_SPATIAL_INDEX_MAGIC = "TKSI";
@@ -114,7 +114,7 @@ interface BinaryHeader {
 }
 
 interface LevelTree {
-  readonly index: Flatbush;
+  readonly index: TerritoryFlatbush;
   readonly records: readonly TerritoryBinarySpatialIndexBBoxRecord[];
   readonly byteLength: number;
 }
@@ -1346,7 +1346,9 @@ function createRecordsByLevel(
   );
 }
 
-function buildFlatbushTree(records: readonly TerritoryBinarySpatialIndexBBoxRecord[]): Flatbush {
+function buildFlatbushTree(
+  records: readonly TerritoryBinarySpatialIndexBBoxRecord[]
+): TerritoryFlatbush {
   const tree = new Flatbush(records.length);
 
   for (const record of records) {
@@ -1360,7 +1362,7 @@ function buildFlatbushTree(records: readonly TerritoryBinarySpatialIndexBBoxReco
 function restoreFlatbushTree(
   treeBytes: Uint8Array,
   level: TerritoryBinarySpatialIndexLevelRecord
-): Flatbush {
+): TerritoryFlatbush {
   try {
     const tree = Flatbush.from(
       treeBytes.buffer.slice(treeBytes.byteOffset, treeBytes.byteOffset + treeBytes.byteLength)

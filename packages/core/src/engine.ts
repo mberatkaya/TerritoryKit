@@ -10,13 +10,13 @@ import type {
   TerritoryDataset,
   TerritoryZone
 } from "@territory-kit/dataset";
-import Flatbush from "flatbush";
 import { normalizeTerritoryBinarySpatialIndex } from "./binary-index.js";
 import type {
   TerritoryBinarySpatialIndex,
   TerritoryBinarySpatialIndexBuffer
 } from "./binary-index.js";
 import { TerritoryZoneNotFoundError } from "./errors.js";
+import { Flatbush } from "./flatbush.js";
 import {
   bboxIntersectsBounds,
   geometryIntersectsGeometry,
