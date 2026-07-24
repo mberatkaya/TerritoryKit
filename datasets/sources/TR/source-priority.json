@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "territorykit-source-priority@1",
+  "country": "TR",
+  "defaultPrecedence": [
+    "official-national-redistributable",
+    "official-local-redistributable",
+    "source-date-desc",
+    "geometry-quality-desc",
+    "open-license-compatible",
+    "provider-id-asc"
+  ],
+  "decisions": [
+    {
+      "levels": ["ADM0", "ADM1", "ADM2"],
+      "selectedSourceId": "cod-ab-tur",
+      "provider": "hdx-cod-ab",
+      "reason": "HDX/OCHA COD-AB provides nationwide Türkiye ADM0-ADM2 GeoJSON resources with stable P-codes, feature counts, license metadata, and downloadable artifacts."
+    },
+    {
+      "levels": ["ADM3", "ADM4"],
+      "selectedSourceId": null,
+      "provider": null,
+      "reason": "Nationwide redistributable official lower-boundary source is not locked; local municipal portals are tracked as candidates but cannot be promoted to nationwide coverage."
+    }
+  ]
+}
