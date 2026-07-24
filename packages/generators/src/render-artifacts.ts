@@ -1,7 +1,8 @@
 import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
+import { createRequire } from "node:module";
 import { basename, dirname, join, resolve } from "node:path";
-import { GeoJSONVT } from "@maplibre/geojson-vt";
+import { GeoJSONVT as GeoJSONVTImport } from "@maplibre/geojson-vt";
 import { fromGeojsonVt } from "@maplibre/vt-pbf";
 import {
   createTerritoryQueryArtifact,
@@ -17,6 +18,11 @@ import type {
   TerritoryRenderLevelPolicy
 } from "@territory-kit/dataset";
 import { createDatasetGeometryHash, serializeJsonStable } from "./sources/utils.js";
+
+type GeoJSONVTConstructor = typeof GeoJSONVTImport;
+type GeoJSONVTInstance = InstanceType<GeoJSONVTConstructor>;
+
+const GeoJSONVT = resolveGeoJSONVTConstructor(GeoJSONVTImport);
 
 export interface TerritoryRenderBuildOptions {
   dataset: TerritoryDataset;
@@ -61,34 +67,39 @@ export function buildTerritoryRenderArtifacts(
   const datasetContentHash = createDatasetGeometryHash(options.dataset);
   const queryArtifact = createTerritoryQueryArtifact(options.dataset, { datasetContentHash });
   const features = createTerritoryRenderFeatureCollection(options.dataset);
+  const policies = filterPoliciesForDataset(options.policies, options.dataset);
   const manifest = createTerritoryRenderArtifactManifest({
     dataset: options.dataset,
     datasetContentHash,
     format,
     generatedAt: buildDate,
     ...(format === "mvt" ? { tileTemplate: "tiles/{z}/{x}/{y}.mvt" } : {}),
-    ...(options.policies ? { policies: options.policies } : {})
+    ...(policies ? { policies } : {})
   });
   const files = new Map<string, string | Uint8Array>([
-    ["query/query-artifact.json", serializeJsonStable(queryArtifact)],
+    ["query/query-artifact.json", serializeJsonArtifact(queryArtifact)],
     ["render/manifest.json", serializeJsonStable(manifest)]
   ]);
 
   if (format === "geojson") {
-    files.set("render/features.geojson", serializeJsonStable(features));
+    files.set("render/features.geojson", serializeJsonArtifact(features));
   } else {
     for (const tile of buildMvtTiles({
       features,
       layerId,
       ...(options.minZoom !== undefined ? { minZoom: options.minZoom } : {}),
       ...(options.maxZoom !== undefined ? { maxZoom: options.maxZoom } : {}),
-      ...(options.policies ? { policies: options.policies } : {})
+      ...(policies ? { policies } : {})
     })) {
       files.set(`render/tiles/${tile.z}/${tile.x}/${tile.y}.mvt`, tile.bytes);
     }
   }
 
   return { manifest, queryArtifact, files };
+}
+
+function serializeJsonArtifact(input: unknown): string {
+  return `${JSON.stringify(input, null, 2)}\n`;
 }
 
 export async function buildTerritoryRenderArtifactPath(
@@ -208,29 +219,36 @@ function buildMvtTiles(input: {
     buffer: 64
   });
   const tiles = [];
+  const tileCoordinates = collectCandidateTileCoordinates(input.features, minZoom, maxZoom);
 
-  for (let z = minZoom; z <= maxZoom; z += 1) {
-    const tileCount = 2 ** z;
+  for (const coordinates of tileCoordinates) {
+    const tile = tileIndex.getTile(coordinates.z, coordinates.x, coordinates.y);
 
-    for (let x = 0; x < tileCount; x += 1) {
-      for (let y = 0; y < tileCount; y += 1) {
-        const tile = tileIndex.getTile(z, x, y);
-
-        if (!tile || tile.features.length === 0) {
-          continue;
-        }
-
-        tiles.push({
-          z,
-          x,
-          y,
-          bytes: fromGeojsonVt({ [input.layerId]: tile }, { version: 2, extent: 4096 })
-        });
-      }
+    if (!tile || tile.features.length === 0) {
+      continue;
     }
+
+    tiles.push({
+      z: coordinates.z,
+      x: coordinates.x,
+      y: coordinates.y,
+      bytes: fromGeojsonVt({ [input.layerId]: tile }, { version: 2, extent: 4096 })
+    });
   }
 
   return tiles.sort((left, right) => left.z - right.z || left.x - right.x || left.y - right.y);
+}
+
+function filterPoliciesForDataset(
+  policies: readonly TerritoryRenderLevelPolicy[] | undefined,
+  dataset: TerritoryDataset
+): readonly TerritoryRenderLevelPolicy[] | undefined {
+  if (!policies) {
+    return undefined;
+  }
+
+  const levels = new Set(dataset.zones.map((zone) => `ADM${zone.level}`));
+  return policies.filter((policy) => levels.has(policy.adminLevel));
 }
 
 function inferMaxZoom(policies: readonly TerritoryRenderLevelPolicy[] | undefined): number {
@@ -238,7 +256,166 @@ function inferMaxZoom(policies: readonly TerritoryRenderLevelPolicy[] | undefine
     return 0;
   }
 
-  return Math.min(4, Math.max(...policies.map((policy) => policy.maxZoom)));
+  return Math.max(...policies.map((policy) => policy.maxZoom));
+}
+
+function readIndexedTileCoordinates(
+  tileIndex: GeoJSONVTInstance
+): Array<{ z: number; x: number; y: number }> {
+  const value =
+    (tileIndex as unknown as { tileCoords?: unknown }).tileCoords ??
+    (tileIndex as unknown as { tileIndex?: { tileCoords?: unknown } }).tileIndex?.tileCoords;
+
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.flatMap((item): Array<{ z: number; x: number; y: number }> => {
+    if (
+      item &&
+      typeof item === "object" &&
+      typeof (item as { z?: unknown }).z === "number" &&
+      typeof (item as { x?: unknown }).x === "number" &&
+      typeof (item as { y?: unknown }).y === "number"
+    ) {
+      const { z, x, y } = item as { z: number; x: number; y: number };
+      return [{ z, x, y }];
+    }
+
+    return [];
+  });
+}
+
+function resolveGeoJSONVTConstructor(candidate: unknown): GeoJSONVTConstructor {
+  if (typeof candidate === "function") {
+    return candidate as GeoJSONVTConstructor;
+  }
+
+  if (
+    candidate &&
+    typeof candidate === "object" &&
+    typeof (candidate as { readonly GeoJSONVT?: unknown }).GeoJSONVT === "function"
+  ) {
+    return (candidate as { readonly GeoJSONVT: GeoJSONVTConstructor }).GeoJSONVT;
+  }
+
+  const nodeRequire = createRequire(import.meta.url);
+  const entryPath = nodeRequire.resolve("@maplibre/geojson-vt");
+  const modulePath = entryPath.endsWith(".js") ? `${entryPath.slice(0, -3)}.mjs` : entryPath;
+  const loaded = nodeRequire(modulePath) as unknown;
+
+  if (
+    loaded &&
+    typeof loaded === "object" &&
+    typeof (loaded as { readonly GeoJSONVT?: unknown }).GeoJSONVT === "function"
+  ) {
+    return (loaded as { readonly GeoJSONVT: GeoJSONVTConstructor }).GeoJSONVT;
+  }
+
+  throw new TypeError("Unable to resolve the GeoJSONVT constructor.");
+}
+
+function collectCandidateTileCoordinates(
+  features: ReturnType<typeof createTerritoryRenderFeatureCollection>,
+  minZoom: number,
+  maxZoom: number
+): Array<{ z: number; x: number; y: number }> {
+  const coordinates = new Map<string, { z: number; x: number; y: number }>();
+
+  for (const indexed of readIndexedTileCoordinates(
+    new GeoJSONVT(features, { maxZoom, indexMaxZoom: maxZoom })
+  )) {
+    if (indexed.z >= minZoom && indexed.z <= maxZoom) {
+      coordinates.set(`${indexed.z}/${indexed.x}/${indexed.y}`, indexed);
+    }
+  }
+
+  for (const feature of features.features) {
+    const bbox = geometryBbox(feature.geometry);
+
+    for (let z = minZoom; z <= maxZoom; z += 1) {
+      const west = lonLatToTile(bbox[0], bbox[3], z);
+      const east = lonLatToTile(bbox[2], bbox[1], z);
+      const minX = Math.min(west.x, east.x);
+      const maxX = Math.max(west.x, east.x);
+      const minY = Math.min(west.y, east.y);
+      const maxY = Math.max(west.y, east.y);
+
+      for (let x = minX; x <= maxX; x += 1) {
+        for (let y = minY; y <= maxY; y += 1) {
+          coordinates.set(`${z}/${x}/${y}`, { z, x, y });
+        }
+      }
+    }
+  }
+
+  return [...coordinates.values()].sort(
+    (left, right) => left.z - right.z || left.x - right.x || left.y - right.y
+  );
+}
+
+function lonLatToTile(lon: number, lat: number, z: number): { x: number; y: number } {
+  const n = 2 ** z;
+  const clampedLat = Math.max(-85.05112878, Math.min(85.05112878, lat));
+  const latRad = (clampedLat * Math.PI) / 180;
+  const x = Math.floor(((lon + 180) / 360) * n);
+  const y = Math.floor(((1 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2) * n);
+
+  return {
+    x: Math.max(0, Math.min(n - 1, x)),
+    y: Math.max(0, Math.min(n - 1, y))
+  };
+}
+
+function geometryBbox(
+  geometry: ReturnType<
+    typeof createTerritoryRenderFeatureCollection
+  >["features"][number]["geometry"]
+): [number, number, number, number] {
+  let west = Infinity;
+  let south = Infinity;
+  let east = -Infinity;
+  let north = -Infinity;
+  const extend = (coordinate: readonly number[]) => {
+    const lng = coordinate[0];
+    const lat = coordinate[1];
+
+    if (lng === undefined || lat === undefined) {
+      return;
+    }
+
+    west = Math.min(west, lng);
+    south = Math.min(south, lat);
+    east = Math.max(east, lng);
+    north = Math.max(north, lat);
+  };
+
+  if (geometry.type === "Polygon") {
+    for (const ring of geometry.coordinates) {
+      for (const coordinate of ring) {
+        extend(coordinate);
+      }
+    }
+  } else {
+    for (const polygon of geometry.coordinates) {
+      for (const ring of polygon) {
+        for (const coordinate of ring) {
+          extend(coordinate);
+        }
+      }
+    }
+  }
+
+  if (
+    !Number.isFinite(west) ||
+    !Number.isFinite(south) ||
+    !Number.isFinite(east) ||
+    !Number.isFinite(north)
+  ) {
+    return [0, 0, 0, 0];
+  }
+
+  return [west, south, east, north];
 }
 
 async function writeRenderFilesAtomically(
