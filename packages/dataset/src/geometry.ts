@@ -2,6 +2,13 @@ import type { TerritoryBBox, TerritoryGeometry, LngLat } from "./types.js";
 
 export type TerritoryPolygonCoordinates = LngLat[][][];
 
+interface RingSegment {
+  index: number;
+  start: LngLat;
+  end: LngLat;
+  bbox: TerritoryBBox;
+}
+
 export function geometryToPolygons(geometry: TerritoryGeometry): TerritoryPolygonCoordinates {
   if (geometry.type === "Polygon") {
     return [geometry.coordinates as LngLat[][]];
@@ -15,16 +22,29 @@ export function computeGeometryBBox(geometry: TerritoryGeometry): TerritoryBBox 
   let south = Number.POSITIVE_INFINITY;
   let east = Number.NEGATIVE_INFINITY;
   let north = Number.NEGATIVE_INFINITY;
+  let hasCoordinate = false;
 
   for (const polygon of geometryToPolygons(geometry)) {
     for (const ring of polygon) {
-      for (const [longitude, latitude] of ring) {
+      for (const coordinate of ring) {
+        const longitude = coordinate[0];
+        const latitude = coordinate[1];
+
+        if (!Number.isFinite(longitude) || !Number.isFinite(latitude)) {
+          continue;
+        }
+
+        hasCoordinate = true;
         west = Math.min(west, longitude);
         south = Math.min(south, latitude);
         east = Math.max(east, longitude);
         north = Math.max(north, latitude);
       }
     }
+  }
+
+  if (!hasCoordinate) {
+    return [0, 0, 0, 0];
   }
 
   return [west, south, east, north];
@@ -58,35 +78,85 @@ export function computeGeometryCenter(geometry: TerritoryGeometry): LngLat {
 }
 
 export function hasRingSelfIntersection(ring: LngLat[]): boolean {
+  const segments = ringSegments(ring).sort(
+    (left, right) => left.bbox[0] - right.bbox[0] || left.index - right.index
+  );
   const lastSegmentIndex = ring.length - 2;
 
-  for (let a = 0; a <= lastSegmentIndex; a += 1) {
-    const a1 = ring[a];
-    const a2 = ring[a + 1];
+  for (const [leftSortedIndex, left] of segments.entries()) {
+    for (
+      let rightSortedIndex = leftSortedIndex + 1;
+      rightSortedIndex < segments.length;
+      rightSortedIndex += 1
+    ) {
+      const right = segments[rightSortedIndex];
 
-    if (!a1 || !a2) {
-      continue;
-    }
-
-    for (let b = a + 1; b <= lastSegmentIndex; b += 1) {
-      if (Math.abs(a - b) <= 1) {
+      if (!right) {
         continue;
       }
 
-      if (a === 0 && b === lastSegmentIndex) {
+      if (right.bbox[0] > left.bbox[2]) {
+        break;
+      }
+
+      if (areAdjacentRingSegments(left.index, right.index, lastSegmentIndex)) {
         continue;
       }
 
-      const b1 = ring[b];
-      const b2 = ring[b + 1];
+      if (!bboxesIntersect(left.bbox, right.bbox)) {
+        continue;
+      }
 
-      if (b1 && b2 && segmentsIntersect(a1, a2, b1, b2)) {
+      if (segmentsIntersect(left.start, left.end, right.start, right.end)) {
         return true;
       }
     }
   }
 
   return false;
+}
+
+function ringSegments(ring: LngLat[]): RingSegment[] {
+  const segments: RingSegment[] = [];
+
+  for (let index = 0; index < ring.length - 1; index += 1) {
+    const start = ring[index];
+    const end = ring[index + 1];
+
+    if (!start || !end || pointsEqual(start, end)) {
+      continue;
+    }
+
+    segments.push({
+      index,
+      start,
+      end,
+      bbox: [
+        Math.min(start[0], end[0]),
+        Math.min(start[1], end[1]),
+        Math.max(start[0], end[0]),
+        Math.max(start[1], end[1])
+      ]
+    });
+  }
+
+  return segments;
+}
+
+function areAdjacentRingSegments(left: number, right: number, lastSegmentIndex: number): boolean {
+  return (
+    Math.abs(left - right) <= 1 ||
+    (left === 0 && right === lastSegmentIndex) ||
+    (right === 0 && left === lastSegmentIndex)
+  );
+}
+
+function bboxesIntersect(left: TerritoryBBox, right: TerritoryBBox): boolean {
+  return !(left[2] < right[0] || right[2] < left[0] || left[3] < right[1] || right[3] < left[1]);
+}
+
+function pointsEqual(left: LngLat, right: LngLat): boolean {
+  return left[0] === right[0] && left[1] === right[1];
 }
 
 function computeRingCentroid(ring: LngLat[]): LngLat {

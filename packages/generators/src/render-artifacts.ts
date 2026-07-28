@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { basename, dirname, join, resolve } from "node:path";
+import { performance } from "node:perf_hooks";
 import { GeoJSONVT as GeoJSONVTImport } from "@maplibre/geojson-vt";
 import { fromGeojsonVt } from "@maplibre/vt-pbf";
 import {
@@ -12,6 +13,7 @@ import {
   validateTerritoryQueryRenderCompatibility
 } from "@territory-kit/dataset";
 import type {
+  TerritoryAdminLevel,
   TerritoryDataset,
   TerritoryQueryArtifact,
   TerritoryRenderArtifactManifest,
@@ -29,6 +31,7 @@ export interface TerritoryRenderBuildOptions {
   format?: "mvt" | "geojson";
   layerId?: string;
   policies?: readonly TerritoryRenderLevelPolicy[];
+  mvtPolicy?: TerritoryMvtPolicyLimits;
   minZoom?: number;
   maxZoom?: number;
   buildDate?: string;
@@ -38,6 +41,7 @@ export interface TerritoryRenderBuildResult {
   manifest: TerritoryRenderArtifactManifest;
   queryArtifact: TerritoryQueryArtifact;
   files: Map<string, string | Uint8Array>;
+  mvtReport?: TerritoryMvtPolicyReport;
 }
 
 export interface TerritoryRenderPathBuildOptions {
@@ -48,6 +52,7 @@ export interface TerritoryRenderPathBuildOptions {
   minZoom?: number;
   maxZoom?: number;
   policies?: readonly TerritoryRenderLevelPolicy[];
+  mvtPolicy?: TerritoryMvtPolicyLimits;
   buildDate?: string;
   force?: boolean;
 }
@@ -57,6 +62,64 @@ export interface TerritoryRenderValidateResult {
   manifest?: TerritoryRenderArtifactManifest;
   issues: Array<{ code: string; message: string; severity: "error" | "warning" }>;
 }
+
+export interface TerritoryMvtPolicyLimits {
+  maximumTileBytes?: number;
+  maximumFeaturesPerTile?: number;
+  maximumEmptyTileRatio?: number;
+}
+
+export interface TerritoryMvtLevelReport {
+  level: TerritoryAdminLevel | "ALL";
+  minZoom: number;
+  maxZoom: number;
+  candidateTileCount: number;
+  generatedTileCount: number;
+  emptyTileCount: number;
+  skippedTileCount: number;
+  duplicateTileCount: number;
+  totalBytes: number;
+  maximumTileBytes: number;
+  averageTileBytes: number;
+  maximumFeaturesPerTile: number;
+  corruptTileCount: number;
+  durationMs: number;
+  missingZooms: number[];
+}
+
+export interface TerritoryMvtPolicyReport {
+  reportVersion: "1";
+  ok: boolean;
+  generatedAt: string;
+  policy: Required<TerritoryMvtPolicyLimits>;
+  levels: TerritoryMvtLevelReport[];
+  totals: {
+    candidateTileCount: number;
+    generatedTileCount: number;
+    emptyTileCount: number;
+    skippedTileCount: number;
+    totalBytes: number;
+    maximumTileBytes: number;
+    maximumFeaturesPerTile: number;
+    corruptTileCount: number;
+    duplicateTileCount: number;
+  };
+  issues: Array<{
+    code: string;
+    severity: "error" | "warning";
+    message: string;
+    level?: TerritoryAdminLevel | "ALL";
+    z?: number;
+    x?: number;
+    y?: number;
+  }>;
+}
+
+const DEFAULT_MVT_POLICY_LIMITS: Required<TerritoryMvtPolicyLimits> = {
+  maximumTileBytes: 500_000,
+  maximumFeaturesPerTile: 5_000,
+  maximumEmptyTileRatio: 0.5
+};
 
 export function buildTerritoryRenderArtifacts(
   options: TerritoryRenderBuildOptions
@@ -80,22 +143,30 @@ export function buildTerritoryRenderArtifacts(
     ["query/query-artifact.json", serializeJsonArtifact(queryArtifact)],
     ["render/manifest.json", serializeJsonStable(manifest)]
   ]);
+  let mvtReport: TerritoryMvtPolicyReport | undefined;
 
   if (format === "geojson") {
     files.set("render/features.geojson", serializeJsonArtifact(features));
   } else {
-    for (const tile of buildMvtTiles({
+    const mvt = buildMvtTiles({
       features,
       layerId,
       ...(options.minZoom !== undefined ? { minZoom: options.minZoom } : {}),
       ...(options.maxZoom !== undefined ? { maxZoom: options.maxZoom } : {}),
-      ...(policies ? { policies } : {})
-    })) {
+      ...(policies ? { policies } : {}),
+      ...(options.mvtPolicy ? { mvtPolicy: options.mvtPolicy } : {}),
+      buildDate
+    });
+    mvtReport = mvt.report;
+
+    for (const tile of mvt.tiles) {
       files.set(`render/tiles/${tile.z}/${tile.x}/${tile.y}.mvt`, tile.bytes);
     }
+
+    files.set("render/mvt-policy-report.json", serializeJsonStable(mvt.report));
   }
 
-  return { manifest, queryArtifact, files };
+  return { manifest, queryArtifact, files, ...(mvtReport ? { mvtReport } : {}) };
 }
 
 function serializeJsonArtifact(input: unknown): string {
@@ -115,6 +186,7 @@ export async function buildTerritoryRenderArtifactPath(
     ...(options.minZoom !== undefined ? { minZoom: options.minZoom } : {}),
     ...(options.maxZoom !== undefined ? { maxZoom: options.maxZoom } : {}),
     ...(options.policies ? { policies: options.policies } : {}),
+    ...(options.mvtPolicy ? { mvtPolicy: options.mvtPolicy } : {}),
     ...(options.buildDate ? { buildDate: options.buildDate } : {})
   });
 
@@ -208,35 +280,215 @@ function buildMvtTiles(input: {
   minZoom?: number;
   maxZoom?: number;
   policies?: readonly TerritoryRenderLevelPolicy[];
-}): Array<{ z: number; x: number; y: number; bytes: Uint8Array }> {
-  const minZoom = input.minZoom ?? 0;
-  const maxZoom = input.maxZoom ?? inferMaxZoom(input.policies);
-  const tileIndex = new GeoJSONVT(input.features, {
-    maxZoom,
-    indexMaxZoom: maxZoom,
-    tolerance: 3,
-    extent: 4096,
-    buffer: 64
+  mvtPolicy?: TerritoryMvtPolicyLimits;
+  buildDate: string;
+}): {
+  tiles: Array<{ z: number; x: number; y: number; bytes: Uint8Array }>;
+  report: TerritoryMvtPolicyReport;
+} {
+  const policy = normalizeMvtPolicyLimits(input.mvtPolicy);
+  const featureGroups = createMvtFeatureGroups(input.features, {
+    ...(input.minZoom !== undefined ? { minZoom: input.minZoom } : {}),
+    ...(input.maxZoom !== undefined ? { maxZoom: input.maxZoom } : {}),
+    ...(input.policies ? { policies: input.policies } : {})
   });
-  const tiles = [];
-  const tileCoordinates = collectCandidateTileCoordinates(input.features, minZoom, maxZoom);
+  const tiles = new Map<string, { z: number; x: number; y: number; bytes: Uint8Array }>();
+  const levelReports: TerritoryMvtLevelReport[] = [];
+  const issues: TerritoryMvtPolicyReport["issues"] = [];
 
-  for (const coordinates of tileCoordinates) {
-    const tile = tileIndex.getTile(coordinates.z, coordinates.x, coordinates.y);
+  for (const group of featureGroups) {
+    const startedAt = performance.now();
+    const tileIndex = new GeoJSONVT(group.features, {
+      maxZoom: group.maxZoom,
+      indexMaxZoom: group.maxZoom,
+      tolerance: 3,
+      extent: 4096,
+      buffer: 64
+    });
+    const candidates = collectCandidateTileCoordinates(
+      group.features,
+      group.minZoom,
+      group.maxZoom,
+      tileIndex
+    );
+    let generatedTileCount = 0;
+    let emptyTileCount = 0;
+    let skippedTileCount = 0;
+    let totalBytes = 0;
+    let maximumTileBytes = 0;
+    let maximumFeaturesPerTile = 0;
+    let corruptTileCount = 0;
+    const generatedZooms = new Set<number>();
 
-    if (!tile || tile.features.length === 0) {
-      continue;
+    for (const coordinates of candidates.coordinates) {
+      const tile = tileIndex.getTile(coordinates.z, coordinates.x, coordinates.y);
+
+      if (!tile || tile.features.length === 0) {
+        emptyTileCount += 1;
+        continue;
+      }
+
+      const bytes = fromGeojsonVt({ [input.layerId]: tile }, { version: 2, extent: 4096 });
+      const featureCount = tile.features.length;
+      const tileKey = `${coordinates.z}/${coordinates.x}/${coordinates.y}`;
+      maximumTileBytes = Math.max(maximumTileBytes, bytes.byteLength);
+      maximumFeaturesPerTile = Math.max(maximumFeaturesPerTile, featureCount);
+
+      if (bytes.byteLength === 0) {
+        corruptTileCount += 1;
+        issues.push({
+          code: "MVT_TILE_CORRUPT",
+          severity: "error",
+          message: `Encoded MVT tile ${tileKey} is empty.`,
+          level: group.level,
+          z: coordinates.z,
+          x: coordinates.x,
+          y: coordinates.y
+        });
+        continue;
+      }
+
+      if (bytes.byteLength > policy.maximumTileBytes) {
+        skippedTileCount += 1;
+        issues.push({
+          code: "MVT_TILE_BYTES_EXCEEDED",
+          severity: "error",
+          message: `MVT tile ${tileKey} is ${bytes.byteLength} bytes, above ${policy.maximumTileBytes}.`,
+          level: group.level,
+          z: coordinates.z,
+          x: coordinates.x,
+          y: coordinates.y
+        });
+        continue;
+      }
+
+      if (featureCount > policy.maximumFeaturesPerTile) {
+        skippedTileCount += 1;
+        issues.push({
+          code: "MVT_TILE_FEATURES_EXCEEDED",
+          severity: "error",
+          message: `MVT tile ${tileKey} contains ${featureCount} features, above ${policy.maximumFeaturesPerTile}.`,
+          level: group.level,
+          z: coordinates.z,
+          x: coordinates.x,
+          y: coordinates.y
+        });
+        continue;
+      }
+
+      if (tiles.has(tileKey)) {
+        skippedTileCount += 1;
+        issues.push({
+          code: "MVT_TILE_DUPLICATE",
+          severity: "error",
+          message: `MVT tile ${tileKey} was generated more than once.`,
+          level: group.level,
+          z: coordinates.z,
+          x: coordinates.x,
+          y: coordinates.y
+        });
+        continue;
+      }
+
+      tiles.set(tileKey, {
+        z: coordinates.z,
+        x: coordinates.x,
+        y: coordinates.y,
+        bytes
+      });
+      generatedTileCount += 1;
+      totalBytes += bytes.byteLength;
+      generatedZooms.add(coordinates.z);
     }
 
-    tiles.push({
-      z: coordinates.z,
-      x: coordinates.x,
-      y: coordinates.y,
-      bytes: fromGeojsonVt({ [input.layerId]: tile }, { version: 2, extent: 4096 })
+    const missingZooms = [];
+
+    for (let z = group.minZoom; z <= group.maxZoom; z += 1) {
+      if (!generatedZooms.has(z)) {
+        missingZooms.push(z);
+      }
+    }
+
+    if (missingZooms.length > 0) {
+      issues.push({
+        code: "MVT_ZOOM_MISSING",
+        severity: "error",
+        message: `${group.level} did not generate tiles for zoom(s) ${missingZooms.join(", ")}.`,
+        level: group.level
+      });
+    }
+
+    const emptyTileRatio =
+      candidates.coordinates.length === 0 ? 0 : emptyTileCount / candidates.coordinates.length;
+
+    if (emptyTileRatio > policy.maximumEmptyTileRatio) {
+      issues.push({
+        code: "MVT_EMPTY_TILE_RATIO_EXCEEDED",
+        severity: "warning",
+        message: `${group.level} empty tile ratio ${roundRatio(emptyTileRatio)} exceeds ${policy.maximumEmptyTileRatio}.`,
+        level: group.level
+      });
+    }
+
+    levelReports.push({
+      level: group.level,
+      minZoom: group.minZoom,
+      maxZoom: group.maxZoom,
+      candidateTileCount: candidates.coordinates.length,
+      generatedTileCount,
+      emptyTileCount,
+      skippedTileCount,
+      duplicateTileCount: candidates.duplicateTileCount,
+      totalBytes,
+      maximumTileBytes,
+      averageTileBytes: generatedTileCount === 0 ? 0 : Math.round(totalBytes / generatedTileCount),
+      maximumFeaturesPerTile,
+      corruptTileCount,
+      durationMs: Math.round(performance.now() - startedAt),
+      missingZooms
     });
   }
 
-  return tiles.sort((left, right) => left.z - right.z || left.x - right.x || left.y - right.y);
+  const sortedTiles = [...tiles.values()].sort(
+    (left, right) => left.z - right.z || left.x - right.x || left.y - right.y
+  );
+  const totals = {
+    candidateTileCount: levelReports.reduce((sum, report) => sum + report.candidateTileCount, 0),
+    generatedTileCount: levelReports.reduce((sum, report) => sum + report.generatedTileCount, 0),
+    emptyTileCount: levelReports.reduce((sum, report) => sum + report.emptyTileCount, 0),
+    skippedTileCount: levelReports.reduce((sum, report) => sum + report.skippedTileCount, 0),
+    totalBytes: levelReports.reduce((sum, report) => sum + report.totalBytes, 0),
+    maximumTileBytes: levelReports.reduce(
+      (maximum, report) => Math.max(maximum, report.maximumTileBytes),
+      0
+    ),
+    maximumFeaturesPerTile: levelReports.reduce(
+      (maximum, report) => Math.max(maximum, report.maximumFeaturesPerTile),
+      0
+    ),
+    corruptTileCount: levelReports.reduce((sum, report) => sum + report.corruptTileCount, 0),
+    duplicateTileCount: levelReports.reduce((sum, report) => sum + report.duplicateTileCount, 0)
+  };
+
+  return {
+    tiles: sortedTiles,
+    report: {
+      reportVersion: "1",
+      ok: issues.every((issue) => issue.severity !== "error"),
+      generatedAt: input.buildDate,
+      policy,
+      levels: levelReports.sort(
+        (left, right) => left.minZoom - right.minZoom || left.level.localeCompare(right.level)
+      ),
+      totals,
+      issues: issues.sort(
+        (left, right) =>
+          (left.level ?? "").localeCompare(right.level ?? "") ||
+          (left.z ?? -1) - (right.z ?? -1) ||
+          left.code.localeCompare(right.code)
+      )
+    }
+  };
 }
 
 function filterPoliciesForDataset(
@@ -257,6 +509,77 @@ function inferMaxZoom(policies: readonly TerritoryRenderLevelPolicy[] | undefine
   }
 
   return Math.max(...policies.map((policy) => policy.maxZoom));
+}
+
+function normalizeMvtPolicyLimits(
+  input: TerritoryMvtPolicyLimits | undefined
+): Required<TerritoryMvtPolicyLimits> {
+  return {
+    maximumTileBytes: readPositiveInteger(
+      input?.maximumTileBytes,
+      DEFAULT_MVT_POLICY_LIMITS.maximumTileBytes
+    ),
+    maximumFeaturesPerTile: readPositiveInteger(
+      input?.maximumFeaturesPerTile,
+      DEFAULT_MVT_POLICY_LIMITS.maximumFeaturesPerTile
+    ),
+    maximumEmptyTileRatio: readRatio(
+      input?.maximumEmptyTileRatio,
+      DEFAULT_MVT_POLICY_LIMITS.maximumEmptyTileRatio
+    )
+  };
+}
+
+function createMvtFeatureGroups(
+  features: ReturnType<typeof createTerritoryRenderFeatureCollection>,
+  options: {
+    minZoom?: number;
+    maxZoom?: number;
+    policies?: readonly TerritoryRenderLevelPolicy[];
+  }
+): Array<{
+  level: TerritoryAdminLevel | "ALL";
+  minZoom: number;
+  maxZoom: number;
+  features: ReturnType<typeof createTerritoryRenderFeatureCollection>;
+}> {
+  const minZoomOverride = options.minZoom;
+  const maxZoomOverride = options.maxZoom;
+
+  if (!options.policies || options.policies.length === 0) {
+    const minZoom = minZoomOverride ?? 0;
+    const maxZoom = maxZoomOverride ?? inferMaxZoom(options.policies);
+
+    if (features.features.length === 0 || minZoom > maxZoom) {
+      return [];
+    }
+
+    return [{ level: "ALL", minZoom, maxZoom, features }];
+  }
+
+  return options.policies.flatMap((policy) => {
+    const minZoom = Math.max(policy.minZoom, minZoomOverride ?? policy.minZoom);
+    const maxZoom = Math.min(policy.maxZoom, maxZoomOverride ?? policy.maxZoom);
+    const levelFeatures = {
+      type: "FeatureCollection" as const,
+      features: features.features.filter(
+        (feature) => feature.properties?.adminLevel === policy.adminLevel
+      )
+    };
+
+    if (levelFeatures.features.length === 0 || minZoom > maxZoom) {
+      return [];
+    }
+
+    return [
+      {
+        level: policy.adminLevel,
+        minZoom,
+        maxZoom,
+        features: levelFeatures
+      }
+    ];
+  });
 }
 
 function readIndexedTileCoordinates(
@@ -318,15 +641,28 @@ function resolveGeoJSONVTConstructor(candidate: unknown): GeoJSONVTConstructor {
 function collectCandidateTileCoordinates(
   features: ReturnType<typeof createTerritoryRenderFeatureCollection>,
   minZoom: number,
-  maxZoom: number
-): Array<{ z: number; x: number; y: number }> {
+  maxZoom: number,
+  tileIndex: GeoJSONVTInstance
+): {
+  coordinates: Array<{ z: number; x: number; y: number }>;
+  duplicateTileCount: number;
+} {
   const coordinates = new Map<string, { z: number; x: number; y: number }>();
+  let duplicateTileCount = 0;
+  const addCoordinate = (coordinate: { z: number; x: number; y: number }) => {
+    const key = `${coordinate.z}/${coordinate.x}/${coordinate.y}`;
 
-  for (const indexed of readIndexedTileCoordinates(
-    new GeoJSONVT(features, { maxZoom, indexMaxZoom: maxZoom })
-  )) {
+    if (coordinates.has(key)) {
+      duplicateTileCount += 1;
+      return;
+    }
+
+    coordinates.set(key, coordinate);
+  };
+
+  for (const indexed of readIndexedTileCoordinates(tileIndex)) {
     if (indexed.z >= minZoom && indexed.z <= maxZoom) {
-      coordinates.set(`${indexed.z}/${indexed.x}/${indexed.y}`, indexed);
+      addCoordinate(indexed);
     }
   }
 
@@ -343,15 +679,18 @@ function collectCandidateTileCoordinates(
 
       for (let x = minX; x <= maxX; x += 1) {
         for (let y = minY; y <= maxY; y += 1) {
-          coordinates.set(`${z}/${x}/${y}`, { z, x, y });
+          addCoordinate({ z, x, y });
         }
       }
     }
   }
 
-  return [...coordinates.values()].sort(
-    (left, right) => left.z - right.z || left.x - right.x || left.y - right.y
-  );
+  return {
+    coordinates: [...coordinates.values()].sort(
+      (left, right) => left.z - right.z || left.x - right.x || left.y - right.y
+    ),
+    duplicateTileCount
+  };
 }
 
 function lonLatToTile(lon: number, lat: number, z: number): { x: number; y: number } {
@@ -416,6 +755,20 @@ function geometryBbox(
   }
 
   return [west, south, east, north];
+}
+
+function readPositiveInteger(input: number | undefined, fallback: number): number {
+  return Number.isInteger(input) && input !== undefined && input > 0 ? input : fallback;
+}
+
+function readRatio(input: number | undefined, fallback: number): number {
+  return Number.isFinite(input) && input !== undefined && input >= 0 && input <= 1
+    ? input
+    : fallback;
+}
+
+function roundRatio(value: number): number {
+  return Math.round(value * 1000) / 1000;
 }
 
 async function writeRenderFilesAtomically(
