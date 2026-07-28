@@ -303,7 +303,7 @@ export async function buildTerritoryCountryDataset(
           issues
         })
       )
-    : {};
+    : { artifacts: {}, reports: {} };
   const publishReadyFailures = evaluatePublishReadyFailures({
     config,
     issues,
@@ -330,7 +330,8 @@ export async function buildTerritoryCountryDataset(
     allBuilt,
     hierarchyReport,
     qualityReport,
-    adjacencyArtifacts,
+    adjacencyArtifacts: adjacencyArtifacts.artifacts,
+    adjacencyReports: adjacencyArtifacts.reports,
     repairReportsByLevel,
     sourceBytesByLevel,
     publishReady
@@ -350,7 +351,8 @@ export async function buildTerritoryCountryDataset(
       identityMap,
       hierarchyReport,
       qualityReport,
-      adjacencyArtifacts,
+      adjacencyArtifacts: adjacencyArtifacts.artifacts,
+      adjacencyReports: adjacencyArtifacts.reports,
       repairReportsByLevel,
       buildReport,
       buildDate,
@@ -390,7 +392,7 @@ export async function buildTerritoryCountryDataset(
     sourceLock: options.sourceLock,
     qualityReport,
     hierarchyReport,
-    adjacencyArtifacts,
+    adjacencyArtifacts: adjacencyArtifacts.artifacts,
     buildReport,
     issues: buildReport.issues,
     files,
@@ -539,7 +541,11 @@ function createPhaseRunner(input: {
     phase: TerritoryCountryBuildPhase,
     details: {
       inputBytes?: number;
+      outputBytes?: number;
       featureCount?: number;
+      artifactCount?: number;
+      warningCount?: number;
+      errorCount?: number;
       level?: TerritoryAdminLevel;
       reason?: string;
     },
@@ -547,41 +553,104 @@ function createPhaseRunner(input: {
   ): Promise<T> {
     const startedAt = new Date().toISOString();
     const started = Date.now();
+    const startedMemory = readMemoryUsageBytes();
     input.onPhase?.({
       country: input.country,
       phase,
       status: "started",
       durationMs: 0,
       startedAt,
+      ...(startedMemory !== undefined ? { peakMemoryBytes: startedMemory } : {}),
       ...details
     });
 
     try {
       const value = await runWithOptionalTimeout(action, input.timeoutMs, phase);
+      const completedAt = new Date().toISOString();
+      const inferredDetails = inferCompletedPhaseDetails(value);
+      const completedMemory = readMemoryUsageBytes();
       input.onPhase?.({
         country: input.country,
         phase,
         status: "completed",
         durationMs: Date.now() - started,
         startedAt,
-        finishedAt: new Date().toISOString(),
-        ...details
+        completedAt,
+        finishedAt: completedAt,
+        ...details,
+        ...inferredDetails,
+        ...maxMemoryUsageDetails(startedMemory, completedMemory)
       });
       return value;
     } catch (error) {
+      const completedAt = new Date().toISOString();
+      const completedMemory = readMemoryUsageBytes();
       input.onPhase?.({
         country: input.country,
         phase,
         status: "failed",
         durationMs: Date.now() - started,
         startedAt,
-        finishedAt: new Date().toISOString(),
+        completedAt,
+        finishedAt: completedAt,
         reason: error instanceof Error ? error.message : String(error),
+        ...maxMemoryUsageDetails(startedMemory, completedMemory),
         ...details
       });
       throw error;
     }
   };
+}
+
+function inferCompletedPhaseDetails(value: unknown): {
+  outputBytes?: number;
+  artifactCount?: number;
+  featureCount?: number;
+} {
+  if (value instanceof Map) {
+    return {
+      outputBytes: [...value.values()].reduce(
+        (sum, content) => sum + Buffer.byteLength(content),
+        0
+      ),
+      artifactCount: value.size
+    };
+  }
+
+  if (Array.isArray(value)) {
+    return { featureCount: value.length };
+  }
+
+  if (value && typeof value === "object" && "zones" in value) {
+    const zones = (value as { zones?: unknown }).zones;
+
+    if (Array.isArray(zones)) {
+      return { featureCount: zones.length };
+    }
+  }
+
+  return {};
+}
+
+function readMemoryUsageBytes(): number | undefined {
+  if (typeof process === "undefined" || typeof process.memoryUsage !== "function") {
+    return undefined;
+  }
+
+  return process.memoryUsage().rss;
+}
+
+function maxMemoryUsageDetails(
+  left: number | undefined,
+  right: number | undefined
+): { peakMemoryBytes?: number } {
+  const values = [left, right].filter((value): value is number => value !== undefined);
+
+  if (values.length === 0) {
+    return {};
+  }
+
+  return { peakMemoryBytes: Math.max(...values) };
 }
 
 async function runWithOptionalTimeout<T>(
@@ -970,7 +1039,7 @@ function createDataset(
     manifest: {
       ...dataset.manifest,
       geometryHash: createDatasetGeometryHash(dataset),
-      artifactChecksum: sha256Hex(serializeJsonStable(dataset.zones))
+      artifactChecksum: sha256Hex(JSON.stringify(dataset.zones))
     }
   };
 }
@@ -1016,6 +1085,9 @@ async function buildAdjacencyArtifacts(
   const artifacts: Partial<
     Record<TerritoryAdminLevel, Awaited<ReturnType<typeof buildTerritoryAdjacency>>["artifact"]>
   > = {};
+  const reports: Partial<
+    Record<TerritoryAdminLevel, Awaited<ReturnType<typeof buildTerritoryAdjacency>>>
+  > = {};
 
   for (const level of config.adjacencyPolicy.levels) {
     const dataset = levelDatasets[level];
@@ -1042,9 +1114,13 @@ async function buildAdjacencyArtifacts(
     artifacts[level] = publishedDataset
       ? rebaseAdjacencyArtifactToDataset(result.artifact, publishedDataset)
       : result.artifact;
+    reports[level] = {
+      ...result,
+      artifact: artifacts[level] ?? result.artifact
+    };
   }
 
-  return artifacts;
+  return { artifacts, reports };
 }
 
 function rebaseAdjacencyArtifactToDataset(
@@ -1153,6 +1229,9 @@ function createBuildStatistics(input: {
   adjacencyArtifacts: Partial<
     Record<TerritoryAdminLevel, Awaited<ReturnType<typeof buildTerritoryAdjacency>>["artifact"]>
   >;
+  adjacencyReports: Partial<
+    Record<TerritoryAdminLevel, Awaited<ReturnType<typeof buildTerritoryAdjacency>>>
+  >;
   repairReportsByLevel: Partial<Record<TerritoryAdminLevel, TerritoryGeometryRepairReport>>;
   sourceBytesByLevel: Partial<Record<TerritoryAdminLevel, number>>;
   publishReady: boolean;
@@ -1217,6 +1296,9 @@ function createBuildStatistics(input: {
         artifact?.edges.length ?? 0
       ])
     ),
+    adjacencyStatisticsByLevel: Object.fromEntries(
+      Object.entries(input.adjacencyReports).map(([level, report]) => [level, report?.statistics])
+    ),
     artifactBytes: 0,
     publishReady: input.publishReady
   };
@@ -1232,6 +1314,9 @@ function createCountryArtifactFiles(input: {
   qualityReport: TerritoryCountryQualityReport;
   adjacencyArtifacts: Partial<
     Record<TerritoryAdminLevel, Awaited<ReturnType<typeof buildTerritoryAdjacency>>["artifact"]>
+  >;
+  adjacencyReports: Partial<
+    Record<TerritoryAdminLevel, Awaited<ReturnType<typeof buildTerritoryAdjacency>>>
   >;
   repairReportsByLevel: Partial<Record<TerritoryAdminLevel, TerritoryGeometryRepairReport>>;
   buildReport: TerritoryCountryBuildReport;
@@ -1329,13 +1414,14 @@ function createCountryArtifactFiles(input: {
     left.localeCompare(right)
   )) {
     if (artifact) {
+      const report = input.adjacencyReports[level as TerritoryAdminLevel];
       files.set(`adjacency/${level}/adjacency.json`, serializeTerritoryAdjacencyArtifact(artifact));
       files.set(
         `adjacency/${level}/build-report.json`,
         serializeJsonStable({
           ok: true,
-          statistics: artifact.statistics,
-          issues: []
+          statistics: report?.statistics ?? artifact.statistics,
+          issues: report?.issues ?? []
         })
       );
       files.set(
@@ -1346,6 +1432,24 @@ function createCountryArtifactFiles(input: {
       );
     }
   }
+  files.set(
+    "adjacency-report.json",
+    serializeJsonStable({
+      reportVersion: "1",
+      levels: Object.fromEntries(
+        Object.entries(input.adjacencyReports)
+          .filter(([, report]) => Boolean(report))
+          .map(([level, report]) => [
+            level,
+            {
+              ok: report!.issues.every((issue) => issue.severity !== "error"),
+              statistics: report!.statistics,
+              issueCount: report!.issues.length
+            }
+          ])
+      )
+    })
+  );
 
   const artifactChecksums = Object.fromEntries(
     [...files.entries()].map(([path, content]) => [path, sha256Hex(content)])

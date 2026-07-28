@@ -1099,29 +1099,32 @@ describe("territory cli", () => {
         code: 0,
         payload: { ok: true, command: "country source verify" }
       });
-      await expect(
-        captureCli([
-          "country",
-          "build",
-          "TR",
-          "--source-lock",
-          lockPath,
-          "--levels",
-          "ADM0,ADM1,ADM2",
-          "--output",
-          outputPath,
-          "--build-adjacency",
-          "--strict",
-          "--build-date",
-          "2026-01-01T00:00:00.000Z"
-        ])
-      ).resolves.toMatchObject({
+      const build = await captureCli([
+        "country",
+        "build",
+        "TR",
+        "--source-lock",
+        lockPath,
+        "--levels",
+        "ADM0,ADM1,ADM2",
+        "--output",
+        outputPath,
+        "--build-adjacency",
+        "--strict",
+        "--profile",
+        "--phase-timeout-ms",
+        "300000",
+        "--build-date",
+        "2026-01-01T00:00:00.000Z"
+      ]);
+      expect(build).toMatchObject({
         code: 0,
         payload: {
           ok: true,
           command: "country build",
           data: {
             country: "TR",
+            profilePath: join(outputPath, "build-performance-report.json"),
             manifest: {
               publishReady: true,
               featureCountByLevel: {
@@ -1139,6 +1142,22 @@ describe("territory cli", () => {
           }
         }
       });
+      const performanceReport = JSON.parse(
+        await readFile(join(outputPath, "build-performance-report.json"), "utf8")
+      ) as {
+        summary: { featureCount: number; artifactCount: number; peakMemoryBytes: number };
+        phases: Array<{ phase: string; durationMs: number; completedAt: string }>;
+      };
+      expect(performanceReport.summary.featureCount).toBe(7);
+      expect(performanceReport.summary.artifactCount).toBeGreaterThan(0);
+      expect(performanceReport.summary.peakMemoryBytes).toBeGreaterThan(0);
+      expect(performanceReport.phases).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ phase: "adjacency-generation" }),
+          expect.objectContaining({ phase: "serialization" }),
+          expect.objectContaining({ phase: "artifact-write" })
+        ])
+      );
       await expect(
         captureCli(["country", "validate", outputPath, "--strict"])
       ).resolves.toMatchObject({
