@@ -9,6 +9,7 @@ import type {
   TerritorySemanticAdminType,
   TerritoryZone
 } from "@territory-kit/dataset";
+import type { TurkeyAdm3SourceLockExtension } from "../turkey-adm3-ingestion.js";
 
 export type TerritoryIdentityStability =
   | "official-code"
@@ -219,6 +220,9 @@ export interface TerritoryCountrySourceLock {
     version: string;
   };
   levels: Partial<Record<TerritoryAdminLevel, TerritoryCountrySourceLockLevel>>;
+  extensions?: {
+    turkeyAdm3?: TurkeyAdm3SourceLockExtension;
+  };
   contentHash: string;
 }
 
@@ -226,6 +230,8 @@ export interface TerritorySourceLockCreateOptions {
   country: string;
   levels: readonly TerritoryAdminLevel[];
   releaseType?: string;
+  adm3Provinces?: readonly string[];
+  adm3CatalogPath?: string;
   outputPath?: string;
   metadataPath?: string;
   metadataUrl?: string;
@@ -603,6 +609,7 @@ export interface TerritoryCountryBuildOptions {
   buildQueryArtifacts?: boolean;
   buildRenderArtifacts?: boolean;
   buildBinaryIndex?: boolean;
+  allowPartial?: boolean;
   strict?: boolean;
   allowNonPublishReady?: boolean;
   buildDate?: string;

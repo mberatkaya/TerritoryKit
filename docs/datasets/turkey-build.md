@@ -9,6 +9,15 @@ territory country source lock TR \
 ```
 
 ADM3 and ADM4 currently resolve as unavailable unless an approved source catalog entry is added.
+Province-scoped ADM3 sources use the Turkey ADM3 catalog:
+
+```bash
+territory country source lock TR \
+  --levels ADM0,ADM1,ADM2,ADM3 \
+  --adm3-provinces 27 \
+  --adm3-catalog datasets/sources/TR/adm3-catalog.json \
+  --output ./dist/tr/sources.lock.json
+```
 
 Build available artifacts:
 
@@ -26,6 +35,10 @@ territory country build TR \
   --profile-report ./dist/tr/artifact/build-performance-report.json \
   --phase-timeout-ms 300000
 ```
+
+For partial ADM3 coverage, add `--allow-partial`. The build writes `coverage.json`,
+`adm3-quality-gates.json`, and `adm3-source-provenance-report.json` without claiming national ADM3
+completion.
 
 The build writes source locks, identity maps, identity diff reports, hierarchy reports, validation
 reports, adjacency artifacts, query artifacts, optional MVT render artifacts, and binary spatial

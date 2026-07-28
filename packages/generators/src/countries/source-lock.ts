@@ -13,6 +13,12 @@ import { isRecord, pathExists, serializeJsonStable, sha256Hex } from "../sources
 import { extractZipMember } from "../sources/zip.js";
 import { getTerritoryCountryConfig } from "./registry.js";
 import { resolveTerritoryBoundarySource } from "./source-resolver.js";
+import {
+  createTurkeyAdm3SourceLockExtension,
+  createTurkeyAdm3SyntheticSourceLockLevel,
+  validateTurkeyAdm3SourceLockExtension,
+  verifyTurkeyAdm3SourceLockExtension
+} from "../turkey-adm3-ingestion.js";
 import type {
   TerritoryCountryBuildIssue,
   TerritoryCountrySourceLock,
@@ -37,8 +43,17 @@ export async function createTerritoryCountrySourceLock(
   const resolvedAt = resolveBuildTimestamp(options.buildDate);
   const issues: TerritoryCountryBuildIssue[] = [];
   const levels: Partial<Record<TerritoryAdminLevel, TerritoryCountrySourceLockLevel>> = {};
+  const adm3ProvinceCodes = options.adm3Provinces?.map((value) => value.trim()).filter(Boolean);
+  const useTurkeyAdm3ProvinceCatalog =
+    config.countryCodeAlpha2 === "TR" &&
+    options.levels.includes("ADM3") &&
+    Boolean(adm3ProvinceCodes && adm3ProvinceCodes.length > 0);
 
   for (const level of [...options.levels].sort(compareAdminLevels)) {
+    if (useTurkeyAdm3ProvinceCatalog && level === "ADM3") {
+      continue;
+    }
+
     const levelConfig = config.levelMappings[level];
 
     if (!levelConfig) {
@@ -108,6 +123,26 @@ export async function createTerritoryCountrySourceLock(
     }
   }
 
+  const turkeyAdm3Extension = useTurkeyAdm3ProvinceCatalog
+    ? await createTurkeyAdm3SourceLockExtension({
+        ...(options.adm3CatalogPath ? { catalogPath: options.adm3CatalogPath } : {}),
+        provinceCodes: adm3ProvinceCodes ?? [],
+        generatedAt: resolvedAt,
+        cwd: options.cwd ?? process.cwd(),
+        ...(options.buildDate ? { buildDate: options.buildDate } : {}),
+        ...(options.cacheDir ? { cacheDir: options.cacheDir } : {}),
+        ...(options.noCache ? { noCache: true } : {}),
+        ...(options.refresh ? { refresh: true } : {}),
+        ...(options.maxSourceBytes ? { maxSourceBytes: options.maxSourceBytes } : {}),
+        acquireSource: acquireBoundarySourceArtifact
+      })
+    : undefined;
+
+  if (turkeyAdm3Extension) {
+    issues.push(...turkeyAdm3Extension.issues);
+    levels.ADM3 = createTurkeyAdm3SyntheticSourceLockLevel(turkeyAdm3Extension.extension);
+  }
+
   const lockWithoutHash: Omit<TerritoryCountrySourceLock, "contentHash"> = {
     lockVersion: "1",
     country: {
@@ -121,7 +156,8 @@ export async function createTerritoryCountrySourceLock(
       package: "@territory-kit/generators",
       version: GENERATORS_PACKAGE_VERSION
     },
-    levels
+    levels,
+    ...(turkeyAdm3Extension ? { extensions: { turkeyAdm3: turkeyAdm3Extension.extension } } : {})
   };
   const lock = {
     ...lockWithoutHash,
@@ -176,6 +212,10 @@ export async function verifyTerritoryCountrySourceLock(
       continue;
     }
 
+    if (level.adminLevel === "ADM3" && lock.extensions?.turkeyAdm3) {
+      continue;
+    }
+
     try {
       const artifact = await acquireBoundarySourceArtifact(
         {
@@ -208,6 +248,16 @@ export async function verifyTerritoryCountrySourceLock(
     }
   }
 
+  if (lock.extensions?.turkeyAdm3) {
+    issues.push(
+      ...(await verifyTurkeyAdm3SourceLockExtension(lock.extensions.turkeyAdm3, {
+        cwd: options.cwd ?? process.cwd(),
+        ...(options.buildDate ? { buildDate: options.buildDate } : {}),
+        acquireSource: acquireBoundarySourceArtifact
+      }))
+    );
+  }
+
   return {
     ok: issues.every((issue) => issue.severity !== "error"),
     issues
@@ -235,6 +285,10 @@ export function validateTerritoryCountrySourceLock(
       severity: "error",
       message: "Source lock content hash does not match."
     });
+  }
+
+  if (lock.extensions?.turkeyAdm3) {
+    issues.push(...validateTurkeyAdm3SourceLockExtension(lock.extensions.turkeyAdm3));
   }
 
   for (const level of Object.values(lock.levels)) {

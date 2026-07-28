@@ -21,3 +21,8 @@ ZIP SHA-256:
 ADM3 examples such as Gaziantep, Sakarya, and Bursa open data portals remain province/local
 candidates. They must not be merged into a nationwide layer until every province has compatible
 license, checksum, parent mapping, and geometry quality evidence.
+
+Reviewed ADM3 province sources are recorded in `datasets/sources/TR/adm3-catalog.json` and locked
+under `extensions.turkeyAdm3` by `territory country source lock TR --adm3-provinces ...`. See
+[Turkey ADM3 source contract](./turkey-adm3-source-contract.md) and
+[Turkey ADM3 ingestion](./turkey-adm3-ingestion.md).

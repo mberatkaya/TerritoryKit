@@ -7,6 +7,19 @@ on:
         description: "Comma-separated ADM levels"
         required: true
         default: "ADM0,ADM1,ADM2"
+      adm3_provinces:
+        description: "Comma-separated Turkey province plate codes for ADM3 catalog ingestion"
+        required: false
+        default: ""
+      adm3_catalog:
+        description: "ADM3 source catalog path"
+        required: false
+        default: "datasets/sources/TR/adm3-catalog.json"
+      allow_partial:
+        description: "Allow partial ADM3 province coverage with ADM2 fallback metadata"
+        required: true
+        type: boolean
+        default: false
       source_lock:
         description: "Existing source lock path, or empty to create one"
         required: false
@@ -32,9 +45,14 @@ jobs:
         if: ${{ inputs.source_lock == '' }}
         run: |
           mkdir -p dist/tr
+          ADM3_FLAGS=""
+          if [[ -n "${{ inputs.adm3_provinces }}" ]]; then
+            ADM3_FLAGS="--adm3-provinces ${{ inputs.adm3_provinces }} --adm3-catalog ${{ inputs.adm3_catalog }}"
+          fi
           pnpm --filter @territory-kit/cli exec territory country source lock TR \
             --levels "${{ inputs.levels }}" \
             --output dist/tr/sources.lock.json \
+            $ADM3_FLAGS \
             --force \
             --json
       - name: Copy provided source lock
@@ -44,6 +62,10 @@ jobs:
           cp "${{ inputs.source_lock }}" dist/tr/sources.lock.json
       - name: Build Turkey artifacts
         run: |
+          PARTIAL_FLAGS=""
+          if [[ "${{ inputs.allow_partial }}" == "true" ]]; then
+            PARTIAL_FLAGS="--allow-partial"
+          fi
           pnpm --filter @territory-kit/cli exec territory country build TR \
             --source-lock dist/tr/sources.lock.json \
             --levels "${{ inputs.levels }}" \
@@ -57,6 +79,7 @@ jobs:
             --profile \
             --profile-report dist/tr/artifact/build-performance-report.json \
             --phase-timeout-ms 300000 \
+            $PARTIAL_FLAGS \
             --json
       - name: Validate artifact checksums
         run: pnpm --filter @territory-kit/cli exec territory country validate dist/tr/artifact --strict

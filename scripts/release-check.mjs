@@ -13,6 +13,7 @@ const steps = [
   ["Country smoke", "pnpm", ["country:smoke"]],
   ["Registry install smoke", "pnpm", ["registry:smoke"]],
   ["Registry publish smoke", "pnpm", ["registry:publish:smoke"]],
+  ["Turkey ADM3 ingestion smoke", "pnpm", ["turkey:adm3:ingestion:smoke"]],
   ["Query/render compatibility", "pnpm", ["query-render:smoke"]],
   ["Fixture benchmark", "pnpm", ["benchmark:fixture"]],
   ["Package dry-run audit", "pnpm", ["package:dry-run"]],
