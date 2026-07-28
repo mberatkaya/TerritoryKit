@@ -291,7 +291,9 @@ function findExplicitParent(
   if (child.sourceParentId) {
     const bySourceId = parents.find(
       (parent) =>
-        parent.sourceId === child.sourceParentId || parent.officialCode === child.sourceParentId
+        parent.zone.id === child.sourceParentId ||
+        parent.sourceId === child.sourceParentId ||
+        parent.officialCode === child.sourceParentId
     );
 
     if (bySourceId) {

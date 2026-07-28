@@ -28,6 +28,7 @@ territory adjacency validate ./dist/regions ./dist/regions-adjacency
 territory adjacency inspect ./dist/regions-adjacency tr:adm2:fatih --type shared-border --json
 territory dataset build world-countries --source ./sources/ne-admin0.geojson --output ./dist/world-countries
 territory country source lock TR --output ./dist/tr/sources.lock.json
+territory country source lock TR --levels ADM0,ADM1,ADM2,ADM3 --adm3-provinces 27 --adm3-catalog datasets/sources/TR/adm3-catalog.json --output ./dist/tr/sources.lock.json
 territory country build TR --source-lock ./dist/tr/sources.lock.json --output ./dist/tr --build-adjacency --build-query-artifacts --build-render-artifacts --build-binary-index --strict --allow-partial
 territory country validate ./dist/tr --strict
 territory registry publish --artifact-root ./dist/tr/artifact --registry-output ./dist/registry --dataset territory-kit-tr --version 1.0.0 --base-url https://datasets.example.com/tr/1.0.0/ --artifact-prefix tr/1.0.0 --dry-run
@@ -63,6 +64,9 @@ territory registry verify --registry https://datasets.example.com/registry.json 
   and `territory country inspect` manage country artifacts. Turkey's default national path verifies
   ADM0-ADM2 from HDX/OCHA COD-AB and records ADM3/ADM4 as unavailable unless a reviewed source lock
   provides them.
+- `territory country source lock TR --adm3-provinces <codes> --adm3-catalog <catalog>` enables
+  province-scoped Turkey ADM3 ingestion with checksum, byte-size, license, coverage, and provenance
+  metadata.
 - `territory registry publish` prepares provider-neutral hosted registry bundles with immutable
   version artifacts, inventory metadata, and rollback manifests.
 - `territory registry verify` validates a hosted registry and checks artifact SHA-256 and byte

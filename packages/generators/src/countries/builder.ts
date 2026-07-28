@@ -38,6 +38,17 @@ import {
   writeFilesAtomically
 } from "../sources/utils.js";
 import {
+  createTurkeyAdm3CoverageManifest,
+  createTurkeyAdm3SyntheticSourceLockLevel,
+  loadTurkeyAdm3ParsedFeatures
+} from "../turkey-adm3-ingestion.js";
+import type {
+  TurkeyAdm3ProvinceBuildStatus,
+  TurkeyAdm3ProvenanceReport,
+  TurkeyAdm3QualityGateReport,
+  TurkeyAdm3SourceLockExtension
+} from "../turkey-adm3-ingestion.js";
+import {
   applyHierarchyResolutions,
   attachChildIds,
   resolveTerritoryCountryHierarchy
@@ -86,6 +97,11 @@ export async function buildTerritoryCountryDataset(
   const sourceBytesByLevel: Partial<Record<TerritoryAdminLevel, number>> = {};
   const sourceDates: Record<string, string> = {};
   const unavailableLevels: TerritoryAdminLevel[] = [];
+  const turkeyAdm3Extension =
+    config.countryCodeAlpha2 === "TR" ? options.sourceLock.extensions?.turkeyAdm3 : undefined;
+  let turkeyAdm3ProvinceStatuses: Record<string, TurkeyAdm3ProvinceBuildStatus> | undefined;
+  let turkeyAdm3QualityReport: TurkeyAdm3QualityGateReport | undefined;
+  let turkeyAdm3ProvenanceReport: TurkeyAdm3ProvenanceReport | undefined;
   const runPhase = createPhaseRunner({
     country: config.countryCodeAlpha2,
     ...(options.phaseTimeoutMs ? { timeoutMs: options.phaseTimeoutMs } : {}),
@@ -93,6 +109,113 @@ export async function buildTerritoryCountryDataset(
   });
 
   for (const level of requestedLevels) {
+    if (level === "ADM3" && turkeyAdm3Extension) {
+      const parsed = await runPhase("download", { level }, () =>
+        loadTurkeyAdm3ParsedFeatures({
+          extension: turkeyAdm3Extension,
+          allowPartial: options.allowPartial ?? false,
+          cwd,
+          buildDate,
+          ...(options.cacheDir ? { cacheDir: options.cacheDir } : {}),
+          ...(options.noCache ? { noCache: true } : {}),
+          ...(options.refresh ? { refresh: true } : {}),
+          acquireSource: acquireBoundarySourceArtifact
+        })
+      );
+      issues.push(...parsed.issues);
+      turkeyAdm3ProvinceStatuses = parsed.provinceStatuses;
+      turkeyAdm3QualityReport = parsed.qualityReport;
+      turkeyAdm3ProvenanceReport = parsed.provenance;
+
+      if (parsed.features.length === 0) {
+        unavailableLevels.push(level);
+        if (!options.allowPartial) {
+          issues.push({
+            code: "TR_ADM3_NO_BUILDABLE_PROVINCES",
+            severity: "error",
+            message: "No Turkey ADM3 province source produced buildable features.",
+            level
+          });
+        }
+        sourceBytesByLevel[level] = parsed.sourceBytes;
+        sourceDates[level] = Object.values(parsed.sourceDates).sort().join(",") || "unknown";
+        continue;
+      }
+
+      const repairReport = await runPhase(
+        "geometry-repair",
+        { level, inputBytes: parsed.sourceBytes, featureCount: parsed.features.length },
+        () =>
+          repairTerritoryGeometries(
+            parsed.features.map((feature, index) => ({
+              id: String(index),
+              geometry: feature.geometry
+            }))
+          )
+      );
+      repairReportsByLevel[level] = repairReport;
+      const repairByIndex = new Map(
+        repairReport.results.map((result) => [Number(result.id), result])
+      );
+      const repairedFeatures = parsed.features.flatMap((feature, index) => {
+        const repair = repairByIndex.get(index);
+
+        if (!repair || repair.status === "rejected" || !repair.geometry) {
+          issues.push({
+            code: "GEOMETRY_REPAIR_REJECTED",
+            severity: "error",
+            message: `${level} feature '${feature.sourceId ?? feature.name}' could not be repaired: ${
+              repair?.message ?? "missing repair result"
+            }`,
+            level,
+            details: {
+              engine: repairReport.engine,
+              engineVersion: repairReport.engineVersion,
+              mode: repairReport.mode,
+              componentsDiscarded: repair?.componentsDiscarded ?? 0
+            }
+          });
+          return [];
+        }
+
+        return [
+          {
+            ...feature,
+            geometry: repair.geometry,
+            ...(repair.center ? { center: repair.center } : {}),
+            ...(repair.bbox ? { bbox: repair.bbox } : {})
+          }
+        ];
+      });
+
+      if (repairReport.featuresRepaired > 0 || repairReport.componentsDiscarded > 0) {
+        issues.push({
+          code: "GEOMETRY_REPAIRED",
+          severity: "info",
+          message: `${level} geometry repair changed ${repairReport.featuresRepaired} feature(s) with ${repairReport.componentsDiscarded} discarded non-area component(s).`,
+          level,
+          details: { ...summarizeGeometryRepairReport(repairReport) }
+        });
+      }
+
+      builtByLevel[level] = await runPhase(
+        "derived-metadata",
+        { level, inputBytes: parsed.sourceBytes, featureCount: repairedFeatures.length },
+        async () =>
+          buildLevelZones({
+            config,
+            level,
+            features: repairedFeatures,
+            sourceLockLevel: createTurkeyAdm3SyntheticSourceLockLevel(turkeyAdm3Extension),
+            sourceDatasetVersion: turkeyAdm3Extension.catalogHash,
+            buildDate
+          })
+      );
+      sourceBytesByLevel[level] = parsed.sourceBytes;
+      sourceDates[level] = Object.values(parsed.sourceDates).sort().join(",") || "unknown";
+      continue;
+    }
+
     const lockLevel = options.sourceLock.levels[level];
 
     if (!lockLevel || lockLevel.status !== "available") {
@@ -348,6 +471,7 @@ export async function buildTerritoryCountryDataset(
       sourceLock: options.sourceLock,
       levelDatasets,
       combinedDataset,
+      builtZones: allBuilt,
       identityMap,
       hierarchyReport,
       qualityReport,
@@ -361,7 +485,22 @@ export async function buildTerritoryCountryDataset(
       publishReadyFailures,
       buildQueryArtifacts: options.buildQueryArtifacts ?? false,
       buildRenderArtifacts: options.buildRenderArtifacts ?? false,
-      buildBinaryIndex: options.buildBinaryIndex ?? false
+      buildBinaryIndex: options.buildBinaryIndex ?? false,
+      ...(turkeyAdm3Extension
+        ? {
+            turkeyAdm3: {
+              extension: turkeyAdm3Extension,
+              allowPartial: options.allowPartial ?? false,
+              ...(turkeyAdm3ProvinceStatuses
+                ? { provinceStatuses: turkeyAdm3ProvinceStatuses }
+                : {}),
+              ...(turkeyAdm3QualityReport ? { qualityReport: turkeyAdm3QualityReport } : {}),
+              ...(turkeyAdm3ProvenanceReport
+                ? { provenanceReport: turkeyAdm3ProvenanceReport }
+                : {})
+            }
+          }
+        : {})
     })
   );
   statistics.artifactBytes = [...files.values()].reduce(
@@ -409,6 +548,7 @@ export async function buildTerritoryCountryDatasetPath(options: {
   buildQueryArtifacts?: boolean;
   buildRenderArtifacts?: boolean;
   buildBinaryIndex?: boolean;
+  allowPartial?: boolean;
   strict?: boolean;
   allowNonPublishReady?: boolean;
   buildDate?: string;
@@ -434,6 +574,7 @@ export async function buildTerritoryCountryDatasetPath(options: {
     ...(options.buildQueryArtifacts ? { buildQueryArtifacts: true } : {}),
     ...(options.buildRenderArtifacts ? { buildRenderArtifacts: true } : {}),
     ...(options.buildBinaryIndex ? { buildBinaryIndex: true } : {}),
+    ...(options.allowPartial ? { allowPartial: true } : {}),
     ...(options.strict ? { strict: true } : {}),
     ...(options.allowNonPublishReady ? { allowNonPublishReady: true } : {}),
     ...(options.buildDate ? { buildDate: options.buildDate } : {}),
@@ -848,13 +989,38 @@ function buildLevelZones(input: {
         })
       : initialIdentity;
     const levelConfig = input.config.levelMappings[input.level];
+    const featureSourceProvider =
+      readStringPropertyPath(feature.rawProperties, "territorykit.provider") ??
+      input.config.sourceProvider;
+    const featureSemanticType =
+      readAdm3SemanticType(feature.rawProperties) ?? levelConfig?.semanticType ?? "unknown";
+    const featureSourceUrl =
+      readStringPropertyPath(feature.rawProperties, "territorykit.sourceUrl") ??
+      input.sourceLockLevel.sourceUrl;
+    const featureSourceDate =
+      readStringPropertyPath(feature.rawProperties, "territorykit.sourceDate") ??
+      input.sourceLockLevel.sourceDate;
+    const featureLicense =
+      readStringPropertyPath(feature.rawProperties, "territorykit.license") ??
+      input.sourceLockLevel.license;
+    const featureAttribution =
+      readStringPropertyPath(feature.rawProperties, "territorykit.attribution") ??
+      input.sourceLockLevel.attribution;
+    const adm3ProvinceCode = readStringPropertyPath(
+      feature.rawProperties,
+      "territorykit.provinceCode"
+    );
+    const adm3ProvinceName = readStringPropertyPath(
+      feature.rawProperties,
+      "territorykit.provinceName"
+    );
     const zone: TerritoryZone = {
       id: identity.territoryId,
       datasetId: `${input.config.datasetId}-${input.level.toLowerCase()}`,
       countryCode: input.config.countryCodeAlpha2,
       level: Number(input.level.slice(3)),
       sourceAdminLevel: input.level,
-      semanticType: levelConfig?.semanticType ?? "unknown",
+      semanticType: featureSemanticType,
       name: feature.name,
       ...(input.config.defaultLocale && input.config.defaultLocale !== "en"
         ? { localName: feature.name }
@@ -868,7 +1034,7 @@ function buildLevelZones(input: {
         territory: {
           adminLevel: input.level,
           sourceAdminLevel: input.level,
-          semanticType: levelConfig?.semanticType ?? "unknown",
+          semanticType: featureSemanticType,
           localType: feature.localType,
           ...(levelConfig?.localTypeName ? { localTypeName: levelConfig.localTypeName } : {}),
           hierarchyDepth: getAdminLevelDepth(input.level),
@@ -885,20 +1051,23 @@ function buildLevelZones(input: {
             ...(input.config.defaultLocale ? { [input.config.defaultLocale]: feature.name } : {})
           },
           source: {
-            provider: input.config.sourceProvider,
+            provider: featureSourceProvider,
             ...(feature.sourceId ? { sourceId: feature.sourceId } : {}),
-            ...(input.sourceLockLevel.sourceUrl
-              ? { sourceUrl: input.sourceLockLevel.sourceUrl }
-              : {}),
-            ...(input.sourceLockLevel.sourceDate
-              ? { sourceDate: input.sourceLockLevel.sourceDate }
-              : {}),
-            ...(input.sourceLockLevel.license ? { license: input.sourceLockLevel.license } : {}),
-            ...(input.sourceLockLevel.attribution
-              ? { attribution: input.sourceLockLevel.attribution }
-              : {}),
+            ...(featureSourceUrl ? { sourceUrl: featureSourceUrl } : {}),
+            ...(featureSourceDate ? { sourceDate: featureSourceDate } : {}),
+            ...(featureLicense ? { license: featureLicense } : {}),
+            ...(featureAttribution ? { attribution: featureAttribution } : {}),
             importedAt: input.buildDate
           },
+          ...(adm3ProvinceCode
+            ? {
+                adm3: {
+                  provinceCode: adm3ProvinceCode,
+                  ...(adm3ProvinceName ? { provinceName: adm3ProvinceName } : {}),
+                  providerId: featureSourceProvider
+                }
+              }
+            : {}),
           nameProvenance: {
             default: {
               value: feature.name,
@@ -1309,6 +1478,7 @@ function createCountryArtifactFiles(input: {
   sourceLock: TerritoryCountrySourceLock;
   levelDatasets: Partial<Record<TerritoryAdminLevel, TerritoryDataset>>;
   combinedDataset: TerritoryDataset;
+  builtZones: readonly BuiltCountryZone[];
   identityMap: TerritoryIdentityMap;
   hierarchyReport: ReturnType<typeof resolveTerritoryCountryHierarchy>;
   qualityReport: TerritoryCountryQualityReport;
@@ -1327,6 +1497,13 @@ function createCountryArtifactFiles(input: {
   buildQueryArtifacts: boolean;
   buildRenderArtifacts: boolean;
   buildBinaryIndex: boolean;
+  turkeyAdm3?: {
+    extension: TurkeyAdm3SourceLockExtension;
+    allowPartial: boolean;
+    provinceStatuses?: Record<string, TurkeyAdm3ProvinceBuildStatus>;
+    qualityReport?: TurkeyAdm3QualityGateReport;
+    provenanceReport?: TurkeyAdm3ProvenanceReport;
+  };
 }): Map<string, string | Uint8Array> {
   const files = new Map<string, string | Uint8Array>();
 
@@ -1343,6 +1520,34 @@ function createCountryArtifactFiles(input: {
   files.set("attribution.txt", createAttributionText(input.sourceLock));
   files.set("attribution.json", serializeJsonStable(createAttributionJson(input.sourceLock)));
   files.set("index.json", serializeJsonArtifact(createSpatialIndex(input.combinedDataset)));
+
+  if (input.turkeyAdm3) {
+    files.set(
+      "coverage.json",
+      serializeJsonStable(
+        createTurkeyAdm3CoverageManifest({
+          generatedAt: input.buildDate,
+          extension: input.turkeyAdm3.extension,
+          zones: input.builtZones,
+          allowPartial: input.turkeyAdm3.allowPartial,
+          ...(input.turkeyAdm3.provinceStatuses
+            ? { provinceStatuses: input.turkeyAdm3.provinceStatuses }
+            : {})
+        })
+      )
+    );
+
+    if (input.turkeyAdm3.qualityReport) {
+      files.set("adm3-quality-gates.json", serializeJsonStable(input.turkeyAdm3.qualityReport));
+    }
+
+    if (input.turkeyAdm3.provenanceReport) {
+      files.set(
+        "adm3-source-provenance-report.json",
+        serializeJsonStable(input.turkeyAdm3.provenanceReport)
+      );
+    }
+  }
 
   if (input.buildQueryArtifacts) {
     files.set(
@@ -1472,7 +1677,11 @@ function createCountryArtifactFiles(input: {
     supportedLevels: normalizeLevels(Object.keys(input.levelDatasets) as TerritoryAdminLevel[]),
     unavailableLevels: normalizeLevels(
       Object.values(input.sourceLock.levels)
-        .filter((level) => level.status === "unavailable")
+        .filter(
+          (level) =>
+            level.status === "unavailable" &&
+            !input.levelDatasets[level.adminLevel as TerritoryAdminLevel]
+        )
         .map((level) => level.adminLevel)
     ),
     featureCountByLevel: Object.fromEntries(
@@ -1783,6 +1992,18 @@ function readFirstProperty(
   }
 
   return undefined;
+}
+
+function readAdm3SemanticType(
+  properties: Record<string, unknown>
+): TerritoryZone["semanticType"] | undefined {
+  const value = readStringPropertyPath(properties, "territorykit.semanticType");
+
+  if (!value) {
+    return undefined;
+  }
+
+  return value as TerritoryZone["semanticType"];
 }
 
 function normalizeLocalType(rawLocalType: string, expectedTypes: readonly string[]): string {

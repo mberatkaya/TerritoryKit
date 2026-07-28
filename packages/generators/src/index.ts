@@ -174,6 +174,29 @@ export {
   stableTurkeyGaziantepAdm3Json,
   validateTurkeyGaziantepAdm3SourceManifest
 } from "./turkey-adm3-pilot.js";
+export {
+  TURKEY_ADM3_COVERAGE_SCHEMA_VERSION,
+  TURKEY_ADM3_PROVENANCE_SCHEMA_VERSION,
+  TURKEY_ADM3_QUALITY_SCHEMA_VERSION,
+  TURKEY_ADM3_SOURCE_CATALOG_SCHEMA_VERSION,
+  TURKEY_ADM3_SOURCE_LOCK_SCHEMA_VERSION,
+  createDefaultTurkeyAdm3SourceCatalog,
+  createTurkeyAdm3CoverageManifest,
+  createTurkeyAdm3SourceLockExtension,
+  createTurkeyAdm3SourceQualityReport,
+  createTurkeyAdm3StableKey,
+  createTurkeyAdm3SyntheticSourceLockLevel,
+  createTurkeyAdm3TerritoryId,
+  isTurkeyAdm3SourceLockExtension,
+  loadTurkeyAdm3ParsedFeatures,
+  normalizeTurkeyAdm3DisplayName,
+  normalizeTurkeyAdm3Name,
+  parseTurkeyAdm3ProvinceSource,
+  readTurkeyAdm3SourceCatalog,
+  validateTurkeyAdm3SourceCatalog,
+  validateTurkeyAdm3SourceLockExtension,
+  verifyTurkeyAdm3SourceLockExtension
+} from "./turkey-adm3-ingestion.js";
 export type {
   DatasetAttribution,
   TerritorySourceAdapter,
@@ -211,6 +234,23 @@ export type {
   TurkeyGaziantepAdm3ParentMapping,
   TurkeyGaziantepAdm3SourceFeature
 } from "./turkey-adm3-pilot.js";
+export type {
+  TurkeyAdm3AcquireSource,
+  TurkeyAdm3CoverageManifest,
+  TurkeyAdm3LoadOptions,
+  TurkeyAdm3ParsedFeature,
+  TurkeyAdm3ParsedSourceResult,
+  TurkeyAdm3ProvinceBuildStatus,
+  TurkeyAdm3ProvinceCatalogEntry,
+  TurkeyAdm3ProvinceSourceLock,
+  TurkeyAdm3ProviderAdapterConfig,
+  TurkeyAdm3ProviderAdapterId,
+  TurkeyAdm3ProvenanceReport,
+  TurkeyAdm3QualityGateReport,
+  TurkeyAdm3SourceCatalog,
+  TurkeyAdm3SourceLockCreateOptions,
+  TurkeyAdm3SourceLockExtension
+} from "./turkey-adm3-ingestion.js";
 export type {
   GeometryQualityPathRepairOptions,
   TerritoryDatasetPathInput

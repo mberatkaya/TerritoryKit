@@ -19,6 +19,10 @@ Current national source coverage is verified for ADM0, ADM1, and ADM2 only. ADM3
 through the Gaziantep neighbourhood pilot, and ADM4 is not production-mapped until a reviewed source
 model exists.
 
+ADM3 ingestion is now catalog-driven by province. Use
+`territory country source lock TR --adm3-provinces <codes> --adm3-catalog <catalog>` and build with
+`--allow-partial` when coverage is intentionally incomplete.
+
 See:
 
 - [Turkey administrative model](./turkey-administrative-model.md)
@@ -26,3 +30,4 @@ See:
 - [Turkey national coverage](./turkey-national-coverage.md)
 - [Turkey build](./turkey-build.md)
 - [Turkey licensing](./turkey-licensing.md)
+- [Turkey ADM3 ingestion](./turkey-adm3-ingestion.md)

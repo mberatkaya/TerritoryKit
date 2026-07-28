@@ -85,6 +85,8 @@ import {
 await createTerritoryCountrySourceLock({
   country: "TR",
   levels: ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"],
+  adm3Provinces: ["27"],
+  adm3CatalogPath: "datasets/sources/TR/adm3-catalog.json",
   outputPath: "./dist/tr/sources.lock.json"
 });
 
@@ -104,6 +106,8 @@ await buildTerritoryCountryDatasetPath({
 Configured pilot countries are `TR`, `US`, `DE`, `JP`, and `ID`.
 Turkey resolves national ADM0-ADM2 from HDX/OCHA COD-AB by default. ADM3 and ADM4 remain explicit
 unavailable levels unless a reviewed redistributable source is added to the source lock.
+Turkey ADM3 ingestion is province-scoped and writes `extensions.turkeyAdm3`, `coverage.json`,
+`adm3-quality-gates.json`, and `adm3-source-provenance-report.json` when requested.
 
 ## Source Adapters
 

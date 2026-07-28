@@ -27,6 +27,17 @@ committed artifacts include `sources.lock.json`, `source-metadata.json`, `source
 `coverage.json`, `repair-report.json`, `repair-details.json`, `production-quality-report.json`,
 `overlap-audit.json`, `parent-containment-report.json`, adjacency, query, and MVT render outputs.
 
+The source is also represented in `datasets/sources/TR/adm3-catalog.json` so future builds can use
+the generic province-scoped ADM3 ingestion path:
+
+```bash
+territory country source lock TR \
+  --levels ADM0,ADM1,ADM2,ADM3 \
+  --adm3-provinces 27 \
+  --adm3-catalog datasets/sources/TR/adm3-catalog.json \
+  --output ./dist/tr/sources.lock.json
+```
+
 Artifact policy:
 
 - `full.geojson` is the only committed GeoJSON render tier.

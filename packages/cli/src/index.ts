@@ -565,9 +565,18 @@ async function runCountrySourceLock(args: string[]): Promise<number> {
   const releaseType = getFlag(flags, "release-type");
   const buildDate = getFlag(flags, "build-date");
   const cacheDir = getFlag(flags, "cache-dir");
+  const adm3Provinces = readCommaSeparatedFlag(flags, "adm3-provinces");
+  const adm3CatalogPath = getFlag(flags, "adm3-catalog") ?? getFlag(flags, "adm3-catalog-path");
+  const flagIssues: CliIssue[] = [];
+  const maxSourceBytes = readOptionalPositiveIntegerFlag(flags, "max-source-bytes", flagIssues);
 
   if (isCliIssueArray(levels)) {
     printJson({ ok: false, command: "country source lock", issues: levels });
+    return 2;
+  }
+
+  if (flagIssues.length > 0) {
+    printJson({ ok: false, command: "country source lock", issues: flagIssues });
     return 2;
   }
 
@@ -576,6 +585,8 @@ async function runCountrySourceLock(args: string[]): Promise<number> {
       country,
       levels: levels ?? [...config.requestedLevels],
       ...(releaseType ? { releaseType } : {}),
+      ...(adm3Provinces.length > 0 ? { adm3Provinces } : {}),
+      ...(adm3CatalogPath ? { adm3CatalogPath } : {}),
       ...(outputPath ? { outputPath } : {}),
       ...(metadataPath ? { metadataPath } : {}),
       ...(metadataUrl ? { metadataUrl } : {}),
@@ -583,6 +594,7 @@ async function runCountrySourceLock(args: string[]): Promise<number> {
       ...(cacheDir ? { cacheDir } : {}),
       ...(flags.has("no-cache") ? { noCache: true } : {}),
       ...(flags.has("refresh") ? { refresh: true } : {}),
+      ...(maxSourceBytes ? { maxSourceBytes } : {}),
       ...(flags.has("force") ? { force: true } : {})
     });
     const ok = result.issues.every((issue) => issue.severity !== "error") && Boolean(result.lock);
@@ -700,6 +712,7 @@ async function runCountryBuild(args: string[]): Promise<number> {
       ...(flags.has("build-render-artifacts") ? { buildRenderArtifacts: true } : {}),
       ...(flags.has("build-binary-index") ? { buildBinaryIndex: true } : {}),
       ...(flags.has("strict") ? { strict: true } : {}),
+      ...(flags.has("allow-partial") ? { allowPartial: true } : {}),
       ...(flags.has("allow-non-publish-ready") || flags.has("allow-partial")
         ? { allowNonPublishReady: true }
         : {}),
@@ -3855,6 +3868,19 @@ function readOptionalPositiveIntegerFlag(
   return parsed;
 }
 
+function readCommaSeparatedFlag(flags: Map<string, string | true>, key: string): string[] {
+  const value = getFlag(flags, key);
+
+  if (!value) {
+    return [];
+  }
+
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
 function readOptionalBooleanFlag(
   flags: Map<string, string | true>,
   key: string,
@@ -4208,7 +4234,10 @@ Options:
   --release-type gbOpen
   --metadata <metadata.json>
   --metadata-url <metadata-url>
+  --adm3-provinces 27,34,54
+  --adm3-catalog <tr-adm3-catalog.json>
   --cache-dir <dir>
+  --max-source-bytes <bytes>
   --no-cache
   --refresh
   --build-date <iso-date>

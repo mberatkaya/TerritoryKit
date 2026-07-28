@@ -38,7 +38,9 @@ const maxBytesByFile = new Map([
   // topology-safe simplification reports, and optional country query/render/binary artifacts.
   // Turkey ADM0-ADM2 full-build performance work adds Flatbush-backed adjacency statistics,
   // bounded MVT policy reports, and production build evidence outputs.
-  ["packages/generators/dist/index.mjs", 425_000],
+  // Turkey ADM3 ingestion adds province-scoped source catalogs, provider adapters, source locks,
+  // parent matching, identity, quality gates, coverage, and provenance reporting.
+  ["packages/generators/dist/index.mjs", 480_000],
   // Dataset build-all/global-admin CLI commands now expose ADM0 completion controls and reports.
   // Lower-admin support adds level filtering, source capability output, and artifact fallback.
   // Sprint 13 adds binary spatial index build/inspect/validate commands.
