@@ -14,6 +14,10 @@ audited neighbor edges evolve independently.
 Bounding boxes are only a candidate prefilter. Final `shared-border`, `point-touch`, overlap, and
 containment decisions are made from polygon boundary geometry.
 
+Production adjacency builds use a Flatbush spatial index per eligible sibling group, so exact
+geometry checks only run for bbox-intersecting candidate pairs. Build reports include possible,
+candidate, tested, accepted, rejected, duplicate, neighbor, reciprocity, and timing metrics.
+
 ## Build API
 
 ```ts

@@ -8,8 +8,8 @@
 - Adjacency levels: `ADM1`, `ADM2`
 
 ```sh
-territory country source lock TR --levels ADM0,ADM1,ADM2,ADM3,ADM4 --output ./dist/tr/sources.lock.json
-territory country build TR --source-lock ./dist/tr/sources.lock.json --output ./dist/tr --levels ADM0,ADM1,ADM2,ADM3,ADM4 --build-adjacency --build-query-artifacts --build-render-artifacts --build-binary-index --strict --allow-partial
+territory country source lock TR --levels ADM0,ADM1,ADM2 --output ./dist/tr/sources.lock.json
+territory country build TR --source-lock ./dist/tr/sources.lock.json --output ./dist/tr/artifact --levels ADM0,ADM1,ADM2 --build-adjacency --build-query-artifacts --build-render-artifacts --build-binary-index --strict --profile --phase-timeout-ms 300000
 ```
 
 The generated artifact records source attribution, source lock hash, identity stability summary,
