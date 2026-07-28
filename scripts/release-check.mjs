@@ -12,6 +12,7 @@ const steps = [
   ["Geometry fixtures", "pnpm", ["geometry:validate:fixtures"]],
   ["Country smoke", "pnpm", ["country:smoke"]],
   ["Registry install smoke", "pnpm", ["registry:smoke"]],
+  ["Registry publish smoke", "pnpm", ["registry:publish:smoke"]],
   ["Query/render compatibility", "pnpm", ["query-render:smoke"]],
   ["Fixture benchmark", "pnpm", ["benchmark:fixture"]],
   ["Package dry-run audit", "pnpm", ["package:dry-run"]],

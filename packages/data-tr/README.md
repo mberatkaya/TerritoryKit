@@ -12,6 +12,13 @@ const handle = await loadTurkeyDataset({
 });
 ```
 
+Hosted registries work through the same resolver contract:
+
+```ts
+const installed = await registry.installDataset({ datasetId: "territory-kit-tr" });
+const handle = await loadTurkeyDataset({ registry, verifyChecksums: true });
+```
+
 `supportedLevels` includes `ADM0` through `ADM4` so clients can request national artifacts,
 partial fixtures, or future reviewed lower-admin layers through the same resolver contract.
 `defaultLevels` remains `["ADM0", "ADM1", "ADM2"]` because only those levels currently have a

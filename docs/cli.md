@@ -31,6 +31,8 @@ territory generate --kind grid --dataset-id demo --rows 10 --columns 10
 territory generate --kind weighted-voronoi --dataset-id demo
 territory dataset build world-countries --source ./sources/ne-admin0.geojson --output ./dist/world-countries
 territory dataset resolve --country TR --level ADM3 --deepest-available --json
+territory registry publish --artifact-root ./dist/tr/artifact --registry-output ./dist/registry --dataset territory-kit-tr --version 1.0.0 --base-url https://datasets.example.com/tr/1.0.0/ --artifact-prefix tr/1.0.0 --dry-run
+territory registry verify --registry https://datasets.example.com/registry.json --dataset territory-kit-tr --version 1.0.0
 ```
 
 Every command returns:
@@ -91,3 +93,12 @@ compact summary. Use `--allow-partial` when intentionally building partial lower
 `territory dataset resolve --country <ISO2> --level <ADM*> --deepest-available` exposes registry
 fallback metadata. The output includes `requestedLevel`, `resolvedLevel`, `exactMatch`, `reason`,
 and `coverageStatus`.
+
+`territory registry publish` prepares a provider-neutral hosted registry bundle with immutable
+version objects, a mutable active `registry.json`, an artifact inventory report, provenance
+metadata, and a rollback manifest. The CLI publish target is local; sync the generated
+`--registry-output` directory with your reviewed CDN or object storage deployment step.
+
+`territory registry verify` fetches a local file, `file:` URL, or HTTP registry and checks selected
+artifact SHA-256 and byte size metadata. `--verify-content-type` and `--verify-etags` add warning
+checks for cache metadata.

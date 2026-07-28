@@ -38,4 +38,114 @@ describe("@territory-kit/data-tr", () => {
     expect(isTurkeyAdm3ParentCovered("tr:adm2:54988432b26387222249237")).toBe(true);
     expect(isTurkeyAdm3ParentCovered("tr:adm2:not-covered")).toBe(false);
   });
+
+  it("loads through a registry-style artifact resolver with checksum verification", async () => {
+    const dataset = createMinimalTurkeyDataset();
+    const files = new Map([
+      [
+        "manifest.json",
+        stableJson({
+          manifestVersion: "1",
+          datasetId: "territory-kit-tr",
+          datasetVersion: "1.0.0",
+          schemaVersion: "territory-schema@1",
+          supportedLevels: ["ADM0"]
+        })
+      ],
+      ["levels/ADM0/dataset.json", stableJson(dataset)]
+    ]);
+    files.set(
+      "checksums.json",
+      stableJson({
+        files: Object.fromEntries(
+          await Promise.all(
+            [...files.entries()].map(async ([path, content]) => [path, await sha256(content)])
+          )
+        )
+      })
+    );
+
+    const handle = await loadTurkeyDataset({
+      levels: ["ADM0"],
+      verifyChecksums: true,
+      registry: {
+        async installDataset(request) {
+          expect(request).toMatchObject({
+            datasetId: "territory-kit-tr",
+            levels: ["ADM0"]
+          });
+
+          return {
+            async resolveArtifact(path: string) {
+              const content = files.get(path);
+
+              if (!content) {
+                throw new Error(`Missing fixture artifact ${path}.`);
+              }
+
+              return content;
+            }
+          };
+        }
+      }
+    });
+
+    expect(handle.levels.ADM0?.manifest.datasetId).toBe("territory-kit-tr");
+  });
 });
+
+function createMinimalTurkeyDataset(): unknown {
+  return {
+    manifest: {
+      datasetId: "territory-kit-tr",
+      datasetVersion: "1.0.0",
+      schemaVersion: "territory-schema@1",
+      sourceDate: "2026-01-01",
+      geometryHash: "territory-kit-tr-fixture-v1",
+      adminLevels: ["ADM0"],
+      license: "Apache-2.0",
+      attribution: "fixture"
+    },
+    zones: [
+      {
+        id: "tr",
+        datasetId: "territory-kit-tr",
+        countryCode: "TR",
+        level: 0,
+        sourceAdminLevel: "ADM0",
+        semanticType: "country",
+        name: "Turkiye",
+        neighborIds: [],
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [25, 35],
+              [45, 35],
+              [45, 42],
+              [25, 42],
+              [25, 35]
+            ]
+          ]
+        },
+        center: [35, 38.5],
+        bbox: [25, 35, 45, 42],
+        properties: {}
+      }
+    ]
+  };
+}
+
+function stableJson(input: unknown): string {
+  return `${JSON.stringify(input, null, 2)}\n`;
+}
+
+async function sha256(input: string): Promise<string> {
+  const bytes = new TextEncoder().encode(input);
+  const buffer =
+    bytes.byteOffset === 0 && bytes.byteLength === bytes.buffer.byteLength
+      ? bytes.buffer
+      : bytes.slice().buffer;
+  const digest = await crypto.subtle.digest("SHA-256", buffer as ArrayBuffer);
+  return [...new Uint8Array(digest)].map((value) => value.toString(16).padStart(2, "0")).join("");
+}

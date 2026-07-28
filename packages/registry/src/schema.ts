@@ -24,7 +24,8 @@ const formatValues = new Set<TerritoryRegistryArtifactFormat>([
   "br",
   "gzip",
   "pmtiles",
-  "mvt"
+  "mvt",
+  "tksi"
 ]);
 
 const levelValues = new Set<TerritoryAdminLevel>(TERRITORY_ADMIN_LEVELS);
@@ -298,6 +299,61 @@ function validateArtifacts(
           "ARTIFACT_COMPRESSION_INVALID",
           "Artifact compression must be none, gzip, or br.",
           `${artifactPath}.compression`
+        )
+      );
+    }
+
+    if (
+      artifact.contentType !== undefined &&
+      (typeof artifact.contentType !== "string" ||
+        artifact.contentType.trim().length === 0 ||
+        /[\r\n]/.test(artifact.contentType))
+    ) {
+      issues.push(
+        issue(
+          "ARTIFACT_CONTENT_TYPE_INVALID",
+          "Artifact contentType must be a non-empty header value.",
+          `${artifactPath}.contentType`
+        )
+      );
+    }
+
+    if (
+      artifact.cacheControl !== undefined &&
+      (typeof artifact.cacheControl !== "string" ||
+        artifact.cacheControl.trim().length === 0 ||
+        /[\r\n]/.test(artifact.cacheControl))
+    ) {
+      issues.push(
+        issue(
+          "ARTIFACT_CACHE_CONTROL_INVALID",
+          "Artifact cacheControl must be a non-empty header value.",
+          `${artifactPath}.cacheControl`
+        )
+      );
+    }
+
+    if (
+      artifact.etag !== undefined &&
+      (typeof artifact.etag !== "string" ||
+        artifact.etag.trim().length === 0 ||
+        /[\r\n]/.test(artifact.etag))
+    ) {
+      issues.push(
+        issue(
+          "ARTIFACT_ETAG_INVALID",
+          "Artifact etag must be a non-empty header value.",
+          `${artifactPath}.etag`
+        )
+      );
+    }
+
+    if (artifact.immutable !== undefined && typeof artifact.immutable !== "boolean") {
+      issues.push(
+        issue(
+          "ARTIFACT_IMMUTABLE_INVALID",
+          "Artifact immutable must be a boolean.",
+          `${artifactPath}.immutable`
         )
       );
     }

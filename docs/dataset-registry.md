@@ -25,3 +25,9 @@ const installed = await registry.installDataset({
 
 The root registry client is browser-safe when a transport and cache are injected. Node filesystem
 cache and file/http transport helpers are available from `@territory-kit/registry/node`.
+
+Hosted publish manifests may additionally include `aliases`, `publishing`, artifact
+`contentType`, `cacheControl`, `etag`, and `immutable` metadata. These fields are additive for
+`registryVersion: "1"` clients. The active hosted `registry.json` acts as the mutable `latest`
+alias, while each dataset version also has an immutable registry URL such as
+`https://datasets.example.com/tr/1.0.0/registry.json`.
