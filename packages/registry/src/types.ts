@@ -12,7 +12,7 @@ export type TerritoryRegistryArtifactPurpose =
   "query" | "render" | "metadata" | "adjacency" | "debug";
 
 export type TerritoryRegistryArtifactFormat =
-  "territory-json" | "geojson" | "json" | "br" | "gzip" | "pmtiles" | "mvt";
+  "territory-json" | "geojson" | "json" | "br" | "gzip" | "pmtiles" | "mvt" | "tksi";
 
 export type TerritoryRegistryArtifactCompression = "none" | "gzip" | "br";
 
@@ -42,6 +42,9 @@ export interface TerritoryRegistryArtifact {
   sizeBytes: number;
   compression?: TerritoryRegistryArtifactCompression;
   contentType?: string;
+  cacheControl?: string;
+  etag?: string;
+  immutable?: boolean;
   datasetContentHash?: string;
   adjacencyForDatasetHash?: string;
   minCoreVersion?: string;

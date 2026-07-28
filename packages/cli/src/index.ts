@@ -73,8 +73,11 @@ import {
 import { validateTerritoryDatasetRegistry } from "@territory-kit/registry";
 import {
   buildTerritoryDatasetRegistryFromArtifacts,
+  createLocalTerritoryRegistryPublishTarget,
   createNodeTerritoryRegistryCache,
   createNodeTerritoryRegistryClient,
+  publishTerritoryDatasetRegistry,
+  verifyTerritoryRegistryPublication,
   readRegistryFile
 } from "@territory-kit/registry/node";
 import type {
@@ -165,51 +168,51 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
 
   try {
     if (command === "dataset") {
-      return runDataset(argv.slice(1));
+      return await runDataset(argv.slice(1));
     }
 
     if (command === "registry") {
-      return runRegistry(argv.slice(1));
+      return await runRegistry(argv.slice(1));
     }
 
     if (command === "cache") {
-      return runCache(argv.slice(1));
+      return await runCache(argv.slice(1));
     }
 
     if (command === "source" || command === "sources") {
-      return runSource(argv.slice(1));
+      return await runSource(argv.slice(1));
     }
 
     if (command === "import") {
-      return runImportCommand(argv.slice(1));
+      return await runImportCommand(argv.slice(1));
     }
 
     if (command === "geometry") {
-      return runGeometry(argv.slice(1));
+      return await runGeometry(argv.slice(1));
     }
 
     if (command === "adjacency") {
-      return runAdjacency(argv.slice(1));
+      return await runAdjacency(argv.slice(1));
     }
 
     if (command === "render") {
-      return runRender(argv.slice(1));
+      return await runRender(argv.slice(1));
     }
 
     if (command === "benchmark") {
-      return runBenchmark(argv.slice(1));
+      return await runBenchmark(argv.slice(1));
     }
 
     if (command === "country") {
-      return runCountry(argv.slice(1));
+      return await runCountry(argv.slice(1));
     }
 
     if (command === "generate") {
-      return runGenerate(argv.slice(1));
+      return await runGenerate(argv.slice(1));
     }
 
     if (command === "index") {
-      return runIndex(argv.slice(1));
+      return await runIndex(argv.slice(1));
     }
 
     const [filePath] = argv.slice(1).filter((value) => !value.startsWith("--"));
@@ -1948,6 +1951,145 @@ async function runRegistry(args: string[]): Promise<number> {
     return validation.ok ? 0 : 1;
   }
 
+  if (subcommand === "publish") {
+    const flags = parseFlags(args.slice(1));
+    const artifactRoot = getFlag(flags, "artifact-root") ?? getFlag(flags, "input");
+    const registryOutput = getFlag(flags, "registry-output") ?? getFlag(flags, "output");
+    const datasetId = getFlag(flags, "dataset");
+    const version = getFlag(flags, "version");
+    const baseUrl = getFlag(flags, "base-url");
+    const targetKind = getFlag(flags, "target") ?? "local";
+
+    if (!artifactRoot || !registryOutput || !datasetId || !version || !baseUrl) {
+      printJson({
+        ok: false,
+        command: "registry publish",
+        issues: [
+          createCliIssue(
+            "--artifact-root, --registry-output, --dataset, --version, and --base-url are required."
+          )
+        ]
+      });
+      return 2;
+    }
+
+    if (targetKind !== "local") {
+      printJson({
+        ok: false,
+        command: "registry publish",
+        issues: [
+          createCliIssue(
+            "The CLI currently publishes to --target local. Use @territory-kit/registry/node adapters for S3-compatible object storage integration."
+          )
+        ]
+      });
+      return 2;
+    }
+
+    const alias = flags.has("no-alias") ? false : (getFlag(flags, "alias") ?? "latest");
+    const publicBaseUrl = getFlag(flags, "public-base-url");
+    const artifactPrefix = getFlag(flags, "artifact-prefix");
+    const registryKey = getFlag(flags, "registry-key");
+    const immutableRegistryKey = getFlag(flags, "immutable-registry-key");
+    const inventoryKey = getFlag(flags, "inventory-key");
+    const rollbackKey = getFlag(flags, "rollback-key");
+    const smokeRegistryUrl = getFlag(flags, "smoke-registry-url");
+    const buildDate = getCliBuildDate(flags);
+    const target = createLocalTerritoryRegistryPublishTarget({
+      rootDir: registryOutput,
+      ...(publicBaseUrl ? { publicBaseUrl } : {})
+    });
+    const result = await publishTerritoryDatasetRegistry({
+      artifactRoot,
+      target,
+      datasetId,
+      version,
+      baseUrl,
+      alias,
+      generatedAt: buildDate,
+      publishedAt: buildDate,
+      provenance: createCliPublishProvenance(flags, artifactRoot),
+      ...(artifactPrefix ? { artifactKeyPrefix: artifactPrefix } : {}),
+      ...(registryKey ? { registryKey } : {}),
+      ...(immutableRegistryKey ? { immutableRegistryKey } : {}),
+      ...(inventoryKey ? { inventoryKey } : {}),
+      ...(rollbackKey ? { rollbackKey } : {}),
+      ...(flags.has("allow-overwrite") ? { allowOverwrite: true } : {}),
+      ...(flags.has("dry-run") ? { dryRun: true } : {}),
+      ...(flags.has("smoke-test") ? { smokeTest: true } : {}),
+      ...(smokeRegistryUrl ? { smokeRegistryUrl } : {})
+    });
+
+    printJson({
+      ok: true,
+      command: "registry publish",
+      data: {
+        dryRun: result.dryRun,
+        registryOutput,
+        datasetId: result.datasetId,
+        version: result.version,
+        alias: result.alias,
+        registryKey: result.registryKey,
+        immutableRegistryKey: result.immutableRegistryKey,
+        inventoryKey: result.inventoryKey,
+        rollbackKey: result.rollbackKey,
+        artifactKeyPrefix: result.artifactKeyPrefix,
+        artifactCount: result.artifactCount,
+        totalSizeBytes: result.totalSizeBytes,
+        uploadedKeys: result.uploadedKeys,
+        ...(result.smokeTest
+          ? {
+              smokeTest: {
+                ok: result.smokeTest.ok,
+                checkedArtifactCount: result.smokeTest.checkedArtifactCount,
+                checkedBytes: result.smokeTest.checkedBytes
+              }
+            }
+          : {})
+      }
+    });
+    return 0;
+  }
+
+  if (subcommand === "verify") {
+    const flags = parseFlags(args.slice(1));
+    const registryUrl =
+      getFlag(flags, "registry") ?? args.slice(1).find((value) => !value.startsWith("--"));
+
+    if (!registryUrl) {
+      printJson({
+        ok: false,
+        command: "registry verify",
+        issues: [createCliIssue("--registry is required.")]
+      });
+      return 2;
+    }
+
+    const datasetId = getFlag(flags, "dataset");
+    const version = getFlag(flags, "version");
+    const result = await verifyTerritoryRegistryPublication({
+      registryUrl,
+      ...(datasetId ? { datasetId } : {}),
+      ...(version ? { version } : {}),
+      ...(flags.has("verify-content-type") ? { verifyContentType: true } : {}),
+      ...(flags.has("verify-etags") ? { verifyEtags: true } : {})
+    });
+
+    printJson({
+      ok: result.ok,
+      command: "registry verify",
+      data: {
+        registryUrl: result.registryUrl,
+        registryHash: result.registryHash,
+        datasetCount: result.datasetCount,
+        checkedArtifactCount: result.checkedArtifactCount,
+        checkedBytes: result.checkedBytes
+      },
+      issues: result.issues
+    });
+    return result.ok ? 0 : 1;
+  }
+
   if (subcommand === "inspect" || subcommand === "list") {
     const flags = parseFlags(args.slice(1));
     const registryPath =
@@ -2776,6 +2918,45 @@ function measureRepeated(iterations: number, callback: () => unknown): { meanMs:
 
 function getBenchmarkGeneratedAt(flags: Map<string, string | true>): string {
   return getFlag(flags, "build-date") ?? new Date().toISOString();
+}
+
+function getCliBuildDate(flags: Map<string, string | true>): string {
+  const buildDate = getFlag(flags, "build-date");
+
+  if (buildDate) {
+    return buildDate;
+  }
+
+  if (process.env.SOURCE_DATE_EPOCH) {
+    return new Date(Number(process.env.SOURCE_DATE_EPOCH) * 1000).toISOString();
+  }
+
+  return new Date().toISOString();
+}
+
+function createCliPublishProvenance(
+  flags: Map<string, string | true>,
+  artifactRoot: string
+): Record<string, unknown> {
+  const sourceRepository = getFlag(flags, "source-repository") ?? process.env.GITHUB_REPOSITORY;
+  const sourceCommit = getFlag(flags, "source-commit") ?? process.env.GITHUB_SHA;
+  const sourceBranch =
+    getFlag(flags, "source-branch") ?? process.env.GITHUB_REF_NAME ?? process.env.GITHUB_HEAD_REF;
+  const workflowRunId = getFlag(flags, "workflow-run-id") ?? process.env.GITHUB_RUN_ID;
+  const buildId = getFlag(flags, "build-id") ?? process.env.GITHUB_RUN_ATTEMPT;
+
+  return {
+    command: "territory registry publish",
+    artifactRoot,
+    node: process.version,
+    platform: process.platform,
+    arch: process.arch,
+    ...(sourceRepository ? { sourceRepository } : {}),
+    ...(sourceCommit ? { sourceCommit } : {}),
+    ...(sourceBranch ? { sourceBranch } : {}),
+    ...(workflowRunId ? { workflowRunId } : {}),
+    ...(buildId ? { buildId } : {})
+  };
 }
 
 function roundMetric(value: number): number {
@@ -3964,11 +4145,23 @@ function printRegistryHelp(): void {
 
 Commands:
   build --input <artifact-dir> --output <registry.json> --base-url <url>
+  publish --artifact-root <artifact-dir> --registry-output <dir> --dataset <id> --version <semver> --base-url <url>
+  verify --registry <registry.json|url> [--dataset <id>] [--version <semver>]
   validate <registry.json>
   inspect --registry <registry.json>
   list --registry <registry.json>
 
 Options:
+  --alias <name>
+  --no-alias
+  --artifact-prefix <object-prefix>
+  --registry-key <object-key>
+  --dry-run
+  --allow-overwrite
+  --smoke-test
+  --smoke-registry-url <url>
+  --verify-content-type
+  --verify-etags
   --build-date <iso-date>
   --force
   --json`);

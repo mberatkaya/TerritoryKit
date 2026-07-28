@@ -12,7 +12,9 @@ const maxBytesByFile = new Map([
   ["packages/core/dist/index.mjs", 65_000],
   ["packages/core/dist/legacy-registry.mjs", 5_000],
   ["packages/registry/dist/index.mjs", 5_000],
-  ["packages/registry/dist/node.mjs", 28_000],
+  // Hosted registry publishing adds provider-neutral local, HTTP, and S3-compatible object-store
+  // adapter contracts plus inventory, rollback, and publish verification helpers to the Node entry.
+  ["packages/registry/dist/node.mjs", 48_000],
   // Sprint 12 turns runtime from lifecycle contracts into viewport request orchestration with
   // scheduler injection, cancellation, cache, lazy engine reuse, adapter updates, stale adapter
   // operation guards, managed source binding, and cache ownership handling.
@@ -42,7 +44,8 @@ const maxBytesByFile = new Map([
   // Sprint 13 adds binary spatial index build/inspect/validate commands.
   // Turkey national source work adds HDX COD-AB import options and simplification/country flags.
   // Turkey ADM0-ADM2 full-build performance work adds phase timeouts and profile reports.
-  ["packages/cli/dist/index.mjs", 106_000]
+  // Hosted registry publishing adds registry publish/verify commands and provenance reporting.
+  ["packages/cli/dist/index.mjs", 116_000]
 ]);
 
 const failures = [];

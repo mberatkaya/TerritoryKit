@@ -1,0 +1,160 @@
+name: Dataset registry publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      dataset:
+        description: "Dataset id to publish"
+        required: true
+        default: "territory-kit-tr"
+      version:
+        description: "Dataset version already recorded in the artifact manifest"
+        required: true
+        default: "0.1.0"
+      levels:
+        description: "Comma-separated ADM levels to build"
+        required: true
+        default: "ADM0,ADM1,ADM2"
+      base_url:
+        description: "Immutable public artifact base URL ending with /"
+        required: true
+        default: "https://datasets.example.invalid/tr/0.1.0/"
+      artifact_prefix:
+        description: "Object prefix that corresponds to base_url"
+        required: true
+        default: "tr/0.1.0"
+      source_lock:
+        description: "Existing source lock path, or empty to create one"
+        required: false
+        default: ""
+      dry_run:
+        description: "Prepare and validate without activating registry.json"
+        required: true
+        type: boolean
+        default: true
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.mode.outputs.should_run }}
+    steps:
+      - id: mode
+        shell: bash
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+          PUBLISH_ENABLED: ${{ secrets.TERRITORY_REGISTRY_PUBLISH_ENABLED }}
+        run: |
+          if [[ "$DRY_RUN" == "true" ]]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::Running provider-neutral dry-run publish."
+            exit 0
+          fi
+
+          if [[ "$PUBLISH_ENABLED" != "true" ]]; then
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::TERRITORY_REGISTRY_PUBLISH_ENABLED is not true; skipping publish safely."
+            exit 0
+          fi
+
+          echo "should_run=true" >> "$GITHUB_OUTPUT"
+
+  build-artifact:
+    needs: preflight
+    if: needs.preflight.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v5
+        with:
+          version: 11.7.0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm --filter @territory-kit/generators build
+      - name: Create source lock
+        if: ${{ inputs.source_lock == '' }}
+        run: |
+          mkdir -p dist/publish
+          pnpm --filter @territory-kit/cli exec territory country source lock TR \
+            --levels "${{ inputs.levels }}" \
+            --output dist/publish/sources.lock.json \
+            --force \
+            --json
+      - name: Copy provided source lock
+        if: ${{ inputs.source_lock != '' }}
+        run: |
+          mkdir -p dist/publish
+          cp "${{ inputs.source_lock }}" dist/publish/sources.lock.json
+      - name: Build dataset artifact
+        run: |
+          pnpm --filter @territory-kit/cli exec territory country build TR \
+            --source-lock dist/publish/sources.lock.json \
+            --levels "${{ inputs.levels }}" \
+            --output dist/publish/artifact \
+            --build-adjacency \
+            --build-query-artifacts \
+            --build-render-artifacts \
+            --build-binary-index \
+            --strict \
+            --force \
+            --profile \
+            --profile-report dist/publish/artifact/build-performance-report.json \
+            --phase-timeout-ms 300000 \
+            --json
+      - name: Validate artifact checksums
+        run: pnpm --filter @territory-kit/cli exec territory country validate dist/publish/artifact --strict
+      - uses: actions/upload-artifact@v5
+        with:
+          name: dataset-publish-artifact
+          path: dist/publish/artifact
+
+  publish-registry:
+    needs: [preflight, build-artifact]
+    if: needs.preflight.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    environment: dataset-registry-production
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v5
+        with:
+          version: 11.7.0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - uses: actions/download-artifact@v5
+        with:
+          name: dataset-publish-artifact
+          path: dist/publish/artifact
+      - name: Build CLI packages
+        run: pnpm --filter @territory-kit/registry build && pnpm --filter @territory-kit/cli build
+      - name: Publish registry bundle
+        run: |
+          DRY_RUN_FLAG=""
+          if [[ "${{ inputs.dry_run }}" == "true" ]]; then
+            DRY_RUN_FLAG="--dry-run"
+          fi
+
+          pnpm --filter @territory-kit/cli exec territory registry publish \
+            --artifact-root dist/publish/artifact \
+            --registry-output dist/publish/registry \
+            --dataset "${{ inputs.dataset }}" \
+            --version "${{ inputs.version }}" \
+            --base-url "${{ inputs.base_url }}" \
+            --artifact-prefix "${{ inputs.artifact_prefix }}" \
+            --build-date "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)" \
+            $DRY_RUN_FLAG \
+            --json
+      - name: Upload registry bundle for provider sync
+        uses: actions/upload-artifact@v5
+        with:
+          name: dataset-registry-bundle
+          path: dist/publish/registry
