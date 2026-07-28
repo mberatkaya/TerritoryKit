@@ -26,10 +26,19 @@ describe("buildTerritoryAdjacency", () => {
     expect(first.artifact.statistics).toMatchObject({
       zoneCount: 5,
       eligibleZoneCount: 5,
+      possiblePairCount: 6,
       candidatePairCount: 3,
       exactComparisonCount: 3,
+      testedPairCount: 3,
+      acceptedPairCount: 3,
+      duplicatePairCount: 0,
+      reciprocityFailureCount: 0,
       finalEdgeCount: 3
     });
+    expect(first.statistics.durationMs).toBeGreaterThanOrEqual(0);
+    expect(first.statistics.indexBuildDurationMs).toBeGreaterThanOrEqual(0);
+    expect(first.statistics.averageNeighbours).toBeGreaterThan(0);
+    expect(first.artifact.statistics.durationMs).toBeUndefined();
     expect(validateTerritoryAdjacencyArtifact(dataset, first.artifact).ok).toBe(true);
     expect(serializeTerritoryAdjacencyArtifact(first.artifact)).toBe(
       serializeTerritoryAdjacencyArtifact(second.artifact)
@@ -73,6 +82,27 @@ describe("buildTerritoryAdjacency", () => {
       finalEdgeCount: 2
     });
     expect(validateTerritoryAdjacencyArtifact(dataset, result.artifact).ok).toBe(true);
+  });
+
+  it("uses spatial candidates instead of comparing every possible pair", async () => {
+    const dataset = sparseAdjacencyDataset(10, 10);
+    const result = await buildTerritoryAdjacency(dataset, {
+      buildDate: "2026-01-01T00:00:00.000Z"
+    });
+
+    expect(result.issues).toEqual([]);
+    expect(result.artifact.edges).toEqual([]);
+    expect(result.statistics).toMatchObject({
+      eligibleZoneCount: 100,
+      possiblePairCount: 4950,
+      candidatePairCount: 0,
+      testedPairCount: 0,
+      acceptedPairCount: 0,
+      rejectedPairCount: 0,
+      duplicatePairCount: 0,
+      reciprocityFailureCount: 0
+    });
+    expect(result.statistics.candidatePairCount).toBeLessThan(result.statistics.possiblePairCount);
   });
 });
 
@@ -137,5 +167,28 @@ function squareGeometry(
         [west, south]
       ]
     ]
+  };
+}
+
+function sparseAdjacencyDataset(rows: number, columns: number): TerritoryDataset {
+  const zones: TerritoryZone[] = [];
+
+  for (let row = 0; row < rows; row += 1) {
+    for (let column = 0; column < columns; column += 1) {
+      const west = column * 2;
+      const south = row * 2;
+      zones.push(squareZone(`cell-${row}-${column}`, 1, west, south, west + 1, south + 1, "root"));
+    }
+  }
+
+  return {
+    manifest: {
+      datasetId: "adjacency-sparse-test",
+      datasetVersion: "0.1.0",
+      schemaVersion: "territory-schema@1",
+      sourceDate: "2026-07",
+      geometryHash: "adjacency-sparse-test-hash"
+    },
+    zones
   };
 }

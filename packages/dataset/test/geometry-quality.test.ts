@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  computeGeometryBBox,
   hashTerritoryGeometry,
   repairGeometryDataset,
   validateGeometryDataset
@@ -7,6 +8,17 @@ import {
 import type { TerritoryDataset, TerritoryGeometry, TerritoryZone } from "../src/index.js";
 
 describe("validateGeometryDataset", () => {
+  it("computes bbox iteratively for very large coordinate arrays", () => {
+    const ring = createLargeRectangleRing(60_000);
+    const bbox = computeGeometryBBox({
+      type: "Polygon",
+      coordinates: [ring]
+    });
+
+    expect(ring.length).toBeGreaterThan(100_000);
+    expect(bbox).toEqual([0, 0, 10, 5]);
+  });
+
   it("validates a simple hierarchy with full geometry checks", () => {
     const result = validateGeometryDataset(validDataset(), { checks: "full" });
 
@@ -144,6 +156,29 @@ function validDataset(): TerritoryDataset {
       square("right", 1, 6, 0, 10, 4, { parentId: "root" })
     ]
   };
+}
+
+function createLargeRectangleRing(pointsPerEdge: number): Array<[number, number]> {
+  const ring: Array<[number, number]> = [];
+
+  for (let index = 0; index < pointsPerEdge; index += 1) {
+    ring.push([(10 * index) / pointsPerEdge, 0]);
+  }
+
+  for (let index = 0; index < pointsPerEdge; index += 1) {
+    ring.push([10, (5 * index) / pointsPerEdge]);
+  }
+
+  for (let index = 0; index < pointsPerEdge; index += 1) {
+    ring.push([10 - (10 * index) / pointsPerEdge, 5]);
+  }
+
+  for (let index = 0; index < pointsPerEdge; index += 1) {
+    ring.push([0, 5 - (5 * index) / pointsPerEdge]);
+  }
+
+  ring.push([0, 0]);
+  return ring;
 }
 
 function square(

@@ -1355,10 +1355,19 @@ function findRingSelfIntersection(
   );
   let candidatePairCount = 0;
   let exactComparisonCount = 0;
+  let rightStartIndex = 0;
 
   for (const [leftSortedIndex, left] of segments.entries()) {
+    while (
+      rightStartIndex < segments.length &&
+      rightStartIndex <= leftSortedIndex &&
+      segments[rightStartIndex]!.bbox[2] < left.bbox[0] - epsilon
+    ) {
+      rightStartIndex += 1;
+    }
+
     for (
-      let rightSortedIndex = leftSortedIndex + 1;
+      let rightSortedIndex = Math.max(leftSortedIndex + 1, rightStartIndex);
       rightSortedIndex < segments.length;
       rightSortedIndex += 1
     ) {
@@ -1482,15 +1491,21 @@ function ringsOverlapPositive(left: LngLat[], right: LngLat[], epsilon: number):
 function polygonsOverlapPositive(left: LngLat[][], right: LngLat[][], epsilon: number): boolean {
   const leftShell = left[0];
   const rightShell = right[0];
+  const leftBBox = polygonBBox(left);
+  const rightBBox = polygonBBox(right);
 
-  if (!leftShell || !rightShell) {
+  if (!leftShell || !rightShell || !leftBBox || !rightBBox) {
+    return false;
+  }
+
+  if (!bboxesIntersect(leftBBox, rightBBox, epsilon)) {
     return false;
   }
 
   return (
     hashPolygon(left) === hashPolygon(right) ||
-    ringHasStrictPointInPolygon(leftShell, right, epsilon) ||
-    ringHasStrictPointInPolygon(rightShell, left, epsilon) ||
+    ringHasStrictPointInPolygon(leftShell, right, rightBBox, epsilon) ||
+    ringHasStrictPointInPolygon(rightShell, left, leftBBox, epsilon) ||
     polygonBoundariesProperlyIntersect(left, right, epsilon)
   );
 }
@@ -1602,9 +1617,14 @@ function ringHasStrictPointInRing(
 function ringHasStrictPointInPolygon(
   subject: LngLat[],
   polygon: LngLat[][],
+  bbox: TerritoryBBox,
   epsilon: number
 ): boolean {
   return subject.slice(0, -1).some((point) => {
+    if (!pointInBBox(point, bbox, epsilon)) {
+      return false;
+    }
+
     if (!polygonCoversPoint(polygon, point, epsilon)) {
       return false;
     }
@@ -1641,35 +1661,27 @@ function ringsIntersect(
   epsilon: number,
   requireProperCrossing: boolean
 ): boolean {
-  for (const leftSegment of ringSegments(left)) {
-    for (const rightSegment of ringSegments(right)) {
-      if (!bboxesIntersect(leftSegment.bbox, rightSegment.bbox, epsilon)) {
-        continue;
-      }
-
-      if (
-        requireProperCrossing
-          ? segmentsProperlyCross(
-              leftSegment.start,
-              leftSegment.end,
-              rightSegment.start,
-              rightSegment.end,
-              epsilon
-            )
-          : segmentsIntersect(
-              leftSegment.start,
-              leftSegment.end,
-              rightSegment.start,
-              rightSegment.end,
-              epsilon
-            )
-      ) {
-        return true;
-      }
-    }
-  }
-
-  return false;
+  return someCandidateSegmentPair(
+    ringSegments(left),
+    ringSegments(right),
+    epsilon,
+    (leftSegment, rightSegment) =>
+      requireProperCrossing
+        ? segmentsProperlyCross(
+            leftSegment.start,
+            leftSegment.end,
+            rightSegment.start,
+            rightSegment.end,
+            epsilon
+          )
+        : segmentsIntersect(
+            leftSegment.start,
+            leftSegment.end,
+            rightSegment.start,
+            rightSegment.end,
+            epsilon
+          )
+  );
 }
 
 function classifyPointInRing(
@@ -1853,6 +1865,54 @@ function pointInBBox(point: LngLat, bbox: TerritoryBBox, epsilon: number): boole
     point[0] <= bbox[2] + epsilon &&
     point[1] >= bbox[1] - epsilon &&
     point[1] <= bbox[3] + epsilon
+  );
+}
+
+function someCandidateSegmentPair(
+  leftSegments: readonly Segment[],
+  rightSegments: readonly Segment[],
+  epsilon: number,
+  predicate: (left: Segment, right: Segment) => boolean
+): boolean {
+  const leftSorted = [...leftSegments].sort(compareSegmentBBoxes);
+  const rightSorted = [...rightSegments].sort(compareSegmentBBoxes);
+  let rightStartIndex = 0;
+
+  for (const left of leftSorted) {
+    while (
+      rightStartIndex < rightSorted.length &&
+      rightSorted[rightStartIndex]!.bbox[2] < left.bbox[0] - epsilon
+    ) {
+      rightStartIndex += 1;
+    }
+
+    for (let rightIndex = rightStartIndex; rightIndex < rightSorted.length; rightIndex += 1) {
+      const right = rightSorted[rightIndex]!;
+
+      if (right.bbox[0] > left.bbox[2] + epsilon) {
+        break;
+      }
+
+      if (!bboxesIntersect(left.bbox, right.bbox, epsilon)) {
+        continue;
+      }
+
+      if (predicate(left, right)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+function compareSegmentBBoxes(left: Segment, right: Segment): number {
+  return (
+    left.bbox[0] - right.bbox[0] ||
+    left.bbox[1] - right.bbox[1] ||
+    left.bbox[2] - right.bbox[2] ||
+    left.bbox[3] - right.bbox[3] ||
+    left.index - right.index
   );
 }
 

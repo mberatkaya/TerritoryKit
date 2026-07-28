@@ -45,6 +45,7 @@ export type {
   TerritoryCountryBuildAllReport,
   TerritoryCountryBuildIssue,
   TerritoryCountryLevelLifecycle,
+  TerritoryCountryAdjacencyStatistics,
   TerritoryCountryBuildOptions,
   TerritoryCountryBuildReport,
   TerritoryCountryBuildResult,

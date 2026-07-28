@@ -349,8 +349,37 @@ export interface TerritoryCountryBuildStatistics {
   geometryRejectedFeatureCount: number;
   geometryRepairDiscardedComponentCount: number;
   adjacencyEdgeCountByLevel: Record<string, number>;
+  adjacencyStatisticsByLevel?: Record<string, TerritoryCountryAdjacencyStatistics>;
   artifactBytes: number;
   publishReady: boolean;
+}
+
+export interface TerritoryCountryAdjacencyStatistics {
+  zoneCount: number;
+  eligibleZoneCount: number;
+  skippedZoneCount: number;
+  featureCount?: number;
+  possiblePairCount?: number;
+  candidatePairCount: number;
+  testedPairCount?: number;
+  acceptedPairCount?: number;
+  rejectedPairCount?: number;
+  duplicatePairCount?: number;
+  exactComparisonCount: number;
+  disjointPairCount: number;
+  sharedBorderCount: number;
+  pointTouchCount: number;
+  overlapRejectedCount: number;
+  ambiguousCount: number;
+  manualAddCount: number;
+  manualRemoveCount: number;
+  finalEdgeCount: number;
+  totalSharedBoundaryMeters: number;
+  indexBuildDurationMs?: number;
+  averageNeighbours?: number;
+  maximumNeighbours?: number;
+  reciprocityFailureCount?: number;
+  durationMs?: number;
 }
 
 export interface TerritoryCountryBuildReport {
@@ -405,7 +434,12 @@ export interface TerritoryCountryBuildPhaseTiming {
   status: "completed" | "failed" | "skipped";
   durationMs: number;
   inputBytes?: number;
+  outputBytes?: number;
   featureCount?: number;
+  peakMemoryBytes?: number;
+  artifactCount?: number;
+  warningCount?: number;
+  errorCount?: number;
   level?: TerritoryAdminLevel;
   outcome?: TerritoryCountryBuildAllOutcome;
   reason?: string;
@@ -417,11 +451,17 @@ export interface TerritoryCountryBuildPhaseEvent {
   status: "started" | "completed" | "failed" | "skipped";
   durationMs: number;
   inputBytes?: number;
+  outputBytes?: number;
   featureCount?: number;
+  peakMemoryBytes?: number;
+  artifactCount?: number;
+  warningCount?: number;
+  errorCount?: number;
   level?: TerritoryAdminLevel;
   outcome?: TerritoryCountryBuildAllOutcome;
   reason?: string;
   startedAt: string;
+  completedAt?: string;
   finishedAt?: string;
 }
 

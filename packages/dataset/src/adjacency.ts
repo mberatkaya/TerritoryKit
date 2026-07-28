@@ -65,6 +65,12 @@ export interface TerritoryBoundarySegment {
   bbox: TerritoryBBox;
 }
 
+interface BoundarySegmentLike {
+  start: LngLat;
+  end: LngLat;
+  bbox: TerritoryBBox;
+}
+
 export interface TerritoryGeometryRelationOptions {
   epsilon?: number;
   tolerance?: Partial<TerritoryAdjacencyTolerance>;
@@ -105,7 +111,13 @@ export interface TerritoryAdjacencyBuildStatistics {
   zoneCount: number;
   eligibleZoneCount: number;
   skippedZoneCount: number;
+  featureCount?: number;
+  possiblePairCount?: number;
   candidatePairCount: number;
+  testedPairCount?: number;
+  acceptedPairCount?: number;
+  rejectedPairCount?: number;
+  duplicatePairCount?: number;
   exactComparisonCount: number;
   disjointPairCount: number;
   sharedBorderCount: number;
@@ -116,6 +128,10 @@ export interface TerritoryAdjacencyBuildStatistics {
   manualRemoveCount: number;
   finalEdgeCount: number;
   totalSharedBoundaryMeters: number;
+  indexBuildDurationMs?: number;
+  averageNeighbours?: number;
+  maximumNeighbours?: number;
+  reciprocityFailureCount?: number;
   durationMs?: number;
 }
 
@@ -451,21 +467,21 @@ export function computeSharedBoundaryMeters(
   });
   const overlaps = new Map<string, [LngLat, LngLat]>();
 
-  for (const leftSegment of leftSegments) {
-    for (const rightSegment of rightSegments) {
-      if (!bboxesIntersect(leftSegment.bbox, rightSegment.bbox, tolerance.coordinateEpsilon)) {
-        continue;
-      }
-
+  forEachCandidateSegmentPair(
+    leftSegments,
+    rightSegments,
+    tolerance.coordinateEpsilon,
+    (leftSegment, rightSegment) => {
       const overlap = collinearOverlap(leftSegment, rightSegment, tolerance);
 
       if (!overlap) {
-        continue;
+        return false;
       }
 
       overlaps.set(segmentKey(overlap[0], overlap[1], tolerance.coordinateEpsilon), overlap);
+      return false;
     }
-  }
+  );
 
   let total = 0;
 
@@ -784,26 +800,25 @@ function countBoundaryTouchPoints(
   });
   const points = new Set<string>();
 
-  for (const leftSegment of leftSegments) {
-    for (const rightSegment of rightSegments) {
-      if (
-        !bboxesIntersect(leftSegment.bbox, rightSegment.bbox, options.tolerance.coordinateEpsilon)
-      ) {
-        continue;
-      }
-
+  forEachCandidateSegmentPair(
+    leftSegments,
+    rightSegments,
+    options.tolerance.coordinateEpsilon,
+    (leftSegment, rightSegment) => {
       for (const point of segmentTouchPoints(leftSegment, rightSegment, options.tolerance)) {
         points.add(pointKey(point, options.tolerance.coordinateEpsilon));
       }
+
+      return false;
     }
-  }
+  );
 
   return points.size;
 }
 
 function segmentTouchPoints(
-  left: TerritoryBoundarySegment,
-  right: TerritoryBoundarySegment,
+  left: BoundarySegmentLike,
+  right: BoundarySegmentLike,
   tolerance: TerritoryAdjacencyTolerance
 ): LngLat[] {
   const candidates = [left.start, left.end, right.start, right.end];
@@ -819,8 +834,8 @@ function segmentTouchPoints(
 }
 
 function collinearOverlap(
-  left: TerritoryBoundarySegment,
-  right: TerritoryBoundarySegment,
+  left: BoundarySegmentLike,
+  right: BoundarySegmentLike,
   tolerance: TerritoryAdjacencyTolerance
 ): [LngLat, LngLat] | undefined {
   if (
@@ -909,14 +924,20 @@ function geometriesOverlapPositive(
 function polygonsOverlapPositive(left: LngLat[][], right: LngLat[][], epsilon: number): boolean {
   const leftShell = left[0];
   const rightShell = right[0];
+  const leftBBox = polygonBBox(left);
+  const rightBBox = polygonBBox(right);
 
-  if (!leftShell || !rightShell) {
+  if (!leftShell || !rightShell || !leftBBox || !rightBBox) {
+    return false;
+  }
+
+  if (!bboxesIntersect(leftBBox, rightBBox, epsilon)) {
     return false;
   }
 
   return (
-    ringHasStrictPointInPolygon(leftShell, right, epsilon) ||
-    ringHasStrictPointInPolygon(rightShell, left, epsilon) ||
+    ringHasStrictPointInPolygon(leftShell, right, rightBBox, epsilon) ||
+    ringHasStrictPointInPolygon(rightShell, left, leftBBox, epsilon) ||
     polygonBoundariesProperlyIntersect(left, right, epsilon)
   );
 }
@@ -924,12 +945,14 @@ function polygonsOverlapPositive(left: LngLat[][], right: LngLat[][], epsilon: n
 function ringHasStrictPointInPolygon(
   ring: LngLat[],
   polygon: LngLat[][],
+  bbox: TerritoryBBox,
   epsilon: number
 ): boolean {
   return ring
     .slice(0, -1)
     .some(
       (point) =>
+        pointInBBox(point, bbox, epsilon) &&
         polygonCoversPoint(polygon, point, epsilon) &&
         classifyPointInRing(point, polygon[0] ?? [], epsilon) === "inside"
     );
@@ -942,10 +965,15 @@ function polygonBoundariesProperlyIntersect(
 ): boolean {
   for (const leftRing of left) {
     for (const rightRing of right) {
-      for (const leftSegment of ringSegments(leftRing)) {
-        for (const rightSegment of ringSegments(rightRing)) {
-          if (
-            bboxesIntersect(leftSegment.bbox, rightSegment.bbox, epsilon) &&
+      const leftSegments = ringSegments(leftRing);
+      const rightSegments = ringSegments(rightRing);
+
+      if (
+        someCandidateSegmentPair(
+          leftSegments,
+          rightSegments,
+          epsilon,
+          (leftSegment, rightSegment) =>
             segmentsProperlyCross(
               leftSegment.start,
               leftSegment.end,
@@ -953,10 +981,9 @@ function polygonBoundariesProperlyIntersect(
               rightSegment.end,
               epsilon
             )
-          ) {
-            return true;
-          }
-        }
+        )
+      ) {
+        return true;
       }
     }
   }
@@ -1031,8 +1058,8 @@ function classifyPointInRing(
   return inside ? "inside" : "outside";
 }
 
-function ringSegments(ring: LngLat[]): Array<{ start: LngLat; end: LngLat; bbox: TerritoryBBox }> {
-  const segments: Array<{ start: LngLat; end: LngLat; bbox: TerritoryBBox }> = [];
+function ringSegments(ring: LngLat[]): BoundarySegmentLike[] {
+  const segments: BoundarySegmentLike[] = [];
 
   for (let index = 0; index < ring.length - 1; index += 1) {
     const start = ring[index];
@@ -1043,7 +1070,7 @@ function ringSegments(ring: LngLat[]): Array<{ start: LngLat; end: LngLat; bbox:
     }
   }
 
-  return segments;
+  return segments.sort(compareSegmentBBoxes);
 }
 
 function segmentsProperlyCross(
@@ -1096,12 +1123,104 @@ function bboxesIntersect(left: TerritoryBBox, right: TerritoryBBox, epsilon: num
   );
 }
 
+function pointInBBox(point: LngLat, bbox: TerritoryBBox, epsilon: number): boolean {
+  return (
+    point[0] >= bbox[0] - epsilon &&
+    point[0] <= bbox[2] + epsilon &&
+    point[1] >= bbox[1] - epsilon &&
+    point[1] <= bbox[3] + epsilon
+  );
+}
+
 function bboxContains(container: TerritoryBBox, subject: TerritoryBBox, epsilon: number): boolean {
   return (
     subject[0] >= container[0] - epsilon &&
     subject[1] >= container[1] - epsilon &&
     subject[2] <= container[2] + epsilon &&
     subject[3] <= container[3] + epsilon
+  );
+}
+
+function polygonBBox(polygon: LngLat[][]): TerritoryBBox | undefined {
+  let west = Number.POSITIVE_INFINITY;
+  let south = Number.POSITIVE_INFINITY;
+  let east = Number.NEGATIVE_INFINITY;
+  let north = Number.NEGATIVE_INFINITY;
+  let hasCoordinate = false;
+
+  for (const ring of polygon) {
+    for (const coordinate of ring) {
+      const longitude = coordinate[0];
+      const latitude = coordinate[1];
+
+      if (!Number.isFinite(longitude) || !Number.isFinite(latitude)) {
+        continue;
+      }
+
+      hasCoordinate = true;
+      west = Math.min(west, longitude);
+      south = Math.min(south, latitude);
+      east = Math.max(east, longitude);
+      north = Math.max(north, latitude);
+    }
+  }
+
+  return hasCoordinate ? [west, south, east, north] : undefined;
+}
+
+function forEachCandidateSegmentPair(
+  leftSegments: readonly BoundarySegmentLike[],
+  rightSegments: readonly BoundarySegmentLike[],
+  epsilon: number,
+  callback: (left: BoundarySegmentLike, right: BoundarySegmentLike) => boolean
+): boolean {
+  const leftSorted = [...leftSegments].sort(compareSegmentBBoxes);
+  const rightSorted = [...rightSegments].sort(compareSegmentBBoxes);
+  let rightStartIndex = 0;
+
+  for (const left of leftSorted) {
+    while (
+      rightStartIndex < rightSorted.length &&
+      rightSorted[rightStartIndex]!.bbox[2] < left.bbox[0] - epsilon
+    ) {
+      rightStartIndex += 1;
+    }
+
+    for (let rightIndex = rightStartIndex; rightIndex < rightSorted.length; rightIndex += 1) {
+      const right = rightSorted[rightIndex]!;
+
+      if (right.bbox[0] > left.bbox[2] + epsilon) {
+        break;
+      }
+
+      if (!bboxesIntersect(left.bbox, right.bbox, epsilon)) {
+        continue;
+      }
+
+      if (callback(left, right)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+function someCandidateSegmentPair(
+  leftSegments: readonly BoundarySegmentLike[],
+  rightSegments: readonly BoundarySegmentLike[],
+  epsilon: number,
+  predicate: (left: BoundarySegmentLike, right: BoundarySegmentLike) => boolean
+): boolean {
+  return forEachCandidateSegmentPair(leftSegments, rightSegments, epsilon, predicate);
+}
+
+function compareSegmentBBoxes(left: BoundarySegmentLike, right: BoundarySegmentLike): number {
+  return (
+    left.bbox[0] - right.bbox[0] ||
+    left.bbox[1] - right.bbox[1] ||
+    left.bbox[2] - right.bbox[2] ||
+    left.bbox[3] - right.bbox[3]
   );
 }
 

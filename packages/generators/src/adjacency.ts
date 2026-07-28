@@ -1,9 +1,12 @@
 import { mkdir, mkdtemp, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import { basename, dirname, extname, join, resolve } from "node:path";
+import { performance } from "node:perf_hooks";
+import FlatbushDefault from "flatbush";
 import {
   applyTerritoryAdjacencyOverrides,
   classifyTerritoryGeometryRelation,
   computeTerritoryAdjacencyContentHash,
+  createTerritoryAdjacencyIndex,
   normalizeTerritoryAdjacencyEdges,
   validateGeometryDataset,
   validateTerritoryAdjacencyArtifact
@@ -24,6 +27,21 @@ import type {
 import { readTerritoryDatasetPath } from "./geometry-quality.js";
 import { pathExists, serializeJsonStable, writeFilesAtomically } from "./sources/utils.js";
 
+type FlatbushConstructor = typeof FlatbushDefault;
+type TerritoryAdjacencyPerformanceStatistics = TerritoryAdjacencyBuildStatistics & {
+  featureCount: number;
+  possiblePairCount: number;
+  testedPairCount: number;
+  acceptedPairCount: number;
+  rejectedPairCount: number;
+  duplicatePairCount: number;
+  indexBuildDurationMs: number;
+  averageNeighbours: number;
+  maximumNeighbours: number;
+  reciprocityFailureCount: number;
+  durationMs: number;
+};
+
 export interface TerritoryAdjacencyBuildIssue {
   code: string;
   severity: "error" | "warning" | "info";
@@ -36,7 +54,7 @@ export interface TerritoryAdjacencyBuildIssue {
 export interface TerritoryAdjacencyBuildResult {
   artifact: TerritoryAdjacencyArtifact;
   issues: TerritoryAdjacencyBuildIssue[];
-  statistics: TerritoryAdjacencyBuildStatistics;
+  statistics: TerritoryAdjacencyPerformanceStatistics;
 }
 
 export interface TerritoryAdjacencyPathBuildOptions extends TerritoryAdjacencyBuildOptions {
@@ -69,6 +87,13 @@ interface CandidatePair {
   right: TerritoryZone;
 }
 
+interface CandidatePairResult {
+  pairs: CandidatePair[];
+  possiblePairCount: number;
+  duplicatePairCount: number;
+  indexBuildDurationMs: number;
+}
+
 const GENERATORS_PACKAGE_VERSION = "1.1.0";
 const INVALID_GEOMETRY_CODES = new Set<GeometryQualityIssueCode>([
   "GEOMETRY_TYPE_INVALID",
@@ -98,18 +123,26 @@ const DEFAULT_ADJACENCY_GEOMETRY_CHECKS: GeometryQualityChecks = {
   parentContainment: false,
   siblingOverlaps: false
 };
+const Flatbush = resolveFlatbushConstructor(FlatbushDefault);
 
 export async function buildTerritoryAdjacency(
   dataset: TerritoryDataset,
   options: TerritoryAdjacencyBuildOptions & { buildDate?: string } = {}
 ): Promise<TerritoryAdjacencyBuildResult> {
+  const startedAt = performance.now();
   const normalizedOptions = normalizeAdjacencyBuildOptions(options);
   const issues: TerritoryAdjacencyBuildIssue[] = [];
-  const statistics: TerritoryAdjacencyBuildStatistics = {
+  const statistics: TerritoryAdjacencyPerformanceStatistics = {
     zoneCount: dataset.zones.length,
+    featureCount: dataset.zones.length,
     eligibleZoneCount: 0,
     skippedZoneCount: 0,
+    possiblePairCount: 0,
     candidatePairCount: 0,
+    testedPairCount: 0,
+    acceptedPairCount: 0,
+    rejectedPairCount: 0,
+    duplicatePairCount: 0,
     exactComparisonCount: 0,
     disjointPairCount: 0,
     sharedBorderCount: 0,
@@ -119,7 +152,12 @@ export async function buildTerritoryAdjacency(
     manualAddCount: normalizedOptions.overrides.add?.length ?? 0,
     manualRemoveCount: normalizedOptions.overrides.remove?.length ?? 0,
     finalEdgeCount: 0,
-    totalSharedBoundaryMeters: 0
+    totalSharedBoundaryMeters: 0,
+    indexBuildDurationMs: 0,
+    averageNeighbours: 0,
+    maximumNeighbours: 0,
+    reciprocityFailureCount: 0,
+    durationMs: 0
   };
 
   options.onProgress?.({ phase: "quality" });
@@ -160,8 +198,12 @@ export async function buildTerritoryAdjacency(
   statistics.skippedZoneCount = dataset.zones.length - eligibleZones.length;
 
   options.onProgress?.({ phase: "candidates" });
-  const candidates = createAdjacencyCandidatePairs(eligibleZones, normalizedOptions);
+  const candidateResult = createAdjacencyCandidatePairs(eligibleZones, normalizedOptions);
+  const candidates = candidateResult.pairs;
+  statistics.possiblePairCount = candidateResult.possiblePairCount;
   statistics.candidatePairCount = candidates.length;
+  statistics.duplicatePairCount = candidateResult.duplicatePairCount;
+  statistics.indexBuildDurationMs = candidateResult.indexBuildDurationMs;
 
   const computedEdges: TerritoryAdjacencyEdge[] = [];
   const totalPairs = candidates.length;
@@ -169,6 +211,8 @@ export async function buildTerritoryAdjacency(
   for (const [index, pair] of candidates.entries()) {
     throwIfAborted(options.signal);
     statistics.exactComparisonCount += 1;
+    statistics.testedPairCount = statistics.exactComparisonCount;
+    let accepted = false;
 
     if (index % normalizedOptions.batchSize === 0 || index + 1 === totalPairs) {
       options.onProgress?.({
@@ -195,6 +239,7 @@ export async function buildTerritoryAdjacency(
           confidence: relation.confidence
         });
         statistics.totalSharedBoundaryMeters += relation.sharedBoundaryMeters;
+        accepted = true;
       }
     } else if (relation.relation === "point-touch") {
       statistics.pointTouchCount += 1;
@@ -207,6 +252,7 @@ export async function buildTerritoryAdjacency(
           source: "computed",
           confidence: relation.confidence
         });
+        accepted = true;
       }
     } else if (relation.relation === "disjoint") {
       statistics.disjointPairCount += 1;
@@ -234,6 +280,12 @@ export async function buildTerritoryAdjacency(
         otherZoneId: pair.right.id
       });
     }
+
+    if (accepted) {
+      statistics.acceptedPairCount = (statistics.acceptedPairCount ?? 0) + 1;
+    } else {
+      statistics.rejectedPairCount = (statistics.rejectedPairCount ?? 0) + 1;
+    }
   }
 
   options.onProgress?.({ phase: "overrides" });
@@ -245,6 +297,11 @@ export async function buildTerritoryAdjacency(
   statistics.totalSharedBoundaryMeters = roundMeters(
     finalEdges.reduce((sum, edge) => sum + (edge.sharedBoundaryMeters ?? 0), 0)
   );
+  const neighbourStats = computeNeighbourStatistics(eligibleZones, finalEdges);
+  statistics.averageNeighbours = neighbourStats.averageNeighbours;
+  statistics.maximumNeighbours = neighbourStats.maximumNeighbours;
+  statistics.reciprocityFailureCount = neighbourStats.reciprocityFailureCount;
+  statistics.durationMs = Math.round(performance.now() - startedAt);
 
   options.onProgress?.({ phase: "artifact" });
   const artifactWithoutHash: Omit<TerritoryAdjacencyArtifact, "contentHash"> = {
@@ -275,7 +332,7 @@ export async function buildTerritoryAdjacency(
       collinearityEpsilon: normalizedOptions.epsilon,
       lengthEpsilonMeters: 0.001
     },
-    statistics,
+    statistics: createArtifactStatistics(statistics),
     overrides: {
       addCount: normalizedOptions.overrides.add?.length ?? 0,
       removeCount: normalizedOptions.overrides.remove?.length ?? 0
@@ -418,64 +475,146 @@ export async function writeTerritoryAdjacencyOutput(
 function createAdjacencyCandidatePairs(
   zones: readonly TerritoryZone[],
   options: ReturnType<typeof normalizeAdjacencyBuildOptions>
-): CandidatePair[] {
-  const indexed = zones
-    .map<IndexedZone>((zone, index) => ({
-      index,
-      zone,
-      bbox: zone.bbox
-    }))
-    .sort(
-      (left, right) =>
-        left.bbox[0] - right.bbox[0] ||
-        left.bbox[1] - right.bbox[1] ||
-        left.zone.id.localeCompare(right.zone.id)
-    );
+): CandidatePairResult {
+  const indexed = zones.map<IndexedZone>((zone, index) => ({
+    index,
+    zone,
+    bbox: zone.bbox
+  }));
+  const groups = groupIndexedZonesForAdjacency(indexed, options);
   const pairs: CandidatePair[] = [];
+  const seenPairs = new Set<string>();
+  let possiblePairCount = 0;
+  let duplicatePairCount = 0;
+  const indexStartedAt = performance.now();
 
-  for (const [leftSortedIndex, left] of indexed.entries()) {
-    for (
-      let rightSortedIndex = leftSortedIndex + 1;
-      rightSortedIndex < indexed.length;
-      rightSortedIndex += 1
-    ) {
-      const right = indexed[rightSortedIndex];
+  for (const group of [...groups.values()].sort(compareIndexedZoneGroups)) {
+    possiblePairCount += (group.length * (group.length - 1)) / 2;
 
-      if (!right) {
-        continue;
+    if (group.length < 2) {
+      continue;
+    }
+
+    const index = new Flatbush(group.length);
+
+    for (const item of group) {
+      index.add(item.bbox[0], item.bbox[1], item.bbox[2], item.bbox[3]);
+    }
+
+    index.finish();
+
+    for (const left of group) {
+      const matches = index.search(
+        left.bbox[0] - options.epsilon,
+        left.bbox[1] - options.epsilon,
+        left.bbox[2] + options.epsilon,
+        left.bbox[3] + options.epsilon
+      ) as number[];
+
+      for (const rightGroupIndex of matches) {
+        const right = group[rightGroupIndex];
+
+        if (!right || right.index <= left.index) {
+          continue;
+        }
+
+        if (!bboxesIntersect(left.bbox, right.bbox, options.epsilon)) {
+          continue;
+        }
+
+        if (options.sameAdminLevelOnly && left.zone.level !== right.zone.level) {
+          continue;
+        }
+
+        if (
+          options.sameParentOnly &&
+          (left.zone.parentId ?? "__root__") !== (right.zone.parentId ?? "__root__")
+        ) {
+          continue;
+        }
+
+        const [a, b] =
+          left.zone.id.localeCompare(right.zone.id) <= 0
+            ? [left.zone, right.zone]
+            : [right.zone, left.zone];
+        const key = `${a.id}\0${b.id}`;
+
+        if (seenPairs.has(key)) {
+          duplicatePairCount += 1;
+          continue;
+        }
+
+        seenPairs.add(key);
+        pairs.push({ left: a, right: b });
       }
-
-      if (right.bbox[0] > left.bbox[2] + options.epsilon) {
-        break;
-      }
-
-      if (!bboxesIntersect(left.bbox, right.bbox, options.epsilon)) {
-        continue;
-      }
-
-      if (options.sameAdminLevelOnly && left.zone.level !== right.zone.level) {
-        continue;
-      }
-
-      if (
-        options.sameParentOnly &&
-        (left.zone.parentId ?? "__root__") !== (right.zone.parentId ?? "__root__")
-      ) {
-        continue;
-      }
-
-      const [a, b] =
-        left.zone.id.localeCompare(right.zone.id) <= 0
-          ? [left.zone, right.zone]
-          : [right.zone, left.zone];
-      pairs.push({ left: a, right: b });
     }
   }
 
-  return pairs.sort(
-    (left, right) =>
-      left.left.id.localeCompare(right.left.id) || left.right.id.localeCompare(right.right.id)
-  );
+  return {
+    pairs: pairs.sort(
+      (left, right) =>
+        left.left.id.localeCompare(right.left.id) || left.right.id.localeCompare(right.right.id)
+    ),
+    possiblePairCount,
+    duplicatePairCount,
+    indexBuildDurationMs: Math.round(performance.now() - indexStartedAt)
+  };
+}
+
+function groupIndexedZonesForAdjacency(
+  zones: readonly IndexedZone[],
+  options: ReturnType<typeof normalizeAdjacencyBuildOptions>
+): Map<string, IndexedZone[]> {
+  const groups = new Map<string, IndexedZone[]>();
+
+  for (const zone of zones) {
+    const keyParts = [
+      options.sameAdminLevelOnly ? `level:${zone.zone.level}` : "level:*",
+      options.sameParentOnly ? `parent:${zone.zone.parentId ?? "__root__"}` : "parent:*"
+    ];
+    const key = keyParts.join("|");
+    groups.set(key, [...(groups.get(key) ?? []), zone]);
+  }
+
+  for (const [key, group] of groups.entries()) {
+    groups.set(
+      key,
+      [...group].sort(
+        (left, right) =>
+          left.zone.id.localeCompare(right.zone.id) ||
+          left.bbox[0] - right.bbox[0] ||
+          left.bbox[1] - right.bbox[1]
+      )
+    );
+  }
+
+  return groups;
+}
+
+function compareIndexedZoneGroups(
+  left: readonly IndexedZone[],
+  right: readonly IndexedZone[]
+): number {
+  const leftFirst = left[0]?.zone;
+  const rightFirst = right[0]?.zone;
+
+  return (leftFirst?.id ?? "").localeCompare(rightFirst?.id ?? "");
+}
+
+function resolveFlatbushConstructor(candidate: unknown): FlatbushConstructor {
+  if (typeof candidate === "function") {
+    return candidate as FlatbushConstructor;
+  }
+
+  if (
+    candidate &&
+    typeof candidate === "object" &&
+    typeof (candidate as { readonly default?: unknown }).default === "function"
+  ) {
+    return (candidate as { readonly default: FlatbushConstructor }).default;
+  }
+
+  throw new TypeError("Unable to resolve the Flatbush constructor.");
 }
 
 function normalizeAdjacencyBuildOptions(
@@ -508,6 +647,58 @@ function createBuildReport(result: TerritoryAdjacencyBuildResult): {
     ok: result.issues.every((issue) => issue.severity !== "error"),
     statistics: result.statistics,
     issues: result.issues
+  };
+}
+
+function createArtifactStatistics(
+  statistics: TerritoryAdjacencyPerformanceStatistics
+): TerritoryAdjacencyBuildStatistics {
+  const {
+    durationMs: _durationMs,
+    indexBuildDurationMs: _indexBuildDurationMs,
+    ...stableStatistics
+  } = statistics;
+
+  return stableStatistics;
+}
+
+function computeNeighbourStatistics(
+  zones: readonly TerritoryZone[],
+  edges: readonly TerritoryAdjacencyEdge[]
+): {
+  averageNeighbours: number;
+  maximumNeighbours: number;
+  reciprocityFailureCount: number;
+} {
+  if (zones.length === 0) {
+    return {
+      averageNeighbours: 0,
+      maximumNeighbours: 0,
+      reciprocityFailureCount: 0
+    };
+  }
+
+  const index = createTerritoryAdjacencyIndex({ edges: [...edges] });
+  let totalNeighbours = 0;
+  let maximumNeighbours = 0;
+  let reciprocityFailureCount = 0;
+
+  for (const zone of zones) {
+    const neighbours = index.getNeighbors(zone.id);
+    totalNeighbours += neighbours.length;
+    maximumNeighbours = Math.max(maximumNeighbours, neighbours.length);
+
+    for (const neighbour of neighbours) {
+      if (!index.getNeighbors(neighbour).includes(zone.id)) {
+        reciprocityFailureCount += 1;
+      }
+    }
+  }
+
+  return {
+    averageNeighbours: Math.round((totalNeighbours / zones.length) * 1000) / 1000,
+    maximumNeighbours,
+    reciprocityFailureCount
   };
 }
 

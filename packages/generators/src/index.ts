@@ -127,6 +127,9 @@ export {
   validateTerritoryRenderArtifactPath
 } from "./render-artifacts.js";
 export type {
+  TerritoryMvtLevelReport,
+  TerritoryMvtPolicyLimits,
+  TerritoryMvtPolicyReport,
   TerritoryRenderBuildOptions,
   TerritoryRenderBuildResult,
   TerritoryRenderPathBuildOptions,

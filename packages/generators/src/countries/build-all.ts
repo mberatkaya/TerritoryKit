@@ -659,7 +659,12 @@ function createPhaseRecorder(input: {
         status: event.status,
         durationMs: event.durationMs,
         ...(event.inputBytes !== undefined ? { inputBytes: event.inputBytes } : {}),
+        ...(event.outputBytes !== undefined ? { outputBytes: event.outputBytes } : {}),
         ...(event.featureCount !== undefined ? { featureCount: event.featureCount } : {}),
+        ...(event.peakMemoryBytes !== undefined ? { peakMemoryBytes: event.peakMemoryBytes } : {}),
+        ...(event.artifactCount !== undefined ? { artifactCount: event.artifactCount } : {}),
+        ...(event.warningCount !== undefined ? { warningCount: event.warningCount } : {}),
+        ...(event.errorCount !== undefined ? { errorCount: event.errorCount } : {}),
         ...(event.level ? { level: event.level } : {}),
         ...(event.outcome ? { outcome: event.outcome } : {}),
         ...(event.reason ? { reason: event.reason } : {})

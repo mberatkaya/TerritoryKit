@@ -133,6 +133,28 @@ interface CliBenchmarkResult {
   skipped?: string[];
 }
 
+interface CliCountryBuildPhaseEvent {
+  country: string;
+  phase: string;
+  status: "started" | "completed" | "failed" | "skipped";
+  durationMs: number;
+  inputBytes?: number;
+  outputBytes?: number;
+  featureCount?: number;
+  peakMemoryBytes?: number;
+  artifactCount?: number;
+  warningCount?: number;
+  errorCount?: number;
+  level?: TerritoryAdminLevel;
+  outcome?: string;
+  reason?: string;
+  startedAt: string;
+  completedAt?: string;
+  finishedAt?: string;
+}
+
+type CliCountryBuildResult = Awaited<ReturnType<typeof buildTerritoryCountryDatasetPath>>;
+
 export async function runCli(argv: string[] = process.argv.slice(2)): Promise<number> {
   const [command] = argv;
 
@@ -634,7 +656,13 @@ async function runCountryBuild(args: string[]): Promise<number> {
   const outputPath = getFlag(flags, "output");
   const levels = readCountryLevelsFlag(flags);
   const buildDate = getFlag(flags, "build-date");
-  const batchSize = getFlag(flags, "batch-size");
+  const flagIssues: CliIssue[] = [];
+  const batchSize = readOptionalPositiveIntegerFlag(flags, "batch-size", flagIssues);
+  const phaseTimeoutMs = readOptionalPositiveIntegerFlag(flags, "phase-timeout-ms", flagIssues);
+  const profile = flags.has("profile");
+  const profileEvents: CliCountryBuildPhaseEvent[] = [];
+  const profileStartedAt = new Date().toISOString();
+  const profileStarted = performance.now();
 
   if (!sourceLockPath || !outputPath) {
     printJson({
@@ -653,6 +681,11 @@ async function runCountryBuild(args: string[]): Promise<number> {
     return 2;
   }
 
+  if (flagIssues.length > 0) {
+    printJson({ ok: false, command: "country build", issues: flagIssues });
+    return 2;
+  }
+
   try {
     const result = await buildTerritoryCountryDatasetPath({
       country,
@@ -668,10 +701,32 @@ async function runCountryBuild(args: string[]): Promise<number> {
         ? { allowNonPublishReady: true }
         : {}),
       ...(buildDate ? { buildDate } : {}),
-      ...(batchSize ? { batchSize: Number(batchSize) } : {}),
-      ...(flags.has("force") ? { force: true } : {})
+      ...(batchSize ? { batchSize } : {}),
+      ...(phaseTimeoutMs ? { phaseTimeoutMs } : {}),
+      ...(flags.has("force") ? { force: true } : {}),
+      ...(profile
+        ? {
+            onPhase: (event: CliCountryBuildPhaseEvent) => {
+              profileEvents.push(event);
+            }
+          }
+        : {})
     });
     const ok = result.issues.every((issue) => issue.severity !== "error");
+    const profilePath = profile
+      ? await writeCountryBuildPerformanceReport({
+          result,
+          sourceLockPath,
+          requestedLevels: levels ?? result.manifest.supportedLevels,
+          profileEvents,
+          startedAt: profileStartedAt,
+          completedAt: new Date().toISOString(),
+          totalDurationMs: Math.round(performance.now() - profileStarted),
+          outputPath:
+            getFlag(flags, "profile-report") ??
+            join(result.outputPath ?? outputPath, "build-performance-report.json")
+        })
+      : undefined;
 
     printJson({
       ok,
@@ -679,6 +734,7 @@ async function runCountryBuild(args: string[]): Promise<number> {
       data: {
         country: result.manifest.country.alpha2,
         outputPath: result.outputPath,
+        ...(profilePath ? { profilePath } : {}),
         manifest: result.manifest,
         statistics: result.buildReport.statistics,
         ...(flags.has("json") ? { buildReport: result.buildReport } : {})
@@ -694,6 +750,99 @@ async function runCountryBuild(args: string[]): Promise<number> {
     });
     return flags.has("strict") ? 3 : 2;
   }
+}
+
+async function writeCountryBuildPerformanceReport(input: {
+  result: CliCountryBuildResult;
+  sourceLockPath: string;
+  requestedLevels: readonly TerritoryAdminLevel[];
+  profileEvents: readonly CliCountryBuildPhaseEvent[];
+  startedAt: string;
+  completedAt: string;
+  totalDurationMs: number;
+  outputPath: string;
+}): Promise<string> {
+  const warningCount = input.result.issues.filter((issue) => issue.severity === "warning").length;
+  const errorCount = input.result.issues.filter((issue) => issue.severity === "error").length;
+  const phaseReports = input.profileEvents
+    .filter((event) => event.status !== "started")
+    .map((event) => ({
+      phase: event.phase,
+      status: event.status,
+      startedAt: event.startedAt,
+      completedAt: event.completedAt ?? event.finishedAt ?? input.completedAt,
+      durationMs: event.durationMs,
+      ...(event.level ? { level: event.level } : {}),
+      ...(event.featureCount !== undefined ? { featureCount: event.featureCount } : {}),
+      ...(event.inputBytes !== undefined ? { inputBytes: event.inputBytes } : {}),
+      ...(event.outputBytes !== undefined ? { outputBytes: event.outputBytes } : {}),
+      ...(event.peakMemoryBytes !== undefined ? { peakMemoryBytes: event.peakMemoryBytes } : {}),
+      ...(event.artifactCount !== undefined ? { artifactCount: event.artifactCount } : {}),
+      warningCount,
+      errorCount,
+      ...(event.reason ? { reason: event.reason } : {})
+    }));
+  const artifactSizes = [...input.result.files.entries()].map(([path, content]) => ({
+    path,
+    sizeBytes: Buffer.byteLength(content)
+  }));
+  const peakMemoryBytes = Math.max(
+    0,
+    readCliMemoryUsageBytes() ?? 0,
+    ...phaseReports.map((phase) =>
+      typeof phase.peakMemoryBytes === "number" ? phase.peakMemoryBytes : 0
+    )
+  );
+  const report = {
+    reportVersion: "1",
+    generatedAt: input.completedAt,
+    command: "country build",
+    country: input.result.manifest.country.alpha2,
+    sourceLockPath: input.sourceLockPath,
+    sourceLockHash: input.result.manifest.sourceLockHash,
+    outputPath: input.result.outputPath,
+    requestedLevels: input.requestedLevels,
+    startedAt: input.startedAt,
+    completedAt: input.completedAt,
+    totalDurationMs: input.totalDurationMs,
+    summary: {
+      featureCount: input.result.combinedDataset?.zones.length ?? 0,
+      featureCountByLevel: input.result.manifest.featureCountByLevel,
+      sourceBytes: input.result.buildReport.statistics.sourceBytes,
+      outputBytes: artifactSizes.reduce((sum, artifact) => sum + artifact.sizeBytes, 0),
+      artifactCount: artifactSizes.length,
+      peakMemoryBytes,
+      warningCount,
+      errorCount
+    },
+    phases: phaseReports,
+    artifacts: artifactSizes.sort((left, right) => left.path.localeCompare(right.path)),
+    adjacency:
+      (
+        input.result.buildReport.statistics as {
+          adjacencyStatisticsByLevel?: Record<string, unknown>;
+        }
+      ).adjacencyStatisticsByLevel ?? {},
+    reports: {
+      build: "build-report.json",
+      adjacency: "adjacency-report.json",
+      mvt: "render/mvt-policy-report.json",
+      checksums: "checksums.json",
+      coverage: "manifest.json"
+    }
+  };
+
+  await mkdir(dirname(input.outputPath), { recursive: true });
+  await writeFile(input.outputPath, `${JSON.stringify(report, null, 2)}\n`, "utf8");
+  return input.outputPath;
+}
+
+function readCliMemoryUsageBytes(): number | undefined {
+  if (typeof process === "undefined" || typeof process.memoryUsage !== "function") {
+    return undefined;
+  }
+
+  return process.memoryUsage().rss;
 }
 
 async function runCountryValidate(args: string[]): Promise<number> {
@@ -3896,6 +4045,9 @@ Options:
   --allow-partial
   --build-date <iso-date>
   --batch-size <integer>
+  --phase-timeout-ms <ms>
+  --profile
+  --profile-report <path>
   --force
   --json`);
 }

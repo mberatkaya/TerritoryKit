@@ -109,6 +109,35 @@ describe("pilot country dataset pipeline", () => {
       expect(build.files.has("index/index.tksi")).toBe(true);
       expect(build.files.has("levels/ADM2/index/index.tksi")).toBe(true);
       expect(build.files.has("render/manifest.json")).toBe(true);
+      expect(build.files.has("render/mvt-policy-report.json")).toBe(true);
+      expect(build.files.has("adjacency-report.json")).toBe(true);
+
+      const adm2ValidationReport = readGeneratedJson<{
+        dataset: { zoneCount: number; zones?: unknown };
+      }>(build.files, "levels/ADM2/validation-report.json");
+      expect(adm2ValidationReport.dataset.zoneCount).toBe(4);
+      expect(adm2ValidationReport.dataset.zones).toBeUndefined();
+
+      const adjacencyReport = readGeneratedJson<{
+        levels: { ADM2: { statistics: { possiblePairCount: number; candidatePairCount: number } } };
+      }>(build.files, "adjacency-report.json");
+      expect(adjacencyReport.levels.ADM2.statistics.possiblePairCount).toBe(2);
+      expect(adjacencyReport.levels.ADM2.statistics.candidatePairCount).toBe(2);
+
+      const mvtReport = readGeneratedJson<{
+        ok: boolean;
+        levels: Array<{ level: string; minZoom: number; maxZoom: number }>;
+        totals: { candidateTileCount: number; generatedTileCount: number; totalBytes: number };
+      }>(build.files, "render/mvt-policy-report.json");
+      expect(mvtReport.ok).toBe(true);
+      expect(mvtReport.levels).toEqual([
+        expect.objectContaining({ level: "ADM0", minZoom: 0, maxZoom: 4 }),
+        expect.objectContaining({ level: "ADM1", minZoom: 5, maxZoom: 7 }),
+        expect.objectContaining({ level: "ADM2", minZoom: 8, maxZoom: 11 })
+      ]);
+      expect(mvtReport.totals.candidateTileCount).toBeGreaterThan(0);
+      expect(mvtReport.totals.generatedTileCount).toBeGreaterThan(0);
+      expect(mvtReport.totals.totalBytes).toBeGreaterThan(0);
 
       await expect(
         validateTerritoryCountryDatasetPath(outputPath, { strict: true })
@@ -619,4 +648,14 @@ function adm0MultiPolygon(): unknown {
       ]
     ]
   };
+}
+
+function readGeneratedJson<T>(files: ReadonlyMap<string, string | Uint8Array>, path: string): T {
+  const content = files.get(path);
+
+  if (typeof content !== "string") {
+    throw new Error(`Expected generated JSON string at ${path}.`);
+  }
+
+  return JSON.parse(content) as T;
 }

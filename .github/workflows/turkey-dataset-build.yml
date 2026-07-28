@@ -6,7 +6,7 @@ on:
       levels:
         description: "Comma-separated ADM levels"
         required: true
-        default: "ADM0,ADM1,ADM2,ADM3,ADM4"
+        default: "ADM0,ADM1,ADM2"
       source_lock:
         description: "Existing source lock path, or empty to create one"
         required: false
@@ -53,12 +53,31 @@ jobs:
             --build-render-artifacts \
             --build-binary-index \
             --strict \
-            --allow-partial \
             --force \
+            --profile \
+            --profile-report dist/tr/artifact/build-performance-report.json \
+            --phase-timeout-ms 300000 \
             --json
       - name: Validate artifact checksums
-        run: pnpm --filter @territory-kit/cli exec territory country validate dist/tr/artifact
+        run: pnpm --filter @territory-kit/cli exec territory country validate dist/tr/artifact --strict
       - uses: actions/upload-artifact@v5
         with:
-          name: turkey-dataset-build
-          path: dist/tr
+          name: turkey-build-performance-report
+          path: dist/tr/artifact/build-performance-report.json
+      - uses: actions/upload-artifact@v5
+        with:
+          name: turkey-adjacency-report
+          path: |
+            dist/tr/artifact/adjacency-report.json
+            dist/tr/artifact/adjacency/**/build-report.json
+      - uses: actions/upload-artifact@v5
+        with:
+          name: turkey-mvt-policy-report
+          path: dist/tr/artifact/render/mvt-policy-report.json
+      - uses: actions/upload-artifact@v5
+        with:
+          name: turkey-coverage-checksum-reports
+          path: |
+            dist/tr/artifact/manifest.json
+            dist/tr/artifact/checksums.json
+            dist/tr/artifact/build-report.json

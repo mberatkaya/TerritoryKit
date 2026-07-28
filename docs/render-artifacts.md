@@ -27,3 +27,8 @@ territory country build TR \
 
 Turkey's default render policy maps available levels to ADM0 z0-z4, ADM1 z5-z7, ADM2 z8-z11,
 ADM3 z12-z14, and ADM4 z15-z17. Only levels present in the source lock are emitted.
+
+MVT generation is bounded by the feature bboxes for levels that are eligible at each zoom policy;
+it does not scan the full world tile grid. MVT builds write `render/mvt-policy-report.json` with
+per-level candidate, generated, empty, skipped, duplicate, byte-size, feature-per-tile, corrupt-tile,
+and missing-zoom counts.

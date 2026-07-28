@@ -356,10 +356,17 @@ function mergeBounds(bounds: readonly TerritoryBBox[]): TerritoryBBox {
     return [0, 0, 0, 0];
   }
 
-  return [
-    Math.min(...bounds.map((bbox) => bbox[0])),
-    Math.min(...bounds.map((bbox) => bbox[1])),
-    Math.max(...bounds.map((bbox) => bbox[2])),
-    Math.max(...bounds.map((bbox) => bbox[3]))
-  ];
+  let west = Number.POSITIVE_INFINITY;
+  let south = Number.POSITIVE_INFINITY;
+  let east = Number.NEGATIVE_INFINITY;
+  let north = Number.NEGATIVE_INFINITY;
+
+  for (const bbox of bounds) {
+    west = Math.min(west, bbox[0]);
+    south = Math.min(south, bbox[1]);
+    east = Math.max(east, bbox[2]);
+    north = Math.max(north, bbox[3]);
+  }
+
+  return [west, south, east, north];
 }
