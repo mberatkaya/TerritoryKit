@@ -26,6 +26,7 @@ reviewed national HDX/OCHA COD-AB source path.
 
 Use `turkeyNationalCoverage` to distinguish verified national ADM0-ADM2 from blocked ADM3/ADM4.
 Use `turkeyAdm3NeighbourhoodCoverage` or `isTurkeyAdm3ParentCovered(parentId)` before requesting
-ADM3 data for a district. Covered parent IDs are the nine Gaziantep ADM2 districts in
-`datasets/generated/countries/TR/levels/ADM3/coverage.json`; this is partial Gaziantep coverage,
-not nationwide Turkey neighbourhood coverage.
+ADM3 data for a district. Historical generated artifacts cover the nine Gaziantep ADM2 districts in
+`datasets/generated/countries/TR/levels/ADM3/coverage.json`, but the 2026-07-30 source inventory
+marks the live Gaziantep download as inaccessible. This remains partial provenance, not nationwide
+Turkey neighbourhood coverage or a current production-approved live source.

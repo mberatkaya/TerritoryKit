@@ -28,7 +28,7 @@ territory adjacency validate ./dist/regions ./dist/regions-adjacency
 territory adjacency inspect ./dist/regions-adjacency tr:adm2:fatih --type shared-border --json
 territory dataset build world-countries --source ./sources/ne-admin0.geojson --output ./dist/world-countries
 territory country source lock TR --output ./dist/tr/sources.lock.json
-territory country source lock TR --levels ADM0,ADM1,ADM2,ADM3 --adm3-provinces 27 --adm3-catalog datasets/sources/TR/adm3-catalog.json --output ./dist/tr/sources.lock.json
+territory country source lock TR --levels ADM0,ADM1,ADM2,ADM3 --adm3-provinces <approved-codes> --adm3-catalog datasets/sources/TR/adm3-catalog.json --output ./dist/tr/sources.lock.json
 territory country build TR --source-lock ./dist/tr/sources.lock.json --output ./dist/tr --build-adjacency --build-query-artifacts --build-render-artifacts --build-binary-index --strict --allow-partial
 territory country validate ./dist/tr --strict
 territory registry publish --artifact-root ./dist/tr/artifact --registry-output ./dist/registry --dataset territory-kit-tr --version 1.0.0 --base-url https://datasets.example.com/tr/1.0.0/ --artifact-prefix tr/1.0.0 --dry-run

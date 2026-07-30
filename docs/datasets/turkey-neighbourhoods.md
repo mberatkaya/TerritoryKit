@@ -1,14 +1,15 @@
 # Turkey Neighbourhoods
 
-TerritoryKit includes reviewed Turkey semantics for `ADM3 -> neighbourhood / Mahalle` and one
-official partial Gaziantep pilot. This is not nationwide Turkey neighbourhood coverage.
+TerritoryKit includes reviewed Turkey semantics for `ADM3 -> neighbourhood / Mahalle` and historical
+partial Gaziantep pilot artifacts. This is not nationwide Turkey neighbourhood coverage, and the
+2026-07-30 source inventory does not currently approve any live ADM3 province source for production
+catalog promotion.
 
 ## Gaziantep Pilot
 
-The first legally redistributable Turkey ADM3 artifact is
-`datasets/generated/countries/TR/levels/ADM3`. It covers Gaziantep province neighbourhood polygons
-from Gaziantep Büyükşehir Belediyesi's "Mahalle Sınır Alanları" KML published through the Ulusal
-Akıllı Şehir Açık Veri Platformu.
+The first historical Turkey ADM3 artifact is `datasets/generated/countries/TR/levels/ADM3`. It
+covers Gaziantep province neighbourhood polygons from Gaziantep Büyükşehir Belediyesi's "Mahalle
+Sınır Alanları" KML published through the Ulusal Akıllı Şehir Açık Veri Platformu.
 
 - Coverage: 786 `ADM3` neighbourhoods for the 9 Gaziantep `ADM2` district parents.
 - Status: `partial`; no nationwide Turkey ADM3 coverage is claimed.
@@ -21,19 +22,22 @@ Akıllı Şehir Açık Veri Platformu.
 - Locked source SHA-256:
   `f145ae9edd2db7a341634e14d59060a535258461794d361c3f49bdec2bcbfa9a`.
 - Attribution: `Gaziantep Büyükşehir Belediyesi, Mahalle Sınır Alanları, CC BY 4.0`.
+- Current source inventory: `inaccessible`; the download host did not resolve during the
+  `2026-07-30` review, so the source is no longer treated as a live approved catalog entry.
 
 The raw KML is cached under `.territory/cache/` during local builds and is not committed. The
 committed artifacts include `sources.lock.json`, `source-metadata.json`, `source-evaluation.json`,
 `coverage.json`, `repair-report.json`, `repair-details.json`, `production-quality-report.json`,
 `overlap-audit.json`, `parent-containment-report.json`, adjacency, query, and MVT render outputs.
 
-The source is also represented in `datasets/sources/TR/adm3-catalog.json` so future builds can use
-the generic province-scoped ADM3 ingestion path:
+If a live source is restored and approved, it can be represented in
+`datasets/sources/TR/adm3-catalog.json` so future builds can use the generic province-scoped ADM3
+ingestion path:
 
 ```bash
 territory country source lock TR \
   --levels ADM0,ADM1,ADM2,ADM3 \
-  --adm3-provinces 27 \
+  --adm3-provinces <approved-province-code> \
   --adm3-catalog datasets/sources/TR/adm3-catalog.json \
   --output ./dist/tr/sources.lock.json
 ```

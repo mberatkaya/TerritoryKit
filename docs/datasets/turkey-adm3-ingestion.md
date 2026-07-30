@@ -6,19 +6,20 @@ coverage.
 
 ## Build Flow
 
-1. Add or update a province entry in `datasets/sources/TR/adm3-catalog.json`.
-2. Keep raw source files outside Git unless they are tiny fixtures.
-3. Create a source lock:
+1. Add or update the candidate row in `datasets/registry/tr-adm3-sources.json`.
+2. Promote the source into `datasets/sources/TR/adm3-catalog.json` only after it is approved.
+3. Keep raw source files outside Git unless they are tiny fixtures.
+4. Create a source lock:
 
 ```bash
 territory country source lock TR \
   --levels ADM0,ADM1,ADM2,ADM3 \
-  --adm3-provinces 27,34,54 \
+  --adm3-provinces <approved-codes> \
   --adm3-catalog datasets/sources/TR/adm3-catalog.json \
   --output ./dist/tr/sources.lock.json
 ```
 
-4. Build with explicit partial coverage when not every requested province is available:
+5. Build with explicit partial coverage when not every requested province is available:
 
 ```bash
 territory country build TR \
@@ -51,9 +52,11 @@ The artifact writes `coverage.json`, `adm3-quality-gates.json`,
 
 ## Current State
 
-Gaziantep is migrated into the generic catalog as province `27`. The old pilot builder remains for
-compatibility, but the generic `country source lock` plus `country build` path can process the same
-KML shape through a `kml-description-table` adapter.
+The production catalog currently contains no approved live ADM3 province sources. The historical
+Gaziantep pilot remains useful as a parser/build fixture and as committed partial artifact
+provenance, but the referenced download host did not resolve during the 2026-07-30 source inventory
+review. It is therefore tracked as `inaccessible` in `datasets/registry/tr-adm3-sources.json`
+instead of being promoted as a current production catalog entry.
 
 National blockers remain: no redistributable nationwide official ADM3 source is locked, not every
 province has reviewed license metadata, and municipality/locality source models still need semantic

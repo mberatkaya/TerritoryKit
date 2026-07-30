@@ -14,7 +14,7 @@ Province-scoped ADM3 sources use the Turkey ADM3 catalog:
 ```bash
 territory country source lock TR \
   --levels ADM0,ADM1,ADM2,ADM3 \
-  --adm3-provinces 27 \
+  --adm3-provinces <approved-province-code> \
   --adm3-catalog datasets/sources/TR/adm3-catalog.json \
   --output ./dist/tr/sources.lock.json
 ```

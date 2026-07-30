@@ -14426,8 +14426,8 @@
           "status": "partial",
           "provider": "gaziantep-open-data",
           "license": "CC BY 4.0",
-          "sourceStatus": "available",
-          "validationStatus": "passed",
+          "sourceStatus": "source-unavailable",
+          "validationStatus": "stale-source-review-required",
           "artifactPath": "datasets/generated/countries/TR/levels/ADM3",
           "featureCount": 786,
           "coveredParents": [
@@ -14445,7 +14445,11 @@
           "semanticType": "neighbourhood",
           "localTypeName": "Mahalle",
           "semanticReviewStatus": "reviewed",
-          "coverageScope": "partial"
+          "coverageScope": "partial",
+          "notes": [
+            "Historical Gaziantep ADM3 artifact remains partial, but the referenced download host did not resolve during the 2026-07-30 source expansion review.",
+            "Do not treat this as a current production-approved ADM3 source until a refreshed lock can verify the checksum from an accessible URL."
+          ]
         },
         "ADM4": {
           "status": "not-reviewed",

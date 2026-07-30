@@ -4,6 +4,10 @@
 `territorykit-tr-adm3-source-catalog@1`. Each province entry is independent, so one failed province
 does not invalidate already verified provinces when `--allow-partial` is used.
 
+Candidate and blocked sources live in `datasets/registry/tr-adm3-sources.json`. The production
+catalog may be empty; do not copy a source into it until the inventory status is `approved` and the
+current artifact can be locked by checksum and byte size.
+
 Required metadata:
 
 - `provinceCode`, `provinceName`, `providerId`, `providerName`, `sourceId`
