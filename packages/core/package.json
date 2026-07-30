@@ -1,6 +1,6 @@
 {
   "name": "@territory-kit/core",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Core TerritoryKit zone engine, hierarchy, adjacency, and spatial queries.",
   "license": "Apache-2.0",
   "homepage": "https://github.com/mberatkaya/TerritoryKit#readme",

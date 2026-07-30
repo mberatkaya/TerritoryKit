@@ -1,6 +1,6 @@
 {
   "name": "@territory-kit/data-de",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Thin loader package for TerritoryKit Germany pilot datasets.",
   "license": "Apache-2.0",
   "homepage": "https://github.com/mberatkaya/TerritoryKit#readme",
