@@ -15,9 +15,10 @@ territory country build TR --source-lock ./dist/tr/sources.lock.json --output ./
 The generated artifact records source attribution, source lock hash, identity stability summary,
 hierarchy summary, geometry quality summary, and per-level adjacency edge counts.
 
-Current national source coverage is verified for ADM0, ADM1, and ADM2 only. ADM3 remains partial
-through the Gaziantep neighbourhood pilot, and ADM4 is not production-mapped until a reviewed source
-model exists.
+Current national source coverage is verified for ADM0, ADM1, and ADM2 only. Historical ADM3
+artifacts remain partial for the Gaziantep neighbourhood pilot, but the 2026-07-30 source inventory
+marks the live Gaziantep download as inaccessible. ADM4 is not production-mapped until a reviewed
+source model exists.
 
 ADM3 ingestion is now catalog-driven by province. Use
 `territory country source lock TR --adm3-provinces <codes> --adm3-catalog <catalog>` and build with
@@ -31,3 +32,4 @@ See:
 - [Turkey build](./turkey-build.md)
 - [Turkey licensing](./turkey-licensing.md)
 - [Turkey ADM3 ingestion](./turkey-adm3-ingestion.md)
+- [Turkey ADM3 source inventory](./turkey-adm3-source-inventory.md)

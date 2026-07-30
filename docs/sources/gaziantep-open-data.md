@@ -1,7 +1,7 @@
 # Gaziantep Open Data ADM3 Source
 
 Gaziantep Büyükşehir Belediyesi publishes "Mahalle Sınır Alanları" through the Ulusal Akıllı Şehir
-Açık Veri Platformu. TerritoryKit uses it as the first official Turkey `ADM3 -> neighbourhood /
+Açık Veri Platformu. TerritoryKit used it as the first official Turkey `ADM3 -> neighbourhood /
 Mahalle` production pilot.
 
 - Source page: <https://ulasav.csb.gov.tr/dataset/27-mahalle-sinir-alanlari>
@@ -12,6 +12,11 @@ Mahalle` production pilot.
 - Source update date: `2026-02-18T13:52:03Z`
 - Locked SHA-256: `f145ae9edd2db7a341634e14d59060a535258461794d361c3f49bdec2bcbfa9a`
 - Locked size: `7439237` bytes
+
+Current inventory note: during the `2026-07-30` Turkey ADM3 source expansion review, the ULASAV
+metadata page was reachable but the referenced `acikveri.gaziantep.bel.tr` download host did not
+resolve. Treat the committed artifact as historical partial provenance until a refreshed source lock
+can validate the current URL.
 
 The artifact covers the nine Gaziantep ADM2 parents and intentionally reports `coverageStatus:
 partial`. All other Turkey ADM2 parents remain uncovered by this pilot.

@@ -1,52 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-adm3-source-catalog@1",
   "country": "TR",
-  "generatedAt": "2026-07-28T00:00:00.000Z",
-  "provinces": {
-    "27": {
-      "provinceCode": "27",
-      "provinceName": "Gaziantep",
-      "providerId": "gaziantep-open-data",
-      "providerName": "Gaziantep Büyükşehir Belediyesi Open Data",
-      "sourceId": "gaziantep-mahalle-sinir-alanlari",
-      "sourceUrl": "https://ulasav.csb.gov.tr/dataset/27-mahalle-sinir-alanlari",
-      "downloadUrl": "https://acikveri.gaziantep.bel.tr/dataset/5fac9bc5-8cc0-4883-8805-1f71149319db/resource/df82c9ce-f69d-4cc2-bf57-d4a36ed1c144/download/mahalle_sinirlari-1.kml",
-      "sourceDate": "2026-02-18T13:52:03Z",
-      "sourceVersion": "2026-02-18T13:52:03Z",
-      "retrievedAt": "2026-07-18T00:00:00.000Z",
-      "license": "CC BY 4.0",
-      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
-      "attribution": "Gaziantep Büyükşehir Belediyesi, Mahalle Sınır Alanları, CC BY 4.0",
-      "redistributionStatus": "allowed",
-      "commercialUseStatus": "allowed",
-      "modificationStatus": "allowed",
-      "crs": "EPSG:4326",
-      "format": "KML",
-      "expectedSha256": "f145ae9edd2db7a341634e14d59060a535258461794d361c3f49bdec2bcbfa9a",
-      "expectedByteSize": 7439237,
-      "expectedFeatureCount": 786,
-      "adapter": {
-        "id": "kml-description-table",
-        "nameField": "AD",
-        "sourceIdField": "KIMLIKNO",
-        "parentField": "ILCEID",
-        "defaultSemanticType": "neighbourhood",
-        "defaultLocalType": "Mahalle",
-        "parentMappings": {
-          "{43FA2512-DB22-41C0-A03E-0A2561941EE6}": "tr:adm2:54988432b85612149706662",
-          "{460503BF-0C83-4365-AC2E-CA607C45B043}": "tr:adm2:54988432b54960387029794",
-          "{48C8E95D-CD95-444A-8D02-722147A859A4}": "tr:adm2:54988432b19771634656837",
-          "{4F692FBF-DD8E-4C6D-93E4-D4C49CACC4C9}": "tr:adm2:54988432b99023740963316",
-          "{622A6409-5CF2-4AFC-9BFF-09AD53B76AE5}": "tr:adm2:54988432b41731057290221",
-          "{8F014A2B-53F9-4823-9FAE-E51D55B81A67}": "tr:adm2:54988432b61004264745956",
-          "{CCECD7A9-7F9F-421B-9DDC-33920592CE42}": "tr:adm2:54988432b26387222249237",
-          "{D34E09C3-2479-4A5D-A923-546908520744}": "tr:adm2:54988432b32789090404224",
-          "{E2A0D610-4A82-4138-941E-9E6C785BFA53}": "tr:adm2:54988432b72028378604273"
-        }
-      },
-      "notes": [
-        "Partial Gaziantep province ADM3 source. This entry does not claim nationwide Turkey ADM3 coverage."
-      ]
-    }
-  }
+  "generatedAt": "2026-07-30T00:00:00.000Z",
+  "provinces": {}
 }

@@ -27,8 +27,8 @@ Strict production imports reject missing or incompatible redistribution metadata
 
 ## Turkey ADM3 Source Research
 
-The Gaziantep ADM3 pilot selected an official municipal KML source because it was reproducibly
-downloadable and explicitly licensed as CC BY 4.0:
+The historical Gaziantep ADM3 pilot selected an official municipal KML source because it was
+reproducibly downloadable and explicitly licensed as CC BY 4.0 at the time of the pilot review:
 
 - Selected: Gaziantep Büyükşehir Belediyesi / Ulusal Akıllı Şehir Açık Veri Platformu,
   "Mahalle Sınır Alanları", KML, updated `2026-02-18T13:52:03Z`.
@@ -48,3 +48,8 @@ downloadable and explicitly licensed as CC BY 4.0:
 
 The selected source and all rejected candidates are recorded in
 `datasets/generated/countries/TR/levels/ADM3/source-evaluation.json`.
+
+The 2026-07-30 source inventory supersedes production eligibility: Gaziantep is now marked
+`inaccessible` because the current download host did not resolve, while Bursa, Sakarya, and Trabzon
+remain candidates with technical blockers. See
+[Turkey ADM3 source inventory](../datasets/turkey-adm3-source-inventory.md).

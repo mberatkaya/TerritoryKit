@@ -20,7 +20,7 @@ territory import geoboundaries --input ./geoBoundaries-TUR-ADM1.geojson --countr
 territory import geojson --input ./regions.geojson --country TR --admin-level ADM2 --name-property region.name --output ./dist/regions
 territory country list
 territory country source lock TR --output ./dist/tr/sources.lock.json
-territory country source lock TR --levels ADM0,ADM1,ADM2,ADM3 --adm3-provinces 27,34,54 --adm3-catalog datasets/sources/TR/adm3-catalog.json --output ./dist/tr/sources.lock.json
+territory country source lock TR --levels ADM0,ADM1,ADM2,ADM3 --adm3-provinces <approved-codes> --adm3-catalog datasets/sources/TR/adm3-catalog.json --output ./dist/tr/sources.lock.json
 territory country source verify ./dist/tr/sources.lock.json
 territory country build TR --source-lock ./dist/tr/sources.lock.json --levels ADM0,ADM1,ADM2,ADM3 --allow-partial --output ./dist/tr --build-adjacency --strict
 territory country validate ./dist/tr --strict

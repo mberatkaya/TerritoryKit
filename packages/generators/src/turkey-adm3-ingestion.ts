@@ -22,18 +22,7 @@ import type {
   TerritoryCountryBuildIssue,
   TerritoryCountrySourceLockLevel
 } from "./countries/types.js";
-import {
-  TURKEY_GAZIANTEP_ADM3_ATTRIBUTION,
-  TURKEY_GAZIANTEP_ADM3_DOWNLOAD_URL,
-  TURKEY_GAZIANTEP_ADM3_LICENSE_URL,
-  TURKEY_GAZIANTEP_ADM3_PARENT_MAPPINGS,
-  TURKEY_GAZIANTEP_ADM3_RETRIEVED_AT,
-  TURKEY_GAZIANTEP_ADM3_SOURCE_DATE,
-  TURKEY_GAZIANTEP_ADM3_SOURCE_SHA256,
-  TURKEY_GAZIANTEP_ADM3_SOURCE_SIZE_BYTES,
-  TURKEY_GAZIANTEP_ADM3_SOURCE_URL,
-  parseTurkeyGaziantepAdm3Kml
-} from "./turkey-adm3-pilot.js";
+import { parseTurkeyGaziantepAdm3Kml } from "./turkey-adm3-pilot.js";
 import {
   isRecord,
   readStringPropertyPath,
@@ -319,48 +308,7 @@ export function createDefaultTurkeyAdm3SourceCatalog(): TurkeyAdm3SourceCatalog 
   return {
     schemaVersion: TURKEY_ADM3_SOURCE_CATALOG_SCHEMA_VERSION,
     country: "TR",
-    provinces: {
-      "27": {
-        provinceCode: "27",
-        provinceName: "Gaziantep",
-        providerId: "gaziantep-open-data",
-        providerName: "Gaziantep Büyükşehir Belediyesi Open Data",
-        sourceId: "gaziantep-mahalle-sinir-alanlari",
-        sourceUrl: TURKEY_GAZIANTEP_ADM3_SOURCE_URL,
-        downloadUrl: TURKEY_GAZIANTEP_ADM3_DOWNLOAD_URL,
-        sourceDate: TURKEY_GAZIANTEP_ADM3_SOURCE_DATE,
-        sourceVersion: TURKEY_GAZIANTEP_ADM3_SOURCE_DATE,
-        retrievedAt: TURKEY_GAZIANTEP_ADM3_RETRIEVED_AT,
-        license: "CC BY 4.0",
-        licenseUrl: TURKEY_GAZIANTEP_ADM3_LICENSE_URL,
-        attribution: TURKEY_GAZIANTEP_ADM3_ATTRIBUTION,
-        redistributionStatus: "allowed",
-        commercialUseStatus: "allowed",
-        modificationStatus: "allowed",
-        crs: "EPSG:4326",
-        format: "KML",
-        expectedSha256: TURKEY_GAZIANTEP_ADM3_SOURCE_SHA256,
-        expectedByteSize: TURKEY_GAZIANTEP_ADM3_SOURCE_SIZE_BYTES,
-        expectedFeatureCount: 786,
-        adapter: {
-          id: "kml-description-table",
-          nameField: "AD",
-          sourceIdField: "KIMLIKNO",
-          parentField: "ILCEID",
-          defaultSemanticType: "neighbourhood",
-          defaultLocalType: "Mahalle",
-          parentMappings: Object.fromEntries(
-            TURKEY_GAZIANTEP_ADM3_PARENT_MAPPINGS.map((mapping) => [
-              mapping.sourceDistrictId,
-              mapping.territoryAdm2Id
-            ])
-          )
-        },
-        notes: [
-          "Partial province source. This catalog entry does not claim nationwide ADM3 coverage."
-        ]
-      }
-    }
+    provinces: {}
   };
 }
 

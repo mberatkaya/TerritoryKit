@@ -1,0 +1,557 @@
+{
+  "schemaVersion": "territorykit-tr-adm3-source-inventory-lock@1",
+  "country": "TR",
+  "inventoryHash": "f448a2587374b58c5eeaf628d89fab91a25338dbfd78add0d56c520939711a14",
+  "generatedAt": "2026-07-30T00:00:00.000Z",
+  "provinces": [
+    {
+      "provinceCode": "01",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "02",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "03",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "04",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "05",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "06",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "07",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "08",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "09",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "10",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "11",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "12",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "13",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "14",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "15",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "16",
+      "status": "candidate",
+      "productionEligible": false,
+      "sourceIds": ["bursa-mahalle-sinirlari"]
+    },
+    {
+      "provinceCode": "17",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "18",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "19",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "20",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "21",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "22",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "23",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "24",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "25",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "26",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "27",
+      "status": "inaccessible",
+      "productionEligible": false,
+      "sourceIds": ["gaziantep-mahalle-sinir-alanlari"]
+    },
+    {
+      "provinceCode": "28",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "29",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "30",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "31",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "32",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "33",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "34",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "35",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "36",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "37",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "38",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "39",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "40",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "41",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "42",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "43",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "44",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "45",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "46",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "47",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "48",
+      "status": "license-unclear",
+      "productionEligible": false,
+      "sourceIds": ["mugla-mahalleler-vektor-verisi"]
+    },
+    {
+      "provinceCode": "49",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "50",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "51",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "52",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "53",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "54",
+      "status": "candidate",
+      "productionEligible": false,
+      "sourceIds": ["sakarya-mahalle-sinirlari"]
+    },
+    {
+      "provinceCode": "55",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "56",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "57",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "58",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "59",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "60",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "61",
+      "status": "candidate",
+      "productionEligible": false,
+      "sourceIds": ["trabzon-adrese-dayali-mahalle-sinirlari"]
+    },
+    {
+      "provinceCode": "62",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "63",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "64",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "65",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "66",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "67",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "68",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "69",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "70",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "71",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "72",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "73",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "74",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "75",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "76",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "77",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "78",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "79",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "80",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    },
+    {
+      "provinceCode": "81",
+      "status": "geometry-unavailable",
+      "productionEligible": false,
+      "sourceIds": []
+    }
+  ],
+  "summary": {
+    "totalProvinceCount": 81,
+    "approvedProvinceCount": 0,
+    "candidateProvinceCount": 3,
+    "blockedProvinceCount": 78,
+    "nationalCoverageClaim": false,
+    "builtProvinceCount": 0,
+    "metadataOnlyProvinceCount": 5,
+    "statusCounts": {
+      "approved": 0,
+      "candidate": 3,
+      "license-unclear": 1,
+      "geometry-unavailable": 76,
+      "attribute-only": 0,
+      "inaccessible": 1,
+      "incompatible-administrative-model": 0,
+      "outdated": 0
+    },
+    "regionCounts": {
+      "Akdeniz": {
+        "total": 8,
+        "approved": 0,
+        "candidate": 0,
+        "blocked": 8
+      },
+      "Doğu Anadolu": {
+        "total": 14,
+        "approved": 0,
+        "candidate": 0,
+        "blocked": 14
+      },
+      "Ege": {
+        "total": 8,
+        "approved": 0,
+        "candidate": 0,
+        "blocked": 8
+      },
+      "Güneydoğu Anadolu": {
+        "total": 9,
+        "approved": 0,
+        "candidate": 0,
+        "blocked": 9
+      },
+      "İç Anadolu": {
+        "total": 13,
+        "approved": 0,
+        "candidate": 0,
+        "blocked": 13
+      },
+      "Karadeniz": {
+        "total": 18,
+        "approved": 0,
+        "candidate": 1,
+        "blocked": 17
+      },
+      "Marmara": {
+        "total": 11,
+        "approved": 0,
+        "candidate": 2,
+        "blocked": 9
+      }
+    }
+  }
+}

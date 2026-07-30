@@ -197,6 +197,16 @@ export {
   validateTurkeyAdm3SourceLockExtension,
   verifyTurkeyAdm3SourceLockExtension
 } from "./turkey-adm3-ingestion.js";
+export {
+  TURKEY_ADM3_SOURCE_INVENTORY_LOCK_SCHEMA_VERSION,
+  TURKEY_ADM3_SOURCE_INVENTORY_SCHEMA_VERSION,
+  TURKEY_ADM3_SOURCE_INVENTORY_STATUSES,
+  createTurkeyAdm3SourceInventoryCoverageSummary,
+  createTurkeyAdm3SourceInventoryLock,
+  readTurkeyAdm3SourceInventory,
+  validateTurkeyAdm3SourceInventory,
+  verifyTurkeyAdm3SourceInventoryArtifacts
+} from "./turkey-adm3-source-inventory.js";
 export type {
   DatasetAttribution,
   TerritorySourceAdapter,
@@ -251,6 +261,15 @@ export type {
   TurkeyAdm3SourceLockCreateOptions,
   TurkeyAdm3SourceLockExtension
 } from "./turkey-adm3-ingestion.js";
+export type {
+  TurkeyAdm3SourceInventory,
+  TurkeyAdm3SourceInventoryArtifactResolver,
+  TurkeyAdm3SourceInventoryCoverageSummary,
+  TurkeyAdm3SourceInventoryLock,
+  TurkeyAdm3SourceInventoryProvince,
+  TurkeyAdm3SourceInventorySource,
+  TurkeyAdm3SourceInventoryStatus
+} from "./turkey-adm3-source-inventory.js";
 export type {
   GeometryQualityPathRepairOptions,
   TerritoryDatasetPathInput

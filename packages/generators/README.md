@@ -85,7 +85,7 @@ import {
 await createTerritoryCountrySourceLock({
   country: "TR",
   levels: ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"],
-  adm3Provinces: ["27"],
+  adm3Provinces: ["<approved-province-code>"],
   adm3CatalogPath: "datasets/sources/TR/adm3-catalog.json",
   outputPath: "./dist/tr/sources.lock.json"
 });
