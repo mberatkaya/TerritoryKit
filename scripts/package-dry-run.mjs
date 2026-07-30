@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { spawnSync } from "node:child_process";
-import { mkdtemp, readdir, readFile, rm } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { mkdtemp, readdir, readFile, rm, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -39,12 +40,16 @@ try {
     }
 
     const tarballPath = join(destination, tarball);
+    const tarballBytes = await readFile(tarballPath);
     const entries = listTarballEntries(tarballPath);
     const issues = auditTarball(packageJson.name, entries);
     results.push({
       package: packageJson.name,
       tarball,
+      tarballSizeBytes: (await stat(tarballPath)).size,
+      tarballSha256: createHash("sha256").update(tarballBytes).digest("hex"),
       fileCount: entries.length,
+      entries,
       ok: issues.length === 0,
       issues
     });
@@ -135,5 +140,17 @@ function auditTarball(packageName, entries) {
     issues.push(`${packageName} tarball includes forbidden development file ${forbidden}.`);
   }
 
+  const geometryArtifact = entries.find(isGeometryArtifactEntry);
+  if (geometryArtifact) {
+    issues.push(`${packageName} tarball includes large geometry artifact ${geometryArtifact}.`);
+  }
+
   return issues;
+}
+
+function isGeometryArtifactEntry(entry) {
+  return (
+    /(?:^|\/)(datasets\/generated|levels\/ADM|render\/tiles|query\/binary)\//.test(entry) ||
+    /[.](geojson|mvt|mbtiles|pmtiles|fgb|gpkg|shp)$/i.test(entry)
+  );
 }

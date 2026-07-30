@@ -1,0 +1,4429 @@
+{
+  "schemaVersion": "territorykit-license-inventory@1",
+  "generatedAt": "2026-07-30T17:46:55.059Z",
+  "scope": "pnpm licenses list --prod --json",
+  "summary": {
+    "licenseCount": 12,
+    "packageCount": 260,
+    "unknown": [],
+    "licenses": [
+      {
+        "license": "(MIT AND Zlib)",
+        "packageCount": 1,
+        "packages": [
+          {
+            "name": "pako",
+            "versions": ["2.2.0"],
+            "license": "(MIT AND Zlib)",
+            "homepage": "https://github.com/nodeca/pako#readme"
+          }
+        ]
+      },
+      {
+        "license": "(MIT OR Apache-2.0)",
+        "packageCount": 2,
+        "packages": [
+          {
+            "name": "@maplibre/mlt",
+            "versions": ["1.1.12"],
+            "license": "(MIT OR Apache-2.0)",
+            "homepage": "https://github.com/maplibre/maplibre-tile-spec/#readme"
+          },
+          {
+            "name": "fb-dotslash",
+            "versions": ["0.5.8"],
+            "license": "(MIT OR Apache-2.0)",
+            "homepage": "https://dotslash-cli.com/"
+          }
+        ]
+      },
+      {
+        "license": "(MIT OR CC0-1.0)",
+        "packageCount": 1,
+        "packages": [
+          {
+            "name": "type-fest",
+            "versions": ["0.7.1"],
+            "license": "(MIT OR CC0-1.0)",
+            "homepage": "https://github.com/sindresorhus/type-fest#readme"
+          }
+        ]
+      },
+      {
+        "license": "0BSD",
+        "packageCount": 2,
+        "packages": [
+          {
+            "name": "jsc-safe-url",
+            "versions": ["0.2.4"],
+            "license": "0BSD",
+            "homepage": "https://github.com/robhogan/jsc-safe-url#readme"
+          },
+          {
+            "name": "tslib",
+            "versions": ["2.8.1"],
+            "license": "0BSD",
+            "homepage": "https://www.typescriptlang.org/"
+          }
+        ]
+      },
+      {
+        "license": "Apache-2.0",
+        "packageCount": 11,
+        "packages": [
+          {
+            "name": "baseline-browser-mapping",
+            "versions": ["2.11.6"],
+            "license": "Apache-2.0",
+            "homepage": "https://github.com/web-platform-dx/baseline-browser-mapping#readme"
+          },
+          {
+            "name": "bser",
+            "versions": ["2.1.1"],
+            "license": "Apache-2.0",
+            "homepage": "https://facebook.github.io/watchman/docs/bser.html"
+          },
+          {
+            "name": "chrome-launcher",
+            "versions": ["0.15.2"],
+            "license": "Apache-2.0",
+            "homepage": "https://github.com/GoogleChrome/chrome-launcher#readme"
+          },
+          {
+            "name": "chromium-edge-launcher",
+            "versions": ["0.3.0"],
+            "license": "Apache-2.0",
+            "homepage": "https://github.com/cezaraugusto/chromium-edge-launcher#readme"
+          },
+          {
+            "name": "exponential-backoff",
+            "versions": ["3.1.3"],
+            "license": "Apache-2.0",
+            "homepage": "https://github.com/coveooss/exponential-backoff#readme"
+          },
+          {
+            "name": "fb-watchman",
+            "versions": ["2.0.2"],
+            "license": "Apache-2.0",
+            "homepage": "https://facebook.github.io/watchman/"
+          },
+          {
+            "name": "lerc",
+            "versions": ["3.0.0"],
+            "license": "Apache-2.0",
+            "homepage": "https://github.com/Esri/lerc"
+          },
+          { "name": "lighthouse-logger", "versions": ["1.4.2"], "license": "Apache-2.0" },
+          {
+            "name": "marky",
+            "versions": ["1.3.0"],
+            "license": "Apache-2.0",
+            "homepage": "https://github.com/nolanlawson/marky#readme"
+          },
+          {
+            "name": "walker",
+            "versions": ["1.0.8"],
+            "license": "Apache-2.0",
+            "homepage": "https://github.com/daaku/nodejs-walker"
+          },
+          {
+            "name": "web-worker",
+            "versions": ["1.5.0"],
+            "license": "Apache-2.0",
+            "homepage": "https://github.com/developit/web-worker"
+          }
+        ]
+      },
+      {
+        "license": "BSD-2-Clause",
+        "packageCount": 5,
+        "packages": [
+          {
+            "name": "@mapbox/tiny-sdf",
+            "versions": ["2.2.0"],
+            "license": "BSD-2-Clause",
+            "homepage": "https://github.com/mapbox/tiny-sdf#readme"
+          },
+          {
+            "name": "@mapbox/unitbezier",
+            "versions": ["0.0.1", "1.0.0"],
+            "license": "BSD-2-Clause",
+            "homepage": "https://github.com/mapbox/unitbezier"
+          },
+          {
+            "name": "leaflet",
+            "versions": ["1.9.4"],
+            "license": "BSD-2-Clause",
+            "homepage": "https://leafletjs.com/"
+          },
+          {
+            "name": "ol",
+            "versions": ["10.10.0"],
+            "license": "BSD-2-Clause",
+            "homepage": "https://openlayers.org/"
+          },
+          {
+            "name": "terser",
+            "versions": ["5.49.0"],
+            "license": "BSD-2-Clause",
+            "homepage": "https://terser.org"
+          }
+        ]
+      },
+      {
+        "license": "BSD-3-Clause",
+        "packageCount": 7,
+        "packages": [
+          {
+            "name": "@mapbox/vector-tile",
+            "versions": ["2.0.5"],
+            "license": "BSD-3-Clause",
+            "homepage": "https://github.com/mapbox/vector-tile-js#readme"
+          },
+          {
+            "name": "@react-native/debugger-frontend",
+            "versions": ["0.86.2"],
+            "license": "BSD-3-Clause",
+            "homepage": "https://github.com/react/react-native/tree/HEAD/packages/debugger-frontend#readme"
+          },
+          {
+            "name": "makeerror",
+            "versions": ["1.0.12"],
+            "license": "BSD-3-Clause",
+            "homepage": "https://github.com/daaku/nodejs-makeerror#readme"
+          },
+          {
+            "name": "maplibre-gl",
+            "versions": ["5.24.0"],
+            "license": "BSD-3-Clause",
+            "homepage": "https://maplibre.org/"
+          },
+          {
+            "name": "pbf",
+            "versions": ["4.0.2", "5.1.2"],
+            "license": "BSD-3-Clause",
+            "homepage": "https://github.com/mapbox/pbf"
+          },
+          {
+            "name": "source-map",
+            "versions": ["0.5.7", "0.6.1"],
+            "license": "BSD-3-Clause",
+            "homepage": "https://github.com/mozilla/source-map"
+          },
+          {
+            "name": "tmpl",
+            "versions": ["1.0.5"],
+            "license": "BSD-3-Clause",
+            "homepage": "https://github.com/daaku/nodejs-tmpl"
+          }
+        ]
+      },
+      {
+        "license": "CC-BY-4.0",
+        "packageCount": 1,
+        "packages": [
+          {
+            "name": "caniuse-lite",
+            "versions": ["1.0.30001806"],
+            "license": "CC-BY-4.0",
+            "homepage": "https://github.com/browserslist/caniuse-lite#readme"
+          }
+        ]
+      },
+      {
+        "license": "CC0-1.0",
+        "packageCount": 1,
+        "packages": [
+          {
+            "name": "xml-utils",
+            "versions": ["1.10.2"],
+            "license": "CC0-1.0",
+            "homepage": "https://github.com/DanielJDufour/xml-utils#readme"
+          }
+        ]
+      },
+      {
+        "license": "ISC",
+        "packageCount": 27,
+        "packages": [
+          {
+            "name": "@isaacs/ttlcache",
+            "versions": ["1.4.1"],
+            "license": "ISC",
+            "homepage": "https://github.com/isaacs/ttlcache#readme"
+          },
+          {
+            "name": "@mapbox/point-geometry",
+            "versions": ["1.1.0"],
+            "license": "ISC",
+            "homepage": "https://github.com/mapbox/point-geometry"
+          },
+          {
+            "name": "@mapbox/whoots-js",
+            "versions": ["3.1.0"],
+            "license": "ISC",
+            "homepage": "https://github.com/mapbox/whoots-js#readme"
+          },
+          {
+            "name": "@maplibre/geojson-vt",
+            "versions": ["6.1.1"],
+            "license": "ISC",
+            "homepage": "https://github.com/maplibre/geojson-vt#readme"
+          },
+          {
+            "name": "@maplibre/maplibre-gl-style-spec",
+            "versions": ["24.8.5", "24.10.0"],
+            "license": "ISC",
+            "homepage": "https://maplibre.org/maplibre-style-spec/"
+          },
+          {
+            "name": "cliui",
+            "versions": ["8.0.1"],
+            "license": "ISC",
+            "homepage": "https://github.com/yargs/cliui#readme"
+          },
+          {
+            "name": "earcut",
+            "versions": ["3.2.3"],
+            "license": "ISC",
+            "homepage": "https://github.com/mapbox/earcut#readme"
+          },
+          {
+            "name": "electron-to-chromium",
+            "versions": ["1.5.398"],
+            "license": "ISC",
+            "homepage": "https://github.com/Kilian/electron-to-chromium#readme"
+          },
+          {
+            "name": "flatbush",
+            "versions": ["4.6.2"],
+            "license": "ISC",
+            "homepage": "https://github.com/mourner/flatbush#readme"
+          },
+          {
+            "name": "flatqueue",
+            "versions": ["3.1.0"],
+            "license": "ISC",
+            "homepage": "https://github.com/mourner/flatqueue#readme"
+          },
+          {
+            "name": "get-caller-file",
+            "versions": ["2.0.5"],
+            "license": "ISC",
+            "homepage": "https://github.com/stefanpenner/get-caller-file#readme"
+          },
+          {
+            "name": "graceful-fs",
+            "versions": ["4.2.11"],
+            "license": "ISC",
+            "homepage": "https://github.com/isaacs/node-graceful-fs#readme"
+          },
+          {
+            "name": "inherits",
+            "versions": ["2.0.4"],
+            "license": "ISC",
+            "homepage": "https://github.com/isaacs/inherits#readme"
+          },
+          {
+            "name": "isexe",
+            "versions": ["2.0.0"],
+            "license": "ISC",
+            "homepage": "https://github.com/isaacs/isexe#readme"
+          },
+          {
+            "name": "kdbush",
+            "versions": ["4.1.0"],
+            "license": "ISC",
+            "homepage": "https://github.com/mourner/kdbush#readme"
+          },
+          {
+            "name": "lru-cache",
+            "versions": ["5.1.1"],
+            "license": "ISC",
+            "homepage": "https://github.com/isaacs/node-lru-cache#readme"
+          },
+          {
+            "name": "picocolors",
+            "versions": ["1.1.1"],
+            "license": "ISC",
+            "homepage": "https://github.com/alexeyraspopov/picocolors#readme"
+          },
+          {
+            "name": "potpack",
+            "versions": ["2.1.0"],
+            "license": "ISC",
+            "homepage": "https://mapbox.github.io/potpack/"
+          },
+          {
+            "name": "quickselect",
+            "versions": ["3.0.0"],
+            "license": "ISC",
+            "homepage": "https://github.com/mourner/quickselect#readme"
+          },
+          {
+            "name": "semver",
+            "versions": ["6.3.1", "7.8.5"],
+            "license": "ISC",
+            "homepage": "https://github.com/npm/node-semver#readme"
+          },
+          {
+            "name": "setprototypeof",
+            "versions": ["1.2.0"],
+            "license": "ISC",
+            "homepage": "https://github.com/wesleytodd/setprototypeof"
+          },
+          {
+            "name": "tinyqueue",
+            "versions": ["3.0.0"],
+            "license": "ISC",
+            "homepage": "https://github.com/mourner/tinyqueue"
+          },
+          {
+            "name": "which",
+            "versions": ["2.0.2"],
+            "license": "ISC",
+            "homepage": "https://github.com/isaacs/node-which#readme"
+          },
+          {
+            "name": "y18n",
+            "versions": ["5.0.8"],
+            "license": "ISC",
+            "homepage": "https://github.com/yargs/y18n"
+          },
+          {
+            "name": "yallist",
+            "versions": ["3.1.1"],
+            "license": "ISC",
+            "homepage": "https://github.com/isaacs/yallist#readme"
+          },
+          {
+            "name": "yaml",
+            "versions": ["2.9.0"],
+            "license": "ISC",
+            "homepage": "https://eemeli.org/yaml/"
+          },
+          {
+            "name": "yargs-parser",
+            "versions": ["21.1.1"],
+            "license": "ISC",
+            "homepage": "https://github.com/yargs/yargs-parser#readme"
+          }
+        ]
+      },
+      {
+        "license": "MIT",
+        "packageCount": 201,
+        "packages": [
+          {
+            "name": "@babel/code-frame",
+            "versions": ["7.29.7"],
+            "license": "MIT",
+            "homepage": "https://babel.dev/docs/en/next/babel-code-frame"
+          },
+          {
+            "name": "@babel/compat-data",
+            "versions": ["7.29.7"],
+            "license": "MIT",
+            "homepage": "https://github.com/babel/babel#readme"
+          },
+          {
+            "name": "@babel/core",
+            "versions": ["7.29.7"],
+            "license": "MIT",
+            "homepage": "https://babel.dev/docs/en/next/babel-core"
+          },
+          {
+            "name": "@babel/generator",
+            "versions": ["7.29.7"],
+            "license": "MIT",
+            "homepage": "https://babel.dev/docs/en/next/babel-generator"
+          },
+          {
+            "name": "@babel/helper-compilation-targets",
+            "versions": ["7.29.7"],
+            "license": "MIT",
+            "homepage": "https://github.com/babel/babel#readme"
+          },
+          {
+            "name": "@babel/helper-globals",
+            "versions": ["7.29.7"],
+            "license": "MIT",
+            "homepage": "https://github.com/babel/babel#readme"
+          },
+          {
+            "name": "@babel/helper-module-imports",
+            "versions": ["7.29.7"],
+            "license": "MIT",
+            "homepage": "https://babel.dev/docs/en/next/babel-helper-module-imports"
+          },
+          {
+            "name": "@babel/helper-module-transforms",
+            "versions": ["7.29.7"],
+            "license": "MIT",
+            "homepage": "https://babel.dev/docs/en/next/babel-helper-module-transforms"
+          },
+          {
+            "name": "@babel/helper-string-parser",
+            "versions": ["7.29.7"],
+            "license": "MIT",
+            "homepage": "https://babel.dev/docs/en/next/babel-helper-string-parser"
+          },
+          {
+            "name": "@babel/helper-validator-identifier",
+            "versions": ["7.29.7"],
+            "license": "MIT",
+            "homepage": "https://github.com/babel/babel#readme"
+          },
+          {
+            "name": "@babel/helper-validator-option",
+            "versions": ["7.29.7"],
+            "license": "MIT",
+            "homepage": "https://github.com/babel/babel#readme"
+          },
+          {
+            "name": "@babel/helpers",
+            "versions": ["7.29.7"],
+            "license": "MIT",
+            "homepage": "https://babel.dev/docs/en/next/babel-helpers"
+          },
+          {
+            "name": "@babel/parser",
+            "versions": ["7.29.7"],
+            "license": "MIT",
+            "homepage": "https://babel.dev/docs/en/next/babel-parser"
+          },
+          {
+            "name": "@babel/runtime",
+            "versions": ["7.29.7"],
+            "license": "MIT",
+            "homepage": "https://babel.dev/docs/en/next/babel-runtime"
+          },
+          {
+            "name": "@babel/template",
+            "versions": ["7.29.7"],
+            "license": "MIT",
+            "homepage": "https://babel.dev/docs/en/next/babel-template"
+          },
+          {
+            "name": "@babel/traverse",
+            "versions": ["7.29.7"],
+            "license": "MIT",
+            "homepage": "https://babel.dev/docs/en/next/babel-traverse"
+          },
+          {
+            "name": "@babel/types",
+            "versions": ["7.29.7"],
+            "license": "MIT",
+            "homepage": "https://babel.dev/docs/en/next/babel-types"
+          },
+          {
+            "name": "@jest/schemas",
+            "versions": ["29.6.3"],
+            "license": "MIT",
+            "homepage": "https://github.com/jestjs/jest#readme"
+          },
+          {
+            "name": "@jest/types",
+            "versions": ["29.6.3"],
+            "license": "MIT",
+            "homepage": "https://github.com/jestjs/jest#readme"
+          },
+          {
+            "name": "@jridgewell/gen-mapping",
+            "versions": ["0.3.13"],
+            "license": "MIT",
+            "homepage": "https://github.com/jridgewell/sourcemaps/tree/main/packages/gen-mapping"
+          },
+          {
+            "name": "@jridgewell/remapping",
+            "versions": ["2.3.5"],
+            "license": "MIT",
+            "homepage": "https://github.com/jridgewell/sourcemaps/tree/main/packages/remapping"
+          },
+          {
+            "name": "@jridgewell/resolve-uri",
+            "versions": ["3.1.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/jridgewell/resolve-uri#readme"
+          },
+          {
+            "name": "@jridgewell/source-map",
+            "versions": ["0.3.11"],
+            "license": "MIT",
+            "homepage": "https://github.com/jridgewell/sourcemaps/tree/main/packages/source-map"
+          },
+          {
+            "name": "@jridgewell/sourcemap-codec",
+            "versions": ["1.5.5"],
+            "license": "MIT",
+            "homepage": "https://github.com/jridgewell/sourcemaps/tree/main/packages/sourcemap-codec"
+          },
+          {
+            "name": "@jridgewell/trace-mapping",
+            "versions": ["0.3.31"],
+            "license": "MIT",
+            "homepage": "https://github.com/jridgewell/sourcemaps/tree/main/packages/trace-mapping"
+          },
+          {
+            "name": "@mapbox/jsonlint-lines-primitives",
+            "versions": ["2.0.3"],
+            "license": "MIT",
+            "homepage": "https://github.com/mapbox/jsonlint#readme"
+          },
+          {
+            "name": "@maplibre/maplibre-react-native",
+            "versions": ["11.3.6"],
+            "license": "MIT",
+            "homepage": "https://github.com/maplibre/maplibre-react-native#readme"
+          },
+          {
+            "name": "@maplibre/vt-pbf",
+            "versions": ["4.3.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/maplibre/vt-pbf#readme"
+          },
+          {
+            "name": "@petamoriken/float16",
+            "versions": ["3.9.3"],
+            "license": "MIT",
+            "homepage": "https://github.com/petamoriken/float16"
+          },
+          {
+            "name": "@react-native/assets-registry",
+            "versions": ["0.86.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/react/react-native/tree/HEAD/packages/assets#readme"
+          },
+          {
+            "name": "@react-native/codegen",
+            "versions": ["0.86.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/react/react-native/tree/HEAD/packages/react-native-codegen#readme"
+          },
+          {
+            "name": "@react-native/community-cli-plugin",
+            "versions": ["0.86.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/react/react-native/tree/HEAD/packages/community-cli-plugin#readme"
+          },
+          {
+            "name": "@react-native/debugger-shell",
+            "versions": ["0.86.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/react/react-native/tree/HEAD/packages/debugger-shell#readme"
+          },
+          {
+            "name": "@react-native/dev-middleware",
+            "versions": ["0.86.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/react/react-native/tree/HEAD/packages/dev-middleware#readme"
+          },
+          {
+            "name": "@react-native/gradle-plugin",
+            "versions": ["0.86.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/react/react-native/tree/HEAD/packages/gradle-plugin#readme"
+          },
+          {
+            "name": "@react-native/js-polyfills",
+            "versions": ["0.86.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/react/react-native/tree/HEAD/packages/polyfills#readme"
+          },
+          {
+            "name": "@react-native/normalize-colors",
+            "versions": ["0.86.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/react/react-native/tree/HEAD/packages/normalize-color#readme"
+          },
+          {
+            "name": "@react-native/virtualized-lists",
+            "versions": ["0.86.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/react/react-native/tree/HEAD/packages/virtualized-lists#readme"
+          },
+          {
+            "name": "@sinclair/typebox",
+            "versions": ["0.27.12"],
+            "license": "MIT",
+            "homepage": "https://github.com/sinclairzx81/sinclair-typebox#readme"
+          },
+          {
+            "name": "@turf/distance",
+            "versions": ["7.3.5"],
+            "license": "MIT",
+            "homepage": "https://github.com/Turfjs/turf"
+          },
+          {
+            "name": "@turf/helpers",
+            "versions": ["7.3.5"],
+            "license": "MIT",
+            "homepage": "https://github.com/Turfjs/turf"
+          },
+          {
+            "name": "@turf/invariant",
+            "versions": ["7.3.5"],
+            "license": "MIT",
+            "homepage": "https://github.com/Turfjs/turf"
+          },
+          {
+            "name": "@turf/length",
+            "versions": ["7.3.5"],
+            "license": "MIT",
+            "homepage": "https://github.com/Turfjs/turf"
+          },
+          {
+            "name": "@turf/meta",
+            "versions": ["7.3.5"],
+            "license": "MIT",
+            "homepage": "https://github.com/Turfjs/turf"
+          },
+          {
+            "name": "@turf/nearest-point-on-line",
+            "versions": ["7.3.5"],
+            "license": "MIT",
+            "homepage": "https://github.com/Turfjs/turf"
+          },
+          {
+            "name": "@types/geojson",
+            "versions": ["7946.0.16"],
+            "license": "MIT",
+            "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/geojson"
+          },
+          {
+            "name": "@types/istanbul-lib-coverage",
+            "versions": ["2.0.6"],
+            "license": "MIT",
+            "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/istanbul-lib-coverage"
+          },
+          {
+            "name": "@types/istanbul-lib-report",
+            "versions": ["3.0.3"],
+            "license": "MIT",
+            "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/istanbul-lib-report"
+          },
+          {
+            "name": "@types/istanbul-reports",
+            "versions": ["3.0.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/istanbul-reports"
+          },
+          {
+            "name": "@types/node",
+            "versions": ["26.1.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/node"
+          },
+          {
+            "name": "@types/rbush",
+            "versions": ["4.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/rbush"
+          },
+          {
+            "name": "@types/yargs",
+            "versions": ["17.0.35"],
+            "license": "MIT",
+            "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/yargs"
+          },
+          {
+            "name": "@types/yargs-parser",
+            "versions": ["21.0.3"],
+            "license": "MIT",
+            "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/yargs-parser"
+          },
+          {
+            "name": "@zarrita/storage",
+            "versions": ["0.2.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/manzt/zarrita.js#readme"
+          },
+          {
+            "name": "abort-controller",
+            "versions": ["3.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/mysticatea/abort-controller#readme"
+          },
+          {
+            "name": "accepts",
+            "versions": ["2.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/jshttp/accepts#readme"
+          },
+          {
+            "name": "acorn",
+            "versions": ["8.17.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/acornjs/acorn"
+          },
+          {
+            "name": "agent-base",
+            "versions": ["7.1.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/TooTallNate/proxy-agents#readme"
+          },
+          {
+            "name": "anser",
+            "versions": ["1.4.10"],
+            "license": "MIT",
+            "homepage": "https://github.com/IonicaBizau/anser#readme"
+          },
+          {
+            "name": "ansi-regex",
+            "versions": ["5.0.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/chalk/ansi-regex#readme"
+          },
+          {
+            "name": "ansi-styles",
+            "versions": ["4.3.0", "5.2.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/chalk/ansi-styles#readme"
+          },
+          {
+            "name": "asap",
+            "versions": ["2.0.6"],
+            "license": "MIT",
+            "homepage": "https://github.com/kriskowal/asap#readme"
+          },
+          {
+            "name": "babel-plugin-syntax-hermes-parser",
+            "versions": ["0.36.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/hermes#readme"
+          },
+          {
+            "name": "base64-js",
+            "versions": ["1.5.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/beatgammit/base64-js"
+          },
+          {
+            "name": "braces",
+            "versions": ["3.0.3"],
+            "license": "MIT",
+            "homepage": "https://github.com/micromatch/braces"
+          },
+          {
+            "name": "browserslist",
+            "versions": ["4.28.7"],
+            "license": "MIT",
+            "homepage": "https://github.com/browserslist/browserslist#readme"
+          },
+          {
+            "name": "buffer-from",
+            "versions": ["1.1.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/LinusU/buffer-from#readme"
+          },
+          {
+            "name": "camelcase",
+            "versions": ["6.3.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/sindresorhus/camelcase#readme"
+          },
+          {
+            "name": "chalk",
+            "versions": ["4.1.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/chalk/chalk#readme"
+          },
+          {
+            "name": "ci-info",
+            "versions": ["2.0.0", "3.9.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/watson/ci-info"
+          },
+          {
+            "name": "color-convert",
+            "versions": ["2.0.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/Qix-/color-convert#readme"
+          },
+          {
+            "name": "color-name",
+            "versions": ["1.1.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/colorjs/color-name"
+          },
+          {
+            "name": "commander",
+            "versions": ["2.20.3", "12.1.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/tj/commander.js#readme"
+          },
+          {
+            "name": "connect",
+            "versions": ["3.7.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/senchalabs/connect#readme"
+          },
+          {
+            "name": "convert-source-map",
+            "versions": ["2.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/thlorenz/convert-source-map"
+          },
+          {
+            "name": "cross-spawn",
+            "versions": ["7.0.6"],
+            "license": "MIT",
+            "homepage": "https://github.com/moxystudio/node-cross-spawn"
+          },
+          {
+            "name": "debug",
+            "versions": ["2.6.9", "4.4.3"],
+            "license": "MIT",
+            "homepage": "https://github.com/debug-js/debug#readme"
+          },
+          {
+            "name": "depd",
+            "versions": ["2.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/dougwilson/nodejs-depd#readme"
+          },
+          {
+            "name": "destroy",
+            "versions": ["1.2.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/stream-utils/destroy#readme"
+          },
+          {
+            "name": "ee-first",
+            "versions": ["1.1.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/jonathanong/ee-first#readme"
+          },
+          {
+            "name": "emoji-regex",
+            "versions": ["8.0.0"],
+            "license": "MIT",
+            "homepage": "https://mths.be/emoji-regex"
+          },
+          {
+            "name": "encodeurl",
+            "versions": ["1.0.2", "2.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/pillarjs/encodeurl#readme"
+          },
+          {
+            "name": "error-stack-parser",
+            "versions": ["2.1.4"],
+            "license": "MIT",
+            "homepage": "https://www.stacktracejs.com"
+          },
+          {
+            "name": "escalade",
+            "versions": ["3.2.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/lukeed/escalade#readme"
+          },
+          {
+            "name": "escape-html",
+            "versions": ["1.0.3"],
+            "license": "MIT",
+            "homepage": "https://github.com/component/escape-html#readme"
+          },
+          {
+            "name": "escape-string-regexp",
+            "versions": ["4.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/sindresorhus/escape-string-regexp#readme"
+          },
+          {
+            "name": "etag",
+            "versions": ["1.8.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/jshttp/etag#readme"
+          },
+          {
+            "name": "event-target-shim",
+            "versions": ["5.0.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/mysticatea/event-target-shim"
+          },
+          {
+            "name": "fdir",
+            "versions": ["6.5.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/thecodrr/fdir#readme"
+          },
+          {
+            "name": "fflate",
+            "versions": ["0.8.3"],
+            "license": "MIT",
+            "homepage": "https://101arrowz.github.io/fflate"
+          },
+          {
+            "name": "fill-range",
+            "versions": ["7.1.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/jonschlinkert/fill-range"
+          },
+          {
+            "name": "finalhandler",
+            "versions": ["1.1.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/pillarjs/finalhandler#readme"
+          },
+          {
+            "name": "flow-enums-runtime",
+            "versions": ["0.0.6"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/flow#readme"
+          },
+          {
+            "name": "fresh",
+            "versions": ["0.5.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/jshttp/fresh#readme"
+          },
+          {
+            "name": "gensync",
+            "versions": ["1.0.0-beta.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/loganfsmyth/gensync"
+          },
+          {
+            "name": "geotiff",
+            "versions": ["3.1.0-beta.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/geotiffjs/geotiff.js#readme"
+          },
+          {
+            "name": "gl-matrix",
+            "versions": ["3.4.4"],
+            "license": "MIT",
+            "homepage": "http://glmatrix.net"
+          },
+          {
+            "name": "has-flag",
+            "versions": ["4.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/sindresorhus/has-flag#readme"
+          },
+          {
+            "name": "hermes-compiler",
+            "versions": ["250829098.0.16"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/hermes#readme"
+          },
+          {
+            "name": "hermes-estree",
+            "versions": ["0.35.0", "0.36.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/hermes#readme"
+          },
+          {
+            "name": "hermes-parser",
+            "versions": ["0.35.0", "0.36.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/hermes#readme"
+          },
+          {
+            "name": "http-errors",
+            "versions": ["2.0.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/jshttp/http-errors#readme"
+          },
+          {
+            "name": "https-proxy-agent",
+            "versions": ["7.0.6"],
+            "license": "MIT",
+            "homepage": "https://github.com/TooTallNate/proxy-agents#readme"
+          },
+          {
+            "name": "image-size",
+            "versions": ["1.2.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/image-size/image-size#readme"
+          },
+          {
+            "name": "invariant",
+            "versions": ["2.2.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/zertosh/invariant#readme"
+          },
+          {
+            "name": "is-docker",
+            "versions": ["2.2.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/sindresorhus/is-docker#readme"
+          },
+          {
+            "name": "is-fullwidth-code-point",
+            "versions": ["3.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/sindresorhus/is-fullwidth-code-point#readme"
+          },
+          {
+            "name": "is-number",
+            "versions": ["7.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/jonschlinkert/is-number"
+          },
+          {
+            "name": "is-wsl",
+            "versions": ["2.2.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/sindresorhus/is-wsl#readme"
+          },
+          {
+            "name": "jest-get-type",
+            "versions": ["29.6.3"],
+            "license": "MIT",
+            "homepage": "https://github.com/jestjs/jest#readme"
+          },
+          {
+            "name": "jest-util",
+            "versions": ["29.7.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/jestjs/jest#readme"
+          },
+          {
+            "name": "jest-validate",
+            "versions": ["29.7.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/jestjs/jest#readme"
+          },
+          {
+            "name": "jest-worker",
+            "versions": ["29.7.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/jestjs/jest#readme"
+          },
+          {
+            "name": "js-tokens",
+            "versions": ["4.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/lydell/js-tokens#readme"
+          },
+          {
+            "name": "jsesc",
+            "versions": ["3.1.0"],
+            "license": "MIT",
+            "homepage": "https://mths.be/jsesc"
+          },
+          {
+            "name": "json-stringify-pretty-compact",
+            "versions": ["4.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/lydell/json-stringify-pretty-compact#readme"
+          },
+          {
+            "name": "json5",
+            "versions": ["2.2.3"],
+            "license": "MIT",
+            "homepage": "http://json5.org/"
+          },
+          {
+            "name": "leven",
+            "versions": ["3.1.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/sindresorhus/leven#readme"
+          },
+          {
+            "name": "lodash.throttle",
+            "versions": ["4.1.1"],
+            "license": "MIT",
+            "homepage": "https://lodash.com/"
+          },
+          {
+            "name": "loose-envify",
+            "versions": ["1.4.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/zertosh/loose-envify"
+          },
+          {
+            "name": "memoize-one",
+            "versions": ["5.2.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/alexreardon/memoize-one#readme"
+          },
+          {
+            "name": "merge-stream",
+            "versions": ["2.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/grncdr/merge-stream#readme"
+          },
+          {
+            "name": "metro",
+            "versions": ["0.84.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/metro#readme"
+          },
+          {
+            "name": "metro-babel-transformer",
+            "versions": ["0.84.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/metro#readme"
+          },
+          {
+            "name": "metro-cache",
+            "versions": ["0.84.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/metro#readme"
+          },
+          {
+            "name": "metro-cache-key",
+            "versions": ["0.84.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/metro#readme"
+          },
+          {
+            "name": "metro-config",
+            "versions": ["0.84.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/metro#readme"
+          },
+          {
+            "name": "metro-core",
+            "versions": ["0.84.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/metro#readme"
+          },
+          {
+            "name": "metro-file-map",
+            "versions": ["0.84.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/metro#readme"
+          },
+          {
+            "name": "metro-minify-terser",
+            "versions": ["0.84.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/metro#readme"
+          },
+          {
+            "name": "metro-resolver",
+            "versions": ["0.84.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/metro#readme"
+          },
+          {
+            "name": "metro-runtime",
+            "versions": ["0.84.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/metro#readme"
+          },
+          {
+            "name": "metro-source-map",
+            "versions": ["0.84.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/metro#readme"
+          },
+          {
+            "name": "metro-symbolicate",
+            "versions": ["0.84.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/metro#readme"
+          },
+          {
+            "name": "metro-transform-plugins",
+            "versions": ["0.84.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/metro#readme"
+          },
+          {
+            "name": "metro-transform-worker",
+            "versions": ["0.84.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/metro#readme"
+          },
+          {
+            "name": "micromatch",
+            "versions": ["4.0.8"],
+            "license": "MIT",
+            "homepage": "https://github.com/micromatch/micromatch"
+          },
+          {
+            "name": "mime",
+            "versions": ["1.6.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/broofa/node-mime#readme"
+          },
+          {
+            "name": "mime-db",
+            "versions": ["1.54.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/jshttp/mime-db#readme"
+          },
+          {
+            "name": "mime-types",
+            "versions": ["3.0.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/jshttp/mime-types#readme"
+          },
+          {
+            "name": "minimist",
+            "versions": ["1.2.8"],
+            "license": "MIT",
+            "homepage": "https://github.com/minimistjs/minimist"
+          },
+          {
+            "name": "mkdirp",
+            "versions": ["1.0.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/isaacs/node-mkdirp#readme"
+          },
+          {
+            "name": "ms",
+            "versions": ["2.0.0", "2.1.3"],
+            "license": "MIT",
+            "homepage": "https://github.com/vercel/ms#readme"
+          },
+          {
+            "name": "murmurhash-js",
+            "versions": ["1.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/mikolalysenko/murmurhash-js#readme"
+          },
+          {
+            "name": "negotiator",
+            "versions": ["1.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/jshttp/negotiator#readme"
+          },
+          {
+            "name": "node-int64",
+            "versions": ["0.4.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/broofa/node-int64#readme"
+          },
+          {
+            "name": "node-releases",
+            "versions": ["2.0.51"],
+            "license": "MIT",
+            "homepage": "https://github.com/chicoxyzzy/node-releases#readme"
+          },
+          {
+            "name": "nullthrows",
+            "versions": ["1.1.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/zertosh/nullthrows#readme"
+          },
+          {
+            "name": "numcodecs",
+            "versions": ["0.3.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/manzt/numcodecs.js#readme"
+          },
+          {
+            "name": "ob1",
+            "versions": ["0.84.4"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/metro#readme"
+          },
+          {
+            "name": "on-finished",
+            "versions": ["2.3.0", "2.4.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/jshttp/on-finished#readme"
+          },
+          {
+            "name": "open",
+            "versions": ["7.4.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/sindresorhus/open#readme"
+          },
+          {
+            "name": "parse-headers",
+            "versions": ["2.0.6"],
+            "license": "MIT",
+            "homepage": "https://github.com/kesla/parse-headers"
+          },
+          {
+            "name": "parseurl",
+            "versions": ["1.3.3"],
+            "license": "MIT",
+            "homepage": "https://github.com/pillarjs/parseurl#readme"
+          },
+          {
+            "name": "path-key",
+            "versions": ["3.1.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/sindresorhus/path-key#readme"
+          },
+          {
+            "name": "picomatch",
+            "versions": ["2.3.2", "4.0.5"],
+            "license": "MIT",
+            "homepage": "https://github.com/micromatch/picomatch"
+          },
+          {
+            "name": "pretty-format",
+            "versions": ["29.7.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/jestjs/jest#readme"
+          },
+          {
+            "name": "promise",
+            "versions": ["8.3.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/then/promise#readme"
+          },
+          {
+            "name": "protocol-buffers-schema",
+            "versions": ["3.6.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/mafintosh/protocol-buffers-schema"
+          },
+          {
+            "name": "queue",
+            "versions": ["6.0.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/jessetane/queue#readme"
+          },
+          {
+            "name": "quick-lru",
+            "versions": ["6.1.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/sindresorhus/quick-lru#readme"
+          },
+          {
+            "name": "range-parser",
+            "versions": ["1.2.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/jshttp/range-parser#readme"
+          },
+          {
+            "name": "rbush",
+            "versions": ["4.0.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/mourner/rbush"
+          },
+          {
+            "name": "react",
+            "versions": ["19.2.8"],
+            "license": "MIT",
+            "homepage": "https://react.dev/"
+          },
+          {
+            "name": "react-devtools-core",
+            "versions": ["6.1.5"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/react#readme"
+          },
+          {
+            "name": "react-is",
+            "versions": ["18.3.1"],
+            "license": "MIT",
+            "homepage": "https://reactjs.org/"
+          },
+          {
+            "name": "react-native",
+            "versions": ["0.86.2"],
+            "license": "MIT",
+            "homepage": "https://reactnative.dev/"
+          },
+          {
+            "name": "react-refresh",
+            "versions": ["0.14.2"],
+            "license": "MIT",
+            "homepage": "https://reactjs.org/"
+          },
+          { "name": "reference-spec-reader", "versions": ["0.2.0"], "license": "MIT" },
+          {
+            "name": "regenerator-runtime",
+            "versions": ["0.13.11"],
+            "license": "MIT",
+            "homepage": "https://github.com/facebook/regenerator/tree/main#readme"
+          },
+          {
+            "name": "require-directory",
+            "versions": ["2.1.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/troygoode/node-require-directory/"
+          },
+          {
+            "name": "resolve-protobuf-schema",
+            "versions": ["2.1.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/mafintosh/resolve-protobuf-schema"
+          },
+          {
+            "name": "scheduler",
+            "versions": ["0.27.0"],
+            "license": "MIT",
+            "homepage": "https://react.dev/"
+          },
+          {
+            "name": "send",
+            "versions": ["0.19.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/pillarjs/send#readme"
+          },
+          {
+            "name": "serialize-error",
+            "versions": ["2.1.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/sindresorhus/serialize-error#readme"
+          },
+          {
+            "name": "serve-static",
+            "versions": ["1.16.3"],
+            "license": "MIT",
+            "homepage": "https://github.com/expressjs/serve-static#readme"
+          },
+          {
+            "name": "shebang-command",
+            "versions": ["2.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/kevva/shebang-command#readme"
+          },
+          {
+            "name": "shebang-regex",
+            "versions": ["3.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/sindresorhus/shebang-regex#readme"
+          },
+          {
+            "name": "shell-quote",
+            "versions": ["1.10.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/ljharb/shell-quote"
+          },
+          {
+            "name": "source-map-support",
+            "versions": ["0.5.21"],
+            "license": "MIT",
+            "homepage": "https://github.com/evanw/node-source-map-support#readme"
+          },
+          {
+            "name": "stackframe",
+            "versions": ["1.3.4"],
+            "license": "MIT",
+            "homepage": "https://www.stacktracejs.com"
+          },
+          {
+            "name": "stacktrace-parser",
+            "versions": ["0.1.11"],
+            "license": "MIT",
+            "homepage": "https://github.com/errwischt/stacktrace-parser"
+          },
+          {
+            "name": "statuses",
+            "versions": ["1.5.0", "2.0.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/jshttp/statuses#readme"
+          },
+          {
+            "name": "string-width",
+            "versions": ["4.2.3"],
+            "license": "MIT",
+            "homepage": "https://github.com/sindresorhus/string-width#readme"
+          },
+          {
+            "name": "strip-ansi",
+            "versions": ["6.0.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/chalk/strip-ansi#readme"
+          },
+          {
+            "name": "supports-color",
+            "versions": ["7.2.0", "8.1.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/chalk/supports-color#readme"
+          },
+          {
+            "name": "throat",
+            "versions": ["5.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/ForbesLindesay/throat#readme"
+          },
+          {
+            "name": "tinyglobby",
+            "versions": ["0.2.17"],
+            "license": "MIT",
+            "homepage": "https://superchupu.dev/tinyglobby"
+          },
+          {
+            "name": "to-regex-range",
+            "versions": ["5.0.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/micromatch/to-regex-range"
+          },
+          {
+            "name": "toidentifier",
+            "versions": ["1.0.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/component/toidentifier#readme"
+          },
+          {
+            "name": "undici-types",
+            "versions": ["8.3.0"],
+            "license": "MIT",
+            "homepage": "https://undici.nodejs.org"
+          },
+          {
+            "name": "unpipe",
+            "versions": ["1.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/stream-utils/unpipe#readme"
+          },
+          {
+            "name": "unzipit",
+            "versions": ["2.0.0"],
+            "license": "MIT",
+            "homepage": "https://greggman.github.io/unzipit"
+          },
+          {
+            "name": "update-browserslist-db",
+            "versions": ["1.2.3"],
+            "license": "MIT",
+            "homepage": "https://github.com/browserslist/update-db#readme"
+          },
+          {
+            "name": "utils-merge",
+            "versions": ["1.0.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/jaredhanson/utils-merge#readme"
+          },
+          {
+            "name": "vlq",
+            "versions": ["1.0.1"],
+            "license": "MIT",
+            "homepage": "https://github.com/Rich-Harris/vlq#readme"
+          },
+          {
+            "name": "whatwg-fetch",
+            "versions": ["3.6.20"],
+            "license": "MIT",
+            "homepage": "https://github.com/github/fetch#readme"
+          },
+          {
+            "name": "wrap-ansi",
+            "versions": ["7.0.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/chalk/wrap-ansi#readme"
+          },
+          {
+            "name": "ws",
+            "versions": ["7.5.13"],
+            "license": "MIT",
+            "homepage": "https://github.com/websockets/ws"
+          },
+          {
+            "name": "yargs",
+            "versions": ["17.7.3"],
+            "license": "MIT",
+            "homepage": "https://yargs.js.org/"
+          },
+          {
+            "name": "zarrita",
+            "versions": ["0.7.3"],
+            "license": "MIT",
+            "homepage": "https://github.com/manzt/zarrita.js#readme"
+          }
+        ]
+      },
+      {
+        "license": "MIT AND BSD-3-Clause",
+        "packageCount": 1,
+        "packages": [
+          {
+            "name": "zstddec",
+            "versions": ["0.2.0"],
+            "license": "MIT AND BSD-3-Clause",
+            "homepage": "https://github.com/donmccurdy/zstddec#readme"
+          }
+        ]
+      }
+    ]
+  },
+  "inventory": {
+    "MIT": [
+      {
+        "name": "@babel/code-frame",
+        "versions": ["7.29.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@babel+code-frame@7.29.7/node_modules/@babel/code-frame"
+        ],
+        "license": "MIT",
+        "author": "The Babel Team",
+        "homepage": "https://babel.dev/docs/en/next/babel-code-frame",
+        "description": "Generate errors that contain a code frame that point to source locations."
+      },
+      {
+        "name": "@babel/compat-data",
+        "versions": ["7.29.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@babel+compat-data@7.29.7/node_modules/@babel/compat-data"
+        ],
+        "license": "MIT",
+        "author": "The Babel Team",
+        "homepage": "https://github.com/babel/babel#readme",
+        "description": "The compat-data to determine required Babel plugins"
+      },
+      {
+        "name": "@babel/core",
+        "versions": ["7.29.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@babel+core@7.29.7/node_modules/@babel/core"
+        ],
+        "license": "MIT",
+        "author": "The Babel Team",
+        "homepage": "https://babel.dev/docs/en/next/babel-core",
+        "description": "Babel compiler core."
+      },
+      {
+        "name": "@babel/generator",
+        "versions": ["7.29.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@babel+generator@7.29.7/node_modules/@babel/generator"
+        ],
+        "license": "MIT",
+        "author": "The Babel Team",
+        "homepage": "https://babel.dev/docs/en/next/babel-generator",
+        "description": "Turns an AST into code."
+      },
+      {
+        "name": "@babel/helper-compilation-targets",
+        "versions": ["7.29.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@babel+helper-compilation-targets@7.29.7/node_modules/@babel/helper-compilation-targets"
+        ],
+        "license": "MIT",
+        "author": "The Babel Team",
+        "homepage": "https://github.com/babel/babel#readme",
+        "description": "Helper functions on Babel compilation targets"
+      },
+      {
+        "name": "@babel/helper-globals",
+        "versions": ["7.29.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@babel+helper-globals@7.29.7/node_modules/@babel/helper-globals"
+        ],
+        "license": "MIT",
+        "author": "The Babel Team",
+        "homepage": "https://github.com/babel/babel#readme",
+        "description": "A collection of JavaScript globals for Babel internal usage"
+      },
+      {
+        "name": "@babel/helper-module-imports",
+        "versions": ["7.29.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@babel+helper-module-imports@7.29.7/node_modules/@babel/helper-module-imports"
+        ],
+        "license": "MIT",
+        "author": "The Babel Team",
+        "homepage": "https://babel.dev/docs/en/next/babel-helper-module-imports",
+        "description": "Babel helper functions for inserting module loads"
+      },
+      {
+        "name": "@babel/helper-module-transforms",
+        "versions": ["7.29.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@babel+helper-module-transforms@7.29.7_@babel+core@7.29.7/node_modules/@babel/helper-module-transforms"
+        ],
+        "license": "MIT",
+        "author": "The Babel Team",
+        "homepage": "https://babel.dev/docs/en/next/babel-helper-module-transforms",
+        "description": "Babel helper functions for implementing ES6 module transformations"
+      },
+      {
+        "name": "@babel/helper-string-parser",
+        "versions": ["7.29.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@babel+helper-string-parser@7.29.7/node_modules/@babel/helper-string-parser"
+        ],
+        "license": "MIT",
+        "author": "The Babel Team",
+        "homepage": "https://babel.dev/docs/en/next/babel-helper-string-parser",
+        "description": "A utility package to parse strings"
+      },
+      {
+        "name": "@babel/helper-validator-identifier",
+        "versions": ["7.29.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@babel+helper-validator-identifier@7.29.7/node_modules/@babel/helper-validator-identifier"
+        ],
+        "license": "MIT",
+        "author": "The Babel Team",
+        "homepage": "https://github.com/babel/babel#readme",
+        "description": "Validate identifier/keywords name"
+      },
+      {
+        "name": "@babel/helper-validator-option",
+        "versions": ["7.29.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@babel+helper-validator-option@7.29.7/node_modules/@babel/helper-validator-option"
+        ],
+        "license": "MIT",
+        "author": "The Babel Team",
+        "homepage": "https://github.com/babel/babel#readme",
+        "description": "Validate plugin/preset options"
+      },
+      {
+        "name": "@babel/helpers",
+        "versions": ["7.29.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@babel+helpers@7.29.7/node_modules/@babel/helpers"
+        ],
+        "license": "MIT",
+        "author": "The Babel Team",
+        "homepage": "https://babel.dev/docs/en/next/babel-helpers",
+        "description": "Collection of helper functions used by Babel transforms."
+      },
+      {
+        "name": "@babel/parser",
+        "versions": ["7.29.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@babel+parser@7.29.7/node_modules/@babel/parser"
+        ],
+        "license": "MIT",
+        "author": "The Babel Team",
+        "homepage": "https://babel.dev/docs/en/next/babel-parser",
+        "description": "A JavaScript parser"
+      },
+      {
+        "name": "@babel/runtime",
+        "versions": ["7.29.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@babel+runtime@7.29.7/node_modules/@babel/runtime"
+        ],
+        "license": "MIT",
+        "author": "The Babel Team",
+        "homepage": "https://babel.dev/docs/en/next/babel-runtime",
+        "description": "babel's modular runtime helpers"
+      },
+      {
+        "name": "@babel/template",
+        "versions": ["7.29.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@babel+template@7.29.7/node_modules/@babel/template"
+        ],
+        "license": "MIT",
+        "author": "The Babel Team",
+        "homepage": "https://babel.dev/docs/en/next/babel-template",
+        "description": "Generate an AST from a string template."
+      },
+      {
+        "name": "@babel/traverse",
+        "versions": ["7.29.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@babel+traverse@7.29.7/node_modules/@babel/traverse"
+        ],
+        "license": "MIT",
+        "author": "The Babel Team",
+        "homepage": "https://babel.dev/docs/en/next/babel-traverse",
+        "description": "The Babel Traverse module maintains the overall tree state, and is responsible for replacing, removing, and adding nodes"
+      },
+      {
+        "name": "@babel/types",
+        "versions": ["7.29.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@babel+types@7.29.7/node_modules/@babel/types"
+        ],
+        "license": "MIT",
+        "author": "The Babel Team",
+        "homepage": "https://babel.dev/docs/en/next/babel-types",
+        "description": "Babel Types is a Lodash-esque utility library for AST nodes"
+      },
+      {
+        "name": "@jest/schemas",
+        "versions": ["29.6.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@jest+schemas@29.6.3/node_modules/@jest/schemas"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/jestjs/jest#readme"
+      },
+      {
+        "name": "@jest/types",
+        "versions": ["29.6.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@jest+types@29.6.3/node_modules/@jest/types"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/jestjs/jest#readme"
+      },
+      {
+        "name": "@jridgewell/gen-mapping",
+        "versions": ["0.3.13"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@jridgewell+gen-mapping@0.3.13/node_modules/@jridgewell/gen-mapping"
+        ],
+        "license": "MIT",
+        "author": "Justin Ridgewell",
+        "homepage": "https://github.com/jridgewell/sourcemaps/tree/main/packages/gen-mapping",
+        "description": "Generate source maps"
+      },
+      {
+        "name": "@jridgewell/remapping",
+        "versions": ["2.3.5"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@jridgewell+remapping@2.3.5/node_modules/@jridgewell/remapping"
+        ],
+        "license": "MIT",
+        "author": "Justin Ridgewell",
+        "homepage": "https://github.com/jridgewell/sourcemaps/tree/main/packages/remapping",
+        "description": "Remap sequential sourcemaps through transformations to point at the original source code"
+      },
+      {
+        "name": "@jridgewell/resolve-uri",
+        "versions": ["3.1.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@jridgewell+resolve-uri@3.1.2/node_modules/@jridgewell/resolve-uri"
+        ],
+        "license": "MIT",
+        "author": "Justin Ridgewell",
+        "homepage": "https://github.com/jridgewell/resolve-uri#readme",
+        "description": "Resolve a URI relative to an optional base URI"
+      },
+      {
+        "name": "@jridgewell/source-map",
+        "versions": ["0.3.11"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@jridgewell+source-map@0.3.11/node_modules/@jridgewell/source-map"
+        ],
+        "license": "MIT",
+        "author": "Justin Ridgewell",
+        "homepage": "https://github.com/jridgewell/sourcemaps/tree/main/packages/source-map",
+        "description": "Packages @jridgewell/trace-mapping and @jridgewell/gen-mapping into the familiar source-map API"
+      },
+      {
+        "name": "@jridgewell/sourcemap-codec",
+        "versions": ["1.5.5"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@jridgewell+sourcemap-codec@1.5.5/node_modules/@jridgewell/sourcemap-codec"
+        ],
+        "license": "MIT",
+        "author": "Justin Ridgewell",
+        "homepage": "https://github.com/jridgewell/sourcemaps/tree/main/packages/sourcemap-codec",
+        "description": "Encode/decode sourcemap mappings"
+      },
+      {
+        "name": "@jridgewell/trace-mapping",
+        "versions": ["0.3.31"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@jridgewell+trace-mapping@0.3.31/node_modules/@jridgewell/trace-mapping"
+        ],
+        "license": "MIT",
+        "author": "Justin Ridgewell",
+        "homepage": "https://github.com/jridgewell/sourcemaps/tree/main/packages/trace-mapping",
+        "description": "Trace the original position through a source map"
+      },
+      {
+        "name": "@mapbox/jsonlint-lines-primitives",
+        "versions": ["2.0.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@mapbox+jsonlint-lines-primitives@2.0.3/node_modules/@mapbox/jsonlint-lines-primitives"
+        ],
+        "license": "MIT",
+        "author": "Zach Carter",
+        "homepage": "https://github.com/mapbox/jsonlint#readme",
+        "description": "Validate JSON"
+      },
+      {
+        "name": "@maplibre/maplibre-react-native",
+        "versions": ["11.3.6"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@maplibre+maplibre-react-native@11.3.6_@types+geojson@7946.0.16_react-native@0.86.2_@ba_f7141e11734351e861eb5d90a766ab58/node_modules/@maplibre/maplibre-react-native"
+        ],
+        "license": "MIT",
+        "author": "MapLibre",
+        "homepage": "https://github.com/maplibre/maplibre-react-native#readme",
+        "description": "React Native library for creating maps with MapLibre Native for Android & iOS"
+      },
+      {
+        "name": "@maplibre/vt-pbf",
+        "versions": ["4.3.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@maplibre+vt-pbf@4.3.2/node_modules/@maplibre/vt-pbf"
+        ],
+        "license": "MIT",
+        "author": "Anand Thakker",
+        "homepage": "https://github.com/maplibre/vt-pbf#readme",
+        "description": "Serialize mapbox vector tiles to binary protobufs in javascript."
+      },
+      {
+        "name": "@petamoriken/float16",
+        "versions": ["3.9.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@petamoriken+float16@3.9.3/node_modules/@petamoriken/float16"
+        ],
+        "license": "MIT",
+        "author": "Kenta Moriuchi",
+        "homepage": "https://github.com/petamoriken/float16",
+        "description": "IEEE 754 half-precision floating-point for JavaScript"
+      },
+      {
+        "name": "@react-native/assets-registry",
+        "versions": ["0.86.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@react-native+assets-registry@0.86.2/node_modules/@react-native/assets-registry"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/react/react-native/tree/HEAD/packages/assets#readme",
+        "description": "Asset support code for React Native."
+      },
+      {
+        "name": "@react-native/codegen",
+        "versions": ["0.86.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@react-native+codegen@0.86.2_@babel+core@7.29.7/node_modules/@react-native/codegen"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/react/react-native/tree/HEAD/packages/react-native-codegen#readme",
+        "description": "Code generation tools for React Native"
+      },
+      {
+        "name": "@react-native/community-cli-plugin",
+        "versions": ["0.86.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@react-native+community-cli-plugin@0.86.2/node_modules/@react-native/community-cli-plugin"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/react/react-native/tree/HEAD/packages/community-cli-plugin#readme",
+        "description": "Core CLI commands for React Native"
+      },
+      {
+        "name": "@react-native/debugger-shell",
+        "versions": ["0.86.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@react-native+debugger-shell@0.86.2/node_modules/@react-native/debugger-shell"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/react/react-native/tree/HEAD/packages/debugger-shell#readme",
+        "description": "Experimental debugger shell for React Native for use with @react-native/debugger-frontend"
+      },
+      {
+        "name": "@react-native/dev-middleware",
+        "versions": ["0.86.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@react-native+dev-middleware@0.86.2/node_modules/@react-native/dev-middleware"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/react/react-native/tree/HEAD/packages/dev-middleware#readme",
+        "description": "Dev server middleware for React Native"
+      },
+      {
+        "name": "@react-native/gradle-plugin",
+        "versions": ["0.86.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@react-native+gradle-plugin@0.86.2/node_modules/@react-native/gradle-plugin"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/react/react-native/tree/HEAD/packages/gradle-plugin#readme",
+        "description": "Gradle Plugin for React Native"
+      },
+      {
+        "name": "@react-native/js-polyfills",
+        "versions": ["0.86.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@react-native+js-polyfills@0.86.2/node_modules/@react-native/js-polyfills"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/react/react-native/tree/HEAD/packages/polyfills#readme",
+        "description": "Polyfills for React Native."
+      },
+      {
+        "name": "@react-native/normalize-colors",
+        "versions": ["0.86.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@react-native+normalize-colors@0.86.2/node_modules/@react-native/normalize-colors"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/react/react-native/tree/HEAD/packages/normalize-color#readme",
+        "description": "Color normalization for React Native."
+      },
+      {
+        "name": "@react-native/virtualized-lists",
+        "versions": ["0.86.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@react-native+virtualized-lists@0.86.2_react-native@0.86.2_@babel+core@7.29.7_react@19.2.8__react@19.2.8/node_modules/@react-native/virtualized-lists"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/react/react-native/tree/HEAD/packages/virtualized-lists#readme",
+        "description": "Virtualized lists for React Native."
+      },
+      {
+        "name": "@sinclair/typebox",
+        "versions": ["0.27.12"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@sinclair+typebox@0.27.12/node_modules/@sinclair/typebox"
+        ],
+        "license": "MIT",
+        "author": "sinclairzx81",
+        "homepage": "https://github.com/sinclairzx81/sinclair-typebox#readme",
+        "description": "JSONSchema Type Builder with Static Type Resolution for TypeScript"
+      },
+      {
+        "name": "@turf/distance",
+        "versions": ["7.3.5"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@turf+distance@7.3.5/node_modules/@turf/distance"
+        ],
+        "license": "MIT",
+        "author": "Turf Authors",
+        "homepage": "https://github.com/Turfjs/turf",
+        "description": "Measures the straight-line distance between two points, like cities or landmarks."
+      },
+      {
+        "name": "@turf/helpers",
+        "versions": ["7.3.5"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@turf+helpers@7.3.5/node_modules/@turf/helpers"
+        ],
+        "license": "MIT",
+        "author": "Turf Authors",
+        "homepage": "https://github.com/Turfjs/turf",
+        "description": "Provides helper functions to create GeoJSON features, like points, lines, or areas on a map."
+      },
+      {
+        "name": "@turf/invariant",
+        "versions": ["7.3.5"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@turf+invariant@7.3.5/node_modules/@turf/invariant"
+        ],
+        "license": "MIT",
+        "author": "Turf Authors",
+        "homepage": "https://github.com/Turfjs/turf",
+        "description": "Lightweight utility for input validation and data extraction in Turf.js. Ensures GeoJSON inputs are in the correct format and extracts specific components like coordinates or geometries."
+      },
+      {
+        "name": "@turf/length",
+        "versions": ["7.3.5"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@turf+length@7.3.5/node_modules/@turf/length"
+        ],
+        "license": "MIT",
+        "author": "Turf Authors",
+        "homepage": "https://github.com/Turfjs/turf",
+        "description": " Calculates the length of a line, perfect for paths or routes."
+      },
+      {
+        "name": "@turf/meta",
+        "versions": ["7.3.5"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@turf+meta@7.3.5/node_modules/@turf/meta"
+        ],
+        "license": "MIT",
+        "author": "Turf Authors",
+        "homepage": "https://github.com/Turfjs/turf",
+        "description": "Provides tools for iterating over and manipulating GeoJSON objects."
+      },
+      {
+        "name": "@turf/nearest-point-on-line",
+        "versions": ["7.3.5"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@turf+nearest-point-on-line@7.3.5/node_modules/@turf/nearest-point-on-line"
+        ],
+        "license": "MIT",
+        "author": "Turf Authors",
+        "homepage": "https://github.com/Turfjs/turf",
+        "description": "Finds the nearest point on a line to a given point"
+      },
+      {
+        "name": "@types/geojson",
+        "versions": ["7946.0.16"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@types+geojson@7946.0.16/node_modules/@types/geojson"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/geojson",
+        "description": "TypeScript definitions for geojson"
+      },
+      {
+        "name": "@types/istanbul-lib-coverage",
+        "versions": ["2.0.6"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@types+istanbul-lib-coverage@2.0.6/node_modules/@types/istanbul-lib-coverage"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/istanbul-lib-coverage",
+        "description": "TypeScript definitions for istanbul-lib-coverage"
+      },
+      {
+        "name": "@types/istanbul-lib-report",
+        "versions": ["3.0.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@types+istanbul-lib-report@3.0.3/node_modules/@types/istanbul-lib-report"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/istanbul-lib-report",
+        "description": "TypeScript definitions for istanbul-lib-report"
+      },
+      {
+        "name": "@types/istanbul-reports",
+        "versions": ["3.0.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@types+istanbul-reports@3.0.4/node_modules/@types/istanbul-reports"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/istanbul-reports",
+        "description": "TypeScript definitions for istanbul-reports"
+      },
+      {
+        "name": "@types/node",
+        "versions": ["26.1.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@types+node@26.1.1/node_modules/@types/node"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/node",
+        "description": "TypeScript definitions for node"
+      },
+      {
+        "name": "@types/rbush",
+        "versions": ["4.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@types+rbush@4.0.0/node_modules/@types/rbush"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/rbush",
+        "description": "TypeScript definitions for rbush"
+      },
+      {
+        "name": "@types/yargs",
+        "versions": ["17.0.35"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@types+yargs@17.0.35/node_modules/@types/yargs"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/yargs",
+        "description": "TypeScript definitions for yargs"
+      },
+      {
+        "name": "@types/yargs-parser",
+        "versions": ["21.0.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@types+yargs-parser@21.0.3/node_modules/@types/yargs-parser"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/yargs-parser",
+        "description": "TypeScript definitions for yargs-parser"
+      },
+      {
+        "name": "@zarrita/storage",
+        "versions": ["0.2.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@zarrita+storage@0.2.0/node_modules/@zarrita/storage"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/manzt/zarrita.js#readme"
+      },
+      {
+        "name": "abort-controller",
+        "versions": ["3.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/abort-controller@3.0.0/node_modules/abort-controller"
+        ],
+        "license": "MIT",
+        "author": "Toru Nagashima",
+        "homepage": "https://github.com/mysticatea/abort-controller#readme",
+        "description": "An implementation of WHATWG AbortController interface."
+      },
+      {
+        "name": "accepts",
+        "versions": ["2.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/accepts@2.0.0/node_modules/accepts"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/jshttp/accepts#readme",
+        "description": "Higher-level content negotiation"
+      },
+      {
+        "name": "acorn",
+        "versions": ["8.17.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/acorn@8.17.0/node_modules/acorn"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/acornjs/acorn",
+        "description": "ECMAScript parser"
+      },
+      {
+        "name": "agent-base",
+        "versions": ["7.1.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/agent-base@7.1.4/node_modules/agent-base"
+        ],
+        "license": "MIT",
+        "author": "Nathan Rajlich",
+        "homepage": "https://github.com/TooTallNate/proxy-agents#readme",
+        "description": "Turn a function into an `http.Agent` instance"
+      },
+      {
+        "name": "anser",
+        "versions": ["1.4.10"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/anser@1.4.10/node_modules/anser"
+        ],
+        "license": "MIT",
+        "author": "Ionică Bizău",
+        "homepage": "https://github.com/IonicaBizau/anser#readme",
+        "description": "A low level parser for ANSI sequences."
+      },
+      {
+        "name": "ansi-regex",
+        "versions": ["5.0.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/ansi-regex@5.0.1/node_modules/ansi-regex"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/chalk/ansi-regex#readme",
+        "description": "Regular expression for matching ANSI escape codes"
+      },
+      {
+        "name": "ansi-styles",
+        "versions": ["4.3.0", "5.2.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/ansi-styles@4.3.0/node_modules/ansi-styles",
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/ansi-styles@5.2.0/node_modules/ansi-styles"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/chalk/ansi-styles#readme",
+        "description": "ANSI escape codes for styling strings in the terminal"
+      },
+      {
+        "name": "asap",
+        "versions": ["2.0.6"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/asap@2.0.6/node_modules/asap"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/kriskowal/asap#readme",
+        "description": "High-priority task queue for Node.js and browsers"
+      },
+      {
+        "name": "babel-plugin-syntax-hermes-parser",
+        "versions": ["0.36.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/babel-plugin-syntax-hermes-parser@0.36.0/node_modules/babel-plugin-syntax-hermes-parser"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/hermes#readme",
+        "description": "Babel plugin which switches Babel to use the Hermes parser."
+      },
+      {
+        "name": "base64-js",
+        "versions": ["1.5.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/base64-js@1.5.1/node_modules/base64-js"
+        ],
+        "license": "MIT",
+        "author": "T. Jameson Little",
+        "homepage": "https://github.com/beatgammit/base64-js",
+        "description": "Base64 encoding/decoding in pure JS"
+      },
+      {
+        "name": "braces",
+        "versions": ["3.0.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/braces@3.0.3/node_modules/braces"
+        ],
+        "license": "MIT",
+        "author": "Jon Schlinkert",
+        "homepage": "https://github.com/micromatch/braces",
+        "description": "Bash-like brace expansion, implemented in JavaScript. Safer than other brace expansion libs, with complete support for the Bash 4.3 braces specification, without sacrificing speed."
+      },
+      {
+        "name": "browserslist",
+        "versions": ["4.28.7"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/browserslist@4.28.7/node_modules/browserslist"
+        ],
+        "license": "MIT",
+        "author": "Andrey Sitnik",
+        "homepage": "https://github.com/browserslist/browserslist#readme",
+        "description": "Share target browsers between different front-end tools, like Autoprefixer, Stylelint and babel-env-preset"
+      },
+      {
+        "name": "buffer-from",
+        "versions": ["1.1.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/buffer-from@1.1.2/node_modules/buffer-from"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/LinusU/buffer-from#readme"
+      },
+      {
+        "name": "camelcase",
+        "versions": ["6.3.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/camelcase@6.3.0/node_modules/camelcase"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/sindresorhus/camelcase#readme",
+        "description": "Convert a dash/dot/underscore/space separated string to camelCase or PascalCase: `foo-bar` → `fooBar`"
+      },
+      {
+        "name": "chalk",
+        "versions": ["4.1.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/chalk@4.1.2/node_modules/chalk"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/chalk/chalk#readme",
+        "description": "Terminal string styling done right"
+      },
+      {
+        "name": "ci-info",
+        "versions": ["2.0.0", "3.9.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/ci-info@2.0.0/node_modules/ci-info",
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/ci-info@3.9.0/node_modules/ci-info"
+        ],
+        "license": "MIT",
+        "author": "Thomas Watson Steen",
+        "homepage": "https://github.com/watson/ci-info",
+        "description": "Get details about the current Continuous Integration environment"
+      },
+      {
+        "name": "color-convert",
+        "versions": ["2.0.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/color-convert@2.0.1/node_modules/color-convert"
+        ],
+        "license": "MIT",
+        "author": "Heather Arthur",
+        "homepage": "https://github.com/Qix-/color-convert#readme",
+        "description": "Plain color conversion functions"
+      },
+      {
+        "name": "color-name",
+        "versions": ["1.1.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/color-name@1.1.4/node_modules/color-name"
+        ],
+        "license": "MIT",
+        "author": "DY",
+        "homepage": "https://github.com/colorjs/color-name",
+        "description": "A list of color names and its values"
+      },
+      {
+        "name": "commander",
+        "versions": ["2.20.3", "12.1.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/commander@2.20.3/node_modules/commander",
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/commander@12.1.0/node_modules/commander"
+        ],
+        "license": "MIT",
+        "author": "TJ Holowaychuk",
+        "homepage": "https://github.com/tj/commander.js#readme",
+        "description": "the complete solution for node.js command-line programs"
+      },
+      {
+        "name": "connect",
+        "versions": ["3.7.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/connect@3.7.0/node_modules/connect"
+        ],
+        "license": "MIT",
+        "author": "TJ Holowaychuk",
+        "homepage": "https://github.com/senchalabs/connect#readme",
+        "description": "High performance middleware framework"
+      },
+      {
+        "name": "convert-source-map",
+        "versions": ["2.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/convert-source-map@2.0.0/node_modules/convert-source-map"
+        ],
+        "license": "MIT",
+        "author": "Thorsten Lorenz",
+        "homepage": "https://github.com/thlorenz/convert-source-map",
+        "description": "Converts a source-map from/to  different formats and allows adding/changing properties."
+      },
+      {
+        "name": "cross-spawn",
+        "versions": ["7.0.6"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/cross-spawn@7.0.6/node_modules/cross-spawn"
+        ],
+        "license": "MIT",
+        "author": "André Cruz",
+        "homepage": "https://github.com/moxystudio/node-cross-spawn",
+        "description": "Cross platform child_process#spawn and child_process#spawnSync"
+      },
+      {
+        "name": "debug",
+        "versions": ["2.6.9", "4.4.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/debug@2.6.9/node_modules/debug",
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/debug@4.4.3/node_modules/debug"
+        ],
+        "license": "MIT",
+        "author": "Josh Junon",
+        "homepage": "https://github.com/debug-js/debug#readme",
+        "description": "Lightweight debugging utility for Node.js and the browser"
+      },
+      {
+        "name": "depd",
+        "versions": ["2.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/depd@2.0.0/node_modules/depd"
+        ],
+        "license": "MIT",
+        "author": "Douglas Christopher Wilson",
+        "homepage": "https://github.com/dougwilson/nodejs-depd#readme",
+        "description": "Deprecate all the things"
+      },
+      {
+        "name": "destroy",
+        "versions": ["1.2.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/destroy@1.2.0/node_modules/destroy"
+        ],
+        "license": "MIT",
+        "author": "Jonathan Ong",
+        "homepage": "https://github.com/stream-utils/destroy#readme",
+        "description": "destroy a stream if possible"
+      },
+      {
+        "name": "ee-first",
+        "versions": ["1.1.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/ee-first@1.1.1/node_modules/ee-first"
+        ],
+        "license": "MIT",
+        "author": "Jonathan Ong",
+        "homepage": "https://github.com/jonathanong/ee-first#readme",
+        "description": "return the first event in a set of ee/event pairs"
+      },
+      {
+        "name": "emoji-regex",
+        "versions": ["8.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/emoji-regex@8.0.0/node_modules/emoji-regex"
+        ],
+        "license": "MIT",
+        "author": "Mathias Bynens",
+        "homepage": "https://mths.be/emoji-regex",
+        "description": "A regular expression to match all Emoji-only symbols as per the Unicode Standard."
+      },
+      {
+        "name": "encodeurl",
+        "versions": ["1.0.2", "2.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/encodeurl@1.0.2/node_modules/encodeurl",
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/encodeurl@2.0.0/node_modules/encodeurl"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/pillarjs/encodeurl#readme",
+        "description": "Encode a URL to a percent-encoded form, excluding already-encoded sequences"
+      },
+      {
+        "name": "error-stack-parser",
+        "versions": ["2.1.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/error-stack-parser@2.1.4/node_modules/error-stack-parser"
+        ],
+        "license": "MIT",
+        "homepage": "https://www.stacktracejs.com",
+        "description": "Extract meaning from JS Errors"
+      },
+      {
+        "name": "escalade",
+        "versions": ["3.2.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/escalade@3.2.0/node_modules/escalade"
+        ],
+        "license": "MIT",
+        "author": "Luke Edwards",
+        "homepage": "https://github.com/lukeed/escalade#readme",
+        "description": "A tiny (183B to 210B) and fast utility to ascend parent directories"
+      },
+      {
+        "name": "escape-html",
+        "versions": ["1.0.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/escape-html@1.0.3/node_modules/escape-html"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/component/escape-html#readme",
+        "description": "Escape string for use in HTML"
+      },
+      {
+        "name": "escape-string-regexp",
+        "versions": ["4.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/escape-string-regexp@4.0.0/node_modules/escape-string-regexp"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/sindresorhus/escape-string-regexp#readme",
+        "description": "Escape RegExp special characters"
+      },
+      {
+        "name": "etag",
+        "versions": ["1.8.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/etag@1.8.1/node_modules/etag"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/jshttp/etag#readme",
+        "description": "Create simple HTTP ETags"
+      },
+      {
+        "name": "event-target-shim",
+        "versions": ["5.0.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/event-target-shim@5.0.1/node_modules/event-target-shim"
+        ],
+        "license": "MIT",
+        "author": "Toru Nagashima",
+        "homepage": "https://github.com/mysticatea/event-target-shim",
+        "description": "An implementation of WHATWG EventTarget interface."
+      },
+      {
+        "name": "fdir",
+        "versions": ["6.5.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/fdir@6.5.0_picomatch@4.0.5/node_modules/fdir"
+        ],
+        "license": "MIT",
+        "author": "thecodrr",
+        "homepage": "https://github.com/thecodrr/fdir#readme",
+        "description": "The fastest directory crawler & globbing alternative to glob, fast-glob, & tiny-glob. Crawls 1m files in < 1s"
+      },
+      {
+        "name": "fflate",
+        "versions": ["0.8.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/fflate@0.8.3/node_modules/fflate"
+        ],
+        "license": "MIT",
+        "author": "Arjun Barrett",
+        "homepage": "https://101arrowz.github.io/fflate",
+        "description": "High performance (de)compression in an 8kB package"
+      },
+      {
+        "name": "fill-range",
+        "versions": ["7.1.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/fill-range@7.1.1/node_modules/fill-range"
+        ],
+        "license": "MIT",
+        "author": "Jon Schlinkert",
+        "homepage": "https://github.com/jonschlinkert/fill-range",
+        "description": "Fill in a range of numbers or letters, optionally passing an increment or `step` to use, or create a regex-compatible range with `options.toRegex`"
+      },
+      {
+        "name": "finalhandler",
+        "versions": ["1.1.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/finalhandler@1.1.2/node_modules/finalhandler"
+        ],
+        "license": "MIT",
+        "author": "Douglas Christopher Wilson",
+        "homepage": "https://github.com/pillarjs/finalhandler#readme",
+        "description": "Node.js final http responder"
+      },
+      {
+        "name": "flow-enums-runtime",
+        "versions": ["0.0.6"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/flow-enums-runtime@0.0.6/node_modules/flow-enums-runtime"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/flow#readme",
+        "description": "Runtime to be use with the Flow Enums transform."
+      },
+      {
+        "name": "fresh",
+        "versions": ["0.5.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/fresh@0.5.2/node_modules/fresh"
+        ],
+        "license": "MIT",
+        "author": "TJ Holowaychuk",
+        "homepage": "https://github.com/jshttp/fresh#readme",
+        "description": "HTTP response freshness testing"
+      },
+      {
+        "name": "gensync",
+        "versions": ["1.0.0-beta.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/gensync@1.0.0-beta.2/node_modules/gensync"
+        ],
+        "license": "MIT",
+        "author": "Logan Smyth",
+        "homepage": "https://github.com/loganfsmyth/gensync",
+        "description": "Allows users to use generators in order to write common functions that can be both sync or async."
+      },
+      {
+        "name": "geotiff",
+        "versions": ["3.1.0-beta.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/geotiff@3.1.0-beta.0/node_modules/geotiff"
+        ],
+        "license": "MIT",
+        "author": "Fabian Schindler",
+        "homepage": "https://github.com/geotiffjs/geotiff.js#readme",
+        "description": "GeoTIFF image decoding in JavaScript"
+      },
+      {
+        "name": "gl-matrix",
+        "versions": ["3.4.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/gl-matrix@3.4.4/node_modules/gl-matrix"
+        ],
+        "license": "MIT",
+        "homepage": "http://glmatrix.net",
+        "description": "Javascript Matrix and Vector library for High Performance WebGL apps"
+      },
+      {
+        "name": "has-flag",
+        "versions": ["4.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/has-flag@4.0.0/node_modules/has-flag"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/sindresorhus/has-flag#readme",
+        "description": "Check if argv has a specific flag"
+      },
+      {
+        "name": "hermes-compiler",
+        "versions": ["250829098.0.16"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/hermes-compiler@250829098.0.16/node_modules/hermes-compiler"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/hermes#readme",
+        "description": "The hermes compiler CLI used during the React Native build process"
+      },
+      {
+        "name": "hermes-estree",
+        "versions": ["0.35.0", "0.36.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/hermes-estree@0.35.0/node_modules/hermes-estree",
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/hermes-estree@0.36.0/node_modules/hermes-estree"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/hermes#readme",
+        "description": "Flow types for the Flow-ESTree spec produced by the hermes parser"
+      },
+      {
+        "name": "hermes-parser",
+        "versions": ["0.35.0", "0.36.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/hermes-parser@0.35.0/node_modules/hermes-parser",
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/hermes-parser@0.36.0/node_modules/hermes-parser"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/hermes#readme",
+        "description": "A JavaScript parser built from the Hermes engine"
+      },
+      {
+        "name": "http-errors",
+        "versions": ["2.0.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/http-errors@2.0.1/node_modules/http-errors"
+        ],
+        "license": "MIT",
+        "author": "Jonathan Ong",
+        "homepage": "https://github.com/jshttp/http-errors#readme",
+        "description": "Create HTTP error objects"
+      },
+      {
+        "name": "https-proxy-agent",
+        "versions": ["7.0.6"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/https-proxy-agent@7.0.6/node_modules/https-proxy-agent"
+        ],
+        "license": "MIT",
+        "author": "Nathan Rajlich",
+        "homepage": "https://github.com/TooTallNate/proxy-agents#readme",
+        "description": "An HTTP(s) proxy `http.Agent` implementation for HTTPS"
+      },
+      {
+        "name": "image-size",
+        "versions": ["1.2.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/image-size@1.2.1/node_modules/image-size"
+        ],
+        "license": "MIT",
+        "author": "netroy",
+        "homepage": "https://github.com/image-size/image-size#readme",
+        "description": "get dimensions of any image file"
+      },
+      {
+        "name": "invariant",
+        "versions": ["2.2.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/invariant@2.2.4/node_modules/invariant"
+        ],
+        "license": "MIT",
+        "author": "Andres Suarez",
+        "homepage": "https://github.com/zertosh/invariant#readme",
+        "description": "invariant"
+      },
+      {
+        "name": "is-docker",
+        "versions": ["2.2.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/is-docker@2.2.1/node_modules/is-docker"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/sindresorhus/is-docker#readme",
+        "description": "Check if the process is running inside a Docker container"
+      },
+      {
+        "name": "is-fullwidth-code-point",
+        "versions": ["3.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/is-fullwidth-code-point@3.0.0/node_modules/is-fullwidth-code-point"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/sindresorhus/is-fullwidth-code-point#readme",
+        "description": "Check if the character represented by a given Unicode code point is fullwidth"
+      },
+      {
+        "name": "is-number",
+        "versions": ["7.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/is-number@7.0.0/node_modules/is-number"
+        ],
+        "license": "MIT",
+        "author": "Jon Schlinkert",
+        "homepage": "https://github.com/jonschlinkert/is-number",
+        "description": "Returns true if a number or string value is a finite number. Useful for regex matches, parsing, user input, etc."
+      },
+      {
+        "name": "is-wsl",
+        "versions": ["2.2.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/is-wsl@2.2.0/node_modules/is-wsl"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/sindresorhus/is-wsl#readme",
+        "description": "Check if the process is running inside Windows Subsystem for Linux (Bash on Windows)"
+      },
+      {
+        "name": "jest-get-type",
+        "versions": ["29.6.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/jest-get-type@29.6.3/node_modules/jest-get-type"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/jestjs/jest#readme",
+        "description": "A utility function to get the type of a value"
+      },
+      {
+        "name": "jest-util",
+        "versions": ["29.7.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/jest-util@29.7.0/node_modules/jest-util"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/jestjs/jest#readme"
+      },
+      {
+        "name": "jest-validate",
+        "versions": ["29.7.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/jest-validate@29.7.0/node_modules/jest-validate"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/jestjs/jest#readme"
+      },
+      {
+        "name": "jest-worker",
+        "versions": ["29.7.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/jest-worker@29.7.0/node_modules/jest-worker"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/jestjs/jest#readme"
+      },
+      {
+        "name": "js-tokens",
+        "versions": ["4.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/js-tokens@4.0.0/node_modules/js-tokens"
+        ],
+        "license": "MIT",
+        "author": "Simon Lydell",
+        "homepage": "https://github.com/lydell/js-tokens#readme",
+        "description": "A regex that tokenizes JavaScript."
+      },
+      {
+        "name": "jsesc",
+        "versions": ["3.1.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/jsesc@3.1.0/node_modules/jsesc"
+        ],
+        "license": "MIT",
+        "author": "Mathias Bynens",
+        "homepage": "https://mths.be/jsesc",
+        "description": "Given some data, jsesc returns the shortest possible stringified & ASCII-safe representation of that data."
+      },
+      {
+        "name": "json-stringify-pretty-compact",
+        "versions": ["4.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/json-stringify-pretty-compact@4.0.0/node_modules/json-stringify-pretty-compact"
+        ],
+        "license": "MIT",
+        "author": "Simon Lydell",
+        "homepage": "https://github.com/lydell/json-stringify-pretty-compact#readme",
+        "description": "The best of both `JSON.stringify(obj)` and `JSON.stringify(obj, null, indent)`."
+      },
+      {
+        "name": "json5",
+        "versions": ["2.2.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/json5@2.2.3/node_modules/json5"
+        ],
+        "license": "MIT",
+        "author": "Aseem Kishore",
+        "homepage": "http://json5.org/",
+        "description": "JSON for Humans"
+      },
+      {
+        "name": "leven",
+        "versions": ["3.1.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/leven@3.1.0/node_modules/leven"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/sindresorhus/leven#readme",
+        "description": "Measure the difference between two strings using the fastest JS implementation of the Levenshtein distance algorithm"
+      },
+      {
+        "name": "lodash.throttle",
+        "versions": ["4.1.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/lodash.throttle@4.1.1/node_modules/lodash.throttle"
+        ],
+        "license": "MIT",
+        "author": "John-David Dalton",
+        "homepage": "https://lodash.com/",
+        "description": "The lodash method `_.throttle` exported as a module."
+      },
+      {
+        "name": "loose-envify",
+        "versions": ["1.4.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/loose-envify@1.4.0/node_modules/loose-envify"
+        ],
+        "license": "MIT",
+        "author": "Andres Suarez",
+        "homepage": "https://github.com/zertosh/loose-envify",
+        "description": "Fast (and loose) selective `process.env` replacer using js-tokens instead of an AST"
+      },
+      {
+        "name": "memoize-one",
+        "versions": ["5.2.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/memoize-one@5.2.1/node_modules/memoize-one"
+        ],
+        "license": "MIT",
+        "author": "Alex Reardon",
+        "homepage": "https://github.com/alexreardon/memoize-one#readme",
+        "description": "A memoization library which only remembers the latest invocation"
+      },
+      {
+        "name": "merge-stream",
+        "versions": ["2.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/merge-stream@2.0.0/node_modules/merge-stream"
+        ],
+        "license": "MIT",
+        "author": "Stephen Sugden",
+        "homepage": "https://github.com/grncdr/merge-stream#readme",
+        "description": "Create a stream that emits events from multiple other streams"
+      },
+      {
+        "name": "metro",
+        "versions": ["0.84.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/metro@0.84.4/node_modules/metro"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/metro#readme",
+        "description": "🚇 The JavaScript bundler for React Native."
+      },
+      {
+        "name": "metro-babel-transformer",
+        "versions": ["0.84.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/metro-babel-transformer@0.84.4/node_modules/metro-babel-transformer"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/metro#readme",
+        "description": "🚇 Base Babel transformer for Metro."
+      },
+      {
+        "name": "metro-cache",
+        "versions": ["0.84.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/metro-cache@0.84.4/node_modules/metro-cache"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/metro#readme",
+        "description": "🚇 Cache layers for Metro."
+      },
+      {
+        "name": "metro-cache-key",
+        "versions": ["0.84.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/metro-cache-key@0.84.4/node_modules/metro-cache-key"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/metro#readme",
+        "description": "🚇 Cache key utility."
+      },
+      {
+        "name": "metro-config",
+        "versions": ["0.84.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/metro-config@0.84.4/node_modules/metro-config"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/metro#readme",
+        "description": "🚇 Config parser for Metro."
+      },
+      {
+        "name": "metro-core",
+        "versions": ["0.84.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/metro-core@0.84.4/node_modules/metro-core"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/metro#readme",
+        "description": "🚇 Metro's core package."
+      },
+      {
+        "name": "metro-file-map",
+        "versions": ["0.84.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/metro-file-map@0.84.4/node_modules/metro-file-map"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/metro#readme",
+        "description": "[Experimental] - 🚇 File crawling, watching and mapping for Metro"
+      },
+      {
+        "name": "metro-minify-terser",
+        "versions": ["0.84.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/metro-minify-terser@0.84.4/node_modules/metro-minify-terser"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/metro#readme",
+        "description": "🚇 Minifier for Metro based on Terser."
+      },
+      {
+        "name": "metro-resolver",
+        "versions": ["0.84.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/metro-resolver@0.84.4/node_modules/metro-resolver"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/metro#readme",
+        "description": "🚇 Implementation of Metro's resolution logic."
+      },
+      {
+        "name": "metro-runtime",
+        "versions": ["0.84.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/metro-runtime@0.84.4/node_modules/metro-runtime"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/metro#readme",
+        "description": "🚇 Module required for evaluating Metro bundles."
+      },
+      {
+        "name": "metro-source-map",
+        "versions": ["0.84.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/metro-source-map@0.84.4/node_modules/metro-source-map"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/metro#readme",
+        "description": "🚇 Source map generator for Metro."
+      },
+      {
+        "name": "metro-symbolicate",
+        "versions": ["0.84.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/metro-symbolicate@0.84.4/node_modules/metro-symbolicate"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/metro#readme",
+        "description": "🚇 A tool to find the source location from JS bundles and stack traces."
+      },
+      {
+        "name": "metro-transform-plugins",
+        "versions": ["0.84.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/metro-transform-plugins@0.84.4/node_modules/metro-transform-plugins"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/metro#readme",
+        "description": "🚇 Transform plugins for Metro."
+      },
+      {
+        "name": "metro-transform-worker",
+        "versions": ["0.84.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/metro-transform-worker@0.84.4/node_modules/metro-transform-worker"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/metro#readme",
+        "description": "🚇 Transform worker for Metro."
+      },
+      {
+        "name": "micromatch",
+        "versions": ["4.0.8"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/micromatch@4.0.8/node_modules/micromatch"
+        ],
+        "license": "MIT",
+        "author": "Jon Schlinkert",
+        "homepage": "https://github.com/micromatch/micromatch",
+        "description": "Glob matching for javascript/node.js. A replacement and faster alternative to minimatch and multimatch."
+      },
+      {
+        "name": "mime",
+        "versions": ["1.6.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/mime@1.6.0/node_modules/mime"
+        ],
+        "license": "MIT",
+        "author": "Robert Kieffer",
+        "homepage": "https://github.com/broofa/node-mime#readme",
+        "description": "A comprehensive library for mime-type mapping"
+      },
+      {
+        "name": "mime-db",
+        "versions": ["1.54.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/mime-db@1.54.0/node_modules/mime-db"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/jshttp/mime-db#readme",
+        "description": "Media Type Database"
+      },
+      {
+        "name": "mime-types",
+        "versions": ["3.0.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/mime-types@3.0.2/node_modules/mime-types"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/jshttp/mime-types#readme",
+        "description": "The ultimate javascript content-type utility."
+      },
+      {
+        "name": "minimist",
+        "versions": ["1.2.8"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/minimist@1.2.8/node_modules/minimist"
+        ],
+        "license": "MIT",
+        "author": "James Halliday",
+        "homepage": "https://github.com/minimistjs/minimist",
+        "description": "parse argument options"
+      },
+      {
+        "name": "mkdirp",
+        "versions": ["1.0.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/mkdirp@1.0.4/node_modules/mkdirp"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/isaacs/node-mkdirp#readme",
+        "description": "Recursively mkdir, like `mkdir -p`"
+      },
+      {
+        "name": "ms",
+        "versions": ["2.0.0", "2.1.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/ms@2.0.0/node_modules/ms",
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/ms@2.1.3/node_modules/ms"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/vercel/ms#readme",
+        "description": "Tiny millisecond conversion utility"
+      },
+      {
+        "name": "murmurhash-js",
+        "versions": ["1.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/murmurhash-js@1.0.0/node_modules/murmurhash-js"
+        ],
+        "license": "MIT",
+        "author": "Gary Court",
+        "homepage": "https://github.com/mikolalysenko/murmurhash-js#readme",
+        "description": "Native JS murmur hash implementation"
+      },
+      {
+        "name": "negotiator",
+        "versions": ["1.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/negotiator@1.0.0/node_modules/negotiator"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/jshttp/negotiator#readme",
+        "description": "HTTP content negotiation"
+      },
+      {
+        "name": "node-int64",
+        "versions": ["0.4.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/node-int64@0.4.0/node_modules/node-int64"
+        ],
+        "license": "MIT",
+        "author": "Robert Kieffer",
+        "homepage": "https://github.com/broofa/node-int64#readme",
+        "description": "Support for representing 64-bit integers in JavaScript"
+      },
+      {
+        "name": "node-releases",
+        "versions": ["2.0.51"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/node-releases@2.0.51/node_modules/node-releases"
+        ],
+        "license": "MIT",
+        "author": "Sergey Rubanov",
+        "homepage": "https://github.com/chicoxyzzy/node-releases#readme",
+        "description": "Node.js releases data"
+      },
+      {
+        "name": "nullthrows",
+        "versions": ["1.1.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/nullthrows@1.1.1/node_modules/nullthrows"
+        ],
+        "license": "MIT",
+        "author": "Andres Suarez",
+        "homepage": "https://github.com/zertosh/nullthrows#readme",
+        "description": "flow typed nullthrows"
+      },
+      {
+        "name": "numcodecs",
+        "versions": ["0.3.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/numcodecs@0.3.2/node_modules/numcodecs"
+        ],
+        "license": "MIT",
+        "author": "Trevor Manz",
+        "homepage": "https://github.com/manzt/numcodecs.js#readme",
+        "description": "Buffer compression and transformation codecs for use in data storage and communication applications."
+      },
+      {
+        "name": "ob1",
+        "versions": ["0.84.4"],
+        "paths": ["/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/ob1@0.84.4/node_modules/ob1"],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/metro#readme",
+        "description": "A small library for working with 0- and 1-based offsets in a type-checked way."
+      },
+      {
+        "name": "on-finished",
+        "versions": ["2.3.0", "2.4.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/on-finished@2.3.0/node_modules/on-finished",
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/on-finished@2.4.1/node_modules/on-finished"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/jshttp/on-finished#readme",
+        "description": "Execute a callback when a request closes, finishes, or errors"
+      },
+      {
+        "name": "open",
+        "versions": ["7.4.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/open@7.4.2/node_modules/open"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/sindresorhus/open#readme",
+        "description": "Open stuff like URLs, files, executables. Cross-platform."
+      },
+      {
+        "name": "parse-headers",
+        "versions": ["2.0.6"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/parse-headers@2.0.6/node_modules/parse-headers"
+        ],
+        "license": "MIT",
+        "author": "David Björklund",
+        "homepage": "https://github.com/kesla/parse-headers",
+        "description": "Parse http headers, works with browserify/xhr"
+      },
+      {
+        "name": "parseurl",
+        "versions": ["1.3.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/parseurl@1.3.3/node_modules/parseurl"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/pillarjs/parseurl#readme",
+        "description": "parse a url with memoization"
+      },
+      {
+        "name": "path-key",
+        "versions": ["3.1.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/path-key@3.1.1/node_modules/path-key"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/sindresorhus/path-key#readme",
+        "description": "Get the PATH environment variable key cross-platform"
+      },
+      {
+        "name": "picomatch",
+        "versions": ["2.3.2", "4.0.5"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/picomatch@2.3.2/node_modules/picomatch",
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/picomatch@4.0.5/node_modules/picomatch"
+        ],
+        "license": "MIT",
+        "author": "Jon Schlinkert",
+        "homepage": "https://github.com/micromatch/picomatch",
+        "description": "Blazing fast and accurate glob matcher written in JavaScript, with no dependencies and full support for standard and extended Bash glob features, including braces, extglobs, POSIX brackets, and regular expressions."
+      },
+      {
+        "name": "pretty-format",
+        "versions": ["29.7.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/pretty-format@29.7.0/node_modules/pretty-format"
+        ],
+        "license": "MIT",
+        "author": "James Kyle",
+        "homepage": "https://github.com/jestjs/jest#readme",
+        "description": "Stringify any JavaScript value."
+      },
+      {
+        "name": "promise",
+        "versions": ["8.3.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/promise@8.3.0/node_modules/promise"
+        ],
+        "license": "MIT",
+        "author": "ForbesLindesay",
+        "homepage": "https://github.com/then/promise#readme",
+        "description": "Bare bones Promises/A+ implementation"
+      },
+      {
+        "name": "protocol-buffers-schema",
+        "versions": ["3.6.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/protocol-buffers-schema@3.6.1/node_modules/protocol-buffers-schema"
+        ],
+        "license": "MIT",
+        "author": "Mathias Buus",
+        "homepage": "https://github.com/mafintosh/protocol-buffers-schema",
+        "description": "No nonsense protocol buffers schema parser written in Javascript"
+      },
+      {
+        "name": "queue",
+        "versions": ["6.0.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/queue@6.0.2/node_modules/queue"
+        ],
+        "license": "MIT",
+        "author": "Jesse Tane",
+        "homepage": "https://github.com/jessetane/queue#readme",
+        "description": "asynchronous function queue with adjustable concurrency"
+      },
+      {
+        "name": "quick-lru",
+        "versions": ["6.1.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/quick-lru@6.1.2/node_modules/quick-lru"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/sindresorhus/quick-lru#readme",
+        "description": "Simple “Least Recently Used” (LRU) cache"
+      },
+      {
+        "name": "range-parser",
+        "versions": ["1.2.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/range-parser@1.2.1/node_modules/range-parser"
+        ],
+        "license": "MIT",
+        "author": "TJ Holowaychuk",
+        "homepage": "https://github.com/jshttp/range-parser#readme",
+        "description": "Range header field string parser"
+      },
+      {
+        "name": "rbush",
+        "versions": ["4.0.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/rbush@4.0.1/node_modules/rbush"
+        ],
+        "license": "MIT",
+        "author": "Volodymyr Agafonkin",
+        "homepage": "https://github.com/mourner/rbush",
+        "description": "High-performance 2D spatial index for rectangles (based on R*-tree with bulk loading and bulk insertion algorithms)"
+      },
+      {
+        "name": "react",
+        "versions": ["19.2.8"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/react@19.2.8/node_modules/react"
+        ],
+        "license": "MIT",
+        "homepage": "https://react.dev/",
+        "description": "React is a JavaScript library for building user interfaces."
+      },
+      {
+        "name": "react-devtools-core",
+        "versions": ["6.1.5"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/react-devtools-core@6.1.5/node_modules/react-devtools-core"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/facebook/react#readme",
+        "description": "Use react-devtools outside of the browser"
+      },
+      {
+        "name": "react-is",
+        "versions": ["18.3.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/react-is@18.3.1/node_modules/react-is"
+        ],
+        "license": "MIT",
+        "homepage": "https://reactjs.org/",
+        "description": "Brand checking of React Elements."
+      },
+      {
+        "name": "react-native",
+        "versions": ["0.86.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/react-native@0.86.2_@babel+core@7.29.7_react@19.2.8/node_modules/react-native"
+        ],
+        "license": "MIT",
+        "homepage": "https://reactnative.dev/",
+        "description": "A framework for building native apps using React"
+      },
+      {
+        "name": "react-refresh",
+        "versions": ["0.14.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/react-refresh@0.14.2/node_modules/react-refresh"
+        ],
+        "license": "MIT",
+        "homepage": "https://reactjs.org/",
+        "description": "React is a JavaScript library for building user interfaces."
+      },
+      {
+        "name": "reference-spec-reader",
+        "versions": ["0.2.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/reference-spec-reader@0.2.0/node_modules/reference-spec-reader"
+        ],
+        "license": "MIT",
+        "author": "manzt"
+      },
+      {
+        "name": "regenerator-runtime",
+        "versions": ["0.13.11"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/regenerator-runtime@0.13.11/node_modules/regenerator-runtime"
+        ],
+        "license": "MIT",
+        "author": "Ben Newman",
+        "homepage": "https://github.com/facebook/regenerator/tree/main#readme",
+        "description": "Runtime for Regenerator-compiled generator and async functions."
+      },
+      {
+        "name": "require-directory",
+        "versions": ["2.1.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/require-directory@2.1.1/node_modules/require-directory"
+        ],
+        "license": "MIT",
+        "author": "Troy Goode",
+        "homepage": "https://github.com/troygoode/node-require-directory/",
+        "description": "Recursively iterates over specified directory, require()'ing each file, and returning a nested hash structure containing those modules."
+      },
+      {
+        "name": "resolve-protobuf-schema",
+        "versions": ["2.1.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/resolve-protobuf-schema@2.1.0/node_modules/resolve-protobuf-schema"
+        ],
+        "license": "MIT",
+        "author": "Mathias Buus",
+        "homepage": "https://github.com/mafintosh/resolve-protobuf-schema",
+        "description": "Read a protobuf schema from the disk, parse it and resolve all imports"
+      },
+      {
+        "name": "scheduler",
+        "versions": ["0.27.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/scheduler@0.27.0/node_modules/scheduler"
+        ],
+        "license": "MIT",
+        "homepage": "https://react.dev/",
+        "description": "Cooperative scheduler for the browser environment."
+      },
+      {
+        "name": "send",
+        "versions": ["0.19.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/send@0.19.2/node_modules/send"
+        ],
+        "license": "MIT",
+        "author": "TJ Holowaychuk",
+        "homepage": "https://github.com/pillarjs/send#readme",
+        "description": "Better streaming static file server with Range and conditional-GET support"
+      },
+      {
+        "name": "serialize-error",
+        "versions": ["2.1.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/serialize-error@2.1.0/node_modules/serialize-error"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/sindresorhus/serialize-error#readme",
+        "description": "Serialize an error into a plain object"
+      },
+      {
+        "name": "serve-static",
+        "versions": ["1.16.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/serve-static@1.16.3/node_modules/serve-static"
+        ],
+        "license": "MIT",
+        "author": "Douglas Christopher Wilson",
+        "homepage": "https://github.com/expressjs/serve-static#readme",
+        "description": "Serve static files"
+      },
+      {
+        "name": "shebang-command",
+        "versions": ["2.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/shebang-command@2.0.0/node_modules/shebang-command"
+        ],
+        "license": "MIT",
+        "author": "Kevin Mårtensson",
+        "homepage": "https://github.com/kevva/shebang-command#readme",
+        "description": "Get the command from a shebang"
+      },
+      {
+        "name": "shebang-regex",
+        "versions": ["3.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/shebang-regex@3.0.0/node_modules/shebang-regex"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/sindresorhus/shebang-regex#readme",
+        "description": "Regular expression for matching a shebang line"
+      },
+      {
+        "name": "shell-quote",
+        "versions": ["1.10.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/shell-quote@1.10.0/node_modules/shell-quote"
+        ],
+        "license": "MIT",
+        "author": "James Halliday",
+        "homepage": "https://github.com/ljharb/shell-quote",
+        "description": "quote and parse shell commands"
+      },
+      {
+        "name": "source-map-support",
+        "versions": ["0.5.21"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/source-map-support@0.5.21/node_modules/source-map-support"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/evanw/node-source-map-support#readme",
+        "description": "Fixes stack traces for files with source maps"
+      },
+      {
+        "name": "stackframe",
+        "versions": ["1.3.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/stackframe@1.3.4/node_modules/stackframe"
+        ],
+        "license": "MIT",
+        "homepage": "https://www.stacktracejs.com",
+        "description": "JS Object representation of a stack frame"
+      },
+      {
+        "name": "stacktrace-parser",
+        "versions": ["0.1.11"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/stacktrace-parser@0.1.11/node_modules/stacktrace-parser"
+        ],
+        "license": "MIT",
+        "author": "Georg Tavonius",
+        "homepage": "https://github.com/errwischt/stacktrace-parser",
+        "description": "Parses every stack trace into a nicely formatted array of hashes."
+      },
+      {
+        "name": "statuses",
+        "versions": ["1.5.0", "2.0.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/statuses@1.5.0/node_modules/statuses",
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/statuses@2.0.2/node_modules/statuses"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/jshttp/statuses#readme",
+        "description": "HTTP status utility"
+      },
+      {
+        "name": "string-width",
+        "versions": ["4.2.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/string-width@4.2.3/node_modules/string-width"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/sindresorhus/string-width#readme",
+        "description": "Get the visual width of a string - the number of columns required to display it"
+      },
+      {
+        "name": "strip-ansi",
+        "versions": ["6.0.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/strip-ansi@6.0.1/node_modules/strip-ansi"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/chalk/strip-ansi#readme",
+        "description": "Strip ANSI escape codes from a string"
+      },
+      {
+        "name": "supports-color",
+        "versions": ["7.2.0", "8.1.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/supports-color@7.2.0/node_modules/supports-color",
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/supports-color@8.1.1/node_modules/supports-color"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/chalk/supports-color#readme",
+        "description": "Detect whether a terminal supports color"
+      },
+      {
+        "name": "throat",
+        "versions": ["5.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/throat@5.0.0/node_modules/throat"
+        ],
+        "license": "MIT",
+        "author": "ForbesLindesay",
+        "homepage": "https://github.com/ForbesLindesay/throat#readme",
+        "description": "Throttle the parallelism of an asynchronous (promise returning) function / functions"
+      },
+      {
+        "name": "tinyglobby",
+        "versions": ["0.2.17"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/tinyglobby@0.2.17/node_modules/tinyglobby"
+        ],
+        "license": "MIT",
+        "author": "Superchupu",
+        "homepage": "https://superchupu.dev/tinyglobby",
+        "description": "A fast and minimal alternative to globby and fast-glob"
+      },
+      {
+        "name": "to-regex-range",
+        "versions": ["5.0.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/to-regex-range@5.0.1/node_modules/to-regex-range"
+        ],
+        "license": "MIT",
+        "author": "Jon Schlinkert",
+        "homepage": "https://github.com/micromatch/to-regex-range",
+        "description": "Pass two numbers, get a regex-compatible source string for matching ranges. Validated against more than 2.78 million test assertions."
+      },
+      {
+        "name": "toidentifier",
+        "versions": ["1.0.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/toidentifier@1.0.1/node_modules/toidentifier"
+        ],
+        "license": "MIT",
+        "author": "Douglas Christopher Wilson",
+        "homepage": "https://github.com/component/toidentifier#readme",
+        "description": "Convert a string of words to a JavaScript identifier"
+      },
+      {
+        "name": "undici-types",
+        "versions": ["8.3.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/undici-types@8.3.0/node_modules/undici-types"
+        ],
+        "license": "MIT",
+        "homepage": "https://undici.nodejs.org",
+        "description": "A stand-alone types package for Undici"
+      },
+      {
+        "name": "unpipe",
+        "versions": ["1.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/unpipe@1.0.0/node_modules/unpipe"
+        ],
+        "license": "MIT",
+        "author": "Douglas Christopher Wilson",
+        "homepage": "https://github.com/stream-utils/unpipe#readme",
+        "description": "Unpipe a stream from all destinations"
+      },
+      {
+        "name": "unzipit",
+        "versions": ["2.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/unzipit@2.0.0/node_modules/unzipit"
+        ],
+        "license": "MIT",
+        "author": "",
+        "homepage": "https://greggman.github.io/unzipit",
+        "description": "random access unzip library for JavaScript"
+      },
+      {
+        "name": "update-browserslist-db",
+        "versions": ["1.2.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/update-browserslist-db@1.2.3_browserslist@4.28.7/node_modules/update-browserslist-db"
+        ],
+        "license": "MIT",
+        "author": "Andrey Sitnik",
+        "homepage": "https://github.com/browserslist/update-db#readme",
+        "description": "CLI tool to update caniuse-lite to refresh target browsers from Browserslist config"
+      },
+      {
+        "name": "utils-merge",
+        "versions": ["1.0.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/utils-merge@1.0.1/node_modules/utils-merge"
+        ],
+        "license": "MIT",
+        "author": "Jared Hanson",
+        "homepage": "https://github.com/jaredhanson/utils-merge#readme",
+        "description": "merge() utility function"
+      },
+      {
+        "name": "vlq",
+        "versions": ["1.0.1"],
+        "paths": ["/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/vlq@1.0.1/node_modules/vlq"],
+        "license": "MIT",
+        "author": "Rich Harris",
+        "homepage": "https://github.com/Rich-Harris/vlq#readme",
+        "description": "Generate, and decode, base64 VLQ mappings for source maps and other uses"
+      },
+      {
+        "name": "whatwg-fetch",
+        "versions": ["3.6.20"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/whatwg-fetch@3.6.20/node_modules/whatwg-fetch"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/github/fetch#readme",
+        "description": "A window.fetch polyfill."
+      },
+      {
+        "name": "wrap-ansi",
+        "versions": ["7.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/wrap-ansi@7.0.0/node_modules/wrap-ansi"
+        ],
+        "license": "MIT",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/chalk/wrap-ansi#readme",
+        "description": "Wordwrap a string with ANSI escape codes"
+      },
+      {
+        "name": "ws",
+        "versions": ["7.5.13"],
+        "paths": ["/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/ws@7.5.13/node_modules/ws"],
+        "license": "MIT",
+        "author": "Einar Otto Stangvik",
+        "homepage": "https://github.com/websockets/ws",
+        "description": "Simple to use, blazing fast and thoroughly tested websocket client and server for Node.js"
+      },
+      {
+        "name": "yargs",
+        "versions": ["17.7.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/yargs@17.7.3/node_modules/yargs"
+        ],
+        "license": "MIT",
+        "homepage": "https://yargs.js.org/",
+        "description": "yargs the modern, pirate-themed, successor to optimist."
+      },
+      {
+        "name": "zarrita",
+        "versions": ["0.7.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/zarrita@0.7.3/node_modules/zarrita"
+        ],
+        "license": "MIT",
+        "homepage": "https://github.com/manzt/zarrita.js#readme"
+      }
+    ],
+    "ISC": [
+      {
+        "name": "@isaacs/ttlcache",
+        "versions": ["1.4.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@isaacs+ttlcache@1.4.1/node_modules/@isaacs/ttlcache"
+        ],
+        "license": "ISC",
+        "author": "Isaac Z. Schlueter",
+        "homepage": "https://github.com/isaacs/ttlcache#readme",
+        "description": "The time-based use-recency-unaware cousin of [`lru-cache`](http://npm.im/lru-cache)"
+      },
+      {
+        "name": "@mapbox/point-geometry",
+        "versions": ["1.1.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@mapbox+point-geometry@1.1.0/node_modules/@mapbox/point-geometry"
+        ],
+        "license": "ISC",
+        "author": "Tom MacWright",
+        "homepage": "https://github.com/mapbox/point-geometry",
+        "description": "a point geometry with transforms"
+      },
+      {
+        "name": "@mapbox/whoots-js",
+        "versions": ["3.1.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@mapbox+whoots-js@3.1.0/node_modules/@mapbox/whoots-js"
+        ],
+        "license": "ISC",
+        "author": "Bryan Housel",
+        "homepage": "https://github.com/mapbox/whoots-js#readme",
+        "description": "Request tiles from WMS servers that support EPSG:3857"
+      },
+      {
+        "name": "@maplibre/geojson-vt",
+        "versions": ["6.1.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@maplibre+geojson-vt@6.1.1/node_modules/@maplibre/geojson-vt"
+        ],
+        "license": "ISC",
+        "author": "Vladimir Agafonkin",
+        "homepage": "https://github.com/maplibre/geojson-vt#readme",
+        "description": "Slice GeoJSON data into vector tiles efficiently"
+      },
+      {
+        "name": "@maplibre/maplibre-gl-style-spec",
+        "versions": ["24.8.5", "24.10.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@maplibre+maplibre-gl-style-spec@24.8.5/node_modules/@maplibre/maplibre-gl-style-spec",
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@maplibre+maplibre-gl-style-spec@24.10.0/node_modules/@maplibre/maplibre-gl-style-spec"
+        ],
+        "license": "ISC",
+        "author": "MapLibre",
+        "homepage": "https://maplibre.org/maplibre-style-spec/",
+        "description": "a specification for maplibre styles"
+      },
+      {
+        "name": "cliui",
+        "versions": ["8.0.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/cliui@8.0.1/node_modules/cliui"
+        ],
+        "license": "ISC",
+        "author": "Ben Coe",
+        "homepage": "https://github.com/yargs/cliui#readme",
+        "description": "easily create complex multi-column command-line-interfaces"
+      },
+      {
+        "name": "earcut",
+        "versions": ["3.2.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/earcut@3.2.3/node_modules/earcut"
+        ],
+        "license": "ISC",
+        "author": "Volodymyr Agafonkin",
+        "homepage": "https://github.com/mapbox/earcut#readme",
+        "description": "The fastest and smallest JavaScript polygon triangulation library for your WebGL apps"
+      },
+      {
+        "name": "electron-to-chromium",
+        "versions": ["1.5.398"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/electron-to-chromium@1.5.398/node_modules/electron-to-chromium"
+        ],
+        "license": "ISC",
+        "author": "Kilian Valkhof",
+        "homepage": "https://github.com/Kilian/electron-to-chromium#readme",
+        "description": "Provides a list of electron-to-chromium version mappings"
+      },
+      {
+        "name": "flatbush",
+        "versions": ["4.6.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/flatbush@4.6.2/node_modules/flatbush"
+        ],
+        "license": "ISC",
+        "author": "Vladimir Agafonkin",
+        "homepage": "https://github.com/mourner/flatbush#readme",
+        "description": "Fast static spatial index for rectangles"
+      },
+      {
+        "name": "flatqueue",
+        "versions": ["3.1.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/flatqueue@3.1.0/node_modules/flatqueue"
+        ],
+        "license": "ISC",
+        "author": "Vladimir Agafonkin",
+        "homepage": "https://github.com/mourner/flatqueue#readme",
+        "description": "The smallest and simplest JavaScript priority queue"
+      },
+      {
+        "name": "get-caller-file",
+        "versions": ["2.0.5"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/get-caller-file@2.0.5/node_modules/get-caller-file"
+        ],
+        "license": "ISC",
+        "author": "Stefan Penner",
+        "homepage": "https://github.com/stefanpenner/get-caller-file#readme",
+        "description": ""
+      },
+      {
+        "name": "graceful-fs",
+        "versions": ["4.2.11"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/graceful-fs@4.2.11/node_modules/graceful-fs"
+        ],
+        "license": "ISC",
+        "homepage": "https://github.com/isaacs/node-graceful-fs#readme",
+        "description": "A drop-in replacement for fs, making various improvements."
+      },
+      {
+        "name": "inherits",
+        "versions": ["2.0.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/inherits@2.0.4/node_modules/inherits"
+        ],
+        "license": "ISC",
+        "homepage": "https://github.com/isaacs/inherits#readme",
+        "description": "Browser-friendly inheritance fully compatible with standard node.js inherits()"
+      },
+      {
+        "name": "isexe",
+        "versions": ["2.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/isexe@2.0.0/node_modules/isexe"
+        ],
+        "license": "ISC",
+        "author": "Isaac Z. Schlueter",
+        "homepage": "https://github.com/isaacs/isexe#readme",
+        "description": "Minimal module to check if a file is executable."
+      },
+      {
+        "name": "kdbush",
+        "versions": ["4.1.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/kdbush@4.1.0/node_modules/kdbush"
+        ],
+        "license": "ISC",
+        "author": "Vladimir Agafonkin",
+        "homepage": "https://github.com/mourner/kdbush#readme",
+        "description": "A very fast static 2D index for points based on kd-tree."
+      },
+      {
+        "name": "lru-cache",
+        "versions": ["5.1.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/lru-cache@5.1.1/node_modules/lru-cache"
+        ],
+        "license": "ISC",
+        "author": "Isaac Z. Schlueter",
+        "homepage": "https://github.com/isaacs/node-lru-cache#readme",
+        "description": "A cache object that deletes the least-recently-used items."
+      },
+      {
+        "name": "picocolors",
+        "versions": ["1.1.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/picocolors@1.1.1/node_modules/picocolors"
+        ],
+        "license": "ISC",
+        "author": "Alexey Raspopov",
+        "homepage": "https://github.com/alexeyraspopov/picocolors#readme",
+        "description": "The tiniest and the fastest library for terminal output formatting with ANSI colors"
+      },
+      {
+        "name": "potpack",
+        "versions": ["2.1.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/potpack@2.1.0/node_modules/potpack"
+        ],
+        "license": "ISC",
+        "author": "Vladimir Agafonkin",
+        "homepage": "https://mapbox.github.io/potpack/",
+        "description": "A tiny library for packing 2D rectangles (for sprite layouts)"
+      },
+      {
+        "name": "quickselect",
+        "versions": ["3.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/quickselect@3.0.0/node_modules/quickselect"
+        ],
+        "license": "ISC",
+        "author": "Vladimir Agafonkin",
+        "homepage": "https://github.com/mourner/quickselect#readme",
+        "description": "A tiny and fast selection algorithm in JavaScript."
+      },
+      {
+        "name": "semver",
+        "versions": ["6.3.1", "7.8.5"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/semver@6.3.1/node_modules/semver",
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/semver@7.8.5/node_modules/semver"
+        ],
+        "license": "ISC",
+        "author": "GitHub Inc.",
+        "homepage": "https://github.com/npm/node-semver#readme",
+        "description": "The semantic version parser used by npm."
+      },
+      {
+        "name": "setprototypeof",
+        "versions": ["1.2.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/setprototypeof@1.2.0/node_modules/setprototypeof"
+        ],
+        "license": "ISC",
+        "author": "Wes Todd",
+        "homepage": "https://github.com/wesleytodd/setprototypeof",
+        "description": "A small polyfill for Object.setprototypeof"
+      },
+      {
+        "name": "tinyqueue",
+        "versions": ["3.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/tinyqueue@3.0.0/node_modules/tinyqueue"
+        ],
+        "license": "ISC",
+        "author": "",
+        "homepage": "https://github.com/mourner/tinyqueue",
+        "description": "The smallest and simplest JavaScript priority queue"
+      },
+      {
+        "name": "which",
+        "versions": ["2.0.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/which@2.0.2/node_modules/which"
+        ],
+        "license": "ISC",
+        "author": "Isaac Z. Schlueter",
+        "homepage": "https://github.com/isaacs/node-which#readme",
+        "description": "Like which(1) unix command. Find the first instance of an executable in the PATH."
+      },
+      {
+        "name": "y18n",
+        "versions": ["5.0.8"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/y18n@5.0.8/node_modules/y18n"
+        ],
+        "license": "ISC",
+        "author": "Ben Coe",
+        "homepage": "https://github.com/yargs/y18n",
+        "description": "the bare-bones internationalization library used by yargs"
+      },
+      {
+        "name": "yallist",
+        "versions": ["3.1.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/yallist@3.1.1/node_modules/yallist"
+        ],
+        "license": "ISC",
+        "author": "Isaac Z. Schlueter",
+        "homepage": "https://github.com/isaacs/yallist#readme",
+        "description": "Yet Another Linked List"
+      },
+      {
+        "name": "yaml",
+        "versions": ["2.9.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/yaml@2.9.0/node_modules/yaml"
+        ],
+        "license": "ISC",
+        "author": "Eemeli Aro",
+        "homepage": "https://eemeli.org/yaml/",
+        "description": "JavaScript parser and stringifier for YAML"
+      },
+      {
+        "name": "yargs-parser",
+        "versions": ["21.1.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/yargs-parser@21.1.1/node_modules/yargs-parser"
+        ],
+        "license": "ISC",
+        "author": "Ben Coe",
+        "homepage": "https://github.com/yargs/yargs-parser#readme",
+        "description": "the mighty option parser used by yargs"
+      }
+    ],
+    "BSD-2-Clause": [
+      {
+        "name": "@mapbox/tiny-sdf",
+        "versions": ["2.2.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@mapbox+tiny-sdf@2.2.0/node_modules/@mapbox/tiny-sdf"
+        ],
+        "license": "BSD-2-Clause",
+        "author": "Vladimir Agafonkin",
+        "homepage": "https://github.com/mapbox/tiny-sdf#readme",
+        "description": "Browser-side SDF font generator"
+      },
+      {
+        "name": "@mapbox/unitbezier",
+        "versions": ["0.0.1", "1.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@mapbox+unitbezier@0.0.1/node_modules/@mapbox/unitbezier",
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@mapbox+unitbezier@1.0.0/node_modules/@mapbox/unitbezier"
+        ],
+        "license": "BSD-2-Clause",
+        "author": "",
+        "homepage": "https://github.com/mapbox/unitbezier",
+        "description": "unit bezier curve interpolation"
+      },
+      {
+        "name": "leaflet",
+        "versions": ["1.9.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/leaflet@1.9.4/node_modules/leaflet"
+        ],
+        "license": "BSD-2-Clause",
+        "homepage": "https://leafletjs.com/",
+        "description": "JavaScript library for mobile-friendly interactive maps"
+      },
+      {
+        "name": "ol",
+        "versions": ["10.10.0"],
+        "paths": ["/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/ol@10.10.0/node_modules/ol"],
+        "license": "BSD-2-Clause",
+        "homepage": "https://openlayers.org/",
+        "description": "OpenLayers mapping library"
+      },
+      {
+        "name": "terser",
+        "versions": ["5.49.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/terser@5.49.0/node_modules/terser"
+        ],
+        "license": "BSD-2-Clause",
+        "author": "Mihai Bazon",
+        "homepage": "https://terser.org",
+        "description": "JavaScript parser, mangler/compressor and beautifier toolkit for ES6+"
+      }
+    ],
+    "BSD-3-Clause": [
+      {
+        "name": "@mapbox/vector-tile",
+        "versions": ["2.0.5"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@mapbox+vector-tile@2.0.5/node_modules/@mapbox/vector-tile"
+        ],
+        "license": "BSD-3-Clause",
+        "homepage": "https://github.com/mapbox/vector-tile-js#readme",
+        "description": "Parses vector tiles"
+      },
+      {
+        "name": "@react-native/debugger-frontend",
+        "versions": ["0.86.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@react-native+debugger-frontend@0.86.2/node_modules/@react-native/debugger-frontend"
+        ],
+        "license": "BSD-3-Clause",
+        "homepage": "https://github.com/react/react-native/tree/HEAD/packages/debugger-frontend#readme",
+        "description": "Debugger frontend for React Native based on Chrome DevTools"
+      },
+      {
+        "name": "makeerror",
+        "versions": ["1.0.12"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/makeerror@1.0.12/node_modules/makeerror"
+        ],
+        "license": "BSD-3-Clause",
+        "author": "Naitik Shah",
+        "homepage": "https://github.com/daaku/nodejs-makeerror#readme",
+        "description": "A library to make errors."
+      },
+      {
+        "name": "maplibre-gl",
+        "versions": ["5.24.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/maplibre-gl@5.24.0/node_modules/maplibre-gl"
+        ],
+        "license": "BSD-3-Clause",
+        "homepage": "https://maplibre.org/",
+        "description": "BSD licensed community fork of mapbox-gl, a WebGL interactive maps library"
+      },
+      {
+        "name": "pbf",
+        "versions": ["4.0.2", "5.1.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/pbf@4.0.2/node_modules/pbf",
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/pbf@5.1.2/node_modules/pbf"
+        ],
+        "license": "BSD-3-Clause",
+        "author": "Konstantin Kaefer",
+        "homepage": "https://github.com/mapbox/pbf",
+        "description": "a low-level, lightweight protocol buffers implementation in JavaScript"
+      },
+      {
+        "name": "source-map",
+        "versions": ["0.5.7", "0.6.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/source-map@0.5.7/node_modules/source-map",
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/source-map@0.6.1/node_modules/source-map"
+        ],
+        "license": "BSD-3-Clause",
+        "author": "Nick Fitzgerald",
+        "homepage": "https://github.com/mozilla/source-map",
+        "description": "Generates and consumes source maps"
+      },
+      {
+        "name": "tmpl",
+        "versions": ["1.0.5"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/tmpl@1.0.5/node_modules/tmpl"
+        ],
+        "license": "BSD-3-Clause",
+        "author": "Naitik Shah",
+        "homepage": "https://github.com/daaku/nodejs-tmpl",
+        "description": "JavaScript micro templates."
+      }
+    ],
+    "(MIT OR Apache-2.0)": [
+      {
+        "name": "@maplibre/mlt",
+        "versions": ["1.1.12"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@maplibre+mlt@1.1.12/node_modules/@maplibre/mlt"
+        ],
+        "license": "(MIT OR Apache-2.0)",
+        "homepage": "https://github.com/maplibre/maplibre-tile-spec/#readme"
+      },
+      {
+        "name": "fb-dotslash",
+        "versions": ["0.5.8"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/fb-dotslash@0.5.8/node_modules/fb-dotslash"
+        ],
+        "license": "(MIT OR Apache-2.0)",
+        "homepage": "https://dotslash-cli.com/",
+        "description": "Command-line tool to facilitate fetching an executable, caching it, and then running it."
+      }
+    ],
+    "Apache-2.0": [
+      {
+        "name": "baseline-browser-mapping",
+        "versions": ["2.11.6"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/baseline-browser-mapping@2.11.6/node_modules/baseline-browser-mapping"
+        ],
+        "license": "Apache-2.0",
+        "homepage": "https://github.com/web-platform-dx/baseline-browser-mapping#readme",
+        "description": "A library for obtaining browser versions with their maximum supported Baseline feature set and Widely Available status."
+      },
+      {
+        "name": "bser",
+        "versions": ["2.1.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/bser@2.1.1/node_modules/bser"
+        ],
+        "license": "Apache-2.0",
+        "author": "Wez Furlong",
+        "homepage": "https://facebook.github.io/watchman/docs/bser.html",
+        "description": "JavaScript implementation of the BSER Binary Serialization"
+      },
+      {
+        "name": "chrome-launcher",
+        "versions": ["0.15.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/chrome-launcher@0.15.2/node_modules/chrome-launcher"
+        ],
+        "license": "Apache-2.0",
+        "author": "The Chromium Authors",
+        "homepage": "https://github.com/GoogleChrome/chrome-launcher#readme",
+        "description": "Launch latest Chrome with the Devtools Protocol port open"
+      },
+      {
+        "name": "chromium-edge-launcher",
+        "versions": ["0.3.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/chromium-edge-launcher@0.3.0/node_modules/chromium-edge-launcher"
+        ],
+        "license": "Apache-2.0",
+        "author": "Cezar Augusto",
+        "homepage": "https://github.com/cezaraugusto/chromium-edge-launcher#readme",
+        "description": "Launch latest Edge with the Devtools Protocol port open"
+      },
+      {
+        "name": "exponential-backoff",
+        "versions": ["3.1.3"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/exponential-backoff@3.1.3/node_modules/exponential-backoff"
+        ],
+        "license": "Apache-2.0",
+        "author": "Sami Sayegh",
+        "homepage": "https://github.com/coveooss/exponential-backoff#readme",
+        "description": "A utility that allows retrying a function with an exponential delay between attempts."
+      },
+      {
+        "name": "fb-watchman",
+        "versions": ["2.0.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/fb-watchman@2.0.2/node_modules/fb-watchman"
+        ],
+        "license": "Apache-2.0",
+        "author": "Wez Furlong",
+        "homepage": "https://facebook.github.io/watchman/",
+        "description": "Bindings for the Watchman file watching service"
+      },
+      {
+        "name": "lerc",
+        "versions": ["3.0.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/lerc@3.0.0/node_modules/lerc"
+        ],
+        "license": "Apache-2.0",
+        "author": "Esri",
+        "homepage": "https://github.com/Esri/lerc",
+        "description": "Rapid decoding of Lerc compressed raster data for any standard pixel type."
+      },
+      {
+        "name": "lighthouse-logger",
+        "versions": ["1.4.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/lighthouse-logger@1.4.2/node_modules/lighthouse-logger"
+        ],
+        "license": "Apache-2.0"
+      },
+      {
+        "name": "marky",
+        "versions": ["1.3.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/marky@1.3.0/node_modules/marky"
+        ],
+        "license": "Apache-2.0",
+        "author": "Nolan Lawson",
+        "homepage": "https://github.com/nolanlawson/marky#readme",
+        "description": "Performance timer based on performance.mark() and measure()"
+      },
+      {
+        "name": "walker",
+        "versions": ["1.0.8"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/walker@1.0.8/node_modules/walker"
+        ],
+        "license": "Apache-2.0",
+        "author": "Naitik Shah",
+        "homepage": "https://github.com/daaku/nodejs-walker",
+        "description": "A simple directory tree walker."
+      },
+      {
+        "name": "web-worker",
+        "versions": ["1.5.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/web-worker@1.5.0/node_modules/web-worker"
+        ],
+        "license": "Apache-2.0",
+        "homepage": "https://github.com/developit/web-worker",
+        "description": "Consistent Web Workers in browser and Node."
+      }
+    ],
+    "CC-BY-4.0": [
+      {
+        "name": "caniuse-lite",
+        "versions": ["1.0.30001806"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/caniuse-lite@1.0.30001806/node_modules/caniuse-lite"
+        ],
+        "license": "CC-BY-4.0",
+        "author": "Ben Briggs",
+        "homepage": "https://github.com/browserslist/caniuse-lite#readme",
+        "description": "A smaller version of caniuse-db, with only the essentials!"
+      }
+    ],
+    "0BSD": [
+      {
+        "name": "jsc-safe-url",
+        "versions": ["0.2.4"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/jsc-safe-url@0.2.4/node_modules/jsc-safe-url"
+        ],
+        "license": "0BSD",
+        "author": "Rob Hogan",
+        "homepage": "https://github.com/robhogan/jsc-safe-url#readme",
+        "description": "Utility functions for converting to and from URLs that encode query string data into URL paths"
+      },
+      {
+        "name": "tslib",
+        "versions": ["2.8.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/tslib@2.8.1/node_modules/tslib"
+        ],
+        "license": "0BSD",
+        "author": "Microsoft Corp.",
+        "homepage": "https://www.typescriptlang.org/",
+        "description": "Runtime library for TypeScript helper functions"
+      }
+    ],
+    "(MIT AND Zlib)": [
+      {
+        "name": "pako",
+        "versions": ["2.2.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/pako@2.2.0/node_modules/pako"
+        ],
+        "license": "(MIT AND Zlib)",
+        "homepage": "https://github.com/nodeca/pako#readme",
+        "description": "zlib port to javascript - fast, modularized, with browser support"
+      }
+    ],
+    "(MIT OR CC0-1.0)": [
+      {
+        "name": "type-fest",
+        "versions": ["0.7.1"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/type-fest@0.7.1/node_modules/type-fest"
+        ],
+        "license": "(MIT OR CC0-1.0)",
+        "author": "Sindre Sorhus",
+        "homepage": "https://github.com/sindresorhus/type-fest#readme",
+        "description": "A collection of essential TypeScript types"
+      }
+    ],
+    "CC0-1.0": [
+      {
+        "name": "xml-utils",
+        "versions": ["1.10.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/xml-utils@1.10.2/node_modules/xml-utils"
+        ],
+        "license": "CC0-1.0",
+        "author": "Daniel J. Dufour",
+        "homepage": "https://github.com/DanielJDufour/xml-utils#readme",
+        "description": "Parse XML without Blowing Up Your Bundle Size"
+      }
+    ],
+    "MIT AND BSD-3-Clause": [
+      {
+        "name": "zstddec",
+        "versions": ["0.2.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/zstddec@0.2.0/node_modules/zstddec"
+        ],
+        "license": "MIT AND BSD-3-Clause",
+        "author": "Don McCurdy",
+        "homepage": "https://github.com/donmccurdy/zstddec#readme",
+        "description": "ZSTD (Zstandard) decoder for Web and Node.js, using WebAssembly"
+      }
+    ]
+  }
+}

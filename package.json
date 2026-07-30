@@ -41,6 +41,7 @@
     "release": "pnpm build && node scripts/publish-packages.mjs",
     "release:check": "node scripts/release-check.mjs",
     "registry:smoke": "node scripts/registry-install-smoke.mjs",
+    "release:hardening": "node scripts/release-hardening-report.mjs",
     "test": "turbo run test",
     "test:visual:maplibre": "pnpm --filter @territory-kit/example-web-maplibre test:visual",
     "turkey:adm3:ingestion:smoke": "pnpm --filter @territory-kit/generators build && pnpm --filter @territory-kit/generators exec vitest run test/turkey-adm3-ingestion.test.ts --passWithNoTests && pnpm --filter @territory-kit/cli exec vitest run test/turkey-adm3-ingestion.test.ts --passWithNoTests",

@@ -4,7 +4,6 @@
 "@territory-kit/adapter-core": minor
 "@territory-kit/runtime": patch
 "@territory-kit/maplibre": patch
-"@territory-kit/shared-testkit": patch
 ---
 
 Add Leaflet and OpenLayers renderer adapters, shared GeoJSON adapter serialization helpers, and a

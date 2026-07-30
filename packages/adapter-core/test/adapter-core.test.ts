@@ -5,8 +5,13 @@ import {
   assertTerritoryAdapterCapability,
   createTerritoryAdapterLifecycle,
   defineTerritoryAdapterCapabilities,
-  hasTerritoryAdapterCapability
+  hasTerritoryAdapterCapability,
+  isTerritoryFeatureCollection,
+  readFirstTerritoryRenderFeature,
+  readTerritoryFeatureId,
+  territoryZonesToFeatureCollection
 } from "../src/index.js";
+import type { TerritoryZone } from "@territory-kit/dataset";
 import type {
   TerritoryRendererAdapter,
   TerritoryRenderSource,
@@ -109,6 +114,84 @@ describe("adapter-core contracts", () => {
     );
   });
 
+  it("converts zones into stable GeoJSON feature collections", () => {
+    const stateByZoneId = new Map([["tr:adm1:istanbul", { selected: true, score: 9 }]]);
+    const collection = territoryZonesToFeatureCollection([zoneFixture()], { stateByZoneId });
+
+    expect(isTerritoryFeatureCollection(collection)).toBe(true);
+    expect(isTerritoryFeatureCollection({ type: "FeatureCollection", features: [] })).toBe(true);
+    expect(isTerritoryFeatureCollection({ type: "FeatureCollection" })).toBe(false);
+    expect(isTerritoryFeatureCollection(null)).toBe(false);
+    expect(collection.features[0]).toMatchObject({
+      id: "tr:adm1:istanbul",
+      properties: {
+        id: "tr:adm1:istanbul",
+        territoryId: "tr:adm1:istanbul",
+        datasetId: "turkey-admin",
+        level: 1,
+        adminLevel: "ADM1",
+        countryCode: "TR",
+        name: "Istanbul",
+        parentId: "tr",
+        source: "fixture",
+        selected: true,
+        score: 9
+      }
+    });
+  });
+
+  it("omits absent optional GeoJSON properties", () => {
+    const zone = zoneFixture({ properties: {} });
+    delete zone.countryCode;
+    delete zone.name;
+    delete zone.parentId;
+
+    const collection = territoryZonesToFeatureCollection([zone]);
+
+    expect(collection.features[0]?.properties).toEqual({
+      id: "tr:adm1:istanbul",
+      territoryId: "tr:adm1:istanbul",
+      datasetId: "turkey-admin",
+      level: 1,
+      adminLevel: "ADM1"
+    });
+  });
+
+  it("reads territory feature ids by renderer priority", () => {
+    expect(readTerritoryFeatureId(null)).toBeUndefined();
+    expect(readTerritoryFeatureId({ properties: { territoryId: 34 }, id: "feature-id" })).toBe(
+      "34"
+    );
+    expect(readTerritoryFeatureId({ properties: {}, id: 27 })).toBe("27");
+    expect(readTerritoryFeatureId({ properties: { id: "property-id" } })).toBe("property-id");
+    expect(readTerritoryFeatureId({ properties: { id: 10 }, id: undefined })).toBe("10");
+    expect(
+      readTerritoryFeatureId({ properties: { territoryId: false }, id: null })
+    ).toBeUndefined();
+    expect(readTerritoryFeatureId({ properties: [], id: "array-properties" })).toBe(
+      "array-properties"
+    );
+  });
+
+  it("reads the first renderer feature across event shapes", () => {
+    const listFeature = { id: "from-list" };
+    const directFeature = { id: "from-direct" };
+    const layerFeature = { id: "from-layer" };
+    const targetFeature = { id: "from-target" };
+
+    expect(readFirstTerritoryRenderFeature(null)).toBeUndefined();
+    expect(readFirstTerritoryRenderFeature({ features: [listFeature] })).toBe(listFeature);
+    expect(readFirstTerritoryRenderFeature({ features: [] })).toBeUndefined();
+    expect(readFirstTerritoryRenderFeature({ feature: directFeature })).toBe(directFeature);
+    expect(readFirstTerritoryRenderFeature({ layer: { feature: layerFeature } })).toBe(
+      layerFeature
+    );
+    expect(readFirstTerritoryRenderFeature({ target: { feature: targetFeature } })).toBe(
+      targetFeature
+    );
+    expect(readFirstTerritoryRenderFeature({ layer: [], target: [] })).toBeUndefined();
+  });
+
   it("keeps the renderer adapter type minimal and implementation-friendly", () => {
     const adapter: TerritoryRendererAdapter<object> = {
       capabilities: defineTerritoryAdapterCapabilities({ geoJson: true }),
@@ -130,3 +213,34 @@ describe("adapter-core contracts", () => {
     );
   });
 });
+
+function zoneFixture(overrides: Partial<TerritoryZone> = {}): TerritoryZone {
+  return {
+    id: "tr:adm1:istanbul",
+    datasetId: "turkey-admin",
+    countryCode: "TR",
+    level: 1,
+    sourceAdminLevel: "ADM1",
+    semanticType: "province",
+    name: "Istanbul",
+    parentId: "tr",
+    childIds: [],
+    neighborIds: [],
+    geometry: {
+      type: "Polygon",
+      coordinates: [
+        [
+          [28, 40],
+          [29, 40],
+          [29, 41],
+          [28, 41],
+          [28, 40]
+        ]
+      ]
+    },
+    center: [28.5, 40.5],
+    bbox: [28, 40, 29, 41],
+    properties: { source: "fixture" },
+    ...overrides
+  };
+}
