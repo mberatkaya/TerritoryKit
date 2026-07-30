@@ -28,6 +28,12 @@ const sourceRules = [
     description: "@territory-kit/core may depend only on dataset and registry workspace APIs"
   },
   {
+    packageDir: "packages/game",
+    allowed: new Set(["@territory-kit/core", "@territory-kit/dataset"]),
+    description:
+      "@territory-kit/game may depend only on core geometry APIs and dataset migration types"
+  },
+  {
     packageDir: "packages/runtime",
     allowed: new Set([
       "@territory-kit/adapter-core",
@@ -108,6 +114,7 @@ const browserSafePackages = new Set([
   "packages/adapter-core",
   "packages/core",
   "packages/dataset",
+  "packages/game",
   "packages/leaflet",
   "packages/maplibre",
   "packages/openlayers",

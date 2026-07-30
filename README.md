@@ -18,8 +18,9 @@ release flow.
   `@territory-kit/maplibre`, `@territory-kit/leaflet`, `@territory-kit/openlayers`,
   `@territory-kit/nestjs`, `@territory-kit/generators`, `@territory-kit/cli`, and pilot country
   loader packages.
-- New runtime line: `@territory-kit/adapter-core` and `@territory-kit/runtime`.
-- Future packages: React Native, game, Studio, hosted registry, and dataset diff/migration tooling
+- New runtime and game lines: `@territory-kit/adapter-core`, `@territory-kit/runtime`, and
+  `@territory-kit/game`.
+- Future packages: React Native, Studio, hosted registry, and additional dataset migration tooling
   remain roadmap items.
 
 ## Historical Sprint Track
@@ -54,6 +55,8 @@ The table below is historical roadmap context, not a claim that every future ada
 - `@territory-kit/runtime`: viewport request orchestration across catalog datasets, core engines,
   engine pool, runtime cache, worker loading, cancellation, scheduler, and renderer-independent
   adapters.
+- `@territory-kit/game`: optional territory ownership, team, action validation, cooldown,
+  snapshot, idempotency, event, audit, and repository contracts for game domains.
 - `@territory-kit/maplibre`: first map adapter boundary for MapLibre GL JS.
 - `@territory-kit/leaflet`: Leaflet adapter with native GeoJSON layers and optional plugin-backed
   vector tile hooks.
@@ -160,6 +163,11 @@ items.
 - [Multi-dataset catalog](./docs/catalog.md)
 - [Binary spatial index](./docs/binary-spatial-index.md)
 - [Worker loading](./docs/worker-loading.md)
+- [Game territory engine](./docs/game/overview.md)
+- [Game domain model](./docs/game/domain-model.md)
+- [Game persistence](./docs/game/persistence.md)
+- [Game concurrency](./docs/game/concurrency.md)
+- [Game dataset migrations](./docs/game/dataset-migrations.md)
 - [Adapter contract](./docs/architecture/adapter-contract.md)
 - [Core/registry boundary](./docs/architecture/core-registry-boundary.md)
 - [Errors](./docs/errors.md)
