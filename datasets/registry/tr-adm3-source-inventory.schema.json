@@ -1,0 +1,245 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://territory-kit.local/schemas/tr-adm3-source-inventory.schema.json",
+  "title": "TerritoryKit Turkey ADM3 source inventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "country", "generatedAt", "summary", "provinces", "batches"],
+  "properties": {
+    "schemaVersion": {
+      "const": "territorykit-tr-adm3-source-inventory@1"
+    },
+    "country": {
+      "const": "TR"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provinceCount",
+        "approvedCount",
+        "candidateCount",
+        "blockedCount",
+        "nationalProductionCatalogChanged"
+      ],
+      "properties": {
+        "provinceCount": {
+          "const": 81
+        },
+        "approvedCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "candidateCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "blockedCount": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "nationalProductionCatalogChanged": {
+          "const": false
+        }
+      }
+    },
+    "provinces": {
+      "type": "array",
+      "minItems": 81,
+      "maxItems": 81,
+      "items": {
+        "$ref": "#/$defs/province"
+      }
+    },
+    "batches": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/batch"
+      }
+    }
+  },
+  "$defs": {
+    "nullableString": {
+      "type": ["string", "null"]
+    },
+    "permission": {
+      "enum": ["allowed", "restricted", "unknown"]
+    },
+    "status": {
+      "enum": [
+        "approved",
+        "candidate",
+        "license-blocked",
+        "access-blocked",
+        "geometry-unavailable",
+        "quality-blocked",
+        "not-found",
+        "requires-authority-request"
+      ]
+    },
+    "province": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provinceCode",
+        "provinceName",
+        "provider",
+        "sourceUrl",
+        "downloadOrServiceUrl",
+        "format",
+        "crs",
+        "sourceDate",
+        "license",
+        "redistributionPermission",
+        "commercialUsePermission",
+        "neighbourhoodNameField",
+        "sourceNativeIdField",
+        "districtParentField",
+        "featureCount",
+        "recommendedAdapter",
+        "qualityRisk",
+        "status",
+        "evidenceUrls"
+      ],
+      "properties": {
+        "provinceCode": {
+          "type": "string",
+          "pattern": "^[0-9]{2}$"
+        },
+        "provinceName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourceUrl": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "downloadOrServiceUrl": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "format": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "crs": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "sourceDate": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1
+        },
+        "redistributionPermission": {
+          "$ref": "#/$defs/permission"
+        },
+        "commercialUsePermission": {
+          "$ref": "#/$defs/permission"
+        },
+        "neighbourhoodNameField": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "sourceNativeIdField": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "districtParentField": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "featureCount": {
+          "type": ["integer", "null"],
+          "minimum": 0
+        },
+        "recommendedAdapter": {
+          "type": "string",
+          "minLength": 1
+        },
+        "qualityRisk": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "evidenceUrls": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "batch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "branchName",
+        "provinceCodes",
+        "provinces",
+        "providerFamily",
+        "sharedFormat",
+        "sharedLicense",
+        "requiredAdapter",
+        "readiness"
+      ],
+      "properties": {
+        "branchName": {
+          "type": "string",
+          "pattern": "^audit/tr-adm3-"
+        },
+        "provinceCodes": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 5,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]{2}$"
+          }
+        },
+        "provinces": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 5,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "providerFamily": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sharedFormat": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sharedLicense": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requiredAdapter": {
+          "type": "string",
+          "minLength": 1
+        },
+        "readiness": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}
