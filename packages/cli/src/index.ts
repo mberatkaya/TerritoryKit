@@ -12,12 +12,19 @@ import {
 import {
   TERRITORY_ADMIN_LEVELS,
   TERRITORY_SCHEMA_VERSION,
+  createMigrationPlan,
   createTerritoryAdjacencyIndex,
   createTerritoryDatasetFromGeoJson,
+  diffDatasets,
+  diffIdentities,
   loadTerritoryDataset,
+  validateMigrationPlan,
   validateTerritoryDataset
 } from "@territory-kit/dataset";
 import type {
+  TerritoryCoverageChangeReport,
+  TerritoryDatasetDiffReport,
+  TerritoryDatasetMigrationPlan,
   GeometryQualityCheckPreset,
   GeometryQualityOptions,
   GeometryRepairOptions,
@@ -158,6 +165,10 @@ interface CliCountryBuildPhaseEvent {
 
 type CliCountryBuildResult = Awaited<ReturnType<typeof buildTerritoryCountryDatasetPath>>;
 
+interface CliDiffRunOptions {
+  identityOnly?: boolean;
+}
+
 export async function runCli(argv: string[] = process.argv.slice(2)): Promise<number> {
   const [command] = argv;
 
@@ -169,6 +180,10 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
   try {
     if (command === "dataset") {
       return await runDataset(argv.slice(1));
+    }
+
+    if (command === "identity") {
+      return await runIdentity(argv.slice(1));
     }
 
     if (command === "registry") {
@@ -1304,6 +1319,14 @@ async function runDataset(args: string[]): Promise<number> {
     return runDatasetCoverage(args.slice(1));
   }
 
+  if (subcommand === "diff") {
+    return runDatasetDiff(args.slice(1));
+  }
+
+  if (subcommand === "migration-plan") {
+    return runDatasetMigrationPlan(args.slice(1));
+  }
+
   if (subcommand === "build-all") {
     return runDatasetBuildAll(args.slice(1));
   }
@@ -1405,6 +1428,134 @@ async function runDataset(args: string[]): Promise<number> {
       : { issues: result.issues })
   });
   return result.ok ? 0 : 1;
+}
+
+async function runIdentity(args: string[]): Promise<number> {
+  const [subcommand] = args;
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printIdentityHelp();
+    return 0;
+  }
+
+  if (subcommand === "diff") {
+    return runDatasetDiff(args.slice(1), { identityOnly: true });
+  }
+
+  printJson({
+    ok: false,
+    command: "identity",
+    issues: [createCliIssue(`Unsupported identity command '${subcommand}'.`)]
+  });
+  return 2;
+}
+
+async function runDatasetDiff(args: string[], options: CliDiffRunOptions = {}): Promise<number> {
+  if (args.includes("--help") || args.includes("-h")) {
+    printDatasetDiffHelp(options.identityOnly === true);
+    return 0;
+  }
+
+  const flags = parseFlags(args);
+  const [oldPath, newPath] = getPositionalArgs(args);
+
+  if (!oldPath || !newPath) {
+    printJson({
+      ok: false,
+      command: options.identityOnly ? "identity diff" : "dataset diff",
+      issues: [
+        createCliIssue(
+          options.identityOnly
+            ? "Usage: territory identity diff <old-dataset.json> <new-dataset.json>."
+            : "Usage: territory dataset diff <old-dataset.json> <new-dataset.json>."
+        )
+      ]
+    });
+    return 2;
+  }
+
+  try {
+    const oldDataset = await readDiffDatasetInput(oldPath);
+    const newDataset = await readDiffDatasetInput(newPath);
+    const report = options.identityOnly
+      ? diffIdentities(oldDataset, newDataset, readDiffOptions(flags))
+      : diffDatasets(oldDataset, newDataset, readDiffOptions(flags));
+    const command = options.identityOnly ? "identity diff" : "dataset diff";
+
+    await writeDatasetDiffOutputs(report, flags);
+    printDatasetDiffOutput(report, flags, command);
+
+    if (flags.has("fail-on-review") && report.summary.requiresReviewCount > 0) {
+      return 1;
+    }
+
+    if (flags.has("fail-on-breaking") && report.summary.breakingChangeCount > 0) {
+      return 1;
+    }
+
+    return 0;
+  } catch (error) {
+    printJson({
+      ok: false,
+      command: options.identityOnly ? "identity diff" : "dataset diff",
+      issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+    });
+    return 2;
+  }
+}
+
+async function runDatasetMigrationPlan(args: string[]): Promise<number> {
+  if (args.includes("--help") || args.includes("-h")) {
+    printDatasetMigrationPlanHelp();
+    return 0;
+  }
+
+  const flags = parseFlags(args);
+  const [oldPath, newPath] = getPositionalArgs(args);
+
+  if (!oldPath || !newPath) {
+    printJson({
+      ok: false,
+      command: "dataset migration-plan",
+      issues: [
+        createCliIssue(
+          "Usage: territory dataset migration-plan <old-dataset.json> <new-dataset.json>."
+        )
+      ]
+    });
+    return 2;
+  }
+
+  try {
+    const oldDataset = await readDiffDatasetInput(oldPath);
+    const newDataset = await readDiffDatasetInput(newPath);
+    const plan = createMigrationPlan(oldDataset, newDataset, readDiffOptions(flags));
+    const validation = validateMigrationPlan(plan);
+
+    await writeMigrationPlanOutputs(plan, flags);
+    printMigrationPlanOutput(plan, validation.ok, flags);
+
+    if (!validation.ok) {
+      return 1;
+    }
+
+    if (flags.has("fail-on-review") && plan.summary.requiresReviewCount > 0) {
+      return 1;
+    }
+
+    if (flags.has("fail-on-breaking") && plan.summary.breakingChangeCount > 0) {
+      return 1;
+    }
+
+    return 0;
+  } catch (error) {
+    printJson({
+      ok: false,
+      command: "dataset migration-plan",
+      issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+    });
+    return 2;
+  }
 }
 
 async function runGlobalAdminAdm0Build(args: string[]): Promise<number> {
@@ -1658,6 +1809,457 @@ async function readCoverageRegistry(inputPath: string, explicit: boolean): Promi
   }
 
   throw lastError instanceof Error ? lastError : new Error(`Unable to read ${inputPath}.`);
+}
+
+async function readDiffDatasetInput(inputPath: string): Promise<TerritoryDataset> {
+  const input = await readJson(inputPath);
+
+  if (!isRecordValue(input) || !isRecordValue(input.manifest) || !Array.isArray(input.zones)) {
+    throw new Error(`Diff input '${inputPath}' must be a TerritoryKit dataset object.`);
+  }
+
+  return input as unknown as TerritoryDataset;
+}
+
+function readDiffOptions(flags: Map<string, string | true>) {
+  const issues: CliIssue[] = [];
+  const automaticConfidenceThreshold = readOptionalNonNegativeNumberFlag(
+    flags,
+    "automatic-confidence-threshold",
+    issues
+  );
+  const geometryCandidateMinConfidence = readOptionalNonNegativeNumberFlag(
+    flags,
+    "geometry-candidate-min-confidence",
+    issues
+  );
+
+  if (automaticConfidenceThreshold !== undefined && automaticConfidenceThreshold > 1) {
+    issues.push(createCliIssue("--automatic-confidence-threshold must be between 0 and 1."));
+  }
+
+  if (geometryCandidateMinConfidence !== undefined && geometryCandidateMinConfidence > 1) {
+    issues.push(createCliIssue("--geometry-candidate-min-confidence must be between 0 and 1."));
+  }
+
+  if (issues.length > 0) {
+    throw new Error(issues.map((issue) => issue.message).join(" "));
+  }
+
+  return {
+    ...(automaticConfidenceThreshold !== undefined ? { automaticConfidenceThreshold } : {}),
+    ...(geometryCandidateMinConfidence !== undefined ? { geometryCandidateMinConfidence } : {})
+  };
+}
+
+async function writeDatasetDiffOutputs(
+  report: TerritoryDatasetDiffReport,
+  flags: Map<string, string | true>
+): Promise<void> {
+  const force = flags.has("force");
+  const outputPath = getFlag(flags, "output");
+  const format = readDatasetDiffFormat(flags);
+
+  if (outputPath) {
+    await writeTextOutput(outputPath, formatDatasetDiffPayload(report, format), force);
+  }
+
+  const jsonOutput = getFlag(flags, "json-output");
+  if (jsonOutput) {
+    await writeJsonOutput(jsonOutput, report, force);
+  }
+
+  const markdownOutput = getFlag(flags, "markdown-output");
+  if (markdownOutput) {
+    await writeTextOutput(markdownOutput, formatDatasetDiffMarkdown(report), force);
+  }
+
+  const csvOutput = getFlag(flags, "csv-output");
+  if (csvOutput) {
+    await writeTextOutput(csvOutput, formatDatasetDiffCsv(report), force);
+  }
+
+  const mappingOutput = getFlag(flags, "mapping-output");
+  if (mappingOutput) {
+    await writeJsonOutput(mappingOutput, createMigrationMappingFromReport(report), force);
+  }
+
+  const breakingOutput = getFlag(flags, "breaking-output");
+  if (breakingOutput) {
+    await writeJsonOutput(breakingOutput, report.breakingChanges, force);
+  }
+
+  const coverageOutput = getFlag(flags, "coverage-output");
+  if (coverageOutput) {
+    await writeJsonOutput(coverageOutput, report.coverageChangeReport, force);
+  }
+
+  const performanceOutput = getFlag(flags, "performance-output");
+  if (performanceOutput) {
+    await writeJsonOutput(performanceOutput, report.performance, force);
+  }
+}
+
+async function writeMigrationPlanOutputs(
+  plan: TerritoryDatasetMigrationPlan,
+  flags: Map<string, string | true>
+): Promise<void> {
+  const force = flags.has("force");
+  const outputPath = getFlag(flags, "output");
+
+  if (outputPath) {
+    await writeTextOutput(
+      outputPath,
+      formatMigrationPlanPayload(plan, readMigrationPlanFormat(flags)),
+      force
+    );
+  }
+
+  const mappingOutput = getFlag(flags, "mapping-output");
+  if (mappingOutput) {
+    await writeJsonOutput(mappingOutput, plan, force);
+  }
+}
+
+function printDatasetDiffOutput(
+  report: TerritoryDatasetDiffReport,
+  flags: Map<string, string | true>,
+  command: string
+): void {
+  const format = readDatasetDiffFormat(flags);
+
+  if (format === "json") {
+    printJson({ ok: true, command, data: report });
+    return;
+  }
+
+  console.log(formatDatasetDiffPayload(report, format));
+}
+
+function printMigrationPlanOutput(
+  plan: TerritoryDatasetMigrationPlan,
+  validationOk: boolean,
+  flags: Map<string, string | true>
+): void {
+  const format = readMigrationPlanFormat(flags);
+
+  if (format === "json") {
+    printJson({ ok: validationOk, command: "dataset migration-plan", data: plan });
+    return;
+  }
+
+  console.log(formatMigrationPlanPayload(plan, format));
+}
+
+function readDatasetDiffFormat(
+  flags: Map<string, string | true>
+): "markdown" | "json" | "csv" | "mapping" | "breaking" | "coverage" {
+  if (flags.has("json")) {
+    return "json";
+  }
+
+  if (flags.has("csv")) {
+    return "csv";
+  }
+
+  if (flags.has("markdown")) {
+    return "markdown";
+  }
+
+  const format = getFlag(flags, "format");
+
+  if (
+    format === "markdown" ||
+    format === "json" ||
+    format === "csv" ||
+    format === "mapping" ||
+    format === "breaking" ||
+    format === "coverage"
+  ) {
+    return format;
+  }
+
+  if (format) {
+    throw new Error("--format must be markdown, json, csv, mapping, breaking, or coverage.");
+  }
+
+  return "markdown";
+}
+
+function readMigrationPlanFormat(flags: Map<string, string | true>): "json" | "markdown" {
+  if (flags.has("markdown")) {
+    return "markdown";
+  }
+
+  const format = getFlag(flags, "format");
+
+  if (format === "json" || format === "markdown") {
+    return format;
+  }
+
+  if (format) {
+    throw new Error("--format must be json or markdown.");
+  }
+
+  return "json";
+}
+
+function formatDatasetDiffPayload(
+  report: TerritoryDatasetDiffReport,
+  format: "markdown" | "json" | "csv" | "mapping" | "breaking" | "coverage"
+): string {
+  if (format === "json") {
+    return `${JSON.stringify(report, null, 2)}\n`;
+  }
+
+  if (format === "csv") {
+    return formatDatasetDiffCsv(report);
+  }
+
+  if (format === "mapping") {
+    return `${JSON.stringify(createMigrationMappingFromReport(report), null, 2)}\n`;
+  }
+
+  if (format === "breaking") {
+    return `${JSON.stringify(report.breakingChanges, null, 2)}\n`;
+  }
+
+  if (format === "coverage") {
+    return `${JSON.stringify(report.coverageChangeReport, null, 2)}\n`;
+  }
+
+  return formatDatasetDiffMarkdown(report);
+}
+
+function formatMigrationPlanPayload(
+  plan: TerritoryDatasetMigrationPlan,
+  format: "json" | "markdown"
+): string {
+  if (format === "markdown") {
+    return formatMigrationPlanMarkdown(plan);
+  }
+
+  return `${JSON.stringify(plan, null, 2)}\n`;
+}
+
+function formatDatasetDiffMarkdown(report: TerritoryDatasetDiffReport): string {
+  const lines = [
+    `# Territory Dataset Diff`,
+    "",
+    `From: ${formatDatasetRef(report.fromDataset)}`,
+    `To: ${formatDatasetRef(report.toDataset)}`,
+    "",
+    `## Summary`,
+    "",
+    `- Old zones: ${report.summary.oldZoneCount}`,
+    `- New zones: ${report.summary.newZoneCount}`,
+    `- Changes: ${report.summary.changedCount}`,
+    `- Unchanged matches: ${report.summary.unchangedCount}`,
+    `- Requires review: ${report.summary.requiresReviewCount}`,
+    `- Breaking changes: ${report.summary.breakingChangeCount}`,
+    "",
+    `## Categories`,
+    "",
+    `| Category | Count |`,
+    `| --- | ---: |`,
+    ...Object.entries(report.summary.countsByCategory).map(
+      ([category, count]) => `| ${category} | ${count} |`
+    ),
+    "",
+    `## Changes`,
+    ""
+  ];
+
+  if (report.changes.length === 0) {
+    lines.push("No changes detected.");
+  } else {
+    lines.push("| Category | Old ID | New ID | Confidence | Review | Reason |");
+    lines.push("| --- | --- | --- | ---: | --- | --- |");
+    for (const change of report.changes) {
+      lines.push(
+        [
+          change.category,
+          change.oldId ?? change.oldIds?.join(", ") ?? "",
+          change.newId ?? change.newIds?.join(", ") ?? "",
+          change.confidence.toFixed(3),
+          change.requiresReview ? "yes" : "no",
+          escapeMarkdownCell(change.reason)
+        ]
+          .join(" | ")
+          .replace(/^/, "| ")
+          .replace(/$/, " |")
+      );
+    }
+  }
+
+  lines.push("", "## Breaking Changes", "");
+
+  if (report.breakingChanges.length === 0) {
+    lines.push("No breaking changes detected.");
+  } else {
+    for (const change of report.breakingChanges) {
+      lines.push(`- ${change.code}: ${change.message}`);
+    }
+  }
+
+  lines.push("", "## Coverage", "", formatCoverageChangeMarkdown(report.coverageChangeReport));
+  lines.push("", "## Performance", "");
+  lines.push(`- Candidate pairs evaluated: ${report.performance.candidatePairCount}`);
+  lines.push(`- Spatial candidates retained: ${report.performance.spatialCandidateCount}`);
+  lines.push(`- Estimated memory bytes: ${report.performance.estimatedMemoryBytes}`);
+  lines.push(`- Streaming recommended: ${report.performance.streamingRecommended ? "yes" : "no"}`);
+
+  return `${lines.join("\n")}\n`;
+}
+
+function formatMigrationPlanMarkdown(plan: TerritoryDatasetMigrationPlan): string {
+  const lines = [
+    `# Territory Dataset Migration Plan`,
+    "",
+    `From: ${formatDatasetRef(plan.fromDataset)}`,
+    `To: ${formatDatasetRef(plan.toDataset)}`,
+    "",
+    `- Automatic mappings: ${plan.summary.automaticMappingCount}`,
+    `- Total mappings: ${plan.summary.totalMappingCount}`,
+    `- Requires review: ${plan.summary.requiresReviewCount}`,
+    `- Breaking changes: ${plan.summary.breakingChangeCount}`,
+    "",
+    `## Mappings`,
+    "",
+    `| Old ID | New ID | Type | Confidence | Review |`,
+    `| --- | --- | --- | ---: | --- |`
+  ];
+
+  for (const mapping of plan.mappings) {
+    lines.push(
+      `| ${mapping.oldId} | ${mapping.newId} | ${mapping.type} | ${mapping.confidence.toFixed(3)} | ${mapping.requiresReview ? "yes" : "no"} |`
+    );
+  }
+
+  lines.push("", "## Manual Review", "");
+
+  if (plan.reviewItems.length === 0) {
+    lines.push("No manual review items.");
+  } else {
+    for (const item of plan.reviewItems) {
+      lines.push(`- ${item.category}: ${item.reason}`);
+    }
+  }
+
+  return `${lines.join("\n")}\n`;
+}
+
+function formatDatasetDiffCsv(report: TerritoryDatasetDiffReport): string {
+  const rows = [
+    ["category", "oldId", "newId", "confidence", "requiresReview", "breaking", "reason"],
+    ...report.changes.map((change) => [
+      change.category,
+      change.oldId ?? change.oldIds?.join(";") ?? "",
+      change.newId ?? change.newIds?.join(";") ?? "",
+      change.confidence.toFixed(6),
+      String(change.requiresReview),
+      String(change.breaking),
+      change.reason
+    ])
+  ];
+
+  return `${rows.map((row) => row.map(escapeCsvCell).join(",")).join("\n")}\n`;
+}
+
+function formatCoverageChangeMarkdown(report: TerritoryCoverageChangeReport): string {
+  const lines = [
+    `Zone count: ${report.zoneCount.old} -> ${report.zoneCount.new} (${report.zoneCount.delta >= 0 ? "+" : ""}${report.zoneCount.delta})`,
+    "",
+    `| Level | Old | New | Delta |`,
+    `| --- | ---: | ---: | ---: |`,
+    ...report.byLevel.map(
+      (entry) => `| ${entry.key} | ${entry.old} | ${entry.new} | ${entry.delta} |`
+    ),
+    "",
+    `| Country | Old | New | Delta |`,
+    `| --- | ---: | ---: | ---: |`,
+    ...report.byCountry.map(
+      (entry) => `| ${entry.key} | ${entry.old} | ${entry.new} | ${entry.delta} |`
+    )
+  ];
+
+  return lines.join("\n");
+}
+
+function createMigrationMappingFromReport(
+  report: TerritoryDatasetDiffReport
+): TerritoryDatasetMigrationPlan {
+  const migrationMatches = report.matches.filter(
+    (match) => !match.categories.includes("stable-id-conflict")
+  );
+
+  return {
+    schemaVersion: "territory-migration-plan@1",
+    fromDataset: report.fromDataset,
+    toDataset: report.toDataset,
+    mappings: migrationMatches.map((match) => ({
+      oldId: match.oldId,
+      newId: match.newId,
+      type: selectCliMigrationMappingType(match.categories),
+      confidence: match.confidence,
+      requiresReview: match.requiresReview,
+      categories: match.categories,
+      strategy: match.strategy
+    })),
+    reviewItems: report.changes
+      .filter((change) => change.requiresReview)
+      .map((change) => ({
+        category: change.category,
+        reason: change.reason,
+        confidence: change.confidence,
+        ...(change.oldId ? { oldId: change.oldId } : {}),
+        ...(change.newId ? { newId: change.newId } : {}),
+        ...(change.oldIds ? { oldIds: change.oldIds } : {}),
+        ...(change.newIds ? { newIds: change.newIds } : {})
+      })),
+    breakingChanges: report.breakingChanges,
+    summary: {
+      automaticMappingCount: migrationMatches.filter((match) => !match.requiresReview).length,
+      breakingChangeCount: report.breakingChanges.length,
+      requiresReviewCount: report.summary.requiresReviewCount,
+      totalMappingCount: migrationMatches.length
+    }
+  };
+}
+
+function selectCliMigrationMappingType(
+  categories: TerritoryDatasetDiffReport["matches"][number]["categories"]
+): TerritoryDatasetMigrationPlan["mappings"][number]["type"] {
+  for (const category of [
+    "renamed",
+    "reparented",
+    "geometry-changed",
+    "metadata-changed",
+    "license-changed",
+    "source-changed"
+  ] as const) {
+    if (categories.includes(category)) {
+      return category;
+    }
+  }
+
+  return "unchanged";
+}
+
+function formatDatasetRef(ref: TerritoryDatasetDiffReport["fromDataset"]): string {
+  return `${ref.datasetId}@${ref.datasetVersion}`;
+}
+
+function escapeMarkdownCell(input: string): string {
+  return input.replaceAll("|", "\\|").replace(/\s+/g, " ");
+}
+
+function escapeCsvCell(input: string): string {
+  if (!/[",\n\r]/.test(input)) {
+    return input;
+  }
+
+  return `"${input.replaceAll('"', '""')}"`;
 }
 
 async function runRender(args: string[]): Promise<number> {
@@ -3806,6 +4408,22 @@ async function writeJsonOutput(path: string, payload: unknown, force: boolean): 
   await writeFile(path, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
 }
 
+async function writeTextOutput(path: string, payload: string, force: boolean): Promise<void> {
+  if (!force) {
+    try {
+      await readFile(path);
+      throw new Error(`Output path '${path}' already exists. Pass --force to overwrite.`);
+    } catch (error) {
+      if (error instanceof Error && error.message.includes("already exists")) {
+        throw error;
+      }
+    }
+  }
+
+  await mkdir(dirname(path), { recursive: true });
+  await writeFile(path, payload.endsWith("\n") ? payload : `${payload}\n`, "utf8");
+}
+
 async function writeBinaryOutput(
   path: string,
   payload: ArrayBuffer,
@@ -4146,6 +4764,7 @@ Commands:
   import     Import a GeoJSON file or source adapter artifact
   source     List and inspect source adapters (alias: sources)
   dataset    Build curated datasets and install registry artifacts
+  identity   Compare stable identity changes across dataset versions
   cache      List, verify, or clear installed dataset cache artifacts
   simplify   Emit a deterministic no-op simplification result for pipeline wiring
   generate   Generate grid or weighted-voronoi MVP datasets as JSON`);
@@ -4432,6 +5051,8 @@ Commands:
   build            Build a curated TerritoryKit dataset artifact
   build-all        Attempt configured country builds and write a machine-readable report
   coverage         Print or generate global coverage lifecycle summary
+  diff             Compare two dataset versions and emit Markdown/JSON/CSV reports
+  migration-plan   Create a reviewed ID migration mapping between two dataset versions
   search           Search registry datasets
   info             Show registry dataset metadata
   resolve          Resolve a country/level artifact, optionally with deepest-available fallback
@@ -4440,6 +5061,48 @@ Commands:
   verify           Verify an installed dataset
   remove           Remove an installed dataset
   list-installed   List installed datasets`);
+}
+
+function printIdentityHelp(): void {
+  console.log(`territory identity <command>
+
+Commands:
+  diff <old-dataset.json> <new-dataset.json>   Compare identity changes only`);
+}
+
+function printDatasetDiffHelp(identityOnly: boolean): void {
+  console.log(`${identityOnly ? "territory identity diff" : "territory dataset diff"} <old-dataset.json> <new-dataset.json>
+
+Options:
+  --format markdown|json|csv|mapping|breaking|coverage
+  --json
+  --csv
+  --output <path>
+  --json-output <path>
+  --markdown-output <path>
+  --csv-output <path>
+  --mapping-output <path>
+  --breaking-output <path>
+  --coverage-output <path>
+  --performance-output <path>
+  --automatic-confidence-threshold <0..1>
+  --geometry-candidate-min-confidence <0..1>
+  --fail-on-breaking
+  --fail-on-review
+  --force`);
+}
+
+function printDatasetMigrationPlanHelp(): void {
+  console.log(`territory dataset migration-plan <old-dataset.json> <new-dataset.json>
+
+Options:
+  --format json|markdown
+  --output <path>
+  --mapping-output <path>
+  --automatic-confidence-threshold <0..1>
+  --fail-on-breaking
+  --fail-on-review
+  --force`);
 }
 
 function printDatasetBuildHelp(): void {

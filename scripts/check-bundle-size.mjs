@@ -7,7 +7,9 @@ const maxBytesByFile = new Map([
   // Sprint 7 adds query/render artifact metadata and compatibility helpers.
   // Lower-admin support adds ADM5 metadata, semantic review, and coverage statuses.
   // Runtime architecture adds the shared TerritoryError serializer and stable error codes.
-  ["packages/dataset/dist/index.mjs", 140_000],
+  // Dataset diff/migration adds versioned report schemas, deterministic matching, geometry
+  // signals, coverage reporting, and migration-plan validation to the public dataset API.
+  ["packages/dataset/dist/index.mjs", 210_000],
   // Web renderer adapters share GeoJSON feature serialization and event identity helpers here.
   ["packages/adapter-core/dist/index.mjs", 32_000],
   ["packages/core/dist/index.mjs", 65_000],
@@ -56,7 +58,8 @@ const maxBytesByFile = new Map([
   // Turkey national source work adds HDX COD-AB import options and simplification/country flags.
   // Turkey ADM0-ADM2 full-build performance work adds phase timeouts and profile reports.
   // Hosted registry publishing adds registry publish/verify commands and provenance reporting.
-  ["packages/cli/dist/index.mjs", 116_000]
+  // Dataset diff/migration adds Markdown/JSON/CSV report outputs and CI migration gates.
+  ["packages/cli/dist/index.mjs", 135_000]
 ]);
 
 const failures = [];
