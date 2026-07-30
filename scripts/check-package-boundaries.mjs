@@ -39,6 +39,12 @@ const sourceRules = [
       "@territory-kit/runtime may coordinate adapter-core, core, dataset, and registry only"
   },
   {
+    packageDir: "packages/react-native",
+    allowed: new Set(["@territory-kit/core", "@territory-kit/dataset", "@territory-kit/registry"]),
+    description:
+      "@territory-kit/react-native may depend on browser-safe core, dataset, and registry APIs only"
+  },
+  {
     packageDir: "packages/generators",
     allowed: new Set(["@territory-kit/core", "@territory-kit/dataset"]),
     description: "@territory-kit/generators may depend on core and dataset only"
@@ -105,6 +111,7 @@ const browserSafePackages = new Set([
   "packages/leaflet",
   "packages/maplibre",
   "packages/openlayers",
+  "packages/react-native",
   "packages/runtime"
 ]);
 

@@ -9,7 +9,7 @@ export const TERRITORY_REGISTRY_VERSION = "1";
 export type TerritoryRegistryVersion = typeof TERRITORY_REGISTRY_VERSION;
 
 export type TerritoryRegistryArtifactPurpose =
-  "query" | "render" | "metadata" | "adjacency" | "debug";
+  "query" | "render" | "index" | "metadata" | "adjacency" | "debug";
 
 export type TerritoryRegistryArtifactFormat =
   "territory-json" | "geojson" | "json" | "br" | "gzip" | "pmtiles" | "mvt" | "tksi";

@@ -353,12 +353,16 @@ export async function buildTerritoryDatasetRegistryFromArtifacts(
 
       const filePath = join(root, relativePath);
       const fileStats = await stat(filePath);
-      const level = /(?:^|\/)(ADM\d+)\/(?:dataset|adjacency)\.json$/.exec(relativePath)?.[1];
-      const purpose = relativePath.startsWith("levels/")
-        ? "query"
-        : relativePath.startsWith("adjacency/") && relativePath.endsWith("/adjacency.json")
-          ? "adjacency"
-          : "metadata";
+      const level = /(?:^|\/)(ADM\d+)(?:\/(?:dataset|adjacency)\.json|\/index\/index\.tksi)$/.exec(
+        relativePath
+      )?.[1];
+      const purpose = relativePath.endsWith(".tksi")
+        ? "index"
+        : relativePath.startsWith("levels/")
+          ? "query"
+          : relativePath.startsWith("adjacency/") && relativePath.endsWith("/adjacency.json")
+            ? "adjacency"
+            : "metadata";
       const format = inferArtifactFormat(relativePath);
 
       artifacts.push({

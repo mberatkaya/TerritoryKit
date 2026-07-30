@@ -25,6 +25,10 @@ const maxBytesByFile = new Map([
   // index initialization reuse.
   ["packages/runtime/dist/index.mjs", 82_000],
   ["packages/maplibre/dist/index.mjs", 45_000],
+  // React Native runtime keeps storage/fetch/checksum abstractions in the core entry and leaves
+  // MapLibre Native behind an optional structural integration entry point.
+  ["packages/react-native/dist/index.mjs", 72_000],
+  ["packages/react-native/dist/maplibre.mjs", 18_000],
   // Leaflet/OpenLayers adapters keep renderer packages external and expose only structural
   // adapter contracts plus registry source metadata helpers.
   ["packages/leaflet/dist/index.mjs", 45_000],
