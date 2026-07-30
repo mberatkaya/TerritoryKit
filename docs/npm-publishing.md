@@ -5,21 +5,21 @@ workspace remains private so `npm publish` from the repository root fails safely
 
 ## Public Packages
 
-The package manifests currently remain on the published `1.1.0` line. The pending Sprint 11 minor
-Changeset resolves the next fixed-group release to `1.2.0`, including `@territory-kit/adapter-core`
-and `@territory-kit/runtime`.
+The package manifests for the main public release set are staged on the `1.2.0` line after the
+Sprint 11 through Sprint 13 Changesets version PR. The npm registry can remain on the previously
+published `1.1.0` line until the release workflow publishes those staged manifests.
 
 | Package                       | Version | Internal dependencies                                                                                     | Output                                                     | Publish |
 | ----------------------------- | ------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ------- |
-| `@territory-kit/dataset`      | `1.1.0` | none                                                                                                      | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/adapter-core` | `1.1.0` | `@territory-kit/dataset`                                                                                  | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/core`         | `1.1.0` | `@territory-kit/dataset`, deprecated registry compatibility                                               | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/registry`     | `1.1.0` | `@territory-kit/dataset`                                                                                  | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/runtime`      | `1.1.0` | `@territory-kit/adapter-core`, `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/registry` | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/generators`   | `1.1.0` | `@territory-kit/core`, `@territory-kit/dataset`                                                           | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/maplibre`     | `1.1.0` | `@territory-kit/adapter-core`, `@territory-kit/dataset`, `@territory-kit/registry`                        | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/nestjs`       | `1.1.0` | `@territory-kit/core`, `@territory-kit/dataset`                                                           | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/cli`          | `1.1.0` | `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/generators`                              | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/dataset`      | `1.2.0` | none                                                                                                      | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/adapter-core` | `1.2.0` | `@territory-kit/dataset`                                                                                  | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/core`         | `1.2.0` | `@territory-kit/dataset`, deprecated registry compatibility                                               | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/registry`     | `1.2.0` | `@territory-kit/dataset`                                                                                  | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/runtime`      | `1.2.0` | `@territory-kit/adapter-core`, `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/registry` | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/generators`   | `1.2.0` | `@territory-kit/core`, `@territory-kit/dataset`                                                           | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/maplibre`     | `1.2.0` | `@territory-kit/adapter-core`, `@territory-kit/dataset`, `@territory-kit/registry`                        | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/nestjs`       | `1.2.0` | `@territory-kit/core`, `@territory-kit/dataset`                                                           | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/cli`          | `1.2.0` | `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/generators`                              | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
 
 The correct first-publish order is:
 
