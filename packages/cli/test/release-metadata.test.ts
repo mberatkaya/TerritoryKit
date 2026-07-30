@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -13,7 +13,7 @@ interface ChangesetConfig {
 }
 
 const rootDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
-const publicPackageJsonPaths = [
+const fixedGroupPackageJsonPaths = [
   "packages/adapter-core/package.json",
   "packages/cli/package.json",
   "packages/core/package.json",
@@ -32,32 +32,54 @@ const publicPackageJsonPaths = [
 ] as const;
 
 describe("release metadata", () => {
-  it("keeps Sprint 11 through Sprint 13 as pending 1.2.0 fixed-group minor releases", () => {
+  it("keeps Sprint 11 through Sprint 13 on the 1.2.0 fixed-group minor release", () => {
     const rootPackage = readJson<PackageJson>("package.json");
     const changesetConfig = readJson<ChangesetConfig>(".changeset/config.json");
     const fixedPackages = new Set(changesetConfig.fixed.flat());
-    const sprintChangeset = readText(".changeset/runtime-architecture-boundaries.md");
+    const fixedGroupVersions = new Set<string>();
 
     expect(rootPackage.version).toBe("0.0.0-private");
 
-    for (const packagePath of publicPackageJsonPaths) {
+    for (const packagePath of fixedGroupPackageJsonPaths) {
       const packageJson = readJson<PackageJson>(packagePath);
 
-      expect(packageJson.version).toBe("1.1.0");
+      fixedGroupVersions.add(packageJson.version);
       expect(packageJson.name ? fixedPackages.has(packageJson.name) : false).toBe(true);
     }
 
-    expect(sprintChangeset).toContain('"@territory-kit/adapter-core": minor');
-    expect(sprintChangeset).toContain('"@territory-kit/runtime": minor');
-    expect(nextMinor("1.1.0")).toBe("1.2.0");
+    expect(fixedGroupVersions.size).toBe(1);
+    const [fixedGroupVersion] = fixedGroupVersions;
+    if (fixedGroupVersion === undefined) {
+      throw new Error("Expected at least one fixed-group package version.");
+    }
 
     const readme = readText("README.md");
-    expect(readme).toContain("| Pending `1.2.0` | Sprint 11");
-    expect(readme).toContain("| Pending `1.2.0` | Sprint 12");
-    expect(readme).toContain("| Pending `1.2.0` | Sprint 13");
-    expect(readText("CHANGELOG.md")).toContain("## 1.2.0 - Unreleased");
-    expect(readText("packages/adapter-core/CHANGELOG.md")).toContain("## 1.2.0 - Unreleased");
-    expect(readText("packages/runtime/CHANGELOG.md")).toContain("## 1.2.0 - Unreleased");
+    expect(readText("CHANGELOG.md")).toContain("## 1.2.0");
+
+    if (existsRelativePath(".changeset/runtime-architecture-boundaries.md")) {
+      const sprintChangeset = readText(".changeset/runtime-architecture-boundaries.md");
+
+      expect(fixedGroupVersion).toBe("1.1.0");
+      expect(sprintChangeset).toContain('"@territory-kit/adapter-core": minor');
+      expect(sprintChangeset).toContain('"@territory-kit/runtime": minor');
+      expect(nextMinor(fixedGroupVersion)).toBe("1.2.0");
+      expect(readme).toMatch(/\| Pending `1\.2\.0`\s+\| Sprint 11/);
+      expect(readme).toMatch(/\| Pending `1\.2\.0`\s+\| Sprint 12/);
+      expect(readme).toMatch(/\| Pending `1\.2\.0`\s+\| Sprint 13/);
+      expect(readText("packages/adapter-core/CHANGELOG.md")).toContain("## 1.2.0 - Unreleased");
+      expect(readText("packages/runtime/CHANGELOG.md")).toContain("## 1.2.0 - Unreleased");
+      return;
+    }
+
+    expect(fixedGroupVersion).toBe("1.2.0");
+    expect(readme).toMatch(/\| `1\.2\.0`\s+\| Sprint 11/);
+    expect(readme).toMatch(/\| `1\.2\.0`\s+\| Sprint 12/);
+    expect(readme).toMatch(/\| `1\.2\.0`\s+\| Sprint 13/);
+    expect(readText("packages/adapter-core/CHANGELOG.md")).toContain(
+      "## 1.2.0\n\n### Minor Changes"
+    );
+    expect(readText("packages/runtime/CHANGELOG.md")).toContain("## 1.2.0\n\n### Minor Changes");
+    expect(readText("packages/runtime/CHANGELOG.md")).toContain("Add Sprint 13 catalog");
   });
 });
 
@@ -67,6 +89,10 @@ function readJson<T>(relativePath: string): T {
 
 function readText(relativePath: string): string {
   return readFileSync(resolve(rootDirectory, relativePath), "utf8");
+}
+
+function existsRelativePath(relativePath: string): boolean {
+  return existsSync(resolve(rootDirectory, relativePath));
 }
 
 function nextMinor(version: string): string {
