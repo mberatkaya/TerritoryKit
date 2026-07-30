@@ -12,6 +12,7 @@ import { isRecord } from "./utils.js";
 const purposeValues = new Set<TerritoryRegistryArtifactPurpose>([
   "query",
   "render",
+  "index",
   "metadata",
   "adjacency",
   "debug"

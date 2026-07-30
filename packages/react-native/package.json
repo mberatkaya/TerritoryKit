@@ -1,0 +1,75 @@
+{
+  "name": "@territory-kit/react-native",
+  "version": "1.1.0",
+  "description": "React Native mobile runtime and optional MapLibre Native integration for TerritoryKit.",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/mberatkaya/TerritoryKit#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mberatkaya/TerritoryKit.git",
+    "directory": "packages/react-native"
+  },
+  "bugs": {
+    "url": "https://github.com/mberatkaya/TerritoryKit/issues"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist/*.cjs",
+    "dist/*.d.cts",
+    "dist/*.d.mts",
+    "dist/*.mjs",
+    "LICENSE",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./maplibre": {
+      "types": "./dist/maplibre.d.mts",
+      "import": "./dist/maplibre.mjs",
+      "require": "./dist/maplibre.cjs"
+    }
+  },
+  "peerDependencies": {
+    "@maplibre/maplibre-react-native": ">=11",
+    "react": ">=18",
+    "react-native": ">=0.72"
+  },
+  "peerDependenciesMeta": {
+    "@maplibre/maplibre-react-native": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-native": {
+      "optional": true
+    }
+  },
+  "scripts": {
+    "build": "tsdown",
+    "clean": "rimraf dist coverage .turbo",
+    "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\" --no-error-on-unmatched-pattern",
+    "test": "vitest run --passWithNoTests",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@territory-kit/core": "workspace:*",
+    "@territory-kit/dataset": "workspace:*",
+    "@territory-kit/registry": "workspace:*"
+  },
+  "devDependencies": {
+    "@territory-kit/shared-testkit": "workspace:*"
+  }
+}
