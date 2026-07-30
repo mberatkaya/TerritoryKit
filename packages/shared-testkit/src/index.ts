@@ -4,6 +4,9 @@ import type {
   TerritorySemanticAdminType,
   TerritoryZone
 } from "@territory-kit/dataset";
+import { isTerritoryError } from "@territory-kit/dataset";
+import { territoryZonesToFeatureCollection } from "@territory-kit/adapter-core";
+import type { TerritoryRenderSource, TerritoryRendererAdapter } from "@territory-kit/adapter-core";
 
 export interface SyntheticGridDatasetOptions {
   datasetId?: string;
@@ -14,6 +17,110 @@ export interface SyntheticGridDatasetOptions {
   originLat?: number;
   cellSize?: number;
   withNeighbors?: boolean;
+}
+
+export interface TerritoryRendererAdapterContractHarness<TTarget> {
+  readonly name: string;
+  readonly sourceId: string;
+  createAdapter(): TerritoryRendererAdapter<TTarget>;
+  createTarget(): TTarget;
+  readSourceUpdateCount?(target: TTarget): number;
+  readListenerCount?(target: TTarget): number;
+  readLayerCount?(target: TTarget): number;
+  emitClick?(target: TTarget, territoryId: string): void;
+  emitHover?(target: TTarget, territoryId: string): void;
+}
+
+export interface TerritoryRendererAdapterContractResult {
+  readonly name: string;
+  readonly lifecycle: readonly string[];
+  readonly beforeAttachErrorCode?: string;
+  readonly unsupportedVectorTileErrorCode?: string;
+  readonly sourceUpdateCount?: number;
+  readonly listenerCountAfterDetach?: number;
+  readonly layerCountAfterDetach?: number;
+}
+
+export async function exerciseTerritoryRendererAdapterContract<TTarget>(
+  harness: TerritoryRendererAdapterContractHarness<TTarget>
+): Promise<TerritoryRendererAdapterContractResult> {
+  const dataset = createSyntheticGridDataset({
+    datasetId: `renderer-contract-${harness.name}`,
+    rows: 2,
+    columns: 2,
+    level: 0,
+    cellSize: 1
+  });
+  const source: TerritoryRenderSource = {
+    id: harness.sourceId,
+    type: "geojson",
+    data: territoryZonesToFeatureCollection(dataset.zones)
+  };
+  const adapter = harness.createAdapter();
+  const target = harness.createTarget();
+  const lifecycle: string[] = [adapter.lifecycleState];
+  let beforeAttachErrorCode: string | undefined;
+  let unsupportedVectorTileErrorCode: string | undefined;
+
+  try {
+    await adapter.setSource(source, { requestId: "contract-before-attach", revision: 0 });
+  } catch (error) {
+    beforeAttachErrorCode = isTerritoryError(error) ? error.code : "UNKNOWN";
+  }
+
+  await adapter.attach(target);
+  lifecycle.push(adapter.lifecycleState);
+
+  await adapter.setSource(source, {
+    requestId: "contract-update",
+    revision: 1,
+    signal: new AbortController().signal
+  });
+  const hoverTerritoryId = dataset.zones[1]?.id;
+  await adapter.updateState({
+    selectedTerritoryIds: [dataset.zones[0]?.id ?? ""],
+    ...(hoverTerritoryId ? { hoverTerritoryId } : {})
+  });
+  await adapter.updateTheme({
+    fillColor: "#2563eb",
+    lineColor: "#111827",
+    lineWidth: 2
+  });
+
+  harness.emitHover?.(target, dataset.zones[0]?.id ?? "");
+  harness.emitClick?.(target, dataset.zones[0]?.id ?? "");
+
+  if (adapter.capabilities.vectorTiles !== true) {
+    try {
+      await adapter.setSource(
+        {
+          id: harness.sourceId,
+          type: "vector-tiles",
+          tiles: ["https://tiles.example.test/{z}/{x}/{y}.mvt"]
+        },
+        { requestId: "contract-vector", revision: 2 }
+      );
+    } catch (error) {
+      unsupportedVectorTileErrorCode = isTerritoryError(error) ? error.code : "UNKNOWN";
+    }
+  }
+
+  await adapter.detach();
+  lifecycle.push(adapter.lifecycleState);
+
+  return {
+    name: harness.name,
+    lifecycle,
+    ...(beforeAttachErrorCode ? { beforeAttachErrorCode } : {}),
+    ...(unsupportedVectorTileErrorCode ? { unsupportedVectorTileErrorCode } : {}),
+    ...(harness.readSourceUpdateCount
+      ? { sourceUpdateCount: harness.readSourceUpdateCount(target) }
+      : {}),
+    ...(harness.readListenerCount
+      ? { listenerCountAfterDetach: harness.readListenerCount(target) }
+      : {}),
+    ...(harness.readLayerCount ? { layerCountAfterDetach: harness.readLayerCount(target) } : {})
+  };
 }
 
 export function createSquareZone(options: {

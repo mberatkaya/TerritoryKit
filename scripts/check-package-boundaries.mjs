@@ -58,6 +58,24 @@ const sourceRules = [
     description: "@territory-kit/maplibre may depend on adapter-core, dataset, and registry only"
   },
   {
+    packageDir: "packages/leaflet",
+    allowed: new Set([
+      "@territory-kit/adapter-core",
+      "@territory-kit/dataset",
+      "@territory-kit/registry"
+    ]),
+    description: "@territory-kit/leaflet may depend on adapter-core, dataset, and registry only"
+  },
+  {
+    packageDir: "packages/openlayers",
+    allowed: new Set([
+      "@territory-kit/adapter-core",
+      "@territory-kit/dataset",
+      "@territory-kit/registry"
+    ]),
+    description: "@territory-kit/openlayers may depend on adapter-core, dataset, and registry only"
+  },
+  {
     packageDir: "packages/nestjs",
     allowed: new Set(["@territory-kit/core", "@territory-kit/dataset"]),
     description: "@territory-kit/nestjs may depend on core and dataset only"
@@ -75,8 +93,8 @@ const sourceRules = [
   },
   {
     packageDir: "packages/shared-testkit",
-    allowed: new Set(["@territory-kit/dataset"]),
-    description: "@territory-kit/shared-testkit may depend on dataset only"
+    allowed: new Set(["@territory-kit/adapter-core", "@territory-kit/dataset"]),
+    description: "@territory-kit/shared-testkit may depend on adapter-core and dataset only"
   }
 ];
 
@@ -84,7 +102,9 @@ const browserSafePackages = new Set([
   "packages/adapter-core",
   "packages/core",
   "packages/dataset",
+  "packages/leaflet",
   "packages/maplibre",
+  "packages/openlayers",
   "packages/runtime"
 ]);
 

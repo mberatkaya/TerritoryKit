@@ -8,7 +8,8 @@ const maxBytesByFile = new Map([
   // Lower-admin support adds ADM5 metadata, semantic review, and coverage statuses.
   // Runtime architecture adds the shared TerritoryError serializer and stable error codes.
   ["packages/dataset/dist/index.mjs", 140_000],
-  ["packages/adapter-core/dist/index.mjs", 24_000],
+  // Web renderer adapters share GeoJSON feature serialization and event identity helpers here.
+  ["packages/adapter-core/dist/index.mjs", 32_000],
   ["packages/core/dist/index.mjs", 65_000],
   ["packages/core/dist/legacy-registry.mjs", 5_000],
   ["packages/registry/dist/index.mjs", 5_000],
@@ -24,6 +25,10 @@ const maxBytesByFile = new Map([
   // index initialization reuse.
   ["packages/runtime/dist/index.mjs", 82_000],
   ["packages/maplibre/dist/index.mjs", 45_000],
+  // Leaflet/OpenLayers adapters keep renderer packages external and expose only structural
+  // adapter contracts plus registry source metadata helpers.
+  ["packages/leaflet/dist/index.mjs", 45_000],
+  ["packages/openlayers/dist/index.mjs", 55_000],
   ["packages/nestjs/dist/index.mjs", 45_000],
   ["packages/data-tr/dist/index.mjs", 8_000],
   ["packages/data-us/dist/index.mjs", 8_000],

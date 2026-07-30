@@ -1,6 +1,6 @@
 # Product Gap Analysis
 
-Last updated: 2026-07-24
+Last updated: 2026-07-30
 
 This maps the original TerritoryKit technical sprint intent to repository evidence. Status values
 are `implemented`, `partial`, `missing`, or `future roadmap`.
@@ -13,11 +13,11 @@ are `implemented`, `partial`, `missing`, or `future roadmap`.
 | Parent/child hierarchy                                                   | implemented    | `packages/core/test/engine.test.ts`, generated `hierarchy-report.json` artifacts             |
 | Adjacency traversal                                                      | implemented    | `packages/dataset/src/adjacency.ts`, `packages/generators/src/adjacency.ts`                  |
 | Zoom-based level selection                                               | implemented    | `packages/core/src/level-strategy.ts`, `packages/maplibre/src/index.ts`                      |
-| Viewport-based loading                                                   | implemented    | `packages/core/src/engine.ts`, `examples/web-maplibre/src/main.ts`                           |
+| Viewport-based loading                                                   | implemented    | `packages/runtime`, `examples/web-maplibre`, `examples/web-leaflet-turkey`                   |
 | Stable territory IDs                                                     | implemented    | `packages/generators/src/turkey-adm3-pilot.ts`, generated `identity-map.json`                |
 | Registry-backed datasets                                                 | partial        | `packages/registry`, `datasets/registry`; hosted production registry is not implemented      |
 | Partial coverage and fallback metadata                                   | implemented    | `packages/registry/src/client.ts`, `packages/data-tr/src/index.ts`                           |
-| Renderer adapters                                                        | partial        | MapLibre exists; Leaflet, OpenLayers, and React Native adapters are future roadmap           |
+| Renderer adapters                                                        | partial        | MapLibre, Leaflet, and OpenLayers exist; React Native remains future roadmap                 |
 | Backend integration                                                      | implemented    | `packages/nestjs`, `examples/nestjs-postgis`                                                 |
 | Optional game state outside core                                         | partial        | Core keeps state separate; `@territory-kit/game` is future roadmap                           |
 | Production lower-admin source ingestion                                  | partial        | HDX/OCHA COD-AB Turkey ADM0-ADM2 lock path exists; ADM3 remains partial/blocker              |

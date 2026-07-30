@@ -1,0 +1,60 @@
+{
+  "name": "@territory-kit/openlayers",
+  "version": "1.1.0",
+  "description": "OpenLayers adapter utilities for TerritoryKit.",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/mberatkaya/TerritoryKit#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mberatkaya/TerritoryKit.git",
+    "directory": "packages/openlayers"
+  },
+  "bugs": {
+    "url": "https://github.com/mberatkaya/TerritoryKit/issues"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist/*.cjs",
+    "dist/*.d.cts",
+    "dist/*.d.mts",
+    "dist/*.mjs",
+    "LICENSE",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "peerDependencies": {
+    "ol": ">=10"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "clean": "rimraf dist coverage .turbo",
+    "lint": "eslint \"src/**/*.ts\" \"test/**/*.ts\" --no-error-on-unmatched-pattern",
+    "test": "vitest run --passWithNoTests",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@territory-kit/adapter-core": "workspace:*",
+    "@territory-kit/dataset": "workspace:*",
+    "@territory-kit/registry": "workspace:*",
+    "@types/geojson": "^7946.0.16"
+  },
+  "devDependencies": {
+    "@territory-kit/runtime": "workspace:*",
+    "@territory-kit/shared-testkit": "workspace:*",
+    "ol": "^10.10.0"
+  }
+}

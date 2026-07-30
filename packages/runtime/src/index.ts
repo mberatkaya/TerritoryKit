@@ -1,6 +1,7 @@
 import {
   assertTerritoryAdapterCapability,
-  hasTerritoryAdapterCapability
+  hasTerritoryAdapterCapability,
+  territoryZonesToFeatureCollection
 } from "@territory-kit/adapter-core";
 import type {
   TerritoryAdapterOperationContext,
@@ -1559,7 +1560,7 @@ export function createTerritoryRuntime<TTarget = unknown>(
         {
           id: resolveAdapterSourceId(adapter, options.adapterSourceId),
           type: "geojson",
-          data: zonesToFeatureCollection(zones),
+          data: territoryZonesToFeatureCollection(zones),
           metadata: {
             requestId: record.requestId,
             revision: record.revision,
@@ -2280,25 +2281,6 @@ function readCachedViewportPayload(bytes: Uint8Array, cacheKey: string): CachedV
 
 function writeCachedViewportPayload(payload: CachedViewportPayload): Uint8Array {
   return new TextEncoder().encode(JSON.stringify(payload));
-}
-
-function zonesToFeatureCollection(zones: readonly TerritoryZone[]): unknown {
-  return {
-    type: "FeatureCollection",
-    features: zones.map((zone) => ({
-      type: "Feature",
-      id: zone.id,
-      geometry: zone.geometry,
-      properties: {
-        ...zone.properties,
-        id: zone.id,
-        datasetId: zone.datasetId,
-        level: zone.level,
-        ...(zone.name ? { name: zone.name } : {}),
-        ...(zone.parentId ? { parentId: zone.parentId } : {})
-      }
-    }))
-  };
 }
 
 function createTentativeRequestKey(

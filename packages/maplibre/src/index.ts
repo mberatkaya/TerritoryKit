@@ -2,7 +2,11 @@ import type { Feature, FeatureCollection } from "geojson";
 import {
   assertTerritoryAdapterAttached,
   assertTerritoryAdapterCapability,
-  defineTerritoryAdapterCapabilities
+  defineTerritoryAdapterCapabilities,
+  isTerritoryFeatureCollection,
+  readFirstTerritoryRenderFeature,
+  readTerritoryFeatureId,
+  territoryZonesToFeatureCollection
 } from "@territory-kit/adapter-core";
 import type {
   TerritoryAdapterOperationContext,
@@ -62,7 +66,7 @@ export interface TerritoryMapLibreZoneEvent {
 }
 
 export interface TerritoryMapLibreAdapterOptions extends TerritoryMapLibreLayerOptions {
-  zones: TerritoryZone[];
+  zones: readonly TerritoryZone[];
   stateByZoneId?: ReadonlyMap<string, TerritoryMapLibreState>;
   onZoneClick?: (event: TerritoryMapLibreZoneEvent) => void;
   onZoneHover?: (event: TerritoryMapLibreZoneEvent) => void;
@@ -102,7 +106,7 @@ export interface TerritoryMapLibreAdapter extends TerritoryRendererAdapter<Terri
   setSource(source: TerritoryRenderSource, context?: TerritoryAdapterOperationContext): void;
   updateState(state: TerritoryRenderState): void;
   updateData(
-    zones: TerritoryZone[],
+    zones: readonly TerritoryZone[],
     stateByZoneId?: ReadonlyMap<string, TerritoryMapLibreState>
   ): void;
   updateTheme(theme: TerritoryMapLibreTheme): void;
@@ -216,36 +220,14 @@ export interface TerritoryMapLibreController {
 }
 
 export function zonesToFeatureCollection(
-  zones: TerritoryZone[],
+  zones: readonly TerritoryZone[],
   stateByZoneId: ReadonlyMap<string, TerritoryMapLibreState> = new Map()
 ): FeatureCollection {
-  return {
-    type: "FeatureCollection",
-    features: zones.map((zone): Feature => {
-      const state = stateByZoneId.get(zone.id);
-      const properties: TerritoryMapLibreFeatureProperties = {
-        ...zone.properties,
-        id: zone.id,
-        datasetId: zone.datasetId,
-        level: zone.level,
-        ...(zone.parentId ? { parentId: zone.parentId } : {}),
-        ...(state?.faction ? { faction: state.faction } : {}),
-        ...(state?.selected !== undefined ? { selected: state.selected } : {}),
-        ...(state?.score !== undefined ? { score: state.score } : {})
-      };
-
-      return {
-        type: "Feature",
-        id: zone.id,
-        geometry: zone.geometry,
-        properties
-      };
-    })
-  };
+  return territoryZonesToFeatureCollection(zones, { stateByZoneId });
 }
 
 export function createTerritoryMapLibreLayers(
-  zones: TerritoryZone[],
+  zones: readonly TerritoryZone[],
   options: TerritoryMapLibreLayerOptions = {}
 ): TerritoryMapLibreLayerBundle {
   const sourceId = options.sourceId ?? "territory-kit-zones";
@@ -773,7 +755,7 @@ export function createTerritoryMapLibreAdapter(
         );
       }
 
-      if (!isFeatureCollection(source.data)) {
+      if (!isTerritoryFeatureCollection(source.data)) {
         throw new TerritoryError(
           "RUNTIME_CONFIGURATION_INVALID",
           "MapLibre source replacement requires a GeoJSON FeatureCollection.",
@@ -869,9 +851,7 @@ export function createTerritoryMapLibreAdapter(
   };
 }
 
-function isFeatureCollection(input: unknown): input is FeatureCollection {
-  return isRecord(input) && input.type === "FeatureCollection" && Array.isArray(input.features);
-}
+export const createMapLibreTerritoryAdapter = createTerritoryMapLibreAdapter;
 
 function requireAttachedMap(
   map: TerritoryMapLibreMap | undefined,
@@ -891,47 +871,15 @@ function requireAttachedMap(
 }
 
 function readFirstFeature(event: unknown): Feature | undefined {
-  if (!isRecord(event) || !Array.isArray(event.features)) {
-    return undefined;
-  }
-
-  return event.features[0] as Feature | undefined;
+  return readFirstTerritoryRenderFeature(event) as Feature | undefined;
 }
 
 function readFeatureZoneId(feature: Feature | undefined): string | undefined {
-  if (!feature) {
-    return undefined;
-  }
-
-  if (typeof feature.id === "string" || typeof feature.id === "number") {
-    return String(feature.id);
-  }
-
-  if (isRecord(feature.properties)) {
-    const id = feature.properties.id;
-
-    if (typeof id === "string" || typeof id === "number") {
-      return String(id);
-    }
-  }
-
-  return undefined;
+  return readTerritoryFeatureId(feature);
 }
 
 function readFeatureTerritoryId(feature: Feature | undefined): string | undefined {
-  if (!feature) {
-    return undefined;
-  }
-
-  if (isRecord(feature.properties)) {
-    const territoryId = feature.properties.territoryId;
-
-    if (typeof territoryId === "string" || typeof territoryId === "number") {
-      return String(territoryId);
-    }
-  }
-
-  return readFeatureZoneId(feature);
+  return readTerritoryFeatureId(feature);
 }
 
 function resolveTileTemplateUrl(template: string, baseUrl: string): string {
@@ -953,8 +901,4 @@ function resolveTileTemplateUrl(template: string, baseUrl: string): string {
   }
 
   return resolved;
-}
-
-function isRecord(input: unknown): input is Record<string, unknown> {
-  return typeof input === "object" && input !== null && !Array.isArray(input);
 }

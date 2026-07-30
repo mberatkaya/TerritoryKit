@@ -27,6 +27,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
+    "@territory-kit/adapter-core": "workspace:*",
     "@territory-kit/dataset": "workspace:*"
   }
 }

@@ -19,7 +19,7 @@
 
 The table above describes the historical sprint track, not blanket production availability for
 every adapter or dataset. Current implementation gaps and partial items are tracked in
-[Product Gap Analysis](./product-gap-analysis.md). In particular, Leaflet, OpenLayers, React Native,
+[Product Gap Analysis](./product-gap-analysis.md). In particular, React Native,
 `@territory-kit/game`, hosted production registry, hosted live demo, and dataset diff/migration
 tooling remain future-roadmap items unless their package or workflow exists in this repository.
 
@@ -33,8 +33,8 @@ guards, memory LRU cache ownership policy, lazy engine reuse, managed adapter so
 renderer-independent adapter updates. Sprint 13 adds a runtime multi-dataset catalog, engine pool,
 binary spatial index artifacts, CLI index build/inspect/validate commands, and injectable worker
 loading contracts. Turkey ADM0-ADM2 national source locking, country-build render/query/index
-outputs, and the Turkey MapLibre example are branch-level additions; nationwide ADM3/ADM4 coverage,
-hosted production registry, and additional renderer adapters remain future work unless their
+outputs, and the Turkey web renderer examples are branch-level additions; nationwide ADM3/ADM4
+coverage, hosted production registry, and mobile renderer adapters remain future work unless their
 package or workflow exists in this repository.
 
 See [Master Sprint Checklist](./sprint-checklist.md) for branch-level completion evidence,
