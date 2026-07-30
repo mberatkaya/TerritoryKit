@@ -75,6 +75,12 @@ importers:
         specifier: workspace:*
         version: link:../../packages/nestjs
 
+  examples/nestjs-postgres-game:
+    dependencies:
+      '@territory-kit/game':
+        specifier: workspace:*
+        version: link:../../packages/game
+
   examples/node-basic:
     dependencies:
       '@territory-kit/core':
@@ -278,6 +284,19 @@ importers:
       '@types/geojson':
         specifier: ^7946.0.16
         version: 7946.0.16
+
+  packages/game:
+    dependencies:
+      '@territory-kit/core':
+        specifier: workspace:*
+        version: link:../core
+      '@territory-kit/dataset':
+        specifier: workspace:*
+        version: link:../dataset
+    devDependencies:
+      '@territory-kit/shared-testkit':
+        specifier: workspace:*
+        version: link:../shared-testkit
 
   packages/generators:
     dependencies:

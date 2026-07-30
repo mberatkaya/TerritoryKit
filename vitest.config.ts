@@ -10,6 +10,7 @@ export default defineConfig({
         "packages/adapter-core/src/**/*.ts",
         "packages/core/src/**/*.ts",
         "packages/dataset/src/**/*.ts",
+        "packages/game/src/**/*.ts",
         "packages/runtime/src/**/*.ts"
       ],
       reporter: ["text", "json-summary"],

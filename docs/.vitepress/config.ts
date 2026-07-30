@@ -20,6 +20,7 @@ export default defineConfig({
       { text: "Viewport Transitions", link: "/viewport-transitions" },
       { text: "Catalog", link: "/catalog" },
       { text: "Binary Spatial Index", link: "/binary-spatial-index" },
+      { text: "Game Territory Engine", link: "/game/overview" },
       { text: "Worker Loading", link: "/worker-loading" },
       { text: "Migration Guide", link: "/migration-guide" },
       { text: "Quick Start", link: "/quick-start" },

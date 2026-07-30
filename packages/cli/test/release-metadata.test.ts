@@ -24,6 +24,7 @@ const publicPackageJsonPaths = [
   "packages/data-us/package.json",
   "packages/dataset/package.json",
   "packages/generators/package.json",
+  "packages/game/package.json",
   "packages/maplibre/package.json",
   "packages/nestjs/package.json",
   "packages/registry/package.json",

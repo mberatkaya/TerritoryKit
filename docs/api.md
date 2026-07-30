@@ -94,6 +94,20 @@
   byte tracking, hit/miss/eviction stats, and default `Uint8Array` copy-on-read/write protection.
   `maxEntries` and `maxBytes` must be finite non-negative integers.
 
+## `@territory-kit/game`
+
+- `createGameEngine({ territory, repository, context, ruleConfig, rules })` creates a
+  renderer-independent game domain engine on top of a core territory source.
+- `execute(command)` supports `claim-territory`, `capture-territory`, `set-territory-owner`,
+  `start-contest`, and `adjust-territory-score` commands.
+- `expectedVersion` is the snapshot-level optimistic concurrency token.
+- `idempotencyKey` returns the original successful result for safe command retries.
+- `createInMemoryGameRepository()` provides a clone-on-read/write repository for tests and demos.
+- `serializeGameSnapshot(snapshot)` and `deserializeGameSnapshot(json)` handle snapshot restore.
+- `migrateGameSnapshotTerritories(snapshot, migrationPlan)` applies
+  `TerritoryDatasetMigrationPlan` mappings from `@territory-kit/dataset`.
+- `ActionRule` plugins run deterministically by `priority` and `id`.
+
 ## `@territory-kit/maplibre`
 
 - `zonesToFeatureCollection(zones, stateByZoneId)`
