@@ -150,8 +150,8 @@ typecheck`, and `pnpm test:visual:maplibre`.
 - [external handoff] Publish npm packages, verify registry versions, create the `v1.0.0`
   tag/GitHub Release, and deploy live docs if desired. Handoff is documented; actions are
   intentionally not executed in this PR.
-- [future backlog] Leaflet, OpenLayers, React Native Maps, game package, Studio editor, dataset
-  diff tooling, plugin generators, and advanced geodesic work.
+- [future backlog] React Native Maps, game package, Studio editor, dataset diff tooling, plugin
+  generators, and advanced geodesic work.
 
 ## Ready-To-Tick Rules
 
@@ -710,7 +710,7 @@ Estimated duration: 1 week
 
 ## Post-1.0 Roadmap
 
-- [future backlog] `1.1` - Leaflet and OpenLayers adapters.
+- [implemented on branch] `1.1` - Leaflet and OpenLayers adapters.
 - [future backlog] `1.2` - React Native Maps adapter.
 - [partial] `1.3` - Vector tile/MVT support. Gaziantep ADM3 emits z12 MVT; broad production MVT
   orchestration remains future work.

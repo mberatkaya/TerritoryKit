@@ -4,7 +4,12 @@ export default defineConfig({
   clean: true,
   dts: true,
   entry: ["src/index.ts"],
-  external: ["@territory-kit/adapter-core", "@territory-kit/dataset"],
+  external: [
+    "@territory-kit/adapter-core",
+    "@territory-kit/dataset",
+    "@territory-kit/registry",
+    "leaflet"
+  ],
   format: ["esm", "cjs"],
   sourcemap: true,
   treeshake: true

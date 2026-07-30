@@ -1,13 +1,15 @@
 import {
   createSampleTerritoryDataset,
   createSyntheticGridDataset,
-  createTurkeyAdm3DemoDataset
+  createTurkeyAdm3DemoDataset,
+  exerciseTerritoryRendererAdapterContract
 } from "@territory-kit/shared-testkit";
 import { isTerritoryError } from "@territory-kit/dataset";
 import { createTerritoryRuntime } from "@territory-kit/runtime";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, expectTypeOf, it, vi } from "vitest";
 import {
   TERRITORY_MAPLIBRE_ADAPTER_CAPABILITIES,
+  createMapLibreTerritoryAdapter,
   createTerritoryMapLibreAdapter,
   createTerritoryMapLibreController,
   createTerritoryMapLibreLayer,
@@ -18,8 +20,14 @@ import {
   setTerritoryMapLibreSelectedState,
   zonesToFeatureCollection
 } from "../src/index.js";
-import type { TerritoryMapLibreGeoJsonSource, TerritoryMapLibreMap } from "../src/index.js";
+import type {
+  TerritoryMapLibreAdapter,
+  TerritoryMapLibreGeoJsonSource,
+  TerritoryMapLibreMap,
+  TerritoryMapLibreTerritoryEvent
+} from "../src/index.js";
 import type { TerritoryRendererAdapter } from "@territory-kit/adapter-core";
+import type { TerritoryZone } from "@territory-kit/dataset";
 import type { TerritoryRegistryClient } from "@territory-kit/registry";
 
 const RUNTIME_VIEWPORT = {
@@ -29,6 +37,42 @@ const RUNTIME_VIEWPORT = {
 };
 
 describe("maplibre adapter", () => {
+  it("passes the shared renderer adapter contract", async () => {
+    const harness = createMapLibreEventHarness();
+    const clicked: string[] = [];
+    const hovered: string[] = [];
+    const result = await exerciseTerritoryRendererAdapterContract({
+      name: "maplibre",
+      sourceId: "zones",
+      createTarget: () => harness.map,
+      createAdapter: () =>
+        createTerritoryMapLibreAdapter({
+          zones: [],
+          sourceId: "zones",
+          fillLayerId: "zones-fill",
+          lineLayerId: "zones-line",
+          onZoneClick: (event) => clicked.push(event.zoneId),
+          onZoneHover: (event) => hovered.push(event.zoneId)
+        }),
+      readSourceUpdateCount: () => harness.source.setDataCalls,
+      readListenerCount: () => harness.listenerCount(),
+      readLayerCount: () => harness.layerCount(),
+      emitClick: (_target, territoryId) => harness.emit("click", "zones-fill", territoryId),
+      emitHover: (_target, territoryId) => harness.emit("mousemove", "zones-fill", territoryId)
+    });
+
+    expect(result).toMatchObject({
+      lifecycle: ["detached", "attached", "detached"],
+      beforeAttachErrorCode: "ADAPTER_NOT_ATTACHED",
+      unsupportedVectorTileErrorCode: "CAPABILITY_UNSUPPORTED",
+      sourceUpdateCount: 1,
+      listenerCountAfterDetach: 0,
+      layerCountAfterDetach: 0
+    });
+    expect(clicked).toHaveLength(1);
+    expect(hovered).toHaveLength(1);
+  });
+
   it("converts zones into a GeoJSON feature collection", () => {
     const dataset = createSampleTerritoryDataset();
     const collection = zonesToFeatureCollection(dataset.zones);
@@ -252,6 +296,29 @@ describe("maplibre adapter", () => {
     expect(source.setData).toHaveBeenCalledWith(data);
   });
 
+  it("does not commit an already aborted source replacement", () => {
+    const dataset = createSampleTerritoryDataset();
+    const { map, source } = createMapLibreHarness();
+    const adapter = createTerritoryMapLibreAdapter({
+      zones: dataset.zones,
+      sourceId: "zones"
+    });
+    const controller = new AbortController();
+
+    adapter.attach(map);
+    controller.abort();
+    adapter.setSource(
+      {
+        id: "zones",
+        type: "geojson",
+        data: zonesToFeatureCollection(dataset.zones)
+      },
+      { requestId: "aborted", revision: 1, signal: controller.signal }
+    );
+
+    expect(source.setData).not.toHaveBeenCalled();
+  });
+
   it("lets runtime default options bind to the MapLibre default managed source", async () => {
     const dataset = createRuntimeDataset();
     const { map, source } = createMapLibreHarness();
@@ -324,6 +391,19 @@ describe("maplibre adapter", () => {
     );
 
     expect(source.setData).not.toHaveBeenCalled();
+  });
+
+  it("exposes a narrow public adapter type surface", () => {
+    const adapter = createMapLibreTerritoryAdapter({ zones: [] });
+    const event: TerritoryMapLibreTerritoryEvent = {
+      territoryId: "tr:34",
+      originalEvent: {}
+    };
+
+    expectTypeOf(adapter).toMatchTypeOf<TerritoryRendererAdapter<TerritoryMapLibreMap>>();
+    expectTypeOf(adapter).toMatchTypeOf<TerritoryMapLibreAdapter>();
+    expectTypeOf(adapter.updateData).parameter(0).toMatchTypeOf<readonly TerritoryZone[]>();
+    expect(event.territoryId).toBe("tr:34");
   });
 
   it("creates registry-backed vector sources and lazy territory resolution", async () => {
@@ -607,6 +687,65 @@ function createMapLibreHarness(options: { resolveSources?: boolean } = {}): {
       removeSource(id) {
         sources.delete(id);
       }
+    }
+  };
+}
+
+function createMapLibreEventHarness(): {
+  map: TerritoryMapLibreMap;
+  source: TerritoryMapLibreGeoJsonSource & { setDataCalls: number };
+  emit(type: string, layerId: string, territoryId: string): void;
+  listenerCount(): number;
+  layerCount(): number;
+} {
+  const layers = new Set<string>();
+  const sources = new Set<string>();
+  const listeners = new Map<string, (event: unknown) => void>();
+  const source: TerritoryMapLibreGeoJsonSource & { setDataCalls: number } = {
+    setDataCalls: 0,
+    setData() {
+      source.setDataCalls += 1;
+    }
+  };
+
+  return {
+    source,
+    map: {
+      addLayer(layer) {
+        layers.add(String(layer.id));
+      },
+      addSource(id) {
+        sources.add(id);
+      },
+      getLayer(id) {
+        return layers.has(id) ? { id } : undefined;
+      },
+      getSource(id) {
+        return sources.has(id) ? source : undefined;
+      },
+      removeLayer(id) {
+        layers.delete(id);
+      },
+      removeSource(id) {
+        sources.delete(id);
+      },
+      on(type, layerId, listener) {
+        listeners.set(`${type}:${layerId}`, listener);
+      },
+      off(type, layerId) {
+        listeners.delete(`${type}:${layerId}`);
+      }
+    },
+    emit(type, layerId, territoryId) {
+      listeners.get(`${type}:${layerId}`)?.({
+        features: [{ type: "Feature", id: territoryId, properties: {}, geometry: null }]
+      });
+    },
+    listenerCount() {
+      return listeners.size;
+    },
+    layerCount() {
+      return layers.size;
     }
   };
 }

@@ -34,7 +34,12 @@ export default defineConfig({
       { text: "Turkey National Coverage", link: "/datasets/turkey-national-coverage" },
       { text: "Turkey Sources", link: "/datasets/turkey-sources" },
       { text: "Geometry Simplification", link: "/geometry-simplification" },
+      { text: "Leaflet Integration", link: "/leaflet-integration" },
+      { text: "OpenLayers Integration", link: "/openlayers-integration" },
+      { text: "Renderer Adapter Comparison", link: "/renderer-adapter-comparison" },
       { text: "Turkey MapLibre Example", link: "/examples/turkey-maplibre" },
+      { text: "Turkey Leaflet Example", link: "/examples/turkey-leaflet" },
+      { text: "Turkey OpenLayers Example", link: "/examples/turkey-openlayers" },
       { text: "Roadmap", link: "/roadmap" }
     ]
   }

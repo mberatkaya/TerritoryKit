@@ -1,5 +1,6 @@
 import { TerritoryError } from "@territory-kit/dataset";
-import type { TerritoryErrorCode } from "@territory-kit/dataset";
+import type { TerritoryErrorCode, TerritoryZone } from "@territory-kit/dataset";
+import type { Feature, FeatureCollection } from "geojson";
 
 export const TERRITORY_ADAPTER_CAPABILITY_NAMES = [
   "geoJson",
@@ -128,6 +129,21 @@ export interface TerritoryRendererAdapter<TTarget = unknown> {
   updateTheme(theme: TerritoryRenderTheme): void | Promise<void>;
 }
 
+export interface TerritoryGeoJsonFeatureProperties extends Record<string, unknown> {
+  id: string;
+  territoryId: string;
+  datasetId: string;
+  level: number;
+  adminLevel: string;
+  countryCode?: string;
+  name?: string;
+  parentId?: string;
+}
+
+export interface TerritoryZonesToFeatureCollectionOptions<TState extends object> {
+  readonly stateByZoneId?: ReadonlyMap<string, TState>;
+}
+
 export interface TerritoryAdapterLifecycleController<TTarget = unknown> {
   readonly lifecycleState: TerritoryAdapterLifecycleState;
   readonly target: TTarget | undefined;
@@ -200,6 +216,94 @@ export function assertTerritoryAdapterAttached(
       action
     );
   }
+}
+
+export function territoryZonesToFeatureCollection<TState extends object = never>(
+  zones: readonly TerritoryZone[],
+  options: TerritoryZonesToFeatureCollectionOptions<TState> = {}
+): FeatureCollection {
+  return {
+    type: "FeatureCollection",
+    features: zones.map((zone): Feature => {
+      const state = options.stateByZoneId?.get(zone.id);
+      const properties: TerritoryGeoJsonFeatureProperties = {
+        ...zone.properties,
+        ...(state ?? {}),
+        id: zone.id,
+        territoryId: zone.id,
+        datasetId: zone.datasetId,
+        level: zone.level,
+        adminLevel: `ADM${zone.level}`,
+        ...(zone.countryCode ? { countryCode: zone.countryCode } : {}),
+        ...(zone.name ? { name: zone.name } : {}),
+        ...(zone.parentId ? { parentId: zone.parentId } : {})
+      };
+
+      return {
+        type: "Feature",
+        id: zone.id,
+        geometry: zone.geometry,
+        properties
+      };
+    })
+  };
+}
+
+export function isTerritoryFeatureCollection(input: unknown): input is FeatureCollection {
+  return isRecord(input) && input.type === "FeatureCollection" && Array.isArray(input.features);
+}
+
+export function readTerritoryFeatureId(feature: unknown): string | undefined {
+  if (!isRecord(feature)) {
+    return undefined;
+  }
+
+  const properties = isRecord(feature.properties) ? feature.properties : undefined;
+  const territoryId = properties?.territoryId;
+
+  if (typeof territoryId === "string" || typeof territoryId === "number") {
+    return String(territoryId);
+  }
+
+  const id = feature.id;
+
+  if (typeof id === "string" || typeof id === "number") {
+    return String(id);
+  }
+
+  const propertyId = properties?.id;
+
+  if (typeof propertyId === "string" || typeof propertyId === "number") {
+    return String(propertyId);
+  }
+
+  return undefined;
+}
+
+export function readFirstTerritoryRenderFeature(event: unknown): unknown {
+  if (!isRecord(event)) {
+    return undefined;
+  }
+
+  if (Array.isArray(event.features)) {
+    return event.features[0];
+  }
+
+  if ("feature" in event) {
+    return event.feature;
+  }
+
+  const layer = isRecord(event.layer) ? event.layer : undefined;
+  if (layer && "feature" in layer) {
+    return layer.feature;
+  }
+
+  const target = isRecord(event.target) ? event.target : undefined;
+  if (target && "feature" in target) {
+    return target.feature;
+  }
+
+  return undefined;
 }
 
 export function createTerritoryAdapterLifecycle<TTarget = unknown>(
@@ -281,4 +385,8 @@ function adapterLifecycleError(
   return new TerritoryError(code, message, {
     details: { lifecycleState, action }
   });
+}
+
+function isRecord(input: unknown): input is Record<string, unknown> {
+  return typeof input === "object" && input !== null && !Array.isArray(input);
 }

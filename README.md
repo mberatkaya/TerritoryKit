@@ -15,11 +15,12 @@ release flow.
 ## Package Maturity
 
 - Stable core line: `@territory-kit/dataset`, `@territory-kit/core`, `@territory-kit/registry`,
-  `@territory-kit/maplibre`, `@territory-kit/nestjs`, `@territory-kit/generators`,
-  `@territory-kit/cli`, and pilot country loader packages.
+  `@territory-kit/maplibre`, `@territory-kit/leaflet`, `@territory-kit/openlayers`,
+  `@territory-kit/nestjs`, `@territory-kit/generators`, `@territory-kit/cli`, and pilot country
+  loader packages.
 - New runtime line: `@territory-kit/adapter-core` and `@territory-kit/runtime`.
-- Future packages: Leaflet, OpenLayers, React Native, game, Studio, hosted registry, and dataset
-  diff/migration tooling remain roadmap items.
+- Future packages: React Native, game, Studio, hosted registry, and dataset diff/migration tooling
+  remain roadmap items.
 
 ## Historical Sprint Track
 
@@ -54,6 +55,10 @@ The table below is historical roadmap context, not a claim that every future ada
   engine pool, runtime cache, worker loading, cancellation, scheduler, and renderer-independent
   adapters.
 - `@territory-kit/maplibre`: first map adapter boundary for MapLibre GL JS.
+- `@territory-kit/leaflet`: Leaflet adapter with native GeoJSON layers and optional plugin-backed
+  vector tile hooks.
+- `@territory-kit/openlayers`: OpenLayers adapter with `VectorSource`, `VectorLayer`, feature
+  picking, projection checks, and optional vector tile hooks.
 - `@territory-kit/nestjs`: NestJS integration boundary and PostGIS repository contracts.
 - `@territory-kit/generators`: deterministic dataset helper, source, and adjacency utilities.
 - `@territory-kit/cli`: `territory validate`, `territory geometry`, `territory index`, binary
@@ -176,7 +181,12 @@ items.
 - [Render artifacts](./docs/render-artifacts.md)
 - [Vector tile pipeline](./docs/vector-tile-pipeline.md)
 - [MapLibre registry integration](./docs/maplibre-registry-integration.md)
+- [Leaflet integration](./docs/leaflet-integration.md)
+- [OpenLayers integration](./docs/openlayers-integration.md)
+- [Renderer adapter comparison](./docs/renderer-adapter-comparison.md)
 - [Turkey MapLibre example](./docs/examples/turkey-maplibre.md)
+- [Turkey Leaflet example](./docs/examples/turkey-leaflet.md)
+- [Turkey OpenLayers example](./docs/examples/turkey-openlayers.md)
 - [Turkey neighbourhood MapLibre example](./docs/examples/turkey-neighbourhood-maplibre.md)
 - [Render/query compatibility](./docs/render-query-compatibility.md)
 - [Mobile map loading](./docs/mobile-map-loading.md)
