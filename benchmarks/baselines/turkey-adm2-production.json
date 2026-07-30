@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "territorykit-benchmark-baseline@1",
+  "mode": "local-real",
+  "scenario": "turkey-adm2-production",
+  "minimumFeatureCount": 973,
+  "budgets": {
+    "datasetLoadMs": 400,
+    "datasetValidationMs": 200,
+    "engineConstructionMs": 200,
+    "getZoneByIdMeanMs": 0.05,
+    "latLngToZoneMeanMs": 0.25,
+    "getZonesInBoundsMeanMs": 0.25
+  }
+}

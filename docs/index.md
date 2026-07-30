@@ -16,6 +16,14 @@ package boundaries required for MapLibre, NestJS/PostGIS, generators, and CLI to
 - [Benchmarks](./benchmarks.md)
 - [Real-world benchmarks](./real-world-benchmarks.md)
 - [Release check](./release-check.md)
+- [Release readiness](./release-readiness.md)
+- [Production checklist](./production-checklist.md)
+- [Security](./security.md)
+- [Rollback](./rollback.md)
+- [Support matrix](./support-matrix.md)
+- [Known limitations](./known-limitations.md)
+- [Migration guide](./migration-guide.md)
+- [Release notes draft](./release-notes-draft.md)
 - [Runtime architecture audit](./architecture/runtime-architecture-audit.md)
 - [Runtime contract](./architecture/runtime-contract.md)
 - [Runtime viewport audit](./architecture/runtime-viewport-audit.md)
@@ -102,7 +110,6 @@ package boundaries required for MapLibre, NestJS/PostGIS, generators, and CLI to
 - [Dataset licensing](./dataset-licensing.md)
 - [NestJS and PostGIS](./nestjs-postgis.md)
 - [NestJS OpenAPI contract](./nestjs-openapi.md)
-- [Release readiness](./release-readiness.md)
 - [Master sprint checklist](./sprint-checklist.md)
 
 The public roadmap documents major milestones; completion status is tracked in the master sprint

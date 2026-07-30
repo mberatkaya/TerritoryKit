@@ -1,5 +1,44 @@
 # Migration Guide
 
+## `1.2.0`
+
+The `1.2.0` release proposal is additive and does not require a dataset schema migration.
+`territory-schema@1`, registry schema contracts, and `territory-migration-plan@1` remain the
+active compatibility lines.
+
+### Package Imports
+
+Prefer package-specific imports for new code:
+
+```ts
+import { createTerritoryRuntime } from "@territory-kit/runtime";
+import { createMapLibreTerritoryAdapter } from "@territory-kit/maplibre";
+import { createNodeTerritoryRegistryClient } from "@territory-kit/registry/node";
+```
+
+The `@territory-kit/core/legacy-registry` subpath remains available for compatibility with
+older core registry re-export usage. New browser or React Native code should use the
+browser-safe root `@territory-kit/registry` entry point and keep filesystem/cache helpers under
+`@territory-kit/registry/node`.
+
+### Dataset Migrations
+
+Use the migration-plan command when moving game or application state between dataset versions:
+
+```sh
+territory dataset migration-plan old-dataset.json new-dataset.json --json
+```
+
+Review mappings that require manual approval before applying them to game snapshots or
+application ownership state. Critical migration scenarios are covered by dataset diff tests,
+CLI migration-plan tests, and game snapshot migration tests.
+
+### Turkey Data
+
+No consumer migration is required for Turkey ADM0-ADM2. The current production evidence
+confirms ADM0, ADM1, and ADM2 from generated artifacts and source locks. ADM3 remains
+Gaziantep-only partial coverage and must not be treated as nationwide neighbourhood data.
+
 ## `1.0.0`
 
 The `1.0.0` release freezes the current public APIs for `@territory-kit/dataset`,

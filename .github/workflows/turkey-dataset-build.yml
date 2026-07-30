@@ -24,12 +24,17 @@ on:
         description: "Existing source lock path, or empty to create one"
         required: false
         default: ""
+      benchmark_baseline:
+        description: "Benchmark baseline JSON path; leave empty to skip comparison"
+        required: false
+        default: "benchmarks/baselines/turkey-adm2-production.json"
+
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v5
@@ -62,11 +67,13 @@ jobs:
           cp "${{ inputs.source_lock }}" dist/tr/sources.lock.json
       - name: Build Turkey artifacts
         run: |
+          mkdir -p dist/tr
           PARTIAL_FLAGS=""
           if [[ "${{ inputs.allow_partial }}" == "true" ]]; then
             PARTIAL_FLAGS="--allow-partial"
           fi
-          pnpm --filter @territory-kit/cli exec territory country build TR \
+          /usr/bin/time -v -o dist/tr/turkey-build-resource-report.txt \
+            pnpm --filter @territory-kit/cli exec territory country build TR \
             --source-lock dist/tr/sources.lock.json \
             --levels "${{ inputs.levels }}" \
             --output dist/tr/artifact \
@@ -81,12 +88,75 @@ jobs:
             --phase-timeout-ms 300000 \
             $PARTIAL_FLAGS \
             --json
+          cp dist/tr/turkey-build-resource-report.txt dist/tr/artifact/turkey-build-resource-report.txt
       - name: Validate artifact checksums
         run: pnpm --filter @territory-kit/cli exec territory country validate dist/tr/artifact --strict
+      - name: Run Turkey ADM2 production benchmark
+        run: |
+          pnpm benchmark:run -- \
+            --mode local-real \
+            --dataset dist/tr/artifact/levels/ADM2/dataset.json \
+            --scenario turkey-adm2-production \
+            --iterations 5000 \
+            --output dist/tr/artifact/turkey-adm2-benchmark.json
+      - name: Compare Turkey ADM2 production benchmark
+        if: ${{ inputs.benchmark_baseline != '' }}
+        run: |
+          pnpm benchmark:compare -- \
+            --baseline "${{ inputs.benchmark_baseline }}" \
+            --current dist/tr/artifact/turkey-adm2-benchmark.json
+      - name: Summarize Turkey build evidence
+        run: |
+          node <<'NODE'
+          const { readdirSync, readFileSync, statSync, writeFileSync } = require("node:fs");
+          const { join } = require("node:path");
+          const root = "dist/tr/artifact";
+          const readJson = (path) => JSON.parse(readFileSync(join(root, path), "utf8"));
+          const walk = (dir) =>
+            readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+              const path = join(dir, entry.name);
+              return entry.isDirectory() ? walk(path) : [path];
+            });
+          const files = walk(root);
+          const mvtTiles = files.filter((path) => path.endsWith(".mvt"));
+          const levels = Object.fromEntries(
+            ["ADM0", "ADM1", "ADM2"]
+              .map((level) => {
+                const dataset = readJson(`levels/${level}/dataset.json`);
+                return [level, dataset.zones.length];
+              })
+          );
+          const summary = {
+            schemaVersion: "territorykit-turkey-build-evidence@1",
+            generatedAt: new Date().toISOString(),
+            levels,
+            totalSizeBytes: files.reduce((total, path) => total + statSync(path).size, 0),
+            fileCount: files.length,
+            mvtTileCount: mvtTiles.length,
+            mvtTileTotalSizeBytes: mvtTiles.reduce((total, path) => total + statSync(path).size, 0),
+            mvtLargestTileBytes: Math.max(0, ...mvtTiles.map((path) => statSync(path).size)),
+            adjacency: {
+              ADM1: readJson("adjacency/ADM1/build-report.json").statistics,
+              ADM2: readJson("adjacency/ADM2/build-report.json").statistics
+            },
+            benchmark: readJson("turkey-adm2-benchmark.json"),
+            resourceUsage: readFileSync(join(root, "turkey-build-resource-report.txt"), "utf8"),
+            manifest: {
+              sourceLockHash: readJson("manifest.json").sourceLockHash,
+              publishReady: readJson("manifest.json").publishReady,
+              publishReadyFailures: readJson("manifest.json").publishReadyFailures
+            }
+          };
+          writeFileSync(join(root, "release-performance-summary.json"), `${JSON.stringify(summary, null, 2)}\n`);
+          NODE
       - uses: actions/upload-artifact@v5
         with:
           name: turkey-build-performance-report
-          path: dist/tr/artifact/build-performance-report.json
+          path: |
+            dist/tr/artifact/build-performance-report.json
+            dist/tr/artifact/turkey-build-resource-report.txt
+            dist/tr/artifact/turkey-adm2-benchmark.json
+            dist/tr/artifact/release-performance-summary.json
       - uses: actions/upload-artifact@v5
         with:
           name: turkey-adjacency-report
@@ -104,3 +174,4 @@ jobs:
             dist/tr/artifact/manifest.json
             dist/tr/artifact/checksums.json
             dist/tr/artifact/build-report.json
+            dist/tr/sources.lock.json

@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "territorykit-release-artifact-checksums@1",
+  "generatedAt": "2026-07-30T17:46:55.137Z",
+  "files": {
+    "production-hardening-report.json": "3c0fbdd7b254b5cb47fb851ecb252c9edc0aea9a863ae64942ee96a8feffed33",
+    "license-inventory.prod.json": "fce2d7f9580ca4ba6d444bb4dc20215948f9ff370033e3b83975381ca5e7bc15",
+    "turkey-adm2-benchmark.json": "f0005f9878358edcf1c961c1f06d334c6001a3032d85d85bfe629d47b2aab535"
+  }
+}

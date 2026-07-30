@@ -15,6 +15,12 @@ All notable changes will be tracked here until Changesets generates release note
 - Added Turkey national ADM0-ADM2 HDX/OCHA COD-AB source locking, optional query/render/binary
   country build artifacts, topology-safe simplification CLI, and a registry-backed Turkey MapLibre
   example while keeping ADM3/ADM4 as partial or blocked.
+- Added production hardening evidence for security audit, production license inventory, package
+  exports, ESM/CJS dry-runs, tarball checksums, import boundaries, Turkey production validation,
+  benchmark comparison, rollback, support matrix, release notes, and release-readiness decision.
+- Hardened Turkey build workflow as a maintainer-triggered gate that stores resource usage,
+  artifact size, MVT tile count, adjacency, geometry, checksum, and benchmark reports outside
+  normal PR CI.
 
 ## 1.0.0 - 2026-07-14
 
