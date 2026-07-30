@@ -57,6 +57,17 @@ export {
 } from "./global.js";
 export { TERRITORY_SCHEMA_VERSION, territoryDatasetJsonSchema } from "./schema.js";
 export {
+  TERRITORY_DATASET_DIFF_SCHEMA_VERSION,
+  TERRITORY_DIFF_CATEGORIES,
+  TERRITORY_MIGRATION_PLAN_SCHEMA_VERSION,
+  createMigrationPlan,
+  diffDatasets,
+  diffIdentities,
+  territoryDatasetDiffJsonSchema,
+  territoryMigrationPlanJsonSchema,
+  validateMigrationPlan
+} from "./diff.js";
+export {
   assertValidTerritoryDataset,
   loadTerritoryDataset,
   validateTerritoryDataset
@@ -164,3 +175,26 @@ export type {
   GeometryRepairSummary,
   NormalizedGeometryQualityChecks
 } from "./quality.js";
+export type {
+  TerritoryBreakingChange,
+  TerritoryCoverageChangeReport,
+  TerritoryCoverageCountChange,
+  TerritoryCoverageSetChange,
+  TerritoryDatasetDiffReport,
+  TerritoryDatasetDiffSummary,
+  TerritoryDatasetMigrationPlan,
+  TerritoryDatasetRef,
+  TerritoryDiffCandidateSignal,
+  TerritoryDiffCategory,
+  TerritoryDiffChange,
+  TerritoryDiffMatch,
+  TerritoryDiffMatchStrategy,
+  TerritoryDiffOptions,
+  TerritoryDiffPerformanceReport,
+  TerritoryGeometryDiffSignals,
+  TerritoryMigrationMapping,
+  TerritoryMigrationMappingType,
+  TerritoryMigrationPlanValidationIssue,
+  TerritoryMigrationPlanValidationResult,
+  TerritoryMigrationReviewItem
+} from "./diff.js";

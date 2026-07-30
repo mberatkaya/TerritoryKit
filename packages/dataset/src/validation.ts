@@ -133,9 +133,26 @@ function readManifest(
     sourceDate,
     geometryHash,
     ...(adminLevels ? { adminLevels } : {}),
+    ...(typeof input.artifactChecksum === "string"
+      ? { artifactChecksum: input.artifactChecksum }
+      : {}),
+    ...(typeof input.attribution === "string" ? { attribution: input.attribution } : {}),
+    ...(typeof input.boundaryPolicy === "string" ? { boundaryPolicy: input.boundaryPolicy } : {}),
+    ...(typeof input.buildDate === "string" ? { buildDate: input.buildDate } : {}),
+    ...(Array.isArray(input.countryCodes) &&
+    input.countryCodes.every((countryCode) => typeof countryCode === "string")
+      ? { countryCodes: [...input.countryCodes] }
+      : {}),
+    ...(typeof input.crs === "string" ? { crs: input.crs } : {}),
+    ...(typeof input.disputedAreaPolicy === "string"
+      ? { disputedAreaPolicy: input.disputedAreaPolicy }
+      : {}),
+    ...(isGeometryDetail(input.geometryDetail) ? { geometryDetail: input.geometryDetail } : {}),
     ...(typeof input.license === "string" ? { license: input.license } : {}),
     ...(typeof input.name === "string" ? { name: input.name } : {}),
     ...(typeof input.description === "string" ? { description: input.description } : {}),
+    ...(typeof input.sourceProvider === "string" ? { sourceProvider: input.sourceProvider } : {}),
+    ...(typeof input.worldview === "string" ? { worldview: input.worldview } : {}),
     ...(isRecord(input.compatibility)
       ? {
           compatibility: {
@@ -153,6 +170,12 @@ function readManifest(
         }
       : {})
   };
+}
+
+function isGeometryDetail(
+  input: unknown
+): input is NonNullable<TerritoryDatasetManifest["geometryDetail"]> {
+  return input === "low" || input === "medium" || input === "high" || input === "source";
 }
 
 function readZones(
