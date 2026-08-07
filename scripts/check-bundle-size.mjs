@@ -61,7 +61,9 @@ const maxBytesByFile = new Map([
   // Dataset diff/migration adds Markdown/JSON/CSV report outputs and CI migration gates.
   // Turkey ADM3 real coverage adds national geometry-build artifact orchestration and source
   // coverage reporting while keeping the heavy geometry implementation external in generators.
-  ["packages/cli/dist/index.mjs", 160_000]
+  // Turkey ADM3 production evidence adds provider health, official/OSM/generated source status,
+  // province artifact manifests, and quality/provenance report emitters.
+  ["packages/cli/dist/index.mjs", 172_000]
 ]);
 
 const failures = [];

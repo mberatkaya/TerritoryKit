@@ -85,7 +85,6 @@ import {
 import {
   buildTurkeyAdm3GeneratedZones,
   buildTurkeyAdm3EffectiveZones,
-  computeTurkeyAdm3DistrictCoverage,
   createTurkeyAdm3ProviderHealthReport,
   createTurkeyAdm3Registry,
   inspectTurkeyAdm3SpatialQuality,
@@ -115,6 +114,7 @@ import type {
   TerritorySourceRequest
 } from "@territory-kit/generators";
 import type {
+  computeTurkeyAdm3DistrictCoverage,
   TurkeyAdm3FallbackRegistry,
   TurkeyAdm3ProviderRecord
 } from "@territory-kit/generators/turkey-adm3";
