@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { performance } from "node:perf_hooks";
@@ -48,6 +49,7 @@ import {
   buildAllTerritoryCountryDatasets,
   buildGlobalAdminAdm0Artifacts,
   buildTerritoryAdjacencyPath,
+  buildTerritoryAdjacency,
   buildTerritoryCoverageRegistryFromArtifacts,
   buildTerritoryCountryDatasetPath,
   buildWorldCountriesDatasetFromSourcePipeline,
@@ -69,6 +71,7 @@ import {
   repairTerritoryDatasetPath,
   simplifyTerritoryDatasetPath,
   buildTerritoryRenderArtifactPath,
+  buildTerritoryRenderArtifacts,
   compareTerritoryQueryRenderArtifacts,
   runTerritorySourcePipeline,
   inspectTerritoryRenderArtifactPath,
@@ -81,9 +84,10 @@ import {
 } from "@territory-kit/generators";
 import {
   buildTurkeyAdm3GeneratedZones,
-  computeTurkeyAdm3DistrictCoverage,
+  buildTurkeyAdm3EffectiveZones,
   createTurkeyAdm3ProviderHealthReport,
   createTurkeyAdm3Registry,
+  inspectTurkeyAdm3SpatialQuality,
   resolveTurkeyAdm3Provider,
   validateTurkeyAdm3ProviderRegistry
 } from "@territory-kit/generators/turkey-adm3";
@@ -110,6 +114,7 @@ import type {
   TerritorySourceRequest
 } from "@territory-kit/generators";
 import type {
+  computeTurkeyAdm3DistrictCoverage,
   TurkeyAdm3FallbackRegistry,
   TurkeyAdm3ProviderRecord
 } from "@territory-kit/generators/turkey-adm3";
@@ -762,29 +767,26 @@ async function runTurkeyAdm3Build(args: string[]): Promise<number> {
           realZones
         }).zones
       : [];
-    const coverage = computeTurkeyAdm3DistrictCoverage({
-      districtId: district.id,
+    const effective = buildTurkeyAdm3EffectiveZones({
+      district,
       provinceCode: fallback.provinceCode,
-      districtGeometry: district.geometry,
-      official: officialZones.map((sourceZone) => sourceZone.geometry),
-      runtime: runtimeZones.map((sourceZone) => sourceZone.geometry),
-      osm: osmZones.map((sourceZone) => sourceZone.geometry),
-      generated: generated.map((sourceZone) => sourceZone.geometry)
+      officialZones,
+      runtimeZones,
+      osmZones,
+      generatedZones: generated
     });
 
     finalZones.push(
-      ...[...officialZones, ...runtimeZones, ...osmZones, ...generated].map((sourceZone) =>
-        normalizeTurkeyAdm3BuildZone(sourceZone, datasetId)
-      )
+      ...effective.zones.map((sourceZone) => normalizeTurkeyAdm3BuildZone(sourceZone, datasetId))
     );
     districtReports.push({
-      ...coverage,
+      ...effective.coverage,
       districtName: fallback.districtName,
       provinceName: fallback.provinceName
     });
   }
 
-  const dataset: TerritoryDataset = {
+  const baseDataset: TerritoryDataset = {
     manifest: {
       schemaVersion: TERRITORY_SCHEMA_VERSION,
       datasetId,
@@ -805,6 +807,34 @@ async function runTurkeyAdm3Build(args: string[]): Promise<number> {
     },
     zones: finalZones
   };
+  const adjacency = await buildTerritoryAdjacency(baseDataset, {
+    buildDate: generatedAt,
+    includePointTouches: true,
+    qualityChecks: {
+      coordinates: true,
+      rings: true,
+      selfIntersections: false,
+      holes: false,
+      bbox: true,
+      center: false,
+      antimeridian: true,
+      parentContainment: false,
+      siblingOverlaps: false
+    },
+    sameAdminLevelOnly: true,
+    sameParentOnly: false,
+    minimumSharedBoundaryMeters: 0.001
+  });
+  const dataset: TerritoryDataset = {
+    ...baseDataset,
+    manifest: {
+      ...baseDataset.manifest,
+      geometryHash: createDatasetGeometryHash({
+        zones: addTurkeyAdm3NeighborsFromAdjacency(baseDataset.zones, adjacency.artifact.edges)
+      })
+    },
+    zones: addTurkeyAdm3NeighborsFromAdjacency(baseDataset.zones, adjacency.artifact.edges)
+  };
   const validation = validateGeometryDataset(dataset, {
     checks: {
       coordinates: true,
@@ -817,6 +847,10 @@ async function runTurkeyAdm3Build(args: string[]): Promise<number> {
       parentContainment: false,
       siblingOverlaps: false
     }
+  });
+  const spatialQuality = inspectTurkeyAdm3SpatialQuality({
+    zones: dataset.zones,
+    districts: selectedDistricts.map((entry) => entry.zone)
   });
   const coverage = createTurkeyAdm3BuildCoverageReport({
     generatedAt,
@@ -844,23 +878,60 @@ async function runTurkeyAdm3Build(args: string[]): Promise<number> {
     country: "TR",
     generatedAt,
     sourceMode: "real-geometry-build",
-    ok: validation.ok && coverage.districtsBelow9999.length === 0,
+    ok: validation.ok && spatialQuality.ok && coverage.districtsBelow9999.length === 0,
     summary: {
       geometryErrors: validation.issues.filter((issue) => issue.severity === "error").length,
       validationIssueCount: validation.issues.length,
-      overlapCount: 0,
-      gapCount: coverage.districtsBelow9999.length,
-      sliverCount: 0
+      overlapCount: spatialQuality.summary.overlapCount,
+      gapCount: spatialQuality.summary.gapCount,
+      sliverCount: spatialQuality.summary.sliverCount,
+      parentContainmentErrors: spatialQuality.summary.parentContainmentErrors,
+      duplicateGeometryCount: spatialQuality.summary.duplicateGeometryCount
     },
-    issues: validation.issues
+    issues: validation.issues,
+    spatialQuality
   };
   const coverageReport = {
     ...coverage,
     geometryErrors: quality.summary.geometryErrors,
     overlapCount: quality.summary.overlapCount,
     gapCount: quality.summary.gapCount,
-    sliverCount: quality.summary.sliverCount
+    sliverCount: quality.summary.sliverCount,
+    parentContainmentErrors: quality.summary.parentContainmentErrors,
+    duplicateGeometryCount: quality.summary.duplicateGeometryCount
   };
+  const districtCoverage = createTurkeyAdm3DistrictCoverageReport(districtReports, spatialQuality);
+  const renderArtifacts = buildTerritoryRenderArtifacts({
+    dataset,
+    format: "mvt",
+    layerId: "territory_adm3",
+    policies: [
+      {
+        adminLevel: "ADM3",
+        minZoom: 10,
+        maxZoom: 12
+      }
+    ],
+    minZoom: 10,
+    maxZoom: 12,
+    buildDate: generatedAt
+  });
+  const queryArtifact = createTurkeyAdm3QueryArtifact(dataset, generatedAt);
+  const performanceReport = {
+    schemaVersion: "territorykit-tr-adm3-build-performance@1",
+    country: "TR",
+    generatedAt,
+    metrics: {
+      totalDurationMs: Math.round(performance.now() - startedAt),
+      adjacencyDurationMs: adjacency.statistics.durationMs,
+      renderArtifactCount: renderArtifacts.files.size,
+      peakRssBytes: process.memoryUsage().rss,
+      nationalFeatureCount: dataset.zones.length,
+      nationalDatasetBytes: Buffer.byteLength(JSON.stringify(dataset))
+    }
+  };
+  const officialIngestion = createTurkeyAdm3OfficialIngestionStatus(records, coverageReport);
+  const osmCoverage = createTurkeyAdm3OsmCoverageStatus(records, coverage);
   const summary = {
     schemaVersion: "territorykit-tr-adm3-build-summary@1",
     country: "TR",
@@ -884,14 +955,53 @@ async function runTurkeyAdm3Build(args: string[]): Promise<number> {
     datasetPath,
     coverageReport: coverageReportPath,
     qualityReport: qualityReportPath,
+    districtCoverageReport: join(artifactRoot, "district-coverage.json"),
+    adjacencyReport: join(artifactRoot, "adjacency/adjacency.json"),
+    queryArtifact: join(artifactRoot, "query/query-artifact.json"),
+    performanceReport: join(artifactRoot, "build-performance.json"),
     sourceModes,
     sourceStatus: coverage.sourceStatus,
+    qualityOk: quality.ok,
+    validationIssueCount: quality.summary.validationIssueCount,
+    overlapCount: quality.summary.overlapCount,
+    gapCount: quality.summary.gapCount,
+    parentContainmentErrors: quality.summary.parentContainmentErrors,
+    coverageTargetMet: coverage.districtsBelow9999.length === 0,
     durationMs: Math.round(performance.now() - startedAt)
   };
 
   await writeJsonOutput(datasetPath, dataset, force);
   await writeJsonOutput(coverageReportPath, coverageReport, force);
   await writeJsonOutput(qualityReportPath, quality, force);
+  await writeJsonOutput(join(artifactRoot, "district-coverage.json"), districtCoverage, force);
+  await writeJsonOutput(join(artifactRoot, "adjacency/adjacency.json"), adjacency.artifact, force);
+  await writeJsonOutput(
+    join(artifactRoot, "adjacency/build-report.json"),
+    {
+      generatedAt,
+      issues: adjacency.issues,
+      statistics: adjacency.statistics
+    },
+    force
+  );
+  await writeJsonOutput(join(artifactRoot, "query/query-artifact.json"), queryArtifact, force);
+  await writeJsonOutput(join(artifactRoot, "build-performance.json"), performanceReport, force);
+  await writeJsonOutput(join(artifactRoot, "official-ingestion.json"), officialIngestion, force);
+  await writeJsonOutput(join(artifactRoot, "osm-coverage.json"), osmCoverage, force);
+  for (const [path, content] of renderArtifacts.files) {
+    const renderPath = join(artifactRoot, path);
+    await mkdir(dirname(renderPath), { recursive: true });
+    await writeFile(renderPath, content);
+  }
+  await writeTurkeyAdm3ProvinceArtifacts({
+    artifactRoot,
+    dataset,
+    coverageReport,
+    quality,
+    queryArtifact,
+    generatedAt,
+    force
+  });
   await writeJsonOutput(summaryPath, summary, force);
 
   printJson({ ok: true, command: "tr adm3 build", data: summary });
@@ -973,6 +1083,16 @@ async function readTurkeyAdm3Adm3Zones(datasetPath: string | undefined): Promise
 
   return input.zones
     .filter(isTerritoryZoneLike)
+    .map((zone) => {
+      const territory = isRecordValue(zone.properties.territory) ? zone.properties.territory : {};
+      const parentId =
+        typeof zone.parentId === "string"
+          ? zone.parentId
+          : (readTurkeyAdm3StringProperty(territory, "sourceParentId") ??
+            readTurkeyAdm3StringProperty(territory, "parentAdm2Id"));
+
+      return parentId ? { ...zone, parentId } : zone;
+    })
     .filter(
       (zone) =>
         (zone.level === 3 || zone.sourceAdminLevel === "ADM3") && typeof zone.parentId === "string"
@@ -1024,6 +1144,356 @@ function normalizeTurkeyAdm3BuildZone(zone: TerritoryZone, datasetId: string): T
       }
     }
   };
+}
+
+function addTurkeyAdm3NeighborsFromAdjacency(
+  zones: readonly TerritoryZone[],
+  edges: ReadonlyArray<{ from: string; to: string }>
+): TerritoryZone[] {
+  const neighbors = new Map<string, Set<string>>();
+
+  for (const zone of zones) {
+    neighbors.set(zone.id, new Set());
+  }
+
+  for (const edge of edges) {
+    neighbors.get(edge.from)?.add(edge.to);
+    neighbors.get(edge.to)?.add(edge.from);
+  }
+
+  return zones
+    .map((zone) => ({
+      ...zone,
+      neighborIds: [...(neighbors.get(zone.id) ?? new Set<string>())].sort()
+    }))
+    .sort((left, right) => left.id.localeCompare(right.id));
+}
+
+function createTurkeyAdm3QueryArtifact(
+  dataset: TerritoryDataset,
+  generatedAt: string
+): Record<string, unknown> {
+  const byId = Object.fromEntries(
+    dataset.zones.map((zone) => [
+      zone.id,
+      {
+        id: zone.id,
+        name: zone.name,
+        parentId: zone.parentId,
+        bbox: zone.bbox,
+        center: zone.center,
+        neighborIds: zone.neighborIds
+      }
+    ])
+  );
+  const childrenByParent = new Map<string, string[]>();
+
+  for (const zone of dataset.zones) {
+    if (!zone.parentId) {
+      continue;
+    }
+
+    const children = childrenByParent.get(zone.parentId) ?? [];
+    children.push(zone.id);
+    childrenByParent.set(zone.parentId, children);
+  }
+
+  return {
+    schemaVersion: "territorykit-tr-adm3-query-artifact@1",
+    generatedAt,
+    zoneCount: dataset.zones.length,
+    byId,
+    childrenByParent: Object.fromEntries(
+      [...childrenByParent.entries()]
+        .map(([parentId, ids]) => [parentId, ids.sort()] as const)
+        .sort(([left], [right]) => left.localeCompare(right))
+    ),
+    bbox: dataset.zones
+      .map((zone) => ({ id: zone.id, bbox: zone.bbox }))
+      .sort((left, right) => left.id.localeCompare(right.id)),
+    neighbors: Object.fromEntries(
+      dataset.zones
+        .map((zone) => [zone.id, zone.neighborIds] as const)
+        .sort(([left], [right]) => left.localeCompare(right))
+    )
+  };
+}
+
+function createTurkeyAdm3DistrictCoverageReport(
+  districts: readonly TurkeyAdm3BuildDistrictCoverage[],
+  spatialQuality: ReturnType<typeof inspectTurkeyAdm3SpatialQuality>
+): Array<Record<string, unknown>> {
+  const gaps = new Map(spatialQuality.gaps.map((gap) => [gap.districtId, gap.areaKm2]));
+  const slivers = new Map<string, number>();
+  const overlaps = new Map<string, number>();
+
+  for (const sliver of spatialQuality.slivers) {
+    if (sliver.parentId) {
+      slivers.set(sliver.parentId, (slivers.get(sliver.parentId) ?? 0) + 1);
+    }
+  }
+
+  for (const overlap of spatialQuality.overlaps) {
+    if (overlap.parentId) {
+      overlaps.set(overlap.parentId, (overlaps.get(overlap.parentId) ?? 0) + overlap.areaKm2);
+    }
+  }
+
+  return districts
+    .map((district) => ({
+      districtId: district.districtId,
+      districtName: district.districtName,
+      provinceCode: district.provinceCode,
+      provinceName: district.provinceName,
+      officialCount: district.officialPolygonCount,
+      osmCount: district.osmPolygonCount,
+      generatedCount: district.generatedPolygonCount,
+      realCoveragePercent: district.realCoveragePercent,
+      generatedCoveragePercent: district.generatedCoveragePercent,
+      finalCoveragePercent: district.finalCoveragePercent,
+      gapAreaKm2: gaps.get(district.districtId) ?? 0,
+      overlapAreaKm2: Number((overlaps.get(district.districtId) ?? 0).toFixed(6)),
+      sliverCount: slivers.get(district.districtId) ?? 0
+    }))
+    .sort((left, right) => String(left.districtId).localeCompare(String(right.districtId)));
+}
+
+function createTurkeyAdm3OfficialIngestionStatus(
+  providers: readonly TurkeyAdm3ProviderRecord[],
+  coverage: Record<string, unknown>
+): Record<string, unknown> {
+  const officialPolygons = Number(coverage.officialPolygons ?? 0);
+  const qualityPassed =
+    officialPolygons > 0 &&
+    Number(coverage.geometryErrors ?? 0) === 0 &&
+    Number(coverage.overlapCount ?? 0) === 0 &&
+    Number(coverage.sliverCount ?? 0) === 0 &&
+    Number(coverage.parentContainmentErrors ?? 0) === 0 &&
+    Number(coverage.duplicateGeometryCount ?? 0) === 0 &&
+    (Array.isArray(coverage.districtsBelow9999) ? coverage.districtsBelow9999.length === 0 : true);
+
+  return {
+    schemaVersion: "territorykit-tr-adm3-official-ingestion@1",
+    country: "TR",
+    generatedAt: coverage.generatedAt,
+    providers: providers
+      .filter((provider) => provider.providerClass === "official")
+      .map((provider) => ({
+        providerId: provider.id,
+        provinceCode: provider.provinceCode,
+        verified: provider.status === "verified",
+        downloaded: false,
+        checksumVerified: Boolean(provider.expectedSha256),
+        parsed: officialPolygons > 0,
+        parentResolved: officialPolygons > 0,
+        qualityPassed,
+        artifactBuilt: officialPolygons > 0,
+        expectedFeatureCount: provider.expectedFeatureCount ?? null,
+        buildStatus:
+          officialPolygons > 0
+            ? qualityPassed
+              ? "built-from-artifact"
+              : "built-from-artifact-quality-blocked"
+            : "not-built"
+      }))
+      .sort((left, right) => left.providerId.localeCompare(right.providerId))
+  };
+}
+
+function createTurkeyAdm3OsmCoverageStatus(
+  providers: readonly TurkeyAdm3ProviderRecord[],
+  coverage: Record<string, unknown>
+): Record<string, unknown> {
+  return {
+    schemaVersion: "territorykit-tr-adm3-osm-coverage@1",
+    country: "TR",
+    generatedAt: coverage.generatedAt,
+    providerCount: providers.filter((provider) => provider.providerClass === "osm").length,
+    polygonCount: coverage.osmPolygons ?? 0,
+    areaKm2: coverage.osmAreaKm2 ?? 0,
+    coveragePercent: coverage.osmCoveragePercent ?? 0,
+    sourceStatus: (coverage.sourceStatus as Record<string, unknown> | undefined)?.osm ?? "unknown",
+    license: "ODbL-1.0",
+    attribution: "OpenStreetMap contributors, ODbL 1.0"
+  };
+}
+
+async function writeTurkeyAdm3ProvinceArtifacts(input: {
+  artifactRoot: string;
+  dataset: TerritoryDataset;
+  coverageReport: Record<string, unknown>;
+  quality: Record<string, unknown>;
+  queryArtifact: Record<string, unknown>;
+  generatedAt: string;
+  force: boolean;
+}): Promise<void> {
+  const provinces = Array.isArray(input.coverageReport.provinces)
+    ? (input.coverageReport.provinces as Array<Record<string, unknown>>)
+    : [];
+  const manifestEntries: Array<Record<string, unknown>> = [];
+
+  for (const province of provinces) {
+    const provinceCode = String(province.provinceCode);
+    const zones = input.dataset.zones.filter(
+      (zone) => provinceCodeForTurkeyAdm3Zone(zone) === provinceCode
+    );
+    const provinceDataset: TerritoryDataset = {
+      manifest: {
+        ...input.dataset.manifest,
+        datasetId: `${input.dataset.manifest.datasetId}-${provinceCode}`,
+        name: `Turkey ADM3-like province build ${provinceCode}`,
+        geometryHash: createDatasetGeometryHash({ zones })
+      },
+      zones
+    };
+    const provinceRoot = join(input.artifactRoot, "provinces", provinceCode);
+    const datasetJson = JSON.stringify(provinceDataset, null, 2);
+    const checksum = sha256Text(datasetJson);
+
+    await writeJsonOutput(join(provinceRoot, "dataset.json"), provinceDataset, input.force);
+    await writeJsonOutput(join(provinceRoot, "coverage.json"), province, input.force);
+    await writeJsonOutput(join(provinceRoot, "quality.json"), input.quality, input.force);
+    await writeJsonOutput(
+      join(provinceRoot, "query/query-artifact.json"),
+      filterTurkeyAdm3QueryArtifactForZones(input.queryArtifact, zones),
+      input.force
+    );
+    await writeJsonOutput(
+      join(provinceRoot, "sources.json"),
+      {
+        provinceCode,
+        sourceClasses: countTurkeyAdm3SourceClasses(zones)
+      },
+      input.force
+    );
+
+    manifestEntries.push({
+      provinceCode,
+      provinceName: province.provinceName,
+      version: input.generatedAt,
+      checksum,
+      byteSize: Buffer.byteLength(datasetJson),
+      featureCount: zones.length,
+      officialCount: province.officialPolygonCount ?? 0,
+      osmCount: province.osmPolygonCount ?? 0,
+      generatedCount: province.generatedPolygonCount ?? 0,
+      realCoveragePercent: province.realCoveragePercent ?? null,
+      generatedCoveragePercent: province.generatedCoveragePercent ?? null,
+      finalCoveragePercent: province.finalCoveragePercent ?? null
+    });
+  }
+
+  await writeJsonOutput(
+    join(input.artifactRoot, "national/manifest.json"),
+    {
+      schemaVersion: "territorykit-tr-adm3-national-manifest@1",
+      country: "TR",
+      generatedAt: input.generatedAt,
+      licenses: [
+        "Municipal open-data licenses",
+        "CC BY 4.0",
+        "ODbL 1.0",
+        "TerritoryKit generated / Apache-2.0"
+      ],
+      provinces: manifestEntries.sort((left, right) =>
+        String(left.provinceCode).localeCompare(String(right.provinceCode))
+      )
+    },
+    input.force
+  );
+}
+
+function filterTurkeyAdm3QueryArtifactForZones(
+  queryArtifact: Record<string, unknown>,
+  zones: readonly TerritoryZone[]
+): Record<string, unknown> {
+  const ids = new Set(zones.map((zone) => zone.id));
+
+  return {
+    ...queryArtifact,
+    zoneCount: zones.length,
+    byId: Object.fromEntries(
+      Object.entries((queryArtifact.byId as Record<string, unknown>) ?? {}).filter(([id]) =>
+        ids.has(id)
+      )
+    ),
+    bbox: ((queryArtifact.bbox as Array<{ id: string }> | undefined) ?? []).filter((entry) =>
+      ids.has(entry.id)
+    ),
+    childrenByParent: Object.fromEntries(
+      Object.entries((queryArtifact.childrenByParent as Record<string, string[]> | undefined) ?? {})
+        .map(
+          ([parentId, childIds]) =>
+            [parentId, childIds.filter((childId) => ids.has(childId)).sort()] as const
+        )
+        .filter(([, childIds]) => childIds.length > 0)
+        .sort(([left], [right]) => left.localeCompare(right))
+    ),
+    neighbors: Object.fromEntries(
+      zones.map((zone) => [zone.id, zone.neighborIds.filter((id) => ids.has(id))])
+    )
+  };
+}
+
+function provinceCodeForTurkeyAdm3Zone(zone: TerritoryZone): string | undefined {
+  const territory = isRecordValue(zone.properties.territory) ? zone.properties.territory : {};
+  const explicit = territory.provinceCode;
+
+  if (typeof explicit === "string" && /^\d{2}$/.test(explicit)) {
+    return explicit;
+  }
+
+  const adm3Metadata = isRecordValue(territory.adm3) ? territory.adm3 : {};
+  const nestedExplicit = adm3Metadata.provinceCode;
+
+  if (typeof nestedExplicit === "string" && /^\d{2}$/.test(nestedExplicit)) {
+    return nestedExplicit;
+  }
+
+  const idMatch =
+    zone.id.match(/tr-il-(\d{2})(?:-|:|$)/) ?? zone.id.match(/(?:^|[:-])tr-(\d{2})(?:-|$)/);
+
+  if (idMatch?.[1]) {
+    return idMatch[1];
+  }
+
+  return undefined;
+}
+
+function readTurkeyAdm3StringProperty(
+  input: Record<string, unknown>,
+  path: string
+): string | undefined {
+  let current: unknown = input;
+
+  for (const segment of path.split(".")) {
+    if (!isRecordValue(current)) {
+      return undefined;
+    }
+
+    current = current[segment];
+  }
+
+  return typeof current === "string" && current.length > 0 ? current : undefined;
+}
+
+function countTurkeyAdm3SourceClasses(zones: readonly TerritoryZone[]): Record<string, number> {
+  const counts: Record<string, number> = {};
+
+  for (const zone of zones) {
+    const territory = isRecordValue(zone.properties.territory) ? zone.properties.territory : {};
+    const sourceClass =
+      typeof territory.sourceClass === "string" ? territory.sourceClass : "unknown";
+    counts[sourceClass] = (counts[sourceClass] ?? 0) + 1;
+  }
+
+  return Object.fromEntries(
+    Object.entries(counts).sort(([left], [right]) => left.localeCompare(right))
+  );
+}
+
+function sha256Text(input: string): string {
+  return createHash("sha256").update(input).digest("hex");
 }
 
 async function createTurkeyAdm3ProviderNetworkHealthReport(input: {

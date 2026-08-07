@@ -306,6 +306,9 @@ importers:
       '@maplibre/vt-pbf':
         specifier: ^4.3.2
         version: 4.3.2
+      '@osmix/pbf':
+        specifier: 0.0.10
+        version: 0.0.10
       '@territory-kit/core':
         specifier: workspace:*
         version: link:../core
@@ -1122,6 +1125,9 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@osmix/pbf@0.0.10':
+    resolution: {integrity: sha512-qne1rjJ5Po0k86W29XNz0jTutsumCONm93k9NWY0NX3rwI+DmU1O8dMcT3fIJp6raqkfBd8RIO/pRC9HpObJUg==}
 
   '@oxc-project/types@0.139.0':
     resolution: {integrity: sha512-r9gHphtCs+1M7J0pw6Sn/hh/Wpa/iQrOOkrNAlVLF/gHq+/CJmHIWKKUUhdWjcD6CIa8idarspCsASiXCXvFUw==}
@@ -4599,6 +4605,10 @@ snapshots:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.20.1
+
+  '@osmix/pbf@0.0.10':
+    dependencies:
+      pbf: 5.1.2
 
   '@oxc-project/types@0.139.0': {}
 

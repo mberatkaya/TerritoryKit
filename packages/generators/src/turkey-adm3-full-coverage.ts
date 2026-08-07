@@ -233,6 +233,72 @@ export interface TurkeyAdm3GeneratedBuildResult {
   issues: TurkeyAdm3RegistryIssue[];
 }
 
+export interface TurkeyAdm3EffectiveZoneBuildOptions {
+  district: TerritoryZone;
+  provinceCode: string;
+  officialZones?: readonly TerritoryZone[];
+  runtimeZones?: readonly TerritoryZone[];
+  osmZones?: readonly TerritoryZone[];
+  generatedZones?: readonly TerritoryZone[];
+  minEffectiveAreaKm2?: number;
+}
+
+export interface TurkeyAdm3EffectiveZoneBuildResult {
+  officialZones: TerritoryZone[];
+  runtimeZones: TerritoryZone[];
+  osmZones: TerritoryZone[];
+  generatedZones: TerritoryZone[];
+  zones: TerritoryZone[];
+  coverage: TurkeyAdm3DistrictCoverageReport;
+  issues: TurkeyAdm3RegistryIssue[];
+}
+
+export interface TurkeyAdm3SpatialQualityOptions {
+  zones: readonly TerritoryZone[];
+  districts: readonly TerritoryZone[];
+  maxAllowedOverlapAreaKm2?: number;
+  minSliverAreaKm2?: number;
+  parentOutsideToleranceKm2?: number;
+  gapToleranceKm2?: number;
+}
+
+export interface TurkeyAdm3SpatialQualityReport {
+  schemaVersion: "territorykit-tr-adm3-spatial-quality@1";
+  ok: boolean;
+  summary: {
+    overlapCount: number;
+    gapCount: number;
+    sliverCount: number;
+    parentContainmentErrors: number;
+    duplicateGeometryCount: number;
+  };
+  overlaps: Array<{
+    leftZoneId: string;
+    rightZoneId: string;
+    parentId?: string;
+    areaKm2: number;
+  }>;
+  gaps: Array<{
+    districtId: string;
+    areaKm2: number;
+  }>;
+  slivers: Array<{
+    zoneId: string;
+    parentId?: string;
+    sourceClass?: string;
+    areaKm2: number;
+  }>;
+  parentContainmentErrors: Array<{
+    zoneId: string;
+    parentId?: string;
+    outsideAreaKm2: number;
+  }>;
+  duplicateGeometryHashes: Array<{
+    geometryHash: string;
+    zoneIds: string[];
+  }>;
+}
+
 export interface TurkeyAdm3GeneratedMigrationReport {
   schemaVersion: "territorykit-tr-adm3-generated-migration@1";
   country: "TR";
@@ -667,6 +733,241 @@ export function computeTurkeyAdm3DistrictCoverage(
   };
 }
 
+export function buildTurkeyAdm3EffectiveZones(
+  options: TurkeyAdm3EffectiveZoneBuildOptions
+): TurkeyAdm3EffectiveZoneBuildResult {
+  const issues: TurkeyAdm3RegistryIssue[] = [];
+  const minEffectiveAreaKm2 = options.minEffectiveAreaKm2 ?? 0.000001;
+  const districtGeometry = geometryToClippingMultiPolygon(options.district.geometry);
+  let priorityMask: ClippingMultiPolygon = [];
+  const officialZones = clipTurkeyAdm3ZoneClass({
+    zones: options.officialZones ?? [],
+    districtGeometry,
+    priorityMask,
+    sourceClass: "official",
+    minEffectiveAreaKm2
+  });
+
+  priorityMask = unionClippingGeometries([
+    priorityMask,
+    unionTerritoryGeometries(officialZones.map((zone) => zone.geometry))
+  ]);
+
+  const runtimeZones = clipTurkeyAdm3ZoneClass({
+    zones: options.runtimeZones ?? [],
+    districtGeometry,
+    priorityMask,
+    sourceClass: "runtime",
+    minEffectiveAreaKm2
+  });
+
+  priorityMask = unionClippingGeometries([
+    priorityMask,
+    unionTerritoryGeometries(runtimeZones.map((zone) => zone.geometry))
+  ]);
+
+  const osmZones = clipTurkeyAdm3ZoneClass({
+    zones: options.osmZones ?? [],
+    districtGeometry,
+    priorityMask,
+    sourceClass: "osm",
+    minEffectiveAreaKm2
+  });
+
+  priorityMask = unionClippingGeometries([
+    priorityMask,
+    unionTerritoryGeometries(osmZones.map((zone) => zone.geometry))
+  ]);
+
+  const generatedZones = clipTurkeyAdm3ZoneClass({
+    zones: options.generatedZones ?? [],
+    districtGeometry,
+    priorityMask,
+    sourceClass: "generated",
+    minEffectiveAreaKm2
+  });
+  const coverage = computeTurkeyAdm3DistrictCoverage({
+    districtId: options.district.id,
+    provinceCode: options.provinceCode,
+    districtGeometry: options.district.geometry,
+    official: officialZones.map((zone) => zone.geometry),
+    runtime: runtimeZones.map((zone) => zone.geometry),
+    osm: osmZones.map((zone) => zone.geometry),
+    generated: generatedZones.map((zone) => zone.geometry)
+  });
+
+  return {
+    officialZones,
+    runtimeZones,
+    osmZones,
+    generatedZones,
+    zones: [...officialZones, ...runtimeZones, ...osmZones, ...generatedZones].sort((left, right) =>
+      left.id.localeCompare(right.id)
+    ),
+    coverage,
+    issues
+  };
+}
+
+export function inspectTurkeyAdm3SpatialQuality(
+  options: TurkeyAdm3SpatialQualityOptions
+): TurkeyAdm3SpatialQualityReport {
+  const maxAllowedOverlapAreaKm2 = options.maxAllowedOverlapAreaKm2 ?? 0.000001;
+  const minSliverAreaKm2 = options.minSliverAreaKm2 ?? 0.00001;
+  const parentOutsideToleranceKm2 = options.parentOutsideToleranceKm2 ?? 0.000001;
+  const gapToleranceKm2 = options.gapToleranceKm2 ?? 0.0001;
+  const districtsById = new Map(options.districts.map((district) => [district.id, district]));
+  const zonesByParent = new Map<string, TerritoryZone[]>();
+  const overlaps: TurkeyAdm3SpatialQualityReport["overlaps"] = [];
+  const gaps: TurkeyAdm3SpatialQualityReport["gaps"] = [];
+  const slivers: TurkeyAdm3SpatialQualityReport["slivers"] = [];
+  const parentContainmentErrors: TurkeyAdm3SpatialQualityReport["parentContainmentErrors"] = [];
+  const geometryHashes = new Map<string, string[]>();
+
+  for (const zone of options.zones) {
+    if (zone.parentId) {
+      const siblings = zonesByParent.get(zone.parentId) ?? [];
+      siblings.push(zone);
+      zonesByParent.set(zone.parentId, siblings);
+    }
+
+    const areaKm2 = computeTurkeyAdm3GeometryAreaKm2(zone.geometry);
+    const territory = isRecord(zone.properties.territory) ? zone.properties.territory : {};
+    const sourceClass = readStringPropertyPath(territory, "sourceClass");
+
+    if (areaKm2 > 0 && areaKm2 < minSliverAreaKm2) {
+      slivers.push({
+        zoneId: zone.id,
+        ...(zone.parentId ? { parentId: zone.parentId } : {}),
+        ...(sourceClass ? { sourceClass } : {}),
+        areaKm2
+      });
+    }
+
+    const geometryHash = createTurkeyAdm3GeometryHash(zone.geometry);
+    const duplicateIds = geometryHashes.get(geometryHash) ?? [];
+    duplicateIds.push(zone.id);
+    geometryHashes.set(geometryHash, duplicateIds);
+
+    if (zone.parentId) {
+      const parent = districtsById.get(zone.parentId);
+
+      if (parent) {
+        const outside = differenceClippingGeometries(
+          geometryToClippingMultiPolygon(zone.geometry),
+          geometryToClippingMultiPolygon(parent.geometry)
+        );
+        const outsideAreaKm2 = clippingAreaKm2(outside);
+
+        if (outsideAreaKm2 > parentOutsideToleranceKm2) {
+          parentContainmentErrors.push({
+            zoneId: zone.id,
+            parentId: zone.parentId,
+            outsideAreaKm2
+          });
+        }
+      }
+    }
+  }
+
+  for (const [parentId, siblings] of zonesByParent.entries()) {
+    const sorted = siblings.sort((left, right) => left.id.localeCompare(right.id));
+
+    for (let index = 0; index < sorted.length; index += 1) {
+      const left = sorted[index];
+
+      if (!left) {
+        continue;
+      }
+
+      for (let nextIndex = index + 1; nextIndex < sorted.length; nextIndex += 1) {
+        const right = sorted[nextIndex];
+
+        if (!right || !bboxesOverlap(left.bbox, right.bbox)) {
+          continue;
+        }
+
+        const overlapAreaKm2 = clippingAreaKm2(
+          intersectClippingGeometries(
+            geometryToClippingMultiPolygon(left.geometry),
+            geometryToClippingMultiPolygon(right.geometry)
+          )
+        );
+
+        if (overlapAreaKm2 > maxAllowedOverlapAreaKm2) {
+          overlaps.push({
+            leftZoneId: left.id,
+            rightZoneId: right.id,
+            parentId,
+            areaKm2: overlapAreaKm2
+          });
+        }
+      }
+    }
+  }
+
+  for (const district of options.districts) {
+    const zones = zonesByParent.get(district.id) ?? [];
+    const union = unionTerritoryGeometries(zones.map((zone) => zone.geometry));
+    const gap = differenceClippingGeometries(
+      geometryToClippingMultiPolygon(district.geometry),
+      union
+    );
+    const clippedGapAreaKm2 = clippingAreaKm2(gap);
+    const districtAreaKm2 = computeTurkeyAdm3GeometryAreaKm2(district.geometry);
+    const zoneAreaKm2 = zones.reduce(
+      (total, zone) => total + computeTurkeyAdm3GeometryAreaKm2(zone.geometry),
+      0
+    );
+    const overlapAreaKm2 = overlaps
+      .filter((overlap) => overlap.parentId === district.id)
+      .reduce((total, overlap) => total + overlap.areaKm2, 0);
+    const estimatedGapAreaKm2 = Math.max(0, districtAreaKm2 - (zoneAreaKm2 - overlapAreaKm2));
+    const areaKm2 =
+      clippedGapAreaKm2 > districtAreaKm2 * 0.25 && estimatedGapAreaKm2 < clippedGapAreaKm2
+        ? Number(estimatedGapAreaKm2.toFixed(6))
+        : clippedGapAreaKm2;
+
+    if (areaKm2 > gapToleranceKm2) {
+      gaps.push({
+        districtId: district.id,
+        areaKm2
+      });
+    }
+  }
+
+  const duplicateGeometryHashes = [...geometryHashes.entries()]
+    .filter(([, zoneIds]) => zoneIds.length > 1)
+    .map(([geometryHash, zoneIds]) => ({
+      geometryHash,
+      zoneIds: zoneIds.sort()
+    }))
+    .sort((left, right) => left.geometryHash.localeCompare(right.geometryHash));
+
+  return {
+    schemaVersion: "territorykit-tr-adm3-spatial-quality@1",
+    ok:
+      overlaps.length === 0 &&
+      gaps.length === 0 &&
+      parentContainmentErrors.length === 0 &&
+      duplicateGeometryHashes.length === 0,
+    summary: {
+      overlapCount: overlaps.length,
+      gapCount: gaps.length,
+      sliverCount: slivers.length,
+      parentContainmentErrors: parentContainmentErrors.length,
+      duplicateGeometryCount: duplicateGeometryHashes.length
+    },
+    overlaps: overlaps.sort((left, right) => left.leftZoneId.localeCompare(right.leftZoneId)),
+    gaps: gaps.sort((left, right) => left.districtId.localeCompare(right.districtId)),
+    slivers: slivers.sort((left, right) => left.zoneId.localeCompare(right.zoneId)),
+    parentContainmentErrors: parentContainmentErrors.sort((left, right) =>
+      left.zoneId.localeCompare(right.zoneId)
+    ),
+    duplicateGeometryHashes
+  };
+}
+
 export function createTurkeyAdm3GeneratedMigrationReport(input: {
   generatedAt: string;
   oldGeneratedZones: readonly TerritoryZone[];
@@ -820,6 +1121,91 @@ function createGeneratedZone(input: {
           maxZonesPerDistrict: input.config.maxZonesPerDistrict,
           minFragmentAreaKm2: input.config.minFragmentAreaKm2
         }
+      }
+    }
+  };
+}
+
+function clipTurkeyAdm3ZoneClass(input: {
+  zones: readonly TerritoryZone[];
+  districtGeometry: ClippingMultiPolygon;
+  priorityMask: ClippingMultiPolygon;
+  sourceClass: TurkeyAdm3ProviderClass;
+  minEffectiveAreaKm2: number;
+}): TerritoryZone[] {
+  const zones: TerritoryZone[] = [];
+  let localPriorityMask = input.priorityMask;
+
+  for (const zone of input.zones) {
+    const original = geometryToClippingMultiPolygon(zone.geometry);
+    const districtClipped = intersectClippingGeometries(input.districtGeometry, original);
+    const effective = differenceClippingGeometries(districtClipped, localPriorityMask);
+    const areaKm2 = clippingAreaKm2(effective);
+    const residualPriorityOverlapKm2 =
+      input.sourceClass === "official"
+        ? 0
+        : clippingAreaKm2(intersectClippingGeometries(effective, localPriorityMask));
+    const geometry =
+      areaKm2 >= input.minEffectiveAreaKm2 &&
+      residualPriorityOverlapKm2 <= input.minEffectiveAreaKm2
+        ? clippingMultiPolygonToTerritoryGeometry(effective)
+        : undefined;
+
+    if (!geometry) {
+      continue;
+    }
+
+    zones.push(
+      createEffectiveTurkeyAdm3Zone({
+        zone,
+        geometry,
+        sourceClass: input.sourceClass,
+        originalGeometry: original,
+        effectiveGeometry: effective
+      })
+    );
+    localPriorityMask = unionClippingGeometries([localPriorityMask, effective]);
+  }
+
+  return zones;
+}
+
+function createEffectiveTurkeyAdm3Zone(input: {
+  zone: TerritoryZone;
+  geometry: TerritoryGeometry;
+  sourceClass: TurkeyAdm3ProviderClass;
+  originalGeometry: ClippingMultiPolygon;
+  effectiveGeometry: ClippingMultiPolygon;
+}): TerritoryZone {
+  const territory = isRecord(input.zone.properties.territory)
+    ? input.zone.properties.territory
+    : {};
+  const originalTerritoryGeometry =
+    clippingMultiPolygonToTerritoryGeometry(input.originalGeometry) ?? input.zone.geometry;
+  const effectiveGeometryHash = createTurkeyAdm3GeometryHash(input.geometry);
+  const originalGeometryHash = createTurkeyAdm3GeometryHash(originalTerritoryGeometry);
+  const clippedByPriority = originalGeometryHash !== effectiveGeometryHash;
+  const bbox = computeGeometryBBox(input.geometry);
+
+  return {
+    ...input.zone,
+    geometry: input.geometry,
+    bbox,
+    center: computeGeometryCenter(input.geometry),
+    properties: {
+      ...input.zone.properties,
+      territory: {
+        ...territory,
+        sourceClass: input.sourceClass,
+        originalGeometryHash,
+        effectiveGeometryHash,
+        geometryHash: effectiveGeometryHash,
+        clippedByPriority,
+        sourceNativeId:
+          readStringPropertyPath(territory, "sourceNativeId") ??
+          readStringPropertyPath(territory, "sourceId") ??
+          readStringPropertyPath(territory, "source.sourceId") ??
+          input.zone.id
       }
     }
   };
@@ -985,7 +1371,27 @@ function differenceClippingGeometries(
     return subject;
   }
 
-  return CLIPPER.difference(subject, ...nonEmptyClips);
+  try {
+    return CLIPPER.difference(subject, ...nonEmptyClips);
+  } catch {
+    let result = subject;
+
+    for (const clip of nonEmptyClips) {
+      for (const clipPolygon of clip) {
+        if (!isNonEmptyClippingGeometry(result)) {
+          return [];
+        }
+
+        try {
+          result = CLIPPER.difference(result, [clipPolygon]);
+        } catch {
+          continue;
+        }
+      }
+    }
+
+    return result;
+  }
 }
 
 function geometryToClippingMultiPolygon(geometry: TerritoryGeometry): ClippingMultiPolygon {
@@ -1144,6 +1550,10 @@ function compareClippingGeometries(
 
 function compareBBoxes(left: TerritoryBBox, right: TerritoryBBox): number {
   return left[1] - right[1] || left[0] - right[0] || left[3] - right[3] || left[2] - right[2];
+}
+
+function bboxesOverlap(left: TerritoryBBox, right: TerritoryBBox): boolean {
+  return left[0] <= right[2] && left[2] >= right[0] && left[1] <= right[3] && left[3] >= right[1];
 }
 
 function coordinatesEqual(left: LngLat, right: LngLat): boolean {

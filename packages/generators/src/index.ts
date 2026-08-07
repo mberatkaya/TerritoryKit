@@ -197,6 +197,14 @@ export {
   validateTurkeyAdm3SourceLockExtension,
   verifyTurkeyAdm3SourceLockExtension
 } from "./turkey-adm3-ingestion.js";
+export {
+  TURKEY_ADM3_OSM_ATTRIBUTION,
+  TURKEY_ADM3_OSM_DOWNLOAD_URL,
+  TURKEY_ADM3_OSM_LICENSE,
+  TURKEY_ADM3_OSM_SOURCE_URL,
+  createTurkeyAdm3OsmDataset,
+  extractTurkeyAdm3OsmPbf
+} from "./turkey-adm3-osm.js";
 export type {
   DatasetAttribution,
   TerritorySourceAdapter,
@@ -251,6 +259,12 @@ export type {
   TurkeyAdm3SourceLockCreateOptions,
   TurkeyAdm3SourceLockExtension
 } from "./turkey-adm3-ingestion.js";
+export type {
+  TurkeyAdm3OsmExtractOptions,
+  TurkeyAdm3OsmExtractResult,
+  TurkeyAdm3OsmParentConfidence,
+  TurkeyAdm3OsmSemanticType
+} from "./turkey-adm3-osm.js";
 export type {
   GeometryQualityPathRepairOptions,
   TerritoryDatasetPathInput

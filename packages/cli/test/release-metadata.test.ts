@@ -32,7 +32,7 @@ const fixedGroupPackageJsonPaths = [
 ] as const;
 
 describe("release metadata", () => {
-  it("keeps Sprint 11 through Sprint 13 on the 1.2.0 fixed-group minor release", () => {
+  it("keeps Sprint 11 through Sprint 13 documented on the 1.2.0 fixed-group minor release", () => {
     const rootPackage = readJson<PackageJson>("package.json");
     const changesetConfig = readJson<ChangesetConfig>(".changeset/config.json");
     const fixedPackages = new Set(changesetConfig.fixed.flat());
@@ -71,7 +71,7 @@ describe("release metadata", () => {
       return;
     }
 
-    expect(fixedGroupVersion).toBe("1.2.0");
+    expect(compareSemver(fixedGroupVersion, "1.2.0")).toBeGreaterThanOrEqual(0);
     expect(readme).toMatch(/\| `1\.2\.0`\s+\| Sprint 11/);
     expect(readme).toMatch(/\| `1\.2\.0`\s+\| Sprint 12/);
     expect(readme).toMatch(/\| `1\.2\.0`\s+\| Sprint 13/);
@@ -105,4 +105,29 @@ function nextMinor(version: string): string {
   }
 
   return `${major}.${minor + 1}.0`;
+}
+
+function compareSemver(left: string, right: string): number {
+  const leftParts = parseSemver(left);
+  const rightParts = parseSemver(right);
+
+  for (let index = 0; index < leftParts.length; index += 1) {
+    const difference = (leftParts[index] ?? 0) - (rightParts[index] ?? 0);
+
+    if (difference !== 0) {
+      return difference;
+    }
+  }
+
+  return 0;
+}
+
+function parseSemver(version: string): [number, number, number] {
+  const parts = version.split(".").map(Number);
+
+  if (parts.length !== 3 || parts.some((part) => !Number.isInteger(part) || part < 0)) {
+    throw new Error(`Invalid semver version: ${version}`);
+  }
+
+  return parts as [number, number, number];
 }

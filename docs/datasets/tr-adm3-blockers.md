@@ -15,6 +15,25 @@ parent fields, missing source-native IDs, or only tabular/name-list evidence.
 
 Total blocked provinces: 74.
 
+## 2026-08-07 Production Build Blockers
+
+The current production completion run ingested official municipal geometry for Bursa, Gaziantep,
+Kayseri, and Ordu, then merged it with generated fallback geometry. The resulting national ADM3
+artifact writes successfully but is not production-approved:
+
+- national final coverage is 99.985715%, below the 99.99% target;
+- final overlap count is 0 after priority clipping and fallback suppression;
+- 162 district gaps remain;
+- 11 parent-containment findings remain;
+- 751 geometry validation issues remain, mostly generated fallback self-intersection reports around
+  pathological source/difference results;
+- OSM is wired as an ODbL source class, but the Turkey PBF artifact is not built in the current
+  evidence run.
+
+Machine-readable evidence is written under `.territory/build/TR/ADM3/`, especially
+`build-summary.json`, `coverage.json`, `geometry-quality.json`, `official-ingestion.json`, and
+`osm-coverage.json`.
+
 ## License Blockers
 
 | Province | Source                                    | Blocker                                                                                                                             |
