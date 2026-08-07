@@ -25,6 +25,7 @@
     "data:tr:adm3:artifact-policy": "node scripts/check-tr-adm3-artifact-policy.mjs",
     "data:tr:adm3:update": "pnpm --filter @territory-kit/generators build && node scripts/data-tr-adm3.mjs update",
     "data:tr:adm3:validate": "pnpm --filter @territory-kit/generators build && node scripts/data-tr-adm3.mjs validate",
+    "data:tr:adm3:national:build": "pnpm --filter @territory-kit/generators build && pnpm --filter @territory-kit/cli build && node packages/cli/dist/index.mjs tr adm3 build --official --osm --generated --fill-gaps --official-artifact .territory/build/TR/ADM3/official/levels/ADM3/dataset.json --output .territory/build/TR/ADM3 --force",
     "docs:build": "pnpm --filter @territory-kit/docs build",
     "docs:dev": "pnpm --filter @territory-kit/docs dev",
     "docs:links": "node scripts/check-doc-links.mjs",
@@ -45,6 +46,7 @@
     "test": "turbo run test",
     "test:visual:maplibre": "pnpm --filter @territory-kit/example-web-maplibre test:visual",
     "turkey:adm3:ingestion:smoke": "pnpm --filter @territory-kit/generators build && pnpm --filter @territory-kit/generators exec vitest run test/turkey-adm3-ingestion.test.ts --passWithNoTests && pnpm --filter @territory-kit/cli exec vitest run test/turkey-adm3-ingestion.test.ts --passWithNoTests",
+    "turkey:adm3:production:smoke": "pnpm --filter @territory-kit/generators exec vitest run test/turkey-adm3-full-coverage.test.ts test/turkey-adm3-osm.test.ts && pnpm --filter @territory-kit/cli build && node packages/cli/dist/index.mjs tr adm3 build --generated --fill-gaps --max-districts 2 --output .territory/build/TR/ADM3-smoke --force",
     "typecheck": "turbo run typecheck",
     "verify": "pnpm format:check && pnpm lint && pnpm package:boundaries && pnpm typecheck && pnpm test && pnpm build && pnpm bundle:size && pnpm data:tr:adm3:artifact-policy",
     "version-packages": "changeset version"

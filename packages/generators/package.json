@@ -51,6 +51,7 @@
   "dependencies": {
     "@maplibre/geojson-vt": "^6.1.1",
     "@maplibre/vt-pbf": "^4.3.2",
+    "@osmix/pbf": "0.0.10",
     "@territory-kit/core": "workspace:*",
     "@territory-kit/dataset": "workspace:*",
     "flatbush": "^4.6.2",

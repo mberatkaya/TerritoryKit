@@ -4,6 +4,7 @@ import type { TerritoryGeometry, TerritoryZone } from "@territory-kit/dataset";
 import { describe, expect, it } from "vitest";
 import {
   buildTurkeyAdm3GeneratedZones,
+  buildTurkeyAdm3EffectiveZones,
   computeTurkeyAdm3DistrictCoverage,
   computeTurkeyAdm3GeometryAreaKm2,
   createTurkeyAdm3GeneratedGeometryHash,
@@ -11,6 +12,7 @@ import {
   createTurkeyAdm3ProviderHealthReport,
   createTurkeyAdm3Registry,
   filterOsmAdministrativeBoundaryPolygons,
+  inspectTurkeyAdm3SpatialQuality,
   resolveTurkeyAdm3Provider,
   validateTurkeyAdm3ProviderRegistry
 } from "../src/turkey-adm3.js";
@@ -366,6 +368,42 @@ describe("Turkey ADM3 OSM and generated fallback behavior", () => {
     expect(report.officialCoveragePercent).toBe(50);
     expect(report.generatedCoveragePercent).toBe(50);
     expect(report.finalCoveragePercent).toBe(100);
+  });
+
+  it("clips final zones by source priority before writing dataset geometry", () => {
+    const district = zone("tr:adm2:priority", "District", square(0, 0, 1, 1));
+    const official = {
+      ...zone("tr:adm3:official", "Official", square(0, 0, 0.75, 1)),
+      parentId: district.id
+    };
+    const osm = { ...zone("tr:adm3:osm", "OSM", square(0.5, 0, 1, 1)), parentId: district.id };
+    const generated = {
+      ...zone("tr:adm3:generated", "Generated", square(0, 0, 1, 1)),
+      parentId: district.id
+    };
+    const result = buildTurkeyAdm3EffectiveZones({
+      district,
+      provinceCode: "01",
+      officialZones: [official],
+      osmZones: [osm],
+      generatedZones: [generated]
+    });
+    const quality = inspectTurkeyAdm3SpatialQuality({
+      districts: [district],
+      zones: result.zones
+    });
+
+    expect(result.officialZones).toHaveLength(1);
+    expect(result.osmZones).toHaveLength(1);
+    expect(result.generatedZones).toHaveLength(0);
+    expect(result.coverage.finalCoveragePercent).toBe(100);
+    expect(result.osmZones[0]?.bbox[0]).toBeCloseTo(0.75, 6);
+    expect(result.osmZones[0]?.properties.territory).toMatchObject({
+      sourceClass: "osm",
+      clippedByPriority: true
+    });
+    expect(quality.summary.overlapCount).toBe(0);
+    expect(quality.summary.gapCount).toBe(0);
   });
 
   it("emits generated to official migration candidates", () => {

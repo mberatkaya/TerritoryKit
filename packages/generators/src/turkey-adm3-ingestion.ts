@@ -370,12 +370,31 @@ export async function readTurkeyAdm3SourceCatalog(
     cwd?: string;
   } = {}
 ): Promise<TurkeyAdm3SourceCatalog> {
+  const catalogPath = options.catalogPath ?? "datasets/sources/TR/adm3-catalog.json";
+
   if (!options.catalogPath) {
+    try {
+      return await readTurkeyAdm3SourceCatalog({
+        catalogPath,
+        ...(options.cwd ? { cwd: options.cwd } : {})
+      });
+    } catch (error) {
+      const missing =
+        error instanceof Error &&
+        ("code" in error
+          ? (error as NodeJS.ErrnoException).code === "ENOENT"
+          : error.message.includes("ENOENT"));
+
+      if (!missing) {
+        throw error;
+      }
+    }
+
     return createDefaultTurkeyAdm3SourceCatalog();
   }
 
   const input = JSON.parse(
-    await readFile(resolve(options.cwd ?? process.cwd(), options.catalogPath), "utf8")
+    await readFile(resolve(options.cwd ?? process.cwd(), catalogPath), "utf8")
   ) as unknown;
   const result = validateTurkeyAdm3SourceCatalog(input);
 
@@ -796,11 +815,11 @@ export async function loadTurkeyAdm3ParsedFeatures(
       continue;
     }
 
-    if (province.crs && province.crs !== "EPSG:4326") {
+    if (province.crs && !isSupportedLonLatCrs(province.crs)) {
       issues.push(
         createIssue(
           "TR_ADM3_CRS_UNSUPPORTED",
-          `Province ${province.provinceCode} source declares ${province.crs}; only EPSG:4326 sources are accepted without an explicit reprojection adapter.`
+          `Province ${province.provinceCode} source declares ${province.crs}; only EPSG:4326/CRS84 lon-lat sources are accepted without an explicit reprojection adapter.`
         )
       );
       provinceStatuses[province.provinceCode] = "build-failed";
@@ -978,7 +997,7 @@ export function parseTurkeyAdm3ProvinceSource(
     const name = readStringPropertyPath(properties, adapter.nameProperty);
     const sourceId = readStringPropertyPath(properties, adapter.sourceIdProperty);
     const rawParent = readStringPropertyPath(properties, adapter.parentProperty);
-    const parentAdm2Id = rawParent ? adapter.parentMappings?.[rawParent] : undefined;
+    const parentAdm2Id = rawParent ? resolveTurkeyAdm3ParentMapping(adapter, rawParent) : undefined;
     const geometry = readGeometry(feature.geometry);
     const rawSemanticType = adapter.semanticTypeProperty
       ? readStringPropertyPath(properties, adapter.semanticTypeProperty)
@@ -1474,11 +1493,11 @@ function validateCatalogEntry(provinceCode: string, input: unknown): TerritoryCo
     );
   }
 
-  if (entry.crs !== "EPSG:4326") {
+  if (!isSupportedLonLatCrs(entry.crs)) {
     issues.push(
       createIssue(
         "TR_ADM3_CRS_UNSUPPORTED",
-        `Turkey ADM3 catalog entry ${provinceCode} must declare EPSG:4326 until a reprojection adapter is added.`
+        `Turkey ADM3 catalog entry ${provinceCode} must declare EPSG:4326 or OGC:CRS84 until a reprojection adapter is added.`
       )
     );
   }
@@ -1507,6 +1526,47 @@ function normalizeProvinceCode(code: string): string {
   }
 
   return numeric.padStart(2, "0");
+}
+
+function isSupportedLonLatCrs(input: unknown): boolean {
+  if (typeof input !== "string") {
+    return false;
+  }
+
+  const normalized = input.trim().toUpperCase().replace(/\s+/g, "");
+
+  return (
+    normalized === "EPSG:4326" ||
+    normalized === "OGC:CRS84" ||
+    normalized === "CRS84" ||
+    (normalized.includes("OGC:CRS84") && normalized.includes("EPSG:4326"))
+  );
+}
+
+function resolveTurkeyAdm3ParentMapping(
+  adapter: TurkeyAdm3ProviderAdapterConfig,
+  rawParent: string
+): string | undefined {
+  if (!("parentMappings" in adapter) || !adapter.parentMappings) {
+    return undefined;
+  }
+
+  const direct = adapter.parentMappings[rawParent];
+
+  if (direct) {
+    return direct;
+  }
+
+  const normalizedRaw = normalizeTurkeyAdm3ParentKey(rawParent);
+  const normalized = Object.entries(adapter.parentMappings).find(
+    ([key]) => normalizeTurkeyAdm3ParentKey(key) === normalizedRaw
+  );
+
+  return normalized?.[1];
+}
+
+function normalizeTurkeyAdm3ParentKey(input: string): string {
+  return input.trim().normalize("NFKC").toLocaleLowerCase("tr-TR").replace(/\s+/g, " ");
 }
 
 async function countProvinceSourceFeatures(

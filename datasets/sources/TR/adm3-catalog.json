@@ -1,8 +1,61 @@
 {
   "schemaVersion": "territorykit-tr-adm3-source-catalog@1",
   "country": "TR",
-  "generatedAt": "2026-07-28T00:00:00.000Z",
+  "generatedAt": "2026-08-07T00:00:00.000Z",
   "provinces": {
+    "16": {
+      "provinceCode": "16",
+      "provinceName": "Bursa",
+      "providerId": "tr-adm3-official-16-bursa-buyuksehir-belediyesi-open-data",
+      "providerName": "Bursa Büyükşehir Belediyesi Open Data",
+      "sourceId": "bursa-mahalle-sinirlari",
+      "sourceUrl": "https://acikyesil.bursa.bel.tr/dataset/mahalle-sinirlari",
+      "downloadUrl": "https://bapi.bursa.bel.tr/apigateway/bbbAcikVeri_Cbs/Mahalle",
+      "sourceDate": "2025-03-19T12:59:41Z",
+      "sourceVersion": "2025-03-19T12:59:41Z",
+      "retrievedAt": "2026-08-07T00:00:00.000Z",
+      "license": "Bursa Acik Veri Lisansi",
+      "licenseUrl": "https://acikyesil.bursa.bel.tr/license",
+      "attribution": "Bursa Büyükşehir Belediyesi Open Data, Mahalle Sınırları",
+      "redistributionStatus": "allowed",
+      "commercialUseStatus": "allowed",
+      "modificationStatus": "allowed",
+      "crs": "EPSG:4326",
+      "format": "GeoJSON",
+      "expectedSha256": "515962f651521ba7b5e498d1654a19fb37b9f93ad49fdae545dd7f1943be781a",
+      "expectedByteSize": 7813482,
+      "expectedFeatureCount": 1074,
+      "adapter": {
+        "id": "geojson-property-map",
+        "nameProperty": "AD",
+        "sourceIdProperty": "KIMLIKNO",
+        "parentProperty": "ILCEID",
+        "defaultSemanticType": "neighbourhood",
+        "defaultLocalType": "Mahalle",
+        "parentMappings": {
+          "{2B77DEE0-31CD-460E-8340-5DBD1F096A65}": "tr:adm2:54988432b65548594921961",
+          "{68BE83EE-3A61-4959-AEAE-5113A910A0CC}": "tr:adm2:54988432b21829167543516",
+          "{6E972996-DC39-4E6D-B4E9-332D208CFCB3}": "tr:adm2:54988432b70315199389199",
+          "{80E88AF7-448C-4167-8039-9203E9B218BF}": "tr:adm2:54988432b42778469156443",
+          "{84DD2C5B-EA63-4878-99E2-78644D7A78BE}": "tr:adm2:54988432b28826403720694",
+          "{9348171B-682E-44EC-AE55-2A64BBF9B0E5}": "tr:adm2:54988432b21454530006409",
+          "{A8D46685-15A5-4B18-A42E-AE843A2ECB71}": "tr:adm2:54988432b337940392373",
+          "{B2FB68F0-539B-4845-89BB-C159E2DC943D}": "tr:adm2:54988432b69692013830482",
+          "{BB3CAC15-7026-4708-A82D-4A6765C21E5E}": "tr:adm2:54988432b8063224387677",
+          "{D9972657-48EB-407F-B6D6-1AF8E5F9824E}": "tr:adm2:54988432b70813006049679",
+          "{DF423374-0C8C-4CD4-994E-FC169491633B}": "tr:adm2:54988432b18249389019037",
+          "{E2FE8A2C-AD97-4C88-A591-9F8B53090719}": "tr:adm2:54988432b22653723739411",
+          "{E4156C8A-1B2C-4836-B855-7A4F05F25B9D}": "tr:adm2:54988432b29894117930942",
+          "{E4182A03-F176-4F47-AD5C-319512602D42}": "tr:adm2:54988432b50709390359139",
+          "{F5760BFA-94E9-4163-92D3-F43F8E39AF56}": "tr:adm2:54988432b38576388688416",
+          "{F7C1BE9E-2DD2-42A7-B7B5-2932D1D91D79}": "tr:adm2:54988432b69574392637180",
+          "{FED3BA9D-0C13-411C-BA45-2FAA2E069CB5}": "tr:adm2:54988432b65769294434717"
+        }
+      },
+      "notes": [
+        "Parent ILCEID mappings were resolved deterministically by spatial majority containment against TerritoryKit ADM2 geometries."
+      ]
+    },
     "27": {
       "provinceCode": "27",
       "provinceName": "Gaziantep",
@@ -45,7 +98,115 @@
         }
       },
       "notes": [
-        "Partial Gaziantep province ADM3 source. This entry does not claim nationwide Turkey ADM3 coverage."
+        "Gaziantep remains compatible with the existing pilot provider id and KML source lock."
+      ]
+    },
+    "38": {
+      "provinceCode": "38",
+      "provinceName": "Kayseri",
+      "providerId": "tr-adm3-official-38-kayseri-buyuksehir-belediyesi-open-data-via-ulasav",
+      "providerName": "Kayseri Büyükşehir Belediyesi Open Data via ULASAV",
+      "sourceId": "kayseri-mahalle-siniri",
+      "sourceUrl": "https://ulasav.csb.gov.tr/dataset/38-kayseri-mahalle-siniri",
+      "downloadUrl": "https://acikveri.kayseri.bel.tr/uploads/data/2026/4/15/mahalle_siniri-1829771.geojson",
+      "sourceDate": "2026-04-15",
+      "sourceVersion": "2026-04-15",
+      "retrievedAt": "2026-08-07T00:00:00.000Z",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://acikveri.kayseri.bel.tr/sayfa/lisans/19",
+      "attribution": "Kayseri Büyükşehir Belediyesi Open Data, Mahalle Sınırı, CC BY 4.0",
+      "redistributionStatus": "allowed",
+      "commercialUseStatus": "allowed",
+      "modificationStatus": "allowed",
+      "crs": "OGC:CRS84 / EPSG:4326 axis order",
+      "format": "GeoJSON",
+      "expectedSha256": "c30cf8ec3058514d51f3928c84029e2473a437a747251bd46686a65c2eb452ac",
+      "expectedByteSize": 13507356,
+      "expectedFeatureCount": 711,
+      "adapter": {
+        "id": "geojson-property-map",
+        "nameProperty": "ADI",
+        "sourceIdProperty": "CBNO",
+        "parentProperty": "ILCE_CBNO",
+        "defaultSemanticType": "neighbourhood",
+        "defaultLocalType": "Mahalle",
+        "parentMappings": {
+          "1": "tr:adm2:54988432b10287230279323",
+          "2": "tr:adm2:54988432b91709779235115",
+          "3": "tr:adm2:54988432b20916998387085",
+          "4": "tr:adm2:54988432b64031240079143",
+          "5": "tr:adm2:54988432b20434166663535",
+          "6": "tr:adm2:54988432b47827945301604",
+          "7": "tr:adm2:54988432b49773192126459",
+          "8": "tr:adm2:54988432b85515105263219",
+          "9": "tr:adm2:54988432b26930911195610",
+          "10": "tr:adm2:54988432b54526822258807",
+          "11": "tr:adm2:54988432b59996123139029",
+          "12": "tr:adm2:54988432b2727016024210",
+          "13": "tr:adm2:54988432b75199317168320",
+          "14": "tr:adm2:54988432b64064239831257",
+          "15": "tr:adm2:54988432b58902751390248",
+          "16": "tr:adm2:54988432b8876383914528"
+        }
+      },
+      "notes": [
+        "Source CRS is explicitly treated as lon/lat CRS84-compatible input; no coordinate swap is applied.",
+        "Parent ILCE_CBNO mappings were resolved deterministically by spatial majority containment against TerritoryKit ADM2 geometries."
+      ]
+    },
+    "52": {
+      "provinceCode": "52",
+      "provinceName": "Ordu",
+      "providerId": "tr-adm3-official-52-ordu-buyuksehir-belediyesi-open-data",
+      "providerName": "Ordu Büyükşehir Belediyesi Open Data",
+      "sourceId": "ordu-mahalleri-alana-gore-sirali",
+      "sourceUrl": "https://acikveri.ordu.bel.tr/dataset/ordu-ilindeki-mahallelerin-alan-buyukluklerine-gore-siralamasi",
+      "downloadUrl": "https://acikveri.ordu.bel.tr/dataset/7b0e0cf5-3399-4630-b19e-32a380ab3b48/resource/a8acc0f6-2fc1-4716-a9e0-74e65cf5a003/download/ordu-mahalleri-alana-gore-sirali.geojson",
+      "sourceDate": "2025-08-01T08:20:14Z",
+      "sourceVersion": "2025-08-01T08:20:14Z",
+      "retrievedAt": "2026-08-07T00:00:00.000Z",
+      "license": "Ordu Acik Veri Lisansi",
+      "licenseUrl": "https://acikveri.ordu.bel.tr/license",
+      "attribution": "Ordu Büyükşehir Belediyesi Open Data, Ordu Mahalleleri Alana Göre Sıralı",
+      "redistributionStatus": "allowed",
+      "commercialUseStatus": "allowed",
+      "modificationStatus": "allowed",
+      "crs": "OGC:CRS84 / EPSG:4326 axis order",
+      "format": "GeoJSON",
+      "expectedSha256": "8645c30283fdc9b709a833ae72c03b5822f93aa91f88d30968a21f899554e4cb",
+      "expectedByteSize": 17556208,
+      "expectedFeatureCount": 772,
+      "adapter": {
+        "id": "geojson-property-map",
+        "nameProperty": "MAHALLE ADI",
+        "sourceIdProperty": "MAHALLE KODU",
+        "parentProperty": "İLÇE ADI",
+        "defaultSemanticType": "neighbourhood",
+        "defaultLocalType": "Mahalle",
+        "parentMappings": {
+          "Akkuş": "tr:adm2:54988432b20612067222805",
+          "Altınordu": "tr:adm2:54988432b98751035289582",
+          "Aybastı": "tr:adm2:54988432b26639415415250",
+          "Çamaş": "tr:adm2:54988432b32742798326876",
+          "Çatalpınar": "tr:adm2:54988432b98216013465603",
+          "Çaybaşı": "tr:adm2:54988432b2751478310709",
+          "Fatsa": "tr:adm2:54988432b97969826728737",
+          "Gölköy": "tr:adm2:54988432b66082429692342",
+          "Gülyalı": "tr:adm2:54988432b78938998312930",
+          "Gürgentepe": "tr:adm2:54988432b68279142747121",
+          "İkizce": "tr:adm2:54988432b81043238073761",
+          "Kabadüz": "tr:adm2:54988432b3557290765638",
+          "Kabataş": "tr:adm2:54988432b26897526032895",
+          "Korgan": "tr:adm2:54988432b88177358385570",
+          "Kumru": "tr:adm2:54988432b1626041363194",
+          "Mesudiye": "tr:adm2:54988432b78961906506617",
+          "Perşembe": "tr:adm2:54988432b6573458732183",
+          "Ulubey": "tr:adm2:54988432b76667969574644",
+          "Ünye": "tr:adm2:54988432b39242508990660"
+        }
+      },
+      "notes": [
+        "Parent district names are resolved with Turkish-aware Unicode normalization, including dotted/dotless I."
       ]
     }
   }
