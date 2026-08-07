@@ -59,7 +59,9 @@ const maxBytesByFile = new Map([
   // Turkey ADM0-ADM2 full-build performance work adds phase timeouts and profile reports.
   // Hosted registry publishing adds registry publish/verify commands and provenance reporting.
   // Dataset diff/migration adds Markdown/JSON/CSV report outputs and CI migration gates.
-  ["packages/cli/dist/index.mjs", 135_000]
+  // Turkey ADM3 real coverage adds national geometry-build artifact orchestration and source
+  // coverage reporting while keeping the heavy geometry implementation external in generators.
+  ["packages/cli/dist/index.mjs", 160_000]
 ]);
 
 const failures = [];

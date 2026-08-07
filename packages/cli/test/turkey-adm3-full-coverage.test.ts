@@ -1,4 +1,4 @@
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
@@ -48,17 +48,27 @@ describe("territory cli Turkey ADM3 full coverage", () => {
       command: "tr adm3 coverage",
       data: {
         provinceCount: 81,
-        districtCount: 973,
-        finalUsableCoveragePercent: 100
+        districtCount: 973
       }
     });
+    expect(
+      (result.payload as { data?: { finalUsableCoveragePercent?: number } }).data
+        ?.finalUsableCoveragePercent
+    ).toBeGreaterThanOrEqual(99.99);
+    expect(
+      (result.payload as { data?: { finalUsableCoveragePercent?: number } }).data
+        ?.finalUsableCoveragePercent
+    ).toBeLessThanOrEqual(100);
   });
 
-  it("writes a deterministic fallback build plan", async () => {
+  it("writes deterministic geometry build artifacts", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-adm3-full-"));
-    const outputPath = join(tempDir, "build-plan.json");
+    const outputPath = join(tempDir, "build-summary.json");
+    const adm2DatasetPath = join(tempDir, "adm2-dataset.json");
 
     try {
+      await writeFile(adm2DatasetPath, JSON.stringify(createAdm2FixtureDataset()), "utf8");
+
       const result = await captureCli([
         "tr",
         "adm3",
@@ -69,6 +79,10 @@ describe("territory cli Turkey ADM3 full coverage", () => {
         "--fill-gaps",
         "--output",
         outputPath,
+        "--adm2-dataset",
+        adm2DatasetPath,
+        "--max-districts",
+        "2",
         "--build-date",
         "2026-08-07T00:00:00.000Z"
       ]);
@@ -79,13 +93,18 @@ describe("territory cli Turkey ADM3 full coverage", () => {
           ok: true,
           command: "tr adm3 build",
           data: {
-            districtCount: 973,
-            coverageTargetPercent: 99.99
+            districtCount: 2,
+            builtDistrictCount: 2,
+            generatedPolygons: expect.any(Number),
+            finalCoveragePercent: expect.any(Number)
           }
         }
       });
       await expect(readFile(outputPath, "utf8")).resolves.toContain(
-        "territorykit-tr-adm3-build-plan@1"
+        "territorykit-tr-adm3-build-summary@1"
+      );
+      await expect(readFile(join(tempDir, "dataset.json"), "utf8")).resolves.toContain(
+        "territory-kit-tr-adm3-national-build"
       );
     } finally {
       await rm(tempDir, { recursive: true, force: true });
@@ -124,4 +143,58 @@ async function captureCli(args: string[]): Promise<{ code: number; payload: unkn
   } finally {
     spy.mockRestore();
   }
+}
+
+function createAdm2FixtureDataset(): unknown {
+  return {
+    zones: [
+      createAdm2FixtureZone({
+        id: "tr:adm2:54988432b39717738295698",
+        name: "Aladag",
+        bbox: [35, 37, 35.2, 37.2],
+        center: [35.1, 37.1]
+      }),
+      createAdm2FixtureZone({
+        id: "tr:adm2:54988432b85758697491434",
+        name: "Ceyhan",
+        bbox: [35.3, 37, 35.5, 37.2],
+        center: [35.4, 37.1]
+      })
+    ]
+  };
+}
+
+function createAdm2FixtureZone(input: {
+  id: string;
+  name: string;
+  bbox: [number, number, number, number];
+  center: [number, number];
+}): unknown {
+  const [west, south, east, north] = input.bbox;
+
+  return {
+    id: input.id,
+    datasetId: "territory-kit-test-tr-adm2",
+    level: 2,
+    sourceAdminLevel: "ADM2",
+    name: input.name,
+    localName: input.name,
+    countryCode: "TR",
+    bbox: input.bbox,
+    center: input.center,
+    neighborIds: [],
+    geometry: {
+      type: "Polygon",
+      coordinates: [
+        [
+          [west, south],
+          [east, south],
+          [east, north],
+          [west, north],
+          [west, south]
+        ]
+      ]
+    },
+    properties: {}
+  };
 }

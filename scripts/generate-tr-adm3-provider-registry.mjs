@@ -10,6 +10,7 @@ const REGISTRY_DIR = resolve(ROOT, "datasets/registry");
 const SCHEMA_DIR = resolve(ROOT, "datasets/registry/schema");
 const REPORT_DIR = resolve(ROOT, "reports/tr-adm3");
 const DOC_DIR = resolve(ROOT, "docs/datasets");
+const REAL_BUILD_COVERAGE_PATH = resolve(ROOT, ".territory/build/TR/ADM3/coverage.json");
 
 const PROVIDER_CLASS_PRIORITY = ["official", "runtime", "osm", "generated"];
 const PROVINCE_NAMES = {
@@ -120,9 +121,10 @@ const providerRecords = [...sourceRecords, ...osmRecords, ...generatedRecords].s
 );
 const fallbacks = createDistrictFallbacks(providerRecords);
 const health = createSourceHealth(sourceRecords);
-const coverage = createNationalCoverage(providerRecords, fallbacks);
+const measuredCoverage = await readOptionalJson(REAL_BUILD_COVERAGE_PATH);
+const coverage = createNationalCoverage(providerRecords, fallbacks, measuredCoverage);
 const migration = createMigrationReport();
-const quality = createGeometryQualityReport();
+const quality = createGeometryQualityReport(measuredCoverage);
 
 await writeJson(resolve(SCHEMA_DIR, "tr-adm3-provider.schema.json"), createProviderSchema());
 await writeJson(resolve(SCHEMA_DIR, "tr-adm3-fallback.schema.json"), createFallbackSchema());
@@ -370,21 +372,34 @@ function createSourceHealth(records) {
   });
 }
 
-function createNationalCoverage(records, fallbackRegistry) {
+function createNationalCoverage(records, fallbackRegistry, measuredCoverage) {
+  if (
+    measuredCoverage &&
+    measuredCoverage.country === "TR" &&
+    measuredCoverage.schemaVersion === "territorykit-tr-adm3-national-coverage@2"
+  ) {
+    return stableRecord({
+      ...measuredCoverage,
+      generatedAt: GENERATED_AT,
+      notes: [
+        ...(Array.isArray(measuredCoverage.notes) ? measuredCoverage.notes : []),
+        "This report was copied from .territory/build/TR/ADM3/coverage.json."
+      ]
+    });
+  }
+
   const official = records.filter((record) => record.providerClass === "official");
   const runtime = records.filter((record) => record.providerClass === "runtime");
   const experimental = records.filter((record) => record.providerClass === "experimental");
   const osm = records.filter((record) => record.providerClass === "osm");
   const generated = records.filter((record) => record.providerClass === "generated");
-  const officialPolygons = sumExpected(official);
-  const runtimePolygons = 0;
-  const osmPolygons = 0;
-  const generatedPolygons = fallbackRegistry.districtCount;
 
   return stableRecord({
-    schemaVersion: "territorykit-tr-adm3-national-coverage@1",
+    schemaVersion: "territorykit-tr-adm3-national-coverage@2",
     country: "TR",
     generatedAt: GENERATED_AT,
+    coverageMeasurementStatus: "not-measured",
+    buildStatus: "not-run",
     provinceCount: 81,
     districtCount: fallbackRegistry.districtCount,
     providerRecords: records.length,
@@ -393,34 +408,35 @@ function createNationalCoverage(records, fallbackRegistry) {
     experimentalProviderProvinces: uniqueProvinceCount(experimental),
     osmProviderProvinces: uniqueProvinceCount(osm),
     generatedProviderProvinces: uniqueProvinceCount(generated),
-    officialPolygons,
-    runtimePolygons,
-    osmPolygons,
-    generatedPolygons,
-    totalRealPolygons: officialPolygons + runtimePolygons + osmPolygons,
-    totalGeneratedPolygons: generatedPolygons,
-    officialCoveragePercent: 0,
-    runtimeCoveragePercent: 0,
-    osmCoveragePercent: 0,
-    realAdm3CoveragePercent: 0,
-    generatedFallbackCoveragePercent: 100,
-    finalUsableCoveragePercent: 100,
-    coveredDistrictsAtOrAbove9999: fallbackRegistry.districtCount,
-    districtsBelow9999: [],
-    geometryErrors: 0,
-    overlapCount: 0,
-    gapCount: 0,
-    sliverCount: 0,
+    officialExpectedFeatureCount: sumExpected(official),
+    officialPolygons: 0,
+    runtimePolygons: 0,
+    osmPolygons: 0,
+    generatedPolygons: 0,
+    totalRealPolygons: 0,
+    totalGeneratedPolygons: 0,
+    officialCoveragePercent: null,
+    runtimeCoveragePercent: null,
+    osmCoveragePercent: null,
+    realAdm3CoveragePercent: null,
+    generatedFallbackCoveragePercent: null,
+    finalUsableCoveragePercent: null,
+    coveredDistrictsAtOrAbove9999: null,
+    districtsBelow9999: "not-measured",
+    geometryErrors: null,
+    overlapCount: null,
+    gapCount: null,
+    sliverCount: null,
     provinces: inventory.provinces.map((province) => ({
       provinceCode: province.provinceCode,
       provinceName: province.provinceName,
-      realCoveragePercent: 0,
-      generatedCoveragePercent: 100,
-      finalCoveragePercent: 100,
+      realCoveragePercent: null,
+      generatedCoveragePercent: null,
+      finalCoveragePercent: null,
       defaultFallbackProviderIds: fallbackRegistry.provinces[province.provinceCode].providerIds
     })),
     notes: [
-      "Coverage percentages in this registry report are fallback-policy coverage, not audited square-kilometer real ADM3 coverage.",
+      "Coverage is not measured until territory tr adm3 build writes a real coverage artifact.",
       "Generated polygons must not be displayed as official or real mahalle boundaries."
     ]
   });
@@ -438,20 +454,44 @@ function createMigrationReport() {
   });
 }
 
-function createGeometryQualityReport() {
+function createGeometryQualityReport(measuredCoverage) {
+  if (
+    measuredCoverage &&
+    measuredCoverage.country === "TR" &&
+    measuredCoverage.schemaVersion === "territorykit-tr-adm3-national-coverage@2"
+  ) {
+    return stableRecord({
+      schemaVersion: "territorykit-tr-adm3-geometry-quality@1",
+      country: "TR",
+      generatedAt: GENERATED_AT,
+      sourceMode: "real-geometry-build",
+      ok: measuredCoverage.districtsBelow9999?.length === 0,
+      summary: {
+        geometryErrors: measuredCoverage.geometryErrors ?? null,
+        overlapCount: measuredCoverage.overlapCount ?? null,
+        gapCount: Array.isArray(measuredCoverage.districtsBelow9999)
+          ? measuredCoverage.districtsBelow9999.length
+          : null,
+        sliverCount: measuredCoverage.sliverCount ?? null
+      },
+      issues: []
+    });
+  }
+
   return stableRecord({
     schemaVersion: "territorykit-tr-adm3-geometry-quality@1",
     country: "TR",
     generatedAt: GENERATED_AT,
-    sourceMode: "registry-and-generated-fallback",
-    ok: true,
+    sourceMode: "not-built",
+    ok: null,
     summary: {
-      geometryErrors: 0,
-      overlapCount: 0,
-      gapCount: 0,
-      sliverCount: 0
+      geometryErrors: null,
+      overlapCount: null,
+      gapCount: null,
+      sliverCount: null
     },
-    issues: []
+    issues: [],
+    notes: "Geometry quality is not measured until territory tr adm3 build writes a real artifact."
   });
 }
 
@@ -610,7 +650,7 @@ function renderNationalCoverageMarkdown(report) {
   const rows = report.provinces
     .map(
       (province) =>
-        `| ${province.provinceCode} | ${province.provinceName} | ${province.realCoveragePercent.toFixed(2)}% | ${province.generatedCoveragePercent.toFixed(2)}% | ${province.finalCoveragePercent.toFixed(2)}% |`
+        `| ${province.provinceCode} | ${province.provinceName} | ${formatPercent(province.realCoveragePercent)} | ${formatPercent(province.generatedCoveragePercent)} | ${formatPercent(province.finalCoveragePercent)} |`
     )
     .join("\n");
 
@@ -629,9 +669,9 @@ Generated zones are never official or real mahalle boundaries.
 | Experimental provider provinces | ${report.experimentalProviderProvinces} |
 | OSM provider provinces | ${report.osmProviderProvinces} |
 | Generated provider provinces | ${report.generatedProviderProvinces} |
-| Real ADM3 coverage | ${report.realAdm3CoveragePercent.toFixed(2)}% |
-| Generated fallback coverage | ${report.generatedFallbackCoveragePercent.toFixed(2)}% |
-| Final usable ADM3-like coverage | ${report.finalUsableCoveragePercent.toFixed(2)}% |
+| Real ADM3 coverage | ${formatPercent(report.realAdm3CoveragePercent)} |
+| Generated fallback coverage | ${formatPercent(report.generatedFallbackCoveragePercent)} |
+| Final usable ADM3-like coverage | ${formatPercent(report.finalUsableCoveragePercent)} |
 
 | Code | Province | Real | Generated | Final |
 | --- | --- | ---: | ---: | ---: |
@@ -645,6 +685,8 @@ async function writeDocs(records, fallbackRegistry, coverage) {
 
 Turkey ADM3 resolution is modeled as five provider classes: official, runtime, experimental, osm, and generated.
 Production default priority is official -> runtime -> osm -> generated. Experimental records are retained but disabled by default.
+
+Provider availability is not spatial coverage. Spatial coverage is measured only by the real build pipeline after source geometry is loaded, clipped, and aggregated.
 `,
     "tr-adm3-81-province-provider-matrix.md": providerMatrix(records),
     "tr-adm3-runtime-sources.md": providerDoc(records, "runtime", "Turkey ADM3 Runtime Sources"),
@@ -658,20 +700,26 @@ Production default priority is official -> runtime -> osm -> generated. Experime
 OSM is handled as a separate ODbL source class. The configured extract is ${OSM_SOURCE.downloadUrl}, with metadata from Geofabrik's Turkey page.
 
 Only closed way/relation administrative boundary polygons are eligible. Nodes such as place=neighbourhood, place=suburb, or place=quarter are not polygons and are rejected.
+
+The current checked-in national report marks OSM as ${coverage.sourceStatus?.osm ?? "not-built"}; OSM provider records do not contribute coverage until a built OSM artifact is supplied.
 `,
     "tr-adm3-generated-zones.md": `# Turkey ADM3 Generated Zones
 
 Generated game zones fill ADM2 areas where no usable real ADM3 polygon is available. They are deterministic, derived only from ADM2 geometry, and labeled with sourceClass=generated, official=false, and generated=true.
 
 Default algorithm version: tr-adm3-generated-zone-v1.
+
+The generated fill uses real ADM2 Polygon/MultiPolygon geometry and clips grid cells to missing district geometry. Current measured generated coverage is ${formatPercent(coverage.generatedFallbackCoveragePercent)}.
 `,
     "tr-adm3-fallback-strategy.md": `# Turkey ADM3 Fallback Strategy
 
 Every ADM2 district in ${fallbackRegistry.districtCount} districts has a default fallback chain. Production resolution uses official -> runtime -> osm -> generated. Experimental sources require explicit opt-in.
+
+Fallback chains are provider-resolution policy, not measured spatial coverage. The build report records source classes as built, not-built, or disabled.
 `,
     "tr-adm3-source-health.md": `# Turkey ADM3 Source Health
 
-Runtime and experimental health is stored in reports/tr-adm3/source-health.json. Network checks are intentionally isolated from default CI and should run as integration checks.
+Runtime and experimental health is stored in reports/tr-adm3/source-health.json. Offline health reflects registry state. Run \`territory tr adm3 providers health --network\` for bounded HTTP health checks; network checks are intentionally isolated from default CI and should run as integration checks.
 `,
     "tr-adm3-license-boundaries.md": `# Turkey ADM3 License Boundaries
 
@@ -683,9 +731,9 @@ Real ADM3 identity is derived from TR, province, district, canonical name, and s
 
 Current registry fallback coverage:
 
-- Real ADM3 coverage: ${coverage.realAdm3CoveragePercent.toFixed(2)}%
-- Generated fallback coverage: ${coverage.generatedFallbackCoveragePercent.toFixed(2)}%
-- Final usable ADM3-like coverage: ${coverage.finalUsableCoveragePercent.toFixed(2)}%
+- Real ADM3 coverage: ${formatPercent(coverage.realAdm3CoveragePercent)}
+- Generated fallback coverage: ${formatPercent(coverage.generatedFallbackCoveragePercent)}
+- Final usable ADM3-like coverage: ${formatPercent(coverage.finalUsableCoveragePercent)}
 `
   };
 
@@ -860,6 +908,10 @@ function compareProviders(left, right) {
   );
 }
 
+function formatPercent(value) {
+  return typeof value === "number" ? `${value.toFixed(6)}%` : "not measured";
+}
+
 function slug(input) {
   return input
     .normalize("NFD")
@@ -891,6 +943,14 @@ function stableRecord(input) {
 
 async function writeJson(path, input) {
   await writeFileEnsured(path, `${JSON.stringify(stableRecord(input), null, 2)}\n`);
+}
+
+async function readOptionalJson(path) {
+  try {
+    return JSON.parse(await readFile(path, "utf8"));
+  } catch {
+    return undefined;
+  }
 }
 
 async function writeFileEnsured(path, content) {

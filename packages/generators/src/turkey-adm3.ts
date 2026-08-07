@@ -10,6 +10,7 @@ export {
   createTurkeyAdm3GeneratedGeometryHash,
   createTurkeyAdm3GeneratedMigrationReport,
   createTurkeyAdm3GeometryHash,
+  computeTurkeyAdm3GeometryAreaKm2,
   createTurkeyAdm3ProviderHealthReport,
   createTurkeyAdm3Registry,
   filterOsmAdministrativeBoundaryPolygons,
