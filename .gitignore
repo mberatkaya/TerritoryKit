@@ -16,3 +16,5 @@ datasets/**/dist/
 datasets/**/.cache/
 .territory/
 .territory/cache/
+.territory/experimental/
+datasets/quarantine/

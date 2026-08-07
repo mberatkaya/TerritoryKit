@@ -1006,6 +1006,31 @@ function buildLevelZones(input: {
     const featureAttribution =
       readStringPropertyPath(feature.rawProperties, "territorykit.attribution") ??
       input.sourceLockLevel.attribution;
+    const featureSourceClass = readStringPropertyPath(
+      feature.rawProperties,
+      "territorykit.sourceClass"
+    );
+    const featureSourceNativeId = readStringPropertyPath(
+      feature.rawProperties,
+      "territorykit.sourceNativeId"
+    );
+    const featureSourceVersion = readStringPropertyPath(
+      feature.rawProperties,
+      "territorykit.sourceVersion"
+    );
+    const featureGeometryHash = readStringPropertyPath(
+      feature.rawProperties,
+      "territorykit.geometryHash"
+    );
+    const featureOfficial = readBooleanPropertyPath(feature.rawProperties, "territorykit.official");
+    const featureGenerated = readBooleanPropertyPath(
+      feature.rawProperties,
+      "territorykit.generated"
+    );
+    const featureParentAdm2Id = readStringPropertyPath(
+      feature.rawProperties,
+      "territorykit.parentAdm2Id"
+    );
     const adm3ProvinceCode = readStringPropertyPath(
       feature.rawProperties,
       "territorykit.provinceCode"
@@ -1039,9 +1064,16 @@ function buildLevelZones(input: {
           ...(levelConfig?.localTypeName ? { localTypeName: levelConfig.localTypeName } : {}),
           hierarchyDepth: getAdminLevelDepth(input.level),
           ...(feature.parentSourceId ? { sourceParentId: feature.parentSourceId } : {}),
+          ...(featureSourceClass ? { sourceClass: featureSourceClass } : {}),
+          ...(featureOfficial !== undefined ? { official: featureOfficial } : {}),
+          ...(featureGenerated !== undefined ? { generated: featureGenerated } : {}),
+          ...(featureSourceNativeId ? { sourceNativeId: featureSourceNativeId } : {}),
+          ...(featureSourceVersion ? { sourceVersion: featureSourceVersion } : {}),
+          ...(featureGeometryHash ? { geometryHash: featureGeometryHash } : {}),
+          ...(featureParentAdm2Id ? { parentAdm2Id: featureParentAdm2Id } : {}),
           semanticReviewStatus:
             levelConfig?.reviewStatus === "reviewed" ? "reviewed" : "mapping-review-required",
-          coverageStatus: "generated",
+          coverageStatus: featureSourceClass === "generated" ? "generated" : "verified",
           codes: {
             ...identity.officialCodes,
             ...(input.level === "ADM0" ? { iso3166_1: input.config.countryCodeAlpha2 } : {})
@@ -1055,6 +1087,9 @@ function buildLevelZones(input: {
             ...(feature.sourceId ? { sourceId: feature.sourceId } : {}),
             ...(featureSourceUrl ? { sourceUrl: featureSourceUrl } : {}),
             ...(featureSourceDate ? { sourceDate: featureSourceDate } : {}),
+            ...(featureSourceClass ? { sourceClass: featureSourceClass } : {}),
+            ...(featureSourceNativeId ? { sourceNativeId: featureSourceNativeId } : {}),
+            ...(featureSourceVersion ? { sourceVersion: featureSourceVersion } : {}),
             ...(featureLicense ? { license: featureLicense } : {}),
             ...(featureAttribution ? { attribution: featureAttribution } : {}),
             importedAt: input.buildDate
@@ -2004,6 +2039,24 @@ function readAdm3SemanticType(
   }
 
   return value as TerritoryZone["semanticType"];
+}
+
+function readBooleanPropertyPath(
+  properties: Record<string, unknown>,
+  path: string
+): boolean | undefined {
+  const parts = path.split(".").filter(Boolean);
+  let current: unknown = properties;
+
+  for (const part of parts) {
+    if (!isRecord(current)) {
+      return undefined;
+    }
+
+    current = current[part];
+  }
+
+  return typeof current === "boolean" ? current : undefined;
 }
 
 function normalizeLocalType(rawLocalType: string, expectedTypes: readonly string[]): string {

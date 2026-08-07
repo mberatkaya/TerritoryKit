@@ -1,0 +1,14 @@
+{
+  "country": "TR",
+  "generatedAt": "2026-08-07T00:00:00.000Z",
+  "issues": [],
+  "ok": true,
+  "schemaVersion": "territorykit-tr-adm3-geometry-quality@1",
+  "sourceMode": "registry-and-generated-fallback",
+  "summary": {
+    "gapCount": 0,
+    "geometryErrors": 0,
+    "overlapCount": 0,
+    "sliverCount": 0
+  }
+}

@@ -1,0 +1,36 @@
+export {
+  TURKEY_ADM3_DEFAULT_PROVIDER_PRIORITY,
+  TURKEY_ADM3_FALLBACK_SCHEMA_VERSION,
+  TURKEY_ADM3_GENERATED_ALGORITHM_VERSION,
+  TURKEY_ADM3_PROVIDER_CLASSES,
+  TURKEY_ADM3_PROVIDER_REGISTRY_SCHEMA_VERSION,
+  buildTurkeyAdm3GeneratedZones,
+  computeTurkeyAdm3DistrictCoverage,
+  createDefaultGeneratedZoneConfig,
+  createTurkeyAdm3GeneratedGeometryHash,
+  createTurkeyAdm3GeneratedMigrationReport,
+  createTurkeyAdm3GeometryHash,
+  createTurkeyAdm3ProviderHealthReport,
+  createTurkeyAdm3Registry,
+  filterOsmAdministrativeBoundaryPolygons,
+  resolveTurkeyAdm3Provider,
+  validateTurkeyAdm3ProviderRegistry
+} from "./turkey-adm3-full-coverage.js";
+export type {
+  GeneratedZoneConfig,
+  ProviderHealth,
+  TurkeyAdm3DefaultProviderClass,
+  TurkeyAdm3DistrictCoverageReport,
+  TurkeyAdm3DistrictFallbackRecord,
+  TurkeyAdm3FallbackRegistry,
+  TurkeyAdm3GeneratedBuildOptions,
+  TurkeyAdm3GeneratedBuildResult,
+  TurkeyAdm3GeneratedMigrationReport,
+  TurkeyAdm3ProviderClass,
+  TurkeyAdm3ProviderFormat,
+  TurkeyAdm3ProviderRecord,
+  TurkeyAdm3ProviderRegistry,
+  TurkeyAdm3RegistryIssue,
+  TurkeyAdm3RegistryValidationResult,
+  TurkeyAdm3ResolveOptions
+} from "./turkey-adm3-full-coverage.js";

@@ -947,7 +947,8 @@ export function parseTurkeyAdm3ProvinceSource(
               ...(parentAdm2Id ? { parentAdm2Id } : {}),
               name: feature.neighbourhoodName,
               semanticType: adapter.defaultSemanticType,
-              localType: adapter.defaultLocalType
+              localType: adapter.defaultLocalType,
+              geometry: feature.geometry
             }),
             rawFeatureId: feature.sourceObjectId
           };
@@ -1049,7 +1050,8 @@ export function parseTurkeyAdm3ProvinceSource(
         ...(parentAdm2Id ? { parentAdm2Id } : {}),
         name,
         semanticType,
-        localType
+        localType,
+        geometry
       }),
       ...(rawFeatureId ? { rawFeatureId } : {})
     };
@@ -1531,7 +1533,10 @@ function createAdm3RawProperties(input: {
   name: string;
   semanticType: TerritorySemanticAdminType;
   localType: string;
+  geometry: TerritoryGeometry;
 }): Record<string, unknown> {
+  const geometryHash = hashGeometryIgnoringRingOrder(input.geometry);
+
   return {
     territorykit: {
       provinceCode: input.province.provinceCode,
@@ -1540,12 +1545,18 @@ function createAdm3RawProperties(input: {
       providerName: input.province.providerName,
       sourceId: input.sourceId,
       sourceObjectId: input.sourceObjectId,
+      sourceNativeId: input.sourceId,
       sourceParentId: input.sourceParentId,
       parentAdm2Id: input.parentAdm2Id,
       semanticType: input.semanticType,
       localType: input.localType,
+      sourceClass: "official",
+      official: true,
+      generated: false,
       sourceUrl: input.province.sourceUrl,
       sourceDate: input.province.sourceDate,
+      sourceVersion: input.province.sourceVersion,
+      geometryHash,
       license: input.province.license,
       attribution: input.province.attribution
     },
