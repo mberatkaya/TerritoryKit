@@ -2,7 +2,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { performance } from "node:perf_hooks";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import {
   createTerritoryEngine,
   encodeTerritoryBinarySpatialIndex,
@@ -77,6 +77,12 @@ import {
   validateTerritoryRenderArtifactPath,
   writeGeometryQualityReport
 } from "@territory-kit/generators";
+import {
+  createTurkeyAdm3ProviderHealthReport,
+  createTurkeyAdm3Registry,
+  resolveTurkeyAdm3Provider,
+  validateTurkeyAdm3ProviderRegistry
+} from "@territory-kit/generators/turkey-adm3";
 import { validateTerritoryDatasetRegistry } from "@territory-kit/registry";
 import {
   buildTerritoryDatasetRegistryFromArtifacts,
@@ -99,6 +105,10 @@ import type {
   TerritorySourcePipelineResult,
   TerritorySourceRequest
 } from "@territory-kit/generators";
+import type {
+  TurkeyAdm3FallbackRegistry,
+  TurkeyAdm3ProviderRecord
+} from "@territory-kit/generators/turkey-adm3";
 
 interface CliIssue {
   code: string;
@@ -169,6 +179,8 @@ interface CliDiffRunOptions {
   identityOnly?: boolean;
 }
 
+const CLI_WORKSPACE_ROOT = fileURLToPath(new URL("../../../", import.meta.url));
+
 export async function runCli(argv: string[] = process.argv.slice(2)): Promise<number> {
   const [command] = argv;
 
@@ -220,6 +232,10 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
 
     if (command === "country") {
       return await runCountry(argv.slice(1));
+    }
+
+    if (command === "tr") {
+      return await runTurkey(argv.slice(1));
     }
 
     if (command === "generate") {
@@ -472,6 +488,224 @@ async function runCountry(args: string[]): Promise<number> {
     issues: [createCliIssue(`Unsupported country command '${subcommand}'.`)]
   });
   return 2;
+}
+
+async function runTurkey(args: string[]): Promise<number> {
+  const [subcommand] = args;
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printTurkeyHelp();
+    return 0;
+  }
+
+  if (subcommand === "adm3") {
+    return runTurkeyAdm3(args.slice(1));
+  }
+
+  printJson({
+    ok: false,
+    command: "tr",
+    issues: [createCliIssue(`Unsupported Turkey command '${subcommand}'.`)]
+  });
+  return 2;
+}
+
+async function runTurkeyAdm3(args: string[]): Promise<number> {
+  const [subcommand] = args;
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printTurkeyAdm3Help();
+    return 0;
+  }
+
+  if (subcommand === "providers") {
+    return runTurkeyAdm3Providers(args.slice(1));
+  }
+
+  if (subcommand === "coverage") {
+    return runTurkeyAdm3Coverage(args.slice(1));
+  }
+
+  if (subcommand === "source-audit") {
+    return runTurkeyAdm3SourceAudit(args.slice(1));
+  }
+
+  if (subcommand === "build") {
+    return runTurkeyAdm3Build(args.slice(1));
+  }
+
+  printJson({
+    ok: false,
+    command: "tr adm3",
+    issues: [createCliIssue(`Unsupported Turkey ADM3 command '${subcommand}'.`)]
+  });
+  return 2;
+}
+
+async function runTurkeyAdm3Providers(args: string[]): Promise<number> {
+  const [subcommand] = args;
+
+  if (!subcommand || subcommand === "--help" || subcommand === "-h") {
+    printTurkeyAdm3ProvidersHelp();
+    return 0;
+  }
+
+  if (subcommand === "list") {
+    const flags = parseFlags(args.slice(1));
+    const records = await readTurkeyAdm3ProviderRecords(flags);
+    const providerClass = getFlag(flags, "class");
+    const filtered = providerClass
+      ? records.filter((record) => record.providerClass === providerClass)
+      : records;
+    const registry = createTurkeyAdm3Registry({
+      providers: filtered,
+      experimentalSources: flags.has("allow-experimental") || flags.has("experimental-sources"),
+      generatedAt: getFlag(flags, "build-date") ?? new Date(0).toISOString()
+    });
+
+    printJson({
+      ok: true,
+      command: "tr adm3 providers list",
+      data: {
+        summary: validateTurkeyAdm3ProviderRegistry({ providers: registry.records }).summary,
+        records: registry.records
+      }
+    });
+    return 0;
+  }
+
+  if (subcommand === "health") {
+    const flags = parseFlags(args.slice(1));
+    const records = await readTurkeyAdm3ProviderRecords(flags);
+    const checkedAt = getFlag(flags, "build-date") ?? new Date().toISOString();
+    const health = createTurkeyAdm3ProviderHealthReport({ providers: records, checkedAt });
+    const outputPath = getFlag(flags, "output");
+    const payload = {
+      schemaVersion: "territorykit-tr-adm3-source-health@1",
+      country: "TR",
+      generatedAt: checkedAt,
+      networkMode: flags.has("network") ? "integration-requested" : "offline-registry",
+      health
+    };
+
+    if (outputPath) {
+      await writeJsonOutput(outputPath, payload, flags.has("force"));
+    }
+
+    printJson({ ok: true, command: "tr adm3 providers health", data: payload });
+    return 0;
+  }
+
+  printJson({
+    ok: false,
+    command: "tr adm3 providers",
+    issues: [createCliIssue(`Unsupported Turkey ADM3 providers command '${subcommand}'.`)]
+  });
+  return 2;
+}
+
+async function runTurkeyAdm3Coverage(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const coveragePath =
+    getFlag(flags, "coverage") ?? cliWorkspacePath("reports/tr-adm3/national-coverage.json");
+  const coverage = await readJson(coveragePath);
+
+  printJson({ ok: true, command: "tr adm3 coverage", data: coverage });
+  return 0;
+}
+
+async function runTurkeyAdm3SourceAudit(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const records = await readTurkeyAdm3ProviderRecords(flags);
+  const fallbacks = await readTurkeyAdm3FallbackRegistry(flags);
+  const validation = validateTurkeyAdm3ProviderRegistry({ providers: records, fallbacks });
+
+  printJson({
+    ok: validation.ok,
+    command: "tr adm3 source-audit",
+    data: validation.summary,
+    issues: validation.issues
+  });
+  return validation.ok ? 0 : 1;
+}
+
+async function runTurkeyAdm3Build(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const records = await readTurkeyAdm3ProviderRecords(flags);
+  const fallbacks = await readTurkeyAdm3FallbackRegistry(flags);
+  const sourceModes = {
+    official: flags.has("official") || getFlag(flags, "source") === "official",
+    runtime: flags.has("allow-runtime"),
+    experimental: flags.has("allow-experimental"),
+    osm: flags.has("osm") || getFlag(flags, "source") === "osm",
+    generated: flags.has("generated") || flags.has("allow-generated") || flags.has("fill-gaps")
+  };
+  const resolvedDistricts = fallbacks.districts.map((district) => {
+    const provider = resolveTurkeyAdm3Provider({
+      countryCode: "TR",
+      provinceCode: district.provinceCode,
+      districtCode: district.districtId,
+      providers: records,
+      allowOfficial: sourceModes.official || !getFlag(flags, "source"),
+      allowRuntime: sourceModes.runtime,
+      allowExperimental: sourceModes.experimental,
+      allowOsm: sourceModes.osm || !getFlag(flags, "source"),
+      allowGenerated: sourceModes.generated || !getFlag(flags, "source")
+    });
+
+    return {
+      districtId: district.districtId,
+      provinceCode: district.provinceCode,
+      providerId: provider?.id,
+      providerClass: provider?.providerClass
+    };
+  });
+  const payload = {
+    schemaVersion: "territorykit-tr-adm3-build-plan@1",
+    country: "TR",
+    generatedAt: getFlag(flags, "build-date") ?? new Date().toISOString(),
+    sourceModes,
+    districtCount: resolvedDistricts.length,
+    resolvedDistricts,
+    coverageTargetPercent: 99.99
+  };
+  const outputPath = getFlag(flags, "output");
+
+  if (outputPath) {
+    await writeJsonOutput(outputPath, payload, flags.has("force"));
+  }
+
+  printJson({ ok: true, command: "tr adm3 build", data: payload });
+  return 0;
+}
+
+async function readTurkeyAdm3ProviderRecords(
+  flags: Map<string, string | true>
+): Promise<TurkeyAdm3ProviderRecord[]> {
+  const registryPath =
+    getFlag(flags, "registry") ?? cliWorkspacePath("datasets/registry/tr-adm3-providers.json");
+  const input = await readJson(registryPath);
+
+  if (!isRecordValue(input) || !Array.isArray(input.records)) {
+    throw new Error(`Bad ADM3 provider registry ${registryPath}`);
+  }
+
+  return input.records as TurkeyAdm3ProviderRecord[];
+}
+
+async function readTurkeyAdm3FallbackRegistry(
+  flags: Map<string, string | true>
+): Promise<TurkeyAdm3FallbackRegistry> {
+  const fallbackPath =
+    getFlag(flags, "fallbacks") ??
+    cliWorkspacePath("datasets/registry/tr-adm3-district-fallbacks.json");
+  const input = await readJson(fallbackPath);
+
+  if (!isRecordValue(input) || !Array.isArray(input.districts)) {
+    throw new Error(`Bad ADM3 fallback registry ${fallbackPath}`);
+  }
+
+  return input as unknown as TurkeyAdm3FallbackRegistry;
 }
 
 function runCountryList(args: string[]): number {
@@ -4736,6 +4970,10 @@ function filterRecordByKeys(
   );
 }
 
+function cliWorkspacePath(relativePath: string): string {
+  return join(CLI_WORKSPACE_ROOT, relativePath);
+}
+
 function printJson(payload: unknown): void {
   console.log(JSON.stringify(payload, null, 2));
 }
@@ -4766,8 +5004,43 @@ Commands:
   dataset    Build curated datasets and install registry artifacts
   identity   Compare stable identity changes across dataset versions
   cache      List, verify, or clear installed dataset cache artifacts
+  tr         Turkey ADM3 tools
   simplify   Emit a deterministic no-op simplification result for pipeline wiring
   generate   Generate grid or weighted-voronoi MVP datasets as JSON`);
+}
+
+function printTurkeyHelp(): void {
+  console.log(`territory tr <command>
+
+Commands:
+  adm3  Turkey ADM3 tools`);
+}
+
+function printTurkeyAdm3Help(): void {
+  console.log(`territory tr adm3 <command>
+
+Commands:
+  providers list
+  providers health
+  coverage
+  source-audit
+  build
+
+Options:
+  --registry <json> --fallbacks <json> --allow-experimental --allow-runtime
+  --official --osm --fill-gaps --output <json>`);
+}
+
+function printTurkeyAdm3ProvidersHelp(): void {
+  console.log(`territory tr adm3 providers <command>
+
+Commands:
+  list
+  health
+
+Options:
+  --class official|runtime|experimental|osm|generated
+  --allow-experimental --registry <json> --output <json> --network --build-date <iso> --force`);
 }
 
 function printIndexHelp(): void {

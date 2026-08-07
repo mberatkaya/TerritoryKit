@@ -1,0 +1,8 @@
+{
+  "algorithmVersion": "tr-adm3-generated-zone-v1",
+  "country": "TR",
+  "generatedAt": "2026-08-07T00:00:00.000Z",
+  "migrations": [],
+  "notes": "When a new official/runtime/OSM polygon covers an existing generated zone, the build emits oldGeneratedId to newOfficialTerritoryId candidates by geometry overlap.",
+  "schemaVersion": "territorykit-tr-adm3-generated-migration@1"
+}

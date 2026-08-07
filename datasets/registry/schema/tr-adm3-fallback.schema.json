@@ -1,0 +1,91 @@
+{
+  "$id": "https://territory-kit.local/schemas/tr-adm3-fallback.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "allowExperimentalByDefault": {
+      "const": false
+    },
+    "country": {
+      "const": "TR"
+    },
+    "districtCount": {
+      "const": 973
+    },
+    "districts": {
+      "items": {
+        "properties": {
+          "districtId": {
+            "type": "string"
+          },
+          "districtName": {
+            "type": "string"
+          },
+          "finalCoverageTargetPercent": {
+            "const": 99.99
+          },
+          "providerClasses": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "providerIds": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2,
+            "type": "array"
+          },
+          "provinceCode": {
+            "pattern": "^[0-9]{2}$",
+            "type": "string"
+          },
+          "provinceName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "districtId",
+          "districtName",
+          "provinceCode",
+          "provinceName",
+          "providerIds",
+          "providerClasses",
+          "finalCoverageTargetPercent"
+        ],
+        "type": "object"
+      },
+      "maxItems": 973,
+      "minItems": 973,
+      "type": "array"
+    },
+    "generatedAt": {
+      "type": "string"
+    },
+    "providerPriority": {
+      "items": {
+        "enum": ["official", "runtime", "osm", "generated"]
+      },
+      "type": "array"
+    },
+    "provinces": {
+      "type": "object"
+    },
+    "schemaVersion": {
+      "const": "territorykit-tr-adm3-fallback@1"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "country",
+    "generatedAt",
+    "allowExperimentalByDefault",
+    "providerPriority",
+    "districtCount",
+    "provinces",
+    "districts"
+  ],
+  "title": "TerritoryKit Turkey ADM3 district fallback registry",
+  "type": "object"
+}

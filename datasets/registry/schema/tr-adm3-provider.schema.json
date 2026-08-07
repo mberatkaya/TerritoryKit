@@ -1,0 +1,164 @@
+{
+  "$id": "https://territory-kit.local/schemas/tr-adm3-provider.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "attribution": {
+      "type": "string"
+    },
+    "cachePolicy": {
+      "enum": ["persistent", "session", "memory-only", "disabled", "unknown"]
+    },
+    "commercialUse": {
+      "enum": ["allowed", "permission-required", "unknown"]
+    },
+    "countryCode": {
+      "const": "TR"
+    },
+    "coverage": {
+      "enum": ["province", "districts", "partial", "unknown"]
+    },
+    "crs": {
+      "type": "string"
+    },
+    "districtCodes": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "downloadUrl": {
+      "type": "string"
+    },
+    "enabledByDefault": {
+      "type": "boolean"
+    },
+    "evidenceUrls": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "expectedByteSize": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "expectedFeatureCount": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "expectedSha256": {
+      "type": "string"
+    },
+    "experimental": {
+      "type": "boolean"
+    },
+    "format": {
+      "enum": [
+        "geojson",
+        "json",
+        "kml",
+        "kmz",
+        "shapefile",
+        "gpkg",
+        "arcgis-feature-service",
+        "arcgis-map-service",
+        "wfs",
+        "geoserver",
+        "keos",
+        "osm-pbf",
+        "generated"
+      ]
+    },
+    "geometryType": {
+      "enum": ["Polygon", "MultiPolygon"]
+    },
+    "id": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "lastVerifiedAt": {
+      "type": "string"
+    },
+    "layerId": {
+      "type": ["string", "number"]
+    },
+    "license": {
+      "type": "string"
+    },
+    "licenseUrl": {
+      "type": "string"
+    },
+    "modification": {
+      "enum": ["allowed", "permission-required", "unknown"]
+    },
+    "nameField": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "official": {
+      "type": "boolean"
+    },
+    "parentIdField": {
+      "type": "string"
+    },
+    "parentNameField": {
+      "type": "string"
+    },
+    "providerClass": {
+      "enum": ["official", "runtime", "experimental", "osm", "generated"]
+    },
+    "providerName": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "provinceCode": {
+      "pattern": "^[0-9]{2}$",
+      "type": "string"
+    },
+    "redistribution": {
+      "enum": ["allowed", "runtime-only", "permission-required", "unknown"]
+    },
+    "serviceUrl": {
+      "type": "string"
+    },
+    "sourceIdField": {
+      "type": "string"
+    },
+    "sourceUrl": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "verified",
+        "reachable",
+        "unreachable",
+        "quality-blocked",
+        "license-blocked",
+        "experimental"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "countryCode",
+    "provinceCode",
+    "providerClass",
+    "providerName",
+    "format",
+    "official",
+    "experimental",
+    "enabledByDefault",
+    "redistribution",
+    "commercialUse",
+    "modification",
+    "cachePolicy",
+    "coverage",
+    "status",
+    "evidenceUrls"
+  ],
+  "title": "TerritoryKit Turkey ADM3 provider record",
+  "type": "object"
+}

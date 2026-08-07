@@ -1,0 +1,721 @@
+{
+  "country": "TR",
+  "coveredDistrictsAtOrAbove9999": 973,
+  "districtCount": 973,
+  "districtsBelow9999": [],
+  "experimentalProviderProvinces": 72,
+  "finalUsableCoveragePercent": 100,
+  "gapCount": 0,
+  "generatedAt": "2026-08-07T00:00:00.000Z",
+  "generatedFallbackCoveragePercent": 100,
+  "generatedPolygons": 973,
+  "generatedProviderProvinces": 81,
+  "geometryErrors": 0,
+  "notes": [
+    "Coverage percentages in this registry report are fallback-policy coverage, not audited square-kilometer real ADM3 coverage.",
+    "Generated polygons must not be displayed as official or real mahalle boundaries."
+  ],
+  "officialCoveragePercent": 0,
+  "officialPolygons": 3343,
+  "officialProviderProvinces": 4,
+  "osmCoveragePercent": 0,
+  "osmPolygons": 0,
+  "osmProviderProvinces": 81,
+  "overlapCount": 0,
+  "providerRecords": 243,
+  "provinceCount": 81,
+  "provinces": [
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-01", "tr-adm3-generated-01"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "01",
+      "provinceName": "Adana",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-02", "tr-adm3-generated-02"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "02",
+      "provinceName": "Adıyaman",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-03", "tr-adm3-generated-03"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "03",
+      "provinceName": "Afyonkarahisar",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-04", "tr-adm3-generated-04"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "04",
+      "provinceName": "Ağrı",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-05", "tr-adm3-generated-05"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "05",
+      "provinceName": "Amasya",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": [
+        "tr-adm3-runtime-06-ankara-buyuksehir-belediyesi-aski-arcgis-planning-service",
+        "tr-adm3-osm-06",
+        "tr-adm3-generated-06"
+      ],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "06",
+      "provinceName": "Ankara",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-07", "tr-adm3-generated-07"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "07",
+      "provinceName": "Antalya",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": [
+        "tr-adm3-runtime-08-artvin-il-ozel-idaresi-arcgis-service",
+        "tr-adm3-osm-08",
+        "tr-adm3-generated-08"
+      ],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "08",
+      "provinceName": "Artvin",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-09", "tr-adm3-generated-09"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "09",
+      "provinceName": "Aydın",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-10", "tr-adm3-generated-10"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "10",
+      "provinceName": "Balıkesir",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-11", "tr-adm3-generated-11"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "11",
+      "provinceName": "Bilecik",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-12", "tr-adm3-generated-12"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "12",
+      "provinceName": "Bingöl",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-13", "tr-adm3-generated-13"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "13",
+      "provinceName": "Bitlis",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-14", "tr-adm3-generated-14"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "14",
+      "provinceName": "Bolu",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-15", "tr-adm3-generated-15"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "15",
+      "provinceName": "Burdur",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": [
+        "tr-adm3-official-16-bursa-buyuksehir-belediyesi-open-data",
+        "tr-adm3-osm-16",
+        "tr-adm3-generated-16"
+      ],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "16",
+      "provinceName": "Bursa",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-17", "tr-adm3-generated-17"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "17",
+      "provinceName": "Çanakkale",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-18", "tr-adm3-generated-18"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "18",
+      "provinceName": "Çankırı",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-19", "tr-adm3-generated-19"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "19",
+      "provinceName": "Çorum",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-20", "tr-adm3-generated-20"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "20",
+      "provinceName": "Denizli",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-21", "tr-adm3-generated-21"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "21",
+      "provinceName": "Diyarbakır",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-22", "tr-adm3-generated-22"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "22",
+      "provinceName": "Edirne",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-23", "tr-adm3-generated-23"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "23",
+      "provinceName": "Elazığ",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-24", "tr-adm3-generated-24"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "24",
+      "provinceName": "Erzincan",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-25", "tr-adm3-generated-25"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "25",
+      "provinceName": "Erzurum",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-26", "tr-adm3-generated-26"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "26",
+      "provinceName": "Eskişehir",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": [
+        "tr-adm3-official-27-gaziantep-buyuksehir-belediyesi-open-data-via-ulasav",
+        "tr-adm3-osm-27",
+        "tr-adm3-generated-27"
+      ],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "27",
+      "provinceName": "Gaziantep",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-28", "tr-adm3-generated-28"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "28",
+      "provinceName": "Giresun",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-29", "tr-adm3-generated-29"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "29",
+      "provinceName": "Gümüşhane",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-30", "tr-adm3-generated-30"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "30",
+      "provinceName": "Hakkari",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-31", "tr-adm3-generated-31"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "31",
+      "provinceName": "Hatay",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-32", "tr-adm3-generated-32"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "32",
+      "provinceName": "Isparta",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-33", "tr-adm3-generated-33"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "33",
+      "provinceName": "Mersin",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": [
+        "tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces",
+        "tr-adm3-osm-34",
+        "tr-adm3-generated-34"
+      ],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "34",
+      "provinceName": "İstanbul",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": [
+        "tr-adm3-runtime-35-izmir-buyuksehir-belediyesi-kent-rehberi-arcgis",
+        "tr-adm3-osm-35",
+        "tr-adm3-generated-35"
+      ],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "35",
+      "provinceName": "İzmir",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-36", "tr-adm3-generated-36"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "36",
+      "provinceName": "Kars",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-37", "tr-adm3-generated-37"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "37",
+      "provinceName": "Kastamonu",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": [
+        "tr-adm3-official-38-kayseri-buyuksehir-belediyesi-open-data-via-ulasav",
+        "tr-adm3-osm-38",
+        "tr-adm3-generated-38"
+      ],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "38",
+      "provinceName": "Kayseri",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-39", "tr-adm3-generated-39"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "39",
+      "provinceName": "Kırklareli",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-40", "tr-adm3-generated-40"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "40",
+      "provinceName": "Kırşehir",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-41", "tr-adm3-generated-41"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "41",
+      "provinceName": "Kocaeli",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-42", "tr-adm3-generated-42"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "42",
+      "provinceName": "Konya",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-43", "tr-adm3-generated-43"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "43",
+      "provinceName": "Kütahya",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-44", "tr-adm3-generated-44"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "44",
+      "provinceName": "Malatya",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-45", "tr-adm3-generated-45"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "45",
+      "provinceName": "Manisa",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-46", "tr-adm3-generated-46"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "46",
+      "provinceName": "Kahramanmaraş",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-47", "tr-adm3-generated-47"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "47",
+      "provinceName": "Mardin",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": [
+        "tr-adm3-runtime-48-mugla-buyuksehir-belediyesi-cbs",
+        "tr-adm3-osm-48",
+        "tr-adm3-generated-48"
+      ],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "48",
+      "provinceName": "Muğla",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-49", "tr-adm3-generated-49"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "49",
+      "provinceName": "Muş",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-50", "tr-adm3-generated-50"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "50",
+      "provinceName": "Nevşehir",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-51", "tr-adm3-generated-51"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "51",
+      "provinceName": "Niğde",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": [
+        "tr-adm3-official-52-ordu-buyuksehir-belediyesi-open-data",
+        "tr-adm3-osm-52",
+        "tr-adm3-generated-52"
+      ],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "52",
+      "provinceName": "Ordu",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-53", "tr-adm3-generated-53"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "53",
+      "provinceName": "Rize",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-54", "tr-adm3-generated-54"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "54",
+      "provinceName": "Sakarya",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-55", "tr-adm3-generated-55"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "55",
+      "provinceName": "Samsun",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-56", "tr-adm3-generated-56"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "56",
+      "provinceName": "Siirt",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-57", "tr-adm3-generated-57"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "57",
+      "provinceName": "Sinop",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-58", "tr-adm3-generated-58"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "58",
+      "provinceName": "Sivas",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-59", "tr-adm3-generated-59"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "59",
+      "provinceName": "Tekirdağ",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-60", "tr-adm3-generated-60"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "60",
+      "provinceName": "Tokat",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-61", "tr-adm3-generated-61"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "61",
+      "provinceName": "Trabzon",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-62", "tr-adm3-generated-62"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "62",
+      "provinceName": "Tunceli",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-63", "tr-adm3-generated-63"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "63",
+      "provinceName": "Şanlıurfa",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-64", "tr-adm3-generated-64"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "64",
+      "provinceName": "Uşak",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-65", "tr-adm3-generated-65"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "65",
+      "provinceName": "Van",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-66", "tr-adm3-generated-66"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "66",
+      "provinceName": "Yozgat",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-67", "tr-adm3-generated-67"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "67",
+      "provinceName": "Zonguldak",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-68", "tr-adm3-generated-68"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "68",
+      "provinceName": "Aksaray",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-69", "tr-adm3-generated-69"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "69",
+      "provinceName": "Bayburt",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-70", "tr-adm3-generated-70"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "70",
+      "provinceName": "Karaman",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-71", "tr-adm3-generated-71"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "71",
+      "provinceName": "Kırıkkale",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-72", "tr-adm3-generated-72"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "72",
+      "provinceName": "Batman",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-73", "tr-adm3-generated-73"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "73",
+      "provinceName": "Şırnak",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-74", "tr-adm3-generated-74"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "74",
+      "provinceName": "Bartın",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-75", "tr-adm3-generated-75"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "75",
+      "provinceName": "Ardahan",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-76", "tr-adm3-generated-76"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "76",
+      "provinceName": "Iğdır",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-77", "tr-adm3-generated-77"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "77",
+      "provinceName": "Yalova",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-78", "tr-adm3-generated-78"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "78",
+      "provinceName": "Karabük",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-79", "tr-adm3-generated-79"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "79",
+      "provinceName": "Kilis",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-80", "tr-adm3-generated-80"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "80",
+      "provinceName": "Osmaniye",
+      "realCoveragePercent": 0
+    },
+    {
+      "defaultFallbackProviderIds": ["tr-adm3-osm-81", "tr-adm3-generated-81"],
+      "finalCoveragePercent": 100,
+      "generatedCoveragePercent": 100,
+      "provinceCode": "81",
+      "provinceName": "Düzce",
+      "realCoveragePercent": 0
+    }
+  ],
+  "realAdm3CoveragePercent": 0,
+  "runtimeCoveragePercent": 0,
+  "runtimePolygons": 0,
+  "runtimeProviderProvinces": 5,
+  "schemaVersion": "territorykit-tr-adm3-national-coverage@1",
+  "sliverCount": 0,
+  "totalGeneratedPolygons": 973,
+  "totalRealPolygons": 3343
+}

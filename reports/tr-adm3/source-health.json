@@ -1,0 +1,552 @@
+{
+  "country": "TR",
+  "generatedAt": "2026-08-07T00:00:00.000Z",
+  "health": [
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-01",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-01-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-02",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-02-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_QUALITY_BLOCKED",
+      "fallbackProviderId": "tr-adm3-osm-03",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-03-afyonkarahisar-belediyesi-ulasav",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-04",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-04-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-05",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-05-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_UNREACHABLE",
+      "fallbackProviderId": "tr-adm3-osm-06",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-runtime-06-ankara-buyuksehir-belediyesi-aski-arcgis-planning-service",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-07",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-07-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_UNREACHABLE",
+      "fallbackProviderId": "tr-adm3-osm-08",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-runtime-08-artvin-il-ozel-idaresi-arcgis-service",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-09",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-09-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-10",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-10-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-11",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-11-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-12",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-12-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-13",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-13-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-14",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-14-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-15",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-15-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-17",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-17-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-18",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-18-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-19",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-19-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-20",
+      "featureCount": 620,
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-20-denizli-buyuksehir-belediyesi-open-data",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-21",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-21-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-22",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-22-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-23",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-23-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_QUALITY_BLOCKED",
+      "fallbackProviderId": "tr-adm3-osm-24",
+      "featureCount": 0,
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-24-erzincan-il-ozel-idaresi-arcgis-service",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-25",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-25-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-26",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-26-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-28",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-28-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-29",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-29-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-30",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-30-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-31",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-31-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-32",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-32-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_QUALITY_BLOCKED",
+      "fallbackProviderId": "tr-adm3-osm-33",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-33-mersin-yenisehir-belediyesi-ulasav",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_LICENSE_BLOCKED",
+      "fallbackProviderId": "tr-adm3-osm-34",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_LICENSE_BLOCKED",
+      "fallbackProviderId": "tr-adm3-osm-35",
+      "featureCount": 1311,
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-runtime-35-izmir-buyuksehir-belediyesi-kent-rehberi-arcgis",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-36",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-36-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-37",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-37-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-39",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-39-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-40",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-40-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-41",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-41-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_QUALITY_BLOCKED",
+      "fallbackProviderId": "tr-adm3-osm-42",
+      "featureCount": 1143,
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-42-konya-buyuksehir-belediyesi-open-data-via-ulasav",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-43",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-43-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-44",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-44-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-45",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-45-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-46",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-46-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-47",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-47-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_LICENSE_BLOCKED",
+      "fallbackProviderId": "tr-adm3-osm-48",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-runtime-48-mugla-buyuksehir-belediyesi-cbs",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-49",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-49-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-50",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-50-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-51",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-51-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-53",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-53-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-54",
+      "featureCount": 677,
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-54-sakarya-buyuksehir-belediyesi-open-data",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-55",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-55-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-56",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-56-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-57",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-57-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-58",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-58-sivas-belediyesi-open-data-via-ulasav",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_QUALITY_BLOCKED",
+      "fallbackProviderId": "tr-adm3-osm-59",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-59-tekirdag-corlu-belediyesi-ulasav",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-60",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-60-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-61",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-61-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-62",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-62-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-63",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-63-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_QUALITY_BLOCKED",
+      "fallbackProviderId": "tr-adm3-osm-64",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-64-usak-belediyesi-ulasav",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_QUALITY_BLOCKED",
+      "fallbackProviderId": "tr-adm3-osm-65",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-65-van-buyuksehir-belediyesi-ulasav",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-66",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-66-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-67",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-67-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-68",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-68-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-69",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-69-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-70",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-70-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-71",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-71-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-72",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-72-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-73",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-73-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-74",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-74-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-75",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-75-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-76",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-76-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-77",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-77-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-78",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-78-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-79",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-79-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-80",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-80-nvi-maks-authority-path",
+      "reachable": false
+    },
+    {
+      "errorCode": "TR_ADM3_EXPERIMENTAL",
+      "fallbackProviderId": "tr-adm3-osm-81",
+      "lastCheckedAt": "2026-08-07T00:00:00.000Z",
+      "providerId": "tr-adm3-experimental-81-nvi-maks-authority-path",
+      "reachable": false
+    }
+  ],
+  "networkMode": "offline-inventory",
+  "schemaVersion": "territorykit-tr-adm3-source-health@1"
+}

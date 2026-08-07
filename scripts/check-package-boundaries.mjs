@@ -178,10 +178,13 @@ function checkSourceImports(rule, directory) {
     ];
 
     for (const match of imports) {
-      const packageName = match[1];
+      const importSpecifier = match[1];
+      const packageName = getWorkspacePackageName(importSpecifier);
 
       if (!rule.allowed.has(packageName)) {
-        failures.push(`${relative(root, filePath)} imports ${packageName}; ${rule.description}.`);
+        failures.push(
+          `${relative(root, filePath)} imports ${importSpecifier}; ${rule.description}.`
+        );
         continue;
       }
 
@@ -194,6 +197,12 @@ function checkSourceImports(rule, directory) {
       }
     }
   }
+}
+
+function getWorkspacePackageName(importSpecifier) {
+  const [scope, name] = importSpecifier.split("/");
+
+  return scope && name ? `${scope}/${name}` : importSpecifier;
 }
 
 function checkBrowserSafeImports(rule, directory) {
