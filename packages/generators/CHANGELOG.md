@@ -1,5 +1,16 @@
 # @territory-kit/generators
 
+## 1.4.0
+
+### Minor Changes
+
+- d54d314: Add Turkey ADM3 production evidence tooling: official ADM3 catalog ingestion, OSM PBF extraction support, priority-clipped effective geometry, spatial QA reports, national/province artifacts, and production smoke commands.
+
+### Patch Changes
+
+- @territory-kit/core@1.4.0
+- @territory-kit/dataset@1.4.0
+
 ## 1.3.0
 
 ### Minor Changes
