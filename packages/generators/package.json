@@ -49,11 +49,12 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
+    "@maplibre/geojson-vt": "^6.1.1",
+    "@maplibre/vt-pbf": "^4.3.2",
     "@territory-kit/core": "workspace:*",
     "@territory-kit/dataset": "workspace:*",
     "flatbush": "^4.6.2",
-    "@maplibre/geojson-vt": "^6.1.1",
-    "@maplibre/vt-pbf": "^4.3.2"
+    "polygon-clipping": "^0.15.7"
   },
   "devDependencies": {
     "@territory-kit/shared-testkit": "workspace:*"

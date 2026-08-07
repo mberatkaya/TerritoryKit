@@ -4,7 +4,7 @@
   "issues": [],
   "ok": true,
   "schemaVersion": "territorykit-tr-adm3-geometry-quality@1",
-  "sourceMode": "registry-and-generated-fallback",
+  "sourceMode": "real-geometry-build",
   "summary": {
     "gapCount": 0,
     "geometryErrors": 0,

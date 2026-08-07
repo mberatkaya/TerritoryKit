@@ -3,4 +3,4 @@
 "@territory-kit/cli": minor
 ---
 
-Adds Turkey ADM3 full-coverage provider registries, fallback resolution metadata, generated game-zone utilities, source health reporting, and CLI commands for the official/runtime/experimental/OSM/generated ADM3 fallback model.
+Replaces Turkey ADM3 fallback-policy coverage with geometry-built coverage reporting for generated fill, adds arbitrary Polygon/MultiPolygon generated-zone clipping, priority-aware geodesic coverage measurement, real `territory tr adm3 build` artifacts, district-specific provider resolution, and bounded network provider health checks.

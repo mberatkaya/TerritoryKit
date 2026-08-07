@@ -1,7 +1,8 @@
 import {
   computeGeometryBBox,
   computeGeometryCenter,
-  createTerritoryGlobalId
+  createTerritoryGlobalId,
+  geometryToPolygons
 } from "@territory-kit/dataset";
 import type {
   LngLat,
@@ -9,6 +10,11 @@ import type {
   TerritoryGeometry,
   TerritoryZone
 } from "@territory-kit/dataset";
+import * as polygonClipping from "polygon-clipping";
+import type {
+  MultiPolygon as ClippingMultiPolygon,
+  Polygon as ClippingPolygon
+} from "polygon-clipping";
 import {
   createDatasetGeometryHash,
   isRecord,
@@ -182,6 +188,7 @@ export interface GeneratedZoneConfig {
 
 export interface TurkeyAdm3CoverageInput {
   districtId: string;
+  provinceCode?: string;
   districtGeometry: TerritoryGeometry;
   official?: readonly TerritoryGeometry[];
   runtime?: readonly TerritoryGeometry[];
@@ -191,14 +198,24 @@ export interface TurkeyAdm3CoverageInput {
 
 export interface TurkeyAdm3DistrictCoverageReport {
   districtId: string;
+  provinceCode?: string;
   districtAreaKm2: number;
+  officialPolygonCount: number;
+  runtimePolygonCount: number;
+  osmPolygonCount: number;
+  generatedPolygonCount: number;
   officialAreaKm2: number;
   runtimeAreaKm2: number;
   osmAreaKm2: number;
+  generatedAreaKm2: number;
   realCoverageAreaKm2: number;
+  missingBeforeGeneratedAreaKm2: number;
+  finalCoverageAreaKm2: number;
+  officialCoveragePercent: number;
+  runtimeCoveragePercent: number;
+  osmCoveragePercent: number;
   realCoveragePercent: number;
   missingAreaKm2: number;
-  generatedAreaKm2: number;
   generatedCoveragePercent: number;
   finalCoveragePercent: number;
 }
@@ -227,15 +244,25 @@ export interface TurkeyAdm3GeneratedMigrationReport {
   }>;
 }
 
-interface Rect {
+interface GridRect {
   west: number;
   south: number;
   east: number;
   north: number;
 }
 
-const SQ_DEGREES_TO_KM2 = 10_000;
-const RECT_EPSILON = 1e-9;
+type PolygonClippingApi = {
+  difference: typeof polygonClipping.difference;
+  intersection: typeof polygonClipping.intersection;
+  union: typeof polygonClipping.union;
+};
+
+const CLIPPER =
+  (polygonClipping as unknown as { default?: PolygonClippingApi }).default ??
+  (polygonClipping as unknown as PolygonClippingApi);
+const EARTH_RADIUS_METERS = 6_371_008.8;
+const GEOMETRY_EPSILON = 1e-12;
+const RING_AREA_EPSILON = 1e-9;
 
 export function createTurkeyAdm3Registry(input: {
   providers: readonly TurkeyAdm3ProviderRecord[];
@@ -411,36 +438,50 @@ export function resolveTurkeyAdm3Provider(
   ];
 
   return options.providers
-    .filter((provider) => {
+    .flatMap((provider) => {
       if (
         provider.countryCode !== options.countryCode ||
         provider.provinceCode !== options.provinceCode
       ) {
-        return false;
+        return [];
       }
 
       if (!allowed.has(provider.providerClass)) {
-        return false;
+        return [];
       }
 
       if (provider.experimental && !options.allowExperimental) {
-        return false;
+        return [];
+      }
+
+      if (!isProviderSelectable(provider, Boolean(options.allowExperimental))) {
+        return [];
       }
 
       if (provider.districtCodes && options.districtCode) {
-        return provider.districtCodes.includes(options.districtCode);
+        const specificity = providerSpecificity(provider, options.districtCode);
+        return specificity > 0 ? [{ provider, specificity }] : [];
       }
 
-      return (
-        provider.enabledByDefault || (provider.experimental && Boolean(options.allowExperimental))
-      );
+      if (provider.districtCodes && !options.districtCode) {
+        return [];
+      }
+
+      return provider.enabledByDefault ||
+        (provider.experimental && Boolean(options.allowExperimental))
+        ? [{ provider, specificity: providerSpecificity(provider, options.districtCode) }]
+        : [];
     })
     .sort((left, right) => {
-      const leftPriority = priority.indexOf(left.providerClass);
-      const rightPriority = priority.indexOf(right.providerClass);
+      const leftPriority = priority.indexOf(left.provider.providerClass);
+      const rightPriority = priority.indexOf(right.provider.providerClass);
 
-      return leftPriority - rightPriority || left.id.localeCompare(right.id);
-    })[0];
+      return (
+        leftPriority - rightPriority ||
+        right.specificity - left.specificity ||
+        left.provider.id.localeCompare(right.provider.id)
+      );
+    })[0]?.provider;
 }
 
 export function createTurkeyAdm3ProviderHealthReport(input: {
@@ -489,9 +530,16 @@ export function createDefaultGeneratedZoneConfig(input: {
 export function buildTurkeyAdm3GeneratedZones(
   options: TurkeyAdm3GeneratedBuildOptions
 ): TurkeyAdm3GeneratedBuildResult {
-  const districtRect = geometryToRect(options.district.geometry);
   const issues: TurkeyAdm3RegistryIssue[] = [];
-  const districtAreaKm2 = rectAreaKm2(districtRect);
+  const districtGeometry = geometryToClippingMultiPolygon(options.district.geometry);
+  const realGeometry = unionClippingGeometries(
+    (options.realZones ?? []).map((zone) => geometryToClippingMultiPolygon(zone.geometry))
+  );
+  const missingGeometry = differenceClippingGeometries(
+    districtGeometry,
+    intersectClippingGeometries(districtGeometry, realGeometry)
+  );
+  const districtAreaKm2 = clippingAreaKm2(districtGeometry);
   const config = {
     ...createDefaultGeneratedZoneConfig({
       districtAreaKm2,
@@ -500,38 +548,46 @@ export function buildTurkeyAdm3GeneratedZones(
     }),
     ...options.config
   };
-  const realRects = (options.realZones ?? []).flatMap((zone) => {
-    try {
-      return [geometryToRect(zone.geometry)];
-    } catch {
-      issues.push(
-        issue(
-          "TR_ADM3_REAL_GEOMETRY_CLIP_UNSUPPORTED",
-          `Real ADM3 geometry ${zone.id} is not an axis-aligned polygon supported by the deterministic fallback clipper.`,
-          undefined,
-          zone.id
-        )
-      );
-      return [];
-    }
-  });
-  const missingRects = subtractRects([districtRect], realRects);
-  const cells = tessellateRects(missingRects, config);
-  const zones = cells.map((cell, index) =>
+  const cells = tessellateClippedGeometry(missingGeometry, config);
+  let zones = cells.map((geometry, index) =>
     createGeneratedZone({
       district: options.district,
       provinceCode: options.provinceCode,
-      rect: cell,
+      geometry,
       cellIndex: index,
       config
     })
   );
-  const coverage = computeTurkeyAdm3DistrictCoverage({
+  let coverage = computeTurkeyAdm3DistrictCoverage({
     districtId: options.district.id,
+    provinceCode: options.provinceCode,
     districtGeometry: options.district.geometry,
     official: options.realZones?.map((zone) => zone.geometry) ?? [],
     generated: zones.map((zone) => zone.geometry)
   });
+
+  if (zones.length > 0 && coverage.finalCoveragePercent < 99.99) {
+    const missingTerritoryGeometry = clippingMultiPolygonToTerritoryGeometry(missingGeometry);
+
+    if (missingTerritoryGeometry) {
+      zones = [
+        createGeneratedZone({
+          district: options.district,
+          provinceCode: options.provinceCode,
+          geometry: missingTerritoryGeometry,
+          cellIndex: 0,
+          config
+        })
+      ];
+      coverage = computeTurkeyAdm3DistrictCoverage({
+        districtId: options.district.id,
+        provinceCode: options.provinceCode,
+        districtGeometry: options.district.geometry,
+        official: options.realZones?.map((zone) => zone.geometry) ?? [],
+        generated: zones.map((zone) => zone.geometry)
+      });
+    }
+  }
 
   return { zones, coverage, issues };
 }
@@ -539,33 +595,73 @@ export function buildTurkeyAdm3GeneratedZones(
 export function computeTurkeyAdm3DistrictCoverage(
   input: TurkeyAdm3CoverageInput
 ): TurkeyAdm3DistrictCoverageReport {
-  const districtRect = geometryToRect(input.districtGeometry);
-  const officialRects = geometriesToRects(input.official ?? []);
-  const runtimeRects = geometriesToRects(input.runtime ?? []);
-  const osmRects = geometriesToRects(input.osm ?? []);
-  const generatedRects = geometriesToRects(input.generated ?? []);
-  const realRects = [...officialRects, ...runtimeRects, ...osmRects];
-  const districtAreaKm2 = rectAreaKm2(districtRect);
-  const officialAreaKm2 = unionRectAreaKm2(officialRects);
-  const runtimeAreaKm2 = unionRectAreaKm2(runtimeRects);
-  const osmAreaKm2 = unionRectAreaKm2(osmRects);
-  const realCoverageAreaKm2 = unionRectAreaKm2(realRects);
-  const generatedAreaKm2 = unionRectAreaKm2(generatedRects);
-  const finalCoverageAreaKm2 = unionRectAreaKm2([...realRects, ...generatedRects]);
+  const districtGeometry = geometryToClippingMultiPolygon(input.districtGeometry);
+  const officialCandidate = intersectClippingGeometries(
+    districtGeometry,
+    unionTerritoryGeometries(input.official ?? [])
+  );
+  const runtimeCandidate = intersectClippingGeometries(
+    districtGeometry,
+    unionTerritoryGeometries(input.runtime ?? [])
+  );
+  const osmCandidate = intersectClippingGeometries(
+    districtGeometry,
+    unionTerritoryGeometries(input.osm ?? [])
+  );
+  const officialEffective = officialCandidate;
+  const runtimeEffective = differenceClippingGeometries(runtimeCandidate, officialEffective);
+  const officialRuntimeUnion = unionClippingGeometries([officialEffective, runtimeEffective]);
+  const osmEffective = differenceClippingGeometries(osmCandidate, officialRuntimeUnion);
+  const realCoverageGeometry = unionClippingGeometries([
+    officialEffective,
+    runtimeEffective,
+    osmEffective
+  ]);
+  const missingBeforeGeneratedGeometry = differenceClippingGeometries(
+    districtGeometry,
+    realCoverageGeometry
+  );
+  const generatedCandidate = intersectClippingGeometries(
+    districtGeometry,
+    unionTerritoryGeometries(input.generated ?? [])
+  );
+  const generatedEffective = differenceClippingGeometries(generatedCandidate, realCoverageGeometry);
+  const finalCoverageGeometry = unionClippingGeometries([realCoverageGeometry, generatedEffective]);
+  const districtAreaKm2 = clippingAreaKm2(districtGeometry);
+  const officialAreaKm2 = clippingAreaKm2(officialEffective);
+  const runtimeAreaKm2 = clippingAreaKm2(runtimeEffective);
+  const osmAreaKm2 = clippingAreaKm2(osmEffective);
+  const realCoverageAreaKm2 = clippingAreaKm2(realCoverageGeometry);
+  const missingBeforeGeneratedAreaKm2 = clippingAreaKm2(missingBeforeGeneratedGeometry);
+  const generatedAreaKm2 = clippingAreaKm2(generatedEffective);
+  const finalCoverageAreaKm2 = clippingAreaKm2(finalCoverageGeometry);
   const realCoveragePercent = percentage(realCoverageAreaKm2, districtAreaKm2);
+  const officialCoveragePercent = percentage(officialAreaKm2, districtAreaKm2);
+  const runtimeCoveragePercent = percentage(runtimeAreaKm2, districtAreaKm2);
+  const osmCoveragePercent = percentage(osmAreaKm2, districtAreaKm2);
   const generatedCoveragePercent = percentage(generatedAreaKm2, districtAreaKm2);
   const finalCoveragePercent = Math.min(100, percentage(finalCoverageAreaKm2, districtAreaKm2));
 
   return {
     districtId: input.districtId,
+    ...(input.provinceCode ? { provinceCode: input.provinceCode } : {}),
     districtAreaKm2,
+    officialPolygonCount: input.official?.length ?? 0,
+    runtimePolygonCount: input.runtime?.length ?? 0,
+    osmPolygonCount: input.osm?.length ?? 0,
+    generatedPolygonCount: input.generated?.length ?? 0,
     officialAreaKm2,
     runtimeAreaKm2,
     osmAreaKm2,
-    realCoverageAreaKm2,
-    realCoveragePercent,
-    missingAreaKm2: Math.max(0, districtAreaKm2 - realCoverageAreaKm2),
     generatedAreaKm2,
+    realCoverageAreaKm2,
+    missingBeforeGeneratedAreaKm2,
+    finalCoverageAreaKm2,
+    officialCoveragePercent,
+    runtimeCoveragePercent,
+    osmCoveragePercent,
+    realCoveragePercent,
+    missingAreaKm2: missingBeforeGeneratedAreaKm2,
     generatedCoveragePercent,
     finalCoveragePercent
   };
@@ -577,15 +673,15 @@ export function createTurkeyAdm3GeneratedMigrationReport(input: {
   newOfficialZones: readonly TerritoryZone[];
 }): TurkeyAdm3GeneratedMigrationReport {
   const migrations = input.oldGeneratedZones.flatMap((generatedZone) => {
-    const generatedRect = geometryToRect(generatedZone.geometry);
-    const generatedArea = rectArea(generatedRect);
+    const generatedGeometry = geometryToClippingMultiPolygon(generatedZone.geometry);
+    const generatedAreaKm2 = clippingAreaKm2(generatedGeometry);
     const best = input.newOfficialZones
       .map((officialZone) => {
-        const officialRect = geometryToRect(officialZone.geometry);
-        const overlapPercent = percentage(
-          rectArea(intersectRect(generatedRect, officialRect)),
-          generatedArea
+        const officialGeometry = geometryToClippingMultiPolygon(officialZone.geometry);
+        const overlapAreaKm2 = clippingAreaKm2(
+          intersectClippingGeometries(generatedGeometry, officialGeometry)
         );
+        const overlapPercent = percentage(overlapAreaKm2, generatedAreaKm2);
 
         return { officialZone, overlapPercent };
       })
@@ -654,19 +750,18 @@ export function createTurkeyAdm3GeometryHash(geometry: TerritoryGeometry): strin
 function createGeneratedZone(input: {
   district: TerritoryZone;
   provinceCode: string;
-  rect: Rect;
+  geometry: TerritoryGeometry;
   cellIndex: number;
   config: GeneratedZoneConfig;
 }): TerritoryZone {
+  const geometry = input.geometry;
+  const geometryHash = createTurkeyAdm3GeometryHash(geometry);
   const cellId = [
     input.config.algorithmVersion,
     input.config.seed,
     input.district.id,
     input.cellIndex,
-    input.rect.west.toFixed(6),
-    input.rect.south.toFixed(6),
-    input.rect.east.toFixed(6),
-    input.rect.north.toFixed(6)
+    geometryHash
   ].join(":");
   const localId = [
     `tr-${input.provinceCode}`,
@@ -675,8 +770,6 @@ function createGeneratedZone(input: {
     input.config.algorithmVersion,
     sha256Hex(cellId).slice(0, 16)
   ].join("-");
-  const geometry = rectToPolygon(input.rect);
-  const geometryHash = createTurkeyAdm3GeometryHash(geometry);
   const id = createTerritoryGlobalId({
     countryCode: "TR",
     adminLevel: "ADM3",
@@ -692,7 +785,7 @@ function createGeneratedZone(input: {
     sourceAdminLevel: "ADM3",
     semanticType: "game-region",
     name: `Generated zone ${input.cellIndex + 1}`,
-    localName: `Generated zone ${input.cellIndex + 1}`,
+    localName: `Zone ${input.cellIndex + 1}`,
     parentId: input.district.id,
     neighborIds: [],
     geometry,
@@ -718,7 +811,7 @@ function createGeneratedZone(input: {
           attribution: "TerritoryKit generated game zones from ADM2 boundaries"
         },
         generatedZone: {
-          algorithm: "deterministic-rectangular-tessellation",
+          algorithm: "deterministic-clipped-grid-tessellation",
           algorithmVersion: input.config.algorithmVersion,
           seed: input.config.seed,
           targetAreaKm2: input.config.targetAreaKm2,
@@ -732,186 +825,271 @@ function createGeneratedZone(input: {
   };
 }
 
-function tessellateRects(rects: readonly Rect[], config: GeneratedZoneConfig): Rect[] {
-  const cells = rects.flatMap((rect) => tessellateRect(rect, config));
+function tessellateClippedGeometry(
+  missingGeometry: ClippingMultiPolygon,
+  config: GeneratedZoneConfig
+): TerritoryGeometry[] {
+  const missingAreaKm2 = clippingAreaKm2(missingGeometry);
 
-  if (cells.length <= config.maxZonesPerDistrict) {
-    return cells;
+  if (missingAreaKm2 < config.minFragmentAreaKm2) {
+    return [];
   }
 
-  const stride = Math.ceil(cells.length / config.maxZonesPerDistrict);
-  const merged: Rect[] = [];
-
-  for (let index = 0; index < cells.length; index += stride) {
-    merged.push(mergeRects(cells.slice(index, index + stride)));
+  if (missingAreaKm2 <= config.maxAreaKm2) {
+    const geometry = clippingMultiPolygonToTerritoryGeometry(missingGeometry);
+    return geometry ? [geometry] : [];
   }
 
-  return merged;
-}
-
-function tessellateRect(rect: Rect, config: GeneratedZoneConfig): Rect[] {
-  const areaKm2 = rectAreaKm2(rect);
-
-  if (areaKm2 <= config.maxAreaKm2) {
-    return areaKm2 >= config.minFragmentAreaKm2 ? [rect] : [];
-  }
-
-  const targetCells = Math.max(1, Math.ceil(areaKm2 / config.targetAreaKm2));
-  const width = rect.east - rect.west;
-  const height = rect.north - rect.south;
+  const bbox = clippingBBox(missingGeometry);
+  const rect = bboxToGridRect(bbox);
+  const targetCells = Math.max(
+    1,
+    Math.min(config.maxZonesPerDistrict, Math.ceil(missingAreaKm2 / config.targetAreaKm2))
+  );
+  const centerLatitude = (rect.south + rect.north) / 2;
+  const widthKm = Math.max(
+    GEOMETRY_EPSILON,
+    (rect.east - rect.west) * kilometersPerLongitudeDegree(centerLatitude)
+  );
+  const heightKm = Math.max(GEOMETRY_EPSILON, (rect.north - rect.south) * 111.32);
+  const aspect = widthKm / heightKm;
   const columns = Math.max(
     1,
-    Math.ceil(Math.sqrt(targetCells * (width / Math.max(height, RECT_EPSILON))))
+    Math.ceil(Math.sqrt(targetCells * Math.max(aspect, GEOMETRY_EPSILON)))
   );
   const rows = Math.max(1, Math.ceil(targetCells / columns));
-  const cellWidth = width / columns;
-  const cellHeight = height / rows;
-  const cells: Rect[] = [];
+  const cellWidth = (rect.east - rect.west) / columns;
+  const cellHeight = (rect.north - rect.south) / rows;
+  const cells: ClippingMultiPolygon[] = [];
+  let subdivisionFailed = false;
 
   for (let row = 0; row < rows; row += 1) {
     for (let column = 0; column < columns; column += 1) {
-      const cell = normalizeRect({
+      const cellRect = normalizeGridRect({
         west: rect.west + column * cellWidth,
         south: rect.south + row * cellHeight,
         east: column === columns - 1 ? rect.east : rect.west + (column + 1) * cellWidth,
         north: row === rows - 1 ? rect.north : rect.south + (row + 1) * cellHeight
       });
+      let clipped: ClippingMultiPolygon;
 
-      if (rectAreaKm2(cell) >= config.minFragmentAreaKm2) {
-        cells.push(cell);
-      }
-    }
-  }
-
-  return cells;
-}
-
-function subtractRects(baseRects: readonly Rect[], subtractors: readonly Rect[]): Rect[] {
-  return subtractors.reduce(
-    (remaining, subtractor) => remaining.flatMap((rect) => subtractRect(rect, subtractor)),
-    [...baseRects]
-  );
-}
-
-function subtractRect(rect: Rect, subtractor: Rect): Rect[] {
-  const overlap = intersectRect(rect, subtractor);
-
-  if (rectArea(overlap) <= RECT_EPSILON) {
-    return [rect];
-  }
-
-  return [
-    { west: rect.west, south: rect.south, east: rect.east, north: overlap.south },
-    { west: rect.west, south: overlap.north, east: rect.east, north: rect.north },
-    { west: rect.west, south: overlap.south, east: overlap.west, north: overlap.north },
-    { west: overlap.east, south: overlap.south, east: rect.east, north: overlap.north }
-  ]
-    .map(normalizeRect)
-    .filter((candidate) => rectArea(candidate) > RECT_EPSILON)
-    .sort(compareRects);
-}
-
-function unionRectAreaKm2(rects: readonly Rect[]): number {
-  return unionRectArea(rects) * SQ_DEGREES_TO_KM2;
-}
-
-function unionRectArea(rects: readonly Rect[]): number {
-  const xs = [...new Set(rects.flatMap((rect) => [rect.west, rect.east]))].sort(
-    (left, right) => left - right
-  );
-  let area = 0;
-
-  for (let index = 0; index < xs.length - 1; index += 1) {
-    const west = xs[index]!;
-    const east = xs[index + 1]!;
-    const covering = rects
-      .filter((rect) => rect.west < east && rect.east > west)
-      .map((rect) => [rect.south, rect.north] as const)
-      .sort((left, right) => left[0] - right[0]);
-
-    let coveredHeight = 0;
-    let currentSouth: number | undefined;
-    let currentNorth: number | undefined;
-
-    for (const [south, north] of covering) {
-      if (currentSouth === undefined || currentNorth === undefined) {
-        currentSouth = south;
-        currentNorth = north;
-        continue;
+      try {
+        clipped = intersectClippingGeometries(
+          missingGeometry,
+          geometryToClippingMultiPolygon(gridRectToPolygon(cellRect))
+        );
+      } catch {
+        subdivisionFailed = true;
+        break;
       }
 
-      if (south <= currentNorth) {
-        currentNorth = Math.max(currentNorth, north);
-      } else {
-        coveredHeight += currentNorth - currentSouth;
-        currentSouth = south;
-        currentNorth = north;
+      if (clippingAreaKm2(clipped) >= config.minFragmentAreaKm2) {
+        cells.push(clipped);
       }
     }
 
-    if (currentSouth !== undefined && currentNorth !== undefined) {
-      coveredHeight += currentNorth - currentSouth;
+    if (subdivisionFailed) {
+      break;
     }
-
-    area += (east - west) * coveredHeight;
   }
 
-  return area;
-}
-
-function geometriesToRects(geometries: readonly TerritoryGeometry[]): Rect[] {
-  return geometries.map(geometryToRect);
-}
-
-function geometryToRect(geometry: TerritoryGeometry): Rect {
-  if (geometry.type !== "Polygon" || geometry.coordinates.length !== 1) {
-    throw new Error(
-      "Turkey ADM3 generated-zone fallback currently requires single-ring Polygon geometry."
-    );
+  if (subdivisionFailed) {
+    const geometry = clippingMultiPolygonToTerritoryGeometry(missingGeometry);
+    return geometry ? [geometry] : [];
   }
 
-  const ring = geometry.coordinates[0] as LngLat[];
-  const bbox = computeGeometryBBox(geometry);
-  const rect = bboxToRect(bbox);
-  const expected = new Set(
-    rectToRing(rect)
-      .slice(0, -1)
-      .map((point) => `${point[0].toFixed(9)},${point[1].toFixed(9)}`)
-  );
-  const actual = new Set(
-    ring
-      .slice(0, -1)
-      .map((point) => `${Number(point[0]).toFixed(9)},${Number(point[1]).toFixed(9)}`)
-  );
-
-  if (expected.size !== actual.size || [...expected].some((point) => !actual.has(point))) {
-    throw new Error(
-      "Turkey ADM3 generated-zone fallback cannot safely clip non-rectangular geometry yet."
-    );
+  if (cells.length === 0) {
+    const geometry = clippingMultiPolygonToTerritoryGeometry(missingGeometry);
+    return geometry ? [geometry] : [];
   }
 
-  return rect;
+  try {
+    return coalesceClippedCells(cells.sort(compareClippingGeometries), config.maxZonesPerDistrict)
+      .map(clippingMultiPolygonToTerritoryGeometry)
+      .filter((geometry): geometry is TerritoryGeometry => Boolean(geometry))
+      .sort(compareTerritoryGeometries);
+  } catch {
+    const geometry = clippingMultiPolygonToTerritoryGeometry(missingGeometry);
+    return geometry ? [geometry] : [];
+  }
 }
 
-function rectToPolygon(rect: Rect): TerritoryGeometry {
+function coalesceClippedCells(
+  cells: readonly ClippingMultiPolygon[],
+  maxZones: number
+): ClippingMultiPolygon[] {
+  if (cells.length <= maxZones) {
+    return [...cells];
+  }
+
+  const stride = Math.ceil(cells.length / maxZones);
+  const merged: ClippingMultiPolygon[] = [];
+
+  for (let index = 0; index < cells.length; index += stride) {
+    merged.push(unionClippingGeometries(cells.slice(index, index + stride)));
+  }
+
+  return merged.filter(isNonEmptyClippingGeometry).sort(compareClippingGeometries);
+}
+
+function unionTerritoryGeometries(geometries: readonly TerritoryGeometry[]): ClippingMultiPolygon {
+  return unionClippingGeometries(geometries.map(geometryToClippingMultiPolygon));
+}
+
+function unionClippingGeometries(
+  geometries: readonly ClippingMultiPolygon[]
+): ClippingMultiPolygon {
+  const nonEmpty = geometries.filter(isNonEmptyClippingGeometry);
+
+  if (nonEmpty.length === 0) {
+    return [];
+  }
+
+  if (nonEmpty.length === 1) {
+    return nonEmpty[0]!;
+  }
+
+  try {
+    return CLIPPER.union(nonEmpty[0]!, ...nonEmpty.slice(1));
+  } catch {
+    return nonEmpty.flatMap((geometry) => geometry);
+  }
+}
+
+function intersectClippingGeometries(
+  left: ClippingMultiPolygon,
+  right: ClippingMultiPolygon
+): ClippingMultiPolygon {
+  if (!isNonEmptyClippingGeometry(left) || !isNonEmptyClippingGeometry(right)) {
+    return [];
+  }
+
+  try {
+    return CLIPPER.intersection(left, right);
+  } catch {
+    return right;
+  }
+}
+
+function differenceClippingGeometries(
+  subject: ClippingMultiPolygon,
+  ...clips: readonly ClippingMultiPolygon[]
+): ClippingMultiPolygon {
+  const nonEmptyClips = clips.filter(isNonEmptyClippingGeometry);
+
+  if (!isNonEmptyClippingGeometry(subject)) {
+    return [];
+  }
+
+  if (nonEmptyClips.length === 0) {
+    return subject;
+  }
+
+  return CLIPPER.difference(subject, ...nonEmptyClips);
+}
+
+function geometryToClippingMultiPolygon(geometry: TerritoryGeometry): ClippingMultiPolygon {
+  return geometryToPolygons(geometry)
+    .map((polygon) => {
+      const rings = polygon
+        .map(normalizeRing)
+        .filter((ring) => ring.length >= 4 && ringHasArea(ring));
+      return rings.length > 0 ? (rings as ClippingPolygon) : undefined;
+    })
+    .filter((polygon): polygon is ClippingPolygon => Boolean(polygon));
+}
+
+function clippingMultiPolygonToTerritoryGeometry(
+  geometry: ClippingMultiPolygon
+): TerritoryGeometry | undefined {
+  const polygons = geometry
+    .map((polygon) =>
+      polygon.map(normalizeRing).filter((ring) => ring.length >= 4 && ringHasArea(ring))
+    )
+    .filter((polygon) => polygon.length > 0);
+
+  if (polygons.length === 0) {
+    return undefined;
+  }
+
+  if (polygons.length === 1) {
+    return {
+      type: "Polygon",
+      coordinates: polygons[0]!
+    };
+  }
+
   return {
-    type: "Polygon",
-    coordinates: [rectToRing(rect)]
+    type: "MultiPolygon",
+    coordinates: polygons
   };
 }
 
-function rectToRing(rect: Rect): LngLat[] {
-  return [
-    [rect.west, rect.south],
-    [rect.east, rect.south],
-    [rect.east, rect.north],
-    [rect.west, rect.north],
-    [rect.west, rect.south]
-  ];
+export function computeTurkeyAdm3GeometryAreaKm2(geometry: TerritoryGeometry): number {
+  return clippingAreaKm2(geometryToClippingMultiPolygon(geometry));
 }
 
-function bboxToRect(bbox: TerritoryBBox): Rect {
-  return normalizeRect({
+function clippingAreaKm2(geometry: ClippingMultiPolygon): number {
+  const areaM2 = geometry.reduce(
+    (total, polygon) => total + Math.max(0, polygonAreaM2(polygon)),
+    0
+  );
+
+  return roundAreaKm2(areaM2 / 1_000_000);
+}
+
+function polygonAreaM2(polygon: ClippingPolygon): number {
+  const [shell, ...holes] = polygon;
+
+  if (!shell) {
+    return 0;
+  }
+
+  const shellArea = Math.abs(ringGeodesicAreaM2(shell));
+  const holeArea = holes.reduce((total, hole) => total + Math.abs(ringGeodesicAreaM2(hole)), 0);
+  return Math.max(0, shellArea - holeArea);
+}
+
+function ringGeodesicAreaM2(ring: readonly LngLat[]): number {
+  let total = 0;
+
+  for (let index = 0; index < ring.length - 1; index += 1) {
+    const current = ring[index];
+    const next = ring[index + 1];
+
+    if (!current || !next) {
+      continue;
+    }
+
+    const deltaLongitude = normalizeRadians(toRadians(next[0] - current[0]));
+    total += deltaLongitude * (2 + Math.sin(toRadians(current[1])) + Math.sin(toRadians(next[1])));
+  }
+
+  return (total * EARTH_RADIUS_METERS * EARTH_RADIUS_METERS) / 2;
+}
+
+function clippingBBox(geometry: ClippingMultiPolygon): TerritoryBBox {
+  const territoryGeometry = clippingMultiPolygonToTerritoryGeometry(geometry);
+  return territoryGeometry ? computeGeometryBBox(territoryGeometry) : [0, 0, 0, 0];
+}
+
+function gridRectToPolygon(rect: GridRect): TerritoryGeometry {
+  return {
+    type: "Polygon",
+    coordinates: [
+      [
+        [rect.west, rect.south],
+        [rect.east, rect.south],
+        [rect.east, rect.north],
+        [rect.west, rect.north],
+        [rect.west, rect.south]
+      ]
+    ]
+  };
+}
+
+function bboxToGridRect(bbox: TerritoryBBox): GridRect {
+  return normalizeGridRect({
     west: bbox[0],
     south: bbox[1],
     east: bbox[2],
@@ -919,7 +1097,7 @@ function bboxToRect(bbox: TerritoryBBox): Rect {
   });
 }
 
-function normalizeRect(rect: Rect): Rect {
+function normalizeGridRect(rect: GridRect): GridRect {
   return {
     west: Math.min(rect.west, rect.east),
     south: Math.min(rect.south, rect.north),
@@ -928,30 +1106,87 @@ function normalizeRect(rect: Rect): Rect {
   };
 }
 
-function intersectRect(left: Rect, right: Rect): Rect {
-  return normalizeRect({
-    west: Math.max(left.west, right.west),
-    south: Math.max(left.south, right.south),
-    east: Math.max(Math.max(left.west, right.west), Math.min(left.east, right.east)),
-    north: Math.max(Math.max(left.south, right.south), Math.min(left.north, right.north))
-  });
+function normalizeRing(ring: readonly (readonly [number, number])[]): LngLat[] {
+  const coordinates = ring
+    .filter((point) => Number.isFinite(point[0]) && Number.isFinite(point[1]))
+    .map((point) => [Number(point[0]), Number(point[1])] satisfies LngLat);
+
+  if (coordinates.length === 0) {
+    return [];
+  }
+
+  const first = coordinates[0]!;
+  const last = coordinates[coordinates.length - 1]!;
+
+  if (!coordinatesEqual(first, last)) {
+    coordinates.push([...first]);
+  }
+
+  return coordinates;
 }
 
-function mergeRects(rects: readonly Rect[]): Rect {
-  return normalizeRect({
-    west: Math.min(...rects.map((rect) => rect.west)),
-    south: Math.min(...rects.map((rect) => rect.south)),
-    east: Math.max(...rects.map((rect) => rect.east)),
-    north: Math.max(...rects.map((rect) => rect.north))
-  });
+function isNonEmptyClippingGeometry(
+  geometry: ClippingMultiPolygon
+): geometry is ClippingMultiPolygon {
+  return geometry.length > 0;
 }
 
-function rectArea(rect: Rect): number {
-  return Math.max(0, rect.east - rect.west) * Math.max(0, rect.north - rect.south);
+function compareTerritoryGeometries(left: TerritoryGeometry, right: TerritoryGeometry): number {
+  return compareBBoxes(computeGeometryBBox(left), computeGeometryBBox(right));
 }
 
-function rectAreaKm2(rect: Rect): number {
-  return rectArea(rect) * SQ_DEGREES_TO_KM2;
+function compareClippingGeometries(
+  left: ClippingMultiPolygon,
+  right: ClippingMultiPolygon
+): number {
+  return compareBBoxes(clippingBBox(left), clippingBBox(right));
+}
+
+function compareBBoxes(left: TerritoryBBox, right: TerritoryBBox): number {
+  return left[1] - right[1] || left[0] - right[0] || left[3] - right[3] || left[2] - right[2];
+}
+
+function coordinatesEqual(left: LngLat, right: LngLat): boolean {
+  return left[0] === right[0] && left[1] === right[1];
+}
+
+function ringHasArea(ring: readonly LngLat[]): boolean {
+  let area = 0;
+
+  for (let index = 0; index < ring.length - 1; index += 1) {
+    const current = ring[index];
+    const next = ring[index + 1];
+
+    if (current && next) {
+      area += current[0] * next[1] - next[0] * current[1];
+    }
+  }
+
+  return Math.abs(area / 2) > RING_AREA_EPSILON;
+}
+
+function kilometersPerLongitudeDegree(latitude: number): number {
+  return Math.max(GEOMETRY_EPSILON, 111.32 * Math.cos(toRadians(latitude)));
+}
+
+function toRadians(degrees: number): number {
+  return (degrees * Math.PI) / 180;
+}
+
+function normalizeRadians(radians: number): number {
+  if (radians > Math.PI) {
+    return radians - Math.PI * 2;
+  }
+
+  if (radians < -Math.PI) {
+    return radians + Math.PI * 2;
+  }
+
+  return radians;
+}
+
+function roundAreaKm2(value: number): number {
+  return Number(value.toFixed(6));
 }
 
 function percentage(value: number, total: number): number {
@@ -960,15 +1195,6 @@ function percentage(value: number, total: number): number {
 
 function roundPercent(value: number): number {
   return Number(value.toFixed(6));
-}
-
-function compareRects(left: Rect, right: Rect): number {
-  return (
-    left.south - right.south ||
-    left.west - right.west ||
-    left.north - right.north ||
-    left.east - right.east
-  );
 }
 
 function compareProviderRecords(
@@ -987,6 +1213,32 @@ function countProviders(
   providerClass: TurkeyAdm3ProviderClass
 ): number {
   return providers.filter((provider) => provider.providerClass === providerClass).length;
+}
+
+function isProviderSelectable(
+  provider: TurkeyAdm3ProviderRecord,
+  allowExperimental: boolean
+): boolean {
+  if (provider.providerClass === "experimental") {
+    return allowExperimental && provider.status === "experimental";
+  }
+
+  return provider.status === "verified" || provider.status === "reachable";
+}
+
+function providerSpecificity(
+  provider: TurkeyAdm3ProviderRecord,
+  districtCode: string | undefined
+): number {
+  if (!provider.districtCodes || provider.districtCodes.length === 0) {
+    return 1;
+  }
+
+  if (!districtCode || !provider.districtCodes.includes(districtCode)) {
+    return 0;
+  }
+
+  return provider.districtCodes.length === 1 ? 3 : 2;
 }
 
 function clamp(value: number, min: number, max: number): number {

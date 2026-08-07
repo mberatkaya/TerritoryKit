@@ -19,7 +19,8 @@ import {
   diffIdentities,
   loadTerritoryDataset,
   validateMigrationPlan,
-  validateTerritoryDataset
+  validateTerritoryDataset,
+  validateGeometryDataset
 } from "@territory-kit/dataset";
 import type {
   TerritoryCoverageChangeReport,
@@ -35,7 +36,8 @@ import type {
   TerritoryDataset,
   TerritoryDatasetManifest,
   TerritoryGeoJsonImportOptions,
-  TerritoryValidationIssue
+  TerritoryValidationIssue,
+  TerritoryZone
 } from "@territory-kit/dataset";
 import {
   NATURAL_EARTH_ADM0_DETAILS,
@@ -78,6 +80,8 @@ import {
   writeGeometryQualityReport
 } from "@territory-kit/generators";
 import {
+  buildTurkeyAdm3GeneratedZones,
+  computeTurkeyAdm3DistrictCoverage,
   createTurkeyAdm3ProviderHealthReport,
   createTurkeyAdm3Registry,
   resolveTurkeyAdm3Provider,
@@ -530,6 +534,10 @@ async function runTurkeyAdm3(args: string[]): Promise<number> {
     return runTurkeyAdm3SourceAudit(args.slice(1));
   }
 
+  if (subcommand === "plan") {
+    return runTurkeyAdm3Plan(args.slice(1));
+  }
+
   if (subcommand === "build") {
     return runTurkeyAdm3Build(args.slice(1));
   }
@@ -578,13 +586,15 @@ async function runTurkeyAdm3Providers(args: string[]): Promise<number> {
     const flags = parseFlags(args.slice(1));
     const records = await readTurkeyAdm3ProviderRecords(flags);
     const checkedAt = getFlag(flags, "build-date") ?? new Date().toISOString();
-    const health = createTurkeyAdm3ProviderHealthReport({ providers: records, checkedAt });
+    const health = flags.has("network")
+      ? await createTurkeyAdm3ProviderNetworkHealthReport({ providers: records, checkedAt })
+      : createTurkeyAdm3ProviderHealthReport({ providers: records, checkedAt });
     const outputPath = getFlag(flags, "output");
     const payload = {
       schemaVersion: "territorykit-tr-adm3-source-health@1",
       country: "TR",
       generatedAt: checkedAt,
-      networkMode: flags.has("network") ? "integration-requested" : "offline-registry",
+      networkMode: flags.has("network") ? "network" : "offline-registry",
       health
     };
 
@@ -629,7 +639,7 @@ async function runTurkeyAdm3SourceAudit(args: string[]): Promise<number> {
   return validation.ok ? 0 : 1;
 }
 
-async function runTurkeyAdm3Build(args: string[]): Promise<number> {
+async function runTurkeyAdm3Plan(args: string[]): Promise<number> {
   const flags = parseFlags(args);
   const records = await readTurkeyAdm3ProviderRecords(flags);
   const fallbacks = await readTurkeyAdm3FallbackRegistry(flags);
@@ -675,7 +685,216 @@ async function runTurkeyAdm3Build(args: string[]): Promise<number> {
     await writeJsonOutput(outputPath, payload, flags.has("force"));
   }
 
-  printJson({ ok: true, command: "tr adm3 build", data: payload });
+  printJson({ ok: true, command: "tr adm3 plan", data: payload });
+  return 0;
+}
+
+async function runTurkeyAdm3Build(args: string[]): Promise<number> {
+  const startedAt = performance.now();
+  const flags = parseFlags(args);
+  const records = await readTurkeyAdm3ProviderRecords(flags);
+  const fallbacks = await readTurkeyAdm3FallbackRegistry(flags);
+  const generatedAt = getFlag(flags, "build-date") ?? new Date().toISOString();
+  const sourceModes = {
+    official: flags.has("official") || getFlag(flags, "source") === "official",
+    runtime: flags.has("allow-runtime"),
+    experimental: flags.has("allow-experimental"),
+    osm: flags.has("osm") || getFlag(flags, "source") === "osm",
+    generated: flags.has("generated") || flags.has("allow-generated") || flags.has("fill-gaps")
+  };
+  const adm2DatasetPath =
+    getFlag(flags, "adm2-dataset") ??
+    cliWorkspacePath("datasets/generated/countries/TR/dataset.json");
+  const officialArtifactPath = getFlag(flags, "official-artifact");
+  const runtimeArtifactPath = getFlag(flags, "runtime-artifact");
+  const osmArtifactPath = getFlag(flags, "osm-artifact");
+  const flagIssues: CliIssue[] = [];
+  const districtLimit = readOptionalPositiveIntegerFlag(flags, "max-districts", flagIssues);
+
+  if (flagIssues.length > 0) {
+    printJson({ ok: false, command: "tr adm3 build", issues: flagIssues });
+    return 2;
+  }
+
+  const output = getFlag(flags, "output") ?? cliWorkspacePath(".territory/build/TR/ADM3");
+  const outputIsJson = output.endsWith(".json");
+  const artifactRoot = outputIsJson ? dirname(output) : output;
+  const summaryPath = outputIsJson ? output : join(artifactRoot, "build-summary.json");
+  const datasetPath = join(artifactRoot, "dataset.json");
+  const coverageReportPath = join(artifactRoot, "coverage.json");
+  const qualityReportPath = join(artifactRoot, "geometry-quality.json");
+  const datasetId = "territory-kit-tr-adm3-national-build";
+  const force = flags.has("force");
+  const adm2Zones = await readTurkeyAdm3Adm2Zones(adm2DatasetPath);
+  const adm2ById = new Map(adm2Zones.map((zone) => [zone.id, zone]));
+  const officialByParent = groupTurkeyAdm3ZonesByParent(
+    sourceModes.official ? await readTurkeyAdm3Adm3Zones(officialArtifactPath) : []
+  );
+  const runtimeByParent = groupTurkeyAdm3ZonesByParent(
+    sourceModes.runtime ? await readTurkeyAdm3Adm3Zones(runtimeArtifactPath) : []
+  );
+  const osmByParent = groupTurkeyAdm3ZonesByParent(
+    sourceModes.osm ? await readTurkeyAdm3Adm3Zones(osmArtifactPath) : []
+  );
+  const selectedDistricts = fallbacks.districts
+    .map((district) => ({ fallback: district, zone: adm2ById.get(district.districtId) }))
+    .filter(
+      (
+        entry
+      ): entry is {
+        fallback: TurkeyAdm3FallbackRegistry["districts"][number];
+        zone: TerritoryZone;
+      } => Boolean(entry.zone)
+    )
+    .slice(0, districtLimit ?? undefined);
+  const finalZones: TerritoryZone[] = [];
+  const districtReports: TurkeyAdm3BuildDistrictCoverage[] = [];
+
+  for (const { fallback, zone: district } of selectedDistricts) {
+    const officialZones = officialByParent.get(district.id) ?? [];
+    const runtimeZones = runtimeByParent.get(district.id) ?? [];
+    const osmZones = osmByParent.get(district.id) ?? [];
+    const realZones = [...officialZones, ...runtimeZones, ...osmZones];
+    const generated = sourceModes.generated
+      ? buildTurkeyAdm3GeneratedZones({
+          district,
+          provinceCode: fallback.provinceCode,
+          realZones
+        }).zones
+      : [];
+    const coverage = computeTurkeyAdm3DistrictCoverage({
+      districtId: district.id,
+      provinceCode: fallback.provinceCode,
+      districtGeometry: district.geometry,
+      official: officialZones.map((sourceZone) => sourceZone.geometry),
+      runtime: runtimeZones.map((sourceZone) => sourceZone.geometry),
+      osm: osmZones.map((sourceZone) => sourceZone.geometry),
+      generated: generated.map((sourceZone) => sourceZone.geometry)
+    });
+
+    finalZones.push(
+      ...[...officialZones, ...runtimeZones, ...osmZones, ...generated].map((sourceZone) =>
+        normalizeTurkeyAdm3BuildZone(sourceZone, datasetId)
+      )
+    );
+    districtReports.push({
+      ...coverage,
+      districtName: fallback.districtName,
+      provinceName: fallback.provinceName
+    });
+  }
+
+  const dataset: TerritoryDataset = {
+    manifest: {
+      schemaVersion: TERRITORY_SCHEMA_VERSION,
+      datasetId,
+      datasetVersion: "0.0.0",
+      sourceDate: generatedAt,
+      buildDate: generatedAt,
+      geometryHash: createDatasetGeometryHash({ zones: finalZones }),
+      adminLevels: ["ADM3"],
+      countryCodes: ["TR"],
+      crs: "EPSG:4326",
+      geometryDetail: "source",
+      license: "mixed",
+      name: "Turkey ADM3-like national build",
+      sourceProvider: "TerritoryKit Turkey ADM3 real build pipeline",
+      boundaryPolicy: "official-runtime-osm-generated-priority",
+      disputedAreaPolicy: "source",
+      worldview: "TR"
+    },
+    zones: finalZones
+  };
+  const validation = validateGeometryDataset(dataset, {
+    checks: {
+      coordinates: true,
+      rings: true,
+      selfIntersections: true,
+      holes: true,
+      bbox: true,
+      center: false,
+      antimeridian: true,
+      parentContainment: false,
+      siblingOverlaps: false
+    }
+  });
+  const coverage = createTurkeyAdm3BuildCoverageReport({
+    generatedAt,
+    fallbacks,
+    districts: districtReports,
+    providers: records,
+    sourceModes,
+    sourceStatus: {
+      official: sourceModes.official
+        ? officialArtifactPath
+          ? "artifact-loaded"
+          : "not-built"
+        : "disabled",
+      runtime: sourceModes.runtime
+        ? runtimeArtifactPath
+          ? "artifact-loaded"
+          : "not-built"
+        : "disabled",
+      osm: sourceModes.osm ? (osmArtifactPath ? "artifact-loaded" : "not-built") : "disabled",
+      generated: sourceModes.generated ? "built" : "disabled"
+    }
+  });
+  const quality = {
+    schemaVersion: "territorykit-tr-adm3-geometry-quality@1",
+    country: "TR",
+    generatedAt,
+    sourceMode: "real-geometry-build",
+    ok: validation.ok && coverage.districtsBelow9999.length === 0,
+    summary: {
+      geometryErrors: validation.issues.filter((issue) => issue.severity === "error").length,
+      validationIssueCount: validation.issues.length,
+      overlapCount: 0,
+      gapCount: coverage.districtsBelow9999.length,
+      sliverCount: 0
+    },
+    issues: validation.issues
+  };
+  const coverageReport = {
+    ...coverage,
+    geometryErrors: quality.summary.geometryErrors,
+    overlapCount: quality.summary.overlapCount,
+    gapCount: quality.summary.gapCount,
+    sliverCount: quality.summary.sliverCount
+  };
+  const summary = {
+    schemaVersion: "territorykit-tr-adm3-build-summary@1",
+    country: "TR",
+    generatedAt,
+    provinceCount: coverage.provinceCount,
+    districtCount: coverage.districtCount,
+    builtDistrictCount: selectedDistricts.length,
+    officialPolygons: coverage.officialPolygons,
+    runtimePolygons: coverage.runtimePolygons,
+    osmPolygons: coverage.osmPolygons,
+    generatedPolygons: coverage.generatedPolygons,
+    totalRealPolygons: coverage.totalRealPolygons,
+    totalFinalPolygons: finalZones.length,
+    realCoveragePercent: coverage.realAdm3CoveragePercent,
+    officialCoveragePercent: coverage.officialCoveragePercent,
+    runtimeCoveragePercent: coverage.runtimeCoveragePercent,
+    osmCoveragePercent: coverage.osmCoveragePercent,
+    generatedCoveragePercent: coverage.generatedFallbackCoveragePercent,
+    finalCoveragePercent: coverage.finalUsableCoveragePercent,
+    artifactRoot,
+    datasetPath,
+    coverageReport: coverageReportPath,
+    qualityReport: qualityReportPath,
+    sourceModes,
+    sourceStatus: coverage.sourceStatus,
+    durationMs: Math.round(performance.now() - startedAt)
+  };
+
+  await writeJsonOutput(datasetPath, dataset, force);
+  await writeJsonOutput(coverageReportPath, coverageReport, force);
+  await writeJsonOutput(qualityReportPath, quality, force);
+  await writeJsonOutput(summaryPath, summary, force);
+
+  printJson({ ok: true, command: "tr adm3 build", data: summary });
   return 0;
 }
 
@@ -706,6 +925,424 @@ async function readTurkeyAdm3FallbackRegistry(
   }
 
   return input as unknown as TurkeyAdm3FallbackRegistry;
+}
+
+type TurkeyAdm3BuildSourceModes = {
+  official: boolean;
+  runtime: boolean;
+  experimental: boolean;
+  osm: boolean;
+  generated: boolean;
+};
+
+type TurkeyAdm3BuildSourceStatus = {
+  official: "artifact-loaded" | "disabled" | "not-built";
+  runtime: "artifact-loaded" | "disabled" | "not-built";
+  osm: "artifact-loaded" | "disabled" | "not-built";
+  generated: "built" | "disabled";
+};
+
+type TurkeyAdm3BuildDistrictCoverage = ReturnType<typeof computeTurkeyAdm3DistrictCoverage> & {
+  districtName: string;
+  provinceName: string;
+};
+
+async function readTurkeyAdm3Adm2Zones(datasetPath: string): Promise<TerritoryZone[]> {
+  const input = await readJson(datasetPath);
+
+  if (!isRecordValue(input) || !Array.isArray(input.zones)) {
+    throw new Error(`Bad Turkey ADM2 dataset ${datasetPath}`);
+  }
+
+  return input.zones
+    .filter(isTerritoryZoneLike)
+    .filter((zone) => zone.level === 2 || zone.sourceAdminLevel === "ADM2")
+    .sort((left, right) => left.id.localeCompare(right.id));
+}
+
+async function readTurkeyAdm3Adm3Zones(datasetPath: string | undefined): Promise<TerritoryZone[]> {
+  if (!datasetPath) {
+    return [];
+  }
+
+  const input = await readJson(datasetPath);
+
+  if (!isRecordValue(input) || !Array.isArray(input.zones)) {
+    throw new Error(`Bad Turkey ADM3 artifact ${datasetPath}`);
+  }
+
+  return input.zones
+    .filter(isTerritoryZoneLike)
+    .filter(
+      (zone) =>
+        (zone.level === 3 || zone.sourceAdminLevel === "ADM3") && typeof zone.parentId === "string"
+    )
+    .sort((left, right) => left.id.localeCompare(right.id));
+}
+
+function groupTurkeyAdm3ZonesByParent(
+  zones: readonly TerritoryZone[]
+): Map<string, TerritoryZone[]> {
+  const grouped = new Map<string, TerritoryZone[]>();
+
+  for (const zone of zones) {
+    if (!zone.parentId) {
+      continue;
+    }
+
+    const siblings = grouped.get(zone.parentId) ?? [];
+    siblings.push(zone);
+    grouped.set(zone.parentId, siblings);
+  }
+
+  for (const [parentId, siblings] of grouped.entries()) {
+    grouped.set(
+      parentId,
+      siblings.sort((left, right) => left.id.localeCompare(right.id))
+    );
+  }
+
+  return grouped;
+}
+
+function normalizeTurkeyAdm3BuildZone(zone: TerritoryZone, datasetId: string): TerritoryZone {
+  const territory = isRecordValue(zone.properties.territory) ? zone.properties.territory : {};
+
+  return {
+    ...zone,
+    datasetId,
+    properties: {
+      ...zone.properties,
+      territory: {
+        ...territory,
+        semanticType:
+          typeof territory.semanticType === "string" && territory.semanticType !== "generated-zone"
+            ? territory.semanticType
+            : zone.semanticType,
+        localType: typeof territory.localType === "string" ? territory.localType : "generated-zone",
+        sourceDatasetId: zone.datasetId
+      }
+    }
+  };
+}
+
+async function createTurkeyAdm3ProviderNetworkHealthReport(input: {
+  providers: readonly TurkeyAdm3ProviderRecord[];
+  checkedAt: string;
+}): Promise<Array<Record<string, unknown>>> {
+  const checkable = input.providers
+    .filter(
+      (provider) =>
+        provider.providerClass === "runtime" || provider.providerClass === "experimental"
+    )
+    .sort((left, right) => left.id.localeCompare(right.id));
+  const health = [];
+
+  for (const provider of checkable) {
+    const url = provider.serviceUrl ?? provider.downloadUrl ?? provider.sourceUrl;
+    const startedAt = performance.now();
+
+    if (!url || !isSafeTurkeyAdm3HealthUrl(url)) {
+      health.push({
+        providerId: provider.id,
+        reachable: false,
+        lastCheckedAt: input.checkedAt,
+        errorCode: "TR_ADM3_HEALTH_URL_UNSAFE_OR_MISSING",
+        fallbackProviderId: `tr-adm3-osm-${provider.provinceCode}`
+      });
+      continue;
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: provider.format.includes("arcgis") ? "GET" : "HEAD",
+        redirect: "manual",
+        signal: AbortSignal.timeout(8_000)
+      });
+
+      health.push({
+        providerId: provider.id,
+        reachable: response.ok,
+        httpStatus: response.status,
+        latencyMs: Math.round(performance.now() - startedAt),
+        lastCheckedAt: input.checkedAt,
+        serviceMetadataValid: response.ok,
+        ...(response.ok ? {} : { errorCode: `TR_ADM3_HTTP_${response.status}` }),
+        fallbackProviderId: `tr-adm3-osm-${provider.provinceCode}`
+      });
+    } catch (error) {
+      health.push({
+        providerId: provider.id,
+        reachable: false,
+        latencyMs: Math.round(performance.now() - startedAt),
+        lastCheckedAt: input.checkedAt,
+        errorCode:
+          error instanceof Error && error.name === "TimeoutError"
+            ? "TR_ADM3_HEALTH_TIMEOUT"
+            : "TR_ADM3_HEALTH_REQUEST_FAILED",
+        fallbackProviderId: `tr-adm3-osm-${provider.provinceCode}`
+      });
+    }
+  }
+
+  return health;
+}
+
+function isSafeTurkeyAdm3HealthUrl(input: string): boolean {
+  let parsed: URL;
+
+  try {
+    parsed = new URL(input);
+  } catch {
+    return false;
+  }
+
+  if (!["https:", "http:"].includes(parsed.protocol)) {
+    return false;
+  }
+
+  const hostname = parsed.hostname.toLowerCase();
+
+  if (
+    hostname === "localhost" ||
+    hostname.endsWith(".localhost") ||
+    hostname === "::1" ||
+    hostname.startsWith("127.") ||
+    hostname.startsWith("10.") ||
+    hostname.startsWith("192.168.") ||
+    hostname.startsWith("169.254.")
+  ) {
+    return false;
+  }
+
+  const private172 = hostname.match(/^172\.(\d{1,2})\./);
+
+  if (private172) {
+    const octet = Number(private172[1]);
+    return octet < 16 || octet > 31;
+  }
+
+  return true;
+}
+
+function createTurkeyAdm3BuildCoverageReport(input: {
+  generatedAt: string;
+  fallbacks: TurkeyAdm3FallbackRegistry;
+  providers: readonly TurkeyAdm3ProviderRecord[];
+  districts: readonly TurkeyAdm3BuildDistrictCoverage[];
+  sourceModes: TurkeyAdm3BuildSourceModes;
+  sourceStatus: TurkeyAdm3BuildSourceStatus;
+}): Record<string, unknown> & {
+  districtCount: number;
+  provinceCount: number;
+  officialPolygons: number;
+  runtimePolygons: number;
+  osmPolygons: number;
+  generatedPolygons: number;
+  totalRealPolygons: number;
+  realAdm3CoveragePercent: number;
+  officialCoveragePercent: number;
+  runtimeCoveragePercent: number;
+  osmCoveragePercent: number;
+  generatedFallbackCoveragePercent: number;
+  finalUsableCoveragePercent: number;
+  districtsBelow9999: Array<{
+    districtId: string;
+    districtName: string;
+    provinceCode?: string;
+    provinceName: string;
+    finalCoveragePercent: number;
+    missingBeforeGeneratedAreaKm2: number;
+  }>;
+  sourceStatus: TurkeyAdm3BuildSourceStatus;
+} {
+  const totalDistrictAreaKm2 = sumCoverage(input.districts, "districtAreaKm2");
+  const officialAreaKm2 = sumCoverage(input.districts, "officialAreaKm2");
+  const runtimeAreaKm2 = sumCoverage(input.districts, "runtimeAreaKm2");
+  const osmAreaKm2 = sumCoverage(input.districts, "osmAreaKm2");
+  const generatedAreaKm2 = sumCoverage(input.districts, "generatedAreaKm2");
+  const realCoverageAreaKm2 = sumCoverage(input.districts, "realCoverageAreaKm2");
+  const finalCoverageAreaKm2 = sumCoverage(input.districts, "finalCoverageAreaKm2");
+  const officialPolygons = sumCoverage(input.districts, "officialPolygonCount");
+  const runtimePolygons = sumCoverage(input.districts, "runtimePolygonCount");
+  const osmPolygons = sumCoverage(input.districts, "osmPolygonCount");
+  const generatedPolygons = sumCoverage(input.districts, "generatedPolygonCount");
+  const districtsBelow9999 = input.districts
+    .filter((district) => district.finalCoveragePercent < 99.99)
+    .map((district) => ({
+      districtId: district.districtId,
+      districtName: district.districtName,
+      ...(district.provinceCode ? { provinceCode: district.provinceCode } : {}),
+      provinceName: district.provinceName,
+      finalCoveragePercent: district.finalCoveragePercent,
+      missingBeforeGeneratedAreaKm2: district.missingBeforeGeneratedAreaKm2
+    }));
+  const provinces = aggregateTurkeyAdm3ProvinceCoverage(input.districts);
+
+  return {
+    schemaVersion: "territorykit-tr-adm3-national-coverage@2",
+    country: "TR",
+    generatedAt: input.generatedAt,
+    provinceCount: new Set(input.districts.map((district) => district.provinceCode)).size,
+    districtCount: input.districts.length,
+    registryDistrictCount: input.fallbacks.districtCount,
+    providerRecords: input.providers.length,
+    officialProviderProvinces: uniqueProviderProvinceCount(input.providers, "official"),
+    runtimeProviderProvinces: uniqueProviderProvinceCount(input.providers, "runtime"),
+    experimentalProviderProvinces: uniqueProviderProvinceCount(input.providers, "experimental"),
+    osmProviderProvinces: uniqueProviderProvinceCount(input.providers, "osm"),
+    generatedProviderProvinces: uniqueProviderProvinceCount(input.providers, "generated"),
+    sourceModes: input.sourceModes,
+    sourceStatus: input.sourceStatus,
+    officialPolygons,
+    runtimePolygons,
+    osmPolygons,
+    generatedPolygons,
+    totalRealPolygons: officialPolygons + runtimePolygons + osmPolygons,
+    totalGeneratedPolygons: generatedPolygons,
+    totalFinalPolygons: officialPolygons + runtimePolygons + osmPolygons + generatedPolygons,
+    officialAreaKm2,
+    runtimeAreaKm2,
+    osmAreaKm2,
+    generatedAreaKm2,
+    realCoverageAreaKm2,
+    finalCoverageAreaKm2,
+    officialCoveragePercent: cliPercentage(officialAreaKm2, totalDistrictAreaKm2),
+    runtimeCoveragePercent: cliPercentage(runtimeAreaKm2, totalDistrictAreaKm2),
+    osmCoveragePercent: cliPercentage(osmAreaKm2, totalDistrictAreaKm2),
+    realAdm3CoveragePercent: cliPercentage(realCoverageAreaKm2, totalDistrictAreaKm2),
+    generatedFallbackCoveragePercent: cliPercentage(generatedAreaKm2, totalDistrictAreaKm2),
+    finalUsableCoveragePercent: cliPercentage(finalCoverageAreaKm2, totalDistrictAreaKm2),
+    coveredDistrictsAtOrAbove9999: input.districts.length - districtsBelow9999.length,
+    districtsBelow9999,
+    provinces,
+    notes: [
+      "Coverage is measured from built geometry, not provider availability.",
+      "Sources marked not-built were not counted as spatial coverage."
+    ]
+  };
+}
+
+function aggregateTurkeyAdm3ProvinceCoverage(
+  districts: readonly TurkeyAdm3BuildDistrictCoverage[]
+): Array<Record<string, unknown>> {
+  const grouped = new Map<
+    string,
+    {
+      provinceCode: string;
+      provinceName: string;
+      districtAreaKm2: number;
+      officialAreaKm2: number;
+      runtimeAreaKm2: number;
+      osmAreaKm2: number;
+      generatedAreaKm2: number;
+      realCoverageAreaKm2: number;
+      finalCoverageAreaKm2: number;
+      officialPolygonCount: number;
+      runtimePolygonCount: number;
+      osmPolygonCount: number;
+      generatedPolygonCount: number;
+    }
+  >();
+
+  for (const district of districts) {
+    const provinceCode = district.provinceCode ?? "unknown";
+    const current = grouped.get(provinceCode) ?? {
+      provinceCode,
+      provinceName: district.provinceName,
+      districtAreaKm2: 0,
+      officialAreaKm2: 0,
+      runtimeAreaKm2: 0,
+      osmAreaKm2: 0,
+      generatedAreaKm2: 0,
+      realCoverageAreaKm2: 0,
+      finalCoverageAreaKm2: 0,
+      officialPolygonCount: 0,
+      runtimePolygonCount: 0,
+      osmPolygonCount: 0,
+      generatedPolygonCount: 0
+    };
+
+    current.districtAreaKm2 += district.districtAreaKm2;
+    current.officialAreaKm2 += district.officialAreaKm2;
+    current.runtimeAreaKm2 += district.runtimeAreaKm2;
+    current.osmAreaKm2 += district.osmAreaKm2;
+    current.generatedAreaKm2 += district.generatedAreaKm2;
+    current.realCoverageAreaKm2 += district.realCoverageAreaKm2;
+    current.finalCoverageAreaKm2 += district.finalCoverageAreaKm2;
+    current.officialPolygonCount += district.officialPolygonCount;
+    current.runtimePolygonCount += district.runtimePolygonCount;
+    current.osmPolygonCount += district.osmPolygonCount;
+    current.generatedPolygonCount += district.generatedPolygonCount;
+    grouped.set(provinceCode, current);
+  }
+
+  return [...grouped.values()]
+    .map((province) => ({
+      provinceCode: province.provinceCode,
+      provinceName: province.provinceName,
+      officialPolygonCount: province.officialPolygonCount,
+      runtimePolygonCount: province.runtimePolygonCount,
+      osmPolygonCount: province.osmPolygonCount,
+      generatedPolygonCount: province.generatedPolygonCount,
+      realCoveragePercent: cliPercentage(province.realCoverageAreaKm2, province.districtAreaKm2),
+      generatedCoveragePercent: cliPercentage(province.generatedAreaKm2, province.districtAreaKm2),
+      finalCoveragePercent: cliPercentage(province.finalCoverageAreaKm2, province.districtAreaKm2),
+      primarySource:
+        province.officialPolygonCount > 0
+          ? "official"
+          : province.runtimePolygonCount > 0
+            ? "runtime"
+            : province.osmPolygonCount > 0
+              ? "osm"
+              : province.generatedPolygonCount > 0
+                ? "generated"
+                : "none"
+    }))
+    .sort((left, right) => String(left.provinceCode).localeCompare(String(right.provinceCode)));
+}
+
+function sumCoverage<K extends keyof TurkeyAdm3BuildDistrictCoverage>(
+  districts: readonly TurkeyAdm3BuildDistrictCoverage[],
+  key: K
+): number {
+  return Number(
+    districts
+      .reduce((total, district) => {
+        const value = district[key];
+        return total + (typeof value === "number" ? value : 0);
+      }, 0)
+      .toFixed(6)
+  );
+}
+
+function uniqueProviderProvinceCount(
+  providers: readonly TurkeyAdm3ProviderRecord[],
+  providerClass: TurkeyAdm3ProviderRecord["providerClass"]
+): number {
+  return new Set(
+    providers
+      .filter((provider) => provider.providerClass === providerClass)
+      .map((provider) => provider.provinceCode)
+  ).size;
+}
+
+function cliPercentage(value: number, total: number): number {
+  return total <= 0 ? 0 : Number(Math.min(100, (value / total) * 100).toFixed(6));
+}
+
+function isTerritoryZoneLike(input: unknown): input is TerritoryZone {
+  return (
+    isRecordValue(input) &&
+    typeof input.id === "string" &&
+    typeof input.datasetId === "string" &&
+    typeof input.level === "number" &&
+    Array.isArray(input.neighborIds) &&
+    isRecordValue(input.geometry) &&
+    Array.isArray(input.bbox) &&
+    Array.isArray(input.center) &&
+    isRecordValue(input.properties)
+  );
 }
 
 function runCountryList(args: string[]): number {

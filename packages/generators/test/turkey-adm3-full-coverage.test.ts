@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildTurkeyAdm3GeneratedZones,
   computeTurkeyAdm3DistrictCoverage,
+  computeTurkeyAdm3GeometryAreaKm2,
   createTurkeyAdm3GeneratedGeometryHash,
   createTurkeyAdm3GeneratedMigrationReport,
   createTurkeyAdm3ProviderHealthReport,
@@ -126,7 +127,8 @@ describe("Turkey ADM3 full coverage provider registry", () => {
 
   it.each([
     ["uses official before OSM and generated", "16", false, "official", {}],
-    ["uses runtime before OSM when allowed", "34", false, "runtime", {}],
+    ["skips license-blocked runtime before OSM", "34", false, "osm", {}],
+    ["skips unreachable runtime before OSM", "06", false, "osm", {}],
     ["uses OSM before generated with no local source", "01", false, "osm", {}],
     ["uses generated if OSM is disabled", "01", false, "generated", { allowOsm: false }],
     ["keeps experimental disabled by default", "20", false, "osm", {}],
@@ -170,6 +172,38 @@ describe("Turkey ADM3 full coverage provider registry", () => {
     });
 
     expect(provider?.providerClass).toBe(expectedClass);
+  });
+
+  it("prefers district-specific providers over province-wide providers within a class", async () => {
+    const { providers, fallbacks } = await loadRegistryContext();
+    const kadikoy = fallbacks.districts.find((district) => district.districtName === "Kadıköy");
+    const official = providers.find((provider) => provider.providerClass === "official");
+
+    expect(kadikoy).toBeDefined();
+    expect(official).toBeDefined();
+
+    const { districtCodes: _districtCodes, ...provinceOfficialSource } = official!;
+    const provinceOfficial: TurkeyAdm3ProviderRecord = {
+      ...provinceOfficialSource,
+      id: "tr-adm3-official-34-province-wide-fixture",
+      provinceCode: "34",
+      providerName: "Province-wide fixture"
+    };
+    const districtOfficial: TurkeyAdm3ProviderRecord = {
+      ...provinceOfficial,
+      id: "tr-adm3-official-34-kadikoy-fixture",
+      providerName: "Kadıköy fixture",
+      coverage: "districts",
+      districtCodes: [kadikoy!.districtId]
+    };
+    const provider = resolveTurkeyAdm3Provider({
+      countryCode: "TR",
+      provinceCode: "34",
+      districtCode: kadikoy!.districtId,
+      providers: [provinceOfficial, districtOfficial]
+    });
+
+    expect(provider?.id).toBe(districtOfficial.id);
   });
 
   it("builds source health with explicit fallback provider ids", async () => {
@@ -327,8 +361,10 @@ describe("Turkey ADM3 OSM and generated fallback behavior", () => {
       generated: [square(0.5, 0, 1, 1)]
     });
 
-    expect(report.officialAreaKm2).toBe(5000);
-    expect(report.generatedAreaKm2).toBe(5000);
+    expect(report.officialAreaKm2).toBeCloseTo(report.districtAreaKm2 / 2, 3);
+    expect(report.generatedAreaKm2).toBeCloseTo(report.districtAreaKm2 / 2, 3);
+    expect(report.officialCoveragePercent).toBe(50);
+    expect(report.generatedCoveragePercent).toBe(50);
     expect(report.finalCoveragePercent).toBe(100);
   });
 
@@ -350,7 +386,7 @@ describe("Turkey ADM3 OSM and generated fallback behavior", () => {
     ]);
   });
 
-  it("blocks unsupported non-rectangular generated-zone clipping", () => {
+  it("supports non-rectangular district clipping", () => {
     const district = zone("tr:adm2:triangle", "Triangle", {
       type: "Polygon",
       coordinates: [
@@ -362,10 +398,49 @@ describe("Turkey ADM3 OSM and generated fallback behavior", () => {
         ]
       ]
     });
+    const result = buildTurkeyAdm3GeneratedZones({ district, provinceCode: "01" });
 
-    expect(() => buildTurkeyAdm3GeneratedZones({ district, provinceCode: "01" })).toThrow(
-      "cannot safely clip non-rectangular geometry"
-    );
+    expect(result.issues).toHaveLength(0);
+    expect(result.zones.length).toBeGreaterThan(0);
+    expect(result.coverage.generatedCoveragePercent).toBeGreaterThanOrEqual(99.99);
+    expect(result.coverage.finalCoveragePercent).toBeGreaterThanOrEqual(99.99);
+    expect(
+      result.zones.reduce(
+        (total, generated) => total + computeTurkeyAdm3GeometryAreaKm2(generated.geometry),
+        0
+      )
+    ).toBeCloseTo(computeTurkeyAdm3GeometryAreaKm2(district.geometry), 0);
+  });
+
+  it("supports multipolygon district clipping", () => {
+    const district = zone("tr:adm2:multipolygon", "Multi", {
+      type: "MultiPolygon",
+      coordinates: [
+        [
+          [
+            [0, 0],
+            [1, 0],
+            [1, 1],
+            [0, 1],
+            [0, 0]
+          ]
+        ],
+        [
+          [
+            [2, 0],
+            [3, 0],
+            [3, 1],
+            [2, 1],
+            [2, 0]
+          ]
+        ]
+      ]
+    });
+    const result = buildTurkeyAdm3GeneratedZones({ district, provinceCode: "01" });
+
+    expect(result.issues).toHaveLength(0);
+    expect(result.zones.length).toBeGreaterThan(0);
+    expect(result.coverage.finalCoveragePercent).toBe(100);
   });
 });
 

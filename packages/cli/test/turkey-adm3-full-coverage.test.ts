@@ -48,15 +48,22 @@ describe("territory cli Turkey ADM3 full coverage", () => {
       command: "tr adm3 coverage",
       data: {
         provinceCount: 81,
-        districtCount: 973,
-        finalUsableCoveragePercent: 100
+        districtCount: 973
       }
     });
+    expect(
+      (result.payload as { data?: { finalUsableCoveragePercent?: number } }).data
+        ?.finalUsableCoveragePercent
+    ).toBeGreaterThanOrEqual(99.99);
+    expect(
+      (result.payload as { data?: { finalUsableCoveragePercent?: number } }).data
+        ?.finalUsableCoveragePercent
+    ).toBeLessThanOrEqual(100);
   });
 
-  it("writes a deterministic fallback build plan", async () => {
+  it("writes deterministic geometry build artifacts", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-adm3-full-"));
-    const outputPath = join(tempDir, "build-plan.json");
+    const outputPath = join(tempDir, "build-summary.json");
 
     try {
       const result = await captureCli([
@@ -69,6 +76,8 @@ describe("territory cli Turkey ADM3 full coverage", () => {
         "--fill-gaps",
         "--output",
         outputPath,
+        "--max-districts",
+        "2",
         "--build-date",
         "2026-08-07T00:00:00.000Z"
       ]);
@@ -79,13 +88,18 @@ describe("territory cli Turkey ADM3 full coverage", () => {
           ok: true,
           command: "tr adm3 build",
           data: {
-            districtCount: 973,
-            coverageTargetPercent: 99.99
+            districtCount: 2,
+            builtDistrictCount: 2,
+            generatedPolygons: expect.any(Number),
+            finalCoveragePercent: expect.any(Number)
           }
         }
       });
       await expect(readFile(outputPath, "utf8")).resolves.toContain(
-        "territorykit-tr-adm3-build-plan@1"
+        "territorykit-tr-adm3-build-summary@1"
+      );
+      await expect(readFile(join(tempDir, "dataset.json"), "utf8")).resolves.toContain(
+        "territory-kit-tr-adm3-national-build"
       );
     } finally {
       await rm(tempDir, { recursive: true, force: true });

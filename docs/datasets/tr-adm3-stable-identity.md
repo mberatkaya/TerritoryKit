@@ -4,6 +4,6 @@ Real ADM3 identity is derived from TR, province, district, canonical name, and s
 
 Current registry fallback coverage:
 
-- Real ADM3 coverage: 0.00%
-- Generated fallback coverage: 100.00%
-- Final usable ADM3-like coverage: 100.00%
+- Real ADM3 coverage: 0.000000%
+- Generated fallback coverage: 99.999305%
+- Final usable ADM3-like coverage: 99.999305%
