@@ -1,5 +1,13 @@
 # @territory-kit/react-native
 
+## 1.1.2
+
+### Patch Changes
+
+- @territory-kit/core@1.3.0
+- @territory-kit/dataset@1.3.0
+- @territory-kit/registry@1.3.0
+
 ## 1.1.1
 
 ### Patch Changes

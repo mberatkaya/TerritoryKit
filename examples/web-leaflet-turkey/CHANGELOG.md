@@ -1,5 +1,14 @@
 # @territory-kit/example-web-leaflet-turkey
 
+## 0.0.3
+
+### Patch Changes
+
+- @territory-kit/registry@1.3.0
+- @territory-kit/runtime@1.3.0
+- @territory-kit/leaflet@1.2.1
+- @territory-kit/shared-testkit@0.1.0-alpha.1
+
 ## 0.0.2
 
 ### Patch Changes
