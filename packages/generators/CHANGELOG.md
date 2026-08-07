@@ -1,5 +1,16 @@
 # @territory-kit/generators
 
+## 1.3.0
+
+### Minor Changes
+
+- 8dd6dd3: Replaces Turkey ADM3 fallback-policy coverage with geometry-built coverage reporting for generated fill, adds arbitrary Polygon/MultiPolygon generated-zone clipping, priority-aware geodesic coverage measurement, real `territory tr adm3 build` artifacts, district-specific provider resolution, and bounded network provider health checks.
+
+### Patch Changes
+
+- @territory-kit/core@1.3.0
+- @territory-kit/dataset@1.3.0
+
 ## 1.2.0
 
 ### Minor Changes
