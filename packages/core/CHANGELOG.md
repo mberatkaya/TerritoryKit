@@ -1,5 +1,13 @@
 # @territory-kit/core
 
+## 1.5.0
+
+### Patch Changes
+
+- Updated dependencies [e605ffc]
+  - @territory-kit/dataset@1.5.0
+  - @territory-kit/registry@1.5.0
+
 ## 1.4.0
 
 ### Patch Changes
