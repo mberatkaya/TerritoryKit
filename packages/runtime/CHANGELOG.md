@@ -1,5 +1,14 @@
 # @territory-kit/runtime
 
+## 1.6.0
+
+### Patch Changes
+
+- @territory-kit/adapter-core@1.6.0
+- @territory-kit/core@1.6.0
+- @territory-kit/dataset@1.6.0
+- @territory-kit/registry@1.6.0
+
 ## 1.5.0
 
 ### Patch Changes
