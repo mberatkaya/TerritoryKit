@@ -86,9 +86,12 @@ import {
 import {
   buildTurkeyAdm3GeneratedZones,
   buildTurkeyAdm3EffectiveZones,
+  buildTurkeyGameZonesWithAdjacency,
+  createTurkeyGameZoneDataset,
   createTurkeyAdm3ProviderHealthReport,
   createTurkeyAdm3Registry,
   inspectTurkeyAdm3SpatialQuality,
+  validateTurkeyGameZoneGeneratorOptions,
   resolveTurkeyAdm3Provider,
   validateTurkeyAdm3ProviderRegistry
 } from "@territory-kit/generators/turkey-adm3";
@@ -117,6 +120,9 @@ import type {
 import type {
   computeTurkeyAdm3DistrictCoverage,
   TurkeyAdm3FallbackRegistry,
+  TurkeyGameZoneFragmentStrategy,
+  TurkeyGameZoneGeneratorOptions,
+  TurkeyGameZoneProfile,
   TurkeyAdm3ProviderRecord
 } from "@territory-kit/generators/turkey-adm3";
 
@@ -565,6 +571,10 @@ async function runTurkeyAdm3(args: string[]): Promise<number> {
 
   if (subcommand === "build") {
     return runTurkeyAdm3Build(args.slice(1));
+  }
+
+  if (subcommand === "generate") {
+    return runTurkeyAdm3Generate(args.slice(1));
   }
 
   printJson({
@@ -1026,6 +1036,301 @@ async function runTurkeyAdm3Build(args: string[]): Promise<number> {
 
   printJson({ ok: true, command: "tr adm3 build", data: summary });
   return 0;
+}
+
+async function runTurkeyAdm3Generate(args: string[]): Promise<number> {
+  const startedAt = performance.now();
+  const flags = parseFlags(args);
+  const inputPath =
+    getFlag(flags, "district") ?? getFlag(flags, "input") ?? getFlag(flags, "dataset");
+  const outputRoot = getFlag(flags, "output");
+  const districtId = getFlag(flags, "district-id") ?? getFlag(flags, "zone-id");
+  const profile = (getFlag(flags, "profile") ?? "auto") as TurkeyGameZoneProfile;
+  const seed = getFlag(flags, "seed");
+  const fragmentStrategy = getFlag(flags, "fragment-strategy") as
+    TurkeyGameZoneFragmentStrategy | undefined;
+  const flagIssues: CliIssue[] = [];
+  const targetAreaKm2 = readOptionalPositiveNumberFlag(flags, "target-area", flagIssues);
+  const targetZoneCount = readOptionalPositiveIntegerFlag(flags, "target-zone-count", flagIssues);
+  const minAreaKm2 = readOptionalPositiveNumberFlag(flags, "min-area", flagIssues);
+  const maxAreaKm2 = readOptionalPositiveNumberFlag(flags, "max-area", flagIssues);
+  const maxZonesPerDistrict = readOptionalPositiveIntegerFlag(flags, "max-zones", flagIssues);
+  const minFragmentAreaKm2 = readOptionalPositiveNumberFlag(flags, "min-fragment-area", flagIssues);
+  const population = readOptionalNonNegativeNumberFlag(flags, "population", flagIssues);
+  const populationDensityPerKm2 = readOptionalNonNegativeNumberFlag(
+    flags,
+    "population-density",
+    flagIssues
+  );
+  const urbanityHint = readTurkeyAdm3UrbanityHint(flags);
+
+  if (!inputPath || !outputRoot) {
+    printJson({
+      ok: false,
+      command: "tr adm3 generate",
+      issues: [
+        ...(!inputPath ? [createCliIssue("--district, --input, or --dataset is required.")] : []),
+        ...(!outputRoot ? [createCliIssue("--output is required.")] : [])
+      ]
+    });
+    return 2;
+  }
+
+  if (flagIssues.length > 0) {
+    printJson({ ok: false, command: "tr adm3 generate", issues: flagIssues });
+    return 2;
+  }
+
+  try {
+    const district = await readTurkeyAdm3GenerateDistrict(inputPath, districtId);
+    const { provinceCode, districtCode } = resolveTurkeyAdm3GenerateCodes(district, flags);
+    const generatorOptions = {
+      district,
+      provinceCode,
+      districtCode,
+      profile,
+      ...(seed ? { seed } : {}),
+      ...(targetAreaKm2 ? { targetAreaKm2 } : {}),
+      ...(targetZoneCount ? { targetZoneCount } : {}),
+      ...(minAreaKm2 ? { minAreaKm2 } : {}),
+      ...(maxAreaKm2 ? { maxAreaKm2 } : {}),
+      ...(maxZonesPerDistrict ? { maxZonesPerDistrict } : {}),
+      ...(minFragmentAreaKm2 ? { minFragmentAreaKm2 } : {}),
+      ...(population !== undefined ? { population } : {}),
+      ...(populationDensityPerKm2 !== undefined ? { populationDensityPerKm2 } : {}),
+      ...(urbanityHint ? { urbanityHint } : {}),
+      ...(fragmentStrategy ? { fragmentStrategy } : {})
+    } satisfies TurkeyGameZoneGeneratorOptions;
+    const validation = validateTurkeyGameZoneGeneratorOptions(generatorOptions);
+
+    if (!validation.ok) {
+      printJson({
+        ok: false,
+        command: "tr adm3 generate",
+        issues: validation.issues
+      });
+      return 2;
+    }
+
+    if (flags.has("dry-run") || flags.has("plan")) {
+      printJson({
+        ok: true,
+        command: "tr adm3 generate",
+        data: {
+          dryRun: true,
+          districtId: district.id,
+          provinceCode,
+          districtCode,
+          configuration: validation.configuration,
+          issues: validation.issues
+        }
+      });
+      return 0;
+    }
+
+    const result = await buildTurkeyGameZonesWithAdjacency(generatorOptions);
+    const dataset = createTurkeyGameZoneDataset({
+      district,
+      zones: result.zones,
+      datasetId: "tr-adm3-game-zone-build",
+      sourceDate: result.configuration.algorithmVersion
+    });
+    const trV2Validation = validateTurkeyV2Dataset(dataset);
+    const artifactPaths = {
+      dataset: join(outputRoot, "dataset.json"),
+      fullGeoJson: join(outputRoot, "full.geojson"),
+      coverage: join(outputRoot, "coverage.json"),
+      quality: join(outputRoot, "quality-report.json"),
+      adjacency: join(outputRoot, "adjacency.json"),
+      buildSummary: join(outputRoot, "build-summary.json"),
+      configuration: join(outputRoot, "configuration.json"),
+      checksums: join(outputRoot, "checksums.json")
+    };
+    const fullGeoJson = territoryDatasetToFeatureCollection(dataset);
+    const summary = {
+      schemaVersion: "territorykit-tr-adm3-game-zone-build-summary@1",
+      command: "tr adm3 generate",
+      districtId: district.id,
+      provinceCode,
+      districtCode,
+      selectedProfile: result.selectedProfile,
+      algorithmVersion: result.configuration.algorithmVersion,
+      producedZoneCount: result.zones.length,
+      finalCoveragePercent: result.coverage.finalCoveragePercent,
+      overlapCount: result.quality.overlapCount,
+      parentContainmentErrorCount: result.quality.parentContainmentErrorCount,
+      invalidGeometryCount: result.quality.invalidGeometryCount,
+      deterministicHash: result.deterministicHash,
+      qualityOk: result.quality.ok,
+      trV2ValidationOk: trV2Validation.ok,
+      durationMs: Math.round(performance.now() - startedAt),
+      artifacts: artifactPaths
+    };
+    const filePayloads = new Map<string, unknown>([
+      [artifactPaths.dataset, dataset],
+      [artifactPaths.fullGeoJson, fullGeoJson],
+      [artifactPaths.coverage, result.coverage],
+      [artifactPaths.quality, result.quality],
+      [artifactPaths.adjacency, result.adjacency ?? { edges: [] }],
+      [artifactPaths.buildSummary, summary],
+      [artifactPaths.configuration, result.configuration]
+    ]);
+    const checksums = createArtifactChecksums(filePayloads);
+
+    for (const [path, payload] of filePayloads) {
+      await writeJsonOutput(path, payload, flags.has("force"));
+    }
+    await writeJsonOutput(artifactPaths.checksums, checksums, flags.has("force"));
+
+    const ok =
+      result.quality.ok &&
+      result.issues.every((issue) => issue.severity !== "error") &&
+      trV2Validation.ok;
+
+    printJson({
+      ok,
+      command: "tr adm3 generate",
+      data: summary,
+      issues: [
+        ...result.issues,
+        ...trV2Validation.issues.map((issue) => ({
+          code: issue.code,
+          severity: issue.severity,
+          message: issue.message,
+          zoneId: issue.zoneId,
+          parentId: issue.parentId
+        }))
+      ]
+    });
+    return ok ? 0 : 1;
+  } catch (error) {
+    printJson({
+      ok: false,
+      command: "tr adm3 generate",
+      issues: [createCliIssue(error instanceof Error ? error.message : String(error))]
+    });
+    return 2;
+  }
+}
+
+async function readTurkeyAdm3GenerateDistrict(
+  inputPath: string,
+  districtId: string | undefined
+): Promise<TerritoryZone> {
+  const input = await readJson(inputPath);
+
+  if (isTerritoryZoneLike(input)) {
+    return input;
+  }
+
+  const zones =
+    isRecordValue(input) && Array.isArray(input.zones)
+      ? input.zones
+          .filter(isTerritoryZoneLike)
+          .filter((zone) => zone.level === 2 || zone.sourceAdminLevel === "ADM2")
+      : loadTerritoryDataset(input).zones.filter(
+          (zone) => zone.level === 2 || zone.sourceAdminLevel === "ADM2"
+        );
+  const selected = districtId ? zones.find((zone) => zone.id === districtId) : zones[0];
+
+  if (!selected) {
+    throw new Error(
+      districtId
+        ? `District zone '${districtId}' was not found in ${inputPath}.`
+        : `No ADM2 district zone was found in ${inputPath}.`
+    );
+  }
+
+  return selected;
+}
+
+function resolveTurkeyAdm3GenerateCodes(
+  district: TerritoryZone,
+  flags: Map<string, string | true>
+): { provinceCode: string; districtCode: string } {
+  const territory = isRecordValue(district.properties.territory)
+    ? district.properties.territory
+    : {};
+  const provinceCode =
+    getFlag(flags, "province-code") ??
+    readTurkeyAdm3StringProperty(territory, "provinceCode") ??
+    readTurkeyAdm3StringProperty(territory, "adm2.provinceCode") ??
+    "00";
+  const districtCode =
+    getFlag(flags, "district-code") ??
+    readTurkeyAdm3StringProperty(territory, "districtCode") ??
+    readTurkeyAdm3StringProperty(territory, "adm2.districtCode") ??
+    district.id.replace(/^tr:adm2:/, "").slice(0, 12);
+
+  return { provinceCode, districtCode };
+}
+
+function readTurkeyAdm3UrbanityHint(
+  flags: Map<string, string | true>
+): "urban" | "suburban" | "rural" | undefined {
+  const value = getFlag(flags, "urbanity-hint");
+
+  if (value === "urban" || value === "suburban" || value === "rural") {
+    return value;
+  }
+
+  return undefined;
+}
+
+function territoryDatasetToFeatureCollection(dataset: TerritoryDataset): Record<string, unknown> {
+  return {
+    type: "FeatureCollection",
+    territoryKit: {
+      datasetId: dataset.manifest.datasetId,
+      datasetVersion: dataset.manifest.datasetVersion,
+      geometryHash: dataset.manifest.geometryHash
+    },
+    features: dataset.zones.map((zone) => ({
+      type: "Feature",
+      id: zone.id,
+      properties: {
+        ...zone.properties,
+        id: zone.id,
+        datasetId: zone.datasetId,
+        countryCode: zone.countryCode,
+        level: zone.level,
+        sourceAdminLevel: zone.sourceAdminLevel,
+        semanticType: zone.semanticType,
+        name: zone.name,
+        localName: zone.localName,
+        parentId: zone.parentId,
+        childIds: zone.childIds,
+        neighborIds: zone.neighborIds,
+        bbox: zone.bbox,
+        center: zone.center
+      },
+      geometry: zone.geometry
+    }))
+  };
+}
+
+function createArtifactChecksums(
+  filePayloads: ReadonlyMap<string, unknown>
+): Record<string, unknown> {
+  const files = Object.fromEntries(
+    [...filePayloads.entries()]
+      .map(([path, payload]) => {
+        const serialized = `${JSON.stringify(payload, null, 2)}\n`;
+        return [
+          path.split("/").pop() ?? path,
+          {
+            sha256: sha256Text(serialized),
+            byteSize: Buffer.byteLength(serialized)
+          }
+        ] as const;
+      })
+      .sort(([left], [right]) => left.localeCompare(right))
+  );
+
+  return {
+    schemaVersion: "territorykit-tr-adm3-game-zone-checksums@1",
+    files
+  };
 }
 
 async function readTurkeyAdm3ProviderRecords(
@@ -5826,6 +6131,27 @@ function readOptionalNonNegativeNumberFlag(
   return parsed;
 }
 
+function readOptionalPositiveNumberFlag(
+  flags: Map<string, string | true>,
+  key: string,
+  issues: CliIssue[]
+): number | undefined {
+  const value = getFlag(flags, key);
+
+  if (value === undefined) {
+    return undefined;
+  }
+
+  const parsed = Number(value);
+
+  if (!Number.isFinite(parsed) || parsed <= 0) {
+    issues.push(createCliIssue(`--${key} must be a positive number.`));
+    return undefined;
+  }
+
+  return parsed;
+}
+
 function readOptionalPositiveIntegerFlag(
   flags: Map<string, string | true>,
   key: string,
@@ -6151,11 +6477,13 @@ Commands:
   providers health
   coverage
   source-audit
+  generate
   build
 
 Options:
   --registry <json> --fallbacks <json> --allow-experimental --allow-runtime
-  --official --osm --fill-gaps --output <json>`);
+  --official --osm --fill-gaps --output <json>
+  generate --dataset <adm2.json> --district-id <id> --profile auto --output <dir>`);
 }
 
 function printTurkeyAdm3ProvidersHelp(): void {

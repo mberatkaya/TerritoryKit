@@ -40,6 +40,18 @@ Patch:
 
 Geometry changes do not automatically mean ID changes. IDs follow the stable identity standard.
 
+## Generated Zone V1 to V2
+
+`tr-adm3-game-zone-v2` is not a geometry-preserving update to
+`tr-adm3-generated-zone-v1`. The algorithm version is part of generated stable identity, so V2
+generated IDs intentionally differ from V1. Applications that persist generated-zone ownership,
+scores, route summaries, or claims must apply an explicit migration mapping before switching a
+district or national artifact to V2.
+
+The V2 generator is available through `buildTurkeyGameZones`,
+`buildTurkeyGameZonesWithAdjacency`, and `territory tr adm3 generate`. It does not publish the final
+national Turkey V2 artifact by itself.
+
 ## Migration Artifacts
 
 Future national Turkey V2 migrations should emit:

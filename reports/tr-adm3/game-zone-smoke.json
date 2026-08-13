@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "territorykit-tr-adm3-game-zone-benchmark@1",
+  "algorithmVersion": "tr-adm3-game-zone-v2",
+  "generatedAt": "1970-01-01T00:00:00.000Z",
+  "mode": "smoke",
+  "runtime": {
+    "node": "v24.14.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "durationMs": 81,
+  "scenarios": [
+    {
+      "scenario": "small-urban-district",
+      "profile": "urban",
+      "districtCount": 1,
+      "producedZoneCount": 23,
+      "minCoveragePercent": 100,
+      "maxDistrictBuildTimeMs": 13,
+      "durationMs": 13,
+      "deterministicHash": "413168f25f65ecf8fd6d6b2ba78612df70f978809e2c2e43b03014f5566e91d4",
+      "peakRssBytes": 68845568
+    },
+    {
+      "scenario": "medium-suburban-district",
+      "profile": "suburban",
+      "districtCount": 1,
+      "producedZoneCount": 117,
+      "minCoveragePercent": 100,
+      "maxDistrictBuildTimeMs": 21,
+      "durationMs": 21,
+      "deterministicHash": "204c70f8d5eb1dd34f50e70e62747ca2bc3e1bb443b2f01b72b52f0d022cc972",
+      "peakRssBytes": 76300288
+    },
+    {
+      "scenario": "large-rural-district",
+      "profile": "rural",
+      "districtCount": 1,
+      "producedZoneCount": 198,
+      "minCoveragePercent": 100,
+      "maxDistrictBuildTimeMs": 30,
+      "durationMs": 30,
+      "deterministicHash": "7090f1a45e88bcd138b79a945e8579320893c01405d21e7cbd20a701718f0131",
+      "peakRssBytes": 88637440
+    },
+    {
+      "scenario": "complex-multipolygon-coastal-district",
+      "profile": "suburban",
+      "districtCount": 1,
+      "producedZoneCount": 100,
+      "minCoveragePercent": 100,
+      "maxDistrictBuildTimeMs": 14,
+      "durationMs": 14,
+      "deterministicHash": "3278504a3d6b18422a80fa0a181d994fd6a8b340feca61cdee6e0618fa2182f3",
+      "peakRssBytes": 89030656
+    },
+    {
+      "scenario": "partial-real-coverage-mask",
+      "profile": "auto",
+      "districtCount": 1,
+      "producedZoneCount": 18,
+      "minCoveragePercent": 100,
+      "maxDistrictBuildTimeMs": 4,
+      "durationMs": 4,
+      "deterministicHash": "87deb5aff531e0f86cfc47a1a681251e91f6b7bcc9ae6912aea955e77ad7fdc7",
+      "peakRssBytes": 89210880
+    }
+  ]
+}

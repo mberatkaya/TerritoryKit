@@ -175,6 +175,16 @@ export {
   validateTurkeyGaziantepAdm3SourceManifest
 } from "./turkey-adm3-pilot.js";
 export {
+  TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
+  TURKEY_GAME_ZONE_CONFIGURATION_SCHEMA_VERSION,
+  TURKEY_GAME_ZONE_QUALITY_SCHEMA_VERSION,
+  buildTurkeyGameZones,
+  buildTurkeyGameZonesWithAdjacency,
+  createTurkeyGameZoneDataset,
+  resolveTurkeyGameZoneConfiguration,
+  validateTurkeyGameZoneGeneratorOptions
+} from "./turkey-game-zones.js";
+export {
   TURKEY_ADM3_COVERAGE_SCHEMA_VERSION,
   TURKEY_ADM3_PROVENANCE_SCHEMA_VERSION,
   TURKEY_ADM3_QUALITY_SCHEMA_VERSION,
@@ -245,6 +255,21 @@ export type {
   TurkeyGaziantepAdm3ParentMapping,
   TurkeyGaziantepAdm3SourceFeature
 } from "./turkey-adm3-pilot.js";
+export type {
+  ResolvedTurkeyGameZoneConfiguration,
+  ResolvedTurkeyGameZoneProfile,
+  TurkeyGameZoneBuildResult,
+  TurkeyGameZoneConfigurationResolution,
+  TurkeyGameZoneFragmentStrategy,
+  TurkeyGameZoneGeneratorOptions,
+  TurkeyGameZoneIssue,
+  TurkeyGameZoneIssueCode,
+  TurkeyGameZoneIssueSeverity,
+  TurkeyGameZoneProfile,
+  TurkeyGameZoneProfileDecision,
+  TurkeyGameZoneQualityReport,
+  TurkeyGameZoneUrbanityHint
+} from "./turkey-game-zones.js";
 export type {
   TurkeyAdm3AcquireSource,
   TurkeyAdm3CoverageManifest,

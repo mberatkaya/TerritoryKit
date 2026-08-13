@@ -56,6 +56,8 @@ const realAdjacency = await buildTerritoryAdjacency(dataset, {
 - `inferBBoxAdjacency(zones, options)` returns neighbor IDs inferred from bounding boxes for
   development fixtures.
 - `inferBBoxAdjacencyConnections(zones, options)` returns adjacency connection objects.
+- `buildTurkeyGameZones(options)` and `buildTurkeyGameZonesWithAdjacency(options)` build Turkey V2
+  generated game zones with `urban`, `suburban`, `rural`, `auto`, and `custom` profiles.
 
 ## World Countries ADM0
 
@@ -108,6 +110,23 @@ Turkey resolves national ADM0-ADM2 from HDX/OCHA COD-AB by default. ADM3 and ADM
 unavailable levels unless a reviewed redistributable source is added to the source lock.
 Turkey ADM3 ingestion is province-scoped and writes `extensions.turkeyAdm3`, `coverage.json`,
 `adm3-quality-gates.json`, and `adm3-source-provenance-report.json` when requested.
+
+## Turkey V2 Game Zones
+
+```ts
+import { buildTurkeyGameZonesWithAdjacency } from "@territory-kit/generators/turkey-adm3";
+
+const result = await buildTurkeyGameZonesWithAdjacency({
+  district,
+  provinceCode: "34",
+  districtCode: "003",
+  profile: "auto",
+  seed: "kaprota-v2"
+});
+```
+
+The V2 algorithm version is `tr-adm3-game-zone-v2`. Generated game zones are deterministic
+`generated-zone` ADM3 records, not official mahalle or köy polygons.
 
 ## Source Adapters
 
