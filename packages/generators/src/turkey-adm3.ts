@@ -1,4 +1,9 @@
 export {
+  TURKEY_V2_ADM3_STABLE_ID_STANDARD,
+  createTurkeyV2Adm3StableKey,
+  createTurkeyV2Adm3TerritoryId
+} from "./turkey-adm3-ingestion.js";
+export {
   TURKEY_ADM3_DEFAULT_PROVIDER_PRIORITY,
   TURKEY_ADM3_FALLBACK_SCHEMA_VERSION,
   TURKEY_ADM3_GENERATED_ALGORITHM_VERSION,
@@ -27,6 +32,10 @@ export {
   createTurkeyAdm3OsmDataset,
   extractTurkeyAdm3OsmPbf
 } from "./turkey-adm3-osm.js";
+export type {
+  TurkeyV2Adm3StableIdInput,
+  TurkeyV2Adm3StableIdSourceClass
+} from "./turkey-adm3-ingestion.js";
 export type {
   GeneratedZoneConfig,
   ProviderHealth,

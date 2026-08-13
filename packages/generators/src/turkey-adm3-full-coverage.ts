@@ -1057,6 +1057,12 @@ function createGeneratedZone(input: {
 }): TerritoryZone {
   const geometry = input.geometry;
   const geometryHash = createTurkeyAdm3GeometryHash(geometry);
+  const districtTerritory = isRecord(input.district.properties.territory)
+    ? input.district.properties.territory
+    : {};
+  const districtCode =
+    readStringPropertyPath(districtTerritory, "districtCode") ??
+    input.district.id.replace(/^tr:adm2:/, "");
   const cellId = [
     input.config.algorithmVersion,
     input.config.seed,
@@ -1084,7 +1090,7 @@ function createGeneratedZone(input: {
     countryCode: "TR",
     level: 3,
     sourceAdminLevel: "ADM3",
-    semanticType: "game-region",
+    semanticType: "generated-zone",
     name: `Generated zone ${input.cellIndex + 1}`,
     localName: `Zone ${input.cellIndex + 1}`,
     parentId: input.district.id,
@@ -1098,15 +1104,34 @@ function createGeneratedZone(input: {
         sourceAdminLevel: "ADM3",
         semanticType: "generated-zone",
         localType: "generated-zone",
+        localTypeName: "Generated game zone",
+        countryCode: "TR",
+        provinceCode: input.provinceCode,
+        districtCode,
+        hierarchyDepth: 3,
+        parentId: input.district.id,
         coverageStatus: "generated",
+        semanticReviewStatus: "not-applicable",
         sourceClass: "generated",
+        sourceProvider: "territory-kit-generated",
+        sourceDatasetId: "tr-adm3-generated",
+        sourceNativeId: id,
+        sourceDate: input.config.algorithmVersion,
+        license: "Apache-2.0",
+        attribution: "TerritoryKit generated game zones from ADM2 boundaries",
         official: false,
         generated: true,
+        algorithmVersion: input.config.algorithmVersion,
+        generationSeed: input.config.seed,
+        stableId: id,
         parentAdm2Id: input.district.id,
         geometryHash,
         source: {
           provider: "territory-kit-generated",
+          sourceClass: "generated",
+          sourceDatasetId: "tr-adm3-generated",
           sourceId: id,
+          sourceNativeId: id,
           sourceDate: input.config.algorithmVersion,
           license: "Apache-2.0",
           attribution: "TerritoryKit generated game zones from ADM2 boundaries"
@@ -1115,6 +1140,8 @@ function createGeneratedZone(input: {
           algorithm: "deterministic-clipped-grid-tessellation",
           algorithmVersion: input.config.algorithmVersion,
           seed: input.config.seed,
+          generationSeed: input.config.seed,
+          localKey: localId,
           targetAreaKm2: input.config.targetAreaKm2,
           minAreaKm2: input.config.minAreaKm2,
           maxAreaKm2: input.config.maxAreaKm2,

@@ -23,6 +23,7 @@ import {
   validateTerritoryDataset,
   validateGeometryDataset
 } from "@territory-kit/dataset";
+import { validateTurkeyV2Dataset } from "@territory-kit/dataset/turkey-v2";
 import type {
   TerritoryCoverageChangeReport,
   TerritoryDatasetDiffReport,
@@ -255,7 +256,9 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
       return await runIndex(argv.slice(1));
     }
 
-    const [filePath] = argv.slice(1).filter((value) => !value.startsWith("--"));
+    const commandArgs = argv.slice(1);
+    const commandFlags = parseFlags(commandArgs);
+    const [filePath] = getPositionalArgs(commandArgs);
 
     if (!filePath) {
       printJson({
@@ -269,11 +272,28 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
     const input = await readJson(filePath);
 
     if (command === "validate") {
-      const result = validateTerritoryDataset(input);
+      const profile = getFlag(commandFlags, "profile");
+
+      if (profile && profile !== "tr-v2") {
+        printJson({
+          ok: false,
+          command,
+          issues: [
+            createCliIssue(`Unsupported validation profile '${profile}'.`, {
+              code: "VALIDATION_PROFILE_UNSUPPORTED"
+            })
+          ]
+        });
+        return 2;
+      }
+
+      const result =
+        profile === "tr-v2" ? validateTurkeyV2Dataset(input) : validateTerritoryDataset(input);
 
       printJson({
         ok: result.ok,
         command,
+        ...(profile ? { profile } : {}),
         ...(result.ok ? { data: { issues: result.issues } } : { issues: result.issues })
       });
       return result.ok ? 0 : 1;

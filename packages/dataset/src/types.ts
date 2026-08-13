@@ -28,6 +28,7 @@ export type TerritorySemanticAdminType =
   | "local"
   | "special-administrative-area"
   | "administrative-unit"
+  | "generated-zone"
   | "game-region"
   | "unknown";
 
@@ -43,6 +44,8 @@ export type TerritoryCoverageStatus =
   | "licence-restricted"
   | "semantic-review-required"
   | "deprecated";
+
+export type TerritorySourceClass = "official" | "osm" | "generated";
 
 export type LngLat = [longitude: number, latitude: number];
 
@@ -131,12 +134,28 @@ export interface TerritoryNames {
 
 export interface TerritorySourceMetadata {
   provider: string;
+  sourceClass?: TerritorySourceClass;
+  sourceDatasetId?: string;
   sourceId?: string;
+  sourceNativeId?: string;
   sourceUrl?: string;
   sourceDate?: string;
   importedAt?: string;
   license?: string;
   attribution?: string;
+}
+
+export interface TerritoryGeneratedZoneMetadata {
+  algorithm?: string;
+  algorithmVersion: string;
+  seed?: string;
+  generationSeed?: string;
+  localKey?: string;
+  targetAreaKm2?: number;
+  minAreaKm2?: number;
+  maxAreaKm2?: number;
+  maxZonesPerDistrict?: number;
+  minFragmentAreaKm2?: number;
 }
 
 export interface TerritoryGlobalMetadata {
@@ -148,11 +167,28 @@ export interface TerritoryGlobalMetadata {
   hierarchyDepth?: number;
   parentId?: string;
   sourceParentId?: string;
+  countryCode?: string;
+  provinceCode?: string;
+  districtCode?: string;
+  sourceClass?: TerritorySourceClass;
+  sourceProvider?: string;
+  sourceDatasetId?: string;
+  sourceNativeId?: string;
+  sourceDate?: string;
+  sourceUrl?: string;
+  license?: string;
+  attribution?: string;
+  official?: boolean;
+  generated?: boolean;
+  algorithmVersion?: string;
+  generationSeed?: string;
+  stableId?: string;
   semanticReviewStatus?: TerritorySemanticReviewStatus;
   coverageStatus?: TerritoryCoverageStatus;
   codes?: TerritoryCodes;
   names?: TerritoryNames;
   source?: TerritorySourceMetadata;
+  generatedZone?: TerritoryGeneratedZoneMetadata;
 }
 
 export type TerritoryValidationSeverity = "error" | "warning";
@@ -181,15 +217,31 @@ export type TerritoryValidationCode =
   | "NEIGHBOR_MISSING"
   | "NEIGHBOR_NOT_RECIPROCAL"
   | "HIERARCHY_CYCLE"
-  | "COORDINATE_RANGE";
+  | "COORDINATE_RANGE"
+  | "INVALID_SOURCE_CLASS"
+  | "SOURCE_FLAG_CONFLICT"
+  | "MISSING_GENERATOR_VERSION"
+  | "INVALID_GENERATED_SEMANTIC_TYPE"
+  | "MISSING_SOURCE_PROVENANCE"
+  | "INVALID_PARENT_LEVEL"
+  | "ADM3_ORPHAN"
+  | "HIERARCHY_CODE_MISMATCH"
+  | "DUPLICATE_STABLE_ID"
+  | "INVALID_COVERAGE_STATUS"
+  | "INVALID_SEMANTIC_REVIEW_STATUS";
 
 export interface TerritoryValidationIssue {
   code: TerritoryValidationCode;
   message: string;
   path: string;
   severity: TerritoryValidationSeverity;
+  datasetId?: string;
   zoneId?: string;
+  parentId?: string;
   featureId?: string;
+  field?: string;
+  expected?: unknown;
+  actual?: unknown;
   sourcePath?: string;
   line?: number;
   column?: number;

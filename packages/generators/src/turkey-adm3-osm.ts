@@ -180,7 +180,8 @@ export async function extractTurkeyAdm3OsmPbf(
       name,
       semanticType,
       geometryHash,
-      geometry: candidate.geometry
+      geometry: candidate.geometry,
+      generatedAt: options.generatedAt
     });
     seen.set(duplicateKey, zone);
     zones.push(zone);
@@ -495,6 +496,7 @@ function createOsmZone(input: {
   semanticType: Exclude<TurkeyAdm3OsmSemanticType, "semantic-review-required">;
   geometryHash: string;
   geometry: TerritoryGeometry;
+  generatedAt: string;
 }): TerritoryZone {
   const sourceNativeId = `osm:${input.candidate.osmType}:${input.candidate.osmId}`;
   const localId = [
@@ -532,8 +534,21 @@ function createOsmZone(input: {
         sourceAdminLevel: "ADM3",
         semanticType: input.semanticType,
         localType: input.semanticType,
-        coverageStatus: "real",
+        localTypeName: input.semanticType === "village" ? "Köy" : "Mahalle",
+        countryCode: "TR",
+        ...(input.provinceCode ? { provinceCode: input.provinceCode } : {}),
+        ...(input.parentId ? { districtCode: input.parentId.replace(/^tr:adm2:/, "") } : {}),
+        hierarchyDepth: 3,
+        ...(input.parentId ? { parentId: input.parentId } : {}),
+        coverageStatus: "verified",
+        semanticReviewStatus: "mapping-review-required",
         sourceClass: "osm",
+        sourceProvider: input.providerId,
+        sourceDatasetId: "openstreetmap",
+        sourceDate: input.generatedAt,
+        sourceUrl: TURKEY_ADM3_OSM_SOURCE_URL,
+        license: TURKEY_ADM3_OSM_LICENSE,
+        attribution: TURKEY_ADM3_OSM_ATTRIBUTION,
         official: false,
         generated: false,
         providerId: input.providerId,
@@ -548,7 +563,11 @@ function createOsmZone(input: {
         clippedByPriority: false,
         source: {
           provider: input.providerId,
+          sourceClass: "osm",
+          sourceDatasetId: "openstreetmap",
           sourceId: sourceNativeId,
+          sourceNativeId,
+          sourceDate: input.generatedAt,
           license: TURKEY_ADM3_OSM_LICENSE,
           attribution: TURKEY_ADM3_OSM_ATTRIBUTION,
           sourceUrl: TURKEY_ADM3_OSM_SOURCE_URL

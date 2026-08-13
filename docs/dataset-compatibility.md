@@ -31,3 +31,8 @@ import pipelines repair adjacency lists.
 
 Global zone metadata is stored under `zone.properties.territory` so schema-v1 consumers can keep
 loading datasets without a new required zone field.
+
+Turkey V2 follows the same additive schema-v1 policy. `sourceClass`, provenance, generated-zone,
+province/district code, and stable-ID metadata are optional for ordinary schema-v1 loading and are
+required only by `territory validate <dataset> --profile tr-v2`. Legacy datasets are not silently
+assigned a source class.

@@ -84,6 +84,7 @@ export const territoryDatasetJsonSchema = {
               "local",
               "special-administrative-area",
               "administrative-unit",
+              "generated-zone",
               "game-region",
               "unknown"
             ]
@@ -119,7 +120,119 @@ export const territoryDatasetJsonSchema = {
             maxItems: 4
           },
           properties: {
-            type: "object"
+            type: "object",
+            additionalProperties: true,
+            properties: {
+              territory: {
+                type: "object",
+                additionalProperties: true,
+                properties: {
+                  adminLevel: { enum: ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4", "ADM5"] },
+                  sourceAdminLevel: { enum: ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4", "ADM5"] },
+                  semanticType: {
+                    enum: [
+                      "world",
+                      "country",
+                      "state",
+                      "province",
+                      "region",
+                      "governorate",
+                      "prefecture",
+                      "county",
+                      "district",
+                      "subdistrict",
+                      "city",
+                      "municipality",
+                      "borough",
+                      "commune",
+                      "ward",
+                      "neighbourhood",
+                      "village",
+                      "locality",
+                      "local",
+                      "special-administrative-area",
+                      "administrative-unit",
+                      "generated-zone",
+                      "game-region",
+                      "unknown"
+                    ]
+                  },
+                  localType: { type: "string", minLength: 1 },
+                  localTypeName: { type: "string", minLength: 1 },
+                  hierarchyDepth: { type: "integer", minimum: 0, maximum: 5 },
+                  parentId: { type: "string", minLength: 1 },
+                  sourceParentId: { type: "string", minLength: 1 },
+                  countryCode: { pattern: "^[A-Za-z]{2}$", type: "string" },
+                  provinceCode: { type: "string", minLength: 1 },
+                  districtCode: { type: "string", minLength: 1 },
+                  sourceClass: { enum: ["official", "osm", "generated"] },
+                  sourceProvider: { type: "string", minLength: 1 },
+                  sourceDatasetId: { type: "string", minLength: 1 },
+                  sourceNativeId: { type: "string", minLength: 1 },
+                  sourceDate: { type: "string", minLength: 1 },
+                  sourceUrl: { type: "string", minLength: 1 },
+                  license: { type: "string", minLength: 1 },
+                  attribution: { type: "string", minLength: 1 },
+                  official: { type: "boolean" },
+                  generated: { type: "boolean" },
+                  algorithmVersion: { type: "string", minLength: 1 },
+                  generationSeed: { type: "string", minLength: 1 },
+                  stableId: { type: "string", minLength: 1 },
+                  semanticReviewStatus: {
+                    enum: [
+                      "reviewed",
+                      "review-required",
+                      "mapping-review-required",
+                      "not-applicable"
+                    ]
+                  },
+                  coverageStatus: {
+                    enum: [
+                      "verified",
+                      "generated",
+                      "generated-with-warnings",
+                      "partial",
+                      "source-unavailable",
+                      "licence-restricted",
+                      "semantic-review-required",
+                      "deprecated"
+                    ]
+                  },
+                  source: {
+                    type: "object",
+                    additionalProperties: true,
+                    properties: {
+                      provider: { type: "string", minLength: 1 },
+                      sourceClass: { enum: ["official", "osm", "generated"] },
+                      sourceDatasetId: { type: "string", minLength: 1 },
+                      sourceId: { type: "string", minLength: 1 },
+                      sourceNativeId: { type: "string", minLength: 1 },
+                      sourceUrl: { type: "string", minLength: 1 },
+                      sourceDate: { type: "string", minLength: 1 },
+                      importedAt: { type: "string", minLength: 1 },
+                      license: { type: "string", minLength: 1 },
+                      attribution: { type: "string", minLength: 1 }
+                    }
+                  },
+                  generatedZone: {
+                    type: "object",
+                    additionalProperties: true,
+                    properties: {
+                      algorithm: { type: "string", minLength: 1 },
+                      algorithmVersion: { type: "string", minLength: 1 },
+                      seed: { type: "string", minLength: 1 },
+                      generationSeed: { type: "string", minLength: 1 },
+                      localKey: { type: "string", minLength: 1 },
+                      targetAreaKm2: { type: "number" },
+                      minAreaKm2: { type: "number" },
+                      maxAreaKm2: { type: "number" },
+                      maxZonesPerDistrict: { type: "integer", minimum: 1 },
+                      minFragmentAreaKm2: { type: "number" }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

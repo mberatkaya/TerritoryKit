@@ -118,6 +118,13 @@ ADM0-ADM2, while ADM3 remains partial and ADM4 remains source-model blocked. See
 [docs/datasets/turkey-sources.md](./docs/datasets/turkey-sources.md), and the partial Gaziantep
 ADM3 pilot in
 [docs/datasets/turkey-neighbourhoods.md](./docs/datasets/turkey-neighbourhoods.md).
+Turkey V2 defines the additive data contract for mixing official, OSM, and generated ADM3 game
+zones without presenting generated zones as official mahalle/köy records. This sprint does not
+generate national ADM3 polygons. See
+[docs/datasets/turkey-v2-data-contract.md](./docs/datasets/turkey-v2-data-contract.md),
+[docs/datasets/turkey-v2-source-provenance.md](./docs/datasets/turkey-v2-source-provenance.md),
+[docs/datasets/turkey-v2-migration.md](./docs/datasets/turkey-v2-migration.md), and
+[ADR-007](./adr/ADR-007-turkey-v2-stable-identity.md).
 The current product gap analysis is tracked in
 [docs/product-gap-analysis.md](./docs/product-gap-analysis.md).
 
@@ -152,6 +159,7 @@ items.
 - [Risk register](./docs/risk-register.md)
 - [Release governance](./docs/release-governance.md)
 - [Turkey national source ADR](./adr/ADR-006-turkey-national-administrative-sources.md)
+- [Turkey V2 stable identity ADR](./adr/ADR-007-turkey-v2-stable-identity.md)
 - [Roadmap](./docs/roadmap.md)
 - [Release check](./docs/release-check.md)
 - [Runtime architecture audit](./docs/architecture/runtime-architecture-audit.md)
@@ -212,6 +220,9 @@ items.
 - [Turkey national coverage](./docs/datasets/turkey-national-coverage.md)
 - [Turkey sources](./docs/datasets/turkey-sources.md)
 - [Turkey build](./docs/datasets/turkey-build.md)
+- [Turkey V2 data contract](./docs/datasets/turkey-v2-data-contract.md)
+- [Turkey V2 source provenance](./docs/datasets/turkey-v2-source-provenance.md)
+- [Turkey V2 migration](./docs/datasets/turkey-v2-migration.md)
 - [Turkey licensing](./docs/datasets/turkey-licensing.md)
 - [Turkey neighbourhoods](./docs/datasets/turkey-neighbourhoods.md)
 - [Dataset providers](./docs/datasets/providers.md)

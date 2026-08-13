@@ -7,6 +7,7 @@ import type {
   TerritoryGlobalMetadata,
   TerritorySemanticReviewStatus,
   TerritorySemanticAdminType,
+  TerritorySourceClass,
   TerritorySourceMetadata
 } from "./types.js";
 
@@ -34,9 +35,15 @@ export const TERRITORY_SEMANTIC_ADMIN_TYPES = [
   "local",
   "special-administrative-area",
   "administrative-unit",
+  "generated-zone",
   "game-region",
   "unknown"
 ] as const satisfies readonly TerritorySemanticAdminType[];
+export const TERRITORY_SOURCE_CLASSES = [
+  "official",
+  "osm",
+  "generated"
+] as const satisfies readonly TerritorySourceClass[];
 export const TERRITORY_SEMANTIC_REVIEW_STATUSES = [
   "reviewed",
   "review-required",

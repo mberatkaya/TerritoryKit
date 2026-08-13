@@ -98,3 +98,12 @@ TerritoryKit intentionally does not mutate application data. Consumers should:
 4. Rebuild derived caches and reports after review decisions are recorded.
 
 Applications should store the plan artifact with the dataset upgrade so user-facing reports can explain why a region ID changed.
+
+## Turkey V2
+
+Turkey V2 migrations must preserve the difference between real and generated records. A generated
+zone replaced by an official or OSM polygon is a source-class change and should be represented in
+the migration plan instead of reusing the generated record as if it were an official mahalle.
+
+The Gaziantep ADM3 pilot and older schema-v1 datasets remain readable in legacy mode. Strict Turkey
+V2 validation is explicit through `--profile tr-v2`.
