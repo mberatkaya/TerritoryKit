@@ -28,8 +28,10 @@ not part of the Turkey V2 production hierarchy in this contract.
 - `osm`
 - `generated`
 
-Priority is `official > osm > generated`. This sprint defines the contract and strict validation;
-real geometric merge, clipping, and national polygon generation remain future work.
+Priority is `official > osm > generated`. `sourceClass` describes the final zone semantics;
+`providerClass` can separately describe access policy such as `runtime` or `experimental`. The
+hybrid coverage pipeline implements deterministic representative merge and clipping, while final
+national polygon publication remains future work.
 See [Turkey V2 source class and provenance](./turkey-v2-source-provenance.md) for the dedicated
 source reference.
 

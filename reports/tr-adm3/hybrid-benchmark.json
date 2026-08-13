@@ -1,0 +1,186 @@
+{
+  "schemaVersion": "territorykit-tr-v2-hybrid-benchmark@1",
+  "generatedAt": "1970-01-01T00:00:00.000Z",
+  "algorithmVersion": "tr-adm3-game-zone-v2",
+  "mode": "benchmark",
+  "runtime": {
+    "node": "v24.14.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "durationMs": 107,
+  "deterministicHash": "19f8fc2eaedd56a77643c65748e7791d9864b323a534da21ada316e63cf73428",
+  "scenarios": [
+    {
+      "scenario": "official-only-district",
+      "districtCount": 1,
+      "candidateCounts": {
+        "official": 1,
+        "osm": 0
+      },
+      "effectiveCounts": {
+        "official": 1,
+        "osm": 0,
+        "generated": 0
+      },
+      "vertexCount": 10,
+      "sourceCoveragePercent": {
+        "official": 100,
+        "osm": 0,
+        "generated": 0
+      },
+      "generatedCount": 0,
+      "finalCoveragePercent": 100,
+      "qualityOk": true,
+      "durationMs": 7,
+      "deterministicHash": "782c3bcaae5379913ebbbdfb02efa32535b0ae48ebac2c7053e0836271e2d554",
+      "peakRssBytes": 63864832
+    },
+    {
+      "scenario": "generated-only-district",
+      "districtCount": 1,
+      "candidateCounts": {
+        "official": 0,
+        "osm": 0
+      },
+      "effectiveCounts": {
+        "official": 0,
+        "osm": 0,
+        "generated": 1
+      },
+      "vertexCount": 10,
+      "sourceCoveragePercent": {
+        "official": 0,
+        "osm": 0,
+        "generated": 100
+      },
+      "generatedCount": 1,
+      "finalCoveragePercent": 100,
+      "qualityOk": true,
+      "durationMs": 4,
+      "deterministicHash": "6caead7ed8c5a5eb6da5f6478c115c9657b4f27a327f34b583b307babdd7f4c4",
+      "peakRssBytes": 66191360
+    },
+    {
+      "scenario": "official-generated-district",
+      "districtCount": 1,
+      "candidateCounts": {
+        "official": 1,
+        "osm": 0
+      },
+      "effectiveCounts": {
+        "official": 1,
+        "osm": 0,
+        "generated": 1
+      },
+      "vertexCount": 15,
+      "sourceCoveragePercent": {
+        "official": 50,
+        "osm": 0,
+        "generated": 50
+      },
+      "generatedCount": 1,
+      "finalCoveragePercent": 100,
+      "qualityOk": true,
+      "durationMs": 4,
+      "deterministicHash": "20ede237eeddae1ce5240c776abcbb38e12238c30926c1469a4d4314e82947aa",
+      "peakRssBytes": 69844992
+    },
+    {
+      "scenario": "official-osm-generated-district",
+      "districtCount": 1,
+      "candidateCounts": {
+        "official": 1,
+        "osm": 1
+      },
+      "effectiveCounts": {
+        "official": 1,
+        "osm": 1,
+        "generated": 1
+      },
+      "vertexCount": 20,
+      "sourceCoveragePercent": {
+        "official": 38.888889,
+        "osm": 33.333333,
+        "generated": 27.777778
+      },
+      "generatedCount": 1,
+      "finalCoveragePercent": 100,
+      "qualityOk": true,
+      "durationMs": 3,
+      "deterministicHash": "73148055034164a9f180a38742cafa43a519b7f2b9a3f0b40aad556e41074d57",
+      "peakRssBytes": 70303744
+    },
+    {
+      "scenario": "complex-multipolygon-district",
+      "districtCount": 1,
+      "candidateCounts": {
+        "official": 1,
+        "osm": 0
+      },
+      "effectiveCounts": {
+        "official": 1,
+        "osm": 0,
+        "generated": 1
+      },
+      "vertexCount": 25,
+      "sourceCoveragePercent": {
+        "official": 39.83345,
+        "osm": 0,
+        "generated": 60.16655
+      },
+      "generatedCount": 1,
+      "finalCoveragePercent": 100,
+      "qualityOk": true,
+      "durationMs": 3,
+      "deterministicHash": "2cca984926e89a9de340b788730069673ce8560a1cb3713f8df1f32d3d132250",
+      "peakRssBytes": 71221248
+    },
+    {
+      "scenario": "10-district-batch",
+      "districtCount": 10,
+      "candidateCounts": {
+        "official": 4,
+        "osm": 3
+      },
+      "effectiveCounts": {
+        "official": 4,
+        "osm": 3,
+        "generated": 10
+      },
+      "vertexCount": 135,
+      "sourceCoveragePercent": {
+        "final": 100
+      },
+      "generatedCount": 10,
+      "finalCoveragePercent": 100,
+      "qualityOk": true,
+      "durationMs": 12,
+      "deterministicHash": "74a5928c7ea7bac48e19c92b111065c0c5e1a7043db2596ffd55e6a228b06c96",
+      "peakRssBytes": 72187904
+    },
+    {
+      "scenario": "100-district-batch",
+      "districtCount": 100,
+      "candidateCounts": {
+        "official": 34,
+        "osm": 33
+      },
+      "effectiveCounts": {
+        "official": 34,
+        "osm": 33,
+        "generated": 100
+      },
+      "vertexCount": 1335,
+      "sourceCoveragePercent": {
+        "final": 100
+      },
+      "generatedCount": 100,
+      "finalCoveragePercent": 100,
+      "qualityOk": true,
+      "durationMs": 74,
+      "deterministicHash": "343bbbc07c406970bf899af343a2c2ed8a533907f44afbeddb986e56da7c7dd0",
+      "peakRssBytes": 86704128
+    }
+  ]
+}

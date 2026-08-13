@@ -119,12 +119,14 @@ ADM0-ADM2, while ADM3 remains partial and ADM4 remains source-model blocked. See
 ADM3 pilot in
 [docs/datasets/turkey-neighbourhoods.md](./docs/datasets/turkey-neighbourhoods.md).
 Turkey V2 defines the additive data contract for mixing official, OSM, and generated ADM3 game
-zones without presenting generated zones as official mahalle/köy records. This sprint does not
-generate national ADM3 polygons. See
+zones without presenting generated zones as official mahalle/köy records. The hybrid builder now
+applies official > OSM > generated priority for representative district and batch artifacts, while
+the final national ADM3 artifact remains future release work. See
 [docs/datasets/turkey-v2-data-contract.md](./docs/datasets/turkey-v2-data-contract.md),
 [docs/datasets/turkey-v2-source-provenance.md](./docs/datasets/turkey-v2-source-provenance.md),
+[docs/datasets/turkey-v2-hybrid-coverage.md](./docs/datasets/turkey-v2-hybrid-coverage.md),
 [docs/datasets/turkey-v2-migration.md](./docs/datasets/turkey-v2-migration.md), and
-[ADR-007](./adr/ADR-007-turkey-v2-stable-identity.md).
+[ADR-007](./adr/ADR-007-turkey-v2-stable-identity.md) / [ADR-009](./adr/ADR-009-turkey-v2-hybrid-source-priority.md).
 The current product gap analysis is tracked in
 [docs/product-gap-analysis.md](./docs/product-gap-analysis.md).
 
@@ -222,6 +224,7 @@ items.
 - [Turkey build](./docs/datasets/turkey-build.md)
 - [Turkey V2 data contract](./docs/datasets/turkey-v2-data-contract.md)
 - [Turkey V2 source provenance](./docs/datasets/turkey-v2-source-provenance.md)
+- [Turkey V2 hybrid coverage](./docs/datasets/turkey-v2-hybrid-coverage.md)
 - [Turkey V2 migration](./docs/datasets/turkey-v2-migration.md)
 - [Turkey licensing](./docs/datasets/turkey-licensing.md)
 - [Turkey neighbourhoods](./docs/datasets/turkey-neighbourhoods.md)
