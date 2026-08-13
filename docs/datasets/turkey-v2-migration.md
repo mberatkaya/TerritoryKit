@@ -65,3 +65,21 @@ Future national Turkey V2 migrations should emit:
 
 Applications should apply mappings only after validating the migration artifact. TerritoryKit does
 not mutate application-owned scores, ownership, or route history.
+
+## Hybrid Migration Plan
+
+The Sprint 3 hybrid builder emits `territorykit-tr-v2-hybrid-migration@1` records for:
+
+- `preserved`
+- `added`
+- `removed`
+- `geometry-changed`
+- `source-replaced`
+- `split`
+- `merged`
+- `parent-changed`
+- `source-class-changed`
+
+Each record carries old/new zone IDs, source classes, parent IDs, intersection area, old/new
+overlap percentages, confidence, manual-review status, and a reason. The plan is evidence only; it
+does not transfer KapRota ownership, scores, or route history.

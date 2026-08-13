@@ -16,6 +16,11 @@ This sprint adds the generator and representative validation. It does not commit
 81-province/973-district Turkey production artifact and does not merge official, OSM, and generated
 coverage nationally.
 
+Sprint 3 uses this generator through
+[`buildTurkeyV2HybridDistrict`](./turkey-v2-hybrid-coverage.md). The hybrid pipeline passes real
+official and OSM effective zones as occupied geometry, so `buildTurkeyGameZones` only runs on the
+remaining district gap.
+
 ## Public API
 
 ```ts

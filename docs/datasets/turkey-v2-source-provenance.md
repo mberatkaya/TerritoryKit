@@ -6,8 +6,14 @@ Turkey V2 ADM3 zones declare `sourceClass`:
 2. `osm`
 3. `generated`
 
-Priority is `official > osm > generated`. Priority is a contract-level rule in this sprint; final
-geometry merge and clipping are future build steps.
+Priority is `official > osm > generated`. The hybrid builder applies that priority for
+representative district and batch artifacts. Final national 81-province publication remains a
+future build/release step.
+
+`sourceClass` is the final zone semantics and must be `official`, `osm`, or `generated`.
+`providerClass` is separate and can describe access policy such as `runtime` or `experimental`.
+Runtime official sources still produce final `sourceClass: "official"` zones; experimental sources
+remain opt-in.
 
 ## Official
 

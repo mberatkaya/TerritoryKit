@@ -278,6 +278,276 @@ describe("territory cli Turkey ADM3 full coverage", () => {
       await rm(tempDir, { recursive: true, force: true });
     }
   });
+
+  it("writes deterministic Turkey V2 hybrid artifacts and protects output", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-adm3-hybrid-"));
+    const adm2DatasetPath = join(tempDir, "adm2-dataset.json");
+    const officialPath = join(tempDir, "official.json");
+    const osmPath = join(tempDir, "osm.json");
+    const outputPath = join(tempDir, "hybrid");
+    const secondOutputPath = join(tempDir, "hybrid-second");
+    const districtId = "tr:adm2:54988432b39717738295698";
+
+    try {
+      await writeFile(adm2DatasetPath, JSON.stringify(createAdm2FixtureDataset()), "utf8");
+      await writeFile(
+        officialPath,
+        JSON.stringify(
+          createAdm3FixtureDataset([
+            createAdm3FixtureZone({
+              id: "tr:adm3:hybrid-official",
+              parentId: districtId,
+              sourceClass: "official",
+              sourceNativeId: "official-1",
+              bbox: [35, 37, 35.08, 37.2]
+            })
+          ])
+        ),
+        "utf8"
+      );
+      await writeFile(
+        osmPath,
+        JSON.stringify(
+          createAdm3FixtureDataset([
+            createAdm3FixtureZone({
+              id: "tr:adm3:hybrid-osm",
+              parentId: districtId,
+              sourceClass: "osm",
+              sourceNativeId: "osm-way-1",
+              bbox: [35.06, 37, 35.14, 37.2]
+            })
+          ])
+        ),
+        "utf8"
+      );
+
+      const args = [
+        "tr",
+        "adm3",
+        "hybrid",
+        "build",
+        "--district",
+        adm2DatasetPath,
+        "--district-id",
+        districtId,
+        "--official",
+        officialPath,
+        "--osm",
+        osmPath,
+        "--profile",
+        "custom",
+        "--target-area",
+        "500",
+        "--min-area",
+        "1",
+        "--max-area",
+        "1000",
+        "--max-zones",
+        "8",
+        "--min-fragment-area",
+        "1",
+        "--seed",
+        "kaprota-v2",
+        "--province-code",
+        "01",
+        "--district-code",
+        "001",
+        "--build-date",
+        "2026-08-13T00:00:00.000Z"
+      ];
+      const first = await captureCli([...args, "--output", outputPath]);
+
+      expect(first).toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "tr adm3 hybrid build",
+          data: {
+            officialEffectiveCount: 1,
+            osmEffectiveCount: 1,
+            generatedEffectiveCount: expect.any(Number),
+            trV2ValidationOk: true
+          }
+        }
+      });
+      await expect(readFile(join(outputPath, "dataset.json"), "utf8")).resolves.toContain(
+        "tr-adm3-v2-hybrid-build"
+      );
+      await expect(readFile(join(outputPath, "attribution.txt"), "utf8")).resolves.toContain(
+        "OpenStreetMap contributors"
+      );
+      await expect(
+        readFile(join(outputPath, "distribution-policy.json"), "utf8")
+      ).resolves.toContain("ODbL-1.0");
+      await expect(readFile(join(outputPath, "checksums.json"), "utf8")).resolves.toContain(
+        "territorykit-tr-v2-hybrid-checksums@1"
+      );
+
+      const blocked = await captureCli([...args, "--output", outputPath]);
+      expect(blocked.code).toBe(2);
+
+      const second = await captureCli([...args, "--output", secondOutputPath]);
+      const firstSummary = JSON.parse(
+        await readFile(join(outputPath, "build-summary.json"), "utf8")
+      ) as { deterministicHash: string };
+      const secondSummary = JSON.parse(
+        await readFile(join(secondOutputPath, "build-summary.json"), "utf8")
+      ) as { deterministicHash: string };
+
+      expect(second.code).toBe(0);
+      expect(secondSummary.deterministicHash).toBe(firstSummary.deterministicHash);
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it("returns a non-zero hybrid result when generated fallback is disabled and gaps remain", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-adm3-hybrid-gap-"));
+    const adm2DatasetPath = join(tempDir, "adm2-dataset.json");
+    const officialPath = join(tempDir, "official.json");
+    const districtId = "tr:adm2:54988432b39717738295698";
+
+    try {
+      await writeFile(adm2DatasetPath, JSON.stringify(createAdm2FixtureDataset()), "utf8");
+      await writeFile(
+        officialPath,
+        JSON.stringify(
+          createAdm3FixtureDataset([
+            createAdm3FixtureZone({
+              id: "tr:adm3:hybrid-gap-official",
+              parentId: districtId,
+              sourceClass: "official",
+              sourceNativeId: "official-gap",
+              bbox: [35, 37, 35.08, 37.2]
+            })
+          ])
+        ),
+        "utf8"
+      );
+
+      const result = await captureCli([
+        "tr",
+        "adm3",
+        "build",
+        "--hybrid",
+        "--district",
+        adm2DatasetPath,
+        "--district-id",
+        districtId,
+        "--official",
+        officialPath,
+        "--no-generated",
+        "--province-code",
+        "01",
+        "--district-code",
+        "001",
+        "--output",
+        join(tempDir, "hybrid-gap")
+      ]);
+
+      expect(result.code).toBe(1);
+      expect(result.payload).toMatchObject({
+        ok: false,
+        command: "tr adm3 hybrid build",
+        data: {
+          qualityOk: false
+        }
+      });
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it("writes Turkey V2 hybrid batch artifacts", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-adm3-hybrid-batch-"));
+    const adm2DatasetPath = join(tempDir, "adm2-dataset.json");
+    const officialPath = join(tempDir, "official.json");
+    const outputPath = join(tempDir, "hybrid-batch");
+    const firstDistrictId = "tr:adm2:54988432b39717738295698";
+    const secondDistrictId = "tr:adm2:54988432b85758697491434";
+
+    try {
+      await writeFile(adm2DatasetPath, JSON.stringify(createAdm2FixtureDataset()), "utf8");
+      await writeFile(
+        officialPath,
+        JSON.stringify(
+          createAdm3FixtureDataset([
+            createAdm3FixtureZone({
+              id: "tr:adm3:batch-first",
+              parentId: firstDistrictId,
+              sourceClass: "official",
+              sourceNativeId: "batch-first",
+              bbox: [35, 37, 35.2, 37.2],
+              districtCode: "001"
+            }),
+            createAdm3FixtureZone({
+              id: "tr:adm3:batch-second",
+              parentId: secondDistrictId,
+              sourceClass: "official",
+              sourceNativeId: "batch-second",
+              bbox: [35.3, 37, 35.4, 37.2],
+              districtCode: "002"
+            })
+          ])
+        ),
+        "utf8"
+      );
+
+      const result = await captureCli([
+        "tr",
+        "adm3",
+        "hybrid",
+        "build",
+        "--batch",
+        "--district",
+        adm2DatasetPath,
+        "--district-id",
+        `${firstDistrictId},${secondDistrictId}`,
+        "--official",
+        officialPath,
+        "--profile",
+        "custom",
+        "--target-area",
+        "500",
+        "--min-area",
+        "1",
+        "--max-area",
+        "1000",
+        "--max-zones",
+        "8",
+        "--min-fragment-area",
+        "1",
+        "--output",
+        outputPath,
+        "--build-date",
+        "2026-08-13T00:00:00.000Z"
+      ]);
+
+      expect(result).toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "tr adm3 hybrid build",
+          data: {
+            mode: "batch",
+            successfulDistrictCount: 2,
+            finalCoveragePercent: expect.any(Number)
+          }
+        }
+      });
+      await expect(readFile(join(outputPath, "batch-summary.json"), "utf8")).resolves.toContain(
+        "territorykit-tr-v2-hybrid-build-summary@1"
+      );
+      await expect(
+        readFile(
+          join(outputPath, "districts", "tr-adm2-54988432b39717738295698", "coverage.json"),
+          "utf8"
+        )
+      ).resolves.toContain("territorykit-tr-v2-hybrid-coverage@1");
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
 });
 
 async function captureCli(args: string[]): Promise<{ code: number; payload: unknown }> {
@@ -344,5 +614,100 @@ function createAdm2FixtureZone(input: {
       ]
     },
     properties: {}
+  };
+}
+
+function createAdm3FixtureDataset(zones: unknown[]): unknown {
+  return { zones };
+}
+
+function createAdm3FixtureZone(input: {
+  id: string;
+  parentId: string;
+  sourceClass: "official" | "osm";
+  sourceNativeId: string;
+  bbox: [number, number, number, number];
+  districtCode?: string;
+}): unknown {
+  const [west, south, east, north] = input.bbox;
+  const providerId = input.sourceClass === "osm" ? "openstreetmap" : "fixture-official";
+  const license = input.sourceClass === "osm" ? "ODbL-1.0" : "CC BY 4.0";
+  const attribution =
+    input.sourceClass === "osm"
+      ? "OpenStreetMap contributors, ODbL 1.0"
+      : "Fixture official source";
+
+  return {
+    id: input.id,
+    datasetId: "territory-kit-test-tr-adm3",
+    level: 3,
+    sourceAdminLevel: "ADM3",
+    name: input.id,
+    localName: input.id,
+    countryCode: "TR",
+    parentId: input.parentId,
+    bbox: input.bbox,
+    center: [(west + east) / 2, (south + north) / 2],
+    neighborIds: [],
+    semanticType: "neighbourhood",
+    geometry: {
+      type: "Polygon",
+      coordinates: [
+        [
+          [west, south],
+          [east, south],
+          [east, north],
+          [west, north],
+          [west, south]
+        ]
+      ]
+    },
+    properties: {
+      territory: {
+        adminLevel: "ADM3",
+        sourceAdminLevel: "ADM3",
+        semanticType: "neighbourhood",
+        localType: "neighbourhood",
+        localTypeName: "Mahalle",
+        hierarchyDepth: 3,
+        parentId: input.parentId,
+        countryCode: "TR",
+        provinceCode: "01",
+        districtCode: input.districtCode ?? "001",
+        sourceClass: input.sourceClass,
+        providerClass: input.sourceClass,
+        providerId,
+        providerName: providerId,
+        sourceProvider: providerId,
+        sourceDatasetId: input.sourceClass === "osm" ? "openstreetmap" : "fixture-official",
+        sourceNativeId: input.sourceNativeId,
+        sourceDate: "2026-08-01",
+        sourceUrl:
+          input.sourceClass === "osm"
+            ? "https://www.openstreetmap.org/"
+            : "https://data.example.test/tr/adm3",
+        license,
+        attribution,
+        official: input.sourceClass === "official",
+        generated: false,
+        semanticReviewStatus: "reviewed",
+        coverageStatus: "verified",
+        stableId: input.id,
+        source: {
+          provider: providerId,
+          sourceClass: input.sourceClass,
+          sourceDatasetId: input.sourceClass === "osm" ? "openstreetmap" : "fixture-official",
+          sourceId: input.sourceNativeId,
+          sourceNativeId: input.sourceNativeId,
+          sourceDate: "2026-08-01",
+          sourceUrl:
+            input.sourceClass === "osm"
+              ? "https://www.openstreetmap.org/"
+              : "https://data.example.test/tr/adm3",
+          license,
+          attribution
+        }
+      }
+    }
   };
 }

@@ -218,6 +218,18 @@ export {
   createTurkeyAdm3OsmDataset,
   extractTurkeyAdm3OsmPbf
 } from "./turkey-adm3-osm.js";
+export {
+  TURKEY_V2_HYBRID_ATTRIBUTION_SCHEMA_VERSION,
+  TURKEY_V2_HYBRID_BATCH_SCHEMA_VERSION,
+  TURKEY_V2_HYBRID_COVERAGE_SCHEMA_VERSION,
+  TURKEY_V2_HYBRID_MIGRATION_SCHEMA_VERSION,
+  TURKEY_V2_HYBRID_PROVENANCE_SCHEMA_VERSION,
+  TURKEY_V2_HYBRID_QUALITY_SCHEMA_VERSION,
+  TURKEY_V2_HYBRID_REJECTION_SCHEMA_VERSION,
+  buildTurkeyV2HybridBatch,
+  buildTurkeyV2HybridDistrict,
+  createTurkeyV2ZoneMigrationPlan
+} from "./turkey-v2-hybrid.js";
 export type {
   DatasetAttribution,
   TerritorySourceAdapter,
@@ -295,6 +307,32 @@ export type {
   TurkeyAdm3OsmParentConfidence,
   TurkeyAdm3OsmSemanticType
 } from "./turkey-adm3-osm.js";
+export type {
+  TurkeyV2HybridAttributionManifest,
+  TurkeyV2HybridBatchBuildOptions,
+  TurkeyV2HybridBatchBuildResult,
+  TurkeyV2HybridBatchCoverageSummary,
+  TurkeyV2HybridBatchQualityReport,
+  TurkeyV2HybridBatchSourceEntry,
+  TurkeyV2HybridDistributionPolicyManifest,
+  TurkeyV2HybridDistrictBuildOptions,
+  TurkeyV2HybridDistrictBuildResult,
+  TurkeyV2HybridGeneratedOptions,
+  TurkeyV2HybridIssue,
+  TurkeyV2HybridIssueSeverity,
+  TurkeyV2HybridLicenseManifest,
+  TurkeyV2HybridMigrationChangeType,
+  TurkeyV2HybridProviderClass,
+  TurkeyV2HybridProvenanceItem,
+  TurkeyV2HybridProvenanceReport,
+  TurkeyV2HybridQualityReport,
+  TurkeyV2HybridRejectionReason,
+  TurkeyV2HybridRejectionRecord,
+  TurkeyV2HybridRejectionReport,
+  TurkeyV2HybridSourceClass,
+  TurkeyV2ZoneMigrationPlan,
+  TurkeyV2ZoneMigrationRecord
+} from "./turkey-v2-hybrid.js";
 export type {
   GeometryQualityPathRepairOptions,
   TerritoryDatasetPathInput

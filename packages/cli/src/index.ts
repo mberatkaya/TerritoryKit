@@ -573,6 +573,10 @@ async function runTurkeyAdm3(args: string[]): Promise<number> {
     return runTurkeyAdm3Build(args.slice(1));
   }
 
+  if (subcommand === "hybrid") {
+    return runTurkeyAdm3Hybrid(args.slice(1));
+  }
+
   if (subcommand === "generate") {
     return runTurkeyAdm3Generate(args.slice(1));
   }
@@ -725,6 +729,10 @@ async function runTurkeyAdm3Plan(args: string[]): Promise<number> {
 }
 
 async function runTurkeyAdm3Build(args: string[]): Promise<number> {
+  if (parseFlags(args).has("hybrid")) {
+    return runTurkeyAdm3HybridBuild(args);
+  }
+
   const startedAt = performance.now();
   const flags = parseFlags(args);
   const records = await readTurkeyAdm3ProviderRecords(flags);
@@ -1211,6 +1219,16 @@ async function runTurkeyAdm3Generate(args: string[]): Promise<number> {
     });
     return 2;
   }
+}
+
+async function runTurkeyAdm3Hybrid(args: string[]): Promise<number> {
+  const command = await import("./turkey-adm3-hybrid.js");
+  return command.runTurkeyAdm3Hybrid(args);
+}
+
+async function runTurkeyAdm3HybridBuild(args: string[]): Promise<number> {
+  const command = await import("./turkey-adm3-hybrid.js");
+  return command.runTurkeyAdm3HybridBuild(args);
 }
 
 async function readTurkeyAdm3GenerateDistrict(

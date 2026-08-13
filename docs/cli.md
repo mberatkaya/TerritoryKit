@@ -25,6 +25,7 @@ territory country source verify ./dist/tr/sources.lock.json
 territory country build TR --source-lock ./dist/tr/sources.lock.json --levels ADM0,ADM1,ADM2,ADM3 --allow-partial --output ./dist/tr --build-adjacency --strict
 territory country validate ./dist/tr --strict
 territory country inspect ./dist/tr
+territory tr adm3 hybrid build --district ./adm2.json --official ./official-adm3.json --osm ./osm-adm3.json --profile auto --seed kaprota-v2 --output ./dist/tr-v2-hybrid
 territory geometry validate ./dist/regions --checks full --report ./geometry-report.json
 territory geometry repair ./dist/regions --checks basic --output ./dist/regions-repaired --report ./repair-report.json
 territory simplify dataset.json
@@ -92,6 +93,15 @@ artifacts, `validate` checks artifact checksums and dataset validity, and `inspe
 compact summary. Use `--allow-partial` when intentionally building partial lower-admin fixtures.
 For Turkey ADM3, pass `--adm3-provinces` and `--adm3-catalog` during source lock creation; the build
 will emit province coverage, quality gate, and source provenance reports.
+
+`territory tr adm3 hybrid build` builds a Turkey V2 district or batch artifact with fixed
+`official > osm > generated` priority. It accepts `--district`, `--district-id`, `--official`,
+`--osm`, `--generated`/`--no-generated`, generator profile and area overrides, tolerance flags,
+`--allow-experimental`, `--migration-baseline`, `--batch`, `--continue-on-error`, `--build-date`,
+`--output`, and `--force`. The command writes dataset, GeoJSON, coverage, quality, provenance,
+attribution, licenses, distribution policy, rejection, migration, adjacency, configuration,
+source-lock summary, and checksum artifacts. `territory tr adm3 build --hybrid` routes to the same
+implementation.
 
 `territory dataset resolve --country <ISO2> --level <ADM*> --deepest-available` exposes registry
 fallback metadata. The output includes `requestedLevel`, `resolvedLevel`, `exactMatch`, `reason`,
