@@ -1,5 +1,22 @@
 # @territory-kit/cli
 
+## 1.6.0
+
+### Minor Changes
+
+- 6414bd1: Add the Turkey V2 KapRota-compatible generated game-zone workflow with
+  `tr-adm3-game-zone-v2`, urban/suburban/rural/auto/custom profiles, deterministic stable generation,
+  coverage and quality reports, adjacency integration, benchmark/smoke reporting, and a
+  `territory tr adm3 generate` CLI path. The legacy V1 generated-zone API remains available.
+
+### Patch Changes
+
+- Updated dependencies [6414bd1]
+  - @territory-kit/generators@1.6.0
+  - @territory-kit/core@1.6.0
+  - @territory-kit/dataset@1.6.0
+  - @territory-kit/registry@1.6.0
+
 ## 1.5.0
 
 ### Minor Changes

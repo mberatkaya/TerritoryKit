@@ -1,5 +1,11 @@
 # @territory-kit/adapter-core
 
+## 1.6.0
+
+### Patch Changes
+
+- @territory-kit/dataset@1.6.0
+
 ## 1.5.0
 
 ### Patch Changes
