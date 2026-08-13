@@ -1,5 +1,17 @@
 # @territory-kit/example-web-maplibre-turkey
 
+## 0.0.7
+
+### Patch Changes
+
+- @territory-kit/adapter-core@1.7.0
+- @territory-kit/core@1.7.0
+- @territory-kit/dataset@1.7.0
+- @territory-kit/registry@1.7.0
+- @territory-kit/maplibre@1.7.0
+- @territory-kit/data-tr@1.7.0
+- @territory-kit/shared-testkit@0.1.0-alpha.1
+
 ## 0.0.6
 
 ### Patch Changes

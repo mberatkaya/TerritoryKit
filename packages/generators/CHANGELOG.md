@@ -1,5 +1,20 @@
 # @territory-kit/generators
 
+## 1.7.0
+
+### Minor Changes
+
+- f1aa280: Add the Turkey V2 hybrid coverage pipeline with deterministic official > OSM > generated source
+  priority. Real polygon provenance and stable identity are preserved, OSM keeps ODbL attribution, and
+  the Sprint 2 game-zone generator fills only uncovered district geometry. The CLI can now write
+  district and batch hybrid artifacts with coverage, quality, provenance, attribution, rejection,
+  migration, adjacency, configuration, source-lock summary, and checksums.
+
+### Patch Changes
+
+- @territory-kit/core@1.7.0
+- @territory-kit/dataset@1.7.0
+
 ## 1.6.0
 
 ### Minor Changes

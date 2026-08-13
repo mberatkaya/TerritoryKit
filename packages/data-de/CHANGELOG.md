@@ -1,5 +1,11 @@
 # @territory-kit/data-de
 
+## 1.7.0
+
+### Patch Changes
+
+- @territory-kit/core@1.7.0
+
 ## 1.6.0
 
 ### Patch Changes
