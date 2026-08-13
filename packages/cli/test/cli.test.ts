@@ -68,6 +68,65 @@ describe("territory cli", () => {
     }
   });
 
+  it("validates Turkey V2 datasets with the strict profile", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-tr-v2-cli-"));
+    const validPath = join(tempDir, "tr-v2-valid.json");
+    const invalidPath = join(tempDir, "tr-v2-invalid.json");
+
+    await writeFile(validPath, JSON.stringify(createCliTurkeyV2Dataset()), "utf8");
+    await writeFile(
+      invalidPath,
+      JSON.stringify(
+        createCliTurkeyV2Dataset({
+          official: false
+        })
+      ),
+      "utf8"
+    );
+
+    try {
+      await expect(
+        captureCli(["validate", validPath, "--profile", "tr-v2"])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "validate",
+          profile: "tr-v2",
+          data: { issues: [] }
+        }
+      });
+      await expect(
+        captureCli(["validate", invalidPath, "--profile", "tr-v2", "--json"])
+      ).resolves.toMatchObject({
+        code: 1,
+        payload: {
+          ok: false,
+          command: "validate",
+          profile: "tr-v2",
+          issues: expect.arrayContaining([
+            expect.objectContaining({
+              code: "SOURCE_FLAG_CONFLICT",
+              datasetId: "territory-kit-tr-v2-cli",
+              zoneId: "tr:adm3:34-003-official-1"
+            })
+          ])
+        }
+      });
+      await expect(
+        captureCli(["validate", validPath, "--profile", "unknown"])
+      ).resolves.toMatchObject({
+        code: 2,
+        payload: {
+          ok: false,
+          issues: [expect.objectContaining({ code: "VALIDATION_PROFILE_UNSUPPORTED" })]
+        }
+      });
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
+
   it("builds a registry and installs dataset artifacts from local files", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-cli-registry-"));
     const artifactRoot = join(tempDir, "artifacts", "sample");
@@ -2056,6 +2115,153 @@ function createHdxCodAbCliFixture(): unknown {
         geometry: squareCli(28, 40)
       }
     ]
+  };
+}
+
+function createCliTurkeyV2Dataset(options: { official?: boolean } = {}): unknown {
+  const datasetId = "territory-kit-tr-v2-cli";
+  const source = {
+    provider: "fixture-official-provider",
+    sourceClass: "official",
+    sourceDatasetId: "fixture-official",
+    sourceId: "official-1",
+    sourceNativeId: "official-1",
+    sourceUrl: "https://data.example.test/tr/adm3",
+    sourceDate: "2026-08-01",
+    license: "CC BY 4.0",
+    attribution: "Fixture"
+  };
+
+  return {
+    manifest: {
+      datasetId,
+      datasetVersion: "1.1.0",
+      schemaVersion: "territory-schema@1",
+      sourceDate: "2026-08-13",
+      buildDate: "2026-08-13T00:00:00.000Z",
+      geometryHash: "cli-tr-v2",
+      adminLevels: ["ADM0", "ADM1", "ADM2", "ADM3"],
+      countryCodes: ["TR"]
+    },
+    zones: [
+      cliTurkeyV2Zone({
+        datasetId,
+        id: "tr",
+        level: 0,
+        semanticType: "country",
+        childIds: ["tr:adm1:34"],
+        territory: {
+          adminLevel: "ADM0",
+          sourceAdminLevel: "ADM0",
+          semanticType: "country",
+          hierarchyDepth: 0,
+          countryCode: "TR",
+          coverageStatus: "verified",
+          semanticReviewStatus: "reviewed"
+        }
+      }),
+      cliTurkeyV2Zone({
+        datasetId,
+        id: "tr:adm1:34",
+        level: 1,
+        semanticType: "province",
+        parentId: "tr",
+        childIds: ["tr:adm2:34-003"],
+        territory: {
+          adminLevel: "ADM1",
+          sourceAdminLevel: "ADM1",
+          semanticType: "province",
+          hierarchyDepth: 1,
+          parentId: "tr",
+          countryCode: "TR",
+          provinceCode: "34",
+          coverageStatus: "verified",
+          semanticReviewStatus: "reviewed"
+        }
+      }),
+      cliTurkeyV2Zone({
+        datasetId,
+        id: "tr:adm2:34-003",
+        level: 2,
+        semanticType: "district",
+        parentId: "tr:adm1:34",
+        childIds: ["tr:adm3:34-003-official-1"],
+        territory: {
+          adminLevel: "ADM2",
+          sourceAdminLevel: "ADM2",
+          semanticType: "district",
+          hierarchyDepth: 2,
+          parentId: "tr:adm1:34",
+          countryCode: "TR",
+          provinceCode: "34",
+          districtCode: "003",
+          coverageStatus: "verified",
+          semanticReviewStatus: "reviewed"
+        }
+      }),
+      cliTurkeyV2Zone({
+        datasetId,
+        id: "tr:adm3:34-003-official-1",
+        level: 3,
+        semanticType: "neighbourhood",
+        parentId: "tr:adm2:34-003",
+        territory: {
+          adminLevel: "ADM3",
+          sourceAdminLevel: "ADM3",
+          semanticType: "neighbourhood",
+          localType: "neighbourhood",
+          localTypeName: "Mahalle",
+          hierarchyDepth: 3,
+          parentId: "tr:adm2:34-003",
+          countryCode: "TR",
+          provinceCode: "34",
+          districtCode: "003",
+          sourceClass: "official",
+          sourceProvider: source.provider,
+          sourceDatasetId: source.sourceDatasetId,
+          sourceNativeId: source.sourceNativeId,
+          sourceDate: source.sourceDate,
+          sourceUrl: source.sourceUrl,
+          license: source.license,
+          attribution: source.attribution,
+          official: options.official ?? true,
+          generated: false,
+          coverageStatus: "verified",
+          semanticReviewStatus: "reviewed",
+          stableId: "tr:adm3:34-003-official-1",
+          source
+        }
+      })
+    ]
+  };
+}
+
+function cliTurkeyV2Zone(input: {
+  datasetId: string;
+  id: string;
+  level: number;
+  semanticType: string;
+  territory: Record<string, unknown>;
+  parentId?: string;
+  childIds?: string[];
+}): unknown {
+  return {
+    id: input.id,
+    datasetId: input.datasetId,
+    countryCode: "TR",
+    level: input.level,
+    sourceAdminLevel: `ADM${input.level}`,
+    semanticType: input.semanticType,
+    name: input.id,
+    ...(input.parentId ? { parentId: input.parentId } : {}),
+    ...(input.childIds ? { childIds: input.childIds } : {}),
+    neighborIds: [],
+    geometry: rectCli(28.9 + input.level * 0.01, 41, 29 + input.level * 0.01, 41.05),
+    center: [28.95 + input.level * 0.01, 41.025],
+    bbox: [28.9 + input.level * 0.01, 41, 29 + input.level * 0.01, 41.05],
+    properties: {
+      territory: input.territory
+    }
   };
 }
 

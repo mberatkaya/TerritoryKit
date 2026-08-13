@@ -1,4 +1,4 @@
-import { TERRITORY_ADMIN_LEVELS } from "@territory-kit/dataset";
+import { TERRITORY_ADMIN_LEVELS, TERRITORY_SOURCE_CLASSES } from "@territory-kit/dataset";
 import type { TerritoryAdminLevel } from "@territory-kit/dataset";
 import type {
   TerritoryDatasetRegistry,
@@ -30,6 +30,7 @@ const formatValues = new Set<TerritoryRegistryArtifactFormat>([
 ]);
 
 const levelValues = new Set<TerritoryAdminLevel>(TERRITORY_ADMIN_LEVELS);
+const sourceClassValues = new Set<string>(TERRITORY_SOURCE_CLASSES);
 
 export function validateTerritoryDatasetRegistry(
   input: unknown
@@ -355,6 +356,19 @@ function validateArtifacts(
           "ARTIFACT_IMMUTABLE_INVALID",
           "Artifact immutable must be a boolean.",
           `${artifactPath}.immutable`
+        )
+      );
+    }
+
+    if (
+      artifact.sourceClass !== undefined &&
+      !sourceClassValues.has(String(artifact.sourceClass))
+    ) {
+      issues.push(
+        issue(
+          "ARTIFACT_SOURCE_CLASS_INVALID",
+          "Artifact sourceClass must be official, osm, or generated.",
+          `${artifactPath}.sourceClass`
         )
       );
     }

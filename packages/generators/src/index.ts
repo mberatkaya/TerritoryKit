@@ -180,6 +180,7 @@ export {
   TURKEY_ADM3_QUALITY_SCHEMA_VERSION,
   TURKEY_ADM3_SOURCE_CATALOG_SCHEMA_VERSION,
   TURKEY_ADM3_SOURCE_LOCK_SCHEMA_VERSION,
+  TURKEY_V2_ADM3_STABLE_ID_STANDARD,
   createDefaultTurkeyAdm3SourceCatalog,
   createTurkeyAdm3CoverageManifest,
   createTurkeyAdm3SourceLockExtension,
@@ -187,6 +188,8 @@ export {
   createTurkeyAdm3StableKey,
   createTurkeyAdm3SyntheticSourceLockLevel,
   createTurkeyAdm3TerritoryId,
+  createTurkeyV2Adm3StableKey,
+  createTurkeyV2Adm3TerritoryId,
   isTurkeyAdm3SourceLockExtension,
   loadTurkeyAdm3ParsedFeatures,
   normalizeTurkeyAdm3DisplayName,
@@ -257,7 +260,9 @@ export type {
   TurkeyAdm3QualityGateReport,
   TurkeyAdm3SourceCatalog,
   TurkeyAdm3SourceLockCreateOptions,
-  TurkeyAdm3SourceLockExtension
+  TurkeyAdm3SourceLockExtension,
+  TurkeyV2Adm3StableIdInput,
+  TurkeyV2Adm3StableIdSourceClass
 } from "./turkey-adm3-ingestion.js";
 export type {
   TurkeyAdm3OsmExtractOptions,

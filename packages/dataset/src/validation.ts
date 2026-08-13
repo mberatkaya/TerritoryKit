@@ -12,6 +12,7 @@ import type {
   TerritoryGeometry,
   TerritorySemanticAdminType,
   TerritorySemanticReviewStatus,
+  TerritorySourceClass,
   TerritoryValidationIssue,
   TerritoryValidationResult,
   TerritoryZone
@@ -21,6 +22,7 @@ import {
   TERRITORY_COVERAGE_STATUSES,
   TERRITORY_SEMANTIC_ADMIN_TYPES,
   TERRITORY_SEMANTIC_REVIEW_STATUSES,
+  TERRITORY_SOURCE_CLASSES,
   getAdminLevelDepth
 } from "./global.js";
 
@@ -710,6 +712,34 @@ function validateTerritoryPropertiesMetadata(
   readOptionalMetadataString(territory.localTypeName, `${path}.localTypeName`, issues, zoneId);
   readOptionalMetadataString(territory.parentId, `${path}.parentId`, issues, zoneId);
   readOptionalMetadataString(territory.sourceParentId, `${path}.sourceParentId`, issues, zoneId);
+  readOptionalMetadataString(territory.countryCode, `${path}.countryCode`, issues, zoneId);
+  readOptionalMetadataString(territory.provinceCode, `${path}.provinceCode`, issues, zoneId);
+  readOptionalMetadataString(territory.districtCode, `${path}.districtCode`, issues, zoneId);
+  readOptionalMetadataSourceClass(territory.sourceClass, `${path}.sourceClass`, issues, zoneId);
+  readOptionalMetadataString(territory.sourceProvider, `${path}.sourceProvider`, issues, zoneId);
+  readOptionalMetadataString(territory.sourceDatasetId, `${path}.sourceDatasetId`, issues, zoneId);
+  readOptionalMetadataString(territory.sourceNativeId, `${path}.sourceNativeId`, issues, zoneId);
+  readOptionalMetadataString(territory.sourceDate, `${path}.sourceDate`, issues, zoneId);
+  readOptionalMetadataString(territory.sourceUrl, `${path}.sourceUrl`, issues, zoneId);
+  readOptionalMetadataString(territory.license, `${path}.license`, issues, zoneId);
+  readOptionalMetadataString(territory.attribution, `${path}.attribution`, issues, zoneId);
+  readOptionalMetadataBoolean(territory.official, `${path}.official`, issues, zoneId);
+  readOptionalMetadataBoolean(territory.generated, `${path}.generated`, issues, zoneId);
+  readOptionalMetadataString(
+    territory.algorithmVersion,
+    `${path}.algorithmVersion`,
+    issues,
+    zoneId
+  );
+  readOptionalMetadataString(territory.generationSeed, `${path}.generationSeed`, issues, zoneId);
+  readOptionalMetadataString(territory.stableId, `${path}.stableId`, issues, zoneId);
+  validateOptionalMetadataSource(territory.source, `${path}.source`, issues, zoneId);
+  validateOptionalGeneratedZoneMetadata(
+    territory.generatedZone,
+    `${path}.generatedZone`,
+    issues,
+    zoneId
+  );
   readOptionalMetadataSemanticReviewStatus(
     territory.semanticReviewStatus,
     `${path}.semanticReviewStatus`,
@@ -813,7 +843,7 @@ function readOptionalMetadataSemanticReviewStatus(
   }
 
   issues.push({
-    code: "ZONE_FIELD",
+    code: "INVALID_SEMANTIC_REVIEW_STATUS",
     message:
       "Expected semanticReviewStatus to be reviewed, review-required, mapping-review-required, or not-applicable.",
     path,
@@ -841,13 +871,125 @@ function readOptionalMetadataCoverageStatus(
   }
 
   issues.push({
-    code: "ZONE_FIELD",
+    code: "INVALID_COVERAGE_STATUS",
     message: "Expected a known coverage status.",
     path,
     severity: "error",
     ...(zoneId ? { zoneId, featureId: zoneId } : {})
   });
   return undefined;
+}
+
+function readOptionalMetadataSourceClass(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[],
+  zoneId: string | undefined
+): TerritorySourceClass | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (
+    typeof input === "string" &&
+    TERRITORY_SOURCE_CLASSES.includes(input as TerritorySourceClass)
+  ) {
+    return input as TerritorySourceClass;
+  }
+
+  issues.push({
+    code: "INVALID_SOURCE_CLASS",
+    message: "Expected sourceClass to be official, osm, or generated.",
+    path,
+    severity: "error",
+    ...(zoneId ? { zoneId, featureId: zoneId } : {})
+  });
+  return undefined;
+}
+
+function readOptionalMetadataBoolean(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[],
+  zoneId: string | undefined
+): boolean | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (typeof input === "boolean") {
+    return input;
+  }
+
+  issues.push({
+    code: "ZONE_FIELD",
+    message: "Expected a boolean when present.",
+    path,
+    severity: "error",
+    ...(zoneId ? { zoneId, featureId: zoneId } : {})
+  });
+  return undefined;
+}
+
+function validateOptionalMetadataSource(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[],
+  zoneId: string | undefined
+): void {
+  if (input === undefined) {
+    return;
+  }
+
+  if (!isRecord(input)) {
+    issues.push({
+      code: "ZONE_FIELD",
+      message: "source must be an object when present.",
+      path,
+      severity: "error",
+      ...(zoneId ? { zoneId, featureId: zoneId } : {})
+    });
+    return;
+  }
+
+  readOptionalMetadataString(input.provider, `${path}.provider`, issues, zoneId);
+  readOptionalMetadataSourceClass(input.sourceClass, `${path}.sourceClass`, issues, zoneId);
+  readOptionalMetadataString(input.sourceDatasetId, `${path}.sourceDatasetId`, issues, zoneId);
+  readOptionalMetadataString(input.sourceId, `${path}.sourceId`, issues, zoneId);
+  readOptionalMetadataString(input.sourceNativeId, `${path}.sourceNativeId`, issues, zoneId);
+  readOptionalMetadataString(input.sourceUrl, `${path}.sourceUrl`, issues, zoneId);
+  readOptionalMetadataString(input.sourceDate, `${path}.sourceDate`, issues, zoneId);
+  readOptionalMetadataString(input.importedAt, `${path}.importedAt`, issues, zoneId);
+  readOptionalMetadataString(input.license, `${path}.license`, issues, zoneId);
+  readOptionalMetadataString(input.attribution, `${path}.attribution`, issues, zoneId);
+}
+
+function validateOptionalGeneratedZoneMetadata(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[],
+  zoneId: string | undefined
+): void {
+  if (input === undefined) {
+    return;
+  }
+
+  if (!isRecord(input)) {
+    issues.push({
+      code: "ZONE_FIELD",
+      message: "generatedZone must be an object when present.",
+      path,
+      severity: "error",
+      ...(zoneId ? { zoneId, featureId: zoneId } : {})
+    });
+    return;
+  }
+
+  readOptionalMetadataString(input.algorithm, `${path}.algorithm`, issues, zoneId);
+  readOptionalMetadataString(input.algorithmVersion, `${path}.algorithmVersion`, issues, zoneId);
+  readOptionalMetadataString(input.seed, `${path}.seed`, issues, zoneId);
+  readOptionalMetadataString(input.generationSeed, `${path}.generationSeed`, issues, zoneId);
+  readOptionalMetadataString(input.localKey, `${path}.localKey`, issues, zoneId);
 }
 
 function readOptionalMetadataHierarchyDepth(

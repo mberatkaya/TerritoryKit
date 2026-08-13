@@ -1,0 +1,194 @@
+{
+  "manifest": {
+    "datasetId": "territory-kit-tr-v2-example",
+    "datasetVersion": "1.1.0",
+    "schemaVersion": "territory-schema@1",
+    "sourceDate": "2026-08-13",
+    "buildDate": "2026-08-13T00:00:00.000Z",
+    "geometryHash": "example-only",
+    "adminLevels": ["ADM0", "ADM1", "ADM2", "ADM3"],
+    "countryCodes": ["TR"],
+    "license": "mixed",
+    "attribution": "Synthetic Turkey V2 example"
+  },
+  "zones": [
+    {
+      "id": "tr",
+      "datasetId": "territory-kit-tr-v2-example",
+      "countryCode": "TR",
+      "level": 0,
+      "sourceAdminLevel": "ADM0",
+      "semanticType": "country",
+      "name": "Turkiye",
+      "childIds": ["tr:adm1:34"],
+      "neighborIds": [],
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [28.8, 40.9],
+            [29.2, 40.9],
+            [29.2, 41.2],
+            [28.8, 41.2],
+            [28.8, 40.9]
+          ]
+        ]
+      },
+      "center": [29, 41.05],
+      "bbox": [28.8, 40.9, 29.2, 41.2],
+      "properties": {
+        "territory": {
+          "adminLevel": "ADM0",
+          "sourceAdminLevel": "ADM0",
+          "semanticType": "country",
+          "countryCode": "TR",
+          "hierarchyDepth": 0,
+          "coverageStatus": "verified",
+          "semanticReviewStatus": "reviewed"
+        }
+      }
+    },
+    {
+      "id": "tr:adm1:34",
+      "datasetId": "territory-kit-tr-v2-example",
+      "countryCode": "TR",
+      "level": 1,
+      "sourceAdminLevel": "ADM1",
+      "semanticType": "province",
+      "name": "Istanbul",
+      "parentId": "tr",
+      "childIds": ["tr:adm2:34-003"],
+      "neighborIds": [],
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [28.85, 40.95],
+            [29.15, 40.95],
+            [29.15, 41.15],
+            [28.85, 41.15],
+            [28.85, 40.95]
+          ]
+        ]
+      },
+      "center": [29, 41.05],
+      "bbox": [28.85, 40.95, 29.15, 41.15],
+      "properties": {
+        "territory": {
+          "adminLevel": "ADM1",
+          "sourceAdminLevel": "ADM1",
+          "semanticType": "province",
+          "countryCode": "TR",
+          "provinceCode": "34",
+          "parentId": "tr",
+          "hierarchyDepth": 1,
+          "coverageStatus": "verified",
+          "semanticReviewStatus": "reviewed"
+        }
+      }
+    },
+    {
+      "id": "tr:adm2:34-003",
+      "datasetId": "territory-kit-tr-v2-example",
+      "countryCode": "TR",
+      "level": 2,
+      "sourceAdminLevel": "ADM2",
+      "semanticType": "district",
+      "name": "Fatih",
+      "parentId": "tr:adm1:34",
+      "childIds": ["tr:adm3:tr-il-34-ilce-003-official-123456"],
+      "neighborIds": [],
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [28.9, 41],
+            [29.05, 41],
+            [29.05, 41.08],
+            [28.9, 41.08],
+            [28.9, 41]
+          ]
+        ]
+      },
+      "center": [28.975, 41.04],
+      "bbox": [28.9, 41, 29.05, 41.08],
+      "properties": {
+        "territory": {
+          "adminLevel": "ADM2",
+          "sourceAdminLevel": "ADM2",
+          "semanticType": "district",
+          "countryCode": "TR",
+          "provinceCode": "34",
+          "districtCode": "003",
+          "parentId": "tr:adm1:34",
+          "hierarchyDepth": 2,
+          "coverageStatus": "verified",
+          "semanticReviewStatus": "reviewed"
+        }
+      }
+    },
+    {
+      "id": "tr:adm3:tr-il-34-ilce-003-official-123456",
+      "datasetId": "territory-kit-tr-v2-example",
+      "countryCode": "TR",
+      "level": 3,
+      "sourceAdminLevel": "ADM3",
+      "semanticType": "neighbourhood",
+      "name": "Istiklal",
+      "parentId": "tr:adm2:34-003",
+      "neighborIds": [],
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [28.94, 41.01],
+            [28.96, 41.01],
+            [28.96, 41.07],
+            [28.94, 41.07],
+            [28.94, 41.01]
+          ]
+        ]
+      },
+      "center": [28.95, 41.04],
+      "bbox": [28.94, 41.01, 28.96, 41.07],
+      "properties": {
+        "territory": {
+          "adminLevel": "ADM3",
+          "sourceAdminLevel": "ADM3",
+          "semanticType": "neighbourhood",
+          "localType": "neighbourhood",
+          "localTypeName": "Mahalle",
+          "countryCode": "TR",
+          "provinceCode": "34",
+          "districtCode": "003",
+          "parentId": "tr:adm2:34-003",
+          "hierarchyDepth": 3,
+          "sourceClass": "official",
+          "sourceProvider": "example-official-provider",
+          "sourceDatasetId": "example-official-adm3",
+          "sourceNativeId": "123456",
+          "sourceDate": "2026-08-01",
+          "sourceUrl": "https://data.example.test/tr/adm3",
+          "license": "CC BY 4.0",
+          "attribution": "Example official provider",
+          "official": true,
+          "generated": false,
+          "coverageStatus": "verified",
+          "semanticReviewStatus": "reviewed",
+          "stableId": "tr:adm3:tr-il-34-ilce-003-official-123456",
+          "source": {
+            "provider": "example-official-provider",
+            "sourceClass": "official",
+            "sourceDatasetId": "example-official-adm3",
+            "sourceId": "123456",
+            "sourceNativeId": "123456",
+            "sourceUrl": "https://data.example.test/tr/adm3",
+            "sourceDate": "2026-08-01",
+            "license": "CC BY 4.0",
+            "attribution": "Example official provider"
+          }
+        }
+      }
+    }
+  ]
+}

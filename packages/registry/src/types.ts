@@ -1,7 +1,8 @@
 import type {
   TerritoryAdminLevel,
   TerritoryCoverageStatus,
-  TerritorySemanticAdminType
+  TerritorySemanticAdminType,
+  TerritorySourceClass
 } from "@territory-kit/dataset";
 
 export const TERRITORY_REGISTRY_VERSION = "1";
@@ -55,6 +56,12 @@ export interface TerritoryRegistryArtifact {
   coverageStatus?: TerritoryCoverageStatus;
   semanticType?: TerritorySemanticAdminType;
   localTypeName?: string;
+  sourceClass?: TerritorySourceClass;
+  sourceProvider?: string;
+  sourceDatasetId?: string;
+  official?: boolean;
+  generated?: boolean;
+  algorithmVersion?: string;
   partialCoverage?: boolean;
   [key: string]: unknown;
 }

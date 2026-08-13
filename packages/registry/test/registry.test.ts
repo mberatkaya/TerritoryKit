@@ -33,7 +33,8 @@ describe("territory dataset registry", () => {
               path: "levels/ADM0/dataset.json",
               url: "javascript:alert(1)",
               sha256: "0".repeat(64),
-              sizeBytes: 1
+              sizeBytes: 1,
+              sourceClass: "runtime"
             }
           ]
         }
@@ -42,7 +43,10 @@ describe("territory dataset registry", () => {
 
     expect(validation.ok).toBe(false);
     expect(validation.issues).toEqual(
-      expect.arrayContaining([expect.objectContaining({ code: "ARTIFACT_URL_INVALID" })])
+      expect.arrayContaining([
+        expect.objectContaining({ code: "ARTIFACT_URL_INVALID" }),
+        expect.objectContaining({ code: "ARTIFACT_SOURCE_CLASS_INVALID" })
+      ])
     );
   });
 

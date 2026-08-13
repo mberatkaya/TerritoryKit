@@ -1365,6 +1365,44 @@ export function createTurkeyAdm3TerritoryId(input: {
   });
 }
 
+export type TurkeyV2Adm3StableIdSourceClass = "official" | "osm" | "generated";
+
+export interface TurkeyV2Adm3StableIdInput {
+  provinceCode: string;
+  districtCode: string;
+  sourceClass: TurkeyV2Adm3StableIdSourceClass;
+  sourceNativeId?: string;
+  sourceDatasetId?: string;
+  name?: string;
+  algorithmVersion?: string;
+  generationSeed?: string;
+  localKey?: string;
+}
+
+export const TURKEY_V2_ADM3_STABLE_ID_STANDARD = "territorykit-tr-v2-adm3-stable-id@1" as const;
+
+export function createTurkeyV2Adm3StableKey(input: TurkeyV2Adm3StableIdInput): string {
+  const provinceCode = normalizeProvinceCode(input.provinceCode);
+  const districtCode = normalizeTurkeyV2DistrictCode(input.districtCode);
+  const sourceIdentity = createTurkeyV2Adm3SourceIdentity(input);
+
+  return [
+    "tr",
+    `il-${provinceCode}`,
+    `ilce-${districtCode}`,
+    input.sourceClass,
+    sourceIdentity
+  ].join("-");
+}
+
+export function createTurkeyV2Adm3TerritoryId(input: TurkeyV2Adm3StableIdInput): string {
+  return createTerritoryGlobalId({
+    countryCode: "TR",
+    adminLevel: "ADM3",
+    localId: createTurkeyV2Adm3StableKey(input)
+  });
+}
+
 export function normalizeTurkeyAdm3Name(input: string): string {
   return slugifyTerritoryIdPart(input.trim().replace(/\s+/g, " "));
 }
@@ -1526,6 +1564,50 @@ function normalizeProvinceCode(code: string): string {
   }
 
   return numeric.padStart(2, "0");
+}
+
+function normalizeTurkeyV2DistrictCode(code: string): string {
+  const trimmed = code.trim();
+  const withoutCountry = trimmed.replace(/^TR[-_:]?/i, "");
+  const parts = withoutCountry.split(/[-_:]/).filter(Boolean);
+  const candidate = parts.at(-1) ?? withoutCountry;
+
+  if (/^\d{1,4}$/.test(candidate)) {
+    return candidate.padStart(3, "0");
+  }
+
+  return slugifyTerritoryIdPart(withoutCountry);
+}
+
+function createTurkeyV2Adm3SourceIdentity(input: TurkeyV2Adm3StableIdInput): string {
+  if (input.sourceClass === "generated") {
+    if (!input.algorithmVersion) {
+      throw new Error("Turkey V2 generated ADM3 stable IDs require algorithmVersion.");
+    }
+
+    const localKey =
+      input.localKey ??
+      input.sourceNativeId ??
+      (input.generationSeed ? `seed-${sha256Hex(input.generationSeed).slice(0, 16)}` : undefined);
+
+    if (!localKey) {
+      throw new Error(
+        "Turkey V2 generated ADM3 stable IDs require localKey, sourceNativeId, or generationSeed."
+      );
+    }
+
+    return `${slugifyTerritoryIdPart(input.algorithmVersion)}-${slugifyTerritoryIdPart(localKey)}`;
+  }
+
+  const realSourceIdentity = input.sourceNativeId ?? input.sourceDatasetId ?? input.name;
+
+  if (!realSourceIdentity) {
+    throw new Error(
+      `Turkey V2 ${input.sourceClass} ADM3 stable IDs require sourceNativeId, sourceDatasetId, or name.`
+    );
+  }
+
+  return slugifyTerritoryIdPart(realSourceIdentity);
 }
 
 function isSupportedLonLatCrs(input: unknown): boolean {

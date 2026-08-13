@@ -77,6 +77,17 @@ export const turkeyAdm3NeighbourhoodCoverage = {
     "tr:adm2:54988432b99023740963316"
   ]
 } as const;
+export const turkeyV2DataContract = {
+  country: "TR",
+  contractVersion: "territorykit-tr-v2-data-contract@1",
+  targetDatasetVersion: "1.1.0",
+  schemaVersion: "territory-schema@1",
+  adm3SemanticTypes: ["neighbourhood", "village", "generated-zone"],
+  sourceClassPriority: ["official", "osm", "generated"],
+  strictValidationProfile: "tr-v2",
+  generatedZonesAreOfficialAdministrativeAreas: false,
+  nationalAdm3PolygonBuildIncluded: false
+} as const;
 
 export function loadTurkeyDataset(
   options: TerritoryCountryDatasetLoadOptions

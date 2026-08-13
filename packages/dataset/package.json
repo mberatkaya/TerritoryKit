@@ -34,6 +34,11 @@
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
+    },
+    "./turkey-v2": {
+      "types": "./dist/turkey-v2.d.mts",
+      "import": "./dist/turkey-v2.mjs",
+      "require": "./dist/turkey-v2.cjs"
     }
   },
   "scripts": {
