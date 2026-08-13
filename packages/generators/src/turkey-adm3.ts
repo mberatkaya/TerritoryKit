@@ -1,4 +1,14 @@
 export {
+  TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
+  TURKEY_GAME_ZONE_CONFIGURATION_SCHEMA_VERSION,
+  TURKEY_GAME_ZONE_QUALITY_SCHEMA_VERSION,
+  buildTurkeyGameZones,
+  buildTurkeyGameZonesWithAdjacency,
+  createTurkeyGameZoneDataset,
+  resolveTurkeyGameZoneConfiguration,
+  validateTurkeyGameZoneGeneratorOptions
+} from "./turkey-game-zones.js";
+export {
   TURKEY_V2_ADM3_STABLE_ID_STANDARD,
   createTurkeyV2Adm3StableKey,
   createTurkeyV2Adm3TerritoryId
@@ -32,6 +42,21 @@ export {
   createTurkeyAdm3OsmDataset,
   extractTurkeyAdm3OsmPbf
 } from "./turkey-adm3-osm.js";
+export type {
+  ResolvedTurkeyGameZoneConfiguration,
+  ResolvedTurkeyGameZoneProfile,
+  TurkeyGameZoneBuildResult,
+  TurkeyGameZoneConfigurationResolution,
+  TurkeyGameZoneFragmentStrategy,
+  TurkeyGameZoneGeneratorOptions,
+  TurkeyGameZoneIssue,
+  TurkeyGameZoneIssueCode,
+  TurkeyGameZoneIssueSeverity,
+  TurkeyGameZoneProfile,
+  TurkeyGameZoneProfileDecision,
+  TurkeyGameZoneQualityReport,
+  TurkeyGameZoneUrbanityHint
+} from "./turkey-game-zones.js";
 export type {
   TurkeyV2Adm3StableIdInput,
   TurkeyV2Adm3StableIdSourceClass

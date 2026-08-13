@@ -46,6 +46,8 @@
     "test": "turbo run test",
     "test:visual:maplibre": "pnpm --filter @territory-kit/example-web-maplibre test:visual",
     "turkey:adm3:ingestion:smoke": "pnpm --filter @territory-kit/generators build && pnpm --filter @territory-kit/generators exec vitest run test/turkey-adm3-ingestion.test.ts --passWithNoTests && pnpm --filter @territory-kit/cli exec vitest run test/turkey-adm3-ingestion.test.ts --passWithNoTests",
+    "turkey:adm3:generator:smoke": "pnpm --filter @territory-kit/generators build && node scripts/turkey-adm3-game-zone-benchmark.mjs --smoke --output reports/tr-adm3/game-zone-smoke.json",
+    "turkey:adm3:generator:benchmark": "pnpm --filter @territory-kit/generators build && node scripts/turkey-adm3-game-zone-benchmark.mjs --output reports/tr-adm3/game-zone-benchmark.json",
     "turkey:adm3:production:smoke": "pnpm --filter @territory-kit/generators exec vitest run test/turkey-adm3-full-coverage.test.ts test/turkey-adm3-osm.test.ts && pnpm --filter @territory-kit/cli build && node packages/cli/dist/index.mjs tr adm3 build --generated --fill-gaps --max-districts 2 --output .territory/build/TR/ADM3-smoke --force",
     "typecheck": "turbo run typecheck",
     "verify": "pnpm format:check && pnpm lint && pnpm package:boundaries && pnpm typecheck && pnpm test && pnpm build && pnpm bundle:size && pnpm data:tr:adm3:artifact-policy",

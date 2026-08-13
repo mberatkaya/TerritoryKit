@@ -63,7 +63,9 @@ const maxBytesByFile = new Map([
   // coverage reporting while keeping the heavy geometry implementation external in generators.
   // Turkey ADM3 production evidence adds provider health, official/OSM/generated source status,
   // province artifact manifests, and quality/provenance report emitters.
-  ["packages/cli/dist/index.mjs", 172_000]
+  // Turkey ADM3 game-zone generation adds deterministic build planning, artifact writing,
+  // checksum reporting, and Turkey V2 validation while leaving generator logic external.
+  ["packages/cli/dist/index.mjs", 180_000]
 ]);
 
 const failures = [];

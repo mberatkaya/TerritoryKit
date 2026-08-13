@@ -130,6 +130,154 @@ describe("territory cli Turkey ADM3 full coverage", () => {
       }
     });
   });
+
+  it("generates deterministic Turkey V2 game-zone artifacts", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-adm3-game-zone-"));
+    const adm2DatasetPath = join(tempDir, "adm2-dataset.json");
+    const outputPath = join(tempDir, "game-zones");
+
+    try {
+      await writeFile(adm2DatasetPath, JSON.stringify(createAdm2FixtureDataset()), "utf8");
+
+      const first = await captureCli([
+        "tr",
+        "adm3",
+        "generate",
+        "--dataset",
+        adm2DatasetPath,
+        "--district-id",
+        "tr:adm2:54988432b39717738295698",
+        "--profile",
+        "urban",
+        "--seed",
+        "kaprota-v2",
+        "--province-code",
+        "01",
+        "--district-code",
+        "001",
+        "--target-zone-count",
+        "6",
+        "--output",
+        outputPath
+      ]);
+
+      expect(first).toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "tr adm3 generate",
+          data: {
+            selectedProfile: "urban",
+            finalCoveragePercent: 100,
+            overlapCount: 0,
+            parentContainmentErrorCount: 0,
+            trV2ValidationOk: true
+          }
+        }
+      });
+      await expect(readFile(join(outputPath, "dataset.json"), "utf8")).resolves.toContain(
+        "tr-adm3-game-zone-build"
+      );
+      await expect(readFile(join(outputPath, "quality-report.json"), "utf8")).resolves.toContain(
+        "territorykit-tr-adm3-game-zone-quality@1"
+      );
+      await expect(readFile(join(outputPath, "adjacency.json"), "utf8")).resolves.toContain(
+        "contentHash"
+      );
+
+      const firstSummary = JSON.parse(
+        await readFile(join(outputPath, "build-summary.json"), "utf8")
+      ) as { deterministicHash: string };
+      const blockedOverwrite = await captureCli([
+        "tr",
+        "adm3",
+        "generate",
+        "--dataset",
+        adm2DatasetPath,
+        "--district-id",
+        "tr:adm2:54988432b39717738295698",
+        "--profile",
+        "urban",
+        "--province-code",
+        "01",
+        "--district-code",
+        "001",
+        "--output",
+        outputPath
+      ]);
+
+      expect(blockedOverwrite.code).toBe(2);
+
+      const secondOutputPath = join(tempDir, "game-zones-second");
+      const second = await captureCli([
+        "tr",
+        "adm3",
+        "generate",
+        "--dataset",
+        adm2DatasetPath,
+        "--district-id",
+        "tr:adm2:54988432b39717738295698",
+        "--profile",
+        "urban",
+        "--seed",
+        "kaprota-v2",
+        "--province-code",
+        "01",
+        "--district-code",
+        "001",
+        "--target-zone-count",
+        "6",
+        "--output",
+        secondOutputPath
+      ]);
+      const secondSummary = JSON.parse(
+        await readFile(join(secondOutputPath, "build-summary.json"), "utf8")
+      ) as { deterministicHash: string };
+
+      expect(second.code).toBe(0);
+      expect(secondSummary.deterministicHash).toBe(firstSummary.deterministicHash);
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it("rejects invalid Turkey V2 game-zone CLI configuration", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-adm3-game-zone-invalid-"));
+    const adm2DatasetPath = join(tempDir, "adm2-dataset.json");
+
+    try {
+      await writeFile(adm2DatasetPath, JSON.stringify(createAdm2FixtureDataset()), "utf8");
+
+      const result = await captureCli([
+        "tr",
+        "adm3",
+        "generate",
+        "--dataset",
+        adm2DatasetPath,
+        "--profile",
+        "custom",
+        "--province-code",
+        "01",
+        "--district-code",
+        "001",
+        "--min-area",
+        "5",
+        "--target-area",
+        "1",
+        "--max-area",
+        "2",
+        "--output",
+        join(tempDir, "bad")
+      ]);
+
+      expect(result.code).toBe(2);
+      expect(
+        (result.payload as { issues?: Array<{ code: string }> }).issues?.map((issue) => issue.code)
+      ).toContain("INVALID_AREA_ORDERING");
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
 });
 
 async function captureCli(args: string[]): Promise<{ code: number; payload: unknown }> {

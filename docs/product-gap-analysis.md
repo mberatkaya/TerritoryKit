@@ -28,6 +28,7 @@ are `implemented`, `partial`, `missing`, or `future roadmap`.
 | Hosted live production demo                                              | future roadmap | No hosted production deployment exists in this repository                                                      |
 | Dataset diff/migration tooling                                           | partial        | Generic migration plans exist; Turkey V2 old-to-new ID artifacts remain future source-build work               |
 | Turkey V2 data contract                                                  | implemented    | `docs/datasets/turkey-v2-data-contract.md`, `@territory-kit/dataset/turkey-v2`, `--profile tr-v2`              |
+| KapRota-style Turkey V2 generated game-zone generator                    | implemented    | `buildTurkeyGameZones`, `territory tr adm3 generate`, `docs/datasets/turkey-v2-game-zone-generator.md`         |
 
 Turkey ADM0-ADM2 now has a reviewed national source path, but Gaziantep remains only a partial ADM3
 hardening pilot. The repo still must not claim complete production lower-admin operations until
