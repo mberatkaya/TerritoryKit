@@ -1,5 +1,13 @@
 # @territory-kit/dataset
 
+## 1.5.0
+
+### Minor Changes
+
+- e605ffc: Establish the Turkey V2 ADM3 data contract with source-class metadata, strict TR V2 validation,
+  stable official/OSM/generated identity helpers, CLI profile support, and Turkey loader/registry
+  metadata for generated-zone compatibility.
+
 ## 1.4.0
 
 ## 1.3.0

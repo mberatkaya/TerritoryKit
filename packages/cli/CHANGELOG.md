@@ -1,5 +1,21 @@
 # @territory-kit/cli
 
+## 1.5.0
+
+### Minor Changes
+
+- e605ffc: Establish the Turkey V2 ADM3 data contract with source-class metadata, strict TR V2 validation,
+  stable official/OSM/generated identity helpers, CLI profile support, and Turkey loader/registry
+  metadata for generated-zone compatibility.
+
+### Patch Changes
+
+- Updated dependencies [e605ffc]
+  - @territory-kit/dataset@1.5.0
+  - @territory-kit/generators@1.5.0
+  - @territory-kit/registry@1.5.0
+  - @territory-kit/core@1.5.0
+
 ## 1.4.0
 
 ### Minor Changes

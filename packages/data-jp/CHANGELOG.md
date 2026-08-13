@@ -1,5 +1,11 @@
 # @territory-kit/data-jp
 
+## 1.5.0
+
+### Patch Changes
+
+- @territory-kit/core@1.5.0
+
 ## 1.4.0
 
 ### Patch Changes
