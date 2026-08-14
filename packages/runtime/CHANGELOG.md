@@ -1,5 +1,15 @@
 # @territory-kit/runtime
 
+## 1.8.0
+
+### Patch Changes
+
+- Updated dependencies [1a93d2f]
+  - @territory-kit/core@1.8.0
+  - @territory-kit/adapter-core@1.8.0
+  - @territory-kit/dataset@1.8.0
+  - @territory-kit/registry@1.8.0
+
 ## 1.7.0
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @territory-kit/data-id
 
+## 1.8.0
+
+### Patch Changes
+
+- Updated dependencies [1a93d2f]
+  - @territory-kit/core@1.8.0
+
 ## 1.7.0
 
 ### Patch Changes
