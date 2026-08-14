@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "territorykit-tr-v2-national-cli-summary@1",
+  "datasetId": "territory-kit-tr-v2-playable",
+  "datasetVersion": "2.0.0-rc.1",
+  "buildDate": "2026-08-13T00:00:00.000Z",
+  "provinceCount": 81,
+  "districtCount": 973,
+  "successfulDistrictCount": 973,
+  "failedDistrictCount": 0,
+  "adm3FinalZoneCount": 42210,
+  "officialZoneCount": 2094,
+  "osmZoneCount": 0,
+  "generatedZoneCount": 40116,
+  "realCoveragePercent": 3.247194,
+  "generatedCoveragePercent": 96.752804,
+  "finalCoveragePercent": 99.999998,
+  "districtsBelow9999": [],
+  "qualityOk": true,
+  "hardGateFailures": [],
+  "sourceStatus": {
+    "official": "artifact-loaded",
+    "osm": "not-built",
+    "generated": "built"
+  },
+  "deterministicHash": "217b50a6d83382437caf15d3d0c975f3ea4f165a29c8467b8666b3c5692daef8",
+  "sourceLockHash": "sha256:10e08ce0d17f4ab81b41984fecd9b30b174603204219bef746c0b63b3209ea63"
+}

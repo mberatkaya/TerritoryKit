@@ -3,6 +3,7 @@ import {
   loadTerritoryCountryDataset
 } from "@territory-kit/core";
 import type {
+  TerritoryCountryDatasetDescriptor,
   TerritoryCountryDatasetHandle,
   TerritoryCountryDatasetLoadOptions
 } from "@territory-kit/core";
@@ -14,6 +15,18 @@ export const turkeyDatasetDescriptor = createTerritoryCountryDatasetDescriptor({
   packageName: "@territory-kit/data-tr",
   schemaVersion: "territory-schema@1",
   supportedLevels: ["ADM0", "ADM1", "ADM2", "ADM3", "ADM4"],
+  defaultLevels: ["ADM0", "ADM1", "ADM2"],
+  manifestPath: "manifest.json",
+  requiresResolver: true
+});
+
+export const turkeyV2NationalDatasetDescriptor = createTerritoryCountryDatasetDescriptor({
+  datasetId: "territory-kit-tr-v2-playable",
+  countryCodeAlpha2: "TR",
+  countryCodeAlpha3: "TUR",
+  packageName: "@territory-kit/data-tr",
+  schemaVersion: "territory-schema@1",
+  supportedLevels: ["ADM0", "ADM1", "ADM2", "ADM3"],
   defaultLevels: ["ADM0", "ADM1", "ADM2"],
   manifestPath: "manifest.json",
   requiresResolver: true
@@ -80,19 +93,92 @@ export const turkeyAdm3NeighbourhoodCoverage = {
 export const turkeyV2DataContract = {
   country: "TR",
   contractVersion: "territorykit-tr-v2-data-contract@1",
-  targetDatasetVersion: "1.1.0",
+  targetDatasetVersion: "2.0.0-rc.1",
   schemaVersion: "territory-schema@1",
   adm3SemanticTypes: ["neighbourhood", "village", "generated-zone"],
   sourceClassPriority: ["official", "osm", "generated"],
   strictValidationProfile: "tr-v2",
   generatedZonesAreOfficialAdministrativeAreas: false,
-  nationalAdm3PolygonBuildIncluded: false
+  nationalAdm3PolygonBuildIncluded: true,
+  nationalAdm3PolygonBuildSemantics:
+    "playable official/OSM/generated hybrid coverage; generated zones are not official administrative areas",
+  nationalDatasetId: turkeyV2NationalDatasetDescriptor.datasetId
+} as const;
+export const turkeyV2NationalPlayableCoverage = {
+  country: "TR",
+  datasetId: turkeyV2NationalDatasetDescriptor.datasetId,
+  datasetVersion: turkeyV2DataContract.targetDatasetVersion,
+  status: "resolver-required",
+  releaseChannel: "prerelease",
+  officialAdm0Adm2: {
+    sourceProvider: "hdx-cod-ab",
+    sourceId: "cod-ab-tur",
+    featureCounts: {
+      ADM0: 1,
+      ADM1: 81,
+      ADM2: 973
+    }
+  },
+  adm3: {
+    status: "playable-national-hybrid",
+    sourceClassPriority: turkeyV2DataContract.sourceClassPriority,
+    generatedFallback: true,
+    generatedZonesAreOfficialAdministrativeAreas: false,
+    minimumDistrictCoveragePercent: 99.99
+  },
+  packaging: {
+    embedsGeometry: false,
+    requiresResolver: true,
+    largeArtifactsExternal: true
+  }
 } as const;
 
 export function loadTurkeyDataset(
   options: TerritoryCountryDatasetLoadOptions
 ): Promise<TerritoryCountryDatasetHandle> {
   return loadTerritoryCountryDataset(turkeyDatasetDescriptor, options);
+}
+
+export function loadTurkeyV2NationalDataset(
+  options: TerritoryCountryDatasetLoadOptions
+): Promise<TerritoryCountryDatasetHandle> {
+  return loadTerritoryCountryDataset(turkeyV2NationalDatasetDescriptor, options);
+}
+
+export type TurkeyDatasetVariant = "legacy" | "v2-national-playable";
+
+export interface TurkeyDatasetResolution {
+  variant: TurkeyDatasetVariant;
+  descriptor: TerritoryCountryDatasetDescriptor;
+  dataContract:
+    typeof turkeyV2DataContract | { readonly country: "TR"; readonly contractVersion: "legacy" };
+  coverage: typeof turkeyNationalCoverage | typeof turkeyV2NationalPlayableCoverage;
+  load(options: TerritoryCountryDatasetLoadOptions): Promise<TerritoryCountryDatasetHandle>;
+}
+
+export function resolveTurkeyDataset(
+  input: {
+    variant?: TurkeyDatasetVariant;
+    includePlayableAdm3?: boolean;
+  } = {}
+): TurkeyDatasetResolution {
+  if (input.variant === "v2-national-playable" || input.includePlayableAdm3) {
+    return {
+      variant: "v2-national-playable",
+      descriptor: turkeyV2NationalDatasetDescriptor,
+      dataContract: turkeyV2DataContract,
+      coverage: turkeyV2NationalPlayableCoverage,
+      load: loadTurkeyV2NationalDataset
+    };
+  }
+
+  return {
+    variant: "legacy",
+    descriptor: turkeyDatasetDescriptor,
+    dataContract: { country: "TR", contractVersion: "legacy" },
+    coverage: turkeyNationalCoverage,
+    load: loadTurkeyDataset
+  };
 }
 
 export function isTurkeyAdm3ParentCovered(parentId: string): boolean {

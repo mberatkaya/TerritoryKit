@@ -51,6 +51,10 @@
     "turkey:adm3:hybrid:smoke": "pnpm --filter @territory-kit/generators build && node scripts/turkey-adm3-hybrid-benchmark.mjs --smoke --output reports/tr-adm3/hybrid-smoke.json",
     "turkey:adm3:hybrid:benchmark": "pnpm --filter @territory-kit/generators build && node scripts/turkey-adm3-hybrid-benchmark.mjs --output reports/tr-adm3/hybrid-benchmark.json",
     "turkey:adm3:production:smoke": "pnpm --filter @territory-kit/generators exec vitest run test/turkey-adm3-full-coverage.test.ts test/turkey-adm3-osm.test.ts && pnpm --filter @territory-kit/cli build && node packages/cli/dist/index.mjs tr adm3 build --generated --fill-gaps --max-districts 2 --output .territory/build/TR/ADM3-smoke --force",
+    "turkey:v2:national:smoke": "pnpm --filter @territory-kit/generators build && pnpm --filter @territory-kit/cli build && node packages/cli/dist/index.mjs tr v2 national plan && node packages/cli/dist/index.mjs tr v2 national build --max-districts 5 --output .territory/build/TR/V2-national-smoke --reports-output reports/tr-v2-national-smoke --force --no-render --no-mvt",
+    "turkey:v2:national:build": "pnpm --filter @territory-kit/generators build && pnpm --filter @territory-kit/cli build && node packages/cli/dist/index.mjs tr v2 national build --output .territory/build/TR/V2-national --reports-output reports/tr-v2-national --force",
+    "turkey:v2:national:validate": "pnpm --filter @territory-kit/cli build && node packages/cli/dist/index.mjs tr v2 national validate --output .territory/build/TR/V2-national",
+    "turkey:v2:national:benchmark": "pnpm --filter @territory-kit/generators build && pnpm --filter @territory-kit/cli build && node packages/cli/dist/index.mjs tr v2 national benchmark --output .territory/build/TR/V2-national-benchmark --reports-output reports/tr-v2-national --force",
     "typecheck": "turbo run typecheck",
     "verify": "pnpm format:check && pnpm lint && pnpm package:boundaries && pnpm typecheck && pnpm test && pnpm build && pnpm bundle:size && pnpm data:tr:adm3:artifact-policy",
     "version-packages": "changeset version"

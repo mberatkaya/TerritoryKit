@@ -187,14 +187,36 @@ async function readChecksums(
     typeof input.files === "object" &&
     !Array.isArray(input.files)
   ) {
-    return input.files as Record<string, string>;
+    return normalizeChecksumEntries(input.files as Record<string, unknown>);
   }
 
   if (input && typeof input === "object" && !Array.isArray(input)) {
-    return input as Record<string, string>;
+    return normalizeChecksumEntries(input as Record<string, unknown>);
   }
 
   throw new TerritoryError("ARTIFACT_CORRUPTED", "Invalid checksums artifact.");
+}
+
+function normalizeChecksumEntries(input: Record<string, unknown>): Record<string, string> {
+  const checksums: Record<string, string> = {};
+
+  for (const [path, value] of Object.entries(input)) {
+    if (typeof value === "string") {
+      checksums[path] = value;
+      continue;
+    }
+
+    if (
+      value &&
+      typeof value === "object" &&
+      "sha256" in value &&
+      typeof value.sha256 === "string"
+    ) {
+      checksums[path] = value.sha256;
+    }
+  }
+
+  return checksums;
 }
 
 async function readJsonArtifact(

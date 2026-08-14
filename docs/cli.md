@@ -26,6 +26,9 @@ territory country build TR --source-lock ./dist/tr/sources.lock.json --levels AD
 territory country validate ./dist/tr --strict
 territory country inspect ./dist/tr
 territory tr adm3 hybrid build --district ./adm2.json --official ./official-adm3.json --osm ./osm-adm3.json --profile auto --seed kaprota-v2 --output ./dist/tr-v2-hybrid
+territory tr v2 national plan
+territory tr v2 national build --output .territory/build/TR/V2-national --reports-output reports/tr-v2-national --force
+territory tr v2 national validate --output .territory/build/TR/V2-national
 territory geometry validate ./dist/regions --checks full --report ./geometry-report.json
 territory geometry repair ./dist/regions --checks basic --output ./dist/regions-repaired --report ./repair-report.json
 territory simplify dataset.json
@@ -102,6 +105,14 @@ will emit province coverage, quality gate, and source provenance reports.
 attribution, licenses, distribution policy, rejection, migration, adjacency, configuration,
 source-lock summary, and checksum artifacts. `territory tr adm3 build --hybrid` routes to the same
 implementation.
+
+`territory tr v2 national` builds the Turkey V2 national playable dataset. `plan` reports the
+canonical ADM0-ADM2 scope and available official/OSM/generated sources, `build` writes local
+artifacts and reports, `publish-ready` applies the same hard gates with non-zero failure semantics,
+`validate` checks an existing output directory, and `benchmark` runs bounded 10/100-district
+scenarios. Common flags include `--adm0-adm2-dataset`, `--source-metadata`, `--official-artifact`,
+`--osm-artifact`, `--output`, `--reports-output`, `--seed`, `--no-official`, `--no-osm`,
+`--no-generated`, `--no-render`, `--no-mvt`, `--no-adjacency`, and `--force`.
 
 `territory dataset resolve --country <ISO2> --level <ADM*> --deepest-available` exposes registry
 fallback metadata. The output includes `requestedLevel`, `resolvedLevel`, `exactMatch`, `reason`,

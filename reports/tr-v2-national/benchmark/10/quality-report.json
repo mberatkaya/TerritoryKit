@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "territorykit-tr-v2-national-quality@1",
+  "ok": false,
+  "hardGateFailures": ["adm2Count"],
+  "summary": {
+    "adm0Count": 1,
+    "adm1Count": 81,
+    "adm2Count": 10,
+    "adm3Count": 481,
+    "failedDistrictCount": 0,
+    "districtsBelow9999": 0,
+    "orphanCount": 0,
+    "hierarchyCycleCount": 0,
+    "duplicateStableIdCount": 0,
+    "invalidFinalGeometryCount": 0,
+    "emptyFinalGeometryCount": 0,
+    "effectiveSiblingOverlapCount": 0,
+    "realGeneratedOverlapCount": 0,
+    "parentContainmentErrorCount": 0,
+    "missingProvenanceCount": 0,
+    "missingAttributionLicenseCount": 0,
+    "generatedMetadataErrorCount": 0,
+    "strictTrV2ValidationErrorCount": 0,
+    "adjacencyIntegrityErrorCount": 0,
+    "registryArtifactChecksumErrors": 0,
+    "warningCount": 0
+  },
+  "strictValidation": {
+    "ok": true,
+    "issues": []
+  },
+  "geometryValidation": {
+    "ok": true,
+    "issueCount": 0,
+    "errorCount": 0
+  },
+  "gates": {
+    "adm0Count": true,
+    "adm1Count": true,
+    "adm2Count": false,
+    "everyDistrictHasAdm3": true,
+    "everyDistrictCoverage": true,
+    "nationalCoverage": true,
+    "orphanCount": true,
+    "hierarchyCycleCount": true,
+    "duplicateStableId": true,
+    "invalidFinalGeometry": true,
+    "effectiveSiblingOverlap": true,
+    "realGeneratedOverlap": true,
+    "parentContainment": true,
+    "missingProvenance": true,
+    "missingAttributionLicense": true,
+    "generatedMetadata": true,
+    "strictTrV2Validation": true,
+    "adjacencyIntegrity": true,
+    "registryArtifactChecksum": true
+  }
+}

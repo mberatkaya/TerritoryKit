@@ -1,0 +1,2 @@
+generated: TerritoryKit generated game zones from ADM2 boundaries (Apache-2.0)
+official: Kayseri Büyükşehir Belediyesi Open Data, Mahalle Sınırı, CC BY 4.0 (CC BY 4.0)

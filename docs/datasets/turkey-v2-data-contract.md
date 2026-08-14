@@ -1,7 +1,8 @@
 # Turkey V2 Data Contract
 
 Turkey V2 is the data contract for mixing real Turkey ADM3 polygons and TerritoryKit-generated game
-zones. It does not build nationwide ADM3 polygons in this sprint.
+zones. Sprint 4 adds a national playable dataset build that applies this contract across the
+canonical 81-province / 973-district ADM0-ADM2 hierarchy.
 
 Final product target: Turkey should become continuously playable for KapRota-style route matching.
 Official and OSM polygons should be used where reviewed, and generated zones may fill gaps. Generated
@@ -31,7 +32,7 @@ not part of the Turkey V2 production hierarchy in this contract.
 Priority is `official > osm > generated`. `sourceClass` describes the final zone semantics;
 `providerClass` can separately describe access policy such as `runtime` or `experimental`. The
 hybrid coverage pipeline implements deterministic representative merge and clipping, while final
-national polygon publication remains future work.
+national playable artifacts are produced by the Turkey V2 national build.
 See [Turkey V2 source class and provenance](./turkey-v2-source-provenance.md) for the dedicated
 source reference.
 
@@ -98,3 +99,26 @@ codes include:
 
 Legacy schema-v1 datasets remain readable by default. They are not silently converted to Turkey V2
 metadata, and generated zones are never relabeled as official administrative areas.
+
+## National Playable Dataset
+
+The Sprint 4 national build uses HDX/OCHA COD-AB for ADM0-ADM2, then applies the hybrid ADM3
+priority per district:
+
+```text
+official > osm > generated
+```
+
+The generated fallback is a playable territorial layer, not an official neighbourhood/village
+claim. Large geometry artifacts are resolver/registry assets; `@territory-kit/data-tr` exposes the
+descriptor and loader but does not embed the national geometry in the npm package.
+
+Build locally:
+
+```bash
+pnpm turkey:v2:national:build
+pnpm turkey:v2:national:validate
+```
+
+See [Turkey V2 national playable dataset](./turkey-v2-national-playable.md) for artifact layout,
+reports, and loader usage.

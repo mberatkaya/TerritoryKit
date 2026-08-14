@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "territorykit-tr-v2-national-distribution-policy-summary@1",
+  "districtId": "national",
+  "policies": [
+    {
+      "sourceClass": "generated",
+      "providerClass": "generated",
+      "license": "Apache-2.0",
+      "redistributionPolicy": "allowed",
+      "commercialUsePolicy": "allowed",
+      "modificationPolicy": "allowed",
+      "zoneCount": 40116
+    },
+    {
+      "sourceClass": "official",
+      "providerClass": "official",
+      "license": "Bursa Acik Veri Lisansi",
+      "redistributionPolicy": "allowed",
+      "commercialUsePolicy": "allowed",
+      "modificationPolicy": "allowed",
+      "zoneCount": 796
+    },
+    {
+      "sourceClass": "official",
+      "providerClass": "official",
+      "license": "CC BY 4.0",
+      "redistributionPolicy": "allowed",
+      "commercialUsePolicy": "allowed",
+      "modificationPolicy": "allowed",
+      "zoneCount": 936
+    },
+    {
+      "sourceClass": "official",
+      "providerClass": "official",
+      "license": "Ordu Acik Veri Lisansi",
+      "redistributionPolicy": "allowed",
+      "commercialUsePolicy": "allowed",
+      "modificationPolicy": "allowed",
+      "zoneCount": 362
+    }
+  ]
+}

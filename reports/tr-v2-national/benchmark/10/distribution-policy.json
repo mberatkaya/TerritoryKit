@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "territorykit-tr-v2-national-distribution-policy-summary@1",
+  "districtId": "national",
+  "policies": [
+    {
+      "sourceClass": "generated",
+      "providerClass": "generated",
+      "license": "Apache-2.0",
+      "redistributionPolicy": "allowed",
+      "commercialUsePolicy": "allowed",
+      "modificationPolicy": "allowed",
+      "zoneCount": 469
+    },
+    {
+      "sourceClass": "official",
+      "providerClass": "official",
+      "license": "CC BY 4.0",
+      "redistributionPolicy": "allowed",
+      "commercialUsePolicy": "allowed",
+      "modificationPolicy": "allowed",
+      "zoneCount": 12
+    }
+  ]
+}

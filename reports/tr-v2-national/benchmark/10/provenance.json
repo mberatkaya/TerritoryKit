@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "territorykit-tr-v2-national-provenance-summary@1",
+  "buildDate": "2026-08-13T00:00:00.000Z",
+  "summary": {
+    "sourceClasses": {
+      "generated": 469,
+      "official": 12
+    },
+    "providerCount": 2,
+    "licenseCount": 2,
+    "zoneCount": 481,
+    "sourceLockHash": "sha256:10e08ce0d17f4ab81b41984fecd9b30b174603204219bef746c0b63b3209ea63"
+  },
+  "providers": [
+    {
+      "providerId": "territory-kit-generated",
+      "providerName": "TerritoryKit game-zone generator",
+      "sourceClass": "generated",
+      "license": "Apache-2.0",
+      "attribution": "TerritoryKit generated game zones from ADM2 boundaries",
+      "zoneCount": 469
+    },
+    {
+      "providerId": "tr-adm3-official-38-kayseri-buyuksehir-belediyesi-open-data-via-ulasav",
+      "providerName": "tr-adm3-official-38-kayseri-buyuksehir-belediyesi-open-data-via-ulasav",
+      "sourceClass": "official",
+      "license": "CC BY 4.0",
+      "attribution": "Kayseri Büyükşehir Belediyesi Open Data, Mahalle Sınırı, CC BY 4.0",
+      "zoneCount": 12
+    }
+  ]
+}

@@ -537,6 +537,10 @@ async function runTurkey(args: string[]): Promise<number> {
     return runTurkeyAdm3(args.slice(1));
   }
 
+  if (subcommand === "v2") {
+    return runTurkeyV2(args.slice(1));
+  }
+
   printJson({
     ok: false,
     command: "tr",
@@ -1229,6 +1233,11 @@ async function runTurkeyAdm3Hybrid(args: string[]): Promise<number> {
 async function runTurkeyAdm3HybridBuild(args: string[]): Promise<number> {
   const command = await import("./turkey-adm3-hybrid.js");
   return command.runTurkeyAdm3HybridBuild(args);
+}
+
+async function runTurkeyV2(args: string[]): Promise<number> {
+  const command = await import("./turkey-v2-national.js");
+  return command.runTurkeyV2(args);
 }
 
 async function readTurkeyAdm3GenerateDistrict(

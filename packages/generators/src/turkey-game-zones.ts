@@ -246,7 +246,8 @@ const CLIPPER =
   (polygonClipping as unknown as PolygonClippingApi);
 const EARTH_RADIUS_METERS = 6_371_008.8;
 const GEOMETRY_EPSILON = 1e-12;
-const RING_AREA_EPSILON = 1e-12;
+const COORDINATE_EPSILON = 1e-9;
+const RING_AREA_EPSILON = 1e-9;
 const AREA_TOLERANCE_KM2 = 0.000001;
 const PROFILE_DEFAULTS: Record<
   Exclude<ResolvedTurkeyGameZoneProfile, "custom">,
@@ -899,7 +900,7 @@ function createZoneCandidates(pieces: readonly PartitionPiece[]): ZoneCandidate[
       serializeJsonStable(canonicalGeometryPayload(geometry))
     );
     const bbox = computeGeometryBBox(geometry);
-    const center = computeGeometryCenter(geometry);
+    const center = computeSafeGeometryCenter(geometry);
     const anchorKey = [
       roundCoordinate(center[1]),
       roundCoordinate(center[0]),
@@ -959,7 +960,7 @@ function createTurkeyGameZone(input: {
     parentId: input.district.id,
     neighborIds: [],
     geometry: input.candidate.geometry,
-    center: computeGeometryCenter(input.candidate.geometry),
+    center: computeSafeGeometryCenter(input.candidate.geometry),
     bbox,
     properties: {
       territory: {
@@ -1534,6 +1535,24 @@ function clippingMultiPolygonToTerritoryGeometry(
   return { type: "MultiPolygon", coordinates: polygons };
 }
 
+function computeSafeGeometryCenter(geometry: TerritoryGeometry): LngLat {
+  const [west, south, east, north] = computeGeometryBBox(geometry);
+  const [longitude, latitude] = computeGeometryCenter(geometry);
+
+  return [
+    clampCoordinate(longitude, west, east),
+    clampCoordinate(latitude, south, north)
+  ] satisfies LngLat;
+}
+
+function clampCoordinate(value: number, minimum: number, maximum: number): number {
+  if (!Number.isFinite(value)) {
+    return (minimum + maximum) / 2;
+  }
+
+  return Math.min(maximum, Math.max(minimum, value));
+}
+
 function unionClippingGeometries(
   geometries: readonly ClippingMultiPolygon[]
 ): ClippingMultiPolygon {
@@ -1600,9 +1619,13 @@ function polygonAreaM2(polygon: ClippingPolygon): number {
 
   return Math.max(
     0,
-    Math.abs(ringGeodesicAreaM2(shell)) -
-      holes.reduce((total, hole) => total + Math.abs(ringGeodesicAreaM2(hole)), 0)
+    ringAreaM2(shell) - holes.reduce((total, hole) => total + ringAreaM2(hole), 0)
   );
+}
+
+function ringAreaM2(ring: readonly LngLat[]): number {
+  const geodesicArea = Math.abs(ringGeodesicAreaM2(ring));
+  return geodesicArea > 1 ? geodesicArea : Math.abs(ringProjectedAreaM2(ring));
 }
 
 function ringGeodesicAreaM2(ring: readonly LngLat[]): number {
@@ -1618,6 +1641,25 @@ function ringGeodesicAreaM2(ring: readonly LngLat[]): number {
   }
 
   return (total * EARTH_RADIUS_METERS * EARTH_RADIUS_METERS) / 2;
+}
+
+function ringProjectedAreaM2(ring: readonly LngLat[]): number {
+  const latitude = ring.reduce((total, point) => total + point[1], 0) / Math.max(1, ring.length);
+  const metersPerDegreeLatitude = 111_320;
+  const metersPerDegreeLongitude = metersPerDegreeLatitude * Math.cos(toRadians(latitude));
+  let area = 0;
+
+  for (let index = 0; index < ring.length - 1; index += 1) {
+    const current = ring[index];
+    const next = ring[index + 1];
+    if (!current || !next) continue;
+
+    area +=
+      current[0] * metersPerDegreeLongitude * next[1] * metersPerDegreeLatitude -
+      next[0] * metersPerDegreeLongitude * current[1] * metersPerDegreeLatitude;
+  }
+
+  return area / 2;
 }
 
 function geometryPerimeterKm(geometry: TerritoryGeometry): number {
@@ -1751,12 +1793,30 @@ function normalizeRing(ring: readonly (readonly [number, number])[]): LngLat[] {
   const coordinates = ring
     .filter((point) => Number.isFinite(point[0]) && Number.isFinite(point[1]))
     .map((point) => [Number(point[0]), Number(point[1])] satisfies LngLat);
+  const deduped: LngLat[] = [];
 
-  if (coordinates.length === 0) return [];
-  const first = coordinates[0]!;
-  const last = coordinates[coordinates.length - 1]!;
-  if (first[0] !== last[0] || first[1] !== last[1]) coordinates.push([...first]);
-  return coordinates;
+  for (const coordinate of coordinates) {
+    const previous = deduped[deduped.length - 1];
+
+    if (previous && pointsEqual(previous, coordinate)) {
+      continue;
+    }
+
+    deduped.push(coordinate);
+  }
+
+  if (deduped.length === 0) return [];
+  const first = deduped[0]!;
+  const last = deduped[deduped.length - 1]!;
+  if (!pointsEqual(first, last)) deduped.push([...first]);
+  return deduped;
+}
+
+function pointsEqual(left: LngLat, right: LngLat): boolean {
+  return (
+    Math.abs(left[0] - right[0]) <= COORDINATE_EPSILON &&
+    Math.abs(left[1] - right[1]) <= COORDINATE_EPSILON
+  );
 }
 
 function ringHasPlanarArea(ring: readonly LngLat[]): boolean {

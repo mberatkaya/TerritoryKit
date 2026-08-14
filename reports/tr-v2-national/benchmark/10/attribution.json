@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "territorykit-tr-v2-national-attribution-summary@1",
+  "districtId": "national",
+  "buildDate": "2026-08-13T00:00:00.000Z",
+  "text": "generated: TerritoryKit generated game zones from ADM2 boundaries (Apache-2.0)\nofficial: Kayseri Büyükşehir Belediyesi Open Data, Mahalle Sınırı, CC BY 4.0 (CC BY 4.0)",
+  "groups": [
+    {
+      "sourceClass": "generated",
+      "providerIds": ["territory-kit-generated"],
+      "license": "Apache-2.0",
+      "attribution": "TerritoryKit generated game zones from ADM2 boundaries",
+      "zoneCount": 469
+    },
+    {
+      "sourceClass": "official",
+      "providerIds": ["tr-adm3-official-38-kayseri-buyuksehir-belediyesi-open-data-via-ulasav"],
+      "license": "CC BY 4.0",
+      "attribution": "Kayseri Büyükşehir Belediyesi Open Data, Mahalle Sınırı, CC BY 4.0",
+      "zoneCount": 12
+    }
+  ]
+}

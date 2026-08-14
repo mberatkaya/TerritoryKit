@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "territorykit-tr-v2-hybrid-licenses@1",
+  "districtId": "national",
+  "licenses": [
+    {
+      "sourceClass": "generated",
+      "license": "Apache-2.0",
+      "attribution": "TerritoryKit generated game zones from ADM2 boundaries",
+      "zoneCount": 4231
+    },
+    {
+      "sourceClass": "official",
+      "license": "Bursa Acik Veri Lisansi",
+      "attribution": "Bursa Büyükşehir Belediyesi Open Data, Mahalle Sınırları",
+      "zoneCount": 42
+    },
+    {
+      "sourceClass": "official",
+      "license": "CC BY 4.0",
+      "attribution": "Gaziantep Büyükşehir Belediyesi, Mahalle Sınır Alanları, CC BY 4.0",
+      "zoneCount": 44
+    },
+    {
+      "sourceClass": "official",
+      "license": "CC BY 4.0",
+      "attribution": "Kayseri Büyükşehir Belediyesi Open Data, Mahalle Sınırı, CC BY 4.0",
+      "zoneCount": 12
+    },
+    {
+      "sourceClass": "official",
+      "license": "Ordu Acik Veri Lisansi",
+      "attribution": "Ordu Büyükşehir Belediyesi Open Data, Ordu Mahalleleri Alana Göre Sıralı",
+      "zoneCount": 40
+    }
+  ]
+}

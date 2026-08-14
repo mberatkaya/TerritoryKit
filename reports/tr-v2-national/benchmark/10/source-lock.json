@@ -1,0 +1,139 @@
+{
+  "schemaVersion": "territorykit-tr-v2-national-source-lock@1",
+  "datasetId": "territory-kit-tr-v2-playable",
+  "datasetVersion": "2.0.0-rc.1",
+  "buildDate": "2026-08-13T00:00:00.000Z",
+  "sourceLockVersion": "1",
+  "adm0Adm2": {
+    "provider": "hdx-cod-ab",
+    "sourceId": "cod-ab-tur",
+    "sourceUrl": "https://data.humdata.org/dataset/cod-ab-tur",
+    "downloadUrl": "https://data.humdata.org/dataset/d74086a0-f398-4474-9e12-1b9a70907bd0/resource/470bd810-2240-4ce0-b5c4-17434112ce41/download/tur_admin_boundaries.geojson.zip",
+    "sourceDate": "2026-01-26",
+    "retrievedAt": "2026-07-24T00:00:00.000Z",
+    "license": "CC BY-IGO",
+    "licenseUrl": "https://data.humdata.org/dataset/cod-ab-tur",
+    "attribution": "OCHA Common Operational Dataset: Türkiye Administrative Boundaries",
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "modificationAllowed": true,
+    "sha256": "6d45f15de76d53da057312dfaedb60248141a1828ce6a5c7cbfeedc7f51714c3",
+    "byteSize": 22618555,
+    "levels": {
+      "ADM0": {
+        "archiveMember": "tur_admin0.geojson",
+        "expectedFeatureCount": 1,
+        "actualFeatureCount": 1,
+        "sha256": "d346d64aa96ea0ba2b4ad1a71af1db104a10649baf04958dc90b8a36b8e1b069",
+        "byteSize": 11119319
+      },
+      "ADM1": {
+        "archiveMember": "tur_admin1.geojson",
+        "expectedFeatureCount": 81,
+        "actualFeatureCount": 81,
+        "sha256": "56b330a4f7086b4f02f8ddac55ce480c24bf813a1da7e3fb93fe4619fb00f721",
+        "byteSize": 16671095
+      },
+      "ADM2": {
+        "archiveMember": "tur_admin2.geojson",
+        "expectedFeatureCount": 973,
+        "actualFeatureCount": 973,
+        "sha256": "91b0968125b7bf3e2eb1d682697c51154ff3384f78ecf4e5f6e9041a24a287f2",
+        "byteSize": 29223893
+      },
+      "ADM3": {
+        "status": "source-unavailable",
+        "reason": "No redistributable nationwide official ADM3 neighbourhood/village boundary source has been locked."
+      },
+      "ADM4": {
+        "status": "not-applicable-until-source-model-review",
+        "reason": "Turkey has no TerritoryKit ADM4 production mapping without a reviewed source that distinguishes municipality/locality sub-units below ADM3."
+      }
+    }
+  },
+  "officialAdm3": {
+    "status": "artifact-loaded",
+    "approvedProviderCount": 4,
+    "loadedZoneCount": 3343,
+    "providers": [
+      {
+        "providerId": "gaziantep-open-data",
+        "providerName": "gaziantep-open-data",
+        "provinceCode": "27",
+        "sourceUrl": "https://ulasav.csb.gov.tr/dataset/27-mahalle-sinir-alanlari",
+        "sourceDate": "2026-02-18T13:52:03Z",
+        "license": "CC BY 4.0",
+        "attribution": "Gaziantep Büyükşehir Belediyesi, Mahalle Sınır Alanları, CC BY 4.0",
+        "redistributionPolicy": "allowed",
+        "commercialUsePolicy": "allowed",
+        "modificationPolicy": "allowed"
+      },
+      {
+        "providerId": "tr-adm3-official-16-bursa-buyuksehir-belediyesi-open-data",
+        "providerName": "tr-adm3-official-16-bursa-buyuksehir-belediyesi-open-data",
+        "provinceCode": "16",
+        "sourceUrl": "https://acikyesil.bursa.bel.tr/dataset/mahalle-sinirlari",
+        "sourceDate": "2025-03-19T12:59:41Z",
+        "license": "Bursa Acik Veri Lisansi",
+        "attribution": "Bursa Büyükşehir Belediyesi Open Data, Mahalle Sınırları",
+        "redistributionPolicy": "allowed",
+        "commercialUsePolicy": "allowed",
+        "modificationPolicy": "allowed"
+      },
+      {
+        "providerId": "tr-adm3-official-38-kayseri-buyuksehir-belediyesi-open-data-via-ulasav",
+        "providerName": "tr-adm3-official-38-kayseri-buyuksehir-belediyesi-open-data-via-ulasav",
+        "provinceCode": "38",
+        "sourceUrl": "https://ulasav.csb.gov.tr/dataset/38-kayseri-mahalle-siniri",
+        "sourceDate": "2026-04-15",
+        "license": "CC BY 4.0",
+        "attribution": "Kayseri Büyükşehir Belediyesi Open Data, Mahalle Sınırı, CC BY 4.0",
+        "redistributionPolicy": "allowed",
+        "commercialUsePolicy": "allowed",
+        "modificationPolicy": "allowed"
+      },
+      {
+        "providerId": "tr-adm3-official-52-ordu-buyuksehir-belediyesi-open-data",
+        "providerName": "tr-adm3-official-52-ordu-buyuksehir-belediyesi-open-data",
+        "provinceCode": "52",
+        "sourceUrl": "https://acikveri.ordu.bel.tr/dataset/ordu-ilindeki-mahallelerin-alan-buyukluklerine-gore-siralamasi",
+        "sourceDate": "2025-08-01T08:20:14Z",
+        "license": "Ordu Acik Veri Lisansi",
+        "attribution": "Ordu Büyükşehir Belediyesi Open Data, Ordu Mahalleleri Alana Göre Sıralı",
+        "redistributionPolicy": "allowed",
+        "commercialUsePolicy": "allowed",
+        "modificationPolicy": "allowed"
+      }
+    ]
+  },
+  "osm": {
+    "status": "not-built",
+    "providerCount": 81,
+    "loadedZoneCount": 0,
+    "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+    "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
+    "license": "ODbL-1.0",
+    "attribution": "OpenStreetMap contributors, ODbL 1.0; extract by Geofabrik"
+  },
+  "generated": {
+    "algorithmVersion": "tr-adm3-game-zone-v2",
+    "seed": "territory-kit-tr-v2-national",
+    "profilePolicy": "auto",
+    "generatorConfigHash": "95656f4ea5906ea4b741d711d609357be9c9f8a2eba4ebbb1aff61bdc0327300"
+  },
+  "hybridPipeline": {
+    "schemaVersion": "territorykit-tr-v2-hybrid-batch@1",
+    "sourcePriority": ["official", "osm", "generated"],
+    "minimumDistrictCoveragePercent": 99.99
+  },
+  "geometry": {
+    "crs": "EPSG:4326",
+    "repairBackend": "none",
+    "simplification": "source-and-render-tiers"
+  },
+  "distribution": {
+    "largeGeometryInNpmPackage": false,
+    "registryCdnOfflineModel": true
+  },
+  "contentHash": "sha256:10e08ce0d17f4ab81b41984fecd9b30b174603204219bef746c0b63b3209ea63"
+}

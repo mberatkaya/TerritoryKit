@@ -3,10 +3,15 @@ import {
   defaultTurkeyAdminLevels,
   isTurkeyAdm3ParentCovered,
   loadTurkeyDataset,
+  loadTurkeyV2NationalDataset,
+  resolveTurkeyDataset,
   supportedTurkeyAdminLevels,
   turkeyAdm3NeighbourhoodCoverage,
   turkeyDatasetDescriptor,
-  turkeyNationalCoverage
+  turkeyNationalCoverage,
+  turkeyV2DataContract,
+  turkeyV2NationalDatasetDescriptor,
+  turkeyV2NationalPlayableCoverage
 } from "../src/index.js";
 
 describe("@territory-kit/data-tr", () => {
@@ -24,6 +29,38 @@ describe("@territory-kit/data-tr", () => {
       featureCount: 973
     });
     await expect(loadTurkeyDataset({})).rejects.toThrow("does not embed geometry artifacts");
+  });
+
+  it("describes the Turkey V2 national playable resolver target", () => {
+    expect(turkeyV2NationalDatasetDescriptor).toMatchObject({
+      datasetId: "territory-kit-tr-v2-playable",
+      supportedLevels: ["ADM0", "ADM1", "ADM2", "ADM3"],
+      defaultLevels: ["ADM0", "ADM1", "ADM2"],
+      requiresResolver: true
+    });
+    expect(turkeyV2DataContract).toMatchObject({
+      targetDatasetVersion: "2.0.0-rc.1",
+      generatedZonesAreOfficialAdministrativeAreas: false,
+      nationalAdm3PolygonBuildIncluded: true
+    });
+    expect(turkeyV2NationalPlayableCoverage).toMatchObject({
+      datasetId: "territory-kit-tr-v2-playable",
+      releaseChannel: "prerelease",
+      adm3: {
+        status: "playable-national-hybrid",
+        generatedFallback: true,
+        minimumDistrictCoveragePercent: 99.99
+      },
+      packaging: {
+        embedsGeometry: false,
+        requiresResolver: true
+      }
+    });
+    expect(resolveTurkeyDataset().variant).toBe("legacy");
+    expect(resolveTurkeyDataset({ includePlayableAdm3: true })).toMatchObject({
+      variant: "v2-national-playable",
+      descriptor: { datasetId: "territory-kit-tr-v2-playable" }
+    });
   });
 
   it("exposes partial Gaziantep ADM3 availability without bundling geometry", () => {
@@ -92,13 +129,65 @@ describe("@territory-kit/data-tr", () => {
 
     expect(handle.levels.ADM0?.manifest.datasetId).toBe("territory-kit-tr");
   });
+
+  it("loads the Turkey V2 national dataset with rich checksum entries", async () => {
+    const dataset = createMinimalTurkeyDataset({ datasetId: "territory-kit-tr-v2-playable" });
+    const files = new Map([
+      [
+        "manifest.json",
+        stableJson({
+          manifestVersion: "1",
+          datasetId: "territory-kit-tr-v2-playable",
+          datasetVersion: "2.0.0-rc.1",
+          schemaVersion: "territory-schema@1",
+          supportedLevels: ["ADM0"]
+        })
+      ],
+      ["levels/ADM0/dataset.json", stableJson(dataset)]
+    ]);
+    files.set(
+      "checksums.json",
+      stableJson({
+        schemaVersion: "territorykit-tr-v2-national-checksums@1",
+        files: Object.fromEntries(
+          await Promise.all(
+            [...files.entries()].map(async ([path, content]) => [
+              path,
+              {
+                sha256: await sha256(content),
+                byteSize: new TextEncoder().encode(content).byteLength
+              }
+            ])
+          )
+        )
+      })
+    );
+
+    const handle = await loadTurkeyV2NationalDataset({
+      levels: ["ADM0"],
+      verifyChecksums: true,
+      resolveArtifact: async (path) => {
+        const content = files.get(path);
+
+        if (!content) {
+          throw new Error(`Missing fixture artifact ${path}.`);
+        }
+
+        return content;
+      }
+    });
+
+    expect(handle.descriptor.datasetId).toBe("territory-kit-tr-v2-playable");
+    expect(handle.levels.ADM0?.manifest.datasetVersion).toBe("2.0.0-rc.1");
+  });
 });
 
-function createMinimalTurkeyDataset(): unknown {
+function createMinimalTurkeyDataset(input: { datasetId?: string } = {}): unknown {
+  const datasetId = input.datasetId ?? "territory-kit-tr";
   return {
     manifest: {
-      datasetId: "territory-kit-tr",
-      datasetVersion: "1.0.0",
+      datasetId,
+      datasetVersion: datasetId === "territory-kit-tr-v2-playable" ? "2.0.0-rc.1" : "1.0.0",
       schemaVersion: "territory-schema@1",
       sourceDate: "2026-01-01",
       geometryHash: "territory-kit-tr-fixture-v1",
@@ -109,7 +198,7 @@ function createMinimalTurkeyDataset(): unknown {
     zones: [
       {
         id: "tr",
-        datasetId: "territory-kit-tr",
+        datasetId,
         countryCode: "TR",
         level: 0,
         sourceAdminLevel: "ADM0",

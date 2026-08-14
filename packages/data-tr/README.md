@@ -29,3 +29,20 @@ Use `turkeyAdm3NeighbourhoodCoverage` or `isTurkeyAdm3ParentCovered(parentId)` b
 ADM3 data for a district. Covered parent IDs are the nine Gaziantep ADM2 districts in
 `datasets/generated/countries/TR/levels/ADM3/coverage.json`; this is partial Gaziantep coverage,
 not nationwide Turkey neighbourhood coverage.
+
+Turkey V2 national playable artifacts are exposed through a separate resolver descriptor:
+
+```ts
+import { loadTurkeyV2NationalDataset, resolveTurkeyDataset } from "@territory-kit/data-tr";
+
+const selection = resolveTurkeyDataset({ includePlayableAdm3: true });
+const handle = await loadTurkeyV2NationalDataset({
+  levels: ["ADM0", "ADM1", "ADM2", "ADM3"],
+  registry,
+  verifyChecksums: true
+});
+```
+
+`turkeyV2NationalDatasetDescriptor.datasetId` is `territory-kit-tr-v2-playable`. It still does not
+embed large geometry in this package; use artifacts from `territory tr v2 national build` or a
+hosted registry.
