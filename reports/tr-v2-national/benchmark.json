@@ -1,0 +1,276 @@
+{
+  "schemaVersion": "territorykit-tr-v2-national-benchmark@1",
+  "generatedAt": "2026-08-13T00:00:00.000Z",
+  "scenarios": [
+    {
+      "districtLimit": 10,
+      "code": 0,
+      "durationMs": 1348,
+      "peakRssBytes": 832126976,
+      "summary": {
+        "schemaVersion": "territorykit-tr-v2-national-build-summary@1",
+        "datasetId": "territory-kit-tr-v2-playable",
+        "datasetVersion": "2.0.0-rc.1",
+        "buildDate": "2026-08-13T00:00:00.000Z",
+        "provinceCount": 81,
+        "districtCount": 973,
+        "successfulDistrictCount": 10,
+        "failedDistrictCount": 0,
+        "adm3FinalZoneCount": 481,
+        "officialZoneCount": 12,
+        "osmZoneCount": 0,
+        "generatedZoneCount": 469,
+        "realCoveragePercent": 2.919116,
+        "generatedCoveragePercent": 97.080911,
+        "finalCoveragePercent": 100.000026,
+        "deterministicHash": "de305331aea58e197c0445c015e14e734ea019ed215072aa076fb1ec6c822bd8",
+        "qualityOk": false,
+        "sourceStatus": {
+          "official": "artifact-loaded",
+          "osm": "not-built",
+          "generated": "built"
+        },
+        "artifactPlan": {
+          "schemaVersion": "territorykit-tr-v2-national-artifact-plan@1",
+          "datasetId": "territory-kit-tr-v2-playable",
+          "datasetVersion": "2.0.0-rc.1",
+          "largeGeometryEmbeddedInNpm": false,
+          "commitPolicy": {
+            "commit": [
+              "source-lock",
+              "coverage summary",
+              "quality summary",
+              "hierarchy summary",
+              "provenance summary",
+              "attribution summary",
+              "registry entry",
+              "checksums",
+              "small smoke fixtures"
+            ],
+            "external": [
+              "dataset.json",
+              "levels/ADM3/dataset.json",
+              "levels/ADM3/full.geojson",
+              "render MVT tiles",
+              "large binary/query indexes",
+              "raw source archives and caches"
+            ]
+          },
+          "artifacts": [
+            {
+              "id": "dataset",
+              "purpose": "metadata",
+              "format": "territory-json",
+              "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
+              "path": "dataset.json",
+              "url": "./dataset.json",
+              "sha256": "2d0a618a91bf7abb91bcfb0de49bc441e2c6c6ac651b5cb10f366ebf2d99677e",
+              "sizeBytes": 9616137,
+              "compression": "none"
+            },
+            {
+              "id": "coverage",
+              "purpose": "metadata",
+              "format": "json",
+              "path": "coverage.json",
+              "url": "./coverage.json",
+              "sha256": "a5a1dc25be3ca8dc8caa84a966cfdc04ebcd0c806dd823c86b9258e9d9872201",
+              "sizeBytes": 14625,
+              "compression": "none"
+            },
+            {
+              "id": "quality",
+              "purpose": "metadata",
+              "format": "json",
+              "path": "quality-report.json",
+              "url": "./quality-report.json",
+              "sha256": "",
+              "sizeBytes": 0,
+              "compression": "none"
+            },
+            {
+              "id": "query",
+              "purpose": "query",
+              "format": "json",
+              "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
+              "path": "query/query-artifact.json",
+              "url": "./query/query-artifact.json",
+              "sha256": "610a9c5d02830d7c944f985f07e66052d091ae440dfe02639a9ddf6790091e76",
+              "sizeBytes": 522498,
+              "compression": "none"
+            },
+            {
+              "id": "adm3",
+              "purpose": "metadata",
+              "format": "territory-json",
+              "levels": ["ADM3"],
+              "detail": "full",
+              "path": "levels/ADM3/dataset.json",
+              "url": "./levels/ADM3/dataset.json",
+              "sha256": "36cfcedb549e5b22efbb42ad5836f5f75bb7610cf24c90856147c168507fa2a1",
+              "sizeBytes": 3261455,
+              "compression": "none"
+            },
+            {
+              "id": "adm3-render-manifest",
+              "purpose": "render",
+              "format": "json",
+              "levels": ["ADM3"],
+              "path": "render/manifest.json",
+              "url": "./render/manifest.json",
+              "sha256": "",
+              "sizeBytes": 0,
+              "compression": "none"
+            },
+            {
+              "id": "adm3-adjacency",
+              "purpose": "adjacency",
+              "format": "json",
+              "levels": ["ADM3"],
+              "path": "levels/ADM3/adjacency/adjacency.json",
+              "url": "./levels/ADM3/adjacency/adjacency.json",
+              "sha256": "",
+              "sizeBytes": 0,
+              "compression": "none"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "districtLimit": 100,
+      "code": 0,
+      "durationMs": 8067,
+      "peakRssBytes": 1333297152,
+      "summary": {
+        "schemaVersion": "territorykit-tr-v2-national-build-summary@1",
+        "datasetId": "territory-kit-tr-v2-playable",
+        "datasetVersion": "2.0.0-rc.1",
+        "buildDate": "2026-08-13T00:00:00.000Z",
+        "provinceCount": 81,
+        "districtCount": 973,
+        "successfulDistrictCount": 100,
+        "failedDistrictCount": 0,
+        "adm3FinalZoneCount": 4369,
+        "officialZoneCount": 138,
+        "osmZoneCount": 0,
+        "generatedZoneCount": 4231,
+        "realCoveragePercent": 2.188774,
+        "generatedCoveragePercent": 97.811233,
+        "finalCoveragePercent": 100.000007,
+        "deterministicHash": "ee3ced9ec76df21c5677b6d2f1cd567da58aa6690a5a6d6e297ceb717a8f258d",
+        "qualityOk": false,
+        "sourceStatus": {
+          "official": "artifact-loaded",
+          "osm": "not-built",
+          "generated": "built"
+        },
+        "artifactPlan": {
+          "schemaVersion": "territorykit-tr-v2-national-artifact-plan@1",
+          "datasetId": "territory-kit-tr-v2-playable",
+          "datasetVersion": "2.0.0-rc.1",
+          "largeGeometryEmbeddedInNpm": false,
+          "commitPolicy": {
+            "commit": [
+              "source-lock",
+              "coverage summary",
+              "quality summary",
+              "hierarchy summary",
+              "provenance summary",
+              "attribution summary",
+              "registry entry",
+              "checksums",
+              "small smoke fixtures"
+            ],
+            "external": [
+              "dataset.json",
+              "levels/ADM3/dataset.json",
+              "levels/ADM3/full.geojson",
+              "render MVT tiles",
+              "large binary/query indexes",
+              "raw source archives and caches"
+            ]
+          },
+          "artifacts": [
+            {
+              "id": "dataset",
+              "purpose": "metadata",
+              "format": "territory-json",
+              "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
+              "path": "dataset.json",
+              "url": "./dataset.json",
+              "sha256": "918a62e1c4b57dd9d23c20ad54a13eac622761f3dcbff2f1f02ea0fb5dc7ef38",
+              "sizeBytes": 36890532,
+              "compression": "none"
+            },
+            {
+              "id": "coverage",
+              "purpose": "metadata",
+              "format": "json",
+              "path": "coverage.json",
+              "url": "./coverage.json",
+              "sha256": "d4acc3500f72108d478208cd7843c40aa90a38188e1d706e4210b3ccff67a492",
+              "sizeBytes": 106560,
+              "compression": "none"
+            },
+            {
+              "id": "quality",
+              "purpose": "metadata",
+              "format": "json",
+              "path": "quality-report.json",
+              "url": "./quality-report.json",
+              "sha256": "",
+              "sizeBytes": 0,
+              "compression": "none"
+            },
+            {
+              "id": "query",
+              "purpose": "query",
+              "format": "json",
+              "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
+              "path": "query/query-artifact.json",
+              "url": "./query/query-artifact.json",
+              "sha256": "9a209f26180b9cced4e443574c4c4df2f859f1160a360e363eba3454bb87e099",
+              "sizeBytes": 4443791,
+              "compression": "none"
+            },
+            {
+              "id": "adm3",
+              "purpose": "metadata",
+              "format": "territory-json",
+              "levels": ["ADM3"],
+              "detail": "full",
+              "path": "levels/ADM3/dataset.json",
+              "url": "./levels/ADM3/dataset.json",
+              "sha256": "bd8f92ce40f0bac23380f96832964f3ec60503bb8c815178599a1ae5d87dbe85",
+              "sizeBytes": 29085116,
+              "compression": "none"
+            },
+            {
+              "id": "adm3-render-manifest",
+              "purpose": "render",
+              "format": "json",
+              "levels": ["ADM3"],
+              "path": "render/manifest.json",
+              "url": "./render/manifest.json",
+              "sha256": "",
+              "sizeBytes": 0,
+              "compression": "none"
+            },
+            {
+              "id": "adm3-adjacency",
+              "purpose": "adjacency",
+              "format": "json",
+              "levels": ["ADM3"],
+              "path": "levels/ADM3/adjacency/adjacency.json",
+              "url": "./levels/ADM3/adjacency/adjacency.json",
+              "sha256": "",
+              "sizeBytes": 0,
+              "compression": "none"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

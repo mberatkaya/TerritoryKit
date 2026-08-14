@@ -230,6 +230,20 @@ export {
   buildTurkeyV2HybridDistrict,
   createTurkeyV2ZoneMigrationPlan
 } from "./turkey-v2-hybrid.js";
+export {
+  TURKEY_V2_NATIONAL_BUILD_SUMMARY_SCHEMA_VERSION,
+  TURKEY_V2_NATIONAL_COVERAGE_SCHEMA_VERSION,
+  TURKEY_V2_NATIONAL_DATASET_ID,
+  TURKEY_V2_NATIONAL_DATASET_VERSION,
+  TURKEY_V2_NATIONAL_HIERARCHY_SCHEMA_VERSION,
+  TURKEY_V2_NATIONAL_PROVENANCE_SCHEMA_VERSION,
+  TURKEY_V2_NATIONAL_QUALITY_SCHEMA_VERSION,
+  TURKEY_V2_NATIONAL_REGISTRY_ENTRY_SCHEMA_VERSION,
+  TURKEY_V2_NATIONAL_SOURCE_LOCK_SCHEMA_VERSION,
+  buildTurkeyV2NationalDataset,
+  createTurkeyV2NationalArtifactPayloads,
+  createTurkeyV2NationalSourceLock
+} from "./turkey-v2-national.js";
 export type {
   DatasetAttribution,
   TerritorySourceAdapter,
@@ -333,6 +347,32 @@ export type {
   TurkeyV2ZoneMigrationPlan,
   TurkeyV2ZoneMigrationRecord
 } from "./turkey-v2-hybrid.js";
+export type {
+  TurkeyV2DistrictBuildOverride,
+  TurkeyV2NationalAdmLevelLock,
+  TurkeyV2NationalAdmSourceLock,
+  TurkeyV2NationalArtifactPayloads,
+  TurkeyV2NationalArtifactPlan,
+  TurkeyV2NationalBuildOptions,
+  TurkeyV2NationalBuildResult,
+  TurkeyV2NationalChecksums,
+  TurkeyV2NationalCoverageReport,
+  TurkeyV2NationalDistrictCoverage,
+  TurkeyV2NationalGeneratedSourceLock,
+  TurkeyV2NationalHierarchyReport,
+  TurkeyV2NationalOsmSourceLock,
+  TurkeyV2NationalOutputMode,
+  TurkeyV2NationalProvenanceReport,
+  TurkeyV2NationalProvinceCoverage,
+  TurkeyV2NationalQualityReport,
+  TurkeyV2NationalRealProviderLock,
+  TurkeyV2NationalRealSourceLock,
+  TurkeyV2NationalRegistryArtifact,
+  TurkeyV2NationalRegistryEntry,
+  TurkeyV2NationalSourceCatalog,
+  TurkeyV2NationalSourceLock,
+  TurkeyV2NationalSourceStatus
+} from "./turkey-v2-national.js";
 export type {
   GeometryQualityPathRepairOptions,
   TerritoryDatasetPathInput

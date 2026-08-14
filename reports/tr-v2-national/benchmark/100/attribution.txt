@@ -1,0 +1,5 @@
+generated: TerritoryKit generated game zones from ADM2 boundaries (Apache-2.0)
+official: Bursa Büyükşehir Belediyesi Open Data, Mahalle Sınırları (Bursa Acik Veri Lisansi)
+official: Gaziantep Büyükşehir Belediyesi, Mahalle Sınır Alanları, CC BY 4.0 (CC BY 4.0)
+official: Kayseri Büyükşehir Belediyesi Open Data, Mahalle Sınırı, CC BY 4.0 (CC BY 4.0)
+official: Ordu Büyükşehir Belediyesi Open Data, Ordu Mahalleleri Alana Göre Sıralı (Ordu Acik Veri Lisansi)

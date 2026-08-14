@@ -9,8 +9,8 @@ The source priority is fixed:
 official > osm > generated
 ```
 
-This sprint adds the reusable single-district and batch pipeline. It does not publish a final
-81-province/973-district canonical Turkey V2 dataset.
+This reusable single-district and batch pipeline is the merge engine used by the Sprint 4
+81-province/973-district Turkey V2 national playable build.
 
 ## Public API
 
@@ -156,4 +156,5 @@ pnpm turkey:adm3:hybrid:benchmark
 The representative 2026-08-13 benchmark writes `reports/tr-adm3/hybrid-benchmark.json`. It covers
 official-only, generated-only, official+generated, official+OSM+generated, complex MultiPolygon,
 10-district batch, and 100-district batch scenarios. These are deterministic fixtures, not a final
-national source build.
+national source build. Use `pnpm turkey:v2:national:benchmark` for the national CLI benchmark and
+see [Turkey V2 national playable dataset](./turkey-v2-national-playable.md) for full-build reports.

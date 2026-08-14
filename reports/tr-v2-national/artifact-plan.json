@@ -1,0 +1,105 @@
+{
+  "schemaVersion": "territorykit-tr-v2-national-artifact-plan@1",
+  "datasetId": "territory-kit-tr-v2-playable",
+  "datasetVersion": "2.0.0-rc.1",
+  "largeGeometryEmbeddedInNpm": false,
+  "commitPolicy": {
+    "commit": [
+      "source-lock",
+      "coverage summary",
+      "quality summary",
+      "hierarchy summary",
+      "provenance summary",
+      "attribution summary",
+      "registry entry",
+      "checksums",
+      "small smoke fixtures"
+    ],
+    "external": [
+      "dataset.json",
+      "levels/ADM3/dataset.json",
+      "levels/ADM3/full.geojson",
+      "render MVT tiles",
+      "large binary/query indexes",
+      "raw source archives and caches"
+    ]
+  },
+  "artifacts": [
+    {
+      "id": "dataset",
+      "purpose": "metadata",
+      "format": "territory-json",
+      "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
+      "path": "dataset.json",
+      "url": "./dataset.json",
+      "sha256": "fa73008543426d612b35e56c563619040895d550c0e6f38e2e9e1b7fb7541364",
+      "sizeBytes": 319605709,
+      "compression": "none"
+    },
+    {
+      "id": "coverage",
+      "purpose": "metadata",
+      "format": "json",
+      "path": "coverage.json",
+      "url": "./coverage.json",
+      "sha256": "e912f7a2f8016899113bd6c4c91b39f2e2d0bf271164454abb041c355bfcc2a7",
+      "sizeBytes": 775850,
+      "compression": "none"
+    },
+    {
+      "id": "quality",
+      "purpose": "metadata",
+      "format": "json",
+      "path": "quality-report.json",
+      "url": "./quality-report.json",
+      "sha256": "",
+      "sizeBytes": 0,
+      "compression": "none"
+    },
+    {
+      "id": "query",
+      "purpose": "query",
+      "format": "json",
+      "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
+      "path": "query/query-artifact.json",
+      "url": "./query/query-artifact.json",
+      "sha256": "9382c9b90568b89be6d2d0b542ef7044121da220244fe7498f0cfe502ed63d44",
+      "sizeBytes": 42379809,
+      "compression": "none"
+    },
+    {
+      "id": "adm3",
+      "purpose": "metadata",
+      "format": "territory-json",
+      "levels": ["ADM3"],
+      "detail": "full",
+      "path": "levels/ADM3/dataset.json",
+      "url": "./levels/ADM3/dataset.json",
+      "sha256": "6972408f54f337137274e29e7f62976ea1dea00172705d0dd8d947f585a54db2",
+      "sizeBytes": 296877461,
+      "compression": "none"
+    },
+    {
+      "id": "adm3-render-manifest",
+      "purpose": "render",
+      "format": "json",
+      "levels": ["ADM3"],
+      "path": "render/manifest.json",
+      "url": "./render/manifest.json",
+      "sha256": "",
+      "sizeBytes": 0,
+      "compression": "none"
+    },
+    {
+      "id": "adm3-adjacency",
+      "purpose": "adjacency",
+      "format": "json",
+      "levels": ["ADM3"],
+      "path": "levels/ADM3/adjacency/adjacency.json",
+      "url": "./levels/ADM3/adjacency/adjacency.json",
+      "sha256": "",
+      "sizeBytes": 0,
+      "compression": "none"
+    }
+  ]
+}

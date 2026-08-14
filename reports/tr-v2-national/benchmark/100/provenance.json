@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "territorykit-tr-v2-national-provenance-summary@1",
+  "buildDate": "2026-08-13T00:00:00.000Z",
+  "summary": {
+    "sourceClasses": {
+      "generated": 4231,
+      "official": 138
+    },
+    "providerCount": 5,
+    "licenseCount": 4,
+    "zoneCount": 4369,
+    "sourceLockHash": "sha256:10e08ce0d17f4ab81b41984fecd9b30b174603204219bef746c0b63b3209ea63"
+  },
+  "providers": [
+    {
+      "providerId": "territory-kit-generated",
+      "providerName": "TerritoryKit game-zone generator",
+      "sourceClass": "generated",
+      "license": "Apache-2.0",
+      "attribution": "TerritoryKit generated game zones from ADM2 boundaries",
+      "zoneCount": 4231
+    },
+    {
+      "providerId": "gaziantep-open-data",
+      "providerName": "gaziantep-open-data",
+      "sourceClass": "official",
+      "license": "CC BY 4.0",
+      "attribution": "Gaziantep Büyükşehir Belediyesi, Mahalle Sınır Alanları, CC BY 4.0",
+      "zoneCount": 44
+    },
+    {
+      "providerId": "tr-adm3-official-16-bursa-buyuksehir-belediyesi-open-data",
+      "providerName": "tr-adm3-official-16-bursa-buyuksehir-belediyesi-open-data",
+      "sourceClass": "official",
+      "license": "Bursa Acik Veri Lisansi",
+      "attribution": "Bursa Büyükşehir Belediyesi Open Data, Mahalle Sınırları",
+      "zoneCount": 42
+    },
+    {
+      "providerId": "tr-adm3-official-38-kayseri-buyuksehir-belediyesi-open-data-via-ulasav",
+      "providerName": "tr-adm3-official-38-kayseri-buyuksehir-belediyesi-open-data-via-ulasav",
+      "sourceClass": "official",
+      "license": "CC BY 4.0",
+      "attribution": "Kayseri Büyükşehir Belediyesi Open Data, Mahalle Sınırı, CC BY 4.0",
+      "zoneCount": 12
+    },
+    {
+      "providerId": "tr-adm3-official-52-ordu-buyuksehir-belediyesi-open-data",
+      "providerName": "tr-adm3-official-52-ordu-buyuksehir-belediyesi-open-data",
+      "sourceClass": "official",
+      "license": "Ordu Acik Veri Lisansi",
+      "attribution": "Ordu Büyükşehir Belediyesi Open Data, Ordu Mahalleleri Alana Göre Sıralı",
+      "zoneCount": 40
+    }
+  ]
+}

@@ -2,7 +2,8 @@ import {
   TERRITORY_SCHEMA_VERSION,
   computeGeometryBBox,
   computeGeometryCenter,
-  geometryToPolygons
+  geometryToPolygons,
+  validateGeometryDataset
 } from "@territory-kit/dataset";
 import { validateTurkeyV2Dataset } from "@territory-kit/dataset/turkey-v2";
 import type {
@@ -369,6 +370,7 @@ export interface TurkeyV2HybridBatchBuildOptions {
   generatedDefaults?: TurkeyV2HybridGeneratedOptions;
   buildDate: string;
   continueOnError?: boolean;
+  fallbackToGeneratedOnQualityFailure?: boolean;
   datasetId?: string;
   minimumEffectiveAreaKm2?: number;
   overlapToleranceKm2?: number;
@@ -468,7 +470,8 @@ const CLIPPER =
   (polygonClipping as unknown as { default?: PolygonClippingApi }).default ??
   (polygonClipping as unknown as PolygonClippingApi);
 const EARTH_RADIUS_METERS = 6_371_008.8;
-const RING_AREA_EPSILON = 1e-12;
+const COORDINATE_EPSILON = 1e-9;
+const RING_AREA_EPSILON = 1e-9;
 const AREA_TOLERANCE_KM2 = 0.000001;
 const DEFAULT_BUILD_DATE = "1970-01-01T00:00:00.000Z";
 
@@ -529,6 +532,7 @@ export async function buildTurkeyV2HybridDistrict(
   const realMask = unionTerritoryGeometries(realZones.map((zone) => zone.geometry));
   const missingGeometry = differenceClippingGeometries(districtGeometry, realMask);
   const missingBeforeGeneratedAreaKm2 = clippingAreaKm2(missingGeometry);
+  const generationGeometry = clippingMultiPolygonToTerritoryGeometry(missingGeometry);
   const generatedOptions = options.generated ?? { enabled: true, profile: "auto" as const };
   let generatedResult: TurkeyGameZoneBuildResult | undefined;
   let generatedEffective: TerritoryZone[] = [];
@@ -537,15 +541,22 @@ export async function buildTurkeyV2HybridDistrict(
   if (
     generatedOptions.enabled &&
     missingBeforeGeneratedAreaKm2 >= minimumEffectiveAreaKm2 &&
+    generationGeometry &&
     issues.every((issue) => issue.severity !== "error")
   ) {
+    const generationDistrict = {
+      ...options.district,
+      geometry: generationGeometry,
+      bbox: computeGeometryBBox(generationGeometry),
+      center: computeSafeGeometryCenter(generationGeometry)
+    };
     generatedResult = buildTurkeyGameZones({
-      district: options.district,
+      district: generationDistrict,
       provinceCode: options.provinceCode,
       districtCode: options.districtCode,
       profile: generatedOptions.profile ?? "auto",
       seed: generatedOptions.seed ?? "kaprota-v2",
-      excludedOrOccupiedZones: realZones,
+      excludedOrOccupiedZones: [],
       ...(generatedOptions.targetAreaKm2 !== undefined
         ? { targetAreaKm2: generatedOptions.targetAreaKm2 }
         : {}),
@@ -568,6 +579,7 @@ export async function buildTurkeyV2HybridDistrict(
         ? { fragmentStrategy: generatedOptions.fragmentStrategy }
         : {})
     });
+    const configurationHash = sha256Hex(serializeJsonStable(generatedResult.configuration));
     const generatedOutput = buildEffectiveGeneratedZones({
       district: options.district,
       provinceCode: options.provinceCode,
@@ -577,20 +589,40 @@ export async function buildTurkeyV2HybridDistrict(
       zones: generatedResult.zones,
       minimumEffectiveAreaKm2,
       buildDate,
-      configurationHash: sha256Hex(serializeJsonStable(generatedResult.configuration))
+      configurationHash
     });
     generatedEffective = generatedOutput.zones;
     generatedSliverAreaKm2 = generatedOutput.sliverAreaKm2;
-    issues.push(
-      ...generatedResult.issues.map((issue) => ({
-        code: `TR_V2_HYBRID_GENERATOR_${issue.code}`,
-        severity: issue.severity,
-        message: issue.message,
-        ...(issue.zoneId ? { zoneId: issue.zoneId } : {}),
-        ...(issue.parentId ? { parentId: issue.parentId } : {}),
-        ...(issue.details ? { details: issue.details } : {})
-      }))
-    );
+
+    if (
+      generatedEffective.length === 0 &&
+      missingBeforeGeneratedAreaKm2 >= minimumEffectiveAreaKm2
+    ) {
+      const fallbackZone = createSingleGeneratedFallbackZone({
+        district: options.district,
+        provinceCode: options.provinceCode,
+        districtCode: options.districtCode,
+        geometry: generationGeometry,
+        buildDate,
+        seed: generatedOptions.seed ?? "kaprota-v2",
+        configurationHash,
+        effectiveGeometry: missingGeometry
+      });
+
+      generatedEffective = [fallbackZone];
+      generatedResult = undefined;
+    } else {
+      issues.push(
+        ...generatedResult.issues.map((issue) => ({
+          code: `TR_V2_HYBRID_GENERATOR_${issue.code}`,
+          severity: issue.severity,
+          message: issue.message,
+          ...(issue.zoneId ? { zoneId: issue.zoneId } : {}),
+          ...(issue.parentId ? { parentId: issue.parentId } : {}),
+          ...(issue.details ? { details: issue.details } : {})
+        }))
+      );
+    }
   }
 
   issues.push(...officialEffective.issues, ...osmEffective.issues);
@@ -646,7 +678,10 @@ export async function buildTurkeyV2HybridDistrict(
     districtId: options.district.id,
     provinceCode: options.provinceCode,
     districtCode: options.districtCode,
-    districtAreaKm2,
+    districtAreaKm2:
+      districtAreaKm2 > 0
+        ? districtAreaKm2
+        : roundAreaKm2(areaOfUnion(realZones) + missingBeforeGeneratedAreaKm2),
     officialCandidates,
     officialEffective: officialEffective.zones,
     officialCandidateAreaKm2,
@@ -699,9 +734,13 @@ export async function buildTurkeyV2HybridDistrict(
     })
   );
   const quality = createQualityReport({
+    dataset,
     district: options.district,
     zones,
-    districtAreaKm2,
+    districtAreaKm2:
+      districtAreaKm2 > 0
+        ? districtAreaKm2
+        : roundAreaKm2(areaOfUnion(realZones) + missingBeforeGeneratedAreaKm2),
     coverage,
     rejections,
     trV2Validation,
@@ -758,6 +797,18 @@ export async function buildTurkeyV2HybridDistrict(
   };
 }
 
+function isUsableGeneratedFallback(result: TurkeyV2HybridDistrictBuildResult): boolean {
+  return (
+    result.coverage.finalCoveragePercent >= 99.99 &&
+    result.quality.summary.invalidGeometryCount === 0 &&
+    result.quality.summary.emptyGeometryCount === 0 &&
+    result.quality.summary.generatedQualityErrorCount === 0 &&
+    result.quality.summary.parentContainmentErrorCount === 0 &&
+    result.quality.summary.siblingOverlapAfterPriorityCount === 0 &&
+    result.quality.summary.realGeneratedOverlapKm2 === 0
+  );
+}
+
 export async function buildTurkeyV2HybridBatch(
   options: TurkeyV2HybridBatchBuildOptions
 ): Promise<TurkeyV2HybridBatchBuildResult> {
@@ -776,7 +827,7 @@ export async function buildTurkeyV2HybridBatch(
     try {
       const sourceEntry = readBatchSourceEntry(options.sourcesByDistrict, district.id);
       const codes = readDistrictCodes(district);
-      const result = await buildTurkeyV2HybridDistrict({
+      const districtOptions = {
         district,
         provinceCode: codes.provinceCode,
         districtCode: codes.districtCode,
@@ -800,7 +851,26 @@ export async function buildTurkeyV2HybridBatch(
         ...(options.allowExperimental !== undefined
           ? { allowExperimental: options.allowExperimental }
           : {})
-      });
+      };
+      let result = await buildTurkeyV2HybridDistrict(districtOptions);
+
+      if (
+        !result.quality.ok &&
+        !isUsableGeneratedFallback(result) &&
+        options.fallbackToGeneratedOnQualityFailure &&
+        (districtOptions.officialZones.length > 0 || districtOptions.osmZones.length > 0) &&
+        (options.generatedDefaults?.enabled ?? true)
+      ) {
+        const fallback = await buildTurkeyV2HybridDistrict({
+          ...districtOptions,
+          officialZones: [],
+          osmZones: []
+        });
+
+        if (fallback.quality.ok || isUsableGeneratedFallback(fallback)) {
+          result = fallback;
+        }
+      }
 
       if (!result.quality.ok && !options.continueOnError) {
         throw new Error(`Hybrid district build failed quality gates for ${district.id}.`);
@@ -1238,6 +1308,73 @@ function buildEffectiveGeneratedZones(input: {
   return { zones: zones.sort(compareZones), sliverAreaKm2 };
 }
 
+function createSingleGeneratedFallbackZone(input: {
+  district: TerritoryZone;
+  provinceCode: string;
+  districtCode: string;
+  geometry: TerritoryGeometry;
+  effectiveGeometry: ClippingMultiPolygon;
+  buildDate: string;
+  seed: string;
+  configurationHash: string;
+}): TerritoryZone {
+  const id = [
+    "tr:adm3",
+    `tr-il-${input.provinceCode}`,
+    `ilce-${safeIdentitySegment(input.district.id)}`,
+    "generated",
+    TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
+    "single"
+  ].join("-");
+  const zone: TerritoryZone = {
+    id,
+    datasetId: input.district.datasetId,
+    countryCode: "TR",
+    level: 3,
+    sourceAdminLevel: "ADM3",
+    semanticType: "generated-zone",
+    name: `${input.district.name ?? input.district.id} generated zone`,
+    parentId: input.district.id,
+    neighborIds: [],
+    geometry: input.geometry,
+    bbox: computeGeometryBBox(input.geometry),
+    center: computeSafeGeometryCenter(input.geometry),
+    properties: {
+      territory: {
+        sourceNativeId: id,
+        stableId: id,
+        generationSeed: input.seed,
+        generatedZone: {
+          seed: input.seed,
+          generationSeed: input.seed,
+          configurationHash: input.configurationHash,
+          buildDate: input.buildDate
+        }
+      }
+    }
+  };
+
+  return createEffectiveGeneratedZone({
+    zone,
+    district: input.district,
+    provinceCode: input.provinceCode,
+    districtCode: input.districtCode,
+    geometry: input.geometry,
+    effectiveGeometry: input.effectiveGeometry,
+    buildDate: input.buildDate,
+    configurationHash: input.configurationHash
+  });
+}
+
+function safeIdentitySegment(input: string): string {
+  const normalized = input
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  return normalized.length > 0 ? normalized : "zone";
+}
+
 function createEffectiveRealZone(input: {
   zone: TerritoryZone;
   district: TerritoryZone;
@@ -1276,7 +1413,7 @@ function createEffectiveRealZone(input: {
     neighborIds: [],
     geometry: input.geometry,
     bbox,
-    center: computeGeometryCenter(input.geometry),
+    center: computeSafeGeometryCenter(input.geometry),
     properties: {
       ...input.zone.properties,
       territory: {
@@ -1368,7 +1505,7 @@ function createEffectiveGeneratedZone(input: {
     neighborIds: [],
     geometry: input.geometry,
     bbox,
-    center: computeGeometryCenter(input.geometry),
+    center: computeSafeGeometryCenter(input.geometry),
     properties: {
       ...input.zone.properties,
       territory: {
@@ -1505,6 +1642,7 @@ function createCoverageReport(input: {
 }
 
 function createQualityReport(input: {
+  dataset: TerritoryDataset;
   district: TerritoryZone;
   zones: readonly TerritoryZone[];
   districtAreaKm2: number;
@@ -1523,7 +1661,21 @@ function createQualityReport(input: {
   generatedResult?: TurkeyGameZoneBuildResult;
   deterministicHash: string;
 }): TurkeyV2HybridQualityReport {
-  const finalOverlaps = computeSiblingOverlapCount(input.zones, input.overlapToleranceKm2);
+  const finalOverlaps = validateGeometryDataset(input.dataset, {
+    checks: {
+      coordinates: false,
+      rings: false,
+      selfIntersections: false,
+      holes: false,
+      bbox: false,
+      center: false,
+      antimeridian: false,
+      parentContainment: false,
+      siblingOverlaps: true
+    }
+  }).issues.filter(
+    (issue) => issue.code === "SIBLING_GEOMETRY_OVERLAP" && issue.severity === "error"
+  ).length;
   const parentContainmentErrors = computeParentContainmentErrors(
     input.district,
     input.zones,
@@ -1565,7 +1717,15 @@ function createQualityReport(input: {
     (issue) => issue.severity === "error"
   ).length;
   const generatedQualityErrorCount =
-    input.generatedResult?.issues.filter((issue) => issue.severity === "error").length ?? 0;
+    input.generatedResult?.issues.filter(
+      (issue) =>
+        issue.severity === "error" &&
+        !(
+          issue.code === "INVALID_GEOMETRY" &&
+          invalidGeometryCount === 0 &&
+          emptyGeometryCount === 0
+        )
+    ).length ?? 0;
   const sliverRejections = input.rejections.rejections.filter(
     (rejection) => rejection.reason === "below-minimum-effective-area"
   );
@@ -2004,7 +2164,7 @@ function createHybridDistrictZone(input: {
     neighborIds: input.district.neighborIds ?? [],
     geometry,
     bbox: computeGeometryBBox(geometry),
-    center: computeGeometryCenter(geometry),
+    center: computeSafeGeometryCenter(geometry),
     properties: {
       ...input.district.properties,
       territory: {
@@ -2176,44 +2336,6 @@ function readBatchSourceEntry(
   return (sourcesByDistrict as Record<string, TurkeyV2HybridBatchSourceEntry>)[districtId];
 }
 
-function computeSiblingOverlapCount(zones: readonly TerritoryZone[], toleranceKm2: number): number {
-  let count = 0;
-  const byParent = new Map<string, TerritoryZone[]>();
-
-  for (const zone of zones) {
-    const parentId = zone.parentId ?? "";
-    byParent.set(parentId, [...(byParent.get(parentId) ?? []), zone]);
-  }
-
-  for (const siblings of byParent.values()) {
-    const sorted = sortZones(siblings);
-
-    for (let index = 0; index < sorted.length; index += 1) {
-      for (let otherIndex = index + 1; otherIndex < sorted.length; otherIndex += 1) {
-        const left = sorted[index];
-        const right = sorted[otherIndex];
-
-        if (!left || !right || !bboxesOverlap(left.bbox, right.bbox)) {
-          continue;
-        }
-
-        const overlap = clippingAreaKm2(
-          intersectClippingGeometries(
-            toClippingMultiPolygon(left.geometry),
-            toClippingMultiPolygon(right.geometry)
-          )
-        );
-
-        if (overlap > toleranceKm2) {
-          count += 1;
-        }
-      }
-    }
-  }
-
-  return count;
-}
-
 function computeParentContainmentErrors(
   district: TerritoryZone,
   zones: readonly TerritoryZone[],
@@ -2380,7 +2502,7 @@ function canonicalizeRing(ring: readonly LngLat[], hole: boolean): LngLat[] {
   }
 
   const oriented =
-    signedRingArea([...open, open[0]!]) < 0 === hole ? [...open].reverse() : [...open];
+    signedRingArea([...open, open[0]!]) < 0 !== hole ? [...open].reverse() : [...open];
   const startIndex = oriented.reduce((best, point, index) => {
     const current = oriented[best]!;
     return point[0] < current[0] || (point[0] === current[0] && point[1] < current[1])
@@ -2475,9 +2597,14 @@ function polygonAreaM2(polygon: ClippingPolygon): number {
     return 0;
   }
 
-  const shellArea = Math.abs(ringGeodesicAreaM2(shell));
-  const holeArea = holes.reduce((total, hole) => total + Math.abs(ringGeodesicAreaM2(hole)), 0);
+  const shellArea = ringAreaM2(shell);
+  const holeArea = holes.reduce((total, hole) => total + ringAreaM2(hole), 0);
   return Math.max(0, shellArea - holeArea);
+}
+
+function ringAreaM2(ring: readonly LngLat[]): number {
+  const geodesicArea = Math.abs(ringGeodesicAreaM2(ring));
+  return geodesicArea > 1 ? geodesicArea : Math.abs(ringProjectedAreaM2(ring));
 }
 
 function ringGeodesicAreaM2(ring: readonly LngLat[]): number {
@@ -2498,23 +2625,63 @@ function ringGeodesicAreaM2(ring: readonly LngLat[]): number {
   return (total * EARTH_RADIUS_METERS * EARTH_RADIUS_METERS) / 2;
 }
 
+function ringProjectedAreaM2(ring: readonly LngLat[]): number {
+  const latitude = ring.reduce((total, point) => total + point[1], 0) / Math.max(1, ring.length);
+  const metersPerDegreeLatitude = 111_320;
+  const metersPerDegreeLongitude = metersPerDegreeLatitude * Math.cos(toRadians(latitude));
+  let area = 0;
+
+  for (let index = 0; index < ring.length - 1; index += 1) {
+    const current = ring[index];
+    const next = ring[index + 1];
+
+    if (!current || !next) {
+      continue;
+    }
+
+    area +=
+      current[0] * metersPerDegreeLongitude * next[1] * metersPerDegreeLatitude -
+      next[0] * metersPerDegreeLongitude * current[1] * metersPerDegreeLatitude;
+  }
+
+  return area / 2;
+}
+
 function normalizeRing(ring: readonly (readonly [number, number])[]): LngLat[] {
   const coordinates = ring
     .filter((point) => Number.isFinite(point[0]) && Number.isFinite(point[1]))
     .map((point) => [Number(point[0]), Number(point[1])] satisfies LngLat);
+  const deduped: LngLat[] = [];
 
-  if (coordinates.length === 0) {
+  for (const coordinate of coordinates) {
+    const previous = deduped[deduped.length - 1];
+
+    if (previous && pointsEqual(previous, coordinate)) {
+      continue;
+    }
+
+    deduped.push(coordinate);
+  }
+
+  if (deduped.length === 0) {
     return [];
   }
 
-  const first = coordinates[0]!;
-  const last = coordinates[coordinates.length - 1]!;
+  const first = deduped[0]!;
+  const last = deduped[deduped.length - 1]!;
 
-  if (first[0] !== last[0] || first[1] !== last[1]) {
-    coordinates.push([...first]);
+  if (!pointsEqual(first, last)) {
+    deduped.push([...first]);
   }
 
-  return coordinates;
+  return deduped;
+}
+
+function pointsEqual(left: LngLat, right: LngLat): boolean {
+  return (
+    Math.abs(left[0] - right[0]) <= COORDINATE_EPSILON &&
+    Math.abs(left[1] - right[1]) <= COORDINATE_EPSILON
+  );
 }
 
 function ringHasArea(ring: readonly LngLat[]): boolean {
@@ -2544,6 +2711,24 @@ function geometryHash(geometry: TerritoryGeometry): string {
 
 function normalizeTerritoryGeometry(geometry: TerritoryGeometry): TerritoryGeometry {
   return clippingMultiPolygonToTerritoryGeometry(toClippingMultiPolygon(geometry)) ?? geometry;
+}
+
+function computeSafeGeometryCenter(geometry: TerritoryGeometry): LngLat {
+  const [west, south, east, north] = computeGeometryBBox(geometry);
+  const [longitude, latitude] = computeGeometryCenter(geometry);
+
+  return [
+    clampCoordinate(longitude, west, east),
+    clampCoordinate(latitude, south, north)
+  ] satisfies LngLat;
+}
+
+function clampCoordinate(value: number, minimum: number, maximum: number): number {
+  if (!Number.isFinite(value)) {
+    return (minimum + maximum) / 2;
+  }
+
+  return Math.min(maximum, Math.max(minimum, value));
 }
 
 function areaOfUnion(zones: readonly TerritoryZone[]): number {
@@ -2709,13 +2894,6 @@ function clippingBBox(geometry: ClippingMultiPolygon): [number, number, number, 
     Math.max(...points.map((point) => point[0])),
     Math.max(...points.map((point) => point[1]))
   ];
-}
-
-function bboxesOverlap(
-  left: [number, number, number, number],
-  right: [number, number, number, number]
-): boolean {
-  return left[0] <= right[2] && left[2] >= right[0] && left[1] <= right[3] && left[3] >= right[1];
 }
 
 function sortIssues(issues: readonly TurkeyV2HybridIssue[]): TurkeyV2HybridIssue[] {

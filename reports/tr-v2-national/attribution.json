@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "territorykit-tr-v2-national-attribution-summary@1",
+  "districtId": "national",
+  "buildDate": "2026-08-13T00:00:00.000Z",
+  "text": "generated: TerritoryKit generated game zones from ADM2 boundaries (Apache-2.0)\nofficial: Bursa Büyükşehir Belediyesi Open Data, Mahalle Sınırları (Bursa Acik Veri Lisansi)\nofficial: Gaziantep Büyükşehir Belediyesi, Mahalle Sınır Alanları, CC BY 4.0 (CC BY 4.0)\nofficial: Kayseri Büyükşehir Belediyesi Open Data, Mahalle Sınırı, CC BY 4.0 (CC BY 4.0)\nofficial: Ordu Büyükşehir Belediyesi Open Data, Ordu Mahalleleri Alana Göre Sıralı (Ordu Acik Veri Lisansi)",
+  "groups": [
+    {
+      "sourceClass": "generated",
+      "providerIds": ["territory-kit-generated"],
+      "license": "Apache-2.0",
+      "attribution": "TerritoryKit generated game zones from ADM2 boundaries",
+      "zoneCount": 40116
+    },
+    {
+      "sourceClass": "official",
+      "providerIds": ["gaziantep-open-data"],
+      "license": "CC BY 4.0",
+      "attribution": "Gaziantep Büyükşehir Belediyesi, Mahalle Sınır Alanları, CC BY 4.0",
+      "zoneCount": 600
+    },
+    {
+      "sourceClass": "official",
+      "providerIds": ["tr-adm3-official-16-bursa-buyuksehir-belediyesi-open-data"],
+      "license": "Bursa Acik Veri Lisansi",
+      "attribution": "Bursa Büyükşehir Belediyesi Open Data, Mahalle Sınırları",
+      "zoneCount": 796
+    },
+    {
+      "sourceClass": "official",
+      "providerIds": ["tr-adm3-official-38-kayseri-buyuksehir-belediyesi-open-data-via-ulasav"],
+      "license": "CC BY 4.0",
+      "attribution": "Kayseri Büyükşehir Belediyesi Open Data, Mahalle Sınırı, CC BY 4.0",
+      "zoneCount": 336
+    },
+    {
+      "sourceClass": "official",
+      "providerIds": ["tr-adm3-official-52-ordu-buyuksehir-belediyesi-open-data"],
+      "license": "Ordu Acik Veri Lisansi",
+      "attribution": "Ordu Büyükşehir Belediyesi Open Data, Ordu Mahalleleri Alana Göre Sıralı",
+      "zoneCount": 362
+    }
+  ]
+}
