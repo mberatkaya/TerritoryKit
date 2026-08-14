@@ -1,5 +1,18 @@
 # @territory-kit/generators
 
+## 1.8.0
+
+### Minor Changes
+
+- 1a93d2f: Add the Turkey V2 national playable dataset build pipeline, CLI commands, resolver metadata, rich
+  checksum loader support, reports, docs, and validation coverage.
+
+### Patch Changes
+
+- Updated dependencies [1a93d2f]
+  - @territory-kit/core@1.8.0
+  - @territory-kit/dataset@1.8.0
+
 ## 1.7.0
 
 ### Minor Changes
