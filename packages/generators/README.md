@@ -43,7 +43,8 @@ const realAdjacency = await buildTerritoryAdjacency(dataset, {
 - `buildTerritoryAdjacencyPath(inputPath, options)` writes `adjacency.json`, `build-report.json`,
   and `checksums.json`.
 - `simplifyTerritoryDatasetPath(inputPath, options)` writes audited topology-safe geometry
-  simplification tiers.
+  simplification tiers that simplify canonical shared-boundary arcs once and reuse them across
+  adjacent polygons.
 - `createTerritoryCountrySourceLock(options)` resolves and checksums country source artifacts,
   including reviewed HDX/OCHA COD-AB Turkey ADM0-ADM2 ZIP members.
 - `buildTerritoryCountryDatasetPath(options)` writes country manifests, per-level datasets,
