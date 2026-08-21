@@ -4,11 +4,14 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
 import {
+  TURKEY_V2_NATIONAL_EXPECTED_COUNTS,
   TURKEY_V2_NATIONAL_DATASET_ID,
   TURKEY_V2_NATIONAL_DATASET_VERSION,
   buildTurkeyV2NationalDataset,
   createTurkeyV2NationalArtifactPayloads,
-  createTurkeyV2NationalSourceLock
+  createTurkeyV2NationalSourceLock,
+  validateTurkeyV2NationalArtifactIntegrity,
+  validateTurkeyV2NationalCompleteness
 } from "@territory-kit/generators/turkey-adm3";
 import type {
   TurkeyV2NationalAdmSourceLock,
@@ -22,6 +25,9 @@ interface CliIssue {
   code: string;
   message: string;
   path?: string;
+  artifactId?: string;
+  expected?: string | number | boolean;
+  actual?: string | number | boolean;
   severity: "error" | "warning";
 }
 
@@ -225,56 +231,166 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
     reportsRoot,
     durationMs: Date.now() - startedAt
   };
+  const commandOk = mode === "publish-ready" ? result.quality.publishReady : result.quality.ok;
+  const failureGates =
+    mode === "publish-ready"
+      ? result.quality.publishReadyGateFailures
+      : result.quality.hardGateFailures;
 
   printJson({
-    ok: result.quality.ok,
+    ok: commandOk,
     command: `tr v2 national ${mode}`,
     data: summary,
-    issues: result.quality.ok
+    issues: commandOk
       ? []
-      : result.quality.hardGateFailures.map((gate) => issue(`Quality gate failed: ${gate}`))
+      : failureGates.map((gate) => issue(`Quality gate failed: ${gate}`, undefined, { code: gate }))
   });
 
-  return result.quality.ok ? 0 : mode === "publish-ready" ? 1 : 0;
+  return commandOk ? 0 : mode === "publish-ready" ? 1 : 0;
 }
 
 async function runValidate(args: string[]): Promise<number> {
   const flags = parseFlags(args);
   const outputRoot = resolve(getFlag(flags, "output") ?? DEFAULT_OUTPUT);
-  const coverage = await readJson(join(outputRoot, "coverage.json"));
-  const quality = await readJson(join(outputRoot, "quality-report.json"));
-  const checksums = await readJson(join(outputRoot, "checksums.json"));
-  const registry = await readJson(join(outputRoot, "registry-entry.json"));
+  const strictPublishReady = flags.has("strict") || flags.has("publish-ready");
   const issues: CliIssue[] = [];
+  const coverage = await readJsonForValidation(outputRoot, "coverage.json", issues);
+  const quality = await readJsonForValidation(outputRoot, "quality-report.json", issues);
+  const sourceLock = await readJsonForValidation(outputRoot, "source-lock.json", issues);
+  const checksums = await readJsonForValidation(outputRoot, "checksums.json", issues);
+  const registry = await readJsonForValidation(outputRoot, "registry-entry.json", issues);
+  const artifactPlan = await readJsonForValidation(outputRoot, "artifact-plan.json", issues);
 
   if (!isRecord(coverage) || coverage.schemaVersion !== "territorykit-tr-v2-national-coverage@1") {
-    issues.push(issue("Coverage report is missing or invalid.", "coverage.json"));
+    issues.push(
+      issue("Coverage report is missing or invalid.", "coverage.json", {
+        code: "COVERAGE_SCHEMA_INVALID"
+      })
+    );
   }
 
   if (!isRecord(quality) || quality.schemaVersion !== "territorykit-tr-v2-national-quality@1") {
-    issues.push(issue("Quality report is missing or invalid.", "quality-report.json"));
+    issues.push(
+      issue("Quality report is missing or invalid.", "quality-report.json", {
+        code: "QUALITY_SCHEMA_INVALID"
+      })
+    );
   } else if (quality.ok !== true) {
-    issues.push(issue("Quality report is not ok.", "quality-report.json"));
+    issues.push(
+      issue("Quality report is not ok.", "quality-report.json", {
+        code: "QUALITY_NOT_OK",
+        expected: true,
+        actual: String(quality.ok)
+      })
+    );
   }
 
   if (!isRecord(checksums) || !isRecord(checksums.files)) {
-    issues.push(issue("Checksums are missing or invalid.", "checksums.json"));
+    issues.push(
+      issue("Checksums are missing or invalid.", "checksums.json", {
+        code: "CHECKSUMS_SCHEMA_INVALID"
+      })
+    );
   }
 
   if (
     !isRecord(registry) ||
     registry.schemaVersion !== "territorykit-tr-v2-national-registry-entry@1"
   ) {
-    issues.push(issue("Registry entry is missing or invalid.", "registry-entry.json"));
+    issues.push(
+      issue("Registry entry is missing or invalid.", "registry-entry.json", {
+        code: "REGISTRY_SCHEMA_INVALID"
+      })
+    );
+  }
+
+  if (
+    !isRecord(artifactPlan) ||
+    artifactPlan.schemaVersion !== "territorykit-tr-v2-national-artifact-plan@1"
+  ) {
+    issues.push(
+      issue("Artifact plan is missing or invalid.", "artifact-plan.json", {
+        code: "ARTIFACT_PLAN_SCHEMA_INVALID"
+      })
+    );
+  }
+
+  if (isRecord(registry) && isRecord(checksums)) {
+    const integrity = await validateTurkeyV2NationalArtifactIntegrity({
+      registry,
+      checksums,
+      outputRoot,
+      mandatoryArtifactIds: ["dataset", "coverage", "quality", "query", "adm3"]
+    });
+    issues.push(...integrity.errors.map(validationIssueToCliIssue));
+  }
+
+  if (isRecord(coverage) && isRecord(quality)) {
+    const completeness = validateTurkeyV2NationalCompleteness({
+      coverage,
+      quality,
+      ...(isRecord(sourceLock) ? { sourceLock } : {}),
+      strictPublishReady
+    });
+    issues.push(...completeness.errors.map(validationIssueToCliIssue));
+  }
+
+  if (isRecord(coverage) && isRecord(sourceLock)) {
+    const sourceLockHash =
+      typeof sourceLock.contentHash === "string" ? sourceLock.contentHash : undefined;
+    if (coverage.sourceLockHash !== sourceLockHash) {
+      issues.push(
+        issue("Coverage source-lock hash does not match source-lock.json.", "source-lock.json", {
+          code: "SOURCE_LOCK_HASH_MISMATCH",
+          expected: String(coverage.sourceLockHash),
+          actual: sourceLockHash ?? "missing"
+        })
+      );
+    }
+  }
+
+  if (isRecord(coverage) && isRecord(registry) && Array.isArray(registry.datasets)) {
+    const dataset = registry.datasets.find(isRecord);
+    if (dataset) {
+      if (dataset.id !== coverage.datasetId) {
+        issues.push(
+          issue("Registry dataset id does not match coverage report.", "registry-entry.json", {
+            code: "REGISTRY_DATASET_ID_MISMATCH",
+            expected: String(coverage.datasetId),
+            actual: String(dataset.id)
+          })
+        );
+      }
+      if (dataset.version !== coverage.datasetVersion) {
+        issues.push(
+          issue("Registry dataset version does not match coverage report.", "registry-entry.json", {
+            code: "REGISTRY_DATASET_VERSION_MISMATCH",
+            expected: String(coverage.datasetVersion),
+            actual: String(dataset.version)
+          })
+        );
+      }
+    }
   }
 
   printJson({
     ok: issues.length === 0,
     command: "tr v2 national validate",
+    strictPublishReady,
     data: {
       outputRoot,
       datasetId: isRecord(coverage) ? coverage.datasetId : undefined,
       datasetVersion: isRecord(coverage) ? coverage.datasetVersion : undefined,
+      expectedAdm0Count: TURKEY_V2_NATIONAL_EXPECTED_COUNTS.ADM0,
+      expectedAdm1Count: TURKEY_V2_NATIONAL_EXPECTED_COUNTS.ADM1,
+      expectedAdm2Count: TURKEY_V2_NATIONAL_EXPECTED_COUNTS.ADM2,
+      adm0Count: isRecord(coverage) ? coverage.adm0Count : undefined,
+      provinceCount: isRecord(coverage) ? coverage.provinceCount : undefined,
+      districtCount: isRecord(coverage) ? coverage.districtCount : undefined,
+      successfulDistrictCount: isRecord(coverage) ? coverage.successfulDistrictCount : undefined,
+      failedDistrictCount: isRecord(coverage) ? coverage.failedDistrictCount : undefined,
+      buildMode: isRecord(quality) ? quality.buildMode : undefined,
+      publishReady: isRecord(quality) ? quality.publishReady : undefined,
       finalCoveragePercent: isRecord(coverage) ? coverage.finalCoveragePercent : undefined
     },
     issues
@@ -472,6 +588,12 @@ function createCliSummary(result: TurkeyV2NationalBuildResult): Record<string, u
     datasetId: result.coverage.datasetId,
     datasetVersion: result.coverage.datasetVersion,
     buildDate: result.coverage.buildDate,
+    buildMode: result.quality.buildMode,
+    publishReady: result.quality.publishReady,
+    expectedAdm0Count: TURKEY_V2_NATIONAL_EXPECTED_COUNTS.ADM0,
+    expectedAdm1Count: TURKEY_V2_NATIONAL_EXPECTED_COUNTS.ADM1,
+    expectedAdm2Count: TURKEY_V2_NATIONAL_EXPECTED_COUNTS.ADM2,
+    adm0Count: result.coverage.adm0Count,
     provinceCount: result.coverage.provinceCount,
     districtCount: result.coverage.districtCount,
     successfulDistrictCount: result.coverage.successfulDistrictCount,
@@ -486,6 +608,7 @@ function createCliSummary(result: TurkeyV2NationalBuildResult): Record<string, u
     districtsBelow9999: result.coverage.districtsBelow9999,
     qualityOk: result.quality.ok,
     hardGateFailures: result.quality.hardGateFailures,
+    publishReadyGateFailures: result.quality.publishReadyGateFailures,
     sourceStatus: result.coverage.sourceStatus,
     deterministicHash: result.deterministicHash,
     sourceLockHash: result.sourceLock.contentHash
@@ -675,6 +798,27 @@ async function readJson(path: string): Promise<unknown> {
   return JSON.parse(await readFile(resolve(path), "utf8")) as unknown;
 }
 
+async function readJsonForValidation(
+  outputRoot: string,
+  relativePath: string,
+  issues: CliIssue[]
+): Promise<unknown> {
+  try {
+    return await readJson(join(outputRoot, relativePath));
+  } catch (error) {
+    issues.push(
+      issue(
+        `Unable to read ${relativePath}: ${error instanceof Error ? error.message : String(error)}`,
+        relativePath,
+        {
+          code: "JSON_READ_ERROR"
+        }
+      )
+    );
+    return undefined;
+  }
+}
+
 async function writeJson(path: string, payload: unknown, force: boolean): Promise<void> {
   await writeText(path, `${JSON.stringify(payload, null, 2)}\n`, force);
 }
@@ -754,12 +898,40 @@ function workspacePath(path: string): string {
   return resolve(WORKSPACE_ROOT, path);
 }
 
-function issue(message: string, path?: string): CliIssue {
+function validationIssueToCliIssue(input: {
+  code: string;
+  message: string;
+  path?: string;
+  artifactId?: string;
+  expected?: string | number | boolean;
+  actual?: string | number | boolean;
+}): CliIssue {
+  return issue(input.message, input.path, {
+    code: input.code,
+    ...(input.artifactId ? { artifactId: input.artifactId } : {}),
+    ...(input.expected !== undefined ? { expected: input.expected } : {}),
+    ...(input.actual !== undefined ? { actual: input.actual } : {})
+  });
+}
+
+function issue(
+  message: string,
+  path?: string,
+  details: {
+    code?: string;
+    artifactId?: string;
+    expected?: string | number | boolean;
+    actual?: string | number | boolean;
+  } = {}
+): CliIssue {
   return {
-    code: "TR_V2_NATIONAL",
+    code: details.code ?? "TR_V2_NATIONAL",
     severity: "error",
     message,
-    ...(path ? { path } : {})
+    ...(path ? { path } : {}),
+    ...(details.artifactId ? { artifactId: details.artifactId } : {}),
+    ...(details.expected !== undefined ? { expected: details.expected } : {}),
+    ...(details.actual !== undefined ? { actual: details.actual } : {})
   };
 }
 

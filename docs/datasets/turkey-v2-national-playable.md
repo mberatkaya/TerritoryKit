@@ -48,6 +48,10 @@ territory tr v2 national publish-ready \
 
 territory tr v2 national validate \
   --output .territory/build/TR/V2-national
+
+territory tr v2 national validate \
+  --output .territory/build/TR/V2-national \
+  --publish-ready
 ```
 
 Useful smoke and benchmark scripts:
@@ -88,6 +92,12 @@ The local artifact directory includes:
 Large geometry, render, and binary/query assets are local or registry artifacts. They are not
 embedded in `@territory-kit/data-tr`.
 
+Registry entries are emitted only for artifacts that were actually produced and checksummed. When
+`--no-render` is used, no render manifest appears in the registry. When `--no-adjacency` is used, no
+adjacency artifact appears in the registry. Registry artifacts never use placeholder checksums or
+zero byte sizes; every listed artifact must exist, be a regular non-empty file, and match both its
+recorded byte size and lowercase 64-character SHA-256 checksum.
+
 ## Loader
 
 ```ts
@@ -107,18 +117,41 @@ to `ADM0` through `ADM2`, and requires a resolver or hosted registry.
 
 ## Gates
 
-The publish-ready gate requires:
+`build` is a diagnostic artifact command. It may write a partial output, including capped
+`--max-districts` smoke and benchmark outputs, and those outputs can still have `quality.ok = true`
+when the selected subset is internally healthy. Diagnostic output is marked with
+`quality.buildMode = "partial"` and `quality.publishReady = false`.
+
+`publish-ready` and `validate --publish-ready` are strict national gates. They require:
 
 - ADM0 count = 1
 - ADM1 count = 81
+- ADM2 count = 973
+- successful ADM2 count = 973
+- failed district count = 0
+- source-lock expected and actual ADM0/ADM1/ADM2 counts match the loaded reports
 - every ADM2 district built successfully
+- every ADM2 district has at least one ADM3 zone
 - every district final coverage >= 99.99%
 - national final coverage >= 99.99%
 - no orphan/cycle/duplicate stable ID failures
 - strict Turkey V2 validation passes
 - provenance, license, and attribution metadata is present
-- registry/checksum metadata is present
+- registry/checksum metadata is present and every registry artifact matches the filesystem
 - adjacency integrity passes when adjacency is built
 
-`build` writes artifacts and reports even when a gate fails. `publish-ready` exits non-zero when a
-hard gate fails.
+`publish-ready` exits non-zero when a strict gate fails. `--max-districts`, smoke, and benchmark
+outputs are always rejected by strict validation, even when their diagnostic quality checks pass.
+
+`validate` without `--publish-ready` performs general artifact validation: JSON shape, quality
+status, registry shape, duplicate artifact id/path checks, path traversal checks, filesystem
+presence, byte-size checks, and streaming SHA-256 verification. Broken JSON and unreadable files are
+reported as machine-readable issues. `validate --publish-ready` adds the strict national 1/81/973
+completeness checks.
+
+Common validation issue codes include `MISSING_ARTIFACT`, `EMPTY_ARTIFACT`, `MISSING_CHECKSUM`,
+`INVALID_CHECKSUM_FORMAT`, `CHECKSUM_MISMATCH`, `SIZE_MISMATCH`, `DUPLICATE_ARTIFACT_ID`,
+`DUPLICATE_ARTIFACT_PATH`, `UNSAFE_ARTIFACT_PATH`, `CHECKSUM_MANIFEST_MISMATCH`,
+`UNEXPECTED_MANDATORY_ARTIFACT_OMISSION`, `NATIONAL_ADM1_COUNT_MISMATCH`,
+`NATIONAL_ADM2_COUNT_MISMATCH`, `NATIONAL_SOURCE_LOCK_ACTUAL_COUNT_MISMATCH`, and
+`NATIONAL_PARTIAL_BUILD`.

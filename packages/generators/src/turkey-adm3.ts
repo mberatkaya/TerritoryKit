@@ -55,6 +55,9 @@ export {
   createTurkeyV2ZoneMigrationPlan
 } from "./turkey-v2-hybrid.js";
 export {
+  TURKEY_V2_ADM0_EXPECTED_COUNT,
+  TURKEY_V2_ADM1_EXPECTED_COUNT,
+  TURKEY_V2_ADM2_EXPECTED_COUNT,
   TURKEY_V2_NATIONAL_BUILD_SUMMARY_SCHEMA_VERSION,
   TURKEY_V2_NATIONAL_COVERAGE_SCHEMA_VERSION,
   TURKEY_V2_NATIONAL_DATASET_ID,
@@ -68,6 +71,12 @@ export {
   createTurkeyV2NationalArtifactPayloads,
   createTurkeyV2NationalSourceLock
 } from "./turkey-v2-national.js";
+export {
+  TURKEY_V2_NATIONAL_EXPECTED_COUNTS,
+  computeFileSha256,
+  validateTurkeyV2NationalArtifactIntegrity,
+  validateTurkeyV2NationalCompleteness
+} from "./turkey-v2-national-validation.js";
 export type {
   ResolvedTurkeyGameZoneConfiguration,
   ResolvedTurkeyGameZoneProfile,
@@ -147,6 +156,7 @@ export type {
   TurkeyV2NationalAdmSourceLock,
   TurkeyV2NationalArtifactPayloads,
   TurkeyV2NationalArtifactPlan,
+  TurkeyV2NationalBuildMode,
   TurkeyV2NationalBuildOptions,
   TurkeyV2NationalBuildResult,
   TurkeyV2NationalChecksums,
@@ -167,3 +177,10 @@ export type {
   TurkeyV2NationalSourceStatus,
   TurkeyV2NationalGeneratedSourceLock
 } from "./turkey-v2-national.js";
+export type {
+  TurkeyV2NationalArtifactIntegrityErrorCode,
+  TurkeyV2NationalCompletenessErrorCode,
+  TurkeyV2NationalValidationErrorCode,
+  TurkeyV2NationalValidationIssue,
+  TurkeyV2NationalValidationResult
+} from "./turkey-v2-national-validation.js";

@@ -3,6 +3,7 @@
 .env.*
 !.env.example
 .turbo/
+.kiro/
 coverage/
 dist/
 node_modules/
@@ -18,3 +19,4 @@ datasets/**/.cache/
 .territory/cache/
 .territory/experimental/
 datasets/quarantine/
+reports/tr-v2-national-smoke/
