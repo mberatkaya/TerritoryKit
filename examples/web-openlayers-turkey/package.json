@@ -1,6 +1,6 @@
 {
   "name": "@territory-kit/example-web-openlayers-turkey",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "private": true,
   "type": "module",
   "scripts": {
