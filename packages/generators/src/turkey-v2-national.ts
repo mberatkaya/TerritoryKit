@@ -18,11 +18,21 @@ import type {
 } from "@territory-kit/dataset";
 import { buildTerritoryAdjacency } from "./adjacency.js";
 import { buildTerritoryRenderArtifacts } from "./render-artifacts.js";
+import type { TerritoryRenderBuildResult } from "./render-artifacts.js";
 import {
   TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
   buildTurkeyV2HybridBatch,
   createTurkeyV2ZoneMigrationPlan
 } from "./turkey-adm3.js";
+import {
+  TURKEY_V2_NATIONAL_EXPECTED_COUNTS,
+  validateTurkeyV2NationalArtifactIntegrity,
+  validateTurkeyV2NationalCompleteness
+} from "./turkey-v2-national-validation.js";
+import type {
+  TurkeyV2NationalValidationIssue,
+  TurkeyV2NationalValidationResult
+} from "./turkey-v2-national-validation.js";
 import type {
   TurkeyV2HybridAttributionManifest,
   TurkeyV2HybridBatchBuildResult,
@@ -58,7 +68,26 @@ export const TURKEY_V2_NATIONAL_REGISTRY_ENTRY_SCHEMA_VERSION =
 export const TURKEY_V2_NATIONAL_BUILD_SUMMARY_SCHEMA_VERSION =
   "territorykit-tr-v2-national-build-summary@1" as const;
 
+/**
+ * Expected count of ADM0 zones for a complete Turkey national dataset.
+ * Turkey has exactly 1 country-level zone.
+ */
+export const TURKEY_V2_ADM0_EXPECTED_COUNT = TURKEY_V2_NATIONAL_EXPECTED_COUNTS.ADM0;
+
+/**
+ * Expected count of ADM1 zones for a complete Turkey national dataset.
+ * Turkey has exactly 81 provinces (il).
+ */
+export const TURKEY_V2_ADM1_EXPECTED_COUNT = TURKEY_V2_NATIONAL_EXPECTED_COUNTS.ADM1;
+
+/**
+ * Expected count of ADM2 zones for a complete Turkey national dataset.
+ * Turkey has exactly 973 districts (ilçe).
+ */
+export const TURKEY_V2_ADM2_EXPECTED_COUNT = TURKEY_V2_NATIONAL_EXPECTED_COUNTS.ADM2;
+
 export type TurkeyV2NationalOutputMode = "plan" | "build" | "publish-ready";
+export type TurkeyV2NationalBuildMode = "partial" | "publish-ready";
 export type TurkeyV2NationalSourceStatus = "artifact-loaded" | "disabled" | "not-built";
 
 export interface TurkeyV2NationalSourceLock {
@@ -212,6 +241,7 @@ export interface TurkeyV2NationalBuildResult {
   migration: TurkeyV2ZoneMigrationPlan;
   sourceLock: TurkeyV2NationalSourceLock;
   adjacency?: TerritoryAdjacencyArtifact;
+  renderArtifacts?: TerritoryRenderBuildResult;
   registry: TurkeyV2NationalRegistryEntry;
   artifactPlan: TurkeyV2NationalArtifactPlan;
   checksums: TurkeyV2NationalChecksums;
@@ -226,6 +256,7 @@ export interface TurkeyV2NationalCoverageReport {
   buildDate: string;
   sourceLockHash: string;
   deterministicHash: string;
+  adm0Count: number;
   provinceCount: number;
   districtCount: number;
   successfulDistrictCount: number;
@@ -303,7 +334,26 @@ export interface TurkeyV2NationalDistrictCoverage {
 export interface TurkeyV2NationalQualityReport {
   schemaVersion: typeof TURKEY_V2_NATIONAL_QUALITY_SCHEMA_VERSION;
   ok: boolean;
+  buildMode: TurkeyV2NationalBuildMode;
+  publishReady: boolean;
   hardGateFailures: string[];
+  publishReadyGateFailures: string[];
+  completeness: {
+    expected: {
+      adm0Count: typeof TURKEY_V2_ADM0_EXPECTED_COUNT;
+      adm1Count: typeof TURKEY_V2_ADM1_EXPECTED_COUNT;
+      adm2Count: typeof TURKEY_V2_ADM2_EXPECTED_COUNT;
+    };
+    actual: {
+      adm0Count: number;
+      adm1Count: number;
+      adm2Count: number;
+      successfulAdm2Count: number;
+      failedDistrictCount: number;
+    };
+    strictIssueCount: number;
+    strictIssues: TurkeyV2NationalValidationIssue[];
+  };
   summary: {
     adm0Count: number;
     adm1Count: number;
@@ -336,7 +386,9 @@ export interface TurkeyV2NationalQualityReport {
     issueCount: number;
     errorCount: number;
   };
+  artifactIntegrity: TurkeyV2NationalValidationResult;
   gates: Record<string, boolean>;
+  publishReadyGates: Record<string, boolean>;
 }
 
 export interface TurkeyV2NationalHierarchyReport {
@@ -439,6 +491,8 @@ interface NormalizedHierarchy {
   provinceNameByCode: Map<string, string>;
 }
 
+const TURKEY_V2_NATIONAL_MANDATORY_ARTIFACT_IDS = ["dataset", "coverage", "query", "adm3"] as const;
+
 export function createTurkeyV2NationalSourceLock(input: {
   adm0Adm2: Omit<TurkeyV2NationalAdmSourceLock, "levels"> & {
     levels: TurkeyV2NationalAdmSourceLock["levels"];
@@ -512,6 +566,16 @@ export function createTurkeyV2NationalSourceLock(input: {
   return {
     ...lockWithoutHash,
     contentHash: `sha256:${sha256Hex(serializeJsonStable(lockWithoutHash))}`
+  };
+}
+
+function resolveNationalArtifactOptions(input: TurkeyV2NationalBuildOptions["buildArtifacts"]): {
+  render: boolean;
+  adjacency: boolean;
+} {
+  return {
+    render: input?.render === true && input.mvt !== false,
+    adjacency: input?.adjacency === true
   };
 }
 
@@ -604,7 +668,8 @@ export async function buildTurkeyV2NationalDataset(
     zones
   };
   const levels = createLevelDatasets(dataset);
-  const adjacency = options.buildArtifacts?.adjacency
+  const artifactOptions = resolveNationalArtifactOptions(options.buildArtifacts);
+  const adjacency = artifactOptions.adjacency
     ? await buildTerritoryAdjacency(levels.ADM3, {
         buildDate,
         includePointTouches: false,
@@ -662,61 +727,88 @@ export async function buildTurkeyV2NationalDataset(
     oldZones: [],
     newZones: adm3Zones
   });
-  const registryWithoutChecksums = createNationalRegistryEntry({
+  const renderArtifacts = artifactOptions.render
+    ? buildTerritoryRenderArtifacts({
+        dataset: levels.ADM3,
+        format: "mvt",
+        layerId: "territory_adm3",
+        policies: [{ adminLevel: "ADM3", minZoom: 10, maxZoom: 12 }],
+        minZoom: 10,
+        maxZoom: 12,
+        buildDate
+      })
+    : undefined;
+  const coreArtifactFiles = createCoreNationalArtifactFiles({
+    dataset,
+    deterministicHash,
+    sourceLock: options.sourceLock,
+    coverage,
+    hierarchy: hierarchyReport,
+    provenance,
+    attribution,
+    licenses,
+    distributionPolicy,
+    migration,
+    levels,
+    ...(adjacency ? { adjacency: adjacency.artifact } : {}),
+    ...(renderArtifacts ? { renderArtifacts } : {})
+  });
+  const coreChecksums = createChecksums(coreArtifactFiles);
+  const baseRegistry = createNationalRegistryEntry({
     datasetId,
     datasetVersion,
     buildDate,
     coverage,
     sourceLock: options.sourceLock,
-    artifactHashes: {}
+    artifactHashes: coreChecksums.files,
+    includeQuality: false,
+    includeRender: Boolean(renderArtifacts),
+    includeAdjacency: Boolean(adjacency)
   });
-  const artifactPlanWithoutChecksums = createNationalArtifactPlan(
-    datasetId,
-    datasetVersion,
-    registryWithoutChecksums.datasets[0].artifacts
-  );
-  const checksums = createChecksums(
-    new Map<string, unknown>([
-      ["dataset.json", dataset],
-      ["manifest.json", { ...dataset.manifest, deterministicHash }],
-      ["source-lock.json", options.sourceLock],
-      ["coverage.json", coverage],
-      ["hierarchy-report.json", hierarchyReport],
-      ["provenance.json", provenance],
-      ["attribution.json", attribution],
-      ["licenses.json", licenses],
-      ["distribution-policy.json", distributionPolicy],
-      ["migration-plan.json", migration],
-      ["registry-entry.json", registryWithoutChecksums],
-      ["artifact-plan.json", artifactPlanWithoutChecksums],
-      ["levels/ADM0/dataset.json", levels.ADM0],
-      ["levels/ADM1/dataset.json", levels.ADM1],
-      ["levels/ADM2/dataset.json", levels.ADM2],
-      ["levels/ADM3/dataset.json", levels.ADM3],
-      ["query/query-artifact.json", createNationalQueryArtifact(dataset)]
-    ])
-  );
-  const registryWithChecksums = createNationalRegistryEntry({
-    datasetId,
-    datasetVersion,
-    buildDate,
-    coverage,
-    sourceLock: options.sourceLock,
-    artifactHashes: checksums.files
+  const baseArtifactIntegrity = await validateTurkeyV2NationalArtifactIntegrity({
+    registry: baseRegistry,
+    checksums: coreChecksums,
+    mandatoryArtifactIds: TURKEY_V2_NATIONAL_MANDATORY_ARTIFACT_IDS,
+    producedPaths: new Set(coreArtifactFiles.keys())
   });
-  const artifactPlanWithChecksums = createNationalArtifactPlan(
-    datasetId,
-    datasetVersion,
-    registryWithChecksums.datasets[0].artifacts
-  );
+  const buildMode: TurkeyV2NationalBuildMode =
+    options.outputMode === "publish-ready" && options.districtLimit === undefined
+      ? "publish-ready"
+      : "partial";
   const quality = createNationalQuality({
     dataset,
     coverage,
     hierarchy: hierarchyReport,
     hybridBatch,
-    checksums,
-    adjacencyIssueCount: adjacency?.issues.filter((issue) => issue.severity === "error").length ?? 0
+    sourceLock: options.sourceLock,
+    artifactIntegrity: baseArtifactIntegrity,
+    adjacencyIssueCount:
+      adjacency?.issues.filter((issue) => issue.severity === "error").length ?? 0,
+    buildMode
   });
+  const filesWithQuality = new Map(coreArtifactFiles);
+  filesWithQuality.set("quality-report.json", serializeJsonArtifact(quality));
+  const checksumsWithQuality = createChecksums(filesWithQuality);
+  const registry = createNationalRegistryEntry({
+    datasetId,
+    datasetVersion,
+    buildDate,
+    coverage,
+    sourceLock: options.sourceLock,
+    artifactHashes: checksumsWithQuality.files,
+    includeQuality: true,
+    includeRender: Boolean(renderArtifacts),
+    includeAdjacency: Boolean(adjacency)
+  });
+  const artifactPlan = createNationalArtifactPlan(
+    datasetId,
+    datasetVersion,
+    registry.datasets[0].artifacts
+  );
+  const checksumFiles = new Map(filesWithQuality);
+  checksumFiles.set("registry-entry.json", serializeJsonArtifact(registry));
+  checksumFiles.set("artifact-plan.json", serializeJsonArtifact(artifactPlan));
+  const checksums = createChecksums(checksumFiles);
 
   return {
     schemaVersion: TURKEY_V2_NATIONAL_BUILD_SUMMARY_SCHEMA_VERSION,
@@ -734,8 +826,9 @@ export async function buildTurkeyV2NationalDataset(
     migration,
     sourceLock: options.sourceLock,
     ...(adjacency ? { adjacency: adjacency.artifact } : {}),
-    registry: registryWithChecksums,
-    artifactPlan: artifactPlanWithChecksums,
+    ...(renderArtifacts ? { renderArtifacts } : {}),
+    registry,
+    artifactPlan,
     checksums,
     deterministicHash,
     failures: hybridBatch.failures
@@ -788,19 +881,11 @@ export function createTurkeyV2NationalArtifactPayloads(input: {
     json.set("levels/ADM3/adjacency/adjacency.json", input.result.adjacency);
   }
 
-  if (input.includeRender) {
-    const renderArtifacts = buildTerritoryRenderArtifacts({
-      dataset: input.result.levels.ADM3,
-      format: "mvt",
-      layerId: "territory_adm3",
-      policies: [{ adminLevel: "ADM3", minZoom: 10, maxZoom: 12 }],
-      minZoom: 10,
-      maxZoom: 12,
-      buildDate: input.result.coverage.buildDate
-    });
-
-    for (const [path, payload] of renderArtifacts.files.entries()) {
-      bytes.set(`render/${path}`, payload);
+  if (input.includeRender && input.result.renderArtifacts) {
+    for (const [path, payload] of input.result.renderArtifacts.files.entries()) {
+      if (path.startsWith("render/")) {
+        bytes.set(path, payload);
+      }
     }
   }
 
@@ -821,15 +906,15 @@ function normalizeTurkeyAdmHierarchy(
     .filter((zone) => zone.level === 2 || zone.sourceAdminLevel === "ADM2")
     .sort(compareZones);
 
-  if (adm0Zones.length !== 1) {
+  if (adm0Zones.length !== TURKEY_V2_ADM0_EXPECTED_COUNT) {
     throw new Error(
       `Turkey national V2 build requires exactly one ADM0 zone, found ${adm0Zones.length}.`
     );
   }
 
-  if (adm1Source.length !== 81) {
+  if (adm1Source.length !== TURKEY_V2_ADM1_EXPECTED_COUNT) {
     throw new Error(
-      `Turkey national V2 build requires 81 ADM1 provinces, found ${adm1Source.length}.`
+      `Turkey national V2 build requires ${TURKEY_V2_ADM1_EXPECTED_COUNT} ADM1 provinces, found ${adm1Source.length}.`
     );
   }
 
@@ -1121,6 +1206,7 @@ function createNationalCoverage(input: {
     buildDate: input.buildDate,
     sourceLockHash: input.sourceLockHash,
     deterministicHash: input.deterministicHash,
+    adm0Count: input.hierarchy.adm0 ? 1 : 0,
     provinceCount: input.hierarchy.adm1.length,
     districtCount: input.hierarchy.adm2.length,
     successfulDistrictCount: input.districts.length,
@@ -1405,8 +1491,10 @@ function createNationalQuality(input: {
   coverage: TurkeyV2NationalCoverageReport;
   hierarchy: TurkeyV2NationalHierarchyReport;
   hybridBatch: TurkeyV2HybridBatchBuildResult;
-  checksums: TurkeyV2NationalChecksums;
+  sourceLock: TurkeyV2NationalSourceLock;
+  artifactIntegrity: TurkeyV2NationalValidationResult;
   adjacencyIssueCount: number;
+  buildMode: TurkeyV2NationalBuildMode;
 }): TurkeyV2NationalQualityReport {
   const strictValidation = validateTurkeyV2Dataset(input.dataset);
   const geometryValidation = validateGeometryDataset(input.dataset, {
@@ -1475,12 +1563,21 @@ function createNationalQuality(input: {
     (total, district) => total + district.quality.summary.generatedQualityErrorCount,
     0
   );
+  const completeness = validateTurkeyV2NationalCompleteness({
+    coverage: input.coverage,
+    quality: { ok: true, buildMode: input.buildMode, publishReady: true },
+    sourceLock: input.sourceLock,
+    strictPublishReady: true
+  });
   const gates = {
     adm0Count:
       input.hierarchy.adm0Id.length > 0 &&
-      input.dataset.zones.filter((zone) => zone.level === 0).length === 1,
-    adm1Count: input.coverage.provinceCount === 81,
-    adm2Count: input.coverage.districtCount === input.coverage.successfulDistrictCount,
+      input.dataset.zones.filter((zone) => zone.level === 0).length === input.coverage.adm0Count,
+    adm1Count: input.coverage.provinceCount === input.hierarchy.provinceCount,
+    adm2Count:
+      input.buildMode === "partial" ||
+      (input.coverage.districtCount === input.coverage.successfulDistrictCount &&
+        input.coverage.failedDistrictCount === 0),
     everyDistrictHasAdm3: input.coverage.districts.every((district) => district.zoneCount > 0),
     everyDistrictCoverage: input.coverage.districtsBelow9999.length === 0,
     nationalCoverage: input.coverage.finalCoveragePercent >= 99.99,
@@ -1498,9 +1595,23 @@ function createNationalQuality(input: {
     generatedMetadata: generatedMetadataErrorCount === 0,
     strictTrV2Validation: strictValidation.ok,
     adjacencyIntegrity: input.adjacencyIssueCount === 0,
-    registryArtifactChecksum: Object.keys(input.checksums.files).length > 0
+    registryArtifactChecksum: input.artifactIntegrity.ok
+  };
+  const publishReadyGates = {
+    ...gates,
+    buildMode: input.buildMode === "publish-ready",
+    nationalCompleteness: completeness.ok,
+    adm0NationalCount: input.coverage.adm0Count === TURKEY_V2_ADM0_EXPECTED_COUNT,
+    adm1NationalCount: input.coverage.provinceCount === TURKEY_V2_ADM1_EXPECTED_COUNT,
+    adm2NationalCount: input.coverage.districtCount === TURKEY_V2_ADM2_EXPECTED_COUNT,
+    successfulAdm2NationalCount:
+      input.coverage.successfulDistrictCount === TURKEY_V2_ADM2_EXPECTED_COUNT
   };
   const hardGateFailures = Object.entries(gates)
+    .filter(([, ok]) => !ok)
+    .map(([gate]) => gate)
+    .sort();
+  const publishReadyGateFailures = Object.entries(publishReadyGates)
     .filter(([, ok]) => !ok)
     .map(([gate]) => gate)
     .sort();
@@ -1508,7 +1619,26 @@ function createNationalQuality(input: {
   return {
     schemaVersion: TURKEY_V2_NATIONAL_QUALITY_SCHEMA_VERSION,
     ok: hardGateFailures.length === 0,
+    buildMode: input.buildMode,
+    publishReady: hardGateFailures.length === 0 && publishReadyGateFailures.length === 0,
     hardGateFailures,
+    publishReadyGateFailures,
+    completeness: {
+      expected: {
+        adm0Count: TURKEY_V2_ADM0_EXPECTED_COUNT,
+        adm1Count: TURKEY_V2_ADM1_EXPECTED_COUNT,
+        adm2Count: TURKEY_V2_ADM2_EXPECTED_COUNT
+      },
+      actual: {
+        adm0Count: input.coverage.adm0Count,
+        adm1Count: input.coverage.provinceCount,
+        adm2Count: input.coverage.districtCount,
+        successfulAdm2Count: input.coverage.successfulDistrictCount,
+        failedDistrictCount: input.coverage.failedDistrictCount
+      },
+      strictIssueCount: completeness.errorCount,
+      strictIssues: completeness.errors
+    },
     summary: {
       adm0Count: input.dataset.zones.filter((zone) => zone.level === 0).length,
       adm1Count: input.dataset.zones.filter((zone) => zone.level === 1).length,
@@ -1537,7 +1667,7 @@ function createNationalQuality(input: {
         (issue) => issue.severity === "error"
       ).length,
       adjacencyIntegrityErrorCount: input.adjacencyIssueCount,
-      registryArtifactChecksumErrors: 0,
+      registryArtifactChecksumErrors: input.artifactIntegrity.errorCount,
       warningCount: strictValidation.issues.filter((issue) => issue.severity === "warning").length
     },
     strictValidation: {
@@ -1549,7 +1679,9 @@ function createNationalQuality(input: {
       issueCount: geometryValidation.issues.length,
       errorCount: geometryValidation.issues.filter((issue) => issue.severity === "error").length
     },
-    gates
+    artifactIntegrity: input.artifactIntegrity,
+    gates,
+    publishReadyGates
   };
 }
 
@@ -1560,6 +1692,9 @@ function createNationalRegistryEntry(input: {
   coverage: TurkeyV2NationalCoverageReport;
   sourceLock: TurkeyV2NationalSourceLock;
   artifactHashes: Record<string, { sha256: string; byteSize: number }>;
+  includeQuality: boolean;
+  includeRender: boolean;
+  includeAdjacency: boolean;
 }): TurkeyV2NationalRegistryEntry {
   const artifact = (
     id: string,
@@ -1569,7 +1704,11 @@ function createNationalRegistryEntry(input: {
     levels?: readonly TerritoryAdminLevel[],
     detail?: string
   ): TurkeyV2NationalRegistryArtifact => {
-    const checksum = input.artifactHashes[path] ?? { sha256: "", byteSize: 0 };
+    const checksum = input.artifactHashes[path];
+    if (!checksum) {
+      throw new Error(`Missing checksum for registry artifact '${id}' at '${path}'.`);
+    }
+
     return {
       id,
       purpose,
@@ -1583,6 +1722,35 @@ function createNationalRegistryEntry(input: {
       compression: "none"
     };
   };
+  const artifacts: TurkeyV2NationalRegistryArtifact[] = [
+    artifact("dataset", "metadata", "territory-json", "dataset.json", [
+      "ADM0",
+      "ADM1",
+      "ADM2",
+      "ADM3"
+    ]),
+    artifact("coverage", "metadata", "json", "coverage.json"),
+    ...(input.includeQuality
+      ? [artifact("quality", "metadata", "json", "quality-report.json")]
+      : []),
+    artifact("query", "query", "json", "query/query-artifact.json", [
+      "ADM0",
+      "ADM1",
+      "ADM2",
+      "ADM3"
+    ]),
+    artifact("adm3", "metadata", "territory-json", "levels/ADM3/dataset.json", ["ADM3"], "full"),
+    ...(input.includeRender
+      ? [artifact("adm3-render-manifest", "render", "json", "render/manifest.json", ["ADM3"])]
+      : []),
+    ...(input.includeAdjacency
+      ? [
+          artifact("adm3-adjacency", "adjacency", "json", "levels/ADM3/adjacency/adjacency.json", [
+            "ADM3"
+          ])
+        ]
+      : [])
+  ];
 
   return {
     schemaVersion: TURKEY_V2_NATIONAL_REGISTRY_ENTRY_SCHEMA_VERSION,
@@ -1618,34 +1786,7 @@ function createNationalRegistryEntry(input: {
           attribution:
             "OCHA COD-AB Türkiye ADM0-ADM2; approved municipal open data; OpenStreetMap contributors if OSM artifact is built; TerritoryKit generated game zones"
         },
-        artifacts: [
-          artifact("dataset", "metadata", "territory-json", "dataset.json", [
-            "ADM0",
-            "ADM1",
-            "ADM2",
-            "ADM3"
-          ]),
-          artifact("coverage", "metadata", "json", "coverage.json"),
-          artifact("quality", "metadata", "json", "quality-report.json"),
-          artifact("query", "query", "json", "query/query-artifact.json", [
-            "ADM0",
-            "ADM1",
-            "ADM2",
-            "ADM3"
-          ]),
-          artifact(
-            "adm3",
-            "metadata",
-            "territory-json",
-            "levels/ADM3/dataset.json",
-            ["ADM3"],
-            "full"
-          ),
-          artifact("adm3-render-manifest", "render", "json", "render/manifest.json", ["ADM3"]),
-          artifact("adm3-adjacency", "adjacency", "json", "levels/ADM3/adjacency/adjacency.json", [
-            "ADM3"
-          ])
-        ]
+        artifacts
       }
     ]
   };
@@ -1686,21 +1827,93 @@ function createNationalArtifactPlan(
   };
 }
 
-function createChecksums(jsonPayloads: ReadonlyMap<string, unknown>): TurkeyV2NationalChecksums {
+function createCoreNationalArtifactFiles(input: {
+  dataset: TerritoryDataset;
+  deterministicHash: string;
+  sourceLock: TurkeyV2NationalSourceLock;
+  coverage: TurkeyV2NationalCoverageReport;
+  hierarchy: TurkeyV2NationalHierarchyReport;
+  provenance: TurkeyV2NationalProvenanceReport;
+  attribution: TurkeyV2HybridAttributionManifest;
+  licenses: TurkeyV2HybridLicenseManifest;
+  distributionPolicy: TurkeyV2HybridDistributionPolicyManifest;
+  migration: TurkeyV2ZoneMigrationPlan;
+  levels: TurkeyV2NationalBuildResult["levels"];
+  adjacency?: TerritoryAdjacencyArtifact;
+  renderArtifacts?: TerritoryRenderBuildResult;
+}): Map<string, string | Uint8Array> {
+  const files = new Map<string, string | Uint8Array>([
+    ["dataset.json", serializeJsonArtifact(input.dataset)],
+    [
+      "manifest.json",
+      serializeJsonArtifact({
+        ...input.dataset.manifest,
+        deterministicHash: input.deterministicHash
+      })
+    ],
+    ["source-lock.json", serializeJsonArtifact(input.sourceLock)],
+    ["coverage.json", serializeJsonArtifact(input.coverage)],
+    ["hierarchy-report.json", serializeJsonArtifact(input.hierarchy)],
+    ["provenance.json", serializeJsonArtifact(input.provenance)],
+    ["attribution.json", serializeJsonArtifact(input.attribution)],
+    [
+      "attribution.txt",
+      input.attribution.text.endsWith("\n") ? input.attribution.text : `${input.attribution.text}\n`
+    ],
+    ["licenses.json", serializeJsonArtifact(input.licenses)],
+    ["distribution-policy.json", serializeJsonArtifact(input.distributionPolicy)],
+    ["migration-plan.json", serializeJsonArtifact(input.migration)],
+    ["levels/ADM0/dataset.json", serializeJsonArtifact(input.levels.ADM0)],
+    ["levels/ADM1/dataset.json", serializeJsonArtifact(input.levels.ADM1)],
+    ["levels/ADM2/dataset.json", serializeJsonArtifact(input.levels.ADM2)],
+    ["levels/ADM3/dataset.json", serializeJsonArtifact(input.levels.ADM3)],
+    [
+      "levels/ADM3/full.geojson",
+      serializeJsonArtifact(territoryDatasetToFeatureCollection(input.levels.ADM3))
+    ],
+    ["query/query-artifact.json", serializeJsonArtifact(createNationalQueryArtifact(input.dataset))]
+  ]);
+
+  if (input.adjacency) {
+    files.set("levels/ADM3/adjacency/adjacency.json", serializeJsonArtifact(input.adjacency));
+  }
+
+  if (input.renderArtifacts) {
+    for (const [path, payload] of input.renderArtifacts.files.entries()) {
+      if (path.startsWith("render/")) {
+        files.set(path, payload);
+      }
+    }
+  }
+
+  return files;
+}
+
+function createChecksums(
+  files: ReadonlyMap<string, string | Uint8Array>
+): TurkeyV2NationalChecksums {
   return {
     schemaVersion: "territorykit-tr-v2-national-checksums@1",
     files: Object.fromEntries(
-      [...jsonPayloads.entries()]
-        .map(([path, payload]) => {
-          const serialized = `${JSON.stringify(payload, null, 2)}\n`;
-          return [
-            path,
-            { sha256: sha256Hex(serialized), byteSize: Buffer.byteLength(serialized) }
-          ] as const;
-        })
+      [...files.entries()]
+        .map(
+          ([path, payload]) =>
+            [
+              path,
+              {
+                sha256: sha256Hex(payload),
+                byteSize:
+                  typeof payload === "string" ? Buffer.byteLength(payload) : payload.byteLength
+              }
+            ] as const
+        )
         .sort(([left], [right]) => left.localeCompare(right))
     )
   };
+}
+
+function serializeJsonArtifact(input: unknown): string {
+  return `${JSON.stringify(input, null, 2)}\n`;
 }
 
 function createDatasetManifestJson(result: TurkeyV2NationalBuildResult): Record<string, unknown> {
@@ -1723,6 +1936,9 @@ function createBuildSummary(result: TurkeyV2NationalBuildResult): Record<string,
     datasetId: result.coverage.datasetId,
     datasetVersion: result.coverage.datasetVersion,
     buildDate: result.coverage.buildDate,
+    buildMode: result.quality.buildMode,
+    publishReady: result.quality.publishReady,
+    adm0Count: result.coverage.adm0Count,
     provinceCount: result.coverage.provinceCount,
     districtCount: result.coverage.districtCount,
     successfulDistrictCount: result.coverage.successfulDistrictCount,
@@ -1736,6 +1952,7 @@ function createBuildSummary(result: TurkeyV2NationalBuildResult): Record<string,
     finalCoveragePercent: result.coverage.finalCoveragePercent,
     deterministicHash: result.deterministicHash,
     qualityOk: result.quality.ok,
+    publishReadyGateFailures: result.quality.publishReadyGateFailures,
     sourceStatus: result.coverage.sourceStatus,
     artifactPlan: result.artifactPlan
   };

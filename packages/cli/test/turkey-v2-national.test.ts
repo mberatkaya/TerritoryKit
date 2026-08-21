@@ -1,4 +1,4 @@
-import { access, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { access, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createSquareZone } from "@territory-kit/shared-testkit";
@@ -87,6 +87,8 @@ describe("territory cli Turkey V2 national build", () => {
         "--no-render",
         "--no-mvt",
         "--no-adjacency",
+        "--max-districts",
+        "1",
         "--seed",
         "cli-national-seed"
       ]);
@@ -128,10 +130,97 @@ describe("territory cli Turkey V2 national build", () => {
         payload: {
           ok: true,
           command: "tr v2 national validate",
+          strictPublishReady: false,
           data: {
             datasetId: "territory-kit-tr-v2-playable",
+            buildMode: "partial",
+            publishReady: false,
             finalCoveragePercent: expect.any(Number)
           }
+        }
+      });
+
+      const strictValidate = await captureCli([
+        "tr",
+        "v2",
+        "national",
+        "validate",
+        "--output",
+        outputPath,
+        "--publish-ready"
+      ]);
+      expect(strictValidate).toMatchObject({
+        code: 1,
+        payload: {
+          ok: false,
+          command: "tr v2 national validate",
+          strictPublishReady: true,
+          data: {
+            expectedAdm1Count: 81,
+            expectedAdm2Count: 973,
+            districtCount: 1
+          },
+          issues: expect.arrayContaining([
+            expect.objectContaining({ code: "NATIONAL_PARTIAL_BUILD" })
+          ])
+        }
+      });
+
+      await writeFile(join(outputPath, "dataset.json"), '{"tampered":true}\n', "utf8");
+      const tampered = await captureCli([
+        "tr",
+        "v2",
+        "national",
+        "validate",
+        "--output",
+        outputPath
+      ]);
+      expect(tampered).toMatchObject({
+        code: 1,
+        payload: {
+          ok: false,
+          command: "tr v2 national validate",
+          issues: expect.arrayContaining([
+            expect.objectContaining({
+              code: "CHECKSUM_MISMATCH",
+              path: "dataset.json",
+              expected: expect.any(String),
+              actual: expect.any(String)
+            })
+          ])
+        }
+      });
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it("reports missing and malformed validation JSON with machine-readable issues", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-v2-invalid-"));
+    const outputPath = join(tempDir, "national");
+
+    try {
+      await mkdir(outputPath, { recursive: true });
+      await writeFile(join(outputPath, "coverage.json"), "{not-json", "utf8");
+
+      const validate = await captureCli([
+        "tr",
+        "v2",
+        "national",
+        "validate",
+        "--output",
+        outputPath
+      ]);
+
+      expect(validate).toMatchObject({
+        code: 1,
+        payload: {
+          ok: false,
+          command: "tr v2 national validate",
+          issues: expect.arrayContaining([
+            expect.objectContaining({ code: "JSON_READ_ERROR", path: "coverage.json" }),
+            expect.objectContaining({ code: "JSON_READ_ERROR", path: "quality-report.json" })
+          ])
         }
       });
     } finally {

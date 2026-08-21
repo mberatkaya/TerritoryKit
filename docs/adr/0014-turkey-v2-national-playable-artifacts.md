@@ -36,6 +36,33 @@ They are playable coverage only and must not be presented as official mahalle or
 `loadTurkeyV2NationalDataset()`, and `resolveTurkeyDataset({ includePlayableAdm3: true })`. It still
 requires a resolver or registry for geometry.
 
+Publish-ready national output is stricter than diagnostic output. A strict Turkey V2 national
+release must contain exactly 1 ADM0 country, 81 ADM1 provinces, and 973 ADM2 districts; all 973
+districts must build successfully, have at least one ADM3 playable zone, and reach at least 99.99%
+final coverage. Source-lock expected and actual ADM0/ADM1/ADM2 counts must match those report
+counts. Outputs built with `--max-districts`, smoke runs, and benchmark runs are marked partial and
+must not be presented as publish-ready.
+
+Artifact metadata is built in a deterministic non-circular order:
+
+1. Build the dataset, level datasets, query artifact, optional adjacency artifact, and optional
+   render artifacts.
+2. Serialize the core artifact payloads and compute their SHA-256 checksums and byte sizes.
+3. Build a preliminary registry over non-quality release artifacts and validate registry/checksum
+   consistency without filesystem placeholders.
+4. Produce `quality-report.json`, including real artifact integrity error counts for that
+   preliminary registry.
+5. Compute the quality report checksum.
+6. Build the final registry and artifact plan using real checksums for every listed artifact.
+7. Build the final checksums manifest for the produced artifacts, excluding `checksums.json` itself
+   to avoid self-hashing.
+8. `validate` rechecks the final directory against the registry with streaming SHA-256 and byte-size
+   checks.
+
+The registry must not contain placeholder `sha256: ""` or `sizeBytes: 0` entries. Optional artifacts
+are omitted when they are not produced: `--no-render` removes render registry entries, and
+`--no-adjacency` removes adjacency registry entries.
+
 ## Consequences
 
 - Applications can opt into national playable ADM3 coverage without downloading geometry at package
@@ -44,4 +71,8 @@ requires a resolver or registry for geometry.
   and checksums are emitted as build/report artifacts.
 - `build` can emit diagnostic artifacts when gates fail, while `publish-ready` blocks release on hard
   quality failures.
+- `quality.ok` continues to describe diagnostic artifact health; `quality.publishReady` records the
+  strict national release decision.
+- Registry integrity failures are hard quality failures, and strict CLI validation compares registry
+  metadata against real files on disk.
 - Future official or OSM coverage can replace generated gaps without changing the loader contract.
