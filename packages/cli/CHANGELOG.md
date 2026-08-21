@@ -1,5 +1,24 @@
 # @territory-kit/cli
 
+## 1.9.0
+
+### Minor Changes
+
+- 8173c2b: Harden Turkey V2 national publish-ready validation and artifact integrity checks.
+
+  Adds strict 1/81/973 national completeness metadata, separates diagnostic `quality.ok` from
+  `quality.publishReady`, removes placeholder registry artifact checksums, validates registry artifacts
+  against real SHA-256 and byte sizes, and upgrades `territory tr v2 national validate` with
+  machine-readable strict publish-ready failures.
+
+### Patch Changes
+
+- Updated dependencies [8173c2b]
+  - @territory-kit/generators@1.9.0
+  - @territory-kit/core@1.9.0
+  - @territory-kit/dataset@1.9.0
+  - @territory-kit/registry@1.9.0
+
 ## 1.8.0
 
 ### Minor Changes

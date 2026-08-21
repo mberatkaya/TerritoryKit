@@ -1,5 +1,11 @@
 # @territory-kit/data-tr
 
+## 1.9.0
+
+### Patch Changes
+
+- @territory-kit/core@1.9.0
+
 ## 1.8.0
 
 ### Minor Changes

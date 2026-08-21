@@ -1,5 +1,13 @@
 # @territory-kit/leaflet
 
+## 1.2.7
+
+### Patch Changes
+
+- @territory-kit/adapter-core@1.9.0
+- @territory-kit/dataset@1.9.0
+- @territory-kit/registry@1.9.0
+
 ## 1.2.6
 
 ### Patch Changes
