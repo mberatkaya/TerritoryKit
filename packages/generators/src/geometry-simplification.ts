@@ -4,9 +4,13 @@ import {
   computeGeometryBBox,
   computeGeometryCenter,
   hasRingSelfIntersection,
-  loadTerritoryDataset
+  loadTerritoryDataset,
+  validateGeometryDataset
 } from "@territory-kit/dataset";
 import type {
+  GeometryQualityChecks,
+  GeometryQualityIssue,
+  GeometryQualitySeverity,
   LngLat,
   TerritoryDataset,
   TerritoryGeometry,
@@ -41,15 +45,60 @@ export interface TerritorySimplificationTierReport {
   vertexCount: number;
   byteSize: number;
   areaDeltaRatio: number;
-  topologyAudit: {
-    sharedSegmentCountBefore: number;
-    sharedSegmentCountAfter: number;
-    sharedBoundaryMismatchCount: number;
-  };
+  topologyAudit: TerritorySimplificationTopologyAudit;
+}
+
+export type TerritorySimplificationAuditIssueCode =
+  | "SHARED_BOUNDARY_MISSING"
+  | "SHARED_BOUNDARY_MISMATCH"
+  | "SHARED_BOUNDARY_OWNER_MISMATCH"
+  | "SIMPLIFIED_GEOMETRY_INVALID";
+
+export interface TerritorySimplificationGeometryValidationSummary {
+  ok: boolean;
+  invalidFeatureCount: number;
+  issueCount: number;
+  errorCount: number;
+  warningCount: number;
+}
+
+export interface TerritorySimplificationAuditIssue {
+  code: TerritorySimplificationAuditIssueCode;
+  severity: GeometryQualitySeverity;
+  message: string;
+  detail?: TerritorySimplificationDetail;
+  boundaryId?: string;
+  zoneId?: string;
+  otherZoneId?: string;
+  zoneIds?: string[];
+  expectedOwnerZoneIds?: string[];
+  observedOwnerZoneIds?: string[];
+  endpoints?: [string, string];
+  reason?: string;
+  path?: string;
+  featureId?: string;
+  geometryIssueCode?: GeometryQualityIssue["code"];
+  check?: GeometryQualityIssue["check"];
+  polygonIndex?: number;
+  ringIndex?: number;
+  coordinateIndex?: number;
+  details?: Record<string, unknown>;
+}
+
+export interface TerritorySimplificationTopologyAudit {
+  ok: boolean;
+  sharedSegmentCountBefore: number;
+  sharedSegmentCountAfter: number;
+  sharedBoundaryCountBefore: number;
+  sharedBoundaryCountAfter: number;
+  sharedBoundaryMismatchCount: number;
+  geometryValidation: TerritorySimplificationGeometryValidationSummary;
+  issues: TerritorySimplificationAuditIssue[];
 }
 
 export interface TerritorySimplificationReport {
-  reportVersion: "1";
+  reportVersion: "2";
+  ok: boolean;
   strategy: TerritorySimplificationStrategy;
   source: {
     datasetId: string;
@@ -58,6 +107,7 @@ export interface TerritorySimplificationReport {
     featureCount: number;
     vertexCount: number;
     sharedSegmentCount: number;
+    sharedBoundaryCount: number;
   };
   tiers: TerritorySimplificationTierReport[];
 }
@@ -66,6 +116,18 @@ export interface TerritorySimplificationPathResult {
   inputPath: string;
   outputPath: string;
   report: TerritorySimplificationReport;
+}
+
+interface TerritorySimplificationBuildTier {
+  report: TerritorySimplificationTierReport;
+  dataset: TerritoryDataset;
+  serializedDataset: string;
+  serializedGeoJson?: string;
+}
+
+interface TerritorySimplificationBuildResult {
+  report: TerritorySimplificationReport;
+  tiers: TerritorySimplificationBuildTier[];
 }
 
 const DETAIL_TOLERANCE: Record<TerritorySimplificationDetail, number> = {
@@ -114,32 +176,72 @@ interface TopologyModel {
   coordinates: Map<string, LngLat>;
 }
 
+interface SharedBoundaryOwnerRef {
+  zoneId: string;
+  ringId: RingId;
+  polygonIndex: number;
+  ringIndex: number;
+  startKey: string;
+  endKey: string;
+}
+
+interface SharedBoundaryAuditRecord {
+  id: string;
+  ownerZoneIds: string[];
+  endpoints: [string, string];
+  sourceCoordinateKeys: string[];
+  sourceSegmentCount: number;
+  ownerRefs: SharedBoundaryOwnerRef[];
+}
+
+interface SharedBoundaryAuditModel {
+  records: SharedBoundaryAuditRecord[];
+  sharedSegmentCount: number;
+  ownersBySegmentKey: Map<string, string[]>;
+}
+
+const SIMPLIFICATION_GEOMETRY_VALIDATION_CHECKS: GeometryQualityChecks = {
+  coordinates: true,
+  rings: true,
+  selfIntersections: true,
+  holes: true,
+  bbox: true,
+  center: true,
+  antimeridian: true,
+  parentContainment: false,
+  siblingOverlaps: false
+};
+
 export async function simplifyTerritoryDatasetPath(
   inputPath: string,
   outputPath: string,
   options: TerritorySimplificationOptions
 ): Promise<TerritorySimplificationPathResult> {
   const dataset = loadTerritoryDataset(JSON.parse(await readFile(resolve(inputPath), "utf8")));
-  const result = simplifyTerritoryDataset(dataset, options);
+  const result = buildTerritorySimplification(dataset, options);
   const files = new Map<string, string>();
 
   for (const tier of result.tiers) {
-    if (tier.status !== "generated" || !tier.datasetPath || !tier.geojsonPath) {
+    if (
+      tier.report.status !== "generated" ||
+      !tier.report.datasetPath ||
+      !tier.report.geojsonPath ||
+      !tier.serializedGeoJson
+    ) {
       continue;
     }
 
-    const tierDataset = simplifyDataset(dataset, tier.detail, options.buildDate);
-    files.set(tier.datasetPath, serializeJsonStable(tierDataset));
-    files.set(tier.geojsonPath, serializeJsonStable(datasetToFeatureCollection(tierDataset)));
+    files.set(tier.report.datasetPath, tier.serializedDataset);
+    files.set(tier.report.geojsonPath, tier.serializedGeoJson);
   }
 
-  files.set("simplification-report.json", serializeJsonStable(result));
+  files.set("simplification-report.json", serializeJsonStable(result.report));
   await writeFilesAtomically(resolve(outputPath), files, { force: options.force ?? false });
 
   return {
     inputPath: resolve(inputPath),
     outputPath: resolve(outputPath),
-    report: result
+    report: result.report
   };
 }
 
@@ -147,13 +249,23 @@ export function simplifyTerritoryDataset(
   dataset: TerritoryDataset,
   options: TerritorySimplificationOptions
 ): TerritorySimplificationReport {
+  return buildTerritorySimplification(dataset, options).report;
+}
+
+function buildTerritorySimplification(
+  dataset: TerritoryDataset,
+  options: TerritorySimplificationOptions
+): TerritorySimplificationBuildResult {
   const sourceHash = createDatasetGeometryHash(dataset);
-  const sourceSharedSegments = collectSharedSegments(dataset);
+  const sourceAuditModel = collectSharedBoundaryAuditModel(dataset);
   const sourceArea = sumDatasetArea(dataset);
   const sourceVertexCount = countDatasetVertices(dataset);
-
-  return {
-    reportVersion: "1",
+  const tiers = options.details.map((detail) =>
+    buildSimplificationTier(dataset, detail, sourceHash, sourceArea, sourceAuditModel, options)
+  );
+  const report: TerritorySimplificationReport = {
+    reportVersion: "2",
+    ok: tiers.every((tier) => tier.report.topologyAudit.ok),
     strategy: options.strategy,
     source: {
       datasetId: dataset.manifest.datasetId,
@@ -161,50 +273,520 @@ export function simplifyTerritoryDataset(
       geometryHash: sourceHash,
       featureCount: dataset.zones.length,
       vertexCount: sourceVertexCount,
-      sharedSegmentCount: sourceSharedSegments
+      sharedSegmentCount: sourceAuditModel.sharedSegmentCount,
+      sharedBoundaryCount: sourceAuditModel.records.length
     },
-    tiers: options.details.map((detail) => {
-      const simplified = simplifyDataset(dataset, detail, options.buildDate);
-      const geometryHash = createDatasetGeometryHash(simplified);
-      const serialized = serializeJsonStable(simplified);
-      const sharedSegmentCountAfter = collectSharedSegments(simplified);
+    tiers: tiers.map((tier) => tier.report)
+  };
 
-      if (geometryHash === sourceHash) {
-        return {
-          detail,
-          status: "omitted",
-          reason: "tier-hash-matches-source",
-          featureCount: simplified.zones.length,
-          vertexCount: countDatasetVertices(simplified),
-          byteSize: Buffer.byteLength(serialized),
-          areaDeltaRatio: 0,
-          topologyAudit: {
-            sharedSegmentCountBefore: sourceSharedSegments,
-            sharedSegmentCountAfter,
-            sharedBoundaryMismatchCount: 0
-          }
-        };
-      }
+  return {
+    report,
+    tiers
+  };
+}
 
-      return {
+function buildSimplificationTier(
+  dataset: TerritoryDataset,
+  detail: TerritorySimplificationDetail,
+  sourceHash: string,
+  sourceArea: number,
+  sourceAuditModel: SharedBoundaryAuditModel,
+  options: TerritorySimplificationOptions
+): TerritorySimplificationBuildTier {
+  const simplified = simplifyDataset(dataset, detail, options.buildDate);
+  const geometryHash = createDatasetGeometryHash(simplified);
+  const serializedDataset = serializeJsonStable(simplified);
+  const topologyAudit = auditSimplifiedTerritoryDatasetWithModel(sourceAuditModel, simplified);
+
+  if (geometryHash === sourceHash) {
+    return {
+      report: {
         detail,
-        status: "generated",
-        datasetPath: `${detail}/dataset.json`,
-        geojsonPath: `${detail}/features.geojson`,
-        geometryHash,
+        status: "omitted",
+        reason: "tier-hash-matches-source",
         featureCount: simplified.zones.length,
         vertexCount: countDatasetVertices(simplified),
-        byteSize: Buffer.byteLength(serialized),
-        areaDeltaRatio:
-          sourceArea === 0 ? 0 : Math.abs(sumDatasetArea(simplified) - sourceArea) / sourceArea,
-        topologyAudit: {
-          sharedSegmentCountBefore: sourceSharedSegments,
-          sharedSegmentCountAfter,
-          sharedBoundaryMismatchCount: Math.max(0, sourceSharedSegments - sharedSegmentCountAfter)
-        }
-      };
-    })
+        byteSize: Buffer.byteLength(serializedDataset),
+        areaDeltaRatio: 0,
+        topologyAudit
+      },
+      dataset: simplified,
+      serializedDataset
+    };
+  }
+
+  return {
+    report: {
+      detail,
+      status: "generated",
+      datasetPath: `${detail}/dataset.json`,
+      geojsonPath: `${detail}/features.geojson`,
+      geometryHash,
+      featureCount: simplified.zones.length,
+      vertexCount: countDatasetVertices(simplified),
+      byteSize: Buffer.byteLength(serializedDataset),
+      areaDeltaRatio:
+        sourceArea === 0 ? 0 : Math.abs(sumDatasetArea(simplified) - sourceArea) / sourceArea,
+      topologyAudit
+    },
+    dataset: simplified,
+    serializedDataset,
+    serializedGeoJson: serializeJsonStable(datasetToFeatureCollection(simplified))
   };
+}
+
+export function auditSimplifiedTerritoryDataset(
+  source: TerritoryDataset,
+  output: TerritoryDataset
+): TerritorySimplificationTopologyAudit {
+  return auditSimplifiedTerritoryDatasetWithModel(collectSharedBoundaryAuditModel(source), output);
+}
+
+function auditSimplifiedTerritoryDatasetWithModel(
+  sourceModel: SharedBoundaryAuditModel,
+  output: TerritoryDataset
+): TerritorySimplificationTopologyAudit {
+  const outputModel = collectSharedBoundaryAuditModel(output);
+  const outputRings = indexDatasetRings(output, new Map<string, LngLat>());
+  const outputRingById = new Map(outputRings.map((ring) => [ring.id, ring]));
+  const issues: TerritorySimplificationAuditIssue[] = [];
+  let sharedBoundaryMismatchCount = 0;
+
+  for (const boundary of sourceModel.records) {
+    const boundaryIssue = auditSharedBoundaryRecord(boundary, outputRingById, outputModel);
+
+    if (boundaryIssue) {
+      sharedBoundaryMismatchCount += 1;
+      issues.push(boundaryIssue);
+    }
+  }
+
+  const geometryValidationReport = validateGeometryDataset(output, {
+    checks: SIMPLIFICATION_GEOMETRY_VALIDATION_CHECKS
+  });
+  const geometryValidation: TerritorySimplificationGeometryValidationSummary = {
+    ok: geometryValidationReport.ok,
+    invalidFeatureCount: geometryValidationReport.summary.invalidFeatureCount,
+    issueCount: geometryValidationReport.summary.issueCount,
+    errorCount: geometryValidationReport.summary.errorCount,
+    warningCount: geometryValidationReport.summary.warningCount
+  };
+
+  issues.push(...geometryValidationReport.issues.map(toSimplificationGeometryIssue));
+
+  const sortedIssues = sortSimplificationAuditIssues(issues);
+
+  return {
+    ok: sharedBoundaryMismatchCount === 0 && geometryValidation.errorCount === 0,
+    sharedSegmentCountBefore: sourceModel.sharedSegmentCount,
+    sharedSegmentCountAfter: outputModel.sharedSegmentCount,
+    sharedBoundaryCountBefore: sourceModel.records.length,
+    sharedBoundaryCountAfter: outputModel.records.length,
+    sharedBoundaryMismatchCount,
+    geometryValidation,
+    issues: sortedIssues
+  };
+}
+
+function auditSharedBoundaryRecord(
+  boundary: SharedBoundaryAuditRecord,
+  outputRingById: ReadonlyMap<RingId, IndexedRing>,
+  outputModel: SharedBoundaryAuditModel
+): TerritorySimplificationAuditIssue | undefined {
+  const outputChains = boundary.ownerRefs.map((owner) => ({
+    owner,
+    chain: extractRingPath(
+      outputRingById.get(owner.ringId)?.pointKeys,
+      owner.startKey,
+      owner.endKey
+    )
+  }));
+  const missing = outputChains.filter((entry) => !entry.chain);
+
+  if (missing.length > 0) {
+    return createBoundaryIssue(boundary, {
+      code: "SHARED_BOUNDARY_MISSING",
+      reason: "missing-output-boundary-chain",
+      message: `Shared boundary ${boundary.id} is missing from one or more simplified owners.`,
+      details: {
+        missingOwnerZoneIds: uniqueSorted(missing.map((entry) => entry.owner.zoneId))
+      }
+    });
+  }
+
+  const canonicalChains = outputChains.map((entry) => ({
+    owner: entry.owner,
+    chain: entry.chain!,
+    canonicalKey: canonicalBoundarySequenceKey(entry.chain!)
+  }));
+  const uniqueChains = uniqueSorted(canonicalChains.map((entry) => entry.canonicalKey));
+
+  if (uniqueChains.length > 1) {
+    return createBoundaryIssue(boundary, {
+      code: "SHARED_BOUNDARY_MISMATCH",
+      reason: "owner-boundary-chains-diverged",
+      message: `Shared boundary ${boundary.id} differs between simplified owners.`,
+      details: {
+        observedChainCount: uniqueChains.length,
+        ownerChainHashes: canonicalChains
+          .map((entry) => ({
+            zoneId: entry.owner.zoneId,
+            ringId: entry.owner.ringId,
+            chainHash: sha256Hex(entry.canonicalKey).slice(0, 16)
+          }))
+          .sort(
+            (left, right) =>
+              left.zoneId.localeCompare(right.zoneId) || left.ringId.localeCompare(right.ringId)
+          )
+      }
+    });
+  }
+
+  const observedOwnerSets = uniqueSorted(
+    canonicalChains.flatMap((entry) => segmentOwnerSetKeys(entry.chain, outputModel))
+  );
+  const expectedOwnerKey = ownerSetKey(boundary.ownerZoneIds);
+
+  if (observedOwnerSets.length !== 1 || observedOwnerSets[0] !== expectedOwnerKey) {
+    return createBoundaryIssue(boundary, {
+      code: "SHARED_BOUNDARY_OWNER_MISMATCH",
+      reason: "output-owner-set-changed",
+      message: `Shared boundary ${boundary.id} has a different simplified owner set.`,
+      ...(observedOwnerSets.length === 1
+        ? { observedOwnerZoneIds: ownerSetFromKey(observedOwnerSets[0]!) }
+        : {}),
+      details: {
+        observedOwnerSets: observedOwnerSets.map(ownerSetFromKey)
+      }
+    });
+  }
+
+  return undefined;
+}
+
+function createBoundaryIssue(
+  boundary: SharedBoundaryAuditRecord,
+  input: {
+    code: Extract<
+      TerritorySimplificationAuditIssueCode,
+      "SHARED_BOUNDARY_MISSING" | "SHARED_BOUNDARY_MISMATCH" | "SHARED_BOUNDARY_OWNER_MISMATCH"
+    >;
+    message: string;
+    reason: string;
+    observedOwnerZoneIds?: string[];
+    details?: Record<string, unknown>;
+  }
+): TerritorySimplificationAuditIssue {
+  const [zoneId, otherZoneId] = boundary.ownerZoneIds;
+
+  return {
+    code: input.code,
+    severity: "error",
+    message: input.message,
+    boundaryId: boundary.id,
+    ...(zoneId ? { zoneId } : {}),
+    ...(otherZoneId ? { otherZoneId } : {}),
+    zoneIds: boundary.ownerZoneIds,
+    expectedOwnerZoneIds: boundary.ownerZoneIds,
+    ...(input.observedOwnerZoneIds ? { observedOwnerZoneIds: input.observedOwnerZoneIds } : {}),
+    endpoints: boundary.endpoints,
+    reason: input.reason,
+    details: {
+      sourceSegmentCount: boundary.sourceSegmentCount,
+      ownerRingIds: boundary.ownerRefs.map((owner) => owner.ringId).sort(),
+      ...(input.details ?? {})
+    }
+  };
+}
+
+function toSimplificationGeometryIssue(
+  issue: GeometryQualityIssue
+): TerritorySimplificationAuditIssue {
+  return {
+    code: "SIMPLIFIED_GEOMETRY_INVALID",
+    severity: issue.severity,
+    message: issue.message,
+    path: issue.path,
+    ...(issue.zoneId ? { zoneId: issue.zoneId } : {}),
+    ...(issue.featureId ? { featureId: issue.featureId } : {}),
+    ...(issue.otherZoneId ? { otherZoneId: issue.otherZoneId } : {}),
+    geometryIssueCode: issue.code,
+    check: issue.check,
+    ...(issue.polygonIndex === undefined ? {} : { polygonIndex: issue.polygonIndex }),
+    ...(issue.ringIndex === undefined ? {} : { ringIndex: issue.ringIndex }),
+    ...(issue.coordinateIndex === undefined ? {} : { coordinateIndex: issue.coordinateIndex }),
+    details: {
+      repairable: issue.repairable,
+      ...(issue.repairSuggestion ? { repairSuggestion: issue.repairSuggestion } : {}),
+      ...(issue.details ? { geometryDetails: issue.details } : {})
+    }
+  };
+}
+
+function collectSharedBoundaryAuditModel(dataset: TerritoryDataset): SharedBoundaryAuditModel {
+  const rings = indexDatasetRings(dataset, new Map<string, LngLat>());
+  const segmentUses = collectTopologySegmentUses(rings);
+  const ownersBySegmentKey = new Map<string, string[]>();
+
+  for (const [segment, uses] of segmentUses) {
+    const zoneIds = uniqueSorted(uses.map((use) => use.zoneId));
+
+    if (zoneIds.length > 1) {
+      ownersBySegmentKey.set(segment, zoneIds);
+    }
+  }
+
+  const recordsByKey = new Map<string, SharedBoundaryAuditRecord>();
+
+  for (const ring of [...rings].sort((left, right) => left.id.localeCompare(right.id))) {
+    collectSharedBoundaryRecordsForRing(ring, ownersBySegmentKey, recordsByKey);
+  }
+
+  const records = [...recordsByKey.values()]
+    .map((record) => ({
+      ...record,
+      ownerRefs: [...record.ownerRefs].sort(compareSharedBoundaryOwnerRefs)
+    }))
+    .sort((left, right) => left.id.localeCompare(right.id));
+
+  return {
+    records,
+    sharedSegmentCount: ownersBySegmentKey.size,
+    ownersBySegmentKey
+  };
+}
+
+function collectSharedBoundaryRecordsForRing(
+  ring: IndexedRing,
+  ownersBySegmentKey: ReadonlyMap<string, string[]>,
+  recordsByKey: Map<string, SharedBoundaryAuditRecord>
+): void {
+  const segmentOwnerKeys = ring.pointKeys.slice(0, -1).map((start, index) => {
+    const end = ring.pointKeys[index + 1]!;
+    return ownerSetKeyOrUndefined(ownersBySegmentKey.get(segmentKeyFromCoordinateKeys(start, end)));
+  });
+
+  if (!segmentOwnerKeys.some(Boolean)) {
+    return;
+  }
+
+  const firstOwnerKey = segmentOwnerKeys[0];
+
+  if (firstOwnerKey && segmentOwnerKeys.every((key) => key === firstOwnerKey)) {
+    addSharedBoundaryRecord(recordsByKey, ring, ring.pointKeys, ownerSetFromKey(firstOwnerKey));
+    return;
+  }
+
+  for (let index = 0; index < segmentOwnerKeys.length; index += 1) {
+    const ownerKey = segmentOwnerKeys[index];
+    const previous =
+      segmentOwnerKeys[(index - 1 + segmentOwnerKeys.length) % segmentOwnerKeys.length];
+
+    if (!ownerKey || ownerKey === previous) {
+      continue;
+    }
+
+    const chain = [ring.pointKeys[index]!];
+    let cursor = index;
+
+    while (segmentOwnerKeys[cursor] === ownerKey) {
+      cursor = (cursor + 1) % segmentOwnerKeys.length;
+      chain.push(ring.pointKeys[cursor]!);
+    }
+
+    addSharedBoundaryRecord(recordsByKey, ring, chain, ownerSetFromKey(ownerKey));
+  }
+}
+
+function addSharedBoundaryRecord(
+  recordsByKey: Map<string, SharedBoundaryAuditRecord>,
+  ring: IndexedRing,
+  pointKeys: readonly string[],
+  ownerZoneIds: readonly string[]
+): void {
+  if (pointKeys.length < 2) {
+    return;
+  }
+
+  const canonicalSequence = canonicalBoundarySequenceKey(pointKeys);
+  const canonicalOwnerKey = ownerSetKey(ownerZoneIds);
+  const recordKey = `${canonicalOwnerKey}|${canonicalSequence}`;
+  const id = `boundary:${sha256Hex(recordKey).slice(0, 16)}`;
+  const first = pointKeys[0]!;
+  const last = pointKeys.at(-1)!;
+  const endpoints: [string, string] = first <= last ? [first, last] : [last, first];
+  const ownerRef: SharedBoundaryOwnerRef = {
+    zoneId: ring.zoneId,
+    ringId: ring.id,
+    polygonIndex: ring.polygonIndex,
+    ringIndex: ring.ringIndex,
+    startKey: first,
+    endKey: last
+  };
+  const existing = recordsByKey.get(recordKey);
+
+  if (!existing) {
+    recordsByKey.set(recordKey, {
+      id,
+      ownerZoneIds: ownerSetFromKey(canonicalOwnerKey),
+      endpoints,
+      sourceCoordinateKeys: [...pointKeys],
+      sourceSegmentCount: pointKeys.length - 1,
+      ownerRefs: [ownerRef]
+    });
+    return;
+  }
+
+  if (
+    !existing.ownerRefs.some(
+      (candidate) => sharedBoundaryOwnerRefKey(candidate) === sharedBoundaryOwnerRefKey(ownerRef)
+    )
+  ) {
+    existing.ownerRefs.push(ownerRef);
+  }
+}
+
+function extractRingPath(
+  pointKeys: readonly string[] | undefined,
+  startKey: string,
+  endKey: string
+): string[] | undefined {
+  if (!pointKeys || pointKeys.length < 2) {
+    return undefined;
+  }
+
+  if (startKey === endKey) {
+    return pointKeys[0] === startKey ? [...pointKeys] : undefined;
+  }
+
+  const openPointKeys = pointKeys.slice(0, -1);
+  const startIndex = openPointKeys.indexOf(startKey);
+  const endIndex = openPointKeys.indexOf(endKey);
+
+  if (startIndex < 0 || endIndex < 0) {
+    return undefined;
+  }
+
+  const chain = [openPointKeys[startIndex]!];
+  let cursor = startIndex;
+
+  while (cursor !== endIndex) {
+    cursor = (cursor + 1) % openPointKeys.length;
+    chain.push(openPointKeys[cursor]!);
+  }
+
+  return chain;
+}
+
+function segmentOwnerSetKeys(
+  pointKeys: readonly string[],
+  model: SharedBoundaryAuditModel
+): string[] {
+  const ownerKeys: string[] = [];
+
+  for (let index = 0; index < pointKeys.length - 1; index += 1) {
+    const segment = segmentKeyFromCoordinateKeys(pointKeys[index]!, pointKeys[index + 1]!);
+    const owners = model.ownersBySegmentKey.get(segment);
+    ownerKeys.push(ownerSetKey(owners ?? []));
+  }
+
+  return ownerKeys;
+}
+
+function canonicalBoundarySequenceKey(pointKeys: readonly string[]): string {
+  const first = pointKeys[0];
+  const last = pointKeys.at(-1);
+
+  if (pointKeys.length > 1 && first === last) {
+    return canonicalClosedSequenceKey(pointKeys);
+  }
+
+  const forward = pointKeys.join(">");
+  const reversed = [...pointKeys].reverse().join(">");
+
+  return forward <= reversed ? forward : reversed;
+}
+
+function canonicalClosedSequenceKey(pointKeys: readonly string[]): string {
+  const openKeys = pointKeys.slice(0, -1);
+
+  if (openKeys.length === 0) {
+    return pointKeys.join(">");
+  }
+
+  return [
+    ...closedSequenceRotations(openKeys),
+    ...closedSequenceRotations([...openKeys].reverse())
+  ].sort()[0]!;
+}
+
+function closedSequenceRotations(openKeys: readonly string[]): string[] {
+  return openKeys.map((_, index) => {
+    const rotated = [...openKeys.slice(index), ...openKeys.slice(0, index)];
+    return [...rotated, rotated[0]!].join(">");
+  });
+}
+
+function ownerSetKeyOrUndefined(zoneIds: readonly string[] | undefined): string | undefined {
+  return zoneIds && zoneIds.length > 0 ? ownerSetKey(zoneIds) : undefined;
+}
+
+function ownerSetKey(zoneIds: readonly string[]): string {
+  return uniqueSorted(zoneIds).join("|");
+}
+
+function ownerSetFromKey(key: string): string[] {
+  return key === "" ? [] : key.split("|");
+}
+
+function sharedBoundaryOwnerRefKey(ownerRef: SharedBoundaryOwnerRef): string {
+  return [
+    ownerRef.zoneId,
+    ownerRef.ringId,
+    ownerRef.polygonIndex,
+    ownerRef.ringIndex,
+    ownerRef.startKey,
+    ownerRef.endKey
+  ].join("|");
+}
+
+function compareSharedBoundaryOwnerRefs(
+  left: SharedBoundaryOwnerRef,
+  right: SharedBoundaryOwnerRef
+): number {
+  return (
+    left.zoneId.localeCompare(right.zoneId) ||
+    left.ringId.localeCompare(right.ringId) ||
+    left.polygonIndex - right.polygonIndex ||
+    left.ringIndex - right.ringIndex ||
+    left.startKey.localeCompare(right.startKey) ||
+    left.endKey.localeCompare(right.endKey)
+  );
+}
+
+function sortSimplificationAuditIssues(
+  issues: readonly TerritorySimplificationAuditIssue[]
+): TerritorySimplificationAuditIssue[] {
+  const severityRank: Record<GeometryQualitySeverity, number> = {
+    error: 0,
+    warning: 1,
+    info: 2
+  };
+
+  return [...issues].sort(
+    (left, right) =>
+      severityRank[left.severity] - severityRank[right.severity] ||
+      left.code.localeCompare(right.code) ||
+      (left.zoneId ?? "").localeCompare(right.zoneId ?? "") ||
+      (left.otherZoneId ?? "").localeCompare(right.otherZoneId ?? "") ||
+      (left.boundaryId ?? "").localeCompare(right.boundaryId ?? "") ||
+      (left.path ?? "").localeCompare(right.path ?? "") ||
+      left.message.localeCompare(right.message)
+  );
+}
+
+function uniqueSorted(values: readonly string[]): string[] {
+  return [...new Set(values)].sort();
 }
 
 function simplifyDataset(
@@ -784,32 +1366,10 @@ function closeRing(ring: readonly LngLat[]): LngLat[] {
   return [...ring, first];
 }
 
-function collectSharedSegments(dataset: TerritoryDataset): number {
-  const counts = new Map<string, number>();
-
-  for (const zone of dataset.zones) {
-    for (const ring of geometryRings(zone.geometry)) {
-      for (let index = 1; index < ring.length; index += 1) {
-        const key = segmentKey(ring[index - 1]!, ring[index]!);
-        counts.set(key, (counts.get(key) ?? 0) + 1);
-      }
-    }
-  }
-
-  return [...counts.values()].filter((count) => count > 1).length;
-}
-
 function geometryRings(geometry: TerritoryGeometry): LngLat[][] {
   return geometry.type === "Polygon"
     ? (geometry.coordinates as LngLat[][])
     : (geometry.coordinates.flat(1) as LngLat[][]);
-}
-
-function segmentKey(left: LngLat, right: LngLat): string {
-  const first = coordinateKey(left);
-  const second = coordinateKey(right);
-
-  return first < second ? `${first}|${second}` : `${second}|${first}`;
 }
 
 function coordinateKey(coordinate: LngLat): string {

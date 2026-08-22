@@ -2729,8 +2729,16 @@ async function runGeometry(args: string[]): Promise<number> {
         await writeFile(reportPath, JSON.stringify(result.report, null, 2) + "\n", "utf8");
       }
 
+      const simplificationIssues = result.report.tiers.flatMap((tier) =>
+        tier.topologyAudit.issues.map((issue) => ({
+          ...issue,
+          detail: tier.detail,
+          message: `${tier.detail}: ${issue.message}`
+        }))
+      );
+
       printJson({
-        ok: true,
+        ok: result.report.ok,
         command: "geometry simplify",
         data: {
           inputPath: result.inputPath,
@@ -2738,9 +2746,9 @@ async function runGeometry(args: string[]): Promise<number> {
           reportPath,
           report: result.report
         },
-        issues: []
+        issues: simplificationIssues
       });
-      return 0;
+      return result.report.ok ? 0 : 1;
     }
 
     const repairOptions = readGeometryRepairOptions(flags, commonOptions);
