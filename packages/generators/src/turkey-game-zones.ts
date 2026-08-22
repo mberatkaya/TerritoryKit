@@ -19,6 +19,7 @@ import type {
   Polygon as ClippingPolygon
 } from "polygon-clipping";
 import { buildTerritoryAdjacency } from "./adjacency.js";
+import { computeGeometryRepresentativePoint } from "./geometry-repair.js";
 import {
   computeTurkeyAdm3DistrictCoverage,
   computeTurkeyAdm3GeometryAreaKm2
@@ -1537,7 +1538,7 @@ function clippingMultiPolygonToTerritoryGeometry(
 
 function computeSafeGeometryCenter(geometry: TerritoryGeometry): LngLat {
   const [west, south, east, north] = computeGeometryBBox(geometry);
-  const [longitude, latitude] = computeGeometryCenter(geometry);
+  const [longitude, latitude] = computeGeometryRepresentativePoint(geometry);
 
   return [
     clampCoordinate(longitude, west, east),

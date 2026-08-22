@@ -32,8 +32,8 @@
       "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
       "path": "dataset.json",
       "url": "./dataset.json",
-      "sha256": "2d0a618a91bf7abb91bcfb0de49bc441e2c6c6ac651b5cb10f366ebf2d99677e",
-      "sizeBytes": 9616137,
+      "sha256": "34aa81cf82446a7fadbed1988a08669859ff95871d8db77a7c212374cd6708e8",
+      "sizeBytes": 9618748,
       "compression": "none"
     },
     {
@@ -42,8 +42,8 @@
       "format": "json",
       "path": "coverage.json",
       "url": "./coverage.json",
-      "sha256": "a5a1dc25be3ca8dc8caa84a966cfdc04ebcd0c806dd823c86b9258e9d9872201",
-      "sizeBytes": 14625,
+      "sha256": "10f28cbf994607e9864e9c61ff93cfb040fd72c1e010102b10ba642babc5b87e",
+      "sizeBytes": 14563,
       "compression": "none"
     },
     {
@@ -52,8 +52,8 @@
       "format": "json",
       "path": "quality-report.json",
       "url": "./quality-report.json",
-      "sha256": "",
-      "sizeBytes": 0,
+      "sha256": "8b78f5ce0ea8126f563902060a3b0eab114b539ff3b0928b4bb8d2918b90ca73",
+      "sizeBytes": 3472,
       "compression": "none"
     },
     {
@@ -63,8 +63,8 @@
       "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
       "path": "query/query-artifact.json",
       "url": "./query/query-artifact.json",
-      "sha256": "610a9c5d02830d7c944f985f07e66052d091ae440dfe02639a9ddf6790091e76",
-      "sizeBytes": 522498,
+      "sha256": "e556a8214d722e2fda23e803658f957861dec7a17537d6709d21ef3ac2074a49",
+      "sizeBytes": 522477,
       "compression": "none"
     },
     {
@@ -75,19 +75,8 @@
       "detail": "full",
       "path": "levels/ADM3/dataset.json",
       "url": "./levels/ADM3/dataset.json",
-      "sha256": "36cfcedb549e5b22efbb42ad5836f5f75bb7610cf24c90856147c168507fa2a1",
-      "sizeBytes": 3261455,
-      "compression": "none"
-    },
-    {
-      "id": "adm3-render-manifest",
-      "purpose": "render",
-      "format": "json",
-      "levels": ["ADM3"],
-      "path": "render/manifest.json",
-      "url": "./render/manifest.json",
-      "sha256": "",
-      "sizeBytes": 0,
+      "sha256": "ae4bb5140f8ac6b721a345a2d31a82b035619cf77e0fa9e24dd33fa75fa0e52c",
+      "sizeBytes": 3241004,
       "compression": "none"
     },
     {
@@ -97,8 +86,8 @@
       "levels": ["ADM3"],
       "path": "levels/ADM3/adjacency/adjacency.json",
       "url": "./levels/ADM3/adjacency/adjacency.json",
-      "sha256": "",
-      "sizeBytes": 0,
+      "sha256": "010b53449d4bd17538ce164445dcff8ee03f9bd26429ea3be41f39e2dd01724b",
+      "sizeBytes": 432465,
       "compression": "none"
     }
   ]

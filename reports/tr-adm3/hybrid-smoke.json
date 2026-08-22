@@ -8,8 +8,8 @@
     "platform": "darwin",
     "arch": "arm64"
   },
-  "durationMs": 20,
-  "deterministicHash": "12654b6ddeffbb4ecf19bc5fb13beb79141aa02a779ee677dbf76c64f382cb0b",
+  "durationMs": 19,
+  "deterministicHash": "4bb6524999179beee4f11306bc7ee438299879d5965bce43f0a4a7800cb5c28a",
   "scenarios": [
     {
       "scenario": "official-only-district",
@@ -33,8 +33,8 @@
       "finalCoveragePercent": 100,
       "qualityOk": true,
       "durationMs": 7,
-      "deterministicHash": "782c3bcaae5379913ebbbdfb02efa32535b0ae48ebac2c7053e0836271e2d554",
-      "peakRssBytes": 64028672
+      "deterministicHash": "5524b8dd00ef830ca6c6808bc62f3ad26c41e105372880611a144fe8bbdc9365",
+      "peakRssBytes": 64520192
     },
     {
       "scenario": "generated-only-district",
@@ -57,9 +57,9 @@
       "generatedCount": 1,
       "finalCoveragePercent": 100,
       "qualityOk": true,
-      "durationMs": 3,
-      "deterministicHash": "6caead7ed8c5a5eb6da5f6478c115c9657b4f27a327f34b583b307babdd7f4c4",
-      "peakRssBytes": 66125824
+      "durationMs": 4,
+      "deterministicHash": "86761a334a4fbf43e7326814b4e358414a0fde3112057d9394970793dc0ddb38",
+      "peakRssBytes": 66600960
     },
     {
       "scenario": "official-generated-district",
@@ -82,9 +82,9 @@
       "generatedCount": 1,
       "finalCoveragePercent": 100,
       "qualityOk": true,
-      "durationMs": 4,
-      "deterministicHash": "20ede237eeddae1ce5240c776abcbb38e12238c30926c1469a4d4314e82947aa",
-      "peakRssBytes": 69861376
+      "durationMs": 3,
+      "deterministicHash": "7a81772de873c0f03e5c1813d2deb38184005e6f5cc743d05288d9187d721b84",
+      "peakRssBytes": 68763648
     },
     {
       "scenario": "official-osm-generated-district",
@@ -108,8 +108,8 @@
       "finalCoveragePercent": 100,
       "qualityOk": true,
       "durationMs": 3,
-      "deterministicHash": "73148055034164a9f180a38742cafa43a519b7f2b9a3f0b40aad556e41074d57",
-      "peakRssBytes": 70221824
+      "deterministicHash": "32b160a4b9f49e89b1585e1454037ba9abd37572e87fbc56db05b0b51467b00f",
+      "peakRssBytes": 70139904
     },
     {
       "scenario": "complex-multipolygon-district",
@@ -132,9 +132,9 @@
       "generatedCount": 1,
       "finalCoveragePercent": 100,
       "qualityOk": true,
-      "durationMs": 3,
-      "deterministicHash": "2cca984926e89a9de340b788730069673ce8560a1cb3713f8df1f32d3d132250",
-      "peakRssBytes": 71483392
+      "durationMs": 2,
+      "deterministicHash": "1e691b9cc6321aa0f6d7d3ca943b11d767793c45f806d323d34e375af7a581df",
+      "peakRssBytes": 70516736
     }
   ]
 }

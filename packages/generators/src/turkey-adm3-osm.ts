@@ -4,13 +4,13 @@ import { createHash } from "node:crypto";
 import { Readable } from "node:stream";
 import {
   computeGeometryBBox,
-  computeGeometryCenter,
   createTerritoryGlobalId,
   slugifyTerritoryIdPart
 } from "@territory-kit/dataset";
 import type { LngLat, TerritoryGeometry, TerritoryZone } from "@territory-kit/dataset";
 import { readOsmPbf } from "@osmix/pbf";
 import type { OsmPbfBlock, OsmPbfGroup } from "@osmix/pbf";
+import { computeGeometryRepresentativePoint } from "./geometry-repair.js";
 import { createTurkeyAdm3GeometryHash } from "./turkey-adm3-full-coverage.js";
 import { sha256Hex, serializeJsonStable } from "./sources/utils.js";
 
@@ -474,7 +474,7 @@ function resolveTurkeyAdm3OsmParent(
     return { confidence: "unresolved" };
   }
 
-  const representative = computeGeometryCenter(geometry);
+  const representative = computeGeometryRepresentativePoint(geometry);
   const containing = districtZones.find((district) =>
     geometryContainsPoint(district.geometry, representative)
   );
@@ -526,7 +526,7 @@ function createOsmZone(input: {
     ...(input.parentId ? { parentId: input.parentId } : {}),
     neighborIds: [],
     geometry: input.geometry,
-    center: computeGeometryCenter(input.geometry),
+    center: computeGeometryRepresentativePoint(input.geometry),
     bbox,
     properties: {
       territory: {

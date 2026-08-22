@@ -46,3 +46,8 @@ const handle = await loadTurkeyV2NationalDataset({
 `turkeyV2NationalDatasetDescriptor.datasetId` is `territory-kit-tr-v2-playable`. It still does not
 embed large geometry in this package; use artifacts from `territory tr v2 national build` or a
 hosted registry.
+
+The 2026-08-22 Sprint 6 publish-ready rebuild verifies 1 ADM0, 81 ADM1 provinces, 973 ADM2
+districts, and nationwide ADM3 playable coverage through the external artifact resolver. Generated
+ADM3 fallback remains explicitly non-official; `@territory-kit/data-tr` exposes resolver metadata,
+not the large national geometry payload.

@@ -1,0 +1,97 @@
+{
+  "reportVersion": "2",
+  "ok": true,
+  "strategy": "topology-safe",
+  "source": {
+    "datasetId": "territory-kit-tr-v2-playable-adm2",
+    "datasetVersion": "2.0.0-rc.1",
+    "geometryHash": "4b34439772834ee563b1734122508907272d1fe3ba937371348f794efe03a02f",
+    "featureCount": 973,
+    "vertexCount": 132258,
+    "sharedSegmentCount": 57054,
+    "sharedBoundaryCount": 2615
+  },
+  "tiers": [
+    {
+      "detail": "high",
+      "status": "generated",
+      "datasetPath": "high/dataset.json",
+      "geojsonPath": "high/features.geojson",
+      "geometryHash": "dca9ebf47a1244ba8149c5293d109ea9706dc8c595a5750b742cc060d5ff62a4",
+      "featureCount": 973,
+      "vertexCount": 132256,
+      "byteSize": 11943985,
+      "areaDeltaRatio": 0,
+      "topologyAudit": {
+        "ok": true,
+        "sharedSegmentCountBefore": 57054,
+        "sharedSegmentCountAfter": 57053,
+        "sharedBoundaryCountBefore": 2615,
+        "sharedBoundaryCountAfter": 2615,
+        "sharedBoundaryMismatchCount": 0,
+        "geometryValidation": {
+          "ok": true,
+          "invalidFeatureCount": 0,
+          "issueCount": 0,
+          "errorCount": 0,
+          "warningCount": 0
+        },
+        "issues": []
+      }
+    },
+    {
+      "detail": "medium",
+      "status": "generated",
+      "datasetPath": "medium/dataset.json",
+      "geojsonPath": "medium/features.geojson",
+      "geometryHash": "842a43d1bd4a1d9c8ae5d0c8174ce7024b7b0d97f37900d1391fa61de0889377",
+      "featureCount": 973,
+      "vertexCount": 132231,
+      "byteSize": 11942022,
+      "areaDeltaRatio": 1.3357149422060747e-7,
+      "topologyAudit": {
+        "ok": true,
+        "sharedSegmentCountBefore": 57054,
+        "sharedSegmentCountAfter": 57043,
+        "sharedBoundaryCountBefore": 2615,
+        "sharedBoundaryCountAfter": 2615,
+        "sharedBoundaryMismatchCount": 0,
+        "geometryValidation": {
+          "ok": true,
+          "invalidFeatureCount": 0,
+          "issueCount": 0,
+          "errorCount": 0,
+          "warningCount": 0
+        },
+        "issues": []
+      }
+    },
+    {
+      "detail": "low",
+      "status": "generated",
+      "datasetPath": "low/dataset.json",
+      "geojsonPath": "low/features.geojson",
+      "geometryHash": "77ed3610cbde43fecae93fef5a0e82eee00efbf6e36da58a626a39ff20f60231",
+      "featureCount": 973,
+      "vertexCount": 80215,
+      "byteSize": 7881488,
+      "areaDeltaRatio": 0.00007161355024013608,
+      "topologyAudit": {
+        "ok": true,
+        "sharedSegmentCountBefore": 57054,
+        "sharedSegmentCountAfter": 34631,
+        "sharedBoundaryCountBefore": 2615,
+        "sharedBoundaryCountAfter": 2615,
+        "sharedBoundaryMismatchCount": 0,
+        "geometryValidation": {
+          "ok": true,
+          "invalidFeatureCount": 0,
+          "issueCount": 0,
+          "errorCount": 0,
+          "warningCount": 0
+        },
+        "issues": []
+      }
+    }
+  ]
+}

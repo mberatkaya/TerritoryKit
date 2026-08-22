@@ -1,7 +1,26 @@
 {
   "schemaVersion": "territorykit-tr-v2-national-quality@1",
   "ok": true,
+  "buildMode": "publish-ready",
+  "publishReady": true,
   "hardGateFailures": [],
+  "publishReadyGateFailures": [],
+  "completeness": {
+    "expected": {
+      "adm0Count": 1,
+      "adm1Count": 81,
+      "adm2Count": 973
+    },
+    "actual": {
+      "adm0Count": 1,
+      "adm1Count": 81,
+      "adm2Count": 973,
+      "successfulAdm2Count": 973,
+      "failedDistrictCount": 0
+    },
+    "strictIssueCount": 0,
+    "strictIssues": []
+  },
   "summary": {
     "adm0Count": 1,
     "adm1Count": 81,
@@ -34,6 +53,11 @@
     "issueCount": 0,
     "errorCount": 0
   },
+  "artifactIntegrity": {
+    "ok": true,
+    "errorCount": 0,
+    "errors": []
+  },
   "gates": {
     "adm0Count": true,
     "adm1Count": true,
@@ -54,5 +78,32 @@
     "strictTrV2Validation": true,
     "adjacencyIntegrity": true,
     "registryArtifactChecksum": true
+  },
+  "publishReadyGates": {
+    "adm0Count": true,
+    "adm1Count": true,
+    "adm2Count": true,
+    "everyDistrictHasAdm3": true,
+    "everyDistrictCoverage": true,
+    "nationalCoverage": true,
+    "orphanCount": true,
+    "hierarchyCycleCount": true,
+    "duplicateStableId": true,
+    "invalidFinalGeometry": true,
+    "effectiveSiblingOverlap": true,
+    "realGeneratedOverlap": true,
+    "parentContainment": true,
+    "missingProvenance": true,
+    "missingAttributionLicense": true,
+    "generatedMetadata": true,
+    "strictTrV2Validation": true,
+    "adjacencyIntegrity": true,
+    "registryArtifactChecksum": true,
+    "buildMode": true,
+    "nationalCompleteness": true,
+    "adm0NationalCount": true,
+    "adm1NationalCount": true,
+    "adm2NationalCount": true,
+    "successfulAdm2NationalCount": true
   }
 }

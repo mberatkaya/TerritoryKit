@@ -2,7 +2,7 @@
   "schemaVersion": "territorykit-tr-v2-national-source-lock@1",
   "datasetId": "territory-kit-tr-v2-playable",
   "datasetVersion": "2.0.0-rc.1",
-  "buildDate": "2026-08-13T00:00:00.000Z",
+  "buildDate": "2026-08-22T00:00:00.000Z",
   "sourceLockVersion": "1",
   "adm0Adm2": {
     "provider": "hdx-cod-ab",
@@ -135,5 +135,5 @@
     "largeGeometryInNpmPackage": false,
     "registryCdnOfflineModel": true
   },
-  "contentHash": "sha256:10e08ce0d17f4ab81b41984fecd9b30b174603204219bef746c0b63b3209ea63"
+  "contentHash": "sha256:6b098b80727e9f703b26f9257a7cc36d94f657b4d2346c5287e2e3910dd2a116"
 }

@@ -4,7 +4,8 @@ import { tmpdir } from "node:os";
 import {
   computeGeometryBBox,
   computeGeometryCenter,
-  hasRingSelfIntersection
+  hasRingSelfIntersection,
+  validateGeometryDataset
 } from "@territory-kit/dataset";
 import type {
   LngLat,
@@ -158,6 +159,42 @@ describe("topology-safe geometry simplification", () => {
     expect(report.ok).toBe(false);
     expect(tier.topologyAudit.geometryValidation.ok).toBe(false);
     expect(tier.topologyAudit.ok).toBe(false);
+  });
+
+  it("falls back invalid MultiPolygon component simplification to source arcs", () => {
+    const source = multipolygonNarrowNotchDataset();
+
+    expect(
+      validateGeometryDataset(source, {
+        checks: {
+          coordinates: true,
+          rings: true,
+          selfIntersections: true,
+          holes: true,
+          bbox: true,
+          center: true,
+          antimeridian: true,
+          parentContainment: false,
+          siblingOverlaps: false
+        }
+      }).ok
+    ).toBe(true);
+
+    const report = simplifyTerritoryDataset(source, {
+      strategy: "topology-safe",
+      details: ["low"],
+      buildDate: "2026-01-01T00:00:00.000Z"
+    });
+    const tier = report.tiers[0]!;
+
+    expect(report.ok).toBe(true);
+    expect(tier.status).toBe("omitted");
+    expect(tier.topologyAudit.ok).toBe(true);
+    expect(tier.topologyAudit.geometryValidation).toMatchObject({
+      ok: true,
+      invalidFeatureCount: 0,
+      errorCount: 0
+    });
   });
 
   it("reproduces Issue #55 with legacy per-ring RDP and fixes it with shared arcs", async () => {
@@ -601,6 +638,35 @@ function issue55RegressionDataset(): TerritoryDataset {
       [0.999938380004, 0.105263157895],
       [1.000049998989, 0.052631578947],
       [1, 0]
+    ])
+  ]);
+}
+
+function multipolygonNarrowNotchDataset(): TerritoryDataset {
+  return territoryDataset("multipolygon-narrow-notch", [
+    multiPolygonZone("notched", [
+      [
+        [
+          [0, 0],
+          [0.01, 0],
+          [0.01, 0.004],
+          [0.009, 0.004],
+          [0.009, 0.006],
+          [0.01, 0.006],
+          [0.01, 0.01],
+          [0, 0.01],
+          [0, 0]
+        ]
+      ],
+      [
+        [
+          [0.0092, 0.0044],
+          [0.0098, 0.0044],
+          [0.0098, 0.0056],
+          [0.0092, 0.0056],
+          [0.0092, 0.0044]
+        ]
+      ]
     ])
   ]);
 }

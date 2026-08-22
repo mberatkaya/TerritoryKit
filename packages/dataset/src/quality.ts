@@ -1392,7 +1392,11 @@ function findRingSelfIntersection(
       candidatePairCount += 1;
       exactComparisonCount += 1;
 
-      if (segmentsIntersect(left.start, left.end, right.start, right.end, epsilon)) {
+      // OGC/GEOS-valid administrative polygons can contain endpoint-only ring touches
+      // from tiny survey spikes. Keep proper crossings and positive-length collinear
+      // overlaps as self-intersections while leaving endpoint-only touch policy to
+      // hole/overlap checks.
+      if (segmentsCrossOrOverlap(left.start, left.end, right.start, right.end, epsilon)) {
         return {
           candidatePairCount,
           exactComparisonCount,
@@ -1737,6 +1741,19 @@ function segmentsIntersect(
   );
 }
 
+function segmentsCrossOrOverlap(
+  a1: LngLat,
+  a2: LngLat,
+  b1: LngLat,
+  b2: LngLat,
+  epsilon: number
+): boolean {
+  return (
+    segmentsProperlyCross(a1, a2, b1, b2, epsilon) ||
+    collinearSegmentsOverlapPositive(a1, a2, b1, b2, epsilon)
+  );
+}
+
 function segmentsProperlyCross(
   a1: LngLat,
   a2: LngLat,
@@ -1753,6 +1770,26 @@ function segmentsProperlyCross(
     ((d1 > epsilon && d2 < -epsilon) || (d1 < -epsilon && d2 > epsilon)) &&
     ((d3 > epsilon && d4 < -epsilon) || (d3 < -epsilon && d4 > epsilon))
   );
+}
+
+function collinearSegmentsOverlapPositive(
+  a1: LngLat,
+  a2: LngLat,
+  b1: LngLat,
+  b2: LngLat,
+  epsilon: number
+): boolean {
+  if (direction(a1, a2, b1) !== 0 || direction(a1, a2, b2) !== 0) {
+    return false;
+  }
+
+  const axis = Math.abs(a1[0] - a2[0]) >= Math.abs(a1[1] - a2[1]) ? 0 : 1;
+  const leftMin = Math.min(a1[axis], a2[axis]);
+  const leftMax = Math.max(a1[axis], a2[axis]);
+  const rightMin = Math.min(b1[axis], b2[axis]);
+  const rightMax = Math.max(b1[axis], b2[axis]);
+
+  return Math.min(leftMax, rightMax) - Math.max(leftMin, rightMin) > epsilon;
 }
 
 function pointOnSegment(a: LngLat, b: LngLat, point: LngLat, epsilon: number): boolean {

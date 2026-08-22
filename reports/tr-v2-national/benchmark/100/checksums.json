@@ -2,23 +2,27 @@
   "schemaVersion": "territorykit-tr-v2-national-checksums@1",
   "files": {
     "artifact-plan.json": {
-      "sha256": "33dae0ff39db7ebd654eccbb116c00a74f80c781306e2eaf539ffdccf549c0f5",
-      "byteSize": 2733
+      "sha256": "fee628ad27032c14c1b13d14a0135f221f8573ca9e01d7bc147fec6945cbb01c",
+      "byteSize": 2862
     },
     "attribution.json": {
-      "sha256": "093cc4fdc59997f45f961b889d17b17afe4384e5158f7b525f786cf846f6bf99",
+      "sha256": "ccab68d016629c47b93aa5bd8fa75f1ec5e3f1d6aa13a48ce25e3243a9c805a4",
       "byteSize": 471948
     },
+    "attribution.txt": {
+      "sha256": "f525e88af82b01b5dcfc2d2112d7033ba75226c2d2106447dc22d73e43faba37",
+      "byteSize": 482
+    },
     "coverage.json": {
-      "sha256": "d4acc3500f72108d478208cd7843c40aa90a38188e1d706e4210b3ccff67a492",
-      "byteSize": 106560
+      "sha256": "8e617084996a8a195d0dc2dadbb87df48f3cf72d0bf50036aa7930df79c33aa7",
+      "byteSize": 105970
     },
     "dataset.json": {
-      "sha256": "918a62e1c4b57dd9d23c20ad54a13eac622761f3dcbff2f1f02ea0fb5dc7ef38",
-      "byteSize": 36890532
+      "sha256": "e94997bf89b585a420c900cd26f090ed4683cffa922574bc7a4295636eff0743",
+      "byteSize": 36907304
     },
     "distribution-policy.json": {
-      "sha256": "c16ca5cf3bac7ae081b071a70570f85cee733f454d6522505e4d3ef82a59f57e",
+      "sha256": "9908e0a91f88b86537d0cb4a46fa4a2805efb419ec520308b9651a74cfdb33d7",
       "byteSize": 470727
     },
     "hierarchy-report.json": {
@@ -26,44 +30,56 @@
       "byteSize": 2090
     },
     "levels/ADM0/dataset.json": {
-      "sha256": "75ba0149a4e399c923bde8ced3d87da30b9ff82dbcdde57146708e1b2e0de260",
-      "byteSize": 1568201
+      "sha256": "a9bf9b72804d8a2b75fa0ca20750eb92f1ccafaea3494607344aa1d16d987078",
+      "byteSize": 1566152
     },
     "levels/ADM1/dataset.json": {
-      "sha256": "f284232a390cb73e20df3915ca693b56860fce63ffb5b700926dac0aff96fb67",
-      "byteSize": 4625422
+      "sha256": "50ce3956c595e1a6967d36dd226dde8ee4d1395012778b0eca5b7a493766ffb7",
+      "byteSize": 4617475
     },
     "levels/ADM2/dataset.json": {
-      "sha256": "bae1c0aa85e0c70a1a7f28e555cd56d111ff00fd051ab413f10eac9c81cc0b95",
-      "byteSize": 1614971
+      "sha256": "8e7757c603328657262dab73a8a2189e96a9b783b5648c18f89e3dfa36601d63",
+      "byteSize": 1139623
+    },
+    "levels/ADM3/adjacency/adjacency.json": {
+      "sha256": "ccaca849d1dea026ea86c2280d30058ffe3f670db1d9fdba35deba9ee8029350",
+      "byteSize": 3890608
     },
     "levels/ADM3/dataset.json": {
-      "sha256": "bd8f92ce40f0bac23380f96832964f3ec60503bb8c815178599a1ae5d87dbe85",
-      "byteSize": 29085116
+      "sha256": "cc5b8f1e7e18b038ea233943ab48fe11e5685b484bc27c8d6a5744cb7098364a",
+      "byteSize": 28892601
+    },
+    "levels/ADM3/full.geojson": {
+      "sha256": "e3a20c6219254346684bc1aa9e35457825a0419b0f60bee066f7307c85456cd6",
+      "byteSize": 29701224
     },
     "licenses.json": {
       "sha256": "5898229a83908e5150af8b7bdb3bd85d7f03dbc1f4ab4b998fbf840b4d12def0",
       "byteSize": 1094
     },
     "manifest.json": {
-      "sha256": "99a9c2f9945c6d11c072b2dbaeb04f318c307a733b64e60d6b40706a4cf8b045",
-      "byteSize": 1106
+      "sha256": "b860213386e7c4faa55d4dff54d4564564d7eba6d74db84e428c32b7dbd4c7cc",
+      "byteSize": 1344
     },
     "migration-plan.json": {
-      "sha256": "8f2b7be33ce5627d706ec3aafc56768ee7101442bb4a8c5e5264537587a512c1",
+      "sha256": "2163f8bdf3ab1d45fe4bbf03590ac4d82affd260d64fc88c8d1c7bb2b369813e",
       "byteSize": 2251686
     },
     "provenance.json": {
-      "sha256": "362b63ecc7540fa0c5b57a62a0633a9e1c7ce2d7a4e81eea2c806b7f60112066",
+      "sha256": "e871958ec6b0d69762603dc40be846eae84ae45817d094f6179e94e8fb758936",
       "byteSize": 6707217
     },
+    "quality-report.json": {
+      "sha256": "9ba0406d17873c9c76955ff3f96c64b5f7d8e4576c8d68bf914445f57b04ee0a",
+      "byteSize": 3476
+    },
     "query/query-artifact.json": {
-      "sha256": "9a209f26180b9cced4e443574c4c4df2f859f1160a360e363eba3454bb87e099",
-      "byteSize": 4443791
+      "sha256": "4b150b677826f5ee5e5f66bc355000e1acc40fe2f8d5121051c2fbe29eb4a4df",
+      "byteSize": 4443483
     },
     "registry-entry.json": {
-      "sha256": "2577ff7182ede416d568bf5163cc0767f1a65d5d597f84a012923acf33d5355e",
-      "byteSize": 3763
+      "sha256": "8518c82c9678f9c17e5dccf376dc863531cabc45906b771af1f81246eabe4c1b",
+      "byteSize": 3840
     },
     "source-lock.json": {
       "sha256": "cbcf21f44abc8bb66581cf5fc90414466e0eaaa53e08bd37eb19d2230dd4dbb0",

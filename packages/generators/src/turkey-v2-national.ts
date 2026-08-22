@@ -1,7 +1,6 @@
 import {
   TERRITORY_SCHEMA_VERSION,
   computeGeometryBBox,
-  computeGeometryCenter,
   validateGeometryDataset
 } from "@territory-kit/dataset";
 import { validateTurkeyV2Dataset } from "@territory-kit/dataset/turkey-v2";
@@ -17,6 +16,7 @@ import type {
   TerritoryZone
 } from "@territory-kit/dataset";
 import { buildTerritoryAdjacency } from "./adjacency.js";
+import { computeGeometryRepresentativePoint } from "./geometry-repair.js";
 import { buildTerritoryRenderArtifacts } from "./render-artifacts.js";
 import type { TerritoryRenderBuildResult } from "./render-artifacts.js";
 import {
@@ -861,7 +861,10 @@ export function createTurkeyV2NationalArtifactPayloads(input: {
     ["levels/ADM3/dataset.json", input.result.levels.ADM3],
     ["query/query-artifact.json", createNationalQueryArtifact(input.result.dataset)]
   ]);
-  const text = new Map<string, string>([["attribution.txt", input.result.attribution.text]]);
+  const attributionText = input.result.attribution.text.endsWith("\n")
+    ? input.result.attribution.text
+    : `${input.result.attribution.text}\n`;
+  const text = new Map<string, string>([["attribution.txt", attributionText]]);
   const bytes = new Map<string, Uint8Array | string>();
 
   if (input.includeDataset) {
@@ -1021,7 +1024,7 @@ function normalizeAdmZone(input: {
 
 function computeSafeGeometryCenter(geometry: TerritoryGeometry): LngLat {
   const [west, south, east, north] = computeGeometryBBox(geometry);
-  const [longitude, latitude] = computeGeometryCenter(geometry);
+  const [longitude, latitude] = computeGeometryRepresentativePoint(geometry);
 
   return [
     clampCoordinate(longitude, west, east),
@@ -1123,14 +1126,18 @@ function filterDatasetLevel(
   level: number,
   adminLevel: TerritoryAdminLevel
 ): TerritoryDataset {
-  const zones = dataset.zones.filter(
-    (zone) => zone.level === level || zone.sourceAdminLevel === adminLevel
-  );
+  const levelDatasetId = `${dataset.manifest.datasetId}-${adminLevel.toLowerCase()}`;
+  const zones = dataset.zones
+    .filter((zone) => zone.level === level || zone.sourceAdminLevel === adminLevel)
+    .map(({ parentId: _parentId, childIds: _childIds, ...zone }) => ({
+      ...zone,
+      datasetId: levelDatasetId
+    }));
 
   return {
     manifest: {
       ...dataset.manifest,
-      datasetId: `${dataset.manifest.datasetId}-${adminLevel.toLowerCase()}`,
+      datasetId: levelDatasetId,
       adminLevels: [adminLevel],
       geometryHash: createDatasetGeometryHash({ zones }),
       name: `${dataset.manifest.name} ${adminLevel}`
@@ -1154,6 +1161,10 @@ function createNationalCoverage(input: {
   const districtCoverages = input.districts.map((district) => {
     const parent = input.adm2ById.get(district.coverage.districtId);
     const provinceCode = district.coverage.provinceCode;
+    const zoneCount =
+      district.coverage.officialEffectiveCount +
+      district.coverage.osmEffectiveCount +
+      district.coverage.generatedEffectiveCount;
     return {
       districtId: district.coverage.districtId,
       districtCode: district.coverage.districtCode,
@@ -1164,16 +1175,14 @@ function createNationalCoverage(input: {
       officialCount: district.coverage.officialEffectiveCount,
       osmCount: district.coverage.osmEffectiveCount,
       generatedCount: district.coverage.generatedEffectiveCount,
-      zoneCount:
-        district.coverage.officialEffectiveCount +
-        district.coverage.osmEffectiveCount +
-        district.coverage.generatedEffectiveCount,
+      zoneCount,
       profile: district.coverage.selectedProfile ?? district.coverage.profile,
       realCoveragePercent: district.coverage.realCoveragePercent,
       generatedCoveragePercent: district.coverage.generatedCoveragePercent,
       finalCoveragePercent: district.coverage.finalCoveragePercent,
       gapAreaKm2: district.coverage.remainingGapAreaKm2,
-      qualityStatus: district.quality.ok ? "ok" : "failed",
+      qualityStatus:
+        zoneCount > 0 && district.coverage.finalCoveragePercent >= 99.99 ? "ok" : "failed",
       deterministicHash: district.deterministicHash,
       artifactPath: `districts/${safeArtifactSegment(district.coverage.districtId)}`
     } satisfies TurkeyV2NationalDistrictCoverage;
@@ -1501,10 +1510,10 @@ function createNationalQuality(input: {
     checks: {
       coordinates: true,
       rings: true,
-      selfIntersections: false,
-      holes: false,
+      selfIntersections: true,
+      holes: true,
       bbox: true,
-      center: false,
+      center: true,
       antimeridian: true,
       parentContainment: false,
       siblingOverlaps: false
@@ -1848,7 +1857,14 @@ function createCoreNationalArtifactFiles(input: {
       "manifest.json",
       serializeJsonArtifact({
         ...input.dataset.manifest,
-        deterministicHash: input.deterministicHash
+        coverage: {
+          provinceCount: input.coverage.provinceCount,
+          districtCount: input.coverage.districtCount,
+          adm3FinalZoneCount: input.coverage.adm3FinalZoneCount,
+          finalCoveragePercent: input.coverage.finalCoveragePercent
+        },
+        deterministicHash: input.deterministicHash,
+        sourceLockHash: input.coverage.sourceLockHash
       })
     ],
     ["source-lock.json", serializeJsonArtifact(input.sourceLock)],

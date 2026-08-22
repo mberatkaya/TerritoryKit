@@ -2,10 +2,12 @@ import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
+import { computeGeometryBBox, validateGeometryDataset } from "@territory-kit/dataset";
 import { createSquareZone } from "@territory-kit/shared-testkit";
 import type {
   TerritoryAdminLevel,
   TerritoryDataset,
+  TerritoryGeometry,
   TerritorySemanticAdminType,
   TerritorySourceClass,
   TerritoryZone
@@ -260,6 +262,27 @@ describe("Turkey V2 national playable build", () => {
     expect(result.coverage.generatedZoneCount).toBeGreaterThan(0);
     expect(result.coverage.officialZoneCount).toBe(0);
     expect(result.coverage.finalCoveragePercent).toBeGreaterThanOrEqual(99.99);
+    expect(result.coverage.districts.every((district) => district.qualityStatus === "ok")).toBe(
+      true
+    );
+    expect(result.coverage.provinces.every((province) => province.qualityStatus === "ok")).toBe(
+      true
+    );
+    expect(
+      result.coverage.provinces.every(
+        (province) => province.successfulDistrictCount === province.districtCount
+      )
+    ).toBe(true);
+    expect(
+      Object.values(result.levels).every((levelDataset) =>
+        levelDataset.zones.every((zone) => zone.datasetId === levelDataset.manifest.datasetId)
+      )
+    ).toBe(true);
+    expect(
+      Object.values(result.levels).every((levelDataset) =>
+        levelDataset.zones.every((zone) => !zone.parentId && !zone.childIds)
+      )
+    ).toBe(true);
     expect(result.registry.datasets[0].id).toBe(TURKEY_V2_NATIONAL_DATASET_ID);
     expect(payloads.json.has("dataset.json")).toBe(true);
     expect(payloads.json.has("levels/ADM3/full.geojson")).toBe(true);
@@ -282,6 +305,39 @@ describe("Turkey V2 national playable build", () => {
       sha256: sha256(qualityBytes),
       byteSize: Buffer.byteLength(qualityBytes)
     });
+  });
+
+  it("uses representative centers covered by concave national and generated geometries", async () => {
+    const fixture = nationalFixture({ donutDistrict: true });
+    const result = await buildTurkeyV2NationalDataset({
+      adm0Adm2Dataset: fixture,
+      sourceLock: sourceLock(),
+      buildDate: BUILD_DATE,
+      datasetVersion: TURKEY_V2_NATIONAL_DATASET_VERSION,
+      generatedDefaults: {
+        ...generatedDefaults(),
+        targetAreaKm2: 500,
+        maxAreaKm2: 2000,
+        maxZonesPerDistrict: 2
+      },
+      buildArtifacts: { adjacency: false, render: false, mvt: false },
+      districtLimit: 1
+    });
+    const centerValidation = validateGeometryDataset(result.dataset, {
+      checks: {
+        coordinates: false,
+        rings: false,
+        selfIntersections: false,
+        holes: false,
+        bbox: true,
+        center: true,
+        antimeridian: false,
+        parentContainment: false,
+        siblingOverlaps: false
+      }
+    });
+
+    expect(centerValidation.issues).toEqual([]);
   });
 
   it("applies official > OSM > generated priority in the national merge", async () => {
@@ -507,7 +563,9 @@ function generatedDefaults() {
   };
 }
 
-function nationalFixture(input: { reverseDistricts?: boolean } = {}): TerritoryDataset {
+function nationalFixture(
+  input: { reverseDistricts?: boolean; donutDistrict?: boolean } = {}
+): TerritoryDataset {
   const datasetId = "test-tr-national";
   const provinceIds = Array.from({ length: 81 }, (_, index) => provinceId(index + 1));
   const districtIds = ["tr:adm2:01-a", "tr:adm2:01-b"];
@@ -532,12 +590,13 @@ function nationalFixture(input: { reverseDistricts?: boolean } = {}): TerritoryD
       localTypeName: "Ulke"
     }
   });
+  const donut = donutGeometry();
   const provinces = provinceIds.map((id, index) => {
     const code = String(index + 1).padStart(2, "0");
     const west = (index % 9) * 10;
     const south = Math.floor(index / 9) * 10;
 
-    return admZone({
+    const zone = admZone({
       id,
       datasetId,
       level: 1,
@@ -562,22 +621,25 @@ function nationalFixture(input: { reverseDistricts?: boolean } = {}): TerritoryD
         codes: { source: `TR${code}` }
       }
     });
+
+    return input.donutDistrict && code === "01" ? withGeometry(zone, donut) : zone;
+  });
+  const districtA = admZone({
+    id: "tr:adm2:01-a",
+    datasetId,
+    level: 2,
+    sourceAdminLevel: "ADM2",
+    semanticType: "district",
+    name: "District A",
+    west: 0,
+    south: 0,
+    east: 1,
+    north: 1,
+    parentId: "tr:adm1:tr-01",
+    territory: districtTerritory("01", "001", "tr:adm1:tr-01")
   });
   const districts = [
-    admZone({
-      id: "tr:adm2:01-a",
-      datasetId,
-      level: 2,
-      sourceAdminLevel: "ADM2",
-      semanticType: "district",
-      name: "District A",
-      west: 0,
-      south: 0,
-      east: 1,
-      north: 1,
-      parentId: "tr:adm1:tr-01",
-      territory: districtTerritory("01", "001", "tr:adm1:tr-01")
-    }),
+    input.donutDistrict ? withGeometry(districtA, donut) : districtA,
     admZone({
       id: "tr:adm2:01-b",
       datasetId,
@@ -610,6 +672,36 @@ function nationalFixture(input: { reverseDistricts?: boolean } = {}): TerritoryD
       attribution: "Fixture"
     },
     zones: [adm0, ...provinces, ...(input.reverseDistricts ? [...districts].reverse() : districts)]
+  };
+}
+
+function withGeometry(zone: TerritoryZone, geometry: TerritoryGeometry): TerritoryZone {
+  return {
+    ...zone,
+    geometry,
+    bbox: computeGeometryBBox(geometry)
+  };
+}
+
+function donutGeometry(): TerritoryGeometry {
+  return {
+    type: "Polygon",
+    coordinates: [
+      [
+        [0, 0],
+        [4, 0],
+        [4, 4],
+        [0, 4],
+        [0, 0]
+      ],
+      [
+        [1, 1],
+        [1, 3],
+        [3, 3],
+        [3, 1],
+        [1, 1]
+      ]
+    ]
   };
 }
 
