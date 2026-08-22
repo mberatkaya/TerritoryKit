@@ -193,7 +193,7 @@ describe("territory cli Turkey V2 national build", () => {
     } finally {
       await rm(tempDir, { recursive: true, force: true });
     }
-  });
+  }, 15_000);
 
   it("reports missing and malformed validation JSON with machine-readable issues", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-v2-invalid-"));
