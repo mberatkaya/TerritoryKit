@@ -1,5 +1,12 @@
 # @territory-kit/game
 
+## 1.9.1
+
+### Patch Changes
+
+- @territory-kit/core@1.9.1
+- @territory-kit/dataset@1.9.1
+
 ## 1.9.0
 
 ### Patch Changes

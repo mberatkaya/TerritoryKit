@@ -1,5 +1,11 @@
 # @territory-kit/example-nestjs-postgres-game
 
+## 0.0.10
+
+### Patch Changes
+
+- @territory-kit/game@1.9.1
+
 ## 0.0.9
 
 ### Patch Changes
