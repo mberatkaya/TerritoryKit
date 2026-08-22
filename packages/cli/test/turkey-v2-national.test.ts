@@ -43,6 +43,8 @@ describe("territory cli Turkey V2 national build", () => {
           command: "tr v2 national plan",
           data: {
             datasetId: "territory-kit-tr-v2-playable",
+            datasetVersion: "2.0.0",
+            buildDate: "2026-08-22T00:00:00.000Z",
             adm1Count: 81,
             adm2Count: 1,
             canonicalAdm2SourceCount: 973,
@@ -194,6 +196,25 @@ describe("territory cli Turkey V2 national build", () => {
       await rm(tempDir, { recursive: true, force: true });
     }
   }, 15_000);
+
+  it("requires an explicit build date for publish-ready release builds", async () => {
+    const result = await captureCli(["tr", "v2", "national", "publish-ready"]);
+
+    expect(result).toMatchObject({
+      code: 2,
+      payload: {
+        ok: false,
+        command: "tr v2 national publish-ready",
+        issues: [
+          expect.objectContaining({
+            code: "BUILD_DATE_REQUIRED",
+            expected: "2026-08-22T00:00:00.000Z",
+            actual: "missing"
+          })
+        ]
+      }
+    });
+  });
 
   it("reports missing and malformed validation JSON with machine-readable issues", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-v2-invalid-"));

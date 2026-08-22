@@ -39,21 +39,26 @@ describe("@territory-kit/data-tr", () => {
       requiresResolver: true
     });
     expect(turkeyV2DataContract).toMatchObject({
-      targetDatasetVersion: "2.0.0-rc.1",
+      targetDatasetVersion: "2.0.0",
       generatedZonesAreOfficialAdministrativeAreas: false,
       nationalAdm3PolygonBuildIncluded: true
     });
+    expect(turkeyV2DataContract.sourceClassPriority).toEqual(["official", "osm", "generated"]);
+    expect(turkeyV2DataContract.adm3SemanticTypes).toContain("generated-zone");
     expect(turkeyV2NationalPlayableCoverage).toMatchObject({
       datasetId: "territory-kit-tr-v2-playable",
-      releaseChannel: "prerelease",
+      datasetVersion: "2.0.0",
+      releaseChannel: "stable",
       adm3: {
         status: "playable-national-hybrid",
         generatedFallback: true,
+        generatedZonesAreOfficialAdministrativeAreas: false,
         minimumDistrictCoveragePercent: 99.99
       },
       packaging: {
         embedsGeometry: false,
-        requiresResolver: true
+        requiresResolver: true,
+        largeArtifactsExternal: true
       }
     });
     expect(resolveTurkeyDataset().variant).toBe("legacy");
@@ -138,7 +143,7 @@ describe("@territory-kit/data-tr", () => {
         stableJson({
           manifestVersion: "1",
           datasetId: "territory-kit-tr-v2-playable",
-          datasetVersion: "2.0.0-rc.1",
+          datasetVersion: "2.0.0",
           schemaVersion: "territory-schema@1",
           supportedLevels: ["ADM0"]
         })
@@ -178,7 +183,7 @@ describe("@territory-kit/data-tr", () => {
     });
 
     expect(handle.descriptor.datasetId).toBe("territory-kit-tr-v2-playable");
-    expect(handle.levels.ADM0?.manifest.datasetVersion).toBe("2.0.0-rc.1");
+    expect(handle.levels.ADM0?.manifest.datasetVersion).toBe("2.0.0");
   });
 });
 
@@ -187,7 +192,7 @@ function createMinimalTurkeyDataset(input: { datasetId?: string } = {}): unknown
   return {
     manifest: {
       datasetId,
-      datasetVersion: datasetId === "territory-kit-tr-v2-playable" ? "2.0.0-rc.1" : "1.0.0",
+      datasetVersion: datasetId === "territory-kit-tr-v2-playable" ? "2.0.0" : "1.0.0",
       schemaVersion: "territory-schema@1",
       sourceDate: "2026-01-01",
       geometryHash: "territory-kit-tr-fixture-v1",

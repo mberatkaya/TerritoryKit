@@ -1,10 +1,10 @@
 {
   "schemaVersion": "territorykit-production-hardening-report@1",
   "ok": true,
-  "generatedAt": "2026-07-30T17:46:55.109Z",
+  "generatedAt": "2026-08-22T16:26:47.124Z",
   "git": {
-    "branch": "release/production-hardening",
-    "head": "9060b8754bd72badb1bccf2b7472bf541c6ac7b6"
+    "branch": "release/v2-stable-hardening",
+    "head": "1c33b1a33fc0e4405a25361448dad86aa45faa4b"
   },
   "environment": {
     "node": "v24.14.0",
@@ -20,6 +20,7 @@
     "importBoundariesOk": true,
     "turkeyAdm0Adm2ChecksumOk": true,
     "turkeyAdm3ChecksumOk": true,
+    "turkeyV2StableNationalOk": true,
     "turkeyBenchmarkOk": true,
     "changesetStatusOk": true
   },
@@ -27,11 +28,11 @@
     "audit": {
       "advisories": {},
       "metadata": {
-        "vulnerabilities": { "info": 0, "low": 0, "moderate": 3, "high": 3, "critical": 0 },
-        "dependencies": 277,
+        "vulnerabilities": { "info": 0, "low": 0, "moderate": 4, "high": 9, "critical": 0 },
+        "dependencies": 281,
         "devDependencies": 490,
         "optionalDependencies": 109,
-        "totalDependencies": 767
+        "totalDependencies": 771
       }
     },
     "fullAudit": {
@@ -136,7 +137,63 @@
           "github_advisory_id": "GHSA-fx2h-pf6j-xcff",
           "url": "https://github.com/advisories/GHSA-fx2h-pf6j-xcff"
         },
-        "1124288": {
+        "1130591": {
+          "findings": [
+            {
+              "version": "5.0.7",
+              "paths": [
+                ".>@eslint/js>eslint>@eslint/config-array>minimatch>brace-expansion",
+                ".>@eslint/js>eslint>minimatch>brace-expansion",
+                ".>eslint>@eslint/config-array>minimatch>brace-expansion",
+                ".>eslint>minimatch>brace-expansion",
+                ".>rimraf>glob>minimatch>brace-expansion",
+                ".>typedoc>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>eslint>@eslint/config-array>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>eslint>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>eslint>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>eslint>@eslint/config-array>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/eslint-plugin>eslint>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/parser>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/parser>eslint>@eslint/config-array>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/parser>eslint>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
+                ".>typescript-eslint>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
+                ".>typescript-eslint>eslint>@eslint/config-array>minimatch>brace-expansion",
+                ".>typescript-eslint>eslint>minimatch>brace-expansion"
+              ],
+              "dev": true,
+              "optional": false,
+              "bundled": false
+            }
+          ],
+          "id": 1130591,
+          "title": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+          "module_name": "brace-expansion",
+          "vulnerable_versions": ">=4.0.0 <5.0.8",
+          "patched_versions": ">=5.0.8",
+          "severity": "high",
+          "cwe": "CWE-400, CWE-770",
+          "github_advisory_id": "GHSA-mh99-v99m-4gvg",
+          "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg"
+        },
+        "1130709": {
           "findings": [
             {
               "version": "8.5.17",
@@ -184,17 +241,17 @@
               "bundled": false
             }
           ],
-          "id": 1124288,
-          "title": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
+          "id": 1130709,
+          "title": "PostCSS: incomplete fix of GHSA-6g55-p6wh-862q — attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset",
           "module_name": "postcss",
-          "vulnerable_versions": "<=8.5.17",
-          "patched_versions": ">=8.5.18",
-          "severity": "high",
-          "cwe": "CWE-22",
-          "github_advisory_id": "GHSA-r28c-9q8g-f849",
-          "url": "https://github.com/advisories/GHSA-r28c-9q8g-f849"
+          "vulnerable_versions": "<=8.5.22",
+          "patched_versions": ">=8.5.23",
+          "severity": "moderate",
+          "cwe": "CWE-22, CWE-200",
+          "github_advisory_id": "GHSA-fxqj-rqcc-2cmp",
+          "url": "https://github.com/advisories/GHSA-fxqj-rqcc-2cmp"
         },
-        "1124334": {
+        "1130734": {
           "findings": [
             {
               "version": "5.0.7",
@@ -240,23 +297,261 @@
               "bundled": false
             }
           ],
-          "id": 1124334,
-          "title": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+          "id": 1130734,
+          "title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
           "module_name": "brace-expansion",
-          "vulnerable_versions": "<=5.0.7",
-          "patched_versions": ">=5.0.8",
+          "vulnerable_versions": ">=4.0.0 <5.0.9",
+          "patched_versions": ">=5.0.9",
           "severity": "high",
           "cwe": "CWE-400, CWE-770",
-          "github_advisory_id": "GHSA-mh99-v99m-4gvg",
-          "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg"
+          "github_advisory_id": "GHSA-rgw5-rvv9-x895",
+          "url": "https://github.com/advisories/GHSA-rgw5-rvv9-x895"
+        },
+        "1138114": {
+          "findings": [
+            {
+              "version": "3.15.0",
+              "paths": [
+                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/config>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/config>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/config>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/git>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/apply-release-plan>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/assemble-release-plan>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/assemble-release-plan>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/assemble-release-plan>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/config>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/config>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/config>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/get-release-plan>@changesets/assemble-release-plan>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/get-release-plan>@changesets/assemble-release-plan>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/get-release-plan>@changesets/assemble-release-plan>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/get-release-plan>@changesets/config>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/get-release-plan>@changesets/config>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/get-release-plan>@changesets/config>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/get-release-plan>@changesets/pre>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/get-release-plan>@changesets/read>@changesets/git>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/get-release-plan>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/git>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/pre>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/read>@changesets/git>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
+                ".>@changesets/cli>@manypkg/get-packages>read-yaml-file>js-yaml"
+              ],
+              "dev": true,
+              "optional": false,
+              "bundled": false
+            }
+          ],
+          "id": 1138114,
+          "title": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) — CVE-2026-59870 fix not backported",
+          "module_name": "js-yaml",
+          "vulnerable_versions": ">=3.0.0 <3.15.1",
+          "patched_versions": ">=3.15.1",
+          "severity": "high",
+          "cwe": "CWE-407",
+          "github_advisory_id": "GHSA-5p4m-2wfm-xmqj",
+          "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj"
+        },
+        "1138115": {
+          "findings": [
+            {
+              "version": "4.3.0",
+              "paths": [
+                ".>@changesets/cli>@changesets/get-release-plan>@changesets/read>@changesets/parse>js-yaml",
+                ".>@changesets/cli>@changesets/read>@changesets/parse>js-yaml",
+                "packages__nestjs>@nestjs/swagger>js-yaml"
+              ],
+              "dev": true,
+              "optional": false,
+              "bundled": false
+            }
+          ],
+          "id": 1138115,
+          "title": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) — CVE-2026-59870 fix not backported",
+          "module_name": "js-yaml",
+          "vulnerable_versions": ">=4.0.0 <4.3.1",
+          "patched_versions": ">=4.3.1",
+          "severity": "high",
+          "cwe": "CWE-407",
+          "github_advisory_id": "GHSA-5p4m-2wfm-xmqj",
+          "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj"
+        },
+        "1138808": {
+          "findings": [
+            {
+              "version": "1.2.1",
+              "paths": [
+                "packages__react-native>@maplibre/maplibre-react-native>react-native>@react-native/community-cli-plugin>metro>image-size",
+                "packages__react-native>@maplibre/maplibre-react-native>react-native>@react-native/community-cli-plugin>metro-config>metro>image-size",
+                "packages__react-native>react-native>@react-native/community-cli-plugin>metro>image-size",
+                "packages__react-native>react-native>@react-native/community-cli-plugin>metro-config>metro>image-size"
+              ],
+              "dev": false,
+              "optional": false,
+              "bundled": false
+            }
+          ],
+          "id": 1138808,
+          "title": "image-size: ICNS parser allows denial of service through an infinite loop",
+          "module_name": "image-size",
+          "vulnerable_versions": "<=2.0.2",
+          "patched_versions": ">=2.0.3",
+          "severity": "high",
+          "cwe": "CWE-835",
+          "github_advisory_id": "GHSA-w3rx-r6r6-pgpr",
+          "url": "https://github.com/advisories/GHSA-w3rx-r6r6-pgpr"
+        },
+        "1138809": {
+          "findings": [
+            {
+              "version": "1.2.1",
+              "paths": [
+                "packages__react-native>@maplibre/maplibre-react-native>react-native>@react-native/community-cli-plugin>metro>image-size",
+                "packages__react-native>@maplibre/maplibre-react-native>react-native>@react-native/community-cli-plugin>metro-config>metro>image-size",
+                "packages__react-native>react-native>@react-native/community-cli-plugin>metro>image-size",
+                "packages__react-native>react-native>@react-native/community-cli-plugin>metro-config>metro>image-size"
+              ],
+              "dev": false,
+              "optional": false,
+              "bundled": false
+            }
+          ],
+          "id": 1138809,
+          "title": "image-size: JXL and HEIF parsers allow denial of service through infinite loops",
+          "module_name": "image-size",
+          "vulnerable_versions": "<=2.0.2",
+          "patched_versions": ">=2.0.3",
+          "severity": "high",
+          "cwe": "CWE-835",
+          "github_advisory_id": "GHSA-5p2g-fcmc-qvqq",
+          "url": "https://github.com/advisories/GHSA-5p2g-fcmc-qvqq"
+        },
+        "1139427": {
+          "findings": [
+            {
+              "version": "3.3.16",
+              "paths": [
+                ".>@vitest/coverage-v8>vitest>@vitest/mocker>vite>postcss>nanoid",
+                ".>@vitest/coverage-v8>vitest>vite>postcss>nanoid",
+                ".>vite>postcss>nanoid",
+                ".>vitepress>@vitejs/plugin-vue>vite>postcss>nanoid",
+                ".>vitepress>@vitejs/plugin-vue>vue>@vue/compiler-sfc>postcss>nanoid",
+                ".>vitepress>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
+                ".>vitepress>@vueuse/core>vue>@vue/compiler-sfc>postcss>nanoid",
+                ".>vitepress>@vueuse/integrations>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
+                ".>vitepress>@vueuse/integrations>@vueuse/core>vue>@vue/compiler-sfc>postcss>nanoid",
+                ".>vitepress>@vueuse/integrations>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
+                ".>vitepress>@vueuse/integrations>vue>@vue/compiler-sfc>postcss>nanoid",
+                ".>vitepress>vite>postcss>nanoid",
+                ".>vitepress>vue>@vue/compiler-sfc>postcss>nanoid",
+                ".>vitepress>postcss>nanoid",
+                ".>vitest>@vitest/mocker>vite>postcss>nanoid",
+                ".>vitest>vite>postcss>nanoid",
+                "docs>vitepress>@vitejs/plugin-vue>vite>postcss>nanoid",
+                "docs>vitepress>@vitejs/plugin-vue>vue>@vue/compiler-sfc>postcss>nanoid",
+                "docs>vitepress>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
+                "docs>vitepress>@vueuse/core>vue>@vue/compiler-sfc>postcss>nanoid",
+                "docs>vitepress>@vueuse/integrations>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
+                "docs>vitepress>@vueuse/integrations>@vueuse/core>vue>@vue/compiler-sfc>postcss>nanoid",
+                "docs>vitepress>@vueuse/integrations>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
+                "docs>vitepress>@vueuse/integrations>vue>@vue/compiler-sfc>postcss>nanoid",
+                "docs>vitepress>vite>postcss>nanoid",
+                "docs>vitepress>vue>@vue/compiler-sfc>postcss>nanoid",
+                "docs>vitepress>postcss>nanoid",
+                "examples__web-leaflet-turkey>vite>postcss>nanoid",
+                "examples__web-leaflet-turkey>vitest>@vitest/mocker>vite>postcss>nanoid",
+                "examples__web-leaflet-turkey>vitest>vite>postcss>nanoid",
+                "examples__web-maplibre>vite>postcss>nanoid",
+                "examples__web-maplibre-turkey>vite>postcss>nanoid",
+                "examples__web-maplibre-turkey>vitest>@vitest/mocker>vite>postcss>nanoid",
+                "examples__web-maplibre-turkey>vitest>vite>postcss>nanoid",
+                "examples__web-openlayers-turkey>vite>postcss>nanoid",
+                "examples__web-openlayers-turkey>vitest>@vitest/mocker>vite>postcss>nanoid",
+                "examples__web-openlayers-turkey>vitest>vite>postcss>nanoid"
+              ],
+              "dev": true,
+              "optional": false,
+              "bundled": false
+            }
+          ],
+          "id": 1139427,
+          "title": "nanoid: custom generators can loop indefinitely when size is zero",
+          "module_name": "nanoid",
+          "vulnerable_versions": "<3.3.18",
+          "patched_versions": ">=3.3.18",
+          "severity": "high",
+          "cwe": "CWE-835",
+          "github_advisory_id": "GHSA-2v37-7h3g-55p8",
+          "url": "https://github.com/advisories/GHSA-2v37-7h3g-55p8"
+        },
+        "1139510": {
+          "findings": [
+            {
+              "version": "8.5.17",
+              "paths": [
+                ".>@vitest/coverage-v8>vitest>@vitest/mocker>vite>postcss",
+                ".>@vitest/coverage-v8>vitest>vite>postcss",
+                ".>vite>postcss",
+                ".>vitepress>@vitejs/plugin-vue>vite>postcss",
+                ".>vitepress>@vitejs/plugin-vue>vue>@vue/compiler-sfc>postcss",
+                ".>vitepress>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
+                ".>vitepress>@vueuse/core>vue>@vue/compiler-sfc>postcss",
+                ".>vitepress>@vueuse/integrations>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
+                ".>vitepress>@vueuse/integrations>@vueuse/core>vue>@vue/compiler-sfc>postcss",
+                ".>vitepress>@vueuse/integrations>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
+                ".>vitepress>@vueuse/integrations>vue>@vue/compiler-sfc>postcss",
+                ".>vitepress>vite>postcss",
+                ".>vitepress>vue>@vue/compiler-sfc>postcss",
+                ".>vitepress>postcss",
+                ".>vitest>@vitest/mocker>vite>postcss",
+                ".>vitest>vite>postcss",
+                "docs>vitepress>@vitejs/plugin-vue>vite>postcss",
+                "docs>vitepress>@vitejs/plugin-vue>vue>@vue/compiler-sfc>postcss",
+                "docs>vitepress>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
+                "docs>vitepress>@vueuse/core>vue>@vue/compiler-sfc>postcss",
+                "docs>vitepress>@vueuse/integrations>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
+                "docs>vitepress>@vueuse/integrations>@vueuse/core>vue>@vue/compiler-sfc>postcss",
+                "docs>vitepress>@vueuse/integrations>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
+                "docs>vitepress>@vueuse/integrations>vue>@vue/compiler-sfc>postcss",
+                "docs>vitepress>vite>postcss",
+                "docs>vitepress>vue>@vue/compiler-sfc>postcss",
+                "docs>vitepress>postcss",
+                "examples__web-leaflet-turkey>vite>postcss",
+                "examples__web-leaflet-turkey>vitest>@vitest/mocker>vite>postcss",
+                "examples__web-leaflet-turkey>vitest>vite>postcss",
+                "examples__web-maplibre>vite>postcss",
+                "examples__web-maplibre-turkey>vite>postcss",
+                "examples__web-maplibre-turkey>vitest>@vitest/mocker>vite>postcss",
+                "examples__web-maplibre-turkey>vitest>vite>postcss",
+                "examples__web-openlayers-turkey>vite>postcss",
+                "examples__web-openlayers-turkey>vitest>@vitest/mocker>vite>postcss",
+                "examples__web-openlayers-turkey>vitest>vite>postcss"
+              ],
+              "dev": true,
+              "optional": false,
+              "bundled": false
+            }
+          ],
+          "id": 1139510,
+          "title": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
+          "module_name": "postcss",
+          "vulnerable_versions": "<=8.5.17",
+          "patched_versions": ">=8.5.18",
+          "severity": "high",
+          "cwe": "CWE-22",
+          "github_advisory_id": "GHSA-r28c-9q8g-f849",
+          "url": "https://github.com/advisories/GHSA-r28c-9q8g-f849"
         }
       },
       "metadata": {
-        "vulnerabilities": { "info": 0, "low": 0, "moderate": 3, "high": 3, "critical": 0 },
-        "dependencies": 277,
+        "vulnerabilities": { "info": 0, "low": 0, "moderate": 4, "high": 9, "critical": 0 },
+        "dependencies": 281,
         "devDependencies": 490,
         "optionalDependencies": 109,
-        "totalDependencies": 767
+        "totalDependencies": 771
       }
     },
     "workflowSecurity": {
@@ -298,8 +593,8 @@
     }
   },
   "licenses": {
-    "licenseCount": 12,
-    "packageCount": 260,
+    "licenseCount": 13,
+    "packageCount": 264,
     "unknown": [],
     "licenses": [
       {
@@ -707,7 +1002,7 @@
       },
       {
         "license": "MIT",
-        "packageCount": 201,
+        "packageCount": 204,
         "packages": [
           {
             "name": "@babel/code-frame",
@@ -876,6 +1171,12 @@
             "versions": ["4.3.2"],
             "license": "MIT",
             "homepage": "https://github.com/maplibre/vt-pbf#readme"
+          },
+          {
+            "name": "@osmix/pbf",
+            "versions": ["0.0.10"],
+            "license": "MIT",
+            "homepage": "https://github.com/conveyal/osmix#readme"
           },
           {
             "name": "@petamoriken/float16",
@@ -1646,6 +1947,12 @@
             "homepage": "https://github.com/micromatch/picomatch"
           },
           {
+            "name": "polygon-clipping",
+            "versions": ["0.15.7"],
+            "license": "MIT",
+            "homepage": "https://github.com/mfogel/polygon-clipping#readme"
+          },
+          {
             "name": "pretty-format",
             "versions": ["29.7.0"],
             "license": "MIT",
@@ -1783,6 +2090,12 @@
             "versions": ["0.5.21"],
             "license": "MIT",
             "homepage": "https://github.com/evanw/node-source-map-support#readme"
+          },
+          {
+            "name": "splaytree",
+            "versions": ["3.2.3"],
+            "license": "MIT",
+            "homepage": "https://github.com/w8r/splay-tree#readme"
           },
           {
             "name": "stackframe",
@@ -1923,6 +2236,18 @@
             "homepage": "https://github.com/donmccurdy/zstddec#readme"
           }
         ]
+      },
+      {
+        "license": "Unlicense",
+        "packageCount": 1,
+        "packages": [
+          {
+            "name": "robust-predicates",
+            "versions": ["3.0.3"],
+            "license": "Unlicense",
+            "homepage": "https://github.com/mourner/robust-predicates#readme"
+          }
+        ]
       }
     ]
   },
@@ -1932,7 +2257,7 @@
     "packages": [
       {
         "name": "@territory-kit/adapter-core",
-        "version": "1.1.0",
+        "version": "1.9.3",
         "directory": "packages/adapter-core",
         "license": "Apache-2.0",
         "sideEffects": false,
@@ -1950,7 +2275,7 @@
       },
       {
         "name": "@territory-kit/cli",
-        "version": "1.1.0",
+        "version": "1.9.3",
         "directory": "packages/cli",
         "license": "Apache-2.0",
         "files": [
@@ -1972,7 +2297,7 @@
       },
       {
         "name": "@territory-kit/core",
-        "version": "1.1.0",
+        "version": "1.9.3",
         "directory": "packages/core",
         "license": "Apache-2.0",
         "sideEffects": false,
@@ -1994,7 +2319,7 @@
       },
       {
         "name": "@territory-kit/data-de",
-        "version": "1.1.0",
+        "version": "1.9.3",
         "directory": "packages/data-de",
         "license": "Apache-2.0",
         "sideEffects": false,
@@ -2012,7 +2337,7 @@
       },
       {
         "name": "@territory-kit/data-id",
-        "version": "1.1.0",
+        "version": "1.9.3",
         "directory": "packages/data-id",
         "license": "Apache-2.0",
         "sideEffects": false,
@@ -2030,7 +2355,7 @@
       },
       {
         "name": "@territory-kit/data-jp",
-        "version": "1.1.0",
+        "version": "1.9.3",
         "directory": "packages/data-jp",
         "license": "Apache-2.0",
         "sideEffects": false,
@@ -2048,7 +2373,7 @@
       },
       {
         "name": "@territory-kit/data-tr",
-        "version": "1.1.0",
+        "version": "1.9.3",
         "directory": "packages/data-tr",
         "license": "Apache-2.0",
         "sideEffects": false,
@@ -2066,7 +2391,7 @@
       },
       {
         "name": "@territory-kit/data-us",
-        "version": "1.1.0",
+        "version": "1.9.3",
         "directory": "packages/data-us",
         "license": "Apache-2.0",
         "sideEffects": false,
@@ -2084,7 +2409,7 @@
       },
       {
         "name": "@territory-kit/dataset",
-        "version": "1.1.0",
+        "version": "1.9.3",
         "directory": "packages/dataset",
         "license": "Apache-2.0",
         "sideEffects": false,
@@ -2102,7 +2427,7 @@
       },
       {
         "name": "@territory-kit/game",
-        "version": "1.1.0",
+        "version": "1.9.3",
         "directory": "packages/game",
         "license": "Apache-2.0",
         "sideEffects": false,
@@ -2123,7 +2448,7 @@
       },
       {
         "name": "@territory-kit/generators",
-        "version": "1.1.0",
+        "version": "1.9.3",
         "directory": "packages/generators",
         "license": "Apache-2.0",
         "sideEffects": false,
@@ -2138,16 +2463,18 @@
         "publishConfig": { "access": "public", "registry": "https://registry.npmjs.org/" },
         "peerDependencies": {},
         "dependencies": {
+          "@maplibre/geojson-vt": "^6.1.1",
+          "@maplibre/vt-pbf": "^4.3.2",
+          "@osmix/pbf": "0.0.10",
           "@territory-kit/core": "workspace:*",
           "@territory-kit/dataset": "workspace:*",
           "flatbush": "^4.6.2",
-          "@maplibre/geojson-vt": "^6.1.1",
-          "@maplibre/vt-pbf": "^4.3.2"
+          "polygon-clipping": "^0.15.7"
         }
       },
       {
         "name": "@territory-kit/leaflet",
-        "version": "1.1.0",
+        "version": "1.2.10",
         "directory": "packages/leaflet",
         "license": "Apache-2.0",
         "sideEffects": false,
@@ -2170,7 +2497,7 @@
       },
       {
         "name": "@territory-kit/maplibre",
-        "version": "1.1.0",
+        "version": "1.9.3",
         "directory": "packages/maplibre",
         "license": "Apache-2.0",
         "sideEffects": false,
@@ -2193,7 +2520,7 @@
       },
       {
         "name": "@territory-kit/nestjs",
-        "version": "1.1.0",
+        "version": "1.9.3",
         "directory": "packages/nestjs",
         "license": "Apache-2.0",
         "sideEffects": false,
@@ -2214,7 +2541,7 @@
       },
       {
         "name": "@territory-kit/openlayers",
-        "version": "1.1.0",
+        "version": "1.2.10",
         "directory": "packages/openlayers",
         "license": "Apache-2.0",
         "sideEffects": false,
@@ -2237,7 +2564,7 @@
       },
       {
         "name": "@territory-kit/react-native",
-        "version": "1.1.0",
+        "version": "1.1.11",
         "directory": "packages/react-native",
         "license": "Apache-2.0",
         "sideEffects": false,
@@ -2263,7 +2590,7 @@
       },
       {
         "name": "@territory-kit/registry",
-        "version": "1.1.0",
+        "version": "1.9.3",
         "directory": "packages/registry",
         "license": "Apache-2.0",
         "sideEffects": false,
@@ -2281,7 +2608,7 @@
       },
       {
         "name": "@territory-kit/runtime",
-        "version": "1.1.0",
+        "version": "1.9.3",
         "directory": "packages/runtime",
         "license": "Apache-2.0",
         "sideEffects": false,
@@ -2309,9 +2636,9 @@
     "packages": [
       {
         "package": "@territory-kit/adapter-core",
-        "tarball": "territory-kit-adapter-core-1.1.0.tgz",
-        "tarballSizeBytes": 7953,
-        "tarballSha256": "711b9f20047cbcea14e1a570cd84a335428b51915450eb1e28d077d19fe00b7c",
+        "tarball": "territory-kit-adapter-core-1.9.3.tgz",
+        "tarballSizeBytes": 7955,
+        "tarballSha256": "3d6d760f1f9e9ccea925aca8d2d1d2b641e845034c48876795f8910d89452fb6",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2327,10 +2654,10 @@
       },
       {
         "package": "@territory-kit/cli",
-        "tarball": "territory-kit-cli-1.1.0.tgz",
-        "tarballSizeBytes": 53782,
-        "tarballSha256": "5a9c8c9016af0557d4c6611cbf6d11fff7806b4cd5d6d818d1319651ae14a2a7",
-        "fileCount": 7,
+        "tarball": "territory-kit-cli-1.9.3.tgz",
+        "tarballSizeBytes": 94442,
+        "tarballSha256": "3f90d9fd1177972cc9675902a695cb801590be67e3d6d76f8ad7663207fe51ed",
+        "fileCount": 11,
         "entries": [
           "package/LICENSE",
           "package/README.md",
@@ -2338,6 +2665,10 @@
           "package/dist/index.d.cts",
           "package/dist/index.d.mts",
           "package/dist/index.mjs",
+          "package/dist/turkey-adm3-hybrid-BisW1TqX.mjs",
+          "package/dist/turkey-adm3-hybrid-CP2Nie0a.cjs",
+          "package/dist/turkey-v2-national-CMaKQN56.cjs",
+          "package/dist/turkey-v2-national-CW-39-vh.mjs",
           "package/package.json"
         ],
         "ok": true,
@@ -2345,9 +2676,9 @@
       },
       {
         "package": "@territory-kit/core",
-        "tarball": "territory-kit-core-1.1.0.tgz",
-        "tarballSizeBytes": 34510,
-        "tarballSha256": "939b11d50dd1713b676e12b900f93b1c02ada54fbdb23f1368fb2e5b273b30db",
+        "tarball": "territory-kit-core-1.9.3.tgz",
+        "tarballSizeBytes": 34695,
+        "tarballSha256": "d294235b19e3929d9a71d1c907cf7fcf238962d4c195e15475a936e7aa1c8854",
         "fileCount": 11,
         "entries": [
           "package/LICENSE",
@@ -2367,9 +2698,9 @@
       },
       {
         "package": "@territory-kit/data-de",
-        "tarball": "territory-kit-data-de-1.1.0.tgz",
-        "tarballSizeBytes": 3466,
-        "tarballSha256": "1d380471f9194573ea0f69e4280e4c78fcab9882b6f8d0a8ea3e257a3b3d4c56",
+        "tarball": "territory-kit-data-de-1.9.3.tgz",
+        "tarballSizeBytes": 3476,
+        "tarballSha256": "a036ffe94794e9cf68bd29555816c30b0683c7cbe222f6907b23d1e9f3a0ac13",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2385,9 +2716,9 @@
       },
       {
         "package": "@territory-kit/data-id",
-        "tarball": "territory-kit-data-id-1.1.0.tgz",
-        "tarballSizeBytes": 3480,
-        "tarballSha256": "2697e2b5abd09d1ad6990bd4af3d3b0438980038b08bbb815923d44303b8d6a2",
+        "tarball": "territory-kit-data-id-1.9.3.tgz",
+        "tarballSizeBytes": 3494,
+        "tarballSha256": "4f3e8d6eefdd49221c45fd766e2f97b25c9fb828f9794bd07a8d7d9141220ba8",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2403,9 +2734,9 @@
       },
       {
         "package": "@territory-kit/data-jp",
-        "tarball": "territory-kit-data-jp-1.1.0.tgz",
-        "tarballSizeBytes": 3473,
-        "tarballSha256": "5f7dd451502ac7024f57598f7b375671b89ecfddb8dc3a3da1a85d7c87bc7f43",
+        "tarball": "territory-kit-data-jp-1.9.3.tgz",
+        "tarballSizeBytes": 3485,
+        "tarballSha256": "f030e5436159f7aba461b188a89a78d4d24fe8eaff85509c6af01e5b07b3e24a",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2421,9 +2752,9 @@
       },
       {
         "package": "@territory-kit/data-tr",
-        "tarball": "territory-kit-data-tr-1.1.0.tgz",
-        "tarballSizeBytes": 4793,
-        "tarballSha256": "a10ba51f7f2784642f0e664c3cb40be7e78856afc8d9de662a6b4cd7604fe113",
+        "tarball": "territory-kit-data-tr-1.9.3.tgz",
+        "tarballSizeBytes": 6148,
+        "tarballSha256": "e6e10917e7f5e7e4ff7918cf1baa528b219db34a18314f0a331c13ee79004a40",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2439,9 +2770,9 @@
       },
       {
         "package": "@territory-kit/data-us",
-        "tarball": "territory-kit-data-us-1.1.0.tgz",
-        "tarballSizeBytes": 3486,
-        "tarballSha256": "f3497a05c754d546207e23b76b109df5a265dce58b9c34a8e695a545f8963e87",
+        "tarball": "territory-kit-data-us-1.9.3.tgz",
+        "tarballSizeBytes": 3498,
+        "tarballSha256": "8624783511ecff4b0f4ccade22cf2d8a3b9dfde76b8358d0a978a2fc6c4cb0f7",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2457,10 +2788,10 @@
       },
       {
         "package": "@territory-kit/dataset",
-        "tarball": "territory-kit-dataset-1.1.0.tgz",
-        "tarballSizeBytes": 101785,
-        "tarballSha256": "3c059dae1a046b1b415474ddca1ab00a3785af150c83d17928d26d1cb4fdf8ed",
-        "fileCount": 7,
+        "tarball": "territory-kit-dataset-1.9.3.tgz",
+        "tarballSizeBytes": 115619,
+        "tarballSha256": "353cecf0423be68eaf7422963f0d779f72bbb995fcc36ff52488b0111c99608e",
+        "fileCount": 15,
         "entries": [
           "package/LICENSE",
           "package/README.md",
@@ -2468,6 +2799,14 @@
           "package/dist/index.d.cts",
           "package/dist/index.d.mts",
           "package/dist/index.mjs",
+          "package/dist/turkey-v2.cjs",
+          "package/dist/turkey-v2.d.cts",
+          "package/dist/turkey-v2.d.mts",
+          "package/dist/turkey-v2.mjs",
+          "package/dist/types-Cya70DRw.d.cts",
+          "package/dist/types-Cya70DRw.d.mts",
+          "package/dist/validation-DCLjRVHQ.cjs",
+          "package/dist/validation-DPA8JOg3.mjs",
           "package/package.json"
         ],
         "ok": true,
@@ -2475,9 +2814,9 @@
       },
       {
         "package": "@territory-kit/game",
-        "tarball": "territory-kit-game-1.1.0.tgz",
-        "tarballSizeBytes": 21050,
-        "tarballSha256": "af5f734704f8b2f12e07f6cbde5dfb7d7d09da9031301a270a659913b8e2e538",
+        "tarball": "territory-kit-game-1.9.3.tgz",
+        "tarballSizeBytes": 21054,
+        "tarballSha256": "b0625f785d813f8d53370c8aee372ae77b15a094404086e49b90f5891d7d5f93",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2493,10 +2832,10 @@
       },
       {
         "package": "@territory-kit/generators",
-        "tarball": "territory-kit-generators-1.1.0.tgz",
-        "tarballSizeBytes": 242763,
-        "tarballSha256": "06035555bfcdb15bc820ec0a9fd2467203c8bdc9aae493c71c5121ef6387174b",
-        "fileCount": 7,
+        "tarball": "territory-kit-generators-1.9.3.tgz",
+        "tarballSizeBytes": 388933,
+        "tarballSha256": "884665a2feea84515c0ecdfdb24ef409691f267df85ccf5263135ab556284477",
+        "fileCount": 15,
         "entries": [
           "package/LICENSE",
           "package/README.md",
@@ -2504,6 +2843,14 @@
           "package/dist/index.d.cts",
           "package/dist/index.d.mts",
           "package/dist/index.mjs",
+          "package/dist/turkey-adm3.cjs",
+          "package/dist/turkey-adm3.d.cts",
+          "package/dist/turkey-adm3.d.mts",
+          "package/dist/turkey-adm3.mjs",
+          "package/dist/turkey-v2-national-Bl_N9Ubc.d.mts",
+          "package/dist/turkey-v2-national-C0J7ILJQ.d.cts",
+          "package/dist/turkey-v2-national-Do-ORQqw.cjs",
+          "package/dist/turkey-v2-national-DyIBwZa8.mjs",
           "package/package.json"
         ],
         "ok": true,
@@ -2511,9 +2858,9 @@
       },
       {
         "package": "@territory-kit/leaflet",
-        "tarball": "territory-kit-leaflet-1.1.0.tgz",
-        "tarballSizeBytes": 7916,
-        "tarballSha256": "dee0a3d618cc62c7503f8ae1d8005ac0397524c63782aef5804c1571ad895c2e",
+        "tarball": "territory-kit-leaflet-1.2.10.tgz",
+        "tarballSizeBytes": 7918,
+        "tarballSha256": "0661b1ad2bcbd8b2ef3d13b540546e95d35e46b7d56719f864b81201c73c223f",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2529,9 +2876,9 @@
       },
       {
         "package": "@territory-kit/maplibre",
-        "tarball": "territory-kit-maplibre-1.1.0.tgz",
-        "tarballSizeBytes": 12091,
-        "tarballSha256": "75f3bfe078982877bc8fb9d923fb6aaa0406bf9f9ac5f346e1b85c08432a04ef",
+        "tarball": "territory-kit-maplibre-1.9.3.tgz",
+        "tarballSizeBytes": 12095,
+        "tarballSha256": "7c43d19652b8db3ee0accbe0fc712e3a709f2d7643f6236acfbb5a98eb334986",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2547,9 +2894,9 @@
       },
       {
         "package": "@territory-kit/nestjs",
-        "tarball": "territory-kit-nestjs-1.1.0.tgz",
-        "tarballSizeBytes": 7364,
-        "tarballSha256": "fbe598006e56e09987503093bce74d4a30f5b9980f6ec52559e405c790af2bcb",
+        "tarball": "territory-kit-nestjs-1.9.3.tgz",
+        "tarballSizeBytes": 7368,
+        "tarballSha256": "bc4ec557587d776d36c64057ea8965627702603ccb1cc006d3943b644cc787cd",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2565,9 +2912,9 @@
       },
       {
         "package": "@territory-kit/openlayers",
-        "tarball": "territory-kit-openlayers-1.1.0.tgz",
-        "tarballSizeBytes": 9328,
-        "tarballSha256": "f254248b75f86a30caa2374c3d71b197db14f91627d4527c61062df4e52a867e",
+        "tarball": "territory-kit-openlayers-1.2.10.tgz",
+        "tarballSizeBytes": 9336,
+        "tarballSha256": "01da0316f50e331dceb26cad92633266db5e830117a1ff055fb71d89efeea852",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2583,9 +2930,9 @@
       },
       {
         "package": "@territory-kit/react-native",
-        "tarball": "territory-kit-react-native-1.1.0.tgz",
-        "tarballSizeBytes": 31204,
-        "tarballSha256": "5c9ff64f1942f1c4b3f90937fa88fc6c7722b6b086a65350df002e24b7c5a5fe",
+        "tarball": "territory-kit-react-native-1.1.11.tgz",
+        "tarballSizeBytes": 31211,
+        "tarballSha256": "6b800746c8c7adac08860aef1a3c8e417d99826f39c8c85796ab20f3361b59b2",
         "fileCount": 11,
         "entries": [
           "package/LICENSE",
@@ -2605,15 +2952,15 @@
       },
       {
         "package": "@territory-kit/registry",
-        "tarball": "territory-kit-registry-1.1.0.tgz",
-        "tarballSizeBytes": 43962,
-        "tarballSha256": "00d1b818c72e26f84ec866c3c8446c953a335e326a2e5b1012f1684916a84963",
+        "tarball": "territory-kit-registry-1.9.3.tgz",
+        "tarballSizeBytes": 44253,
+        "tarballSha256": "b5655e558efd8b1072a33868ae6e1f3b82c3891025f12cb829a7bcc52ad3baba",
         "fileCount": 15,
         "entries": [
           "package/LICENSE",
           "package/README.md",
-          "package/dist/client-CYSLXTP2.mjs",
-          "package/dist/client-kJGP0mFt.cjs",
+          "package/dist/client-CtzYr_gT.cjs",
+          "package/dist/client-CzTRavGv.mjs",
           "package/dist/index.cjs",
           "package/dist/index.d.cts",
           "package/dist/index.d.mts",
@@ -2622,8 +2969,8 @@
           "package/dist/node.d.cts",
           "package/dist/node.d.mts",
           "package/dist/node.mjs",
-          "package/dist/types-NamNwy-G.d.cts",
-          "package/dist/types-NamNwy-G.d.mts",
+          "package/dist/types-CglN8BV-.d.cts",
+          "package/dist/types-CglN8BV-.d.mts",
           "package/package.json"
         ],
         "ok": true,
@@ -2631,9 +2978,9 @@
       },
       {
         "package": "@territory-kit/runtime",
-        "tarball": "territory-kit-runtime-1.1.0.tgz",
-        "tarballSizeBytes": 45432,
-        "tarballSha256": "825905fbf4f674f97a2f0cba4fa74951b05efc6ce14a76a7532b5c3569a4b848",
+        "tarball": "territory-kit-runtime-1.9.3.tgz",
+        "tarballSizeBytes": 45436,
+        "tarballSha256": "13d2dff6243f275d193961e66dee94408567bb7908bb53ef06c5c57eb5f9abfa",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2651,7 +2998,7 @@
   },
   "exports": {
     "ok": true,
-    "checkedExports": 21,
+    "checkedExports": 23,
     "issues": [],
     "results": [
       {
@@ -2725,6 +3072,13 @@
         "types": "packages/dataset/dist/index.d.mts"
       },
       {
+        "package": "@territory-kit/dataset",
+        "subpath": "./turkey-v2",
+        "import": "packages/dataset/dist/turkey-v2.mjs",
+        "require": "packages/dataset/dist/turkey-v2.cjs",
+        "types": "packages/dataset/dist/turkey-v2.d.mts"
+      },
+      {
         "package": "@territory-kit/game",
         "subpath": ".",
         "import": "packages/game/dist/index.mjs",
@@ -2737,6 +3091,13 @@
         "import": "packages/generators/dist/index.mjs",
         "require": "packages/generators/dist/index.cjs",
         "types": "packages/generators/dist/index.d.mts"
+      },
+      {
+        "package": "@territory-kit/generators",
+        "subpath": "./turkey-adm3",
+        "import": "packages/generators/dist/turkey-adm3.mjs",
+        "require": "packages/generators/dist/turkey-adm3.cjs",
+        "types": "packages/generators/dist/turkey-adm3.d.mts"
       },
       {
         "package": "@territory-kit/leaflet",
@@ -2803,7 +3164,7 @@
       }
     ]
   },
-  "importBoundaries": { "ok": true, "scannedFiles": 41, "issues": [] },
+  "importBoundaries": { "ok": true, "scannedFiles": 42, "issues": [] },
   "coverage": {
     "lines": { "total": 4702, "covered": 4091, "skipped": 0, "pct": 87 },
     "statements": { "total": 4805, "covered": 4183, "skipped": 0, "pct": 87.05 },
@@ -2973,6 +3334,108 @@
       "checksums": { "ok": true, "checkedFiles": 183, "mismatches": [] }
     }
   },
+  "turkeyV2": {
+    "ok": true,
+    "reportRoot": "reports/tr-v2-national",
+    "gates": {
+      "datasetVersion": true,
+      "sourceLockDatasetVersion": true,
+      "registryDatasetVersion": true,
+      "registryPrerelease": true,
+      "qualityOk": true,
+      "qualityPublishReady": true,
+      "buildMode": true,
+      "hardGateFailures": true,
+      "publishReadyGateFailures": true,
+      "adm0Count": true,
+      "adm1Count": true,
+      "adm2Count": true,
+      "successfulDistricts": true,
+      "failedDistricts": true,
+      "everyDistrictHasAdm3": true,
+      "districtsBelow9999": true,
+      "everyDistrictCoverage": true,
+      "nationalCoverage": true,
+      "invalidGeometry": true,
+      "emptyGeometry": true,
+      "orphanCount": true,
+      "hierarchyCycles": true,
+      "duplicateStableIds": true,
+      "parentContainment": true,
+      "effectiveSiblingOverlap": true,
+      "realGeneratedOverlap": true,
+      "missingProvenance": true,
+      "missingAttributionLicense": true,
+      "generatedMetadata": true,
+      "strictTrV2Validation": true,
+      "adjacencyIntegrity": true,
+      "registryChecksumIntegrity": true,
+      "registryArtifacts": true,
+      "generatedZonesNonOfficial": true,
+      "externalNationalGeometry": true
+    },
+    "dataset": {
+      "id": "territory-kit-tr-v2-playable",
+      "version": "2.0.0",
+      "registryVersion": "2.0.0",
+      "registryPrerelease": false,
+      "buildDate": "2026-08-22T00:00:00.000Z",
+      "buildMode": "publish-ready",
+      "publishReady": true
+    },
+    "counts": {
+      "ADM0": 1,
+      "ADM1": 81,
+      "ADM2": 973,
+      "ADM3": 42210,
+      "successfulDistricts": 973,
+      "failedDistricts": 0,
+      "districtsBelow9999": 0,
+      "officialADM3": 2094,
+      "osmADM3": 0,
+      "generatedADM3": 40116
+    },
+    "coverage": {
+      "realCoveragePercent": 3.247194,
+      "generatedCoveragePercent": 96.752804,
+      "finalCoveragePercent": 99.999998
+    },
+    "quality": {
+      "ok": true,
+      "publishReady": true,
+      "hardGateFailures": [],
+      "publishReadyGateFailures": [],
+      "summary": {
+        "adm0Count": 1,
+        "adm1Count": 81,
+        "adm2Count": 973,
+        "adm3Count": 42210,
+        "failedDistrictCount": 0,
+        "districtsBelow9999": 0,
+        "orphanCount": 0,
+        "hierarchyCycleCount": 0,
+        "duplicateStableIdCount": 0,
+        "invalidFinalGeometryCount": 0,
+        "emptyFinalGeometryCount": 0,
+        "effectiveSiblingOverlapCount": 0,
+        "realGeneratedOverlapCount": 0,
+        "parentContainmentErrorCount": 0,
+        "missingProvenanceCount": 0,
+        "missingAttributionLicenseCount": 0,
+        "generatedMetadataErrorCount": 0,
+        "strictTrV2ValidationErrorCount": 0,
+        "adjacencyIntegrityErrorCount": 0,
+        "registryArtifactChecksumErrors": 0,
+        "warningCount": 0
+      },
+      "geometryValidation": { "ok": true, "issueCount": 0, "errorCount": 0 },
+      "artifactIntegrity": { "ok": true, "errorCount": 0, "errors": [] }
+    },
+    "hashes": {
+      "sourceLockHash": "sha256:7e39a815b6eb587e8d718039f349c3e16d931301b648344cda15c7c2f77eb339",
+      "deterministicHash": "a1485efd7ffa655b4b81ee214b6baa4c297410b4d4f5b03181e2507f3712960b"
+    }
+  },
   "benchmarkComparison": {
     "ok": true,
     "baseline": "benchmarks/baselines/turkey-adm2-production.json",
@@ -2981,6 +3444,6 @@
   },
   "changesetStatus": {
     "ok": true,
-    "output": "🦋  info Packages to be bumped at patch\n🦋  - @territory-kit/example-web-maplibre-turkey 0.0.2\n🦋  - @territory-kit/react-native 1.1.1\n🦋  - @territory-kit/example-web-leaflet-turkey 0.0.2\n🦋  - @territory-kit/example-web-openlayers-turkey 0.0.2\n🦋  - @territory-kit/example-nestjs-postgres-game 0.0.2\n🦋  ---\n🦋  info Packages to be bumped at minor\n🦋  - @territory-kit/core 1.2.0\n🦋    - .changeset/catalog-binary-spatial-index.md\n🦋    - .changeset/dataset-registry.md\n🦋    - .changeset/pilot-country-datasets.md\n🦋    - .changeset/real-adjacency-engine.md\n🦋    - .changeset/render-query-separation.md\n🦋    - .changeset/runtime-architecture-boundaries.md\n🦋  - @territory-kit/runtime 1.2.0\n🦋    - .changeset/catalog-binary-spatial-index.md\n🦋    - .changeset/runtime-architecture-boundaries.md\n🦋    - .changeset/runtime-viewport-lifecycle.md\n🦋    - .changeset/web-renderer-adapters.md\n🦋  - @territory-kit/cli 1.2.0\n🦋    - .changeset/catalog-binary-spatial-index.md\n🦋    - .changeset/dataset-registry.md\n🦋    - .changeset/hosted-registry-publishing.md\n🦋    - .changeset/pilot-country-datasets.md\n🦋    - .changeset/real-adjacency-engine.md\n🦋    - .changeset/real-world-benchmarks.md\n🦋    - .changeset/render-query-separation.md\n🦋    - .changeset/turkey-adm3-ingestion.md\n🦋    - .changeset/turkey-full-build-performance.md\n🦋    - .changeset/turkey-national-source-pipeline.md\n🦋  - @territory-kit/registry 1.2.0\n🦋    - .changeset/dataset-registry.md\n🦋    - .changeset/hosted-registry-publishing.md\n🦋    - .changeset/render-query-separation.md\n🦋    - .changeset/runtime-architecture-boundaries.md\n🦋    - .changeset/turkey-adm3-pilot.md\n🦋  - @territory-kit/game 1.2.0\n🦋    - .changeset/game-territory-engine.md\n🦋  - @territory-kit/data-tr 1.2.0\n🦋    - .changeset/hosted-registry-publishing.md\n🦋    - .changeset/pilot-country-datasets.md\n🦋    - .changeset/turkey-adm3-pilot.md\n🦋    - .changeset/turkey-national-source-pipeline.md\n🦋  - @territory-kit/generators 1.2.0\n🦋    - .changeset/pilot-country-datasets.md\n🦋    - .changeset/real-adjacency-engine.md\n🦋    - .changeset/render-query-separation.md\n🦋    - .changeset/turkey-adm3-ingestion.md\n🦋    - .changeset/turkey-adm3-pilot.md\n🦋    - .changeset/turkey-full-build-performance.md\n🦋    - .changeset/turkey-national-source-pipeline.md\n🦋  - @territory-kit/data-us 1.2.0\n🦋    - .changeset/pilot-country-datasets.md\n🦋  - @territory-kit/data-de 1.2.0\n🦋    - .changeset/pilot-country-datasets.md\n🦋  - @territory-kit/data-jp 1.2.0\n🦋    - .changeset/pilot-country-datasets.md\n🦋  - @territory-kit/data-id 1.2.0\n🦋    - .changeset/pilot-country-datasets.md\n🦋  - @territory-kit/dataset 1.2.0\n🦋    - .changeset/real-adjacency-engine.md\n🦋    - .changeset/render-query-separation.md\n🦋    - .changeset/runtime-architecture-boundaries.md\n🦋    - .changeset/turkey-adm3-pilot.md\n🦋    - .changeset/turkey-full-build-performance.md\n🦋  - @territory-kit/maplibre 1.2.0\n🦋    - .changeset/render-query-separation.md\n🦋    - .changeset/runtime-architecture-boundaries.md\n🦋    - .changeset/turkey-adm3-pilot.md\n🦋    - .changeset/web-renderer-adapters.md\n🦋  - @territory-kit/adapter-core 1.2.0\n🦋    - .changeset/runtime-architecture-boundaries.md\n🦋    - .changeset/web-renderer-adapters.md\n🦋  - @territory-kit/leaflet 1.2.0\n🦋    - .changeset/web-renderer-adapters.md\n🦋  - @territory-kit/openlayers 1.2.0\n🦋    - .changeset/web-renderer-adapters.md\n🦋  - @territory-kit/nestjs 1.2.0\n🦋  ---\n🦋  info Running release would release NO packages as a major"
+    "output": "🦋  info Packages to be bumped at patch\n🦋  - @territory-kit/example-web-maplibre-turkey 0.0.13\n🦋  - @territory-kit/leaflet 1.2.11\n🦋  - @territory-kit/openlayers 1.2.11\n🦋  - @territory-kit/react-native 1.1.12\n🦋  - @territory-kit/example-nestjs-postgres-game 0.0.13\n🦋  - @territory-kit/example-web-leaflet-turkey 0.0.13\n🦋  - @territory-kit/example-web-openlayers-turkey 0.0.13\n🦋  ---\n🦋  info Running release would release NO packages as a minor\n🦋  ---\n🦋  info Packages to be bumped at major\n🦋  - @territory-kit/adapter-core 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/cli 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/core 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/data-de 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/data-id 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/data-jp 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/data-tr 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/data-us 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/dataset 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/generators 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/game 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/maplibre 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/nestjs 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/registry 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/runtime 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md"
   }
 }

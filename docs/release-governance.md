@@ -43,15 +43,15 @@ rules.
 
 ## World-Scale Data Roadmap
 
-World-scale support is deliberately staged after `1.0.0`:
+World-scale support remains staged after the TerritoryKit 2.0 stable handoff:
 
-- Keep `1.0.0` focused on viewport queries, simplification guidance, and benchmark evidence for
-  synthetic 10K/100K datasets.
+- Keep core SDK releases focused on verified query/render/registry contracts and benchmark
+  evidence.
 - Add opt-in large benchmark evidence before marking 1M feature scenarios complete.
-- Add vector tile/MVT support in the `1.3` roadmap milestone rather than changing
-  `territory-schema@1`.
-- Keep global administrative datasets out of MVP package publishing until source licensing and
-  redistribution are reviewed.
+- Keep global administrative datasets out of npm packages until source licensing and
+  redistribution are reviewed; large geography should flow through resolver/registry artifacts.
+- Treat the Turkey V2 national playable artifact as a reviewed country-specific release path, not
+  as a blanket claim that every country has complete lower-admin source coverage.
 
 ## Validator Rules
 

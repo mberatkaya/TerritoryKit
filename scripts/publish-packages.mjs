@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const registry = "https://registry.npmjs.org/";
 const dryRun = process.argv.includes("--dry-run");
+const publishTag = "latest";
 
 if (process.env.NODE_AUTH_TOKEN === "") {
   delete process.env.NODE_AUTH_TOKEN;
@@ -132,13 +133,15 @@ const packPackage = (pkg, packRoot) => {
 };
 
 const publishTarball = (pkg, tarball) => {
+  assertSafePublishTag(pkg);
+
   const args = [
     "publish",
     tarball,
     "--access",
     "public",
     "--tag",
-    "latest",
+    publishTag,
     `--registry=${registry}`
   ];
 
@@ -149,6 +152,24 @@ const publishTarball = (pkg, tarball) => {
 
   run("npm", args);
   console.log(`Published ${pkg.name}@${pkg.version}`);
+};
+
+const assertSafePublishTag = (pkg) => {
+  if (publishTag === "latest" && isPrereleaseVersion(pkg.version)) {
+    throw new Error(
+      `${pkg.name}@${pkg.version} is a prerelease and must not be published with npm tag latest.`
+    );
+  }
+};
+
+const isPrereleaseVersion = (version) => {
+  const match = /^\d+\.\d+\.\d+(?:-([0-9A-Za-z.-]+))?(?:\+[0-9A-Za-z.-]+)?$/.exec(version);
+
+  if (!match) {
+    throw new Error(`Invalid semver package version '${version}'.`);
+  }
+
+  return match[1] !== undefined;
 };
 
 const main = () => {

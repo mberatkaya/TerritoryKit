@@ -2,7 +2,7 @@
   "schemaVersion": "territorykit-benchmark-result@1",
   "mode": "local-real",
   "scenario": "turkey-adm2-production",
-  "generatedAt": "2026-07-30T17:46:54.664Z",
+  "generatedAt": "2026-08-22T16:26:46.462Z",
   "runtime": {
     "node": "v24.14.0",
     "platform": "darwin",
@@ -19,11 +19,11 @@
     "iterations": 5000
   },
   "metrics": {
-    "datasetValidationMs": 19.984458,
-    "engineConstructionMs": 19.385166,
-    "getZoneByIdMeanMs": 0.000036,
-    "latLngToZoneMeanMs": 0.003702,
-    "getZonesInBoundsMeanMs": 0.001448,
-    "datasetLoadMs": 41.05525000000001
+    "datasetValidationMs": 19.337833,
+    "engineConstructionMs": 20.656334,
+    "getZoneByIdMeanMs": 0.000035,
+    "latLngToZoneMeanMs": 0.003733,
+    "getZonesInBoundsMeanMs": 0.001379,
+    "datasetLoadMs": 41.59483300000001
   }
 }

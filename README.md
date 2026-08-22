@@ -6,21 +6,24 @@ independent from map renderers, backend frameworks, and game-specific state.
 
 ## Current Release
 
-Public package manifests in this workspace are staged on the `1.2.0` package line after the
-Sprint 11 through Sprint 13 Changesets version PR. The latest npm registry line can remain
-`1.1.0` until the release workflow publishes those staged manifests. The root workspace is
-private; its `0.0.0-private` version is tooling metadata and is not a public product version.
+TerritoryKit `2.0.0` is the stable release target for the V2 line. Public package manifests remain
+on the current `1.9.3` fixed-group line in this branch until Changesets creates the Version
+Packages PR; the root workspace stays private and its `0.0.0-private` version is tooling metadata,
+not a public product version.
+
+The Turkey V2 national playable dataset contract is
+`territory-kit-tr-v2-playable@2.0.0`. It provides 1 ADM0 country, 81 ADM1 provinces, 973 ADM2
+districts, and nationwide playable ADM3 coverage through resolver-managed external artifacts.
 
 ## Package Maturity
 
 - Stable core line: `@territory-kit/dataset`, `@territory-kit/core`, `@territory-kit/registry`,
-  `@territory-kit/maplibre`, `@territory-kit/leaflet`, `@territory-kit/openlayers`,
-  `@territory-kit/nestjs`, `@territory-kit/generators`, `@territory-kit/cli`, and pilot country
-  loader packages.
-- New runtime and game lines: `@territory-kit/adapter-core`, `@territory-kit/runtime`, and
-  `@territory-kit/game`.
-- Future packages: React Native, Studio, hosted registry, and additional dataset migration tooling
-  remain roadmap items.
+  `@territory-kit/adapter-core`, `@territory-kit/runtime`, `@territory-kit/generators`,
+  `@territory-kit/cli`, and `@territory-kit/game`.
+- Renderer and integration packages: `@territory-kit/maplibre`, `@territory-kit/leaflet`,
+  `@territory-kit/openlayers`, `@territory-kit/react-native`, and `@territory-kit/nestjs`.
+- Country loader packages are thin resolver descriptors. Large national geometry is kept outside
+  npm packages and loaded through local artifacts or registries.
 
 ## Historical Sprint Track
 
@@ -112,19 +115,23 @@ The generated coverage registry lives in `datasets/registry/coverage.json` and i
 [docs/datasets/coverage.md](./docs/datasets/coverage.md). TerritoryKit supports lower
 administrative levels when a suitable source exists, but it does not guarantee neighbourhood-level
 coverage for every country. Municipality and neighbourhood are semantic types on ADM records, not
-pseudo-administrative levels. Turkey now has a reviewed HDX/OCHA COD-AB source path for national
-ADM0-ADM2, while ADM3 remains partial and ADM4 remains source-model blocked. See
+pseudo-administrative levels. Turkey has a reviewed HDX/OCHA COD-AB source path for national
+ADM0-ADM2. The Turkey V2 national playable artifact adds nationwide ADM3 gameplay coverage by
+using reviewed real boundaries where available and deterministic generated fallback elsewhere.
+Generated fallback zones remain non-official `generated-zone` records, not official mahalle/koy
+administrative boundaries. ADM4 remains source-model blocked. See
 [docs/datasets/turkey-national-coverage.md](./docs/datasets/turkey-national-coverage.md),
 [docs/datasets/turkey-sources.md](./docs/datasets/turkey-sources.md), and the partial Gaziantep
 ADM3 pilot in
 [docs/datasets/turkey-neighbourhoods.md](./docs/datasets/turkey-neighbourhoods.md).
 Turkey V2 defines the additive data contract for mixing official, OSM, and generated ADM3 game
-zones without presenting generated zones as official mahalle/köy records. The hybrid builder now
-applies official > OSM > generated priority for representative district and batch artifacts, while
-the final national ADM3 artifact remains future release work. See
+zones without presenting generated zones as official mahalle/koy records. The stable national
+builder applies official > OSM > generated priority, emits registry/checksum/source-lock evidence,
+and keeps the national geometry external to npm packages. See
 [docs/datasets/turkey-v2-data-contract.md](./docs/datasets/turkey-v2-data-contract.md),
 [docs/datasets/turkey-v2-source-provenance.md](./docs/datasets/turkey-v2-source-provenance.md),
 [docs/datasets/turkey-v2-hybrid-coverage.md](./docs/datasets/turkey-v2-hybrid-coverage.md),
+[docs/datasets/turkey-v2-national-playable.md](./docs/datasets/turkey-v2-national-playable.md),
 [docs/datasets/turkey-v2-migration.md](./docs/datasets/turkey-v2-migration.md), and
 [ADR-007](./adr/ADR-007-turkey-v2-stable-identity.md) / [ADR-009](./adr/ADR-009-turkey-v2-hybrid-source-priority.md).
 The current product gap analysis is tracked in
@@ -145,14 +152,13 @@ pnpm release:check
 Node.js `>=22` and pnpm `>=11` are required. The current TypeScript baseline is `6.0.3`;
 TypeScript 7 will be evaluated in a later ADR before adoption.
 
-## 1.0 Release Scope
+## 2.0 Release Handoff
 
-The `1.0.0` release branch freezes the current public API surface and keeps
-`territory-schema@1` unchanged. It prepares package versions, release notes, benchmark
-evidence, and verification gates for a stable PR, but publishing, tagging, and GitHub release
-creation remain post-merge maintainer actions. The master sprint checklist separates completed
-repo evidence from repo-owned hardening work, external release handoff, and post-1.0 roadmap
-items.
+The `2.0.0` handoff keeps `territory-schema@1` unchanged and promotes the Turkey V2 national
+playable dataset from RC metadata to stable `2.0.0`. This branch prepares release notes,
+benchmark evidence, package dry-runs, release-hardening evidence, and a final major Changeset.
+Publishing, tagging, and merging the Changesets Version Packages PR remain post-merge maintainer
+actions.
 
 ## Planning Docs
 

@@ -46,6 +46,7 @@ const packageMetadata = validatePackageMetadata(publicPackages);
 const importBoundaries = inspectImportBoundaries();
 const workflowSecurity = inspectWorkflowSecurity();
 const turkey = collectTurkeyEvidence();
+const turkeyV2 = collectTurkeyV2StableEvidence();
 const coverage = existsSync(join(root, "coverage", "coverage-summary.json"))
   ? readJson("coverage/coverage-summary.json").total
   : undefined;
@@ -58,6 +59,7 @@ const releaseDecisionInputs = {
   importBoundariesOk: importBoundaries.ok,
   turkeyAdm0Adm2ChecksumOk: turkey.adm0Adm2.checksums.ok,
   turkeyAdm3ChecksumOk: turkey.adm3.checksums.ok,
+  turkeyV2StableNationalOk: turkeyV2.ok,
   turkeyBenchmarkOk: benchmarkComparison.ok,
   changesetStatusOk: changesetStatus.status === 0
 };
@@ -105,6 +107,7 @@ await writeJson(reportPath, {
   importBoundaries,
   coverage,
   turkey,
+  turkeyV2,
   benchmarkComparison,
   changesetStatus: {
     ok: changesetStatus.status === 0,
@@ -397,6 +400,133 @@ function collectTurkeyEvidence() {
       artifactPolicyOk: adm3ArtifactPolicy.ok,
       qualityCheckStatuses: adm3Quality.checkStatuses,
       checksums: verifyChecksums(adm3Root)
+    }
+  };
+}
+
+function collectTurkeyV2StableEvidence() {
+  const reportRoot = "reports/tr-v2-national";
+  const quality = readJson(`${reportRoot}/quality-report.json`);
+  const coverage = readJson(`${reportRoot}/coverage.json`);
+  const registry = readJson(`${reportRoot}/registry-entry.json`);
+  const sourceLock = readJson(`${reportRoot}/source-lock.json`);
+  const hierarchy = readJson(`${reportRoot}/hierarchy-report.json`);
+  const buildSummary = readJson(`${reportRoot}/build-summary.json`);
+  const dataset = Array.isArray(registry.datasets) ? registry.datasets[0] : undefined;
+  const summary = quality.summary ?? {};
+  const gates = {
+    datasetVersion: coverage.datasetVersion === "2.0.0",
+    sourceLockDatasetVersion: sourceLock.datasetVersion === "2.0.0",
+    registryDatasetVersion: dataset?.version === "2.0.0",
+    registryPrerelease: dataset?.prerelease === false,
+    qualityOk: quality.ok === true,
+    qualityPublishReady: quality.publishReady === true,
+    buildMode: quality.buildMode === "publish-ready" && buildSummary.buildMode === "publish-ready",
+    hardGateFailures:
+      Array.isArray(quality.hardGateFailures) && quality.hardGateFailures.length === 0,
+    publishReadyGateFailures:
+      Array.isArray(quality.publishReadyGateFailures) &&
+      quality.publishReadyGateFailures.length === 0,
+    adm0Count: coverage.adm0Count === 1 && summary.adm0Count === 1,
+    adm1Count: coverage.provinceCount === 81 && summary.adm1Count === 81,
+    adm2Count: coverage.districtCount === 973 && summary.adm2Count === 973,
+    successfulDistricts: coverage.successfulDistrictCount === 973,
+    failedDistricts: coverage.failedDistrictCount === 0 && summary.failedDistrictCount === 0,
+    everyDistrictHasAdm3:
+      Array.isArray(coverage.districts) &&
+      coverage.districts.length === 973 &&
+      coverage.districts.every((district) => district.zoneCount > 0),
+    districtsBelow9999:
+      Array.isArray(coverage.districtsBelow9999) &&
+      coverage.districtsBelow9999.length === 0 &&
+      summary.districtsBelow9999 === 0,
+    everyDistrictCoverage:
+      Array.isArray(coverage.districts) &&
+      coverage.districts.every((district) => district.finalCoveragePercent >= 99.99),
+    nationalCoverage: coverage.finalCoveragePercent >= 99.99,
+    invalidGeometry:
+      quality.geometryValidation?.ok === true &&
+      quality.geometryValidation?.errorCount === 0 &&
+      summary.invalidFinalGeometryCount === 0,
+    emptyGeometry: summary.emptyFinalGeometryCount === 0,
+    orphanCount: summary.orphanCount === 0 && hierarchy.orphanCount === 0,
+    hierarchyCycles: summary.hierarchyCycleCount === 0 && hierarchy.cycleCount === 0,
+    duplicateStableIds: summary.duplicateStableIdCount === 0 && hierarchy.duplicateIdCount === 0,
+    parentContainment: summary.parentContainmentErrorCount === 0,
+    effectiveSiblingOverlap: summary.effectiveSiblingOverlapCount === 0,
+    realGeneratedOverlap: summary.realGeneratedOverlapCount === 0,
+    missingProvenance: summary.missingProvenanceCount === 0,
+    missingAttributionLicense: summary.missingAttributionLicenseCount === 0,
+    generatedMetadata: summary.generatedMetadataErrorCount === 0,
+    strictTrV2Validation:
+      quality.strictValidation?.ok === true && summary.strictTrV2ValidationErrorCount === 0,
+    adjacencyIntegrity: summary.adjacencyIntegrityErrorCount === 0,
+    registryChecksumIntegrity:
+      quality.artifactIntegrity?.ok === true &&
+      quality.artifactIntegrity?.errorCount === 0 &&
+      summary.registryArtifactChecksumErrors === 0,
+    registryArtifacts:
+      dataset !== undefined &&
+      Array.isArray(dataset.artifacts) &&
+      dataset.artifacts.length > 0 &&
+      dataset.artifacts.every(
+        (artifact) =>
+          /^[a-f0-9]{64}$/.test(artifact.sha256) &&
+          artifact.sizeBytes > 0 &&
+          !artifact.path.startsWith("/") &&
+          !artifact.path.includes("..")
+      ),
+    generatedZonesNonOfficial:
+      coverage.generatedZoneCount > 0 &&
+      summary.generatedMetadataErrorCount === 0 &&
+      quality.strictValidation?.ok === true,
+    externalNationalGeometry:
+      sourceLock.distribution?.largeGeometryInNpmPackage === false &&
+      sourceLock.distribution?.registryCdnOfflineModel === true
+  };
+
+  return {
+    ok: Object.values(gates).every((value) => value === true),
+    reportRoot,
+    gates,
+    dataset: {
+      id: coverage.datasetId,
+      version: coverage.datasetVersion,
+      registryVersion: dataset?.version,
+      registryPrerelease: dataset?.prerelease,
+      buildDate: coverage.buildDate,
+      buildMode: quality.buildMode,
+      publishReady: quality.publishReady
+    },
+    counts: {
+      ADM0: coverage.adm0Count,
+      ADM1: coverage.provinceCount,
+      ADM2: coverage.districtCount,
+      ADM3: coverage.adm3FinalZoneCount,
+      successfulDistricts: coverage.successfulDistrictCount,
+      failedDistricts: coverage.failedDistrictCount,
+      districtsBelow9999: coverage.districtsBelow9999?.length ?? null,
+      officialADM3: coverage.officialZoneCount,
+      osmADM3: coverage.osmZoneCount,
+      generatedADM3: coverage.generatedZoneCount
+    },
+    coverage: {
+      realCoveragePercent: coverage.realCoveragePercent,
+      generatedCoveragePercent: coverage.generatedCoveragePercent,
+      finalCoveragePercent: coverage.finalCoveragePercent
+    },
+    quality: {
+      ok: quality.ok,
+      publishReady: quality.publishReady,
+      hardGateFailures: quality.hardGateFailures,
+      publishReadyGateFailures: quality.publishReadyGateFailures,
+      summary,
+      geometryValidation: quality.geometryValidation,
+      artifactIntegrity: quality.artifactIntegrity
+    },
+    hashes: {
+      sourceLockHash: sourceLock.contentHash,
+      deterministicHash: coverage.deterministicHash
     }
   };
 }

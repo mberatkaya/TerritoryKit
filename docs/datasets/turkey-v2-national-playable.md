@@ -3,12 +3,12 @@
 Turkey V2 national playable artifacts are built by:
 
 ```bash
-pnpm turkey:v2:national:build
-pnpm turkey:v2:national:validate
+pnpm turkey:v2:national:publish-ready
+pnpm turkey:v2:national:validate:publish-ready
 ```
 
-The build target is `territory-kit-tr-v2-playable@2.0.0-rc.1`. It keeps the canonical Turkey
-ADM0-ADM2 hierarchy from HDX/OCHA COD-AB and fills ADM3 gameplay coverage per district with the
+The stable build target is `territory-kit-tr-v2-playable@2.0.0`. It keeps the canonical Turkey
+ADM0-ADM2 hierarchy from HDX/OCHA COD-AB and fills ADM3 gameplay coverage nationwide with the
 Turkey V2 hybrid priority:
 
 ```text
@@ -31,9 +31,9 @@ The local build uses reviewed official ADM3 artifacts when they are present at
 `.territory/build/TR/ADM3/official/levels/ADM3/dataset.json`. OSM is reported as `not-built` unless
 an OSM artifact is provided with `--osm-artifact`.
 
-## Sprint 6 Verification Snapshot
+## Stable 2.0.0 Verification Snapshot
 
-The 2026-08-22 publish-ready rebuild verified the full national contract with:
+The 2026-08-22 publish-ready rebuild verified the full stable national contract with:
 
 | Metric                                       |      Value |
 | -------------------------------------------- | ---------: |
@@ -78,6 +78,8 @@ territory tr v2 national build \
   --force
 
 territory tr v2 national publish-ready \
+  --dataset-version 2.0.0 \
+  --build-date 2026-08-22T00:00:00.000Z \
   --output .territory/build/TR/V2-national \
   --reports-output reports/tr-v2-national \
   --force
@@ -158,6 +160,8 @@ to `ADM0` through `ADM2`, and requires a resolver or hosted registry.
 when the selected subset is internally healthy. Diagnostic output is marked with
 `quality.buildMode = "partial"` and `quality.publishReady = false`.
 
+`publish-ready` requires an explicit `--build-date`; the canonical stable script supplies
+`2026-08-22T00:00:00.000Z` so release evidence cannot be produced with a hidden stale date.
 `publish-ready` and `validate --publish-ready` are strict national gates. They require:
 
 - ADM0 count = 1

@@ -1,0 +1,206 @@
+{
+  "schemaVersion": "territorykit-tr-v2-rc-to-stable-diff@1",
+  "generatedAt": "2026-08-22T00:00:00.000Z",
+  "rc": {
+    "datasetVersion": "2.0.0-rc.1",
+    "registryPrerelease": true,
+    "geometryHash": "298c17b2beda8434201752917198aee3e840bd27d37b9258789bd3c63ddbbbfc",
+    "adm3GeometryHash": "a8c9c0303858407d38b02d5ece5d60cd3d8834afdac1e85cf45a5e7ab5d176d2",
+    "deterministicHash": "b0abf33a7e66e46a904da648c03554d10efa8d7269083a967d22c48eff2854f2",
+    "sourceLockHash": "sha256:6b098b80727e9f703b26f9257a7cc36d94f657b4d2346c5287e2e3910dd2a116",
+    "zoneCount": 42210,
+    "zoneIdHash": "54a294a51dabaee999233a3753008368373daf388bfa2dda4fdabc17c7031cb2",
+    "sourceClassCounts": {
+      "official": 2094,
+      "osm": 0,
+      "generated": 40116,
+      "unknown": 0
+    },
+    "coverage": {
+      "final": 99.999998,
+      "real": 3.247194,
+      "generated": 96.752804
+    }
+  },
+  "stable": {
+    "datasetVersion": "2.0.0",
+    "registryPrerelease": false,
+    "buildDate": "2026-08-22T00:00:00.000Z",
+    "geometryHash": "298c17b2beda8434201752917198aee3e840bd27d37b9258789bd3c63ddbbbfc",
+    "adm3GeometryHash": "a8c9c0303858407d38b02d5ece5d60cd3d8834afdac1e85cf45a5e7ab5d176d2",
+    "deterministicHash": "a1485efd7ffa655b4b81ee214b6baa4c297410b4d4f5b03181e2507f3712960b",
+    "sourceLockHash": "sha256:7e39a815b6eb587e8d718039f349c3e16d931301b648344cda15c7c2f77eb339",
+    "zoneCount": 42210,
+    "zoneIdHash": "54a294a51dabaee999233a3753008368373daf388bfa2dda4fdabc17c7031cb2",
+    "sourceClassCounts": {
+      "official": 2094,
+      "osm": 0,
+      "generated": 40116,
+      "unknown": 0
+    },
+    "coverage": {
+      "final": 99.999998,
+      "real": 3.247194,
+      "generated": 96.752804
+    }
+  },
+  "stableBuildComparison": {
+    "buildADeterministicHash": "a1485efd7ffa655b4b81ee214b6baa4c297410b4d4f5b03181e2507f3712960b",
+    "buildBDeterministicHash": "a1485efd7ffa655b4b81ee214b6baa4c297410b4d4f5b03181e2507f3712960b",
+    "deterministicHashEqual": true,
+    "buildASourceLockHash": "sha256:7e39a815b6eb587e8d718039f349c3e16d931301b648344cda15c7c2f77eb339",
+    "buildBSourceLockHash": "sha256:7e39a815b6eb587e8d718039f349c3e16d931301b648344cda15c7c2f77eb339",
+    "sourceLockHashEqual": true,
+    "buildAGeometryHash": "298c17b2beda8434201752917198aee3e840bd27d37b9258789bd3c63ddbbbfc",
+    "buildBGeometryHash": "298c17b2beda8434201752917198aee3e840bd27d37b9258789bd3c63ddbbbfc",
+    "geometryHashEqual": true,
+    "buildAZoneIdHash": "54a294a51dabaee999233a3753008368373daf388bfa2dda4fdabc17c7031cb2",
+    "buildBZoneIdHash": "54a294a51dabaee999233a3753008368373daf388bfa2dda4fdabc17c7031cb2",
+    "zoneIdHashEqual": true,
+    "sourceClassCountsEqual": true,
+    "coverageEqual": true
+  },
+  "diff": {
+    "datasetVersion": "2.0.0-rc.1 -> 2.0.0",
+    "registryPrerelease": "true -> false",
+    "geometryHashEqual": true,
+    "adm3GeometryHashEqual": true,
+    "zoneCountDelta": 0,
+    "zoneIdsChangedCount": 0,
+    "zoneIdHashEqual": true,
+    "sourceClassCountDelta": {
+      "official": 0,
+      "osm": 0,
+      "generated": 0,
+      "unknown": 0
+    },
+    "coverageDelta": {
+      "final": 0,
+      "real": 0,
+      "generated": 0
+    },
+    "sourceLockHashChanged": true,
+    "deterministicHashChanged": true
+  },
+  "stableQuality": {
+    "ok": true,
+    "publishReady": true,
+    "buildMode": "publish-ready",
+    "hardGateFailures": [],
+    "publishReadyGateFailures": [],
+    "summary": {
+      "adm0Count": 1,
+      "adm1Count": 81,
+      "adm2Count": 973,
+      "adm3Count": 42210,
+      "failedDistrictCount": 0,
+      "districtsBelow9999": 0,
+      "orphanCount": 0,
+      "hierarchyCycleCount": 0,
+      "duplicateStableIdCount": 0,
+      "invalidFinalGeometryCount": 0,
+      "emptyFinalGeometryCount": 0,
+      "effectiveSiblingOverlapCount": 0,
+      "realGeneratedOverlapCount": 0,
+      "parentContainmentErrorCount": 0,
+      "missingProvenanceCount": 0,
+      "missingAttributionLicenseCount": 0,
+      "generatedMetadataErrorCount": 0,
+      "strictTrV2ValidationErrorCount": 0,
+      "adjacencyIntegrityErrorCount": 0,
+      "registryArtifactChecksumErrors": 0,
+      "warningCount": 0
+    }
+  },
+  "stableCoverage": {
+    "adm0Count": 1,
+    "adm1Count": 81,
+    "adm2Count": 973,
+    "adm3Count": 42210,
+    "successfulDistrictCount": 973,
+    "failedDistrictCount": 0,
+    "districtsAtOrAbove9999": 973,
+    "districtsBelow9999": 0,
+    "finalCoveragePercent": 99.999998,
+    "realCoveragePercent": 3.247194,
+    "generatedCoveragePercent": 96.752804
+  },
+  "stableRegistry": {
+    "datasetId": "territory-kit-tr-v2-playable",
+    "version": "2.0.0",
+    "prerelease": false,
+    "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
+    "artifactCount": 7,
+    "allSha256Lowercase": true,
+    "allSizesPositive": true
+  },
+  "sourceLock": {
+    "datasetVersion": "2.0.0",
+    "buildDate": "2026-08-22T00:00:00.000Z",
+    "contentHash": "sha256:7e39a815b6eb587e8d718039f349c3e16d931301b648344cda15c7c2f77eb339",
+    "sourcePriority": ["official", "osm", "generated"],
+    "osmStatus": "not-built",
+    "generatedAlgorithmVersion": "tr-adm3-game-zone-v2",
+    "seed": "territory-kit-tr-v2-national"
+  },
+  "districtDeterminism": {
+    "districtCount": 973,
+    "hash": "0c14b1d9979fc84626b174fe28772f1810b785a7654c6abdae3fd0a9756138b4",
+    "allDistrictsHaveDeterministicHash": true
+  },
+  "topology": {
+    "adm1": {
+      "high": {
+        "ok": true,
+        "sharedBoundaryMismatchCount": 0,
+        "geometryErrorCount": 0,
+        "geometryIssueCount": 0,
+        "infoIssueCount": 0
+      },
+      "medium": {
+        "ok": true,
+        "sharedBoundaryMismatchCount": 0,
+        "geometryErrorCount": 0,
+        "geometryIssueCount": 0,
+        "infoIssueCount": 0
+      },
+      "low": {
+        "ok": true,
+        "sharedBoundaryMismatchCount": 0,
+        "geometryErrorCount": 0,
+        "geometryIssueCount": 1,
+        "infoIssueCount": 1
+      }
+    },
+    "adm2": {
+      "high": {
+        "ok": true,
+        "sharedBoundaryMismatchCount": 0,
+        "geometryErrorCount": 0,
+        "geometryIssueCount": 0,
+        "infoIssueCount": 0
+      },
+      "medium": {
+        "ok": true,
+        "sharedBoundaryMismatchCount": 0,
+        "geometryErrorCount": 0,
+        "geometryIssueCount": 0,
+        "infoIssueCount": 0
+      },
+      "low": {
+        "ok": true,
+        "sharedBoundaryMismatchCount": 0,
+        "geometryErrorCount": 0,
+        "geometryIssueCount": 0,
+        "infoIssueCount": 0
+      }
+    },
+    "orientationDecision": "ADM1 low retains one RING_ORIENTATION issue as info-only because topologyAudit.ok is true and geometryValidation.errorCount is 0; no geometry was mutated for cosmetic orientation normalization."
+  },
+  "expectedMetadataOnlyDifferences": [
+    "datasetVersion changed from 2.0.0-rc.1 to 2.0.0",
+    "registry prerelease changed from true to false",
+    "sourceLockHash and deterministicHash changed because release metadata participates in deterministic evidence",
+    "artifact checksums may change where metadata is serialized"
+  ]
+}

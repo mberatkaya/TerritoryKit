@@ -93,7 +93,7 @@ export const turkeyAdm3NeighbourhoodCoverage = {
 export const turkeyV2DataContract = {
   country: "TR",
   contractVersion: "territorykit-tr-v2-data-contract@1",
-  targetDatasetVersion: "2.0.0-rc.1",
+  targetDatasetVersion: "2.0.0",
   schemaVersion: "territory-schema@1",
   adm3SemanticTypes: ["neighbourhood", "village", "generated-zone"],
   sourceClassPriority: ["official", "osm", "generated"],
@@ -109,7 +109,7 @@ export const turkeyV2NationalPlayableCoverage = {
   datasetId: turkeyV2NationalDatasetDescriptor.datasetId,
   datasetVersion: turkeyV2DataContract.targetDatasetVersion,
   status: "resolver-required",
-  releaseChannel: "prerelease",
+  releaseChannel: "stable",
   officialAdm0Adm2: {
     sourceProvider: "hdx-cod-ab",
     sourceId: "cod-ab-tur",

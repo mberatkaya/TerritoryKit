@@ -1,17 +1,17 @@
 {
   "schemaVersion": "territorykit-tr-v2-national-benchmark@1",
-  "generatedAt": "2026-08-13T00:00:00.000Z",
+  "generatedAt": "2026-08-22T00:00:00.000Z",
   "scenarios": [
     {
       "districtLimit": 10,
       "code": 0,
-      "durationMs": 2629,
-      "peakRssBytes": 879149056,
+      "durationMs": 2589,
+      "peakRssBytes": 879034368,
       "summary": {
         "schemaVersion": "territorykit-tr-v2-national-build-summary@1",
         "datasetId": "territory-kit-tr-v2-playable",
-        "datasetVersion": "2.0.0-rc.1",
-        "buildDate": "2026-08-13T00:00:00.000Z",
+        "datasetVersion": "2.0.0",
+        "buildDate": "2026-08-22T00:00:00.000Z",
         "buildMode": "partial",
         "publishReady": false,
         "adm0Count": 1,
@@ -26,7 +26,7 @@
         "realCoveragePercent": 2.919116,
         "generatedCoveragePercent": 97.080911,
         "finalCoveragePercent": 100.000026,
-        "deterministicHash": "52be241307e8b4c42a2331aef6d7093b01db9f75f03312c69e8310dd426b006d",
+        "deterministicHash": "80f7bff5ebac02dc8d54c93131d127782c3ae794b4687b27cb5f6e047fb17818",
         "qualityOk": true,
         "publishReadyGateFailures": [
           "buildMode",
@@ -41,7 +41,7 @@
         "artifactPlan": {
           "schemaVersion": "territorykit-tr-v2-national-artifact-plan@1",
           "datasetId": "territory-kit-tr-v2-playable",
-          "datasetVersion": "2.0.0-rc.1",
+          "datasetVersion": "2.0.0",
           "largeGeometryEmbeddedInNpm": false,
           "commitPolicy": {
             "commit": [
@@ -72,8 +72,8 @@
               "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
               "path": "dataset.json",
               "url": "./dataset.json",
-              "sha256": "34aa81cf82446a7fadbed1988a08669859ff95871d8db77a7c212374cd6708e8",
-              "sizeBytes": 9618748,
+              "sha256": "9b7f7a2b40e49ae7d94f4afd74ee99f8be906a1feead8a8b779feb1f8dbf8022",
+              "sizeBytes": 9618743,
               "compression": "none"
             },
             {
@@ -82,8 +82,8 @@
               "format": "json",
               "path": "coverage.json",
               "url": "./coverage.json",
-              "sha256": "10f28cbf994607e9864e9c61ff93cfb040fd72c1e010102b10ba642babc5b87e",
-              "sizeBytes": 14563,
+              "sha256": "6c5c04c942f384daa1f1ede319510e594bfab1034f6b7caad8b2aee213a7cd1f",
+              "sizeBytes": 14558,
               "compression": "none"
             },
             {
@@ -103,8 +103,8 @@
               "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
               "path": "query/query-artifact.json",
               "url": "./query/query-artifact.json",
-              "sha256": "e556a8214d722e2fda23e803658f957861dec7a17537d6709d21ef3ac2074a49",
-              "sizeBytes": 522477,
+              "sha256": "fbf50bdd84bfc7df298122789e1a261fb8124867dc6f74abf479db733cf3256c",
+              "sizeBytes": 522472,
               "compression": "none"
             },
             {
@@ -115,8 +115,8 @@
               "detail": "full",
               "path": "levels/ADM3/dataset.json",
               "url": "./levels/ADM3/dataset.json",
-              "sha256": "ae4bb5140f8ac6b721a345a2d31a82b035619cf77e0fa9e24dd33fa75fa0e52c",
-              "sizeBytes": 3241004,
+              "sha256": "6c122eac39e37ac5442f6236cf1d98cd089c922a2c2dadc4e7264fcc69761504",
+              "sizeBytes": 3240999,
               "compression": "none"
             },
             {
@@ -126,8 +126,8 @@
               "levels": ["ADM3"],
               "path": "levels/ADM3/adjacency/adjacency.json",
               "url": "./levels/ADM3/adjacency/adjacency.json",
-              "sha256": "010b53449d4bd17538ce164445dcff8ee03f9bd26429ea3be41f39e2dd01724b",
-              "sizeBytes": 432465,
+              "sha256": "61ded9fb591fa651530f7f7516514308130cc8ff0350257a6fa6534dc004e26b",
+              "sizeBytes": 432460,
               "compression": "none"
             }
           ]
@@ -137,13 +137,13 @@
     {
       "districtLimit": 100,
       "code": 0,
-      "durationMs": 9756,
-      "peakRssBytes": 940654592,
+      "durationMs": 9716,
+      "peakRssBytes": 899497984,
       "summary": {
         "schemaVersion": "territorykit-tr-v2-national-build-summary@1",
         "datasetId": "territory-kit-tr-v2-playable",
-        "datasetVersion": "2.0.0-rc.1",
-        "buildDate": "2026-08-13T00:00:00.000Z",
+        "datasetVersion": "2.0.0",
+        "buildDate": "2026-08-22T00:00:00.000Z",
         "buildMode": "partial",
         "publishReady": false,
         "adm0Count": 1,
@@ -158,7 +158,7 @@
         "realCoveragePercent": 2.188774,
         "generatedCoveragePercent": 97.811233,
         "finalCoveragePercent": 100.000007,
-        "deterministicHash": "39bf2fbc922093201253dc808ac362253db21f54daca0765409a7e75e1edd972",
+        "deterministicHash": "56426498b6e699ef1273f903d0646c5327bd654421efd73f6db1165e5c18e8a0",
         "qualityOk": true,
         "publishReadyGateFailures": [
           "buildMode",
@@ -173,7 +173,7 @@
         "artifactPlan": {
           "schemaVersion": "territorykit-tr-v2-national-artifact-plan@1",
           "datasetId": "territory-kit-tr-v2-playable",
-          "datasetVersion": "2.0.0-rc.1",
+          "datasetVersion": "2.0.0",
           "largeGeometryEmbeddedInNpm": false,
           "commitPolicy": {
             "commit": [
@@ -204,8 +204,8 @@
               "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
               "path": "dataset.json",
               "url": "./dataset.json",
-              "sha256": "e94997bf89b585a420c900cd26f090ed4683cffa922574bc7a4295636eff0743",
-              "sizeBytes": 36907304,
+              "sha256": "86982beca349efa7235a843d080916765bbdfaf588fd7e483339950113cddeca",
+              "sizeBytes": 36907299,
               "compression": "none"
             },
             {
@@ -214,8 +214,8 @@
               "format": "json",
               "path": "coverage.json",
               "url": "./coverage.json",
-              "sha256": "8e617084996a8a195d0dc2dadbb87df48f3cf72d0bf50036aa7930df79c33aa7",
-              "sizeBytes": 105970,
+              "sha256": "949dcb9136c63f109cfe3905860f0c2755a024684a2391cd6508b41c97f71e90",
+              "sizeBytes": 105965,
               "compression": "none"
             },
             {
@@ -235,8 +235,8 @@
               "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
               "path": "query/query-artifact.json",
               "url": "./query/query-artifact.json",
-              "sha256": "4b150b677826f5ee5e5f66bc355000e1acc40fe2f8d5121051c2fbe29eb4a4df",
-              "sizeBytes": 4443483,
+              "sha256": "999dc82188591fd0e8cd0e9fa544f69c10741867718cf8652647fc19fa0acc80",
+              "sizeBytes": 4443478,
               "compression": "none"
             },
             {
@@ -247,8 +247,8 @@
               "detail": "full",
               "path": "levels/ADM3/dataset.json",
               "url": "./levels/ADM3/dataset.json",
-              "sha256": "cc5b8f1e7e18b038ea233943ab48fe11e5685b484bc27c8d6a5744cb7098364a",
-              "sizeBytes": 28892601,
+              "sha256": "8751b6b51155cb6acb7bb044c1d35f9fe5871bfc7817193a26ef3789965563f7",
+              "sizeBytes": 28892596,
               "compression": "none"
             },
             {
@@ -258,8 +258,8 @@
               "levels": ["ADM3"],
               "path": "levels/ADM3/adjacency/adjacency.json",
               "url": "./levels/ADM3/adjacency/adjacency.json",
-              "sha256": "ccaca849d1dea026ea86c2280d30058ffe3f670db1d9fdba35deba9ee8029350",
-              "sizeBytes": 3890608,
+              "sha256": "7f1529630d7837f576ed6bdac8c96609b412bb05aa20119edf94005e19fa8524",
+              "sizeBytes": 3890603,
               "compression": "none"
             }
           ]

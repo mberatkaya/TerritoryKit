@@ -15,6 +15,16 @@ artifacts and the Gaziantep ADM3 pilot remain legacy-readable; they are not rewr
 
 Dataset version and NPM package version are different concepts.
 
+For the TerritoryKit 2.0 handoff they are intentionally aligned: the SDK fixed-group release target
+is `2.0.0` and the Turkey V2 national playable dataset version is also `2.0.0`. This alignment is
+release policy for this handoff, not a rule that future dataset versions must always match package
+versions.
+
+The final RC-to-stable promotion changes active dataset metadata from `2.0.0-rc.1` to `2.0.0`.
+Geometry and stable zone IDs are expected to remain unchanged when sources and generation
+configuration are unchanged; source-lock and deterministic hashes may change because release
+metadata is part of those hashes.
+
 ## Turkey Dataset Semver
 
 Major:
@@ -49,8 +59,8 @@ scores, route summaries, or claims must apply an explicit migration mapping befo
 district or national artifact to V2.
 
 The V2 generator is available through `buildTurkeyGameZones`,
-`buildTurkeyGameZonesWithAdjacency`, and `territory tr adm3 generate`. It does not publish the final
-national Turkey V2 artifact by itself.
+`buildTurkeyGameZonesWithAdjacency`, and `territory tr adm3 generate`. The national playable
+artifact is produced by the separate `territory tr v2 national publish-ready` pipeline.
 
 ## Migration Artifacts
 

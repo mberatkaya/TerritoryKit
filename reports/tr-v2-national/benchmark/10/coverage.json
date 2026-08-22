@@ -1,10 +1,10 @@
 {
   "schemaVersion": "territorykit-tr-v2-national-coverage@1",
   "datasetId": "territory-kit-tr-v2-playable",
-  "datasetVersion": "2.0.0-rc.1",
-  "buildDate": "2026-08-13T00:00:00.000Z",
-  "sourceLockHash": "sha256:10e08ce0d17f4ab81b41984fecd9b30b174603204219bef746c0b63b3209ea63",
-  "deterministicHash": "52be241307e8b4c42a2331aef6d7093b01db9f75f03312c69e8310dd426b006d",
+  "datasetVersion": "2.0.0",
+  "buildDate": "2026-08-22T00:00:00.000Z",
+  "sourceLockHash": "sha256:7e39a815b6eb587e8d718039f349c3e16d931301b648344cda15c7c2f77eb339",
+  "deterministicHash": "80f7bff5ebac02dc8d54c93131d127782c3ae794b4687b27cb5f6e047fb17818",
   "adm0Count": 1,
   "provinceCount": 81,
   "districtCount": 973,
@@ -268,7 +268,7 @@
       "finalCoveragePercent": 99.999996,
       "gapAreaKm2": 0.000051,
       "qualityStatus": "ok",
-      "deterministicHash": "923534c15bfb605f3a1e2d7e28a739db8d8eb0359c77018a0b361525832af777",
+      "deterministicHash": "759424ce64d4deefc56b88975f6a29d13f080e11e03a1a6c2e1820e3e7b68218",
       "artifactPath": "districts/tr-adm2-54988432b10253984912437"
     },
     {
@@ -288,7 +288,7 @@
       "finalCoveragePercent": 99.999981,
       "gapAreaKm2": 0.000032,
       "qualityStatus": "ok",
-      "deterministicHash": "8012fcf015f06fc72a90cffdc2cb28222a89a55581a2a52401dc4606b1a0ee93",
+      "deterministicHash": "6d5742426fa37e21852add7d28457e55cb3ddf7da4199c42f38eff5da01c1e6d",
       "artifactPath": "districts/tr-adm2-54988432b10287230279323"
     },
     {
@@ -308,7 +308,7 @@
       "finalCoveragePercent": 99.999945,
       "gapAreaKm2": 0.000249,
       "qualityStatus": "ok",
-      "deterministicHash": "ecaa6d5f2abf2033c3c6e63862ceecf006420be41911c834b9d066b0ac3bafc7",
+      "deterministicHash": "f9658b253da4f95c945a7f2ab45b724213ef0f3b59bf59e2d99af184c0880a12",
       "artifactPath": "districts/tr-adm2-54988432b10558365680808"
     },
     {
@@ -328,7 +328,7 @@
       "finalCoveragePercent": 99.999939,
       "gapAreaKm2": 0.000235,
       "qualityStatus": "ok",
-      "deterministicHash": "3b71798a8eee636f10040183a2c5c77edaf0eeda548ef289bbd33f6ea2fbbc6e",
+      "deterministicHash": "89b02682edf8285e537796eeca8545db3a4070c0486f11b4eb43054f3391317e",
       "artifactPath": "districts/tr-adm2-54988432b10626729870430"
     },
     {
@@ -348,7 +348,7 @@
       "finalCoveragePercent": 99.99999,
       "gapAreaKm2": 0.000041,
       "qualityStatus": "ok",
-      "deterministicHash": "726692979122deb482bd1a7025b6c7209311f0b5753ea2b54a80fc4a9e23a3f9",
+      "deterministicHash": "b97f40be1399c7128585fe98847bd4244f953cd36cfe71bd39a23c4d4e4e0a9a",
       "artifactPath": "districts/tr-adm2-54988432b10630286252901"
     },
     {
@@ -368,7 +368,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "2e9fd22ec5d1fc16be44e489d0503599ebf5a0a4b268fb2ca6a930e0c1eb7891",
+      "deterministicHash": "a71346a0e2e4f5c1c0c88889a956094c9f020228caf04fb8250e08a5334c410b",
       "artifactPath": "districts/tr-adm2-54988432b10710239542127"
     },
     {
@@ -388,7 +388,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "f946a9f17f3b5a969b9c5c5dec382e6915b3f06e26525bc03e8a6064cf205a67",
+      "deterministicHash": "7656fe47bb39e16ed1232a302a42b7c6bf525cce1f723d434a979266a0bed088",
       "artifactPath": "districts/tr-adm2-54988432b10923405291908"
     },
     {
@@ -408,7 +408,7 @@
       "finalCoveragePercent": 99.999859,
       "gapAreaKm2": 0.000016,
       "qualityStatus": "ok",
-      "deterministicHash": "bae6b33ad6179b1539ee3cbc043bbd91d1a10e74125683286833ea7529d4e7cf",
+      "deterministicHash": "f460c29970aa4170c0742299f7e7075be2d91eaf751239bd4fc1d0630f358649",
       "artifactPath": "districts/tr-adm2-54988432b10954011235531"
     },
     {
@@ -428,7 +428,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0.000001,
       "qualityStatus": "ok",
-      "deterministicHash": "ebeec0af8264f21a996a7464b55bc591a24db05bc380c1f404b83ae77ab09416",
+      "deterministicHash": "4bc08fefb943ed811b6f918d635a4a8d8c787050f87b1de43f3f44f506d35ac5",
       "artifactPath": "districts/tr-adm2-54988432b10964336547790"
     },
     {
@@ -448,7 +448,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "9c2a82ed5eba62e66002ee5e3f5a70a99035bbcff238b92e0ecf16eef25b9c4a",
+      "deterministicHash": "266d19923d7cdb004569a50e5f0118c441bf0fc3c28538eaf3b43f7ceb37f7ac",
       "artifactPath": "districts/tr-adm2-54988432b11094776022203"
     }
   ]

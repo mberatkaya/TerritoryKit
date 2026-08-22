@@ -1,12 +1,12 @@
 {
   "schemaVersion": "territorykit-tr-v2-national-registry-entry@1",
   "registryVersion": "1",
-  "generatedAt": "2026-08-13T00:00:00.000Z",
+  "generatedAt": "2026-08-22T00:00:00.000Z",
   "datasets": [
     {
       "id": "territory-kit-tr-v2-playable",
       "displayName": "Turkey V2 Playable National Dataset",
-      "version": "2.0.0-rc.1",
+      "version": "2.0.0",
       "schemaVersion": "territory-schema@1",
       "country": {
         "alpha2": "TR",
@@ -14,7 +14,7 @@
         "name": "Türkiye"
       },
       "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
-      "prerelease": true,
+      "prerelease": false,
       "coverage": {
         "provinceCount": 81,
         "districtCount": 973,
@@ -28,7 +28,7 @@
       },
       "source": {
         "provider": "territory-kit-tr-v2-national",
-        "version": "sha256:10e08ce0d17f4ab81b41984fecd9b30b174603204219bef746c0b63b3209ea63",
+        "version": "sha256:7e39a815b6eb587e8d718039f349c3e16d931301b648344cda15c7c2f77eb339",
         "attribution": "OCHA Common Operational Dataset: Türkiye Administrative Boundaries"
       },
       "license": {
@@ -43,8 +43,8 @@
           "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
           "path": "dataset.json",
           "url": "./dataset.json",
-          "sha256": "e94997bf89b585a420c900cd26f090ed4683cffa922574bc7a4295636eff0743",
-          "sizeBytes": 36907304,
+          "sha256": "86982beca349efa7235a843d080916765bbdfaf588fd7e483339950113cddeca",
+          "sizeBytes": 36907299,
           "compression": "none"
         },
         {
@@ -53,8 +53,8 @@
           "format": "json",
           "path": "coverage.json",
           "url": "./coverage.json",
-          "sha256": "8e617084996a8a195d0dc2dadbb87df48f3cf72d0bf50036aa7930df79c33aa7",
-          "sizeBytes": 105970,
+          "sha256": "949dcb9136c63f109cfe3905860f0c2755a024684a2391cd6508b41c97f71e90",
+          "sizeBytes": 105965,
           "compression": "none"
         },
         {
@@ -74,8 +74,8 @@
           "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
           "path": "query/query-artifact.json",
           "url": "./query/query-artifact.json",
-          "sha256": "4b150b677826f5ee5e5f66bc355000e1acc40fe2f8d5121051c2fbe29eb4a4df",
-          "sizeBytes": 4443483,
+          "sha256": "999dc82188591fd0e8cd0e9fa544f69c10741867718cf8652647fc19fa0acc80",
+          "sizeBytes": 4443478,
           "compression": "none"
         },
         {
@@ -86,8 +86,8 @@
           "detail": "full",
           "path": "levels/ADM3/dataset.json",
           "url": "./levels/ADM3/dataset.json",
-          "sha256": "cc5b8f1e7e18b038ea233943ab48fe11e5685b484bc27c8d6a5744cb7098364a",
-          "sizeBytes": 28892601,
+          "sha256": "8751b6b51155cb6acb7bb044c1d35f9fe5871bfc7817193a26ef3789965563f7",
+          "sizeBytes": 28892596,
           "compression": "none"
         },
         {
@@ -97,8 +97,8 @@
           "levels": ["ADM3"],
           "path": "levels/ADM3/adjacency/adjacency.json",
           "url": "./levels/ADM3/adjacency/adjacency.json",
-          "sha256": "ccaca849d1dea026ea86c2280d30058ffe3f670db1d9fdba35deba9ee8029350",
-          "sizeBytes": 3890608,
+          "sha256": "7f1529630d7837f576ed6bdac8c96609b412bb05aa20119edf94005e19fa8524",
+          "sizeBytes": 3890603,
           "compression": "none"
         }
       ]

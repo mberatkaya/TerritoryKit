@@ -26,7 +26,7 @@ import {
   validateTurkeyV2NationalCompleteness
 } from "../src/turkey-adm3.js";
 
-const BUILD_DATE = "2026-08-13T00:00:00.000Z";
+const BUILD_DATE = "2026-08-22T00:00:00.000Z";
 
 describe("Turkey V2 national playable build", () => {
   describe("National completeness constants", () => {
@@ -284,6 +284,10 @@ describe("Turkey V2 national playable build", () => {
       )
     ).toBe(true);
     expect(result.registry.datasets[0].id).toBe(TURKEY_V2_NATIONAL_DATASET_ID);
+    expect(result.registry.datasets[0]).toMatchObject({
+      version: "2.0.0",
+      prerelease: false
+    });
     expect(payloads.json.has("dataset.json")).toBe(true);
     expect(payloads.json.has("levels/ADM3/full.geojson")).toBe(true);
     expect([...payloads.bytes.keys()]).toEqual([]);
@@ -304,6 +308,23 @@ describe("Turkey V2 national playable build", () => {
     expect(result.checksums.files["quality-report.json"]).toEqual({
       sha256: sha256(qualityBytes),
       byteSize: Buffer.byteLength(qualityBytes)
+    });
+  });
+
+  it("derives registry prerelease metadata from dataset semver", async () => {
+    const result = await buildTurkeyV2NationalDataset({
+      adm0Adm2Dataset: nationalFixture(),
+      sourceLock: sourceLock({ datasetVersion: "2.0.1-rc.1" }),
+      buildDate: BUILD_DATE,
+      datasetVersion: "2.0.1-rc.1",
+      generatedDefaults: generatedDefaults(),
+      buildArtifacts: { adjacency: false, render: false, mvt: false },
+      districtLimit: 1
+    });
+
+    expect(result.registry.datasets[0]).toMatchObject({
+      version: "2.0.1-rc.1",
+      prerelease: true
     });
   });
 
@@ -507,7 +528,7 @@ describe("Turkey V2 national playable build", () => {
   });
 });
 
-function sourceLock() {
+function sourceLock(input: { datasetVersion?: string } = {}) {
   return createTurkeyV2NationalSourceLock({
     adm0Adm2: {
       provider: "hdx-cod-ab",
@@ -531,7 +552,7 @@ function sourceLock() {
       }
     },
     buildDate: BUILD_DATE,
-    datasetVersion: TURKEY_V2_NATIONAL_DATASET_VERSION,
+    datasetVersion: input.datasetVersion ?? TURKEY_V2_NATIONAL_DATASET_VERSION,
     generated: { seed: "national-test-seed" }
   });
 }

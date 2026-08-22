@@ -2,7 +2,24 @@
 
 All notable changes will be tracked here until Changesets generates release notes.
 
-## 1.2.0 - Unreleased
+## 2.0.0 - 2026-08-22
+
+- Promoted TerritoryKit V2 to the stable `2.0.0` release target while leaving package manifest
+  version changes to the Changesets Version Packages PR.
+- Promoted the Turkey V2 national playable dataset contract to
+  `territory-kit-tr-v2-playable@2.0.0`.
+- Added nationwide Turkey playable ADM3 coverage across 1 ADM0, 81 ADM1 provinces, and 973 ADM2
+  districts using official > OSM > generated source priority.
+- Preserved generated ADM3 zones as deterministic, playable, explicitly non-official
+  `generated-zone` records.
+- Added resolver/registry metadata, source-locks, checksums, artifact integrity validation, and
+  strict publish-ready national validation for the Turkey V2 artifact.
+- Added topology-safe ADM1/ADM2 simplification evidence and real shared-boundary topology audit
+  semantics.
+- Hardened the release path with canonical Turkey V2 stable build/validate scripts, package
+  dry-run checks, release-hardening V2 gates, and a final major Changeset.
+
+## 1.2.0 - 2026-07-30
 
 - Added `@territory-kit/adapter-core` renderer-independent adapter contracts.
 - Added `@territory-kit/runtime` minimal lifecycle contracts.
