@@ -1,5 +1,14 @@
 # @territory-kit/example-web-openlayers-turkey
 
+## 0.0.11
+
+### Patch Changes
+
+- @territory-kit/registry@1.9.2
+- @territory-kit/runtime@1.9.2
+- @territory-kit/openlayers@1.2.9
+- @territory-kit/shared-testkit@0.1.0-alpha.1
+
 ## 0.0.10
 
 ### Patch Changes
