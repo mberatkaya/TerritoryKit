@@ -47,7 +47,7 @@ territory registry verify --registry https://datasets.example.com/registry.json 
 - `territory geometry validate <dataset-path>` runs validate-only geometry quality checks.
 - `territory geometry repair <dataset-path> --output <dir>` applies safe audited repairs.
 - `territory geometry simplify <dataset-path> --strategy topology-safe` writes audited real
-  simplification tiers and omits duplicate-hash placeholders.
+  simplification tiers with canonical shared-boundary arcs and omits duplicate-hash placeholders.
 - `territory adjacency build <dataset-path> --output <dir|json>` builds exact polygon adjacency
   artifacts.
 - `territory adjacency validate <dataset-path> <dir|json>` validates an adjacency artifact.
