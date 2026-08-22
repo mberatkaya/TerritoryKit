@@ -32,11 +32,12 @@ const fixedGroupPackageJsonPaths = [
 ] as const;
 
 describe("release metadata", () => {
-  it("keeps fixed-group versions Changesets-owned for the 2.0 handoff", () => {
+  it("keeps fixed-group versions Changesets-owned through the 2.0 handoff", () => {
     const rootPackage = readJson<PackageJson>("package.json");
     const changesetConfig = readJson<ChangesetConfig>(".changeset/config.json");
     const fixedPackages = new Set(changesetConfig.fixed.flat());
     const fixedGroupVersions = new Set<string>();
+    const v2StableChangesetExists = existsRelativePath(".changeset/territorykit-v2-stable.md");
 
     expect(rootPackage.version).toBe("0.0.0-private");
 
@@ -54,15 +55,29 @@ describe("release metadata", () => {
     }
 
     const readme = readText("README.md");
-    expect(fixedGroupVersion).toBe("1.9.3");
     expect(readText("CHANGELOG.md")).toContain("## 2.0.0 - 2026-08-22");
     expect(readme).toContain("TerritoryKit `2.0.0` is the stable release target");
     expect(readme).toContain("`territory-kit-tr-v2-playable@2.0.0`");
     expect(readme).toMatch(/\| `1\.2\.0`\s+\| Sprint 11/);
     expect(readme).toMatch(/\| `1\.2\.0`\s+\| Sprint 12/);
     expect(readme).toMatch(/\| `1\.2\.0`\s+\| Sprint 13/);
-    expect(existsRelativePath(".changeset")).toBe(true);
-    expect(nextMajor(fixedGroupVersion)).toBe("2.0.0");
+    if (v2StableChangesetExists) {
+      expect(fixedGroupVersion).toBe("1.9.3");
+      expect(readme).toMatch(/Public package manifests\s+remain on the current `1\.9\.3`/);
+      expect(nextMajor(fixedGroupVersion)).toBe("2.0.0");
+      expect(readText(".changeset/territorykit-v2-stable.md")).toContain(
+        '"@territory-kit/cli": major'
+      );
+      return;
+    }
+
+    expect(fixedGroupVersion).toBe("2.0.0");
+    expect(readme).toMatch(
+      /Public package manifests for\s+the fixed core family are versioned at `2\.0\.0`/
+    );
+    expect(readText("packages/cli/CHANGELOG.md")).toContain("## 2.0.0");
+    expect(readText("packages/adapter-core/CHANGELOG.md")).toContain("## 2.0.0");
+    expect(readText("packages/runtime/CHANGELOG.md")).toContain("## 2.0.0");
   });
 });
 
