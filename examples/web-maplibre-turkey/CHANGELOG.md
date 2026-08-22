@@ -1,5 +1,18 @@
 # @territory-kit/example-web-maplibre-turkey
 
+## 0.0.13
+
+### Patch Changes
+
+- Updated dependencies [5ccdbf6]
+  - @territory-kit/adapter-core@2.0.0
+  - @territory-kit/core@2.0.0
+  - @territory-kit/data-tr@2.0.0
+  - @territory-kit/dataset@2.0.0
+  - @territory-kit/maplibre@2.0.0
+  - @territory-kit/registry@2.0.0
+  - @territory-kit/shared-testkit@0.1.0-alpha.1
+
 ## 0.0.12
 
 ### Patch Changes

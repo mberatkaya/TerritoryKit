@@ -1,6 +1,6 @@
 {
   "name": "@territory-kit/generators",
-  "version": "1.9.3",
+  "version": "2.0.0",
   "description": "Generator and deterministic dataset utility helpers for TerritoryKit.",
   "license": "Apache-2.0",
   "homepage": "https://github.com/mberatkaya/TerritoryKit#readme",
