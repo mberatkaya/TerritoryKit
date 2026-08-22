@@ -32,7 +32,7 @@ const fixedGroupPackageJsonPaths = [
 ] as const;
 
 describe("release metadata", () => {
-  it("keeps Sprint 11 through Sprint 13 documented on the 1.2.0 fixed-group minor release", () => {
+  it("keeps fixed-group versions Changesets-owned for the 2.0 handoff", () => {
     const rootPackage = readJson<PackageJson>("package.json");
     const changesetConfig = readJson<ChangesetConfig>(".changeset/config.json");
     const fixedPackages = new Set(changesetConfig.fixed.flat());
@@ -54,32 +54,15 @@ describe("release metadata", () => {
     }
 
     const readme = readText("README.md");
-    expect(readText("CHANGELOG.md")).toContain("## 1.2.0");
-
-    if (existsRelativePath(".changeset/runtime-architecture-boundaries.md")) {
-      const sprintChangeset = readText(".changeset/runtime-architecture-boundaries.md");
-
-      expect(fixedGroupVersion).toBe("1.1.0");
-      expect(sprintChangeset).toContain('"@territory-kit/adapter-core": minor');
-      expect(sprintChangeset).toContain('"@territory-kit/runtime": minor');
-      expect(nextMinor(fixedGroupVersion)).toBe("1.2.0");
-      expect(readme).toMatch(/\| Pending `1\.2\.0`\s+\| Sprint 11/);
-      expect(readme).toMatch(/\| Pending `1\.2\.0`\s+\| Sprint 12/);
-      expect(readme).toMatch(/\| Pending `1\.2\.0`\s+\| Sprint 13/);
-      expect(readText("packages/adapter-core/CHANGELOG.md")).toContain("## 1.2.0 - Unreleased");
-      expect(readText("packages/runtime/CHANGELOG.md")).toContain("## 1.2.0 - Unreleased");
-      return;
-    }
-
-    expect(compareSemver(fixedGroupVersion, "1.2.0")).toBeGreaterThanOrEqual(0);
+    expect(fixedGroupVersion).toBe("1.9.3");
+    expect(readText("CHANGELOG.md")).toContain("## 2.0.0 - 2026-08-22");
+    expect(readme).toContain("TerritoryKit `2.0.0` is the stable release target");
+    expect(readme).toContain("`territory-kit-tr-v2-playable@2.0.0`");
     expect(readme).toMatch(/\| `1\.2\.0`\s+\| Sprint 11/);
     expect(readme).toMatch(/\| `1\.2\.0`\s+\| Sprint 12/);
     expect(readme).toMatch(/\| `1\.2\.0`\s+\| Sprint 13/);
-    expect(readText("packages/adapter-core/CHANGELOG.md")).toContain(
-      "## 1.2.0\n\n### Minor Changes"
-    );
-    expect(readText("packages/runtime/CHANGELOG.md")).toContain("## 1.2.0\n\n### Minor Changes");
-    expect(readText("packages/runtime/CHANGELOG.md")).toContain("Add Sprint 13 catalog");
+    expect(existsRelativePath(".changeset")).toBe(true);
+    expect(nextMajor(fixedGroupVersion)).toBe("2.0.0");
   });
 });
 
@@ -95,39 +78,13 @@ function existsRelativePath(relativePath: string): boolean {
   return existsSync(resolve(rootDirectory, relativePath));
 }
 
-function nextMinor(version: string): string {
-  const [majorText, minorText] = version.split(".");
+function nextMajor(version: string): string {
+  const [majorText] = version.split(".");
   const major = Number(majorText);
-  const minor = Number(minorText);
 
-  if (!Number.isInteger(major) || !Number.isInteger(minor)) {
+  if (!Number.isInteger(major)) {
     throw new Error(`Invalid semver version: ${version}`);
   }
 
-  return `${major}.${minor + 1}.0`;
-}
-
-function compareSemver(left: string, right: string): number {
-  const leftParts = parseSemver(left);
-  const rightParts = parseSemver(right);
-
-  for (let index = 0; index < leftParts.length; index += 1) {
-    const difference = (leftParts[index] ?? 0) - (rightParts[index] ?? 0);
-
-    if (difference !== 0) {
-      return difference;
-    }
-  }
-
-  return 0;
-}
-
-function parseSemver(version: string): [number, number, number] {
-  const parts = version.split(".").map(Number);
-
-  if (parts.length !== 3 || parts.some((part) => !Number.isInteger(part) || part < 0)) {
-    throw new Error(`Invalid semver version: ${version}`);
-  }
-
-  return parts as [number, number, number];
+  return `${major + 1}.0.0`;
 }

@@ -1,10 +1,10 @@
 {
   "schemaVersion": "territorykit-tr-v2-national-coverage@1",
   "datasetId": "territory-kit-tr-v2-playable",
-  "datasetVersion": "2.0.0-rc.1",
-  "buildDate": "2026-08-13T00:00:00.000Z",
-  "sourceLockHash": "sha256:10e08ce0d17f4ab81b41984fecd9b30b174603204219bef746c0b63b3209ea63",
-  "deterministicHash": "39bf2fbc922093201253dc808ac362253db21f54daca0765409a7e75e1edd972",
+  "datasetVersion": "2.0.0",
+  "buildDate": "2026-08-22T00:00:00.000Z",
+  "sourceLockHash": "sha256:7e39a815b6eb587e8d718039f349c3e16d931301b648344cda15c7c2f77eb339",
+  "deterministicHash": "56426498b6e699ef1273f903d0646c5327bd654421efd73f6db1165e5c18e8a0",
   "adm0Count": 1,
   "provinceCount": 81,
   "districtCount": 973,
@@ -1200,7 +1200,7 @@
       "finalCoveragePercent": 99.999996,
       "gapAreaKm2": 0.000051,
       "qualityStatus": "ok",
-      "deterministicHash": "923534c15bfb605f3a1e2d7e28a739db8d8eb0359c77018a0b361525832af777",
+      "deterministicHash": "759424ce64d4deefc56b88975f6a29d13f080e11e03a1a6c2e1820e3e7b68218",
       "artifactPath": "districts/tr-adm2-54988432b10253984912437"
     },
     {
@@ -1220,7 +1220,7 @@
       "finalCoveragePercent": 99.999981,
       "gapAreaKm2": 0.000032,
       "qualityStatus": "ok",
-      "deterministicHash": "8012fcf015f06fc72a90cffdc2cb28222a89a55581a2a52401dc4606b1a0ee93",
+      "deterministicHash": "6d5742426fa37e21852add7d28457e55cb3ddf7da4199c42f38eff5da01c1e6d",
       "artifactPath": "districts/tr-adm2-54988432b10287230279323"
     },
     {
@@ -1240,7 +1240,7 @@
       "finalCoveragePercent": 99.999945,
       "gapAreaKm2": 0.000249,
       "qualityStatus": "ok",
-      "deterministicHash": "ecaa6d5f2abf2033c3c6e63862ceecf006420be41911c834b9d066b0ac3bafc7",
+      "deterministicHash": "f9658b253da4f95c945a7f2ab45b724213ef0f3b59bf59e2d99af184c0880a12",
       "artifactPath": "districts/tr-adm2-54988432b10558365680808"
     },
     {
@@ -1260,7 +1260,7 @@
       "finalCoveragePercent": 99.999939,
       "gapAreaKm2": 0.000235,
       "qualityStatus": "ok",
-      "deterministicHash": "3b71798a8eee636f10040183a2c5c77edaf0eeda548ef289bbd33f6ea2fbbc6e",
+      "deterministicHash": "89b02682edf8285e537796eeca8545db3a4070c0486f11b4eb43054f3391317e",
       "artifactPath": "districts/tr-adm2-54988432b10626729870430"
     },
     {
@@ -1280,7 +1280,7 @@
       "finalCoveragePercent": 99.99999,
       "gapAreaKm2": 0.000041,
       "qualityStatus": "ok",
-      "deterministicHash": "726692979122deb482bd1a7025b6c7209311f0b5753ea2b54a80fc4a9e23a3f9",
+      "deterministicHash": "b97f40be1399c7128585fe98847bd4244f953cd36cfe71bd39a23c4d4e4e0a9a",
       "artifactPath": "districts/tr-adm2-54988432b10630286252901"
     },
     {
@@ -1300,7 +1300,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "2e9fd22ec5d1fc16be44e489d0503599ebf5a0a4b268fb2ca6a930e0c1eb7891",
+      "deterministicHash": "a71346a0e2e4f5c1c0c88889a956094c9f020228caf04fb8250e08a5334c410b",
       "artifactPath": "districts/tr-adm2-54988432b10710239542127"
     },
     {
@@ -1320,7 +1320,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "f946a9f17f3b5a969b9c5c5dec382e6915b3f06e26525bc03e8a6064cf205a67",
+      "deterministicHash": "7656fe47bb39e16ed1232a302a42b7c6bf525cce1f723d434a979266a0bed088",
       "artifactPath": "districts/tr-adm2-54988432b10923405291908"
     },
     {
@@ -1340,7 +1340,7 @@
       "finalCoveragePercent": 99.999859,
       "gapAreaKm2": 0.000016,
       "qualityStatus": "ok",
-      "deterministicHash": "bae6b33ad6179b1539ee3cbc043bbd91d1a10e74125683286833ea7529d4e7cf",
+      "deterministicHash": "f460c29970aa4170c0742299f7e7075be2d91eaf751239bd4fc1d0630f358649",
       "artifactPath": "districts/tr-adm2-54988432b10954011235531"
     },
     {
@@ -1360,7 +1360,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0.000001,
       "qualityStatus": "ok",
-      "deterministicHash": "ebeec0af8264f21a996a7464b55bc591a24db05bc380c1f404b83ae77ab09416",
+      "deterministicHash": "4bc08fefb943ed811b6f918d635a4a8d8c787050f87b1de43f3f44f506d35ac5",
       "artifactPath": "districts/tr-adm2-54988432b10964336547790"
     },
     {
@@ -1380,7 +1380,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "9c2a82ed5eba62e66002ee5e3f5a70a99035bbcff238b92e0ecf16eef25b9c4a",
+      "deterministicHash": "266d19923d7cdb004569a50e5f0118c441bf0fc3c28538eaf3b43f7ceb37f7ac",
       "artifactPath": "districts/tr-adm2-54988432b11094776022203"
     },
     {
@@ -1400,7 +1400,7 @@
       "finalCoveragePercent": 99.999827,
       "gapAreaKm2": 0.000363,
       "qualityStatus": "ok",
-      "deterministicHash": "20936a8c705c9872dd14cfc31b79abe1958ebd864db284e22cfbf14940e92500",
+      "deterministicHash": "cba656893def381dccc3bd3a535f97a16fb75429fef4e88b1f5f513ba62f0c6b",
       "artifactPath": "districts/tr-adm2-54988432b11123047057176"
     },
     {
@@ -1420,7 +1420,7 @@
       "finalCoveragePercent": 99.999909,
       "gapAreaKm2": 0.000386,
       "qualityStatus": "ok",
-      "deterministicHash": "5432490a9f5c87aaba16d7e58660be4029c78f1abd89e2a1825caec29e81bd59",
+      "deterministicHash": "8ae77e8cf140ab4dfe17753b41772fa8dffcfd383e801bbf76c31bb59f0dc99e",
       "artifactPath": "districts/tr-adm2-54988432b11153156770264"
     },
     {
@@ -1440,7 +1440,7 @@
       "finalCoveragePercent": 99.999971,
       "gapAreaKm2": 0.000058,
       "qualityStatus": "ok",
-      "deterministicHash": "8e661e021b9891f34f57d073ae822bfd8ddfc2b6867403b62af452a78e136591",
+      "deterministicHash": "8b8c68b206a6266ed1d055597076619699a4a83d5e13e3b827855e62545f4de8",
       "artifactPath": "districts/tr-adm2-54988432b11210263033857"
     },
     {
@@ -1460,7 +1460,7 @@
       "finalCoveragePercent": 99.999963,
       "gapAreaKm2": 0.000162,
       "qualityStatus": "ok",
-      "deterministicHash": "1e01f4950b1bd0ee76ce8505df8a419dd603cb6037ac8a30fb6dda44f4c71a4c",
+      "deterministicHash": "cda1306ffc85f23d50f0f9e815670a9bab81a1949ce916f889c961b378a0d1e6",
       "artifactPath": "districts/tr-adm2-54988432b11239792936467"
     },
     {
@@ -1480,7 +1480,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "6e026cb179625aaf25e4bc9de038384d71dff62c3f6369af029c56025ae3b8d6",
+      "deterministicHash": "7137eda4813441ad657c8ca753c41e38e0d5b7f724df016a2eff7c77c72bd64f",
       "artifactPath": "districts/tr-adm2-54988432b11310133229622"
     },
     {
@@ -1500,7 +1500,7 @@
       "finalCoveragePercent": 99.999993,
       "gapAreaKm2": 0.000026,
       "qualityStatus": "ok",
-      "deterministicHash": "112402cfa4ce38ef8f62013221f72b1736f4f74f0515947cef43ad1028719ebb",
+      "deterministicHash": "b0dc2ab28a1357fe5bd44fea51976546c05180daf653a74bd15ea366ad74962b",
       "artifactPath": "districts/tr-adm2-54988432b11333989170250"
     },
     {
@@ -1520,7 +1520,7 @@
       "finalCoveragePercent": 99.999994,
       "gapAreaKm2": 0.000016,
       "qualityStatus": "ok",
-      "deterministicHash": "bcaf3ad93615e47abad7a0d500d55c5db88309e0d4040824a87e22542dafd911",
+      "deterministicHash": "60c7b790f0a0b98eeb994909009630692476854174831c5cacd0c1727118b038",
       "artifactPath": "districts/tr-adm2-54988432b11359051677875"
     },
     {
@@ -1540,7 +1540,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "a0ae9990903732f5824f1eb9a976a50b32c46bebc37ec1f6189bdb7fd39a103d",
+      "deterministicHash": "0d005a39dc4736ac48685f572c03c884a4051cc51c3b4e4405159a6d18605d24",
       "artifactPath": "districts/tr-adm2-54988432b11506112394599"
     },
     {
@@ -1560,7 +1560,7 @@
       "finalCoveragePercent": 99.99996,
       "gapAreaKm2": 0.000275,
       "qualityStatus": "ok",
-      "deterministicHash": "ba8a8ea25cc92bfb93668f1954686a13216ff68227758c5958c97ef6238990f7",
+      "deterministicHash": "77cb042b1aaa921876519e2e84483cb25c43b90dde0c0e1ba9ae346cd4b59ee2",
       "artifactPath": "districts/tr-adm2-54988432b11733036150032"
     },
     {
@@ -1580,7 +1580,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "a0c54e2c12e9b79c648ba431c785b13c8a0392fc1163d39dbbe12a091f0f9403",
+      "deterministicHash": "00af642420641432305cabde35b98cb3b31568f3495e4cb87df627be7137f3b8",
       "artifactPath": "districts/tr-adm2-54988432b11866351639272"
     },
     {
@@ -1600,7 +1600,7 @@
       "finalCoveragePercent": 99.999785,
       "gapAreaKm2": 0.000292,
       "qualityStatus": "ok",
-      "deterministicHash": "5a03404510c9e0b009fee6cd42529851bcb0740836caf7c4a148b20943e67165",
+      "deterministicHash": "218ed5af64c0cab3c42365a41991f1f76cb16304248007970332bd002b0d2389",
       "artifactPath": "districts/tr-adm2-54988432b11894887373653"
     },
     {
@@ -1620,7 +1620,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "89ae3b2ad500394e70a07c14a654ecc18691bb5582b713c63a50778aebbdf70a",
+      "deterministicHash": "b2dc0163f5050256f7d417ea7986534406c24bb5ee26da166e5f088b6a903632",
       "artifactPath": "districts/tr-adm2-54988432b11965473551698"
     },
     {
@@ -1640,7 +1640,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "50a89b8f2b23bfd204928935281a03bfe2a71b93fe504284e4be5136de2e5b18",
+      "deterministicHash": "ceb84c3b76b2104c44d3a45015210b7d610f239762d8950747f366b6d6a28661",
       "artifactPath": "districts/tr-adm2-54988432b12089273300588"
     },
     {
@@ -1660,7 +1660,7 @@
       "finalCoveragePercent": 99.999995,
       "gapAreaKm2": 0.000013,
       "qualityStatus": "ok",
-      "deterministicHash": "9ebc8458c36084d56abe6878c88815e228041ef3f60276183a9e08d6ca4eb819",
+      "deterministicHash": "12f3ea40abed514e0bd4aeb8259866285e490789cc8dfd2dc3b67b87fc3bb864",
       "artifactPath": "districts/tr-adm2-54988432b12282198097688"
     },
     {
@@ -1680,7 +1680,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "c50692b155f40f5e97622355b7ffdadda0f66c112507608fa6fae9bc0d197327",
+      "deterministicHash": "46f279c4b2d3299000ef5253d8f473a6143ae0b962183b7b9aaaae80bc780ffe",
       "artifactPath": "districts/tr-adm2-54988432b12649673902080"
     },
     {
@@ -1700,7 +1700,7 @@
       "finalCoveragePercent": 99.999995,
       "gapAreaKm2": 0.000023,
       "qualityStatus": "ok",
-      "deterministicHash": "b8640593b8638a87909326841d8fc6e39ca7983a36ee04f7e2f7deed82ac594c",
+      "deterministicHash": "410b2bdfdd324713144dd6bea16a1a9d23ee817446c234a27b58e705290dd0e1",
       "artifactPath": "districts/tr-adm2-54988432b12652451571712"
     },
     {
@@ -1720,7 +1720,7 @@
       "finalCoveragePercent": 99.999995,
       "gapAreaKm2": 0.000017,
       "qualityStatus": "ok",
-      "deterministicHash": "9ce3476ae43fcc8dedbe2471cf20848eb48f4488563a2c26add4c2e70e1e8971",
+      "deterministicHash": "bc037a4a9136890c54ad0284cd239f19bfe71ea856aae085dad5ad0a72978727",
       "artifactPath": "districts/tr-adm2-54988432b12770771460380"
     },
     {
@@ -1740,7 +1740,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "0874dea8f75e64c2274617b6183661798fc3d2782631fe708bb12a9e45e87650",
+      "deterministicHash": "091dc2ecc370ce8b0081e1206bdfde27d6e3d42c47dabe54f889956a5850065e",
       "artifactPath": "districts/tr-adm2-54988432b12859589940172"
     },
     {
@@ -1760,7 +1760,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "026e4170a6a83e53ce9a83db843b71cca92dd5b91c9752da0e5307e4ff3df31a",
+      "deterministicHash": "065186f3eb3bca25b0d6d94a1b859f36284973e6a3d15924bfe1b0979661ae07",
       "artifactPath": "districts/tr-adm2-54988432b12971115509737"
     },
     {
@@ -1780,7 +1780,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "0b8ec043e4172a8679894fcb7ecbea529af4d297bbad38aed808023bf33adcbf",
+      "deterministicHash": "3b344216c8639d8e3f393037e6e25fd370413805b8c78d4119311e1a023677b4",
       "artifactPath": "districts/tr-adm2-54988432b13012659541885"
     },
     {
@@ -1800,7 +1800,7 @@
       "finalCoveragePercent": 99.999922,
       "gapAreaKm2": 0.0007,
       "qualityStatus": "ok",
-      "deterministicHash": "3a358a17e324d844f12ff17c9e8052e009b2cf9b04147320d5563a5f4c75b072",
+      "deterministicHash": "daebf41e48724748b7d427cb48743ca49dd0b67284c5a7c8aa745bc768d476ab",
       "artifactPath": "districts/tr-adm2-54988432b13089930907673"
     },
     {
@@ -1820,7 +1820,7 @@
       "finalCoveragePercent": 99.999994,
       "gapAreaKm2": 0.000006,
       "qualityStatus": "ok",
-      "deterministicHash": "48beb1447ac930fccc243da10e03ac9b1c085c0d958fa6c1c4334db34d77dc7b",
+      "deterministicHash": "a64b53a5bbe4c5d8a0a8e60a8c7ca6341846f156ad11ad2b2f0299fb98a81f46",
       "artifactPath": "districts/tr-adm2-54988432b13153830049799"
     },
     {
@@ -1840,7 +1840,7 @@
       "finalCoveragePercent": 99.999983,
       "gapAreaKm2": 0.000066,
       "qualityStatus": "ok",
-      "deterministicHash": "d4cd77ae2f5edefe2f834d621ebbd9846a3da551204df8b3cec83f1b791beeb4",
+      "deterministicHash": "82623fc2fa405da4e5f328f0eb695cdbba5ee4e79e96dac0fb0886077d2f5deb",
       "artifactPath": "districts/tr-adm2-54988432b13184104417142"
     },
     {
@@ -1860,7 +1860,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "cdd9b5205e1b63669454bffa69508025a56b0d3b504275af4f6a108de2df4802",
+      "deterministicHash": "c281a4cba83193491834ea198f8dc42af4491c73be3d3cef0c3f0aa5a465bd98",
       "artifactPath": "districts/tr-adm2-54988432b13336850419353"
     },
     {
@@ -1880,7 +1880,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "fe45a6de43427edb1a2fbba7240d022845f9ba2bd5947325e73f97bcdb96fdf0",
+      "deterministicHash": "da31fc424ad8f8a4a22656e101a24e56ff35f86448a9552fd1c2d23bf0607d11",
       "artifactPath": "districts/tr-adm2-54988432b13359639505311"
     },
     {
@@ -1900,7 +1900,7 @@
       "finalCoveragePercent": 99.999994,
       "gapAreaKm2": 0.000028,
       "qualityStatus": "ok",
-      "deterministicHash": "9fb5c1b7849c22eff5052032c2006bfda38471cf0a23b2d74cf06cd3d75bf8f1",
+      "deterministicHash": "4f5dc490329dd3690881d733d92f869097217d6736bfb896a3c73a140a2190d3",
       "artifactPath": "districts/tr-adm2-54988432b13394167497593"
     },
     {
@@ -1920,7 +1920,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "203d428585f745831e803332bb6403cbb81044cb3f5f172bf52660804581687e",
+      "deterministicHash": "ae5701f4598887e895e9d3d4f7d5dd3128f7f9f50aa7c4b73c568c983558e93b",
       "artifactPath": "districts/tr-adm2-54988432b13587691087198"
     },
     {
@@ -1940,7 +1940,7 @@
       "finalCoveragePercent": 99.999973,
       "gapAreaKm2": 0.000178,
       "qualityStatus": "ok",
-      "deterministicHash": "07a967b09054dd280c4c66773a15d6ae8f8b80a2d38cbbac42c8ceeaf62550d1",
+      "deterministicHash": "33ddada0db217c079df6722afa79f7441ad1b77a29b0c508eb0d56ddcbace725",
       "artifactPath": "districts/tr-adm2-54988432b13628237636764"
     },
     {
@@ -1960,7 +1960,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "04e4d1b7646463ab5fa602c14348810362788dc1908a5447f479b8f81f38c92c",
+      "deterministicHash": "06b38287604a1e89cda00c991362edfc9a130603f969b4925bdcc65ba2b859d8",
       "artifactPath": "districts/tr-adm2-54988432b13760722847594"
     },
     {
@@ -1980,7 +1980,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "c61bd07d8ef0cae7ba559d27350f18fddd07243f881cb2069efdf746f8842804",
+      "deterministicHash": "d7920d92f4e874760ce7c0c29ea97509cae74fa13b4f2a6413546943db703f57",
       "artifactPath": "districts/tr-adm2-54988432b13849312279861"
     },
     {
@@ -2000,7 +2000,7 @@
       "finalCoveragePercent": 99.999995,
       "gapAreaKm2": 0.000076,
       "qualityStatus": "ok",
-      "deterministicHash": "3449edb0f0c22b11adef5e6f8a1b247cb21b36a636f8d650c09331f178e8ffed",
+      "deterministicHash": "6df1c37542364f90b4e9ab51c85f54d899431078fefad9044679e10a201fdc1e",
       "artifactPath": "districts/tr-adm2-54988432b13977847971239"
     },
     {
@@ -2020,7 +2020,7 @@
       "finalCoveragePercent": 99.999837,
       "gapAreaKm2": 0.002136,
       "qualityStatus": "ok",
-      "deterministicHash": "6d787f63b2cdbac7e8ec0f25c9ea2b2f20c2d94f937ecc0c0f7c4cd8d407d51f",
+      "deterministicHash": "45c7dafcecbba64e5bb807005d87569eb437ff350a24fffa053969183db4e0c4",
       "artifactPath": "districts/tr-adm2-54988432b14215635599319"
     },
     {
@@ -2040,7 +2040,7 @@
       "finalCoveragePercent": 99.99999,
       "gapAreaKm2": 0.000022,
       "qualityStatus": "ok",
-      "deterministicHash": "984f42a88b591a0d59bf4ff8750f2f8d1f624f517d03979025b169e9c24a7b18",
+      "deterministicHash": "18c38929d756550bd0ab97802572568fd0bb51f69ab681ce134975eef232319a",
       "artifactPath": "districts/tr-adm2-54988432b14217813536294"
     },
     {
@@ -2060,7 +2060,7 @@
       "finalCoveragePercent": 99.999985,
       "gapAreaKm2": 0.000023,
       "qualityStatus": "ok",
-      "deterministicHash": "d098b9e2ef51eef1ea09883ff7380317582bc6da714315bc13e74153f0ae8caf",
+      "deterministicHash": "dcddb03548acf2881cdebb7eb2676a7704ed7fddeb7fe5d00bee3daef6b47dfd",
       "artifactPath": "districts/tr-adm2-54988432b14260044534811"
     },
     {
@@ -2080,7 +2080,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "668483cacf96ac3bb9c2fbcc1d4b2aa2b0223583968aa79ba6381d5f4a7d0c12",
+      "deterministicHash": "28d871136bf26e007d59f9b5104dc77dff0bc83614986cd94f871ba8b292b416",
       "artifactPath": "districts/tr-adm2-54988432b14282860472632"
     },
     {
@@ -2100,7 +2100,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "6e43a951a5dc67b3e304b837643ea2277c36c5c5414f001fedb07cedadbdcdfc",
+      "deterministicHash": "acc399121fe6b7477e1c55ca2ea40393383f7ede415d00be9bba356bfec6a65b",
       "artifactPath": "districts/tr-adm2-54988432b14340726912856"
     },
     {
@@ -2120,7 +2120,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "90c79e8987bd0c63a257d14c989c9a1848e3d8d8988deb16e17409048c1f3af1",
+      "deterministicHash": "41219722cb4f7e5d5adb358c07c624d1bb19fd6bc72b969f5e002a83e07a63b4",
       "artifactPath": "districts/tr-adm2-54988432b14406336237626"
     },
     {
@@ -2140,7 +2140,7 @@
       "finalCoveragePercent": 99.999015,
       "gapAreaKm2": 0.003539,
       "qualityStatus": "ok",
-      "deterministicHash": "2423f48cd3b0dd7fdf7243586d5174d36c9457db0e9827f1c2aa5105b202318e",
+      "deterministicHash": "10a019d432fcd7f5e641d7ea8239190d5248b23ade805bfe34c65faacbef88b2",
       "artifactPath": "districts/tr-adm2-54988432b1446118549854"
     },
     {
@@ -2160,7 +2160,7 @@
       "finalCoveragePercent": 99.99999,
       "gapAreaKm2": 0.000124,
       "qualityStatus": "ok",
-      "deterministicHash": "f9edade0702ea0e54417ebbff7d26b199052b0bef9a9ac2e40af139b2479f752",
+      "deterministicHash": "d84f6d7438e440e79fa0e0e72f075a6efb3d134dd5879f6697caae326cc5b294",
       "artifactPath": "districts/tr-adm2-54988432b14467270081386"
     },
     {
@@ -2180,7 +2180,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "335dd7fac5e62ac93a98a5fb7e4118ffc82c3976f47c62796eeda25811087b51",
+      "deterministicHash": "fe766a94194a8e4632c410c4a0060f1e3fae858e03c1cfa8d22572031e4323cb",
       "artifactPath": "districts/tr-adm2-54988432b14556173736384"
     },
     {
@@ -2200,7 +2200,7 @@
       "finalCoveragePercent": 99.999999,
       "gapAreaKm2": 0.000002,
       "qualityStatus": "ok",
-      "deterministicHash": "543b5b0e30476854d6c3bc0c9df8e592285d6e554ef6813af4e154ce84075453",
+      "deterministicHash": "4e2472775d18cdd2a3b0c7d5595d2f170a102b42f73d7f0759e469311aa5c757",
       "artifactPath": "districts/tr-adm2-54988432b14645765693693"
     },
     {
@@ -2220,7 +2220,7 @@
       "finalCoveragePercent": 99.99996,
       "gapAreaKm2": 0.001102,
       "qualityStatus": "ok",
-      "deterministicHash": "dc7c9998a49f4aae823f78f677ce5353054c7f7959f05351c29471f5755abce9",
+      "deterministicHash": "88701c9e6e40eef3aaee627251c5276ef708ddb62e318f6fad898c8d9b33d4c9",
       "artifactPath": "districts/tr-adm2-54988432b1484249621136"
     },
     {
@@ -2240,7 +2240,7 @@
       "finalCoveragePercent": 99.999997,
       "gapAreaKm2": 0.000018,
       "qualityStatus": "ok",
-      "deterministicHash": "7e9f848614160900bc149ee8dcb6180bb2cc78e7512d9c99fc2adbe7332ec856",
+      "deterministicHash": "ac663418c88cb357b9ad7301b0a1da576e01ec64d28ccbeec2bcdd07d59724dd",
       "artifactPath": "districts/tr-adm2-54988432b14970064024432"
     },
     {
@@ -2260,7 +2260,7 @@
       "finalCoveragePercent": 99.999954,
       "gapAreaKm2": 0.000569,
       "qualityStatus": "ok",
-      "deterministicHash": "ec3e261add01c41c327a9ed704096f886e3804fc5b200e03235b89e3d2d4b8bc",
+      "deterministicHash": "f6ac43084b62c71c5dbc967eb707a1ba4b3f27734d22d11454c88d5b45733880",
       "artifactPath": "districts/tr-adm2-54988432b150490693817"
     },
     {
@@ -2280,7 +2280,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "bd7edc989e750f47b2a3d80b7769c0bc3ef4b3defc096c3cd1b52ed159fed36a",
+      "deterministicHash": "48e3dca3cea89fa644980d9098d9bdd6b9a7ad38e421d9354f657698df4a8f34",
       "artifactPath": "districts/tr-adm2-54988432b15058920594435"
     },
     {
@@ -2300,7 +2300,7 @@
       "finalCoveragePercent": 99.999316,
       "gapAreaKm2": 0.005062,
       "qualityStatus": "ok",
-      "deterministicHash": "f5ea4367244c0bdcd06b726280069b094e5899dee847059d8403e0fe2c2c4802",
+      "deterministicHash": "fc01e2fa01686fb5284f456dac73be0492bb0df0e6597dc64b814ad6c7e06927",
       "artifactPath": "districts/tr-adm2-54988432b15496700745430"
     },
     {
@@ -2320,7 +2320,7 @@
       "finalCoveragePercent": 99.999987,
       "gapAreaKm2": 0.000165,
       "qualityStatus": "ok",
-      "deterministicHash": "17f4dd5b591be107176e7202cf3fe24b70e5c9540cf28781b8a1497c3048e95d",
+      "deterministicHash": "a890322429cbacf73adfc6e727d810cef89ef2431ac2b8ef1ac73751353282ed",
       "artifactPath": "districts/tr-adm2-54988432b15523271257274"
     },
     {
@@ -2340,7 +2340,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "ac8e6e5ced9571268cdc981d7358f1cb08afc31e13d4725fa7da24b0cf3461ab",
+      "deterministicHash": "95723189f7efba4ef23dc7aac34f22e3a53e12717198b162d99aa1fe799f7fb5",
       "artifactPath": "districts/tr-adm2-54988432b15558909248688"
     },
     {
@@ -2360,7 +2360,7 @@
       "finalCoveragePercent": 99.999995,
       "gapAreaKm2": 0.00001,
       "qualityStatus": "ok",
-      "deterministicHash": "b28ee8bf1db2a00a0adb9de7b8ea930b4f1fd2c9c0297f41967557bdb3c4b133",
+      "deterministicHash": "a202750ed5363cc9a6bc4379eee1880eaea847a05d767fb72e9147543cf71b11",
       "artifactPath": "districts/tr-adm2-54988432b15641118678695"
     },
     {
@@ -2380,7 +2380,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "da7dcb9ecc764fa047d946c5fd9b36c4b34f6ddbaf7820f2311de2bbeb6d5be7",
+      "deterministicHash": "d1e5f8b6e729e0f65f108d1f4a53f5d42e01c43336d09562a0f31a334f38115c",
       "artifactPath": "districts/tr-adm2-54988432b15644410313065"
     },
     {
@@ -2400,7 +2400,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "25026a2f5b5f9f58e4b0322ec721cda38daa8080cfd6f95ba8d159ba3b74c0ad",
+      "deterministicHash": "6de4538f9828708ee2a9fed775b8dd36b63093380fe240f28ae5ab39b89f7507",
       "artifactPath": "districts/tr-adm2-54988432b15919915720396"
     },
     {
@@ -2420,7 +2420,7 @@
       "finalCoveragePercent": 99.999989,
       "gapAreaKm2": 0.000035,
       "qualityStatus": "ok",
-      "deterministicHash": "2334c036b0a2d2baed51ab93854afd7404fe2307f924f49bff3f2798cb7cebd3",
+      "deterministicHash": "ca00d20112c47e0af92b9a2d7e277a788cfed3a7e76749785793e62019062dbc",
       "artifactPath": "districts/tr-adm2-54988432b16159073535028"
     },
     {
@@ -2440,7 +2440,7 @@
       "finalCoveragePercent": 99.999988,
       "gapAreaKm2": 0.000031,
       "qualityStatus": "ok",
-      "deterministicHash": "b1ce61eb1052b2ec1c060ea0acfa3745a13b271700de89687364091213eb1e6a",
+      "deterministicHash": "d5ee036b831d507ce91ad64da85e01c6cb9e12dd46331588be215089654a2a5a",
       "artifactPath": "districts/tr-adm2-54988432b1626041363194"
     },
     {
@@ -2460,7 +2460,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "b2a16d27c1bef20457119a5b76b48a44f3548efcc798302b703a17a2d7e96974",
+      "deterministicHash": "0edcf39698d1175cd6fb06add98e9a97e221de990137114c03f93ac7de3df301",
       "artifactPath": "districts/tr-adm2-54988432b16266988631438"
     },
     {
@@ -2480,7 +2480,7 @@
       "finalCoveragePercent": 99.999994,
       "gapAreaKm2": 0.000036,
       "qualityStatus": "ok",
-      "deterministicHash": "7a97591b710c8687b5d376dc95fc94f7b993eced0a2dbd276baccf688335fd17",
+      "deterministicHash": "7d5d6c5260bddddc88a03fe6d00929e0f04f0ed6486ddcf1c36ac16a29a98d19",
       "artifactPath": "districts/tr-adm2-54988432b16312548829707"
     },
     {
@@ -2500,7 +2500,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "f3cad6cabb88124defebb05b893e4deb0e8b57d592a3c5072fc99ef464a7ae1c",
+      "deterministicHash": "7ece4b2e1491c05841bd24e6b6c437fcda32e9db3a669f6fb4135a29a7195b6c",
       "artifactPath": "districts/tr-adm2-54988432b16358110737710"
     },
     {
@@ -2520,7 +2520,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "787be0b7c3820bed4d0660a8ea14919aadbc7c0a0d1b7ca9fc5544e759468715",
+      "deterministicHash": "6d9a304ae90ffe931b08361639b2519ceac8c8a49cc6747149d38b339f744efc",
       "artifactPath": "districts/tr-adm2-54988432b16406650788150"
     },
     {
@@ -2540,7 +2540,7 @@
       "finalCoveragePercent": 99.999996,
       "gapAreaKm2": 0.000019,
       "qualityStatus": "ok",
-      "deterministicHash": "047f610c160b70676dc718e7b4735b6bfa786fd8d089dad47239c09a34aa3605",
+      "deterministicHash": "0266d2fd2c446016f9b4fef4a9657f51d066282d5f3bf43313379614d8adb70d",
       "artifactPath": "districts/tr-adm2-54988432b17114220369178"
     },
     {
@@ -2560,7 +2560,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "9113485cecb94c624d5c4722942da841e4ddad87b889a23e7c99b6410c9d0095",
+      "deterministicHash": "6a7c8fad8a82aaf83d7838dc8c3ae53c119aff3356d424e5aa1dd698864f221a",
       "artifactPath": "districts/tr-adm2-54988432b17229261486281"
     },
     {
@@ -2580,7 +2580,7 @@
       "finalCoveragePercent": 99.999986,
       "gapAreaKm2": 0.000027,
       "qualityStatus": "ok",
-      "deterministicHash": "e01100140b48c28ba725f062168dcc0dcdbb3873e5edacf4f23e2fe59f6dbf17",
+      "deterministicHash": "128d8356382eb3a1722fc857244268aa2040ea0889b0c4c83cfc82f410736c4c",
       "artifactPath": "districts/tr-adm2-54988432b17351022548299"
     },
     {
@@ -2600,7 +2600,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "533ffaca35bf69d4c7352de093b9cfd7133dbcfd41379c366b9f06a948bebbc2",
+      "deterministicHash": "19713ee1ebbf01d23f58dda1eba7694b2e78fe8a28782c5b4b027fd4b5f674ef",
       "artifactPath": "districts/tr-adm2-54988432b17518540104638"
     },
     {
@@ -2620,7 +2620,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "d64b7c06e03f5ac59fd92b52b07191897ed1a247617787ac60ca3b93d2015050",
+      "deterministicHash": "6c04ba2211d81a5f484df1d29274bf8cc9c329ec584623580ced0ef4bcf6c780",
       "artifactPath": "districts/tr-adm2-54988432b17530851783527"
     },
     {
@@ -2640,7 +2640,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "ecdd4e9858e746e22870d3e9d8c2012592dbe1e7c915ec333bc0e98625ff95fe",
+      "deterministicHash": "bfb41b3cbf7b3e96483755deece9b36027d6c1854239d0da2c97aeba9e13ddf4",
       "artifactPath": "districts/tr-adm2-54988432b17532401262571"
     },
     {
@@ -2660,7 +2660,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "3b077877cabdb7c055e6978a2aba0757cf6d8daa7d7bbb61946a1ae64bd169a8",
+      "deterministicHash": "f9246e39468c65dbfe75fd071ca1210008d2bf75a71e55436dcdd10263409427",
       "artifactPath": "districts/tr-adm2-54988432b1769560269502"
     },
     {
@@ -2680,7 +2680,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "a3cd80237fd18f46a4fee75dcea0da190b1a182235aee31e293815c8cc4ddfc4",
+      "deterministicHash": "e5948db6178a9eb54c8b97bf6ba7c1060dff4a4dfc68cd036641760996380dc2",
       "artifactPath": "districts/tr-adm2-54988432b17723605206621"
     },
     {
@@ -2700,7 +2700,7 @@
       "finalCoveragePercent": 99.999928,
       "gapAreaKm2": 0.000262,
       "qualityStatus": "ok",
-      "deterministicHash": "ce048d4975d04ec4a67593ae56adaa2782ab3a221751560c596751922e5b2db9",
+      "deterministicHash": "2705043a481855215402e4742b99d154bac333d60d22ca7198e890401e1c85a1",
       "artifactPath": "districts/tr-adm2-54988432b17733923685340"
     },
     {
@@ -2720,7 +2720,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "7c6184af87ffa17db823dd14614675d67740bdd75287e271846f69108f724264",
+      "deterministicHash": "4118c1825562bba2f6234d4eea493b17f02c304c8bb51af030fd7084efcbaa06",
       "artifactPath": "districts/tr-adm2-54988432b17876819529278"
     },
     {
@@ -2740,7 +2740,7 @@
       "finalCoveragePercent": 99.999984,
       "gapAreaKm2": 0.00028,
       "qualityStatus": "ok",
-      "deterministicHash": "c1ea85e2aa841fdb08c33f393cf8992ed3aaac47916c54fc6cb66f602b097e34",
+      "deterministicHash": "52b05b64b15b033b1839da03c882fb25c3e3c2d669b95fe30b0550ea36997aad",
       "artifactPath": "districts/tr-adm2-54988432b18155993888482"
     },
     {
@@ -2760,7 +2760,7 @@
       "finalCoveragePercent": 99.999993,
       "gapAreaKm2": 0.000047,
       "qualityStatus": "ok",
-      "deterministicHash": "99bfbbe2a3ce18ba99ed05e4823763d9f6e5868c339c0d83e2f31d1d5e68287f",
+      "deterministicHash": "fc3765291c3465adf0d1855fccdc0759ae76f2d0a19bfaeedc04b7bfbe1460ba",
       "artifactPath": "districts/tr-adm2-54988432b18249389019037"
     },
     {
@@ -2780,7 +2780,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "37f1a2a290bedc35453a4cfefa752117eab778fe4d7c7a81ca278d10947d0686",
+      "deterministicHash": "b4b2a13377794c7887d89b6b0a78a408ab9b617c0bb36087ae4500ed613b7857",
       "artifactPath": "districts/tr-adm2-54988432b18439797691554"
     },
     {
@@ -2800,7 +2800,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "566e7aedf6737c9c073f6873d5f432fd8ac0d99327946309f1b409392c73f191",
+      "deterministicHash": "7b250b63327b31e0f169397d61119778b2134cf16c61955b9c551ec63c3362fc",
       "artifactPath": "districts/tr-adm2-54988432b18592908532301"
     },
     {
@@ -2820,7 +2820,7 @@
       "finalCoveragePercent": 99.999994,
       "gapAreaKm2": 0.000037,
       "qualityStatus": "ok",
-      "deterministicHash": "a17d57831f8480639a49e0088250adaff751c5ad1a28c7b4e6530a8fd586d7c7",
+      "deterministicHash": "bbc9d6deaf53fa35e7544d4377ab1bab5138ed3bd651cec1eed68e8164e2e260",
       "artifactPath": "districts/tr-adm2-54988432b18647546937138"
     },
     {
@@ -2840,7 +2840,7 @@
       "finalCoveragePercent": 99.999917,
       "gapAreaKm2": 0.00013,
       "qualityStatus": "ok",
-      "deterministicHash": "88069ef0a9ddf8708b39daaaaf90e4f27c5c51cedfbed8c78819db5ec51eb680",
+      "deterministicHash": "dfeea0b8b7d8cfa0a5af85515f4d9fc6576fd38d18833da8a312da5953211f8b",
       "artifactPath": "districts/tr-adm2-54988432b18669123151161"
     },
     {
@@ -2860,7 +2860,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "2799488b276a0674a4c33419d8e9223488d7437c1c69762969dddb13b9305872",
+      "deterministicHash": "8e80b6a549093891e47920a8fbbf458d7ca5d88d45693711c6124c5f7d2476a2",
       "artifactPath": "districts/tr-adm2-54988432b18726314643148"
     },
     {
@@ -2880,7 +2880,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "dfe21058db976de5d44590d0019e849e34eb852d128c3480faf3fe7b8e688b68",
+      "deterministicHash": "53645bf8b77b0e58125e74d14276a04faa7e13eb41d29061fec48f156fff20b7",
       "artifactPath": "districts/tr-adm2-54988432b18782972179490"
     },
     {
@@ -2900,7 +2900,7 @@
       "finalCoveragePercent": 99.999995,
       "gapAreaKm2": 0.000035,
       "qualityStatus": "ok",
-      "deterministicHash": "bf05a35b4d51da605ed1db3d9aa3de36471b19d5b471e81d03af1085e1533f16",
+      "deterministicHash": "a26a965484f59ebd297458edc212d30cbe09c1f3cb64d6c3d87fa2a054be1a49",
       "artifactPath": "districts/tr-adm2-54988432b18897698290342"
     },
     {
@@ -2920,7 +2920,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "a1c7bb32801d12547e6751ee5e4b298ca7d7904c99bb03dbdfe69c9ad84f7d26",
+      "deterministicHash": "959f8affa13ca23bcc009aa00912c7bb7a48437c72f6d5314b352a217ae14f68",
       "artifactPath": "districts/tr-adm2-54988432b19023122389933"
     },
     {
@@ -2940,7 +2940,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "6d7cb2d349d21928bf24ab611535fc942f35e65451ce6c2bcd502739b060e08f",
+      "deterministicHash": "f00cfa80dde2643ba19ff28cba2557133b589e924ffdcb83e6355dfd68af6f92",
       "artifactPath": "districts/tr-adm2-54988432b19168401993834"
     },
     {
@@ -2960,7 +2960,7 @@
       "finalCoveragePercent": 99.999947,
       "gapAreaKm2": 0.000146,
       "qualityStatus": "ok",
-      "deterministicHash": "c1b32116a29114cda36631d90fdccf585cb0f64992bbe30559d04e29d8ee0b83",
+      "deterministicHash": "4dc4ad4956a845338405355625475124cc858f7456579232d2237e4d82175d17",
       "artifactPath": "districts/tr-adm2-54988432b19253807136892"
     },
     {
@@ -2980,7 +2980,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "0f8b2d40cf63c38f948e26fc28a662aeeb0d0f13cb75f9926523daa445615f57",
+      "deterministicHash": "ae763f76d2f69c5e661c98992fa4ec37fb63a4fd7b60139173433bb7bd7a93a0",
       "artifactPath": "districts/tr-adm2-54988432b19331703481644"
     },
     {
@@ -3000,7 +3000,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "d67674d4a36cfa3b30470b36b0958420864c5eea1556e13a1cd7961ce17854ed",
+      "deterministicHash": "f337dbb5cfc7672a535c66a10155b19b25c94f746b387c3efb26f4afbd3d7da7",
       "artifactPath": "districts/tr-adm2-54988432b1936830285057"
     },
     {
@@ -3020,7 +3020,7 @@
       "finalCoveragePercent": 99.999999,
       "gapAreaKm2": 0.000024,
       "qualityStatus": "ok",
-      "deterministicHash": "2814d504b274bd8a75f2a478dc50919864c70cb3058189b06d5bcc5f1e353f94",
+      "deterministicHash": "b1cc3fee2574e938d2de6efb802e45b29bf2e00910ee3239ea243567dbdbbc51",
       "artifactPath": "districts/tr-adm2-54988432b19409093219384"
     },
     {
@@ -3040,7 +3040,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "485249ddd25d8ba2c5ef51935724c3bdfc55fd10b419fb841f890f466b87cf5f",
+      "deterministicHash": "63dbe0f0a97b1e18f92063cc3734145e4423555058ff4ea57134146f163d514b",
       "artifactPath": "districts/tr-adm2-54988432b19462176511596"
     },
     {
@@ -3060,7 +3060,7 @@
       "finalCoveragePercent": 99.999988,
       "gapAreaKm2": 0.000062,
       "qualityStatus": "ok",
-      "deterministicHash": "688887bc1840078b3369b82249e593423e19f04b0cf100c4ec090c8fe945ff35",
+      "deterministicHash": "85bcf4ea7582cc7c6ecace555d6b19b5ac20e7c35f38c1d43e4e0e0f79d07ed1",
       "artifactPath": "districts/tr-adm2-54988432b19525680012961"
     },
     {
@@ -3080,7 +3080,7 @@
       "finalCoveragePercent": 99.999976,
       "gapAreaKm2": 0.000009,
       "qualityStatus": "ok",
-      "deterministicHash": "7033ec84b463647036d9e82fb5a232c4d0e348c8012c5e4b44153874d77b3720",
+      "deterministicHash": "181250b771f9c60b35df10c2885e37f7b78444832df52af84e1c896cb51d7191",
       "artifactPath": "districts/tr-adm2-54988432b19682235419629"
     },
     {
@@ -3100,7 +3100,7 @@
       "finalCoveragePercent": 99.999981,
       "gapAreaKm2": 0.000154,
       "qualityStatus": "ok",
-      "deterministicHash": "5ed24d4be1c9cd0226223ac3ce9b61628f10881132d7954b72fa1a2260cfc3f8",
+      "deterministicHash": "77d7ba44805301081723d91ebad8e827cadcdc92ff3890a8d0dbfc175397f862",
       "artifactPath": "districts/tr-adm2-54988432b19751816948051"
     },
     {
@@ -3120,7 +3120,7 @@
       "finalCoveragePercent": 99.999888,
       "gapAreaKm2": 0.000569,
       "qualityStatus": "ok",
-      "deterministicHash": "7282ba3447f7bb78067b095414e1b73450a42168fe9f543cd2c8fcd0d88fff77",
+      "deterministicHash": "22146da2ed999c08815e34d133a2645881d29983d58eb2950e7cf222789234f0",
       "artifactPath": "districts/tr-adm2-54988432b19771634656837"
     },
     {
@@ -3140,7 +3140,7 @@
       "finalCoveragePercent": 99.999946,
       "gapAreaKm2": 0.000519,
       "qualityStatus": "ok",
-      "deterministicHash": "fb66545bc085029376c0dd482234cfc88dd7e894ff2782a486ca95133acb4cb5",
+      "deterministicHash": "3961eba9320d437c3aba51b2aec1904297e99d644886b270882b256d931c10b7",
       "artifactPath": "districts/tr-adm2-54988432b19879435718056"
     },
     {
@@ -3160,7 +3160,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "80f5177e073a35d36129181d89d7a11b4eb3b3dadd61dc4d0fa79373002720ae",
+      "deterministicHash": "dbf7046a44e8df9da107a79a9a7940b464625ce2660076f891052ceb9969d7f5",
       "artifactPath": "districts/tr-adm2-54988432b199390104970"
     },
     {
@@ -3180,7 +3180,7 @@
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
       "qualityStatus": "ok",
-      "deterministicHash": "15a40c7c41293b57af224d90718af55f2c33d29a127f537b3ac5053dae2344ee",
+      "deterministicHash": "d12bac238a4fc93f906ce8c132418f0ed9807fa05902471872344a9ab5040d2f",
       "artifactPath": "districts/tr-adm2-54988432b19989775131060"
     }
   ]

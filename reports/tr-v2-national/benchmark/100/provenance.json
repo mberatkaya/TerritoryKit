@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-v2-national-provenance-summary@1",
-  "buildDate": "2026-08-13T00:00:00.000Z",
+  "buildDate": "2026-08-22T00:00:00.000Z",
   "summary": {
     "sourceClasses": {
       "generated": 4231,
@@ -9,7 +9,7 @@
     "providerCount": 5,
     "licenseCount": 4,
     "zoneCount": 4369,
-    "sourceLockHash": "sha256:10e08ce0d17f4ab81b41984fecd9b30b174603204219bef746c0b63b3209ea63"
+    "sourceLockHash": "sha256:7e39a815b6eb587e8d718039f349c3e16d931301b648344cda15c7c2f77eb339"
   },
   "providers": [
     {

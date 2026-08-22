@@ -52,7 +52,7 @@ import {
 } from "./sources/utils.js";
 
 export const TURKEY_V2_NATIONAL_DATASET_ID = "territory-kit-tr-v2-playable" as const;
-export const TURKEY_V2_NATIONAL_DATASET_VERSION = "2.0.0-rc.1" as const;
+export const TURKEY_V2_NATIONAL_DATASET_VERSION = "2.0.0" as const;
 export const TURKEY_V2_NATIONAL_SOURCE_LOCK_SCHEMA_VERSION =
   "territorykit-tr-v2-national-source-lock@1" as const;
 export const TURKEY_V2_NATIONAL_COVERAGE_SCHEMA_VERSION =
@@ -432,7 +432,7 @@ export interface TurkeyV2NationalRegistryEntry {
       schemaVersion: typeof TERRITORY_SCHEMA_VERSION;
       country: { alpha2: "TR"; alpha3: "TUR"; name: "Türkiye" };
       levels: readonly TerritoryAdminLevel[];
-      prerelease: true;
+      prerelease: boolean;
       coverage: {
         provinceCount: number;
         districtCount: number;
@@ -1773,7 +1773,7 @@ function createNationalRegistryEntry(input: {
         schemaVersion: TERRITORY_SCHEMA_VERSION,
         country: { alpha2: "TR", alpha3: "TUR", name: "Türkiye" },
         levels: ["ADM0", "ADM1", "ADM2", "ADM3"],
-        prerelease: true,
+        prerelease: isSemverPrerelease(input.datasetVersion),
         coverage: {
           provinceCount: input.coverage.provinceCount,
           districtCount: input.coverage.districtCount,
@@ -1799,6 +1799,16 @@ function createNationalRegistryEntry(input: {
       }
     ]
   };
+}
+
+function isSemverPrerelease(version: string): boolean {
+  const match = /^\d+\.\d+\.\d+(?:-([0-9A-Za-z.-]+))?(?:\+[0-9A-Za-z.-]+)?$/.exec(version);
+
+  if (!match) {
+    throw new Error(`Invalid Turkey V2 national dataset semver '${version}'.`);
+  }
+
+  return match[1] !== undefined;
 }
 
 function createNationalArtifactPlan(

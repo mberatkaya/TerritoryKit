@@ -5,21 +5,22 @@ workspace remains private so `npm publish` from the repository root fails safely
 
 ## Public Packages
 
-The package manifests for the main public release set are staged on the `1.2.0` line after the
-Sprint 11 through Sprint 13 Changesets version PR. The npm registry can remain on the previously
-published `1.1.0` line until the release workflow publishes those staged manifests.
+The fixed core package family is currently on the `1.9.3` line in source manifests. The final
+TerritoryKit V2 Changeset targets `2.0.0`; do not edit package versions manually in the release
+hardening PR. After that PR merges, the Changesets Version Packages PR performs the manifest and
+package changelog updates.
 
 | Package                       | Version | Internal dependencies                                                                                     | Output                                                     | Publish |
 | ----------------------------- | ------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ------- |
-| `@territory-kit/dataset`      | `1.2.0` | none                                                                                                      | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/adapter-core` | `1.2.0` | `@territory-kit/dataset`                                                                                  | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/core`         | `1.2.0` | `@territory-kit/dataset`, deprecated registry compatibility                                               | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/registry`     | `1.2.0` | `@territory-kit/dataset`                                                                                  | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/runtime`      | `1.2.0` | `@territory-kit/adapter-core`, `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/registry` | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/generators`   | `1.2.0` | `@territory-kit/core`, `@territory-kit/dataset`                                                           | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/maplibre`     | `1.2.0` | `@territory-kit/adapter-core`, `@territory-kit/dataset`, `@territory-kit/registry`                        | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/nestjs`       | `1.2.0` | `@territory-kit/core`, `@territory-kit/dataset`                                                           | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/cli`          | `1.2.0` | `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/generators`                              | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/dataset`      | `1.9.3` | none                                                                                                      | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/adapter-core` | `1.9.3` | `@territory-kit/dataset`                                                                                  | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/core`         | `1.9.3` | `@territory-kit/dataset`, deprecated registry compatibility                                               | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/registry`     | `1.9.3` | `@territory-kit/dataset`                                                                                  | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/runtime`      | `1.9.3` | `@territory-kit/adapter-core`, `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/registry` | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/generators`   | `1.9.3` | `@territory-kit/core`, `@territory-kit/dataset`                                                           | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/maplibre`     | `1.9.3` | `@territory-kit/adapter-core`, `@territory-kit/dataset`, `@territory-kit/registry`                        | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/nestjs`       | `1.9.3` | `@territory-kit/core`, `@territory-kit/dataset`                                                           | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/cli`          | `1.9.3` | `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/generators`                              | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
 
 The correct first-publish order is:
 
@@ -126,6 +127,9 @@ The release workflow is `.github/workflows/release.yml`.
 - `pnpm release` runs `pnpm build && changeset publish`.
 - Changesets checks npm before publishing and skips package versions that already exist.
 - The root workspace is private and ignored by publish tooling.
+- The stable release publishes under npm `latest`. The repository publish script rejects prerelease
+  semver versions when the publish tag is `latest`; prerelease handoffs must use an explicit
+  non-latest tag.
 
 ## Trusted Publishing Setup
 
@@ -152,10 +156,10 @@ Use these values in each package's Trusted Publisher settings:
 | Environment       | leave blank    |
 | Allowed actions   | `npm publish`  |
 
-The workflow grants `id-token: write` and does not set `NPM_TOKEN` or `NODE_AUTH_TOKEN`.
-Node.js 24 and npm 11 are used for the release job. `PNPM_CONFIG_PROVENANCE=true` and
-`NPM_CONFIG_PROVENANCE=true` are set for the publish step; pnpm 11 supports `--provenance` and
-Trusted Publishing-compatible release builds.
+The workflow grants `id-token: write`. `NPM_TOKEN` is optional; when it is absent, publishing relies
+on npm Trusted Publishing. Node.js 24 and npm 11 are used for the release job.
+`PNPM_CONFIG_PROVENANCE=true` and `NPM_CONFIG_PROVENANCE=true` are set for the publish step; pnpm 11
+supports `--provenance` and Trusted Publishing-compatible release builds.
 
 Trusted Publishing requires the package `repository.url` to match the GitHub repository. Public
 package manifests point to `https://github.com/mberatkaya/TerritoryKit.git` and include each
@@ -172,7 +176,7 @@ Publishing is unavailable.
 - Never write the token into repo files, `.npmrc`, logs, or docs.
 - Remove the token after Trusted Publishing works.
 
-Do not enable Trusted Publishing and token publishing in the active workflow at the same time.
+Do not require both Trusted Publishing and token publishing for the same release path.
 
 ## Troubleshooting
 

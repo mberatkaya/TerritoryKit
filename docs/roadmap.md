@@ -16,6 +16,7 @@
 | Pending `1.2.0` | Sprint 11 | Runtime contracts and adapter boundaries       | Merged to main             |
 | Pending `1.2.0` | Sprint 12 | Runtime viewport lifecycle                     | Merged to main             |
 | Pending `1.2.0` | Sprint 13 | Catalogs, binary indexes, and worker loading   | In progress on branch      |
+| `2.0.0` target  | V2        | Turkey V2 national playable stable handoff     | Release hardening          |
 
 The table above describes the historical sprint track, not blanket production availability for
 every adapter or dataset. Current implementation gaps and partial items are tracked in
@@ -33,9 +34,10 @@ guards, memory LRU cache ownership policy, lazy engine reuse, managed adapter so
 renderer-independent adapter updates. Sprint 13 adds a runtime multi-dataset catalog, engine pool,
 binary spatial index artifacts, CLI index build/inspect/validate commands, and injectable worker
 loading contracts. Turkey ADM0-ADM2 national source locking, country-build render/query/index
-outputs, and the Turkey web renderer examples are branch-level additions; nationwide ADM3/ADM4
-coverage, hosted production registry, and mobile renderer adapters remain future work unless their
-package or workflow exists in this repository.
+outputs, and the Turkey web renderer examples are branch-level additions. Turkey V2 national
+playable ADM3 coverage is now a stable release target through external resolver artifacts with
+generated non-official fallback; nationwide official ADM3/ADM4 source coverage and a hosted
+production registry remain future work unless their package or workflow exists in this repository.
 
 See [Master Sprint Checklist](./sprint-checklist.md) for branch-level completion evidence,
 repo-owned hardening work, external handoff, and post-1.0 roadmap items.

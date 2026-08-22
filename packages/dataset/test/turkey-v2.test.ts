@@ -163,6 +163,23 @@ describe("Turkey V2 dataset contract", () => {
         code: "MISSING_GENERATOR_VERSION"
       },
       {
+        name: "generated zone marked official",
+        dataset: createTurkeyV2Fixture([
+          createAdm3Zone({
+            id: "tr:adm3:generated-false-official",
+            name: "Generated False Official",
+            semanticType: "generated-zone",
+            sourceClass: "generated",
+            sourceNativeId: "1",
+            official: true,
+            generated: true,
+            west: 28.94,
+            east: 28.96
+          })
+        ]),
+        code: "SOURCE_FLAG_CONFLICT"
+      },
+      {
         name: "generated zone presented as mahalle",
         dataset: createTurkeyV2Fixture([
           createAdm3Zone({

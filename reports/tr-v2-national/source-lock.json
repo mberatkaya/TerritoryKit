@@ -1,7 +1,7 @@
 {
   "schemaVersion": "territorykit-tr-v2-national-source-lock@1",
   "datasetId": "territory-kit-tr-v2-playable",
-  "datasetVersion": "2.0.0-rc.1",
+  "datasetVersion": "2.0.0",
   "buildDate": "2026-08-22T00:00:00.000Z",
   "sourceLockVersion": "1",
   "adm0Adm2": {
@@ -135,5 +135,5 @@
     "largeGeometryInNpmPackage": false,
     "registryCdnOfflineModel": true
   },
-  "contentHash": "sha256:6b098b80727e9f703b26f9257a7cc36d94f657b4d2346c5287e2e3910dd2a116"
+  "contentHash": "sha256:7e39a815b6eb587e8d718039f349c3e16d931301b648344cda15c7c2f77eb339"
 }

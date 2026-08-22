@@ -2,8 +2,13 @@
 
 ## Supported Versions
 
-Until `1.0.0`, security fixes target the current `main` branch and the latest prerelease line.
-After `1.0.0`, supported versions will be listed here.
+Security fixes target the current stable major line.
+
+| Version line | Support status                                           |
+| ------------ | -------------------------------------------------------- |
+| `2.x`        | Supported for security fixes while it is the stable line |
+| `1.x`        | Maintenance fixes only when explicitly announced         |
+| `<1.0`       | Unsupported                                              |
 
 ## Reporting
 

@@ -1,8 +1,8 @@
 {
   "schemaVersion": "territorykit-tr-v2-national-cli-summary@1",
   "datasetId": "territory-kit-tr-v2-playable",
-  "datasetVersion": "2.0.0-rc.1",
-  "buildDate": "2026-08-13T00:00:00.000Z",
+  "datasetVersion": "2.0.0",
+  "buildDate": "2026-08-22T00:00:00.000Z",
   "buildMode": "partial",
   "publishReady": false,
   "expectedAdm0Count": 1,
@@ -29,6 +29,6 @@
     "osm": "not-built",
     "generated": "built"
   },
-  "deterministicHash": "52be241307e8b4c42a2331aef6d7093b01db9f75f03312c69e8310dd426b006d",
-  "sourceLockHash": "sha256:10e08ce0d17f4ab81b41984fecd9b30b174603204219bef746c0b63b3209ea63"
+  "deterministicHash": "80f7bff5ebac02dc8d54c93131d127782c3ae794b4687b27cb5f6e047fb17818",
+  "sourceLockHash": "sha256:7e39a815b6eb587e8d718039f349c3e16d931301b648344cda15c7c2f77eb339"
 }

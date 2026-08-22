@@ -39,7 +39,7 @@ const DEFAULT_OFFICIAL_ARTIFACT = workspacePath(
 );
 const DEFAULT_OUTPUT = workspacePath(".territory/build/TR/V2-national");
 const DEFAULT_REPORTS_OUTPUT = workspacePath("reports/tr-v2-national");
-const DEFAULT_BUILD_DATE = "2026-08-13T00:00:00.000Z";
+const DEFAULT_BUILD_DATE = "2026-08-22T00:00:00.000Z";
 
 export async function runTurkeyV2(args: string[]): Promise<number> {
   const [subcommand] = args;
@@ -152,6 +152,21 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
   const startedAt = Date.now();
   const outputRoot = resolve(getFlag(flags, "output") ?? DEFAULT_OUTPUT);
   const reportsRoot = resolve(getFlag(flags, "reports-output") ?? DEFAULT_REPORTS_OUTPUT);
+  const explicitBuildDate = getFlag(flags, "build-date");
+  if (mode === "publish-ready" && explicitBuildDate === undefined) {
+    printJson({
+      ok: false,
+      command: "tr v2 national publish-ready",
+      issues: [
+        issue("Publish-ready Turkey V2 builds require an explicit --build-date.", undefined, {
+          code: "BUILD_DATE_REQUIRED",
+          expected: DEFAULT_BUILD_DATE,
+          actual: "missing"
+        })
+      ]
+    });
+    return 2;
+  }
   const buildDate = getFlag(flags, "build-date") ?? DEFAULT_BUILD_DATE;
   const datasetVersion = getFlag(flags, "dataset-version") ?? TURKEY_V2_NATIONAL_DATASET_VERSION;
   const admDataset = await readDataset(
@@ -955,8 +970,8 @@ Common flags:
   --osm-artifact <dataset.json>
   --output <dir>
   --reports-output <dir>
-  --dataset-version 2.0.0-rc.1
-  --build-date 2026-08-13T00:00:00.000Z
+  --dataset-version 2.0.0
+  --build-date 2026-08-22T00:00:00.000Z
   --max-districts <n>
   --force
 `);

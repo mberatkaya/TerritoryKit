@@ -1,7 +1,7 @@
 {
   "schemaVersion": "territorykit-tr-v2-national-artifact-plan@1",
   "datasetId": "territory-kit-tr-v2-playable",
-  "datasetVersion": "2.0.0-rc.1",
+  "datasetVersion": "2.0.0",
   "largeGeometryEmbeddedInNpm": false,
   "commitPolicy": {
     "commit": [
@@ -32,8 +32,8 @@
       "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
       "path": "dataset.json",
       "url": "./dataset.json",
-      "sha256": "34aa81cf82446a7fadbed1988a08669859ff95871d8db77a7c212374cd6708e8",
-      "sizeBytes": 9618748,
+      "sha256": "9b7f7a2b40e49ae7d94f4afd74ee99f8be906a1feead8a8b779feb1f8dbf8022",
+      "sizeBytes": 9618743,
       "compression": "none"
     },
     {
@@ -42,8 +42,8 @@
       "format": "json",
       "path": "coverage.json",
       "url": "./coverage.json",
-      "sha256": "10f28cbf994607e9864e9c61ff93cfb040fd72c1e010102b10ba642babc5b87e",
-      "sizeBytes": 14563,
+      "sha256": "6c5c04c942f384daa1f1ede319510e594bfab1034f6b7caad8b2aee213a7cd1f",
+      "sizeBytes": 14558,
       "compression": "none"
     },
     {
@@ -63,8 +63,8 @@
       "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
       "path": "query/query-artifact.json",
       "url": "./query/query-artifact.json",
-      "sha256": "e556a8214d722e2fda23e803658f957861dec7a17537d6709d21ef3ac2074a49",
-      "sizeBytes": 522477,
+      "sha256": "fbf50bdd84bfc7df298122789e1a261fb8124867dc6f74abf479db733cf3256c",
+      "sizeBytes": 522472,
       "compression": "none"
     },
     {
@@ -75,8 +75,8 @@
       "detail": "full",
       "path": "levels/ADM3/dataset.json",
       "url": "./levels/ADM3/dataset.json",
-      "sha256": "ae4bb5140f8ac6b721a345a2d31a82b035619cf77e0fa9e24dd33fa75fa0e52c",
-      "sizeBytes": 3241004,
+      "sha256": "6c122eac39e37ac5442f6236cf1d98cd089c922a2c2dadc4e7264fcc69761504",
+      "sizeBytes": 3240999,
       "compression": "none"
     },
     {
@@ -86,8 +86,8 @@
       "levels": ["ADM3"],
       "path": "levels/ADM3/adjacency/adjacency.json",
       "url": "./levels/ADM3/adjacency/adjacency.json",
-      "sha256": "010b53449d4bd17538ce164445dcff8ee03f9bd26429ea3be41f39e2dd01724b",
-      "sizeBytes": 432465,
+      "sha256": "61ded9fb591fa651530f7f7516514308130cc8ff0350257a6fa6534dc004e26b",
+      "sizeBytes": 432460,
       "compression": "none"
     }
   ]
