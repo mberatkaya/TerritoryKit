@@ -98,12 +98,16 @@ export {
   simplifyTerritoryDatasetPath
 } from "./geometry-simplification.js";
 export type {
+  TerritorySimplificationAuditIssue,
+  TerritorySimplificationAuditIssueCode,
   TerritorySimplificationDetail,
+  TerritorySimplificationGeometryValidationSummary,
   TerritorySimplificationOptions,
   TerritorySimplificationPathResult,
   TerritorySimplificationReport,
   TerritorySimplificationStrategy,
-  TerritorySimplificationTierReport
+  TerritorySimplificationTierReport,
+  TerritorySimplificationTopologyAudit
 } from "./geometry-simplification.js";
 export {
   computeGeometryRepresentativePoint,

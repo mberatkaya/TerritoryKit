@@ -48,6 +48,9 @@ territory registry verify --registry https://datasets.example.com/registry.json 
 - `territory geometry repair <dataset-path> --output <dir>` applies safe audited repairs.
 - `territory geometry simplify <dataset-path> --strategy topology-safe` writes audited real
   simplification tiers with canonical shared-boundary arcs and omits duplicate-hash placeholders.
+  The report v2 `sharedBoundaryMismatchCount` counts actual shared-boundary relationship failures,
+  not expected shared segment reduction. Exit `1` means simplification completed but topology or
+  geometry quality failed; exit `2` remains reserved for usage/configuration failures.
 - `territory adjacency build <dataset-path> --output <dir|json>` builds exact polygon adjacency
   artifacts.
 - `territory adjacency validate <dataset-path> <dir|json>` validates an adjacency artifact.

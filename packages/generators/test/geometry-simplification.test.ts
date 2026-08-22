@@ -13,7 +13,12 @@ import type {
   TerritoryZone
 } from "@territory-kit/dataset";
 import { describe, expect, it } from "vitest";
-import { createDatasetGeometryHash, simplifyTerritoryDatasetPath } from "../src/index.js";
+import {
+  createDatasetGeometryHash,
+  simplifyTerritoryDataset,
+  simplifyTerritoryDatasetPath
+} from "../src/index.js";
+import { auditSimplifiedTerritoryDataset } from "../src/geometry-simplification.js";
 
 type Detail = "high" | "medium" | "low";
 
@@ -52,6 +57,107 @@ describe("topology-safe geometry simplification", () => {
 
     expect(simplifiedShared.left.length).toBeLessThan(sourceShared.left.length);
     expect(simplifiedShared.left).toEqual([...simplifiedShared.right].reverse());
+  });
+
+  it("does not count shared segment reduction as a topology mismatch", () => {
+    const shared = wavySharedBoundary(1, 0, 1, 12, 0.00004);
+    const source = territoryDataset("issue-56-false-positive", [
+      polygonZone("left", leftOfShared(shared, 0)),
+      polygonZone("right", rightOfShared(shared, 2))
+    ]);
+
+    const report = simplifyTerritoryDataset(source, {
+      strategy: "topology-safe",
+      details: ["high"],
+      buildDate: "2026-01-01T00:00:00.000Z"
+    });
+    const audit = report.tiers[0]!.topologyAudit;
+
+    expect(report.reportVersion).toBe("2");
+    expect(report.ok).toBe(true);
+    expect(audit.sharedSegmentCountAfter).toBeLessThan(audit.sharedSegmentCountBefore);
+    expect(audit.sharedBoundaryMismatchCount).toBe(0);
+    expect(audit.geometryValidation).toMatchObject({
+      ok: true,
+      invalidFeatureCount: 0,
+      errorCount: 0
+    });
+    expect(audit.ok).toBe(true);
+  });
+
+  it("detects a real shared-boundary divergence in reconstructed output", () => {
+    const shared = [
+      [1, 0],
+      [1, 0.25],
+      [1, 0.5],
+      [1, 0.75],
+      [1, 1]
+    ] as LngLat[];
+    const source = territoryDataset("shared-boundary-audit-source", [
+      polygonZone("left", leftOfShared(shared, 0)),
+      polygonZone("right", rightOfShared(shared, 2))
+    ]);
+    const output = territoryDataset("shared-boundary-audit-output", [
+      polygonZone("left", leftOfShared([shared[0]!, shared[2]!, shared[4]!], 0)),
+      polygonZone("right", [shared[0]!, [2, 0], [2, 1], shared[4]!, shared[3]!, shared[0]!])
+    ]);
+
+    const audit = auditSimplifiedTerritoryDataset(source, output);
+
+    expect(audit.geometryValidation.ok).toBe(true);
+    expect(audit.sharedBoundaryMismatchCount).toBeGreaterThan(0);
+    expect(audit.ok).toBe(false);
+    expect(audit.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: "SHARED_BOUNDARY_MISMATCH",
+          severity: "error",
+          zoneIds: ["left", "right"]
+        })
+      ])
+    );
+  });
+
+  it("reports invalid simplified geometry through the geometry validator", () => {
+    const source = territoryDataset("invalid-output-source", [
+      polygonZone("bowtie", simpleRectangle(0, 0, 1, 1))
+    ]);
+    const output = territoryDataset("invalid-output-corrupted", [
+      polygonZone("bowtie", bowTieRing())
+    ]);
+
+    const audit = auditSimplifiedTerritoryDataset(source, output);
+
+    expect(audit.sharedBoundaryMismatchCount).toBe(0);
+    expect(audit.geometryValidation.ok).toBe(false);
+    expect(audit.geometryValidation.invalidFeatureCount).toBeGreaterThan(0);
+    expect(audit.geometryValidation.errorCount).toBeGreaterThan(0);
+    expect(audit.ok).toBe(false);
+    expect(audit.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: "SIMPLIFIED_GEOMETRY_INVALID",
+          geometryIssueCode: "SELF_INTERSECTION",
+          zoneId: "bowtie"
+        })
+      ])
+    );
+  });
+
+  it("does not treat an omitted hash-equal invalid tier as quality-success", () => {
+    const source = territoryDataset("invalid-omitted-tier", [polygonZone("bowtie", bowTieRing())]);
+
+    const report = simplifyTerritoryDataset(source, {
+      strategy: "topology-safe",
+      details: ["high"],
+      buildDate: "2026-01-01T00:00:00.000Z"
+    });
+    const tier = report.tiers[0]!;
+
+    expect(tier.status).toBe("omitted");
+    expect(report.ok).toBe(false);
+    expect(tier.topologyAudit.geometryValidation.ok).toBe(false);
+    expect(tier.topologyAudit.ok).toBe(false);
   });
 
   it("reproduces Issue #55 with legacy per-ring RDP and fixes it with shared arcs", async () => {
@@ -123,6 +229,10 @@ describe("topology-safe geometry simplification", () => {
       zoneGeometry(simplified, "west"),
       zoneGeometry(simplified, "northeast")
     );
+    expect(auditSimplifiedTerritoryDataset(source, simplified)).toMatchObject({
+      ok: true,
+      sharedBoundaryMismatchCount: 0
+    });
   });
 
   it("produces the same geometries regardless of input zone order", async () => {
@@ -133,6 +243,9 @@ describe("topology-safe geometry simplification", () => {
     const second = await simplifyFixture(reordered, "high");
 
     expect(geometriesByZoneId(second)).toEqual(geometriesByZoneId(first));
+    expect(auditSimplifiedTerritoryDataset(source, first).issues).toEqual(
+      auditSimplifiedTerritoryDataset(reordered, second).issues
+    );
   });
 
   it("matches opposing ring traversal directions with exact reversal", async () => {
@@ -164,6 +277,31 @@ describe("topology-safe geometry simplification", () => {
     expect(multi.type).toBe("MultiPolygon");
     expect(multi.coordinates).toHaveLength(2);
     expectSharedBoundarySynchronized(multi, zoneGeometry(simplified, "neighbor"));
+    expect(auditSimplifiedTerritoryDataset(source, simplified)).toMatchObject({
+      ok: true,
+      sharedBoundaryMismatchCount: 0
+    });
+  });
+
+  it("audits disconnected MultiPolygon shared boundaries independently", () => {
+    const lower = wavySharedBoundary(1, 0, 1, 8, 0.00004);
+    const upper = wavySharedBoundary(1, 2, 3, 8, 0.00004);
+    const source = territoryDataset("multipolygon-disconnected-shared-boundaries", [
+      multiPolygonZone("multi-left", [[leftOfShared(lower, 0)], [leftOfShared(upper, 0)]]),
+      multiPolygonZone("multi-right", [[rightOfShared(lower, 2)], [rightOfShared(upper, 2)]])
+    ]);
+
+    const report = simplifyTerritoryDataset(source, {
+      strategy: "topology-safe",
+      details: ["high"],
+      buildDate: "2026-01-01T00:00:00.000Z"
+    });
+    const audit = report.tiers[0]!.topologyAudit;
+
+    expect(report.source.sharedBoundaryCount).toBe(2);
+    expect(audit.sharedBoundaryCountBefore).toBe(2);
+    expect(audit.sharedBoundaryMismatchCount).toBe(0);
+    expect(audit.ok).toBe(true);
   });
 
   it("keeps interior rings closed, non-degenerate, and self-intersection-free", async () => {
@@ -212,6 +350,28 @@ describe("topology-safe geometry simplification", () => {
     expect(countDatasetVertices(low!)).toBeLessThan(sourceVertices);
   });
 
+  it("adds independent topology audits for high, medium, and low tiers", () => {
+    const source = orderIndependenceDataset();
+
+    const report = simplifyTerritoryDataset(source, {
+      strategy: "topology-safe",
+      details: ["high", "medium", "low"],
+      buildDate: "2026-01-01T00:00:00.000Z"
+    });
+
+    expect(report.ok).toBe(true);
+    expect(report.tiers.map((tier) => tier.detail)).toEqual(["high", "medium", "low"]);
+
+    for (const tier of report.tiers) {
+      expect(tier.topologyAudit.ok).toBe(true);
+      expect(tier.topologyAudit.sharedBoundaryMismatchCount).toBe(0);
+      expect(tier.topologyAudit.geometryValidation.ok).toBe(true);
+      expect(tier.topologyAudit.sharedSegmentCountAfter).toBeLessThanOrEqual(
+        tier.topologyAudit.sharedSegmentCountBefore
+      );
+    }
+  });
+
   it("handles a moderately sized synthetic grid without losing shared boundaries", async () => {
     const source = gridDataset(10, 10);
 
@@ -245,6 +405,21 @@ describe("topology-safe geometry simplification", () => {
     );
   });
 
+  it("keeps audit output deterministic and stable after serialization", async () => {
+    const source = orderIndependenceDataset();
+    const simplified = await simplifyFixture(source, "high");
+    const reparsed = JSON.parse(JSON.stringify(simplified)) as TerritoryDataset;
+
+    const first = auditSimplifiedTerritoryDataset(source, simplified);
+    const second = auditSimplifiedTerritoryDataset(source, simplified);
+    const afterSerialization = auditSimplifiedTerritoryDataset(source, reparsed);
+
+    expect(second).toEqual(first);
+    expect(afterSerialization.ok).toBe(first.ok);
+    expect(afterSerialization.sharedBoundaryMismatchCount).toBe(first.sharedBoundaryMismatchCount);
+    expect(afterSerialization.issues).toEqual(first.issues);
+  });
+
   it("covers the Gaziantep/Kilis ADM1 regression shape with a bounded deterministic fixture", async () => {
     const shared = wavySharedBoundary(37.1, 36.65, 37.55, 14, 0.00004);
     const source = territoryDataset("turkey-adm1-gaziantep-kilis-regression", [
@@ -270,6 +445,12 @@ describe("topology-safe geometry simplification", () => {
 
     expect(sharedAfter.left).toEqual([...sharedAfter.right].reverse());
     expect(sharedAfter.left.length).toBeLessThan(shared.length);
+
+    const audit = auditSimplifiedTerritoryDataset(source, simplified);
+    expect(audit.sharedSegmentCountAfter).toBeLessThan(audit.sharedSegmentCountBefore);
+    expect(audit.sharedBoundaryMismatchCount).toBe(0);
+    expect(audit.geometryValidation.ok).toBe(true);
+    expect(audit.ok).toBe(true);
   });
 });
 
@@ -553,6 +734,16 @@ function simpleRectangle(west: number, south: number, east: number, north: numbe
     [east, north],
     [west, north],
     [west, south]
+  ];
+}
+
+function bowTieRing(): LngLat[] {
+  return [
+    [0, 0],
+    [1, 1],
+    [1, 0],
+    [0, 1],
+    [0, 0]
   ];
 }
 

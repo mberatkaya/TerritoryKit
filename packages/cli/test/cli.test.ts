@@ -6,6 +6,24 @@ import { createSampleTerritoryDataset } from "@territory-kit/shared-testkit";
 import { describe, expect, it, vi } from "vitest";
 import { runCli } from "../src/index.js";
 
+interface SimplificationCliPayload {
+  data: {
+    report: {
+      ok: boolean;
+      reportVersion: string;
+      tiers: Array<{
+        topologyAudit: {
+          sharedSegmentCountBefore: number;
+          sharedSegmentCountAfter: number;
+          geometryValidation: {
+            invalidFeatureCount: number;
+          };
+        };
+      }>;
+    };
+  };
+}
+
 describe("territory cli", () => {
   it("validates a dataset file", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-"));
@@ -353,16 +371,107 @@ describe("territory cli", () => {
           ok: true,
           command: "geometry simplify",
           data: {
+            reportPath,
             report: {
-              tiers: [expect.objectContaining({ detail: "medium", status: "generated" })]
+              reportVersion: "2",
+              ok: true,
+              tiers: [
+                expect.objectContaining({
+                  detail: "medium",
+                  status: "generated",
+                  topologyAudit: expect.objectContaining({
+                    ok: true,
+                    sharedBoundaryMismatchCount: 0,
+                    geometryValidation: expect.objectContaining({
+                      ok: true,
+                      invalidFeatureCount: 0,
+                      errorCount: 0
+                    })
+                  })
+                })
+              ]
             }
-          }
+          },
+          issues: []
         }
       });
+      const report = (result.payload as SimplificationCliPayload).data.report;
+      const tier = report.tiers[0]!;
+      expect(tier.topologyAudit.sharedSegmentCountAfter).toBeLessThan(
+        tier.topologyAudit.sharedSegmentCountBefore
+      );
       await expect(readFile(join(outputPath, "medium", "dataset.json"), "utf8")).resolves.toContain(
         '"geometryDetail": "medium"'
       );
-      await expect(readFile(reportPath, "utf8")).resolves.toContain("topology-safe");
+      await expect(JSON.parse(await readFile(reportPath, "utf8"))).toMatchObject(report);
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
+
+  it("returns a quality-failure exit code when simplified output is invalid", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-simplify-invalid-"));
+    const filePath = join(tempDir, "dataset.json");
+    const outputPath = join(tempDir, "simplified");
+    const reportPath = join(tempDir, "simplification-report.json");
+
+    await writeFile(filePath, JSON.stringify(createInvalidSimplificationDataset()), "utf8");
+
+    try {
+      const result = await captureCli([
+        "geometry",
+        "simplify",
+        filePath,
+        "--strategy",
+        "topology-safe",
+        "--detail",
+        "high",
+        "--output",
+        outputPath,
+        "--report",
+        reportPath
+      ]);
+
+      expect(result).toMatchObject({
+        code: 1,
+        payload: {
+          ok: false,
+          command: "geometry simplify",
+          data: {
+            reportPath,
+            report: {
+              reportVersion: "2",
+              ok: false,
+              tiers: [
+                expect.objectContaining({
+                  detail: "high",
+                  topologyAudit: expect.objectContaining({
+                    ok: false,
+                    geometryValidation: expect.objectContaining({
+                      ok: false,
+                      invalidFeatureCount: expect.any(Number),
+                      errorCount: expect.any(Number)
+                    })
+                  })
+                })
+              ]
+            }
+          },
+          issues: expect.arrayContaining([
+            expect.objectContaining({
+              code: "SIMPLIFIED_GEOMETRY_INVALID",
+              detail: "high",
+              geometryIssueCode: "HOLE_OUTSIDE_SHELL",
+              zoneId: "invalid-hole"
+            })
+          ])
+        }
+      });
+      const report = (result.payload as SimplificationCliPayload).data.report;
+      expect(report.tiers[0]!.topologyAudit.geometryValidation.invalidFeatureCount).toBeGreaterThan(
+        0
+      );
+      await expect(JSON.parse(await readFile(reportPath, "utf8"))).toMatchObject(report);
     } finally {
       await rm(tempDir, { force: true, recursive: true });
     }
@@ -1916,7 +2025,97 @@ function createSharedBoundarySimplificationDataset(): unknown {
   };
 }
 
-function sharedBoundaryZone(id: string, ring: number[][]): unknown {
+function createInvalidSimplificationDataset(): unknown {
+  return {
+    manifest: {
+      datasetId: "simplify-invalid-geometry",
+      datasetVersion: "1.0.0",
+      schemaVersion: "territory-schema@1",
+      sourceDate: "2026-01-01",
+      geometryHash: "fixture",
+      adminLevels: ["ADM2"],
+      artifactChecksum: "fixture",
+      attribution: "fixture",
+      boundaryPolicy: "fixture",
+      buildDate: "2026-01-01T00:00:00.000Z",
+      countryCodes: ["tr"],
+      crs: "EPSG:4326",
+      disputedAreaPolicy: "fixture",
+      geometryDetail: "source",
+      license: "Apache-2.0",
+      name: "Invalid simplification fixture",
+      sourceProvider: "fixture",
+      worldview: "fixture"
+    },
+    zones: [
+      polygonZoneWithRings(
+        "invalid-hole",
+        [
+          [0, 0],
+          [1, 0],
+          [1, 1],
+          [0, 1],
+          [0, 0]
+        ],
+        [
+          [2, 2],
+          [3, 2],
+          [3, 3],
+          [2, 3],
+          [2, 2]
+        ],
+        "simplify-invalid-geometry"
+      )
+    ]
+  };
+}
+
+function polygonZoneWithRings(
+  id: string,
+  shell: number[][],
+  hole: number[][],
+  datasetId: string
+): unknown {
+  const coordinates = [shell, hole];
+  const points = coordinates.flat();
+  const lngs = points.map((point) => point[0] ?? 0);
+  const lats = points.map((point) => point[1] ?? 0);
+  const bbox = [Math.min(...lngs), Math.min(...lats), Math.max(...lngs), Math.max(...lats)] as [
+    number,
+    number,
+    number,
+    number
+  ];
+
+  return {
+    id,
+    datasetId,
+    countryCode: "TR",
+    level: 2,
+    sourceAdminLevel: "ADM2",
+    semanticType: "district",
+    name: id,
+    neighborIds: [],
+    geometry: { type: "Polygon", coordinates },
+    center: [0.5, 0.5],
+    bbox,
+    properties: {
+      name: id,
+      territory: {
+        adminLevel: "ADM2",
+        sourceAdminLevel: "ADM2",
+        semanticType: "district",
+        coverageStatus: "generated"
+      }
+    }
+  };
+}
+
+function sharedBoundaryZone(
+  id: string,
+  ring: number[][],
+  datasetId = "simplify-shared-boundary"
+): unknown {
   const lngs = ring.map((point) => point[0] ?? 0);
   const lats = ring.map((point) => point[1] ?? 0);
   const bbox = [Math.min(...lngs), Math.min(...lats), Math.max(...lngs), Math.max(...lats)] as [
@@ -1928,7 +2127,7 @@ function sharedBoundaryZone(id: string, ring: number[][]): unknown {
 
   return {
     id,
-    datasetId: "simplify-shared-boundary",
+    datasetId,
     countryCode: "TR",
     level: 2,
     sourceAdminLevel: "ADM2",
