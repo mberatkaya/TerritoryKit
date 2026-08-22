@@ -1,5 +1,14 @@
 # @territory-kit/generators
 
+## 1.9.1
+
+### Patch Changes
+
+- 5b62b10: Fix topology-safe geometry simplification so shared polygon boundaries are simplified once as
+  canonical arcs and reused by adjacent polygons instead of being independently simplified per ring.
+  - @territory-kit/core@1.9.1
+  - @territory-kit/dataset@1.9.1
+
 ## 1.9.0
 
 ### Minor Changes

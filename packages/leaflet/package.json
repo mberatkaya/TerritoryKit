@@ -1,6 +1,6 @@
 {
   "name": "@territory-kit/leaflet",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "Leaflet adapter utilities for TerritoryKit.",
   "license": "Apache-2.0",
   "homepage": "https://github.com/mberatkaya/TerritoryKit#readme",
