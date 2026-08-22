@@ -1,5 +1,12 @@
 # @territory-kit/dataset
 
+## 1.9.3
+
+### Patch Changes
+
+- 66f1c77: Harden Turkey V2 national publish-ready geometry validation, representative centers, level artifacts,
+  and topology-safe simplification fallback for the full national verification rebuild.
+
 ## 1.9.2
 
 ## 1.9.1
