@@ -1,5 +1,15 @@
 # @territory-kit/example-web-openlayers-turkey
 
+## 0.0.13
+
+### Patch Changes
+
+- Updated dependencies [5ccdbf6]
+  - @territory-kit/registry@2.0.0
+  - @territory-kit/runtime@2.0.0
+  - @territory-kit/openlayers@1.2.11
+  - @territory-kit/shared-testkit@0.1.0-alpha.1
+
 ## 0.0.12
 
 ### Patch Changes

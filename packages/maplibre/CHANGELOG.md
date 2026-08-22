@@ -1,5 +1,33 @@
 # @territory-kit/maplibre
 
+## 2.0.0
+
+### Major Changes
+
+- 5ccdbf6: Prepare TerritoryKit V2 for the stable `2.0.0` release handoff.
+
+  This release promotes the Turkey V2 national playable dataset contract to
+  `territory-kit-tr-v2-playable@2.0.0`, with the complete 1 ADM0 / 81 ADM1 / 973 ADM2 Turkey
+  hierarchy and nationwide playable ADM3 coverage. The ADM3 source policy remains
+  official > OSM > generated; generated fallback zones are deterministic, playable, explicitly
+  generated, and non-official.
+
+  The release hardens the national build, registry, source-lock, checksum, topology, geometry,
+  provenance, attribution, and strict validation gates that protect the resolver-driven external
+  artifact model. Large national geometry remains outside npm packages.
+
+  Migration note: `territory-schema@1` is unchanged and legacy `territory-kit-tr` resolution remains
+  separate. Consumers opting into `territory-kit-tr-v2-playable` should preserve the generated-zone
+  semantics and must not treat generated fallback as official Turkish mahalle/koy administrative
+  data.
+
+### Patch Changes
+
+- Updated dependencies [5ccdbf6]
+  - @territory-kit/adapter-core@2.0.0
+  - @territory-kit/dataset@2.0.0
+  - @territory-kit/registry@2.0.0
+
 ## 1.9.3
 
 ### Patch Changes

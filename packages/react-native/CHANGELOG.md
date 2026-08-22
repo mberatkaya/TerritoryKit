@@ -1,5 +1,14 @@
 # @territory-kit/react-native
 
+## 1.1.12
+
+### Patch Changes
+
+- Updated dependencies [5ccdbf6]
+  - @territory-kit/core@2.0.0
+  - @territory-kit/dataset@2.0.0
+  - @territory-kit/registry@2.0.0
+
 ## 1.1.11
 
 ### Patch Changes
