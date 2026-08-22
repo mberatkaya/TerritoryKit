@@ -1,5 +1,18 @@
 # @territory-kit/generators
 
+## 1.9.2
+
+### Patch Changes
+
+- 3f26da7: Harden topology-safe simplification reporting with report v2. The topology audit now verifies
+  actual shared-boundary relationships across simplified output geometries instead of treating shared
+  segment reduction as mismatches, includes geometry validation summaries and structured issues, and
+  marks the overall report failed when any requested tier fails. The CLI now returns exit code 1 for
+  completed simplification runs whose topology or geometry quality audit fails while preserving the
+  diagnostic report.
+  - @territory-kit/core@1.9.2
+  - @territory-kit/dataset@1.9.2
+
 ## 1.9.1
 
 ### Patch Changes

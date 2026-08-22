@@ -1,5 +1,12 @@
 # @territory-kit/nestjs
 
+## 1.9.2
+
+### Patch Changes
+
+- @territory-kit/core@1.9.2
+- @territory-kit/dataset@1.9.2
+
 ## 1.9.1
 
 ### Patch Changes
