@@ -1,6 +1,6 @@
 {
   "name": "@territory-kit/data-jp",
-  "version": "1.9.2",
+  "version": "1.9.3",
   "description": "Thin loader package for TerritoryKit Japan pilot datasets.",
   "license": "Apache-2.0",
   "homepage": "https://github.com/mberatkaya/TerritoryKit#readme",
