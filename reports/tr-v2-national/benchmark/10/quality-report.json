@@ -1,7 +1,41 @@
 {
   "schemaVersion": "territorykit-tr-v2-national-quality@1",
-  "ok": false,
-  "hardGateFailures": ["adm2Count"],
+  "ok": true,
+  "buildMode": "partial",
+  "publishReady": false,
+  "hardGateFailures": [],
+  "publishReadyGateFailures": ["buildMode", "nationalCompleteness", "successfulAdm2NationalCount"],
+  "completeness": {
+    "expected": {
+      "adm0Count": 1,
+      "adm1Count": 81,
+      "adm2Count": 973
+    },
+    "actual": {
+      "adm0Count": 1,
+      "adm1Count": 81,
+      "adm2Count": 973,
+      "successfulAdm2Count": 10,
+      "failedDistrictCount": 0
+    },
+    "strictIssueCount": 2,
+    "strictIssues": [
+      {
+        "code": "NATIONAL_PARTIAL_BUILD",
+        "message": "Partial, capped, smoke, or benchmark output is not publish-ready.",
+        "path": "quality-report.json",
+        "expected": "publish-ready",
+        "actual": "partial"
+      },
+      {
+        "code": "NATIONAL_SUCCESSFUL_ADM2_COUNT_MISMATCH",
+        "message": "Publish-ready Turkey V2 national output must contain exactly 973 successful ADM2 records.",
+        "path": "coverage.json",
+        "expected": 973,
+        "actual": 10
+      }
+    ]
+  },
   "summary": {
     "adm0Count": 1,
     "adm1Count": 81,
@@ -34,10 +68,15 @@
     "issueCount": 0,
     "errorCount": 0
   },
+  "artifactIntegrity": {
+    "ok": true,
+    "errorCount": 0,
+    "errors": []
+  },
   "gates": {
     "adm0Count": true,
     "adm1Count": true,
-    "adm2Count": false,
+    "adm2Count": true,
     "everyDistrictHasAdm3": true,
     "everyDistrictCoverage": true,
     "nationalCoverage": true,
@@ -54,5 +93,32 @@
     "strictTrV2Validation": true,
     "adjacencyIntegrity": true,
     "registryArtifactChecksum": true
+  },
+  "publishReadyGates": {
+    "adm0Count": true,
+    "adm1Count": true,
+    "adm2Count": true,
+    "everyDistrictHasAdm3": true,
+    "everyDistrictCoverage": true,
+    "nationalCoverage": true,
+    "orphanCount": true,
+    "hierarchyCycleCount": true,
+    "duplicateStableId": true,
+    "invalidFinalGeometry": true,
+    "effectiveSiblingOverlap": true,
+    "realGeneratedOverlap": true,
+    "parentContainment": true,
+    "missingProvenance": true,
+    "missingAttributionLicense": true,
+    "generatedMetadata": true,
+    "strictTrV2Validation": true,
+    "adjacencyIntegrity": true,
+    "registryArtifactChecksum": true,
+    "buildMode": false,
+    "nationalCompleteness": false,
+    "adm0NationalCount": true,
+    "adm1NationalCount": true,
+    "adm2NationalCount": true,
+    "successfulAdm2NationalCount": false
   }
 }

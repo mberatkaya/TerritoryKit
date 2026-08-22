@@ -1,6 +1,5 @@
 import {
   computeGeometryBBox,
-  computeGeometryCenter,
   createTerritoryGlobalId,
   geometryToPolygons
 } from "@territory-kit/dataset";
@@ -22,6 +21,7 @@ import {
   serializeJsonStable,
   sha256Hex
 } from "./sources/utils.js";
+import { computeGeometryRepresentativePoint } from "./geometry-repair.js";
 
 export const TURKEY_ADM3_PROVIDER_REGISTRY_SCHEMA_VERSION =
   "territorykit-tr-adm3-provider-registry@1";
@@ -1096,7 +1096,7 @@ function createGeneratedZone(input: {
     parentId: input.district.id,
     neighborIds: [],
     geometry,
-    center: computeGeometryCenter(geometry),
+    center: computeGeometryRepresentativePoint(geometry),
     bbox,
     properties: {
       territory: {
@@ -1218,7 +1218,7 @@ function createEffectiveTurkeyAdm3Zone(input: {
     ...input.zone,
     geometry: input.geometry,
     bbox,
-    center: computeGeometryCenter(input.geometry),
+    center: computeGeometryRepresentativePoint(input.geometry),
     properties: {
       ...input.zone.properties,
       territory: {

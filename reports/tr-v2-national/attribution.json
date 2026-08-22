@@ -1,7 +1,7 @@
 {
   "schemaVersion": "territorykit-tr-v2-national-attribution-summary@1",
   "districtId": "national",
-  "buildDate": "2026-08-13T00:00:00.000Z",
+  "buildDate": "2026-08-22T00:00:00.000Z",
   "text": "generated: TerritoryKit generated game zones from ADM2 boundaries (Apache-2.0)\nofficial: Bursa Büyükşehir Belediyesi Open Data, Mahalle Sınırları (Bursa Acik Veri Lisansi)\nofficial: Gaziantep Büyükşehir Belediyesi, Mahalle Sınır Alanları, CC BY 4.0 (CC BY 4.0)\nofficial: Kayseri Büyükşehir Belediyesi Open Data, Mahalle Sınırı, CC BY 4.0 (CC BY 4.0)\nofficial: Ordu Büyükşehir Belediyesi Open Data, Ordu Mahalleleri Alana Göre Sıralı (Ordu Acik Veri Lisansi)",
   "groups": [
     {

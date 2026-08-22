@@ -5,13 +5,16 @@
     {
       "districtLimit": 10,
       "code": 0,
-      "durationMs": 1348,
-      "peakRssBytes": 832126976,
+      "durationMs": 2629,
+      "peakRssBytes": 879149056,
       "summary": {
         "schemaVersion": "territorykit-tr-v2-national-build-summary@1",
         "datasetId": "territory-kit-tr-v2-playable",
         "datasetVersion": "2.0.0-rc.1",
         "buildDate": "2026-08-13T00:00:00.000Z",
+        "buildMode": "partial",
+        "publishReady": false,
+        "adm0Count": 1,
         "provinceCount": 81,
         "districtCount": 973,
         "successfulDistrictCount": 10,
@@ -23,8 +26,13 @@
         "realCoveragePercent": 2.919116,
         "generatedCoveragePercent": 97.080911,
         "finalCoveragePercent": 100.000026,
-        "deterministicHash": "de305331aea58e197c0445c015e14e734ea019ed215072aa076fb1ec6c822bd8",
-        "qualityOk": false,
+        "deterministicHash": "52be241307e8b4c42a2331aef6d7093b01db9f75f03312c69e8310dd426b006d",
+        "qualityOk": true,
+        "publishReadyGateFailures": [
+          "buildMode",
+          "nationalCompleteness",
+          "successfulAdm2NationalCount"
+        ],
         "sourceStatus": {
           "official": "artifact-loaded",
           "osm": "not-built",
@@ -64,8 +72,8 @@
               "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
               "path": "dataset.json",
               "url": "./dataset.json",
-              "sha256": "2d0a618a91bf7abb91bcfb0de49bc441e2c6c6ac651b5cb10f366ebf2d99677e",
-              "sizeBytes": 9616137,
+              "sha256": "34aa81cf82446a7fadbed1988a08669859ff95871d8db77a7c212374cd6708e8",
+              "sizeBytes": 9618748,
               "compression": "none"
             },
             {
@@ -74,8 +82,8 @@
               "format": "json",
               "path": "coverage.json",
               "url": "./coverage.json",
-              "sha256": "a5a1dc25be3ca8dc8caa84a966cfdc04ebcd0c806dd823c86b9258e9d9872201",
-              "sizeBytes": 14625,
+              "sha256": "10f28cbf994607e9864e9c61ff93cfb040fd72c1e010102b10ba642babc5b87e",
+              "sizeBytes": 14563,
               "compression": "none"
             },
             {
@@ -84,8 +92,8 @@
               "format": "json",
               "path": "quality-report.json",
               "url": "./quality-report.json",
-              "sha256": "",
-              "sizeBytes": 0,
+              "sha256": "8b78f5ce0ea8126f563902060a3b0eab114b539ff3b0928b4bb8d2918b90ca73",
+              "sizeBytes": 3472,
               "compression": "none"
             },
             {
@@ -95,8 +103,8 @@
               "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
               "path": "query/query-artifact.json",
               "url": "./query/query-artifact.json",
-              "sha256": "610a9c5d02830d7c944f985f07e66052d091ae440dfe02639a9ddf6790091e76",
-              "sizeBytes": 522498,
+              "sha256": "e556a8214d722e2fda23e803658f957861dec7a17537d6709d21ef3ac2074a49",
+              "sizeBytes": 522477,
               "compression": "none"
             },
             {
@@ -107,19 +115,8 @@
               "detail": "full",
               "path": "levels/ADM3/dataset.json",
               "url": "./levels/ADM3/dataset.json",
-              "sha256": "36cfcedb549e5b22efbb42ad5836f5f75bb7610cf24c90856147c168507fa2a1",
-              "sizeBytes": 3261455,
-              "compression": "none"
-            },
-            {
-              "id": "adm3-render-manifest",
-              "purpose": "render",
-              "format": "json",
-              "levels": ["ADM3"],
-              "path": "render/manifest.json",
-              "url": "./render/manifest.json",
-              "sha256": "",
-              "sizeBytes": 0,
+              "sha256": "ae4bb5140f8ac6b721a345a2d31a82b035619cf77e0fa9e24dd33fa75fa0e52c",
+              "sizeBytes": 3241004,
               "compression": "none"
             },
             {
@@ -129,8 +126,8 @@
               "levels": ["ADM3"],
               "path": "levels/ADM3/adjacency/adjacency.json",
               "url": "./levels/ADM3/adjacency/adjacency.json",
-              "sha256": "",
-              "sizeBytes": 0,
+              "sha256": "010b53449d4bd17538ce164445dcff8ee03f9bd26429ea3be41f39e2dd01724b",
+              "sizeBytes": 432465,
               "compression": "none"
             }
           ]
@@ -140,13 +137,16 @@
     {
       "districtLimit": 100,
       "code": 0,
-      "durationMs": 8067,
-      "peakRssBytes": 1333297152,
+      "durationMs": 9756,
+      "peakRssBytes": 940654592,
       "summary": {
         "schemaVersion": "territorykit-tr-v2-national-build-summary@1",
         "datasetId": "territory-kit-tr-v2-playable",
         "datasetVersion": "2.0.0-rc.1",
         "buildDate": "2026-08-13T00:00:00.000Z",
+        "buildMode": "partial",
+        "publishReady": false,
+        "adm0Count": 1,
         "provinceCount": 81,
         "districtCount": 973,
         "successfulDistrictCount": 100,
@@ -158,8 +158,13 @@
         "realCoveragePercent": 2.188774,
         "generatedCoveragePercent": 97.811233,
         "finalCoveragePercent": 100.000007,
-        "deterministicHash": "ee3ced9ec76df21c5677b6d2f1cd567da58aa6690a5a6d6e297ceb717a8f258d",
-        "qualityOk": false,
+        "deterministicHash": "39bf2fbc922093201253dc808ac362253db21f54daca0765409a7e75e1edd972",
+        "qualityOk": true,
+        "publishReadyGateFailures": [
+          "buildMode",
+          "nationalCompleteness",
+          "successfulAdm2NationalCount"
+        ],
         "sourceStatus": {
           "official": "artifact-loaded",
           "osm": "not-built",
@@ -199,8 +204,8 @@
               "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
               "path": "dataset.json",
               "url": "./dataset.json",
-              "sha256": "918a62e1c4b57dd9d23c20ad54a13eac622761f3dcbff2f1f02ea0fb5dc7ef38",
-              "sizeBytes": 36890532,
+              "sha256": "e94997bf89b585a420c900cd26f090ed4683cffa922574bc7a4295636eff0743",
+              "sizeBytes": 36907304,
               "compression": "none"
             },
             {
@@ -209,8 +214,8 @@
               "format": "json",
               "path": "coverage.json",
               "url": "./coverage.json",
-              "sha256": "d4acc3500f72108d478208cd7843c40aa90a38188e1d706e4210b3ccff67a492",
-              "sizeBytes": 106560,
+              "sha256": "8e617084996a8a195d0dc2dadbb87df48f3cf72d0bf50036aa7930df79c33aa7",
+              "sizeBytes": 105970,
               "compression": "none"
             },
             {
@@ -219,8 +224,8 @@
               "format": "json",
               "path": "quality-report.json",
               "url": "./quality-report.json",
-              "sha256": "",
-              "sizeBytes": 0,
+              "sha256": "9ba0406d17873c9c76955ff3f96c64b5f7d8e4576c8d68bf914445f57b04ee0a",
+              "sizeBytes": 3476,
               "compression": "none"
             },
             {
@@ -230,8 +235,8 @@
               "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
               "path": "query/query-artifact.json",
               "url": "./query/query-artifact.json",
-              "sha256": "9a209f26180b9cced4e443574c4c4df2f859f1160a360e363eba3454bb87e099",
-              "sizeBytes": 4443791,
+              "sha256": "4b150b677826f5ee5e5f66bc355000e1acc40fe2f8d5121051c2fbe29eb4a4df",
+              "sizeBytes": 4443483,
               "compression": "none"
             },
             {
@@ -242,19 +247,8 @@
               "detail": "full",
               "path": "levels/ADM3/dataset.json",
               "url": "./levels/ADM3/dataset.json",
-              "sha256": "bd8f92ce40f0bac23380f96832964f3ec60503bb8c815178599a1ae5d87dbe85",
-              "sizeBytes": 29085116,
-              "compression": "none"
-            },
-            {
-              "id": "adm3-render-manifest",
-              "purpose": "render",
-              "format": "json",
-              "levels": ["ADM3"],
-              "path": "render/manifest.json",
-              "url": "./render/manifest.json",
-              "sha256": "",
-              "sizeBytes": 0,
+              "sha256": "cc5b8f1e7e18b038ea233943ab48fe11e5685b484bc27c8d6a5744cb7098364a",
+              "sizeBytes": 28892601,
               "compression": "none"
             },
             {
@@ -264,8 +258,8 @@
               "levels": ["ADM3"],
               "path": "levels/ADM3/adjacency/adjacency.json",
               "url": "./levels/ADM3/adjacency/adjacency.json",
-              "sha256": "",
-              "sizeBytes": 0,
+              "sha256": "ccaca849d1dea026ea86c2280d30058ffe3f670db1d9fdba35deba9ee8029350",
+              "sizeBytes": 3890608,
               "compression": "none"
             }
           ]

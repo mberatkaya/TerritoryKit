@@ -43,8 +43,8 @@
           "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
           "path": "dataset.json",
           "url": "./dataset.json",
-          "sha256": "918a62e1c4b57dd9d23c20ad54a13eac622761f3dcbff2f1f02ea0fb5dc7ef38",
-          "sizeBytes": 36890532,
+          "sha256": "e94997bf89b585a420c900cd26f090ed4683cffa922574bc7a4295636eff0743",
+          "sizeBytes": 36907304,
           "compression": "none"
         },
         {
@@ -53,8 +53,8 @@
           "format": "json",
           "path": "coverage.json",
           "url": "./coverage.json",
-          "sha256": "d4acc3500f72108d478208cd7843c40aa90a38188e1d706e4210b3ccff67a492",
-          "sizeBytes": 106560,
+          "sha256": "8e617084996a8a195d0dc2dadbb87df48f3cf72d0bf50036aa7930df79c33aa7",
+          "sizeBytes": 105970,
           "compression": "none"
         },
         {
@@ -63,8 +63,8 @@
           "format": "json",
           "path": "quality-report.json",
           "url": "./quality-report.json",
-          "sha256": "",
-          "sizeBytes": 0,
+          "sha256": "9ba0406d17873c9c76955ff3f96c64b5f7d8e4576c8d68bf914445f57b04ee0a",
+          "sizeBytes": 3476,
           "compression": "none"
         },
         {
@@ -74,8 +74,8 @@
           "levels": ["ADM0", "ADM1", "ADM2", "ADM3"],
           "path": "query/query-artifact.json",
           "url": "./query/query-artifact.json",
-          "sha256": "9a209f26180b9cced4e443574c4c4df2f859f1160a360e363eba3454bb87e099",
-          "sizeBytes": 4443791,
+          "sha256": "4b150b677826f5ee5e5f66bc355000e1acc40fe2f8d5121051c2fbe29eb4a4df",
+          "sizeBytes": 4443483,
           "compression": "none"
         },
         {
@@ -86,19 +86,8 @@
           "detail": "full",
           "path": "levels/ADM3/dataset.json",
           "url": "./levels/ADM3/dataset.json",
-          "sha256": "bd8f92ce40f0bac23380f96832964f3ec60503bb8c815178599a1ae5d87dbe85",
-          "sizeBytes": 29085116,
-          "compression": "none"
-        },
-        {
-          "id": "adm3-render-manifest",
-          "purpose": "render",
-          "format": "json",
-          "levels": ["ADM3"],
-          "path": "render/manifest.json",
-          "url": "./render/manifest.json",
-          "sha256": "",
-          "sizeBytes": 0,
+          "sha256": "cc5b8f1e7e18b038ea233943ab48fe11e5685b484bc27c8d6a5744cb7098364a",
+          "sizeBytes": 28892601,
           "compression": "none"
         },
         {
@@ -108,8 +97,8 @@
           "levels": ["ADM3"],
           "path": "levels/ADM3/adjacency/adjacency.json",
           "url": "./levels/ADM3/adjacency/adjacency.json",
-          "sha256": "",
-          "sizeBytes": 0,
+          "sha256": "ccaca849d1dea026ea86c2280d30058ffe3f670db1d9fdba35deba9ee8029350",
+          "sizeBytes": 3890608,
           "compression": "none"
         }
       ]

@@ -107,7 +107,7 @@ export function hasRingSelfIntersection(ring: LngLat[]): boolean {
         continue;
       }
 
-      if (segmentsIntersect(left.start, left.end, right.start, right.end)) {
+      if (segmentsCrossOrOverlap(left.start, left.end, right.start, right.end)) {
         return true;
       }
     }
@@ -202,7 +202,7 @@ function computeRingSignedArea(ring: LngLat[]): number {
   return area / 2;
 }
 
-function segmentsIntersect(a1: LngLat, a2: LngLat, b1: LngLat, b2: LngLat): boolean {
+function segmentsCrossOrOverlap(a1: LngLat, a2: LngLat, b1: LngLat, b2: LngLat): boolean {
   const d1 = direction(b1, b2, a1);
   const d2 = direction(b1, b2, a2);
   const d3 = direction(a1, a2, b1);
@@ -212,23 +212,21 @@ function segmentsIntersect(a1: LngLat, a2: LngLat, b1: LngLat, b2: LngLat): bool
     return true;
   }
 
-  return (
-    (d1 === 0 && isOnSegment(b1, b2, a1)) ||
-    (d2 === 0 && isOnSegment(b1, b2, a2)) ||
-    (d3 === 0 && isOnSegment(a1, a2, b1)) ||
-    (d4 === 0 && isOnSegment(a1, a2, b2))
-  );
+  return d1 === 0 && d2 === 0 && d3 === 0 && d4 === 0
+    ? collinearSegmentsOverlapPositive(a1, a2, b1, b2)
+    : false;
+}
+
+function collinearSegmentsOverlapPositive(a1: LngLat, a2: LngLat, b1: LngLat, b2: LngLat): boolean {
+  const axis = Math.abs(a1[0] - a2[0]) >= Math.abs(a1[1] - a2[1]) ? 0 : 1;
+  const leftMin = Math.min(a1[axis], a2[axis]);
+  const leftMax = Math.max(a1[axis], a2[axis]);
+  const rightMin = Math.min(b1[axis], b2[axis]);
+  const rightMax = Math.max(b1[axis], b2[axis]);
+
+  return Math.min(leftMax, rightMax) - Math.max(leftMin, rightMin) > 0;
 }
 
 function direction(a: LngLat, b: LngLat, c: LngLat): number {
   return (c[0] - a[0]) * (b[1] - a[1]) - (b[0] - a[0]) * (c[1] - a[1]);
-}
-
-function isOnSegment(a: LngLat, b: LngLat, point: LngLat): boolean {
-  return (
-    point[0] >= Math.min(a[0], b[0]) &&
-    point[0] <= Math.max(a[0], b[0]) &&
-    point[1] >= Math.min(a[1], b[1]) &&
-    point[1] <= Math.max(a[1], b[1])
-  );
 }

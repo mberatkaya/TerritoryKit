@@ -2,7 +2,13 @@
   "schemaVersion": "territorykit-tr-v2-national-cli-summary@1",
   "datasetId": "territory-kit-tr-v2-playable",
   "datasetVersion": "2.0.0-rc.1",
-  "buildDate": "2026-08-13T00:00:00.000Z",
+  "buildDate": "2026-08-22T00:00:00.000Z",
+  "buildMode": "publish-ready",
+  "publishReady": true,
+  "expectedAdm0Count": 1,
+  "expectedAdm1Count": 81,
+  "expectedAdm2Count": 973,
+  "adm0Count": 1,
   "provinceCount": 81,
   "districtCount": 973,
   "successfulDistrictCount": 973,
@@ -17,11 +23,12 @@
   "districtsBelow9999": [],
   "qualityOk": true,
   "hardGateFailures": [],
+  "publishReadyGateFailures": [],
   "sourceStatus": {
     "official": "artifact-loaded",
     "osm": "not-built",
     "generated": "built"
   },
-  "deterministicHash": "217b50a6d83382437caf15d3d0c975f3ea4f165a29c8467b8666b3c5692daef8",
-  "sourceLockHash": "sha256:10e08ce0d17f4ab81b41984fecd9b30b174603204219bef746c0b63b3209ea63"
+  "deterministicHash": "b0abf33a7e66e46a904da648c03554d10efa8d7269083a967d22c48eff2854f2",
+  "sourceLockHash": "sha256:6b098b80727e9f703b26f9257a7cc36d94f657b4d2346c5287e2e3910dd2a116"
 }

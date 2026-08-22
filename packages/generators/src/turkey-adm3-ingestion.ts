@@ -2,7 +2,6 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import {
   computeGeometryBBox,
-  computeGeometryCenter,
   createTerritoryGlobalId,
   slugifyTerritoryIdPart,
   validateGeometryDataset
@@ -16,6 +15,7 @@ import type {
   TerritorySemanticAdminType,
   TerritoryZone
 } from "@territory-kit/dataset";
+import { computeGeometryRepresentativePoint } from "./geometry-repair.js";
 import type {
   BuiltCountryZone,
   ParsedCountryFeature,
@@ -1255,7 +1255,7 @@ export function createTurkeyAdm3SourceQualityReport(input: {
         name: feature.name,
         neighborIds: [],
         geometry: feature.geometry,
-        center: computeGeometryCenter(feature.geometry),
+        center: computeGeometryRepresentativePoint(feature.geometry),
         bbox,
         properties: { territory: { adminLevel: "ADM3" } }
       };

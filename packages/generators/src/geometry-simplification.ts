@@ -2,7 +2,6 @@ import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import {
   computeGeometryBBox,
-  computeGeometryCenter,
   hasRingSelfIntersection,
   loadTerritoryDataset,
   validateGeometryDataset
@@ -23,6 +22,7 @@ import {
   sha256Hex,
   writeFilesAtomically
 } from "./sources/utils.js";
+import { computeGeometryRepresentativePoint } from "./geometry-repair.js";
 
 export type TerritorySimplificationDetail = "high" | "medium" | "low";
 export type TerritorySimplificationStrategy = "topology-safe";
@@ -803,7 +803,7 @@ function simplifyDataset(
       ...zone,
       geometry,
       bbox: computeGeometryBBox(geometry),
-      center: computeGeometryCenter(geometry)
+      center: computeGeometryRepresentativePoint(geometry)
     };
   });
   const simplified: TerritoryDataset = {
@@ -832,6 +832,7 @@ function simplifyDatasetGeometriesTopologySafe(
 ): Map<string, TerritoryGeometry> {
   const model = buildTopologyModel(dataset, tolerance);
   settleInvalidRingsOnSourceArcs(model);
+  settleInvalidFeaturesOnSourceArcs(dataset, model);
   return reconstructDatasetGeometries(dataset, model);
 }
 
@@ -1153,6 +1154,76 @@ function settleInvalidRingsOnSourceArcs(model: TopologyModel): void {
       }
     }
   }
+}
+
+function settleInvalidFeaturesOnSourceArcs(dataset: TerritoryDataset, model: TopologyModel): void {
+  const maxIterations = model.rings.length + 1;
+
+  for (let iteration = 0; iteration < maxIterations; iteration += 1) {
+    const validation = validateGeometryDataset(
+      datasetWithReconstructedGeometriesForValidation(dataset, model),
+      { checks: SIMPLIFICATION_GEOMETRY_VALIDATION_CHECKS }
+    );
+
+    if (validation.summary.errorCount === 0) {
+      return;
+    }
+
+    const invalidZoneIds = uniqueSorted(
+      validation.issues
+        .filter((issue) => issue.severity === "error")
+        .flatMap((issue) => (issue.zoneId ? [issue.zoneId] : []))
+    );
+    const fallbackZoneIds =
+      invalidZoneIds.length > 0 ? invalidZoneIds : dataset.zones.map((zone) => zone.id);
+
+    if (!forceSourceArcsForZoneIds(model, fallbackZoneIds)) {
+      return;
+    }
+  }
+}
+
+function datasetWithReconstructedGeometriesForValidation(
+  dataset: TerritoryDataset,
+  model: TopologyModel
+): TerritoryDataset {
+  const geometries = reconstructDatasetGeometries(dataset, model);
+
+  return {
+    ...dataset,
+    zones: dataset.zones.map((zone) => {
+      const geometry = geometries.get(zone.id) ?? zone.geometry;
+
+      return {
+        ...zone,
+        geometry,
+        bbox: computeGeometryBBox(geometry),
+        center: computeGeometryRepresentativePoint(geometry)
+      };
+    })
+  };
+}
+
+function forceSourceArcsForZoneIds(model: TopologyModel, zoneIds: readonly string[]): boolean {
+  const fallbackZoneIds = new Set(zoneIds);
+  let changed = false;
+
+  for (const ring of [...model.rings].sort((left, right) => left.id.localeCompare(right.id))) {
+    if (!fallbackZoneIds.has(ring.zoneId)) {
+      continue;
+    }
+
+    for (const ref of model.ringRefs.get(ring.id) ?? []) {
+      const arc = model.arcs.get(ref.arcId);
+
+      if (arc && !arc.forceSource) {
+        arc.forceSource = true;
+        changed = true;
+      }
+    }
+  }
+
+  return changed;
 }
 
 function reconstructDatasetGeometries(

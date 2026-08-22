@@ -3,6 +3,12 @@
   "datasetId": "territory-kit-tr-v2-playable",
   "datasetVersion": "2.0.0-rc.1",
   "buildDate": "2026-08-13T00:00:00.000Z",
+  "buildMode": "partial",
+  "publishReady": false,
+  "expectedAdm0Count": 1,
+  "expectedAdm1Count": 81,
+  "expectedAdm2Count": 973,
+  "adm0Count": 1,
   "provinceCount": 81,
   "districtCount": 973,
   "successfulDistrictCount": 10,
@@ -15,13 +21,14 @@
   "generatedCoveragePercent": 97.080911,
   "finalCoveragePercent": 100.000026,
   "districtsBelow9999": [],
-  "qualityOk": false,
-  "hardGateFailures": ["adm2Count"],
+  "qualityOk": true,
+  "hardGateFailures": [],
+  "publishReadyGateFailures": ["buildMode", "nationalCompleteness", "successfulAdm2NationalCount"],
   "sourceStatus": {
     "official": "artifact-loaded",
     "osm": "not-built",
     "generated": "built"
   },
-  "deterministicHash": "de305331aea58e197c0445c015e14e734ea019ed215072aa076fb1ec6c822bd8",
+  "deterministicHash": "52be241307e8b4c42a2331aef6d7093b01db9f75f03312c69e8310dd426b006d",
   "sourceLockHash": "sha256:10e08ce0d17f4ab81b41984fecd9b30b174603204219bef746c0b63b3209ea63"
 }

@@ -31,6 +31,42 @@ The local build uses reviewed official ADM3 artifacts when they are present at
 `.territory/build/TR/ADM3/official/levels/ADM3/dataset.json`. OSM is reported as `not-built` unless
 an OSM artifact is provided with `--osm-artifact`.
 
+## Sprint 6 Verification Snapshot
+
+The 2026-08-22 publish-ready rebuild verified the full national contract with:
+
+| Metric                                       |      Value |
+| -------------------------------------------- | ---------: |
+| ADM0 country records                         |          1 |
+| ADM1 provinces                               |         81 |
+| ADM2 districts                               |        973 |
+| ADM3 playable zones                          |     42,210 |
+| official ADM3 zones in final effective layer |      2,094 |
+| OSM ADM3 zones                               |          0 |
+| generated ADM3 fallback zones                |     40,116 |
+| districts at or above 99.99% coverage        |        973 |
+| failed districts                             |          0 |
+| national final coverage                      | 99.999998% |
+| real coverage contribution                   |  3.247194% |
+| generated coverage contribution              | 96.752804% |
+
+The rebuilt artifact uses official ADM3 geometry only where reviewed local artifacts are available.
+OSM is `not-built` in this snapshot. All remaining ADM3 playable coverage is deterministic generated
+fallback and remains marked as generated, non-official `generated-zone` geometry. This is not a claim
+that all official Turkish mahalle or koy boundaries are included.
+
+Strict `territory tr v2 national validate --publish-ready` passes against the publish-ready output.
+The quality report has `quality.ok = true`, `quality.buildMode = "publish-ready"`, empty
+`hardGateFailures`, empty `publishReadyGateFailures`, zero final geometry errors, zero hierarchy
+orphan/cycle/duplicate failures, zero effective sibling overlaps, zero real/generated overlaps, zero
+parent containment errors, zero missing provenance/license failures, zero adjacency integrity
+failures, and zero registry checksum errors.
+
+Topology-safe ADM1 and ADM2 simplification was also verified for high, medium, and low detail tiers.
+All tiers have `sharedBoundaryMismatchCount = 0` and `geometryValidation.errorCount = 0`. ADM3 is
+distributed through the source/full dataset plus render and adjacency artifacts; the build does not
+publish separate ADM3 simplification tiers.
+
 ## CLI
 
 ```bash

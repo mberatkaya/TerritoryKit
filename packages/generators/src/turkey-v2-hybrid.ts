@@ -1,7 +1,6 @@
 import {
   TERRITORY_SCHEMA_VERSION,
   computeGeometryBBox,
-  computeGeometryCenter,
   geometryToPolygons,
   validateGeometryDataset
 } from "@territory-kit/dataset";
@@ -21,6 +20,7 @@ import type {
   Polygon as ClippingPolygon
 } from "polygon-clipping";
 import { buildTerritoryAdjacency } from "./adjacency.js";
+import { computeGeometryRepresentativePoint } from "./geometry-repair.js";
 import {
   TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
   buildTurkeyGameZones
@@ -2715,7 +2715,7 @@ function normalizeTerritoryGeometry(geometry: TerritoryGeometry): TerritoryGeome
 
 function computeSafeGeometryCenter(geometry: TerritoryGeometry): LngLat {
   const [west, south, east, north] = computeGeometryBBox(geometry);
-  const [longitude, latitude] = computeGeometryCenter(geometry);
+  const [longitude, latitude] = computeGeometryRepresentativePoint(geometry);
 
   return [
     clampCoordinate(longitude, west, east),

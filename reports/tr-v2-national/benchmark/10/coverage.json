@@ -4,7 +4,8 @@
   "datasetVersion": "2.0.0-rc.1",
   "buildDate": "2026-08-13T00:00:00.000Z",
   "sourceLockHash": "sha256:10e08ce0d17f4ab81b41984fecd9b30b174603204219bef746c0b63b3209ea63",
-  "deterministicHash": "de305331aea58e197c0445c015e14e734ea019ed215072aa076fb1ec6c822bd8",
+  "deterministicHash": "52be241307e8b4c42a2331aef6d7093b01db9f75f03312c69e8310dd426b006d",
+  "adm0Count": 1,
   "provinceCount": 81,
   "districtCount": 973,
   "successfulDistrictCount": 10,
@@ -52,7 +53,7 @@
       "provinceCode": "06",
       "provinceName": "Ankara",
       "districtCount": 1,
-      "successfulDistrictCount": 0,
+      "successfulDistrictCount": 1,
       "finalZoneCount": 69,
       "officialCount": 0,
       "officialAreaKm2": 0,
@@ -65,14 +66,14 @@
       "generatedCoveragePercent": 100,
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0.000001,
-      "qualityStatus": "failed",
+      "qualityStatus": "ok",
       "primaryCoverageClass": "generated"
     },
     {
       "provinceCode": "15",
       "provinceName": "Burdur",
       "districtCount": 1,
-      "successfulDistrictCount": 0,
+      "successfulDistrictCount": 1,
       "finalZoneCount": 73,
       "officialCount": 0,
       "officialAreaKm2": 0,
@@ -85,14 +86,14 @@
       "generatedCoveragePercent": 100.00054,
       "finalCoveragePercent": 100.00054,
       "gapAreaKm2": 0,
-      "qualityStatus": "failed",
+      "qualityStatus": "ok",
       "primaryCoverageClass": "generated"
     },
     {
       "provinceCode": "34",
       "provinceName": "İstanbul",
       "districtCount": 1,
-      "successfulDistrictCount": 0,
+      "successfulDistrictCount": 1,
       "finalZoneCount": 6,
       "officialCount": 0,
       "officialAreaKm2": 0,
@@ -105,14 +106,14 @@
       "generatedCoveragePercent": 99.999859,
       "finalCoveragePercent": 99.999859,
       "gapAreaKm2": 0.000016,
-      "qualityStatus": "failed",
+      "qualityStatus": "ok",
       "primaryCoverageClass": "generated"
     },
     {
       "provinceCode": "35",
       "provinceName": "İzmir",
       "districtCount": 1,
-      "successfulDistrictCount": 0,
+      "successfulDistrictCount": 1,
       "finalZoneCount": 77,
       "officialCount": 0,
       "officialAreaKm2": 0,
@@ -125,14 +126,14 @@
       "generatedCoveragePercent": 99.999939,
       "finalCoveragePercent": 99.999939,
       "gapAreaKm2": 0.000235,
-      "qualityStatus": "failed",
+      "qualityStatus": "ok",
       "primaryCoverageClass": "generated"
     },
     {
       "provinceCode": "36",
       "provinceName": "Kars",
       "districtCount": 1,
-      "successfulDistrictCount": 0,
+      "successfulDistrictCount": 1,
       "finalZoneCount": 66,
       "officialCount": 0,
       "officialAreaKm2": 0,
@@ -145,14 +146,14 @@
       "generatedCoveragePercent": 100.000006,
       "finalCoveragePercent": 100.000006,
       "gapAreaKm2": 0,
-      "qualityStatus": "failed",
+      "qualityStatus": "ok",
       "primaryCoverageClass": "generated"
     },
     {
       "provinceCode": "38",
       "provinceName": "Kayseri",
       "districtCount": 1,
-      "successfulDistrictCount": 0,
+      "successfulDistrictCount": 1,
       "finalZoneCount": 13,
       "officialCount": 12,
       "officialAreaKm2": 163.806458,
@@ -165,14 +166,14 @@
       "generatedCoveragePercent": 0.555003,
       "finalCoveragePercent": 99.999981,
       "gapAreaKm2": 0.000032,
-      "qualityStatus": "failed",
+      "qualityStatus": "ok",
       "primaryCoverageClass": "official"
     },
     {
       "provinceCode": "45",
       "provinceName": "Manisa",
       "districtCount": 1,
-      "successfulDistrictCount": 0,
+      "successfulDistrictCount": 1,
       "finalZoneCount": 41,
       "officialCount": 0,
       "officialAreaKm2": 0,
@@ -185,14 +186,14 @@
       "generatedCoveragePercent": 99.999996,
       "finalCoveragePercent": 99.999996,
       "gapAreaKm2": 0.000051,
-      "qualityStatus": "failed",
+      "qualityStatus": "ok",
       "primaryCoverageClass": "generated"
     },
     {
       "provinceCode": "58",
       "provinceName": "Sivas",
       "districtCount": 1,
-      "successfulDistrictCount": 0,
+      "successfulDistrictCount": 1,
       "finalZoneCount": 14,
       "officialCount": 0,
       "officialAreaKm2": 0,
@@ -205,14 +206,14 @@
       "generatedCoveragePercent": 99.999945,
       "finalCoveragePercent": 99.999945,
       "gapAreaKm2": 0.000249,
-      "qualityStatus": "failed",
+      "qualityStatus": "ok",
       "primaryCoverageClass": "generated"
     },
     {
       "provinceCode": "59",
       "provinceName": "Tekirdağ",
       "districtCount": 1,
-      "successfulDistrictCount": 0,
+      "successfulDistrictCount": 1,
       "finalZoneCount": 78,
       "officialCount": 0,
       "officialAreaKm2": 0,
@@ -225,14 +226,14 @@
       "generatedCoveragePercent": 99.99999,
       "finalCoveragePercent": 99.99999,
       "gapAreaKm2": 0.000041,
-      "qualityStatus": "failed",
+      "qualityStatus": "ok",
       "primaryCoverageClass": "generated"
     },
     {
       "provinceCode": "60",
       "provinceName": "Tokat",
       "districtCount": 1,
-      "successfulDistrictCount": 0,
+      "successfulDistrictCount": 1,
       "finalZoneCount": 44,
       "officialCount": 0,
       "officialAreaKm2": 0,
@@ -245,7 +246,7 @@
       "generatedCoveragePercent": 100.000005,
       "finalCoveragePercent": 100.000005,
       "gapAreaKm2": 0,
-      "qualityStatus": "failed",
+      "qualityStatus": "ok",
       "primaryCoverageClass": "generated"
     }
   ],
@@ -266,7 +267,7 @@
       "generatedCoveragePercent": 99.999996,
       "finalCoveragePercent": 99.999996,
       "gapAreaKm2": 0.000051,
-      "qualityStatus": "failed",
+      "qualityStatus": "ok",
       "deterministicHash": "923534c15bfb605f3a1e2d7e28a739db8d8eb0359c77018a0b361525832af777",
       "artifactPath": "districts/tr-adm2-54988432b10253984912437"
     },
@@ -286,8 +287,8 @@
       "generatedCoveragePercent": 0.555003,
       "finalCoveragePercent": 99.999981,
       "gapAreaKm2": 0.000032,
-      "qualityStatus": "failed",
-      "deterministicHash": "cabb0f0d5bdbef0b2c19de11839562f1a9a10d1ae94cb65a188d88235130be22",
+      "qualityStatus": "ok",
+      "deterministicHash": "8012fcf015f06fc72a90cffdc2cb28222a89a55581a2a52401dc4606b1a0ee93",
       "artifactPath": "districts/tr-adm2-54988432b10287230279323"
     },
     {
@@ -306,8 +307,8 @@
       "generatedCoveragePercent": 99.999945,
       "finalCoveragePercent": 99.999945,
       "gapAreaKm2": 0.000249,
-      "qualityStatus": "failed",
-      "deterministicHash": "45a89c4f567054a3e9db3124fdbb629f50b5b5e579d6ad55374b57ed8c408b41",
+      "qualityStatus": "ok",
+      "deterministicHash": "ecaa6d5f2abf2033c3c6e63862ceecf006420be41911c834b9d066b0ac3bafc7",
       "artifactPath": "districts/tr-adm2-54988432b10558365680808"
     },
     {
@@ -326,7 +327,7 @@
       "generatedCoveragePercent": 99.999939,
       "finalCoveragePercent": 99.999939,
       "gapAreaKm2": 0.000235,
-      "qualityStatus": "failed",
+      "qualityStatus": "ok",
       "deterministicHash": "3b71798a8eee636f10040183a2c5c77edaf0eeda548ef289bbd33f6ea2fbbc6e",
       "artifactPath": "districts/tr-adm2-54988432b10626729870430"
     },
@@ -346,8 +347,8 @@
       "generatedCoveragePercent": 99.99999,
       "finalCoveragePercent": 99.99999,
       "gapAreaKm2": 0.000041,
-      "qualityStatus": "failed",
-      "deterministicHash": "fb1e44ca6e3cda48a4d7cffcb4ccc34bf687caf2d5050e02d154cac2cc5fd8e4",
+      "qualityStatus": "ok",
+      "deterministicHash": "726692979122deb482bd1a7025b6c7209311f0b5753ea2b54a80fc4a9e23a3f9",
       "artifactPath": "districts/tr-adm2-54988432b10630286252901"
     },
     {
@@ -366,7 +367,7 @@
       "generatedCoveragePercent": 100.000005,
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
-      "qualityStatus": "failed",
+      "qualityStatus": "ok",
       "deterministicHash": "2e9fd22ec5d1fc16be44e489d0503599ebf5a0a4b268fb2ca6a930e0c1eb7891",
       "artifactPath": "districts/tr-adm2-54988432b10710239542127"
     },
@@ -386,8 +387,8 @@
       "generatedCoveragePercent": 100.000006,
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
-      "qualityStatus": "failed",
-      "deterministicHash": "783e658acc7a9290579461d829c31b024ee78df8363118d5c7bd3b8e91dfa274",
+      "qualityStatus": "ok",
+      "deterministicHash": "f946a9f17f3b5a969b9c5c5dec382e6915b3f06e26525bc03e8a6064cf205a67",
       "artifactPath": "districts/tr-adm2-54988432b10923405291908"
     },
     {
@@ -406,7 +407,7 @@
       "generatedCoveragePercent": 99.999859,
       "finalCoveragePercent": 99.999859,
       "gapAreaKm2": 0.000016,
-      "qualityStatus": "failed",
+      "qualityStatus": "ok",
       "deterministicHash": "bae6b33ad6179b1539ee3cbc043bbd91d1a10e74125683286833ea7529d4e7cf",
       "artifactPath": "districts/tr-adm2-54988432b10954011235531"
     },
@@ -426,8 +427,8 @@
       "generatedCoveragePercent": 100,
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0.000001,
-      "qualityStatus": "failed",
-      "deterministicHash": "e15e5ba74d5d0f6a0820c4a8af9cf191c0a830f3765c418fce3d5f61e4606e5c",
+      "qualityStatus": "ok",
+      "deterministicHash": "ebeec0af8264f21a996a7464b55bc591a24db05bc380c1f404b83ae77ab09416",
       "artifactPath": "districts/tr-adm2-54988432b10964336547790"
     },
     {
@@ -446,7 +447,7 @@
       "generatedCoveragePercent": 100.00054,
       "finalCoveragePercent": 100,
       "gapAreaKm2": 0,
-      "qualityStatus": "failed",
+      "qualityStatus": "ok",
       "deterministicHash": "9c2a82ed5eba62e66002ee5e3f5a70a99035bbcff238b92e0ecf16eef25b9c4a",
       "artifactPath": "districts/tr-adm2-54988432b11094776022203"
     }

@@ -1,0 +1,114 @@
+{
+  "reportVersion": "2",
+  "ok": true,
+  "strategy": "topology-safe",
+  "source": {
+    "datasetId": "territory-kit-tr-v2-playable-adm1",
+    "datasetVersion": "2.0.0-rc.1",
+    "geometryHash": "26745178cb995756ac11b6d7a1e61ef8d7110c1b1a9a7f359d3228bd9b23d17a",
+    "featureCount": 81,
+    "vertexCount": 55865,
+    "sharedSegmentCount": 18924,
+    "sharedBoundaryCount": 197
+  },
+  "tiers": [
+    {
+      "detail": "high",
+      "status": "generated",
+      "datasetPath": "high/dataset.json",
+      "geojsonPath": "high/features.geojson",
+      "geometryHash": "76e4adcc05831c7e89bc6e53bfd4c61704ffc18445f5545f82ddf278af906b2e",
+      "featureCount": 81,
+      "vertexCount": 55775,
+      "byteSize": 4610232,
+      "areaDeltaRatio": 1.6731032044928927e-8,
+      "topologyAudit": {
+        "ok": true,
+        "sharedSegmentCountBefore": 18924,
+        "sharedSegmentCountAfter": 18881,
+        "sharedBoundaryCountBefore": 197,
+        "sharedBoundaryCountAfter": 197,
+        "sharedBoundaryMismatchCount": 0,
+        "geometryValidation": {
+          "ok": true,
+          "invalidFeatureCount": 0,
+          "issueCount": 0,
+          "errorCount": 0,
+          "warningCount": 0
+        },
+        "issues": []
+      }
+    },
+    {
+      "detail": "medium",
+      "status": "generated",
+      "datasetPath": "medium/dataset.json",
+      "geojsonPath": "medium/features.geojson",
+      "geometryHash": "ecf350bb096cf09a126fd3750e63a2da4481ca26d64a72f2b189c51434f1f343",
+      "featureCount": 81,
+      "vertexCount": 55723,
+      "byteSize": 4606136,
+      "areaDeltaRatio": 3.735763477911433e-7,
+      "topologyAudit": {
+        "ok": true,
+        "sharedSegmentCountBefore": 18924,
+        "sharedSegmentCountAfter": 18863,
+        "sharedBoundaryCountBefore": 197,
+        "sharedBoundaryCountAfter": 197,
+        "sharedBoundaryMismatchCount": 0,
+        "geometryValidation": {
+          "ok": true,
+          "invalidFeatureCount": 0,
+          "issueCount": 0,
+          "errorCount": 0,
+          "warningCount": 0
+        },
+        "issues": []
+      }
+    },
+    {
+      "detail": "low",
+      "status": "generated",
+      "datasetPath": "low/dataset.json",
+      "geojsonPath": "low/features.geojson",
+      "geometryHash": "67dcabf4b1ad3f120eafd41f0442a6c5b397bbd239f4f20c6aa1bcc540a3c40a",
+      "featureCount": 81,
+      "vertexCount": 43507,
+      "byteSize": 3641362,
+      "areaDeltaRatio": 0.0000314521847290626,
+      "topologyAudit": {
+        "ok": true,
+        "sharedSegmentCountBefore": 18924,
+        "sharedSegmentCountAfter": 14417,
+        "sharedBoundaryCountBefore": 197,
+        "sharedBoundaryCountAfter": 197,
+        "sharedBoundaryMismatchCount": 0,
+        "geometryValidation": {
+          "ok": true,
+          "invalidFeatureCount": 0,
+          "issueCount": 1,
+          "errorCount": 0,
+          "warningCount": 0
+        },
+        "issues": [
+          {
+            "code": "SIMPLIFIED_GEOMETRY_INVALID",
+            "severity": "info",
+            "message": "Outer ring is clockwise; GeoJSON-compatible datasets usually prefer counter-clockwise shells.",
+            "path": "$.zones[47].geometry.coordinates[34][0]",
+            "zoneId": "tr:adm1:tr-48",
+            "featureId": "tr:adm1:tr-48",
+            "geometryIssueCode": "RING_ORIENTATION",
+            "check": "rings",
+            "polygonIndex": 34,
+            "ringIndex": 0,
+            "details": {
+              "repairable": true,
+              "repairSuggestion": "Pass normalizeRingOrientation to safe repair if orientation normalization is desired."
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
