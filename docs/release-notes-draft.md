@@ -6,8 +6,9 @@ GitHub Release until npm publication, provenance, and registry verification succ
 ## Summary
 
 TerritoryKit `2.0.0` promotes the V2 SDK line and the Turkey V2 national playable dataset to a
-stable release target. The package manifests remain on the current source version until the
-Changesets Version Packages PR applies the final `2.0.0` package versions.
+stable release target. The release-hardening and Changesets Version Packages PRs have prepared the
+final package versions and changelog entries; publish these notes only after npm publication,
+provenance, and registry verification succeed.
 
 ## Highlights
 
@@ -39,6 +40,6 @@ reviewed real sources where available and deterministic generated fallback elsew
 
 ## Publish Checklist
 
-Before publishing, maintainers must merge the release-hardening PR, review the Changesets Version
-Packages PR, verify the versioned state locally or in CI, merge that PR, and then use the guarded
-release workflow. Do not publish from the hardening branch.
+Before publishing, maintainers must verify the post-Changesets state locally or in CI, confirm npm
+Trusted Publishing settings, and then use the guarded release workflow from `main`. Do not publish
+from a feature or hardening branch.

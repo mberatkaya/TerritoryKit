@@ -1,16 +1,16 @@
 # Release Readiness
 
-Recorded for `release/v2-stable-hardening` on 2026-08-22. This branch prepares the TerritoryKit
-`2.0.0` stable handoff without publishing npm packages, creating a Git tag, or creating a GitHub
-Release.
+Recorded for the TerritoryKit `2.0.0` stable handoff on 2026-08-22 and updated after the
+Changesets Version Packages PR. This state has versioned package manifests but still does not imply
+that npm packages, a Git tag, or a GitHub Release have been published.
 
 ## Decision
 
-Decision: release-ready for PR review once the commands in the sprint report are green.
+Decision: versioned release state is ready for the guarded release workflow once CI is green.
 
-Publishing remains a post-merge action. The release-hardening PR should merge first, then
-Changesets should open the Version Packages PR that moves the fixed core family from `1.9.3` to
-`2.0.0`.
+Publishing remains controlled by `.github/workflows/release.yml`. The release-hardening PR and
+Changesets Version Packages PR have moved the fixed core family to `2.0.0`; maintainers should
+verify CI and npm Trusted Publishing settings before treating the release as complete.
 
 ## Evidence
 
@@ -57,13 +57,11 @@ Generated zones remain non-official generated fallback, not official administrat
 
 ## Manual Publish Steps
 
-1. Merge the release-hardening PR after review.
-2. Let Changesets open or update the Version Packages PR from `main`.
-3. Review package versions, package changelogs, tarball dry-run output, and npm Trusted Publishing
+1. Confirm the fix PR for the post-Changesets state is green.
+2. Verify package versions, package changelogs, tarball dry-run output, and npm Trusted Publishing
    settings.
-4. Merge the Changesets Version Packages PR.
-5. Let the guarded release workflow publish when no Changesets remain, or dispatch it from `main`
+3. Let the guarded release workflow publish when no Changesets remain, or dispatch it from `main`
    according to maintainer policy.
-6. Verify npm package pages, provenance, package exports, registry smoke tests, and final release
+4. Verify npm package pages, provenance, package exports, registry smoke tests, and final release
    notes.
-7. Create a Git tag or GitHub Release only after npm and registry verification succeeds.
+5. Create a Git tag or GitHub Release only after npm and registry verification succeeds.

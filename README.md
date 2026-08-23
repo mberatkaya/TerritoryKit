@@ -6,10 +6,10 @@ independent from map renderers, backend frameworks, and game-specific state.
 
 ## Current Release
 
-TerritoryKit `2.0.0` is the stable release target for the V2 line. Public package manifests remain
-on the current `1.9.3` fixed-group line in this branch until Changesets creates the Version
-Packages PR; the root workspace stays private and its `0.0.0-private` version is tooling metadata,
-not a public product version.
+TerritoryKit `2.0.0` is the stable release target for the V2 line. Public package manifests for
+the fixed core family are versioned at `2.0.0` after the Changesets Version Packages PR; the root
+workspace stays private and its `0.0.0-private` version is tooling metadata, not a public product
+version.
 
 The Turkey V2 national playable dataset contract is
 `territory-kit-tr-v2-playable@2.0.0`. It provides 1 ADM0 country, 81 ADM1 provinces, 973 ADM2
@@ -155,10 +155,10 @@ TypeScript 7 will be evaluated in a later ADR before adoption.
 ## 2.0 Release Handoff
 
 The `2.0.0` handoff keeps `territory-schema@1` unchanged and promotes the Turkey V2 national
-playable dataset from RC metadata to stable `2.0.0`. This branch prepares release notes,
-benchmark evidence, package dry-runs, release-hardening evidence, and a final major Changeset.
-Publishing, tagging, and merging the Changesets Version Packages PR remain post-merge maintainer
-actions.
+playable dataset from RC metadata to stable `2.0.0`. The release-hardening and Changesets Version
+Packages PRs have prepared release notes, benchmark evidence, package dry-runs, release-hardening
+evidence, package versions, and package changelogs. Publishing and tagging remain maintainer
+actions after workflow verification.
 
 ## Planning Docs
 

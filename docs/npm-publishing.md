@@ -5,22 +5,32 @@ workspace remains private so `npm publish` from the repository root fails safely
 
 ## Public Packages
 
-The fixed core package family is currently on the `1.9.3` line in source manifests. The final
-TerritoryKit V2 Changeset targets `2.0.0`; do not edit package versions manually in the release
-hardening PR. After that PR merges, the Changesets Version Packages PR performs the manifest and
-package changelog updates.
+The fixed core package family is currently on the `2.0.0` line in source manifests after the
+Changesets Version Packages PR. `@territory-kit/leaflet`, `@territory-kit/openlayers`, and
+`@territory-kit/react-native` remain on their existing adapter-specific patch lines. Future package
+version changes should remain Changesets-owned; do not edit public package versions manually in
+release-hardening PRs.
 
-| Package                       | Version | Internal dependencies                                                                                     | Output                                                     | Publish |
-| ----------------------------- | ------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ------- |
-| `@territory-kit/dataset`      | `1.9.3` | none                                                                                                      | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/adapter-core` | `1.9.3` | `@territory-kit/dataset`                                                                                  | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/core`         | `1.9.3` | `@territory-kit/dataset`, deprecated registry compatibility                                               | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/registry`     | `1.9.3` | `@territory-kit/dataset`                                                                                  | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/runtime`      | `1.9.3` | `@territory-kit/adapter-core`, `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/registry` | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/generators`   | `1.9.3` | `@territory-kit/core`, `@territory-kit/dataset`                                                           | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/maplibre`     | `1.9.3` | `@territory-kit/adapter-core`, `@territory-kit/dataset`, `@territory-kit/registry`                        | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/nestjs`       | `1.9.3` | `@territory-kit/core`, `@territory-kit/dataset`                                                           | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
-| `@territory-kit/cli`          | `1.9.3` | `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/generators`                              | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| Package                       | Version  | Internal dependencies                                                                                     | Output                                                     | Publish |
+| ----------------------------- | -------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ------- |
+| `@territory-kit/dataset`      | `2.0.0`  | none                                                                                                      | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/adapter-core` | `2.0.0`  | `@territory-kit/dataset`                                                                                  | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/registry`     | `2.0.0`  | `@territory-kit/dataset`                                                                                  | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/core`         | `2.0.0`  | `@territory-kit/dataset`, `@territory-kit/registry`                                                       | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/generators`   | `2.0.0`  | `@territory-kit/core`, `@territory-kit/dataset`                                                           | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/cli`          | `2.0.0`  | `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/generators`                              | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/data-de`      | `2.0.0`  | `@territory-kit/core`                                                                                     | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/data-id`      | `2.0.0`  | `@territory-kit/core`                                                                                     | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/data-jp`      | `2.0.0`  | `@territory-kit/core`                                                                                     | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/data-tr`      | `2.0.0`  | `@territory-kit/core`                                                                                     | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/data-us`      | `2.0.0`  | `@territory-kit/core`                                                                                     | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/game`         | `2.0.0`  | `@territory-kit/core`, `@territory-kit/dataset`                                                           | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/leaflet`      | `1.2.11` | `@territory-kit/adapter-core`, `@territory-kit/dataset`, `@territory-kit/registry`                        | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/maplibre`     | `2.0.0`  | `@territory-kit/adapter-core`, `@territory-kit/dataset`, `@territory-kit/registry`                        | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/nestjs`       | `2.0.0`  | `@territory-kit/core`, `@territory-kit/dataset`                                                           | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/openlayers`   | `1.2.11` | `@territory-kit/adapter-core`, `@territory-kit/dataset`, `@territory-kit/registry`                        | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/react-native` | `1.1.12` | `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/registry`                                | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
+| `@territory-kit/runtime`      | `2.0.0`  | `@territory-kit/adapter-core`, `@territory-kit/core`, `@territory-kit/dataset`, `@territory-kit/registry` | `dist/*.cjs`, `dist/*.mjs`, `dist/*.d.cts`, `dist/*.d.mts` | yes     |
 
 The correct first-publish order is:
 
@@ -29,15 +39,24 @@ The correct first-publish order is:
 @territory-kit/adapter-core
 @territory-kit/registry
 @territory-kit/core
-@territory-kit/runtime
 @territory-kit/generators
+@territory-kit/cli
+@territory-kit/data-de
+@territory-kit/data-id
+@territory-kit/data-jp
+@territory-kit/data-tr
+@territory-kit/data-us
+@territory-kit/game
+@territory-kit/leaflet
 @territory-kit/maplibre
 @territory-kit/nestjs
-@territory-kit/cli
+@territory-kit/openlayers
+@territory-kit/react-native
+@territory-kit/runtime
 ```
 
-`@territory-kit/maplibre` and `@territory-kit/nestjs` are independent of each other after
-`@territory-kit/core` and `@territory-kit/dataset` have been published.
+The repository publish script computes this topological order from workspace dependencies and
+skips package versions that already exist on npm.
 
 ## Private Workspaces
 
@@ -74,11 +93,20 @@ pnpm --filter @territory-kit/dataset publish --dry-run --json --access public --
 pnpm --filter @territory-kit/adapter-core publish --dry-run --json --access public --no-git-checks
 pnpm --filter @territory-kit/registry publish --dry-run --json --access public --no-git-checks
 pnpm --filter @territory-kit/core publish --dry-run --json --access public --no-git-checks
-pnpm --filter @territory-kit/runtime publish --dry-run --json --access public --no-git-checks
 pnpm --filter @territory-kit/generators publish --dry-run --json --access public --no-git-checks
+pnpm --filter @territory-kit/cli publish --dry-run --json --access public --no-git-checks
+pnpm --filter @territory-kit/data-de publish --dry-run --json --access public --no-git-checks
+pnpm --filter @territory-kit/data-id publish --dry-run --json --access public --no-git-checks
+pnpm --filter @territory-kit/data-jp publish --dry-run --json --access public --no-git-checks
+pnpm --filter @territory-kit/data-tr publish --dry-run --json --access public --no-git-checks
+pnpm --filter @territory-kit/data-us publish --dry-run --json --access public --no-git-checks
+pnpm --filter @territory-kit/game publish --dry-run --json --access public --no-git-checks
+pnpm --filter @territory-kit/leaflet publish --dry-run --json --access public --no-git-checks
 pnpm --filter @territory-kit/maplibre publish --dry-run --json --access public --no-git-checks
 pnpm --filter @territory-kit/nestjs publish --dry-run --json --access public --no-git-checks
-pnpm --filter @territory-kit/cli publish --dry-run --json --access public --no-git-checks
+pnpm --filter @territory-kit/openlayers publish --dry-run --json --access public --no-git-checks
+pnpm --filter @territory-kit/react-native publish --dry-run --json --access public --no-git-checks
+pnpm --filter @territory-kit/runtime publish --dry-run --json --access public --no-git-checks
 ```
 
 Expected tarball contents are `package.json`, `README.md`, `LICENSE`, and the runtime/type files
@@ -104,11 +132,20 @@ pnpm --filter @territory-kit/dataset publish --access public --no-git-checks
 pnpm --filter @territory-kit/adapter-core publish --access public --no-git-checks
 pnpm --filter @territory-kit/registry publish --access public --no-git-checks
 pnpm --filter @territory-kit/core publish --access public --no-git-checks
-pnpm --filter @territory-kit/runtime publish --access public --no-git-checks
 pnpm --filter @territory-kit/generators publish --access public --no-git-checks
+pnpm --filter @territory-kit/cli publish --access public --no-git-checks
+pnpm --filter @territory-kit/data-de publish --access public --no-git-checks
+pnpm --filter @territory-kit/data-id publish --access public --no-git-checks
+pnpm --filter @territory-kit/data-jp publish --access public --no-git-checks
+pnpm --filter @territory-kit/data-tr publish --access public --no-git-checks
+pnpm --filter @territory-kit/data-us publish --access public --no-git-checks
+pnpm --filter @territory-kit/game publish --access public --no-git-checks
+pnpm --filter @territory-kit/leaflet publish --access public --no-git-checks
 pnpm --filter @territory-kit/maplibre publish --access public --no-git-checks
 pnpm --filter @territory-kit/nestjs publish --access public --no-git-checks
-pnpm --filter @territory-kit/cli publish --access public --no-git-checks
+pnpm --filter @territory-kit/openlayers publish --access public --no-git-checks
+pnpm --filter @territory-kit/react-native publish --access public --no-git-checks
+pnpm --filter @territory-kit/runtime publish --access public --no-git-checks
 ```
 
 If npm asks for a 2FA code or web authentication, stop at that prompt and complete the login or
@@ -141,9 +178,18 @@ Configure npm Trusted Publishing on npmjs.com for each public package:
 - `@territory-kit/registry`
 - `@territory-kit/runtime`
 - `@territory-kit/generators`
+- `@territory-kit/cli`
+- `@territory-kit/data-de`
+- `@territory-kit/data-id`
+- `@territory-kit/data-jp`
+- `@territory-kit/data-tr`
+- `@territory-kit/data-us`
+- `@territory-kit/game`
+- `@territory-kit/leaflet`
 - `@territory-kit/maplibre`
 - `@territory-kit/nestjs`
-- `@territory-kit/cli`
+- `@territory-kit/openlayers`
+- `@territory-kit/react-native`
 
 Use these values in each package's Trusted Publisher settings:
 
