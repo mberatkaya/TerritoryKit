@@ -21,6 +21,18 @@
 ## `@territory-kit/core`
 
 - `createTerritoryEngine({ dataset, adjacency, levelStrategy, spatialIndex })`
+- `engine.findTerritoryAtPoint({ lat, lng }, { level, levels, boundaryMode })`
+- `engine.findTerritoriesAtPoint({ lat, lng }, { level, levels, boundaryMode })`
+- `engine.findTerritoriesInBounds({ west, south, east, north }, { level, levels, limit })`
+- `engine.getById(territoryId)`
+- `engine.getIdentity(territoryId)`
+- `engine.getDatasetVersionInfo()`
+- `engine.getGeometry(territoryId)`
+- `engine.getMetrics(territoryId)`
+- `engine.getHierarchy(territoryId)`
+- `engine.getParent(territoryId)`
+- `engine.getChildren(territoryId)`
+- `engine.getAdjacentTerritories(territoryId)`
 - `engine.latLngToZone({ lat, lng }, { level })`
 - `engine.latLngToZones([{ lat, lng }], { level })`
 - `engine.zoneToBoundary(zoneId)`
@@ -40,6 +52,12 @@
 - `engine.getLevelTransition({ bounds, fromZoom, toZoom })`
 - `engine.getSpatialIndexSummary()` reports `flatbush` or `binary` index usage.
 - `engine.polygonToZones(geometry, { level })`
+- `createTerritoryIdentity(dataset, zone)`,
+  `createTerritoryDatasetVersionInfo(dataset)`,
+  `createTerritoryGeometryVersion(geometry)`,
+  `computeTerritoryAreaM2(geometry)`, and
+  `computeTerritoryRepresentativePoint(geometry)` expose production identity, version, and geometry
+  metric helpers.
 - `encodeTerritoryBinarySpatialIndex(dataset)`,
   `decodeTerritoryBinarySpatialIndex(buffer, expected)`,
   `inspectTerritoryBinarySpatialIndex(buffer)`, and
@@ -125,6 +143,10 @@
 - Controller query/body parsing rejects invalid numeric input before repository calls.
 - `createPostgisTerritoryRepository(client, options)` uses `ST_Intersects`, `ST_Covers`, and
   GiST-friendly bbox prefilters.
+- `importTerritoryDatasetToPostgis(client, dataset, options)` batch upserts a validated dataset into
+  the production PostGIS schema with `(dataset_id, dataset_version, id)` identity.
+- `POSTGIS_SCHEMA_SQL`, `POSTGIS_INDEX_SQL`, and query SQL constants are exported for migration and
+  snapshot testing.
 
 ## `@territory-kit/generators`
 

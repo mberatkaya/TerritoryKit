@@ -69,19 +69,33 @@ Response shape:
 The example migration at `examples/nestjs-postgis/src/001_create_territory_zones.sql` creates the
 `territory_zones` table and the indexes expected by `createPostgisTerritoryRepository`.
 
+The repository schema stores version-aware production rows:
+
+- `id` as the stable logical territory ID.
+- `dataset_id` and `dataset_version` as the release namespace.
+- `geometry_version` as the per-territory boundary revision.
+- `geometry geometry(MultiPolygon, 4326)` with Polygon inputs normalized on import.
+- `bbox`, `area_m2`, and `representative_point` for indexed viewport and map-label workflows.
+
 The repository SQL contract uses:
 
 - `ST_Intersects` with `&& ST_MakeEnvelope(...)` for viewport queries.
 - `ST_Covers` for point lookup so boundary points match core default lookup semantics.
-- Stable `order by id asc` ordering for deterministic responses.
+- Stable `order by level asc, id asc` bounds ordering and deepest-first point lookup.
+- Optional `datasetVersion` filtering. Production callers should set it when multiple releases can
+  coexist.
 
-The SQL exports in `examples/nestjs-postgis/src/postgis-queries.ts` are a baseline for consumers
-that want to inspect, snapshot, or adapt the generated queries.
+`importTerritoryDatasetToPostgis(client, dataset, options)` wraps imports in a transaction, ensures
+schema/indexes by default, deletes stale rows for the same dataset version, and batch upserts zones
+with `on conflict (dataset_id, dataset_version, id)`.
+
+The SQL exports from `@territory-kit/nestjs` are a baseline for consumers that want to inspect,
+snapshot, or adapt the generated queries.
 
 ## Test Gates
 
 - Unit tests cover controller request/response contracts, invalid input handling before repository
-  calls, SQL text expectations, and row mapping.
+  calls, SQL text expectations, row mapping, import batching, and version-aware idempotent upserts.
 - The PostGIS integration harness covers the controller, repository, bbox query, coordinate
   endpoint, row mapping, and SQL parameter order against the sample dataset.
 - Live PostGIS verification remains an optional maintainer check: apply the migration, import a
