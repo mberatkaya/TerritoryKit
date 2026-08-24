@@ -1,21 +1,19 @@
 {
-  "name": "@territory-kit/cli",
+  "name": "@territory-kit/migration",
   "version": "2.0.0",
-  "description": "TerritoryKit command line tools.",
+  "description": "Generic spatial migration helpers for mapping legacy zones onto TerritoryKit datasets.",
   "license": "Apache-2.0",
   "homepage": "https://github.com/mberatkaya/TerritoryKit#readme",
   "repository": {
     "type": "git",
     "url": "https://github.com/mberatkaya/TerritoryKit.git",
-    "directory": "packages/cli"
+    "directory": "packages/migration"
   },
   "bugs": {
     "url": "https://github.com/mberatkaya/TerritoryKit/issues"
   },
   "type": "module",
-  "bin": {
-    "territory": "./dist/index.mjs"
-  },
+  "sideEffects": false,
   "files": [
     "dist/*.cjs",
     "dist/*.d.cts",
@@ -48,9 +46,7 @@
   "dependencies": {
     "@territory-kit/core": "workspace:*",
     "@territory-kit/dataset": "workspace:*",
-    "@territory-kit/generators": "workspace:*",
-    "@territory-kit/migration": "workspace:*",
-    "@territory-kit/registry": "workspace:*"
+    "polygon-clipping": "^0.15.7"
   },
   "devDependencies": {
     "@territory-kit/shared-testkit": "workspace:*"

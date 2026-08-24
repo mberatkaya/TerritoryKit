@@ -144,6 +144,25 @@ describe("@territory-kit/react-native runtime", () => {
     });
   });
 
+  it("rejects installed query artifacts whose dataset version does not match the registry", async () => {
+    const fixture = await createRegistryFixture(["1.0.0"], {
+      datasetVersionOverride: "2.0.0"
+    });
+    const runtime = createMobileTerritoryRuntime({
+      registryUrl: fixture.registryUrl,
+      storageAdapter: new FakeMobileStorage(),
+      fetchAdapter: new FakeFetch(fixture.responses)
+    });
+
+    await runtime.installDataset({ datasetId: "territory-kit-test", version: "1.0.0" });
+
+    await expect(
+      runtime.loadInstalledDataset({ datasetId: "territory-kit-test", version: "1.0.0" })
+    ).rejects.toMatchObject({
+      code: "DATASET_INVALID"
+    });
+  });
+
   it("keeps the active dataset intact after interrupted downloads and checksum mismatch", async () => {
     const fixture = await createRegistryFixture(["1.0.0", "1.1.0"]);
     const storage = new FakeMobileStorage();
@@ -468,7 +487,10 @@ class FakeFetch implements MobileTerritoryFetchAdapter {
 
 async function createRegistryFixture(
   versions: readonly string[],
-  options: { readonly corruptChecksum?: boolean } = {}
+  options: {
+    readonly corruptChecksum?: boolean;
+    readonly datasetVersionOverride?: string;
+  } = {}
 ): Promise<{
   readonly registryUrl: string;
   readonly registry: TerritoryDatasetRegistry;
@@ -478,7 +500,7 @@ async function createRegistryFixture(
   const datasets: TerritoryRegistryDataset[] = [];
 
   for (const version of versions) {
-    const dataset = createDataset(version);
+    const dataset = createDataset(options.datasetVersionOverride ?? version);
     const datasetBytes = jsonBytes(dataset);
     const indexBytes = new Uint8Array(encodeTerritoryBinarySpatialIndex(dataset));
     const queryUrl = `https://datasets.example/test/${version}/adm1.json`;

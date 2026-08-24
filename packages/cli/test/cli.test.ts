@@ -86,6 +86,82 @@ describe("territory cli", () => {
     }
   });
 
+  it("dry-runs legacy spatial migration mappings", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-cli-migrate-"));
+    const datasetPath = join(tempDir, "dataset.json");
+    const sourcePath = join(tempDir, "source-zones.json");
+    const outputPath = join(tempDir, "migration-plan.json");
+
+    await writeFile(datasetPath, JSON.stringify(createSampleTerritoryDataset()), "utf8");
+    await writeFile(
+      sourcePath,
+      JSON.stringify([
+        {
+          h3Index: "legacy-cell-fatih",
+          center: [28.95, 41.01],
+          ownerId: "user-1",
+          score: 12
+        }
+      ]),
+      "utf8"
+    );
+
+    try {
+      await expect(
+        captureCli([
+          "migrate-spatial",
+          "--source",
+          sourcePath,
+          "--target-dataset",
+          datasetPath,
+          "--strategy",
+          "centroid",
+          "--target-level",
+          "3",
+          "--source-system",
+          "rushandclaim-h3",
+          "--build-date",
+          "2026-08-24T00:00:00.000Z",
+          "--output",
+          outputPath
+        ])
+      ).resolves.toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "migrate-spatial",
+          data: {
+            outputPath,
+            manifest: {
+              targetDatasetId: "territorykit-sample",
+              mappingStrategy: "centroid",
+              summary: {
+                sourceCount: 1,
+                mappedCount: 1
+              }
+            }
+          }
+        }
+      });
+
+      await expect(readFile(outputPath, "utf8").then(JSON.parse)).resolves.toMatchObject({
+        manifest: {
+          sourceSystem: "rushandclaim-h3",
+          dryRun: true
+        },
+        mappings: [
+          {
+            sourceSpatialId: "legacy-cell-fatih",
+            targetTerritoryId: "tr:34:fatih",
+            confidence: "HIGH"
+          }
+        ]
+      });
+    } finally {
+      await rm(tempDir, { force: true, recursive: true });
+    }
+  });
+
   it("validates Turkey V2 datasets with the strict profile", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-kit-tr-v2-cli-"));
     const validPath = join(tempDir, "tr-v2-valid.json");

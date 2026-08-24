@@ -230,6 +230,11 @@ export async function runCli(argv: string[] = process.argv.slice(2)): Promise<nu
       return await runImportCommand(argv.slice(1));
     }
 
+    if (command === "migrate-spatial") {
+      const { runMigrateSpatial } = await import("./migrate-spatial.js");
+      return await runMigrateSpatial(argv.slice(1));
+    }
+
     if (command === "geometry") {
       return await runGeometry(argv.slice(1));
     }
@@ -6487,6 +6492,7 @@ Commands:
   render     Build, validate, inspect, or compare render artifacts
   benchmark  Run or compare fixture/local-real benchmark results
   country    Build and inspect configured country dataset artifacts
+  migrate-spatial  Dry-run legacy spatial ID to TerritoryKit territory mapping
   import     Import a GeoJSON file or source adapter artifact
   source     List and inspect source adapters (alias: sources)
   dataset    Build curated datasets and install registry artifacts
