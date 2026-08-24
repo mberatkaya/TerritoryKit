@@ -1,6 +1,6 @@
 {
   "name": "@territory-kit/react-native",
-  "version": "1.1.12",
+  "version": "1.1.13",
   "description": "React Native mobile runtime and optional MapLibre Native integration for TerritoryKit.",
   "license": "Apache-2.0",
   "homepage": "https://github.com/mberatkaya/TerritoryKit#readme",

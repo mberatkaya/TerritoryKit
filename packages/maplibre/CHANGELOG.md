@@ -1,5 +1,13 @@
 # @territory-kit/maplibre
 
+## 2.1.0
+
+### Patch Changes
+
+- @territory-kit/adapter-core@2.1.0
+- @territory-kit/dataset@2.1.0
+- @territory-kit/registry@2.1.0
+
 ## 2.0.0
 
 ### Major Changes

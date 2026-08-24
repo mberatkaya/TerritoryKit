@@ -1,5 +1,16 @@
 # @territory-kit/react-native
 
+## 1.1.13
+
+### Patch Changes
+
+- 5fce56b: Add H3 removal readiness hardening with reusable spatial migration dry-run tooling, CLI support,
+  mobile dataset version-mixing protection, and identity regression coverage.
+- Updated dependencies [5fce56b]
+  - @territory-kit/core@2.1.0
+  - @territory-kit/dataset@2.1.0
+  - @territory-kit/registry@2.1.0
+
 ## 1.1.12
 
 ### Patch Changes

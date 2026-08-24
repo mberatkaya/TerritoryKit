@@ -1,6 +1,6 @@
 {
   "name": "@territory-kit/game",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Renderer-independent territory ownership and action engine for games built on TerritoryKit.",
   "license": "Apache-2.0",
   "homepage": "https://github.com/mberatkaya/TerritoryKit#readme",

@@ -1,5 +1,12 @@
 # @territory-kit/data-tr
 
+## 2.1.0
+
+### Patch Changes
+
+- Updated dependencies [5fce56b]
+  - @territory-kit/core@2.1.0
+
 ## 2.0.0
 
 ### Major Changes

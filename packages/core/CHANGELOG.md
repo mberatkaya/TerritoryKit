@@ -1,5 +1,14 @@
 # @territory-kit/core
 
+## 2.1.0
+
+### Patch Changes
+
+- 5fce56b: Add H3 removal readiness hardening with reusable spatial migration dry-run tooling, CLI support,
+  mobile dataset version-mixing protection, and identity regression coverage.
+  - @territory-kit/dataset@2.1.0
+  - @territory-kit/registry@2.1.0
+
 ## 2.0.0
 
 ### Major Changes
