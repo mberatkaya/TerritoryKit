@@ -64,6 +64,27 @@ Response shape:
 }
 ```
 
+`POST /territories/route`
+
+Request body:
+
+```json
+{
+  "route": {
+    "type": "LineString",
+    "coordinates": [
+      [28.94, 41.01],
+      [29.07, 41.01]
+    ]
+  },
+  "level": 3
+}
+```
+
+The response uses the core route result shape with `territories`, `traversal`, `mode`, and
+`routeLengthM`. A PostGIS-backed repository serves exact mode through `findAlongRoute`; sampled
+mode remains an in-memory/core fallback.
+
 ## PostGIS Baseline
 
 The example migration at `examples/nestjs-postgis/src/001_create_territory_zones.sql` creates the
@@ -81,6 +102,8 @@ The repository SQL contract uses:
 
 - `ST_Intersects` with `&& ST_MakeEnvelope(...)` for viewport queries.
 - `ST_Covers` for point lookup so boundary points match core default lookup semantics.
+- `ST_Intersects`, `ST_Intersection`, `ST_Length`, and `geometry && ST_Envelope(route)` for exact
+  route queries.
 - Stable `order by level asc, id asc` bounds ordering and deepest-first point lookup.
 - Optional `datasetVersion` filtering. Production callers should set it when multiple releases can
   coexist.
@@ -97,7 +120,7 @@ snapshot, or adapt the generated queries.
 - Unit tests cover controller request/response contracts, invalid input handling before repository
   calls, SQL text expectations, row mapping, import batching, and version-aware idempotent upserts.
 - The PostGIS integration harness covers the controller, repository, bbox query, coordinate
-  endpoint, row mapping, and SQL parameter order against the sample dataset.
-- Live PostGIS verification remains an optional maintainer check: apply the migration, import a
-  validated dataset into `territory_zones`, then run viewport and locate calls against a NestJS app
-  instance.
+  endpoint, route endpoint, row mapping, and SQL parameter order against the sample dataset.
+- Live PostGIS verification remains an optional maintainer check for CI, but Sprint 2 includes a
+  local Docker/PostGIS evidence report in
+  [Sprint 2 spatial performance](./sprint-2-spatial-performance.md).

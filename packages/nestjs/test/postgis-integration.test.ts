@@ -4,6 +4,7 @@ import { createSampleTerritoryDataset } from "@territory-kit/shared-testkit";
 import { describe, expect, it } from "vitest";
 import {
   POSTGIS_LOCATE_SQL,
+  POSTGIS_ROUTE_SQL,
   POSTGIS_VIEWPORT_SQL,
   TerritoryKitController,
   createPostgisTerritoryRepository
@@ -59,6 +60,41 @@ describe("PostGIS integration harness", () => {
           };
         }
 
+        if (sql === POSTGIS_ROUTE_SQL) {
+          const [datasetId, datasetVersion, level] = values;
+          const route = engine.findTerritoriesAlongRoute(
+            {
+              type: "LineString",
+              coordinates: [
+                [28.94, 41.01],
+                [29.07, 41.01]
+              ]
+            },
+            { level: Number(level) }
+          );
+          const rows = route.territories
+            .map((territory) =>
+              dataset.zones.find((candidate) => candidate.id === territory.territoryId)
+            )
+            .filter(
+              (zone): zone is TerritoryZone =>
+                zone !== undefined &&
+                zone.datasetId === datasetId &&
+                (datasetVersion === null || dataset.manifest.datasetVersion === datasetVersion)
+            )
+            .map((zone, index) => ({
+              ...toPostgisRow(zone),
+              intersection_length_m: route.territories[index]?.intersectionLengthM ?? 0,
+              route_fraction: route.territories[index]?.routeFractionStart ?? 0,
+              intersection_point: {
+                type: "Point",
+                coordinates: route.territories[index]?.firstIntersection ?? zone.center
+              }
+            }));
+
+          return { rows: rows as Row[] };
+        }
+
         throw new Error(`Unexpected PostGIS SQL: ${sql}`);
       }
     };
@@ -84,11 +120,25 @@ describe("PostGIS integration harness", () => {
       }
     );
     const locate = await controller.locateTerritory({ lat: 41.01, lng: 28.95, level: 3 });
+    const route = await controller.routeTerritories({
+      route: {
+        type: "LineString",
+        coordinates: [
+          [28.94, 41.01],
+          [29.07, 41.01]
+        ]
+      },
+      level: 3
+    });
 
     expect(viewport.zones.map((zone) => zone.id)).toEqual(["tr:34:fatih"]);
     expect(viewport.cacheKey).toContain("territorykit-sample");
     expect(headers.get("ETag")).toBe(`"${viewport.cacheKey}"`);
     expect(locate.zoneId).toBe("tr:34:fatih");
+    expect(route.territories.map((territory) => territory.territoryId)).toEqual([
+      "tr:34:fatih",
+      "tr:34:kadikoy"
+    ]);
     expect(queries).toEqual([
       {
         sql: POSTGIS_VIEWPORT_SQL,
@@ -97,6 +147,21 @@ describe("PostGIS integration harness", () => {
       {
         sql: POSTGIS_LOCATE_SQL,
         values: ["territorykit-sample", null, 3, 28.95, 41.01]
+      },
+      {
+        sql: POSTGIS_ROUTE_SQL,
+        values: [
+          "territorykit-sample",
+          null,
+          3,
+          JSON.stringify({
+            type: "LineString",
+            coordinates: [
+              [28.94, 41.01],
+              [29.07, 41.01]
+            ]
+          })
+        ]
       }
     ]);
   });

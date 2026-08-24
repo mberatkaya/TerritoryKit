@@ -111,6 +111,32 @@ describe("maplibre adapter", () => {
     expect(bundle.layers.map((layer) => layer.type)).toEqual(["fill", "line"]);
   });
 
+  it("creates production GeoJSON sources with stable promoted IDs and minimal properties", () => {
+    const dataset = createSampleTerritoryDataset();
+    const collection = zonesToFeatureCollection(dataset.zones, {
+      propertyMode: "minimal",
+      datasetVersion: dataset.manifest.datasetVersion,
+      includeGeometryVersion: true
+    });
+    const feature = collection.features.find((candidate) => candidate.id === "tr:34");
+    const bundle = createTerritoryMapLibreLayers(dataset.zones, {
+      sourceId: "zones",
+      propertyMode: "minimal",
+      datasetVersion: dataset.manifest.datasetVersion
+    });
+
+    expect(feature).toMatchObject({
+      id: "tr:34",
+      properties: {
+        territoryId: "tr:34",
+        datasetVersion: "0.1.0-alpha.1",
+        geometryVersion: expect.stringMatching(/^fnv1a32:/)
+      }
+    });
+    expect(bundle.source.spec.promoteId).toBe("id");
+    expect(bundle.source.spec.data.features[0]?.properties).not.toHaveProperty("territory");
+  });
+
   it("attaches, updates, binds events, and detaches from a MapLibre-like map", () => {
     const dataset = createSampleTerritoryDataset();
     const source: TerritoryMapLibreGeoJsonSource = { setData: vi.fn() };

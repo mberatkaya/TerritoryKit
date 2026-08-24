@@ -22,7 +22,12 @@ export {
   computeTerritoryRepresentativePoint,
   createTerritoryGeometryVersion
 } from "@territory-kit/dataset";
-export { normalizeLongitude } from "./geometry.js";
+export {
+  computeLineStringBounds,
+  computeLngLatDistanceM,
+  intersectLineStringWithGeometry,
+  normalizeLongitude
+} from "./geometry.js";
 export { createTerritoryDatasetVersionInfo, createTerritoryIdentity } from "./identity.js";
 export { defaultZoomLevelStrategy, zoomToDefaultLevel } from "./zoom.js";
 /**
@@ -87,11 +92,25 @@ export type {
   TerritoryIdentity,
   TerritoryLevelSelector,
   TerritoryLookupResult,
+  TerritoryRouteInput,
+  TerritoryRouteLineString,
+  TerritoryRouteQueryMode,
+  TerritoryRouteQueryOptions,
+  TerritoryRouteQueryResult,
+  TerritoryRouteTerritoryResult,
+  TerritoryRouteTraversalSegment,
   TerritoryPointLookupOptions,
+  TerritoryViewportDeliveryQuery,
+  TerritoryViewportDeliveryResult,
   ViewportCacheKeyQuery,
   VisibleZonesQuery,
   ZoomLevelStrategy
 } from "./types.js";
+export type {
+  RouteGeometryIntersection,
+  RouteGeometryIntersectionPoint,
+  RouteGeometryIntersectionSegment
+} from "./geometry.js";
 export type {
   TerritoryBinarySpatialIndex,
   TerritoryBinarySpatialIndexBBoxRecord,

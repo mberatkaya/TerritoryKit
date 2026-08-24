@@ -22,7 +22,10 @@ import { TerritoryZoneNotFoundError } from "./errors.js";
 import { Flatbush } from "./flatbush.js";
 import {
   bboxIntersectsBounds,
+  computeLineStringBounds,
+  computeLngLatDistanceM,
   geometryIntersectsGeometry,
+  intersectLineStringWithGeometry,
   normalizeLongitude,
   pointIntersectsGeometry
 } from "./geometry.js";
@@ -45,9 +48,21 @@ import type {
   TerritoryLookupResult,
   TerritoryPointLookupOptions,
   TerritoryEngineSpatialIndexSummary,
+  TerritoryRouteInput,
+  TerritoryRouteQueryOptions,
+  TerritoryRouteQueryResult,
+  TerritoryRouteTerritoryResult,
+  TerritoryRouteTraversalSegment,
+  TerritoryViewportDeliveryQuery,
+  TerritoryViewportDeliveryResult,
   ViewportCacheKeyQuery,
   VisibleZonesQuery
 } from "./types.js";
+
+const DEFAULT_VIEWPORT_LIMIT = 500;
+const MAX_VIEWPORT_LIMIT = 5_000;
+const DEFAULT_ROUTE_SAMPLE_DISTANCE_M = 50;
+const MAX_ROUTE_SAMPLE_COUNT = 10_000;
 
 interface LevelIndex {
   source: "flatbush" | "binary-flatbush";
@@ -58,6 +73,27 @@ interface LevelIndex {
 interface SpatialIndexBuildResult {
   indexesByLevel: Map<number, LevelIndex>;
   summary: TerritoryEngineSpatialIndexSummary;
+}
+
+interface RouteAccumulator {
+  zone: TerritoryZone;
+  identity: ReturnType<typeof createTerritoryIdentity>;
+  method: "exact" | "sampled";
+  lengthM: number;
+  firstDistanceM: number;
+  lastDistanceM: number;
+  firstFraction: number;
+  lastFraction: number;
+  firstCoordinate: LngLat;
+  lastCoordinate: LngLat;
+  segmentCount: number;
+  boundaryOnly: boolean;
+}
+
+interface RouteSamplePoint {
+  coordinate: LngLat;
+  distanceM: number;
+  fraction: number;
 }
 
 export function createTerritoryEngine(options: TerritoryEngineOptions): TerritoryEngine {
@@ -99,9 +135,9 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
     level?: number,
     lookupMode: "index" | "brute-force" = "index"
   ): TerritoryZone[] {
-    const normalizedBounds = normalizeQueryBounds(bounds);
+    const normalizedBoundsParts = normalizeQueryBoundsParts(bounds);
 
-    if (!normalizedBounds || (level !== undefined && !isValidLevel(level))) {
+    if (!normalizedBoundsParts || (level !== undefined && !isValidLevel(level))) {
       return [];
     }
 
@@ -110,7 +146,7 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
         dataset.zones.filter(
           (zone) =>
             (level === undefined || zone.level === level) &&
-            bboxIntersectsBounds(zone.bbox, normalizedBounds)
+            normalizedBoundsParts.some((part) => bboxIntersectsBounds(zone.bbox, part))
         )
       );
     }
@@ -119,28 +155,30 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
       level === undefined
         ? [...indexesByLevel.values()]
         : [indexesByLevel.get(level)].filter(Boolean);
-    const zones: TerritoryZone[] = [];
+    const zonesByIdResult = new Map<string, TerritoryZone>();
 
     for (const entry of indexes) {
       if (!entry) {
         continue;
       }
 
-      for (const zoneId of entry.search(
-        normalizedBounds.west,
-        normalizedBounds.south,
-        normalizedBounds.east,
-        normalizedBounds.north
-      )) {
-        const zone = zoneId ? zonesById.get(zoneId) : undefined;
+      for (const normalizedBounds of normalizedBoundsParts) {
+        for (const zoneId of entry.search(
+          normalizedBounds.west,
+          normalizedBounds.south,
+          normalizedBounds.east,
+          normalizedBounds.north
+        )) {
+          const zone = zoneId ? zonesById.get(zoneId) : undefined;
 
-        if (zone && bboxIntersectsBounds(zone.bbox, normalizedBounds)) {
-          zones.push(zone);
+          if (zone && bboxIntersectsBounds(zone.bbox, normalizedBounds)) {
+            zonesByIdResult.set(zone.id, zone);
+          }
         }
       }
     }
 
-    return sortZones(zones);
+    return sortZones([...zonesByIdResult.values()]);
   }
 
   function getCandidateZonesForLevels(
@@ -258,6 +296,282 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
       hierarchy,
       metrics
     };
+  }
+
+  function findRouteTerritories(
+    routeInput: TerritoryRouteInput,
+    routeOptions: TerritoryRouteQueryOptions = {}
+  ): TerritoryRouteQueryResult {
+    const mode = routeOptions.mode ?? "exact";
+    const route = normalizeRouteInput(routeInput);
+
+    if (!route) {
+      return createEmptyRouteResult(mode, 0);
+    }
+
+    const routeLengthM = computeRouteLengthM(route);
+
+    if (routeLengthM <= 0) {
+      return createEmptyRouteResult(mode, routeLengthM);
+    }
+
+    return mode === "sampled"
+      ? findSampledRouteTerritories(route, routeLengthM, routeOptions)
+      : findExactRouteTerritories(route, routeLengthM, routeOptions);
+  }
+
+  function findExactRouteTerritories(
+    route: readonly LngLat[],
+    routeLengthM: number,
+    routeOptions: TerritoryRouteQueryOptions
+  ): TerritoryRouteQueryResult {
+    const bounds = computeLineStringBounds(route);
+    const levels = resolveLevelSelectors(routeOptions);
+
+    if (!bounds || levels === "invalid") {
+      return createEmptyRouteResult("exact", routeLengthM);
+    }
+
+    const boundaryMode = routeOptions.boundaryMode ?? "covers";
+    const candidates = getCandidateZonesForLevels(
+      bounds,
+      levels,
+      debugBruteForceLookup ? "brute-force" : "index"
+    );
+    const accumulators = new Map<string, RouteAccumulator>();
+    const traversal: TerritoryRouteTraversalSegment[] = [];
+
+    for (const zone of candidates) {
+      const intersection = intersectLineStringWithGeometry(route, zone.geometry, boundaryMode);
+      const identity = getCachedIdentity(zone);
+
+      if (intersection.segments.length > 0) {
+        for (const segment of intersection.segments) {
+          const traversalSegment: TerritoryRouteTraversalSegment = {
+            territoryId: zone.id,
+            zone,
+            identity,
+            method: "exact",
+            sequence: 0,
+            startCoordinate: segment.startCoordinate,
+            endCoordinate: segment.endCoordinate,
+            startDistanceM: segment.startDistanceM,
+            endDistanceM: segment.endDistanceM,
+            startFraction: segment.startFraction,
+            endFraction: segment.endFraction,
+            lengthM: segment.lengthM
+          };
+          traversal.push(traversalSegment);
+          accumulateRouteSegment(accumulators, traversalSegment);
+        }
+        continue;
+      }
+
+      const touch = intersection.touchPoints[0];
+
+      if (!touch) {
+        continue;
+      }
+
+      const traversalSegment: TerritoryRouteTraversalSegment = {
+        territoryId: zone.id,
+        zone,
+        identity,
+        method: "exact",
+        sequence: 0,
+        startCoordinate: touch.coordinate,
+        endCoordinate: touch.coordinate,
+        startDistanceM: touch.distanceM,
+        endDistanceM: touch.distanceM,
+        startFraction: touch.fraction,
+        endFraction: touch.fraction,
+        lengthM: 0,
+        boundaryOnly: true
+      };
+      traversal.push(traversalSegment);
+      accumulateRouteSegment(accumulators, traversalSegment);
+    }
+
+    const orderedTraversal = orderTraversalSegments(traversal);
+
+    return {
+      mode: "exact",
+      routeLengthM,
+      territories: routeAccumulatorsToResults(accumulators),
+      traversal: orderedTraversal
+    };
+  }
+
+  function findSampledRouteTerritories(
+    route: readonly LngLat[],
+    routeLengthM: number,
+    routeOptions: TerritoryRouteQueryOptions
+  ): TerritoryRouteQueryResult {
+    const levels = resolveLevelSelectors(routeOptions);
+
+    if (levels === "invalid") {
+      return createEmptyRouteResult("sampled", routeLengthM);
+    }
+
+    const sampleDistanceM = normalizeSampleDistance(routeOptions.sampleDistanceM);
+    const maxSampleCount = normalizeSampleCount(routeOptions.maxSampleCount);
+    const samples = sampleRoute(route, routeLengthM, sampleDistanceM, maxSampleCount);
+    const accumulators = new Map<string, RouteAccumulator>();
+    const traversal: TerritoryRouteTraversalSegment[] = [];
+
+    for (const sample of samples) {
+      const matches = findMatchingZonesAtPoint(
+        { lng: sample.coordinate[0], lat: sample.coordinate[1] },
+        {
+          ...(routeOptions.level === undefined ? {} : { level: routeOptions.level }),
+          ...(routeOptions.levels === undefined ? {} : { levels: routeOptions.levels }),
+          boundaryMode: routeOptions.boundaryMode ?? "covers"
+        }
+      );
+
+      for (const zone of matches) {
+        const identity = getCachedIdentity(zone);
+        const previous = traversal.at(-1);
+
+        if (
+          previous?.method === "sampled" &&
+          previous.territoryId === zone.id &&
+          previous.endDistanceM <= sample.distanceM
+        ) {
+          previous.endCoordinate = sample.coordinate;
+          previous.endDistanceM = sample.distanceM;
+          previous.endFraction = sample.fraction;
+          accumulateRouteSegment(accumulators, previous, false);
+          continue;
+        }
+
+        const traversalSegment: TerritoryRouteTraversalSegment = {
+          territoryId: zone.id,
+          zone,
+          identity,
+          method: "sampled",
+          sequence: 0,
+          startCoordinate: sample.coordinate,
+          endCoordinate: sample.coordinate,
+          startDistanceM: sample.distanceM,
+          endDistanceM: sample.distanceM,
+          startFraction: sample.fraction,
+          endFraction: sample.fraction
+        };
+        traversal.push(traversalSegment);
+        accumulateRouteSegment(accumulators, traversalSegment);
+      }
+    }
+
+    return {
+      mode: "sampled",
+      routeLengthM,
+      territories: routeAccumulatorsToResults(accumulators),
+      traversal: orderTraversalSegments(traversal)
+    };
+  }
+
+  function queryViewportDelivery(
+    query: TerritoryViewportDeliveryQuery
+  ): TerritoryViewportDeliveryResult {
+    const resolvedLevels = resolveViewportDeliveryLevels(query);
+    const limit = normalizeViewportDeliveryLimit(query.limit, query.maxLimit);
+    const offset = parseViewportCursor(query.cursor);
+    const cacheKey = createViewportDeliveryCacheKey(query, resolvedLevels.levels, limit, offset);
+
+    if (resolvedLevels.invalid || limit === "invalid" || offset === "invalid") {
+      return {
+        zones: [],
+        territories: [],
+        ...(resolvedLevels.level !== undefined ? { level: resolvedLevels.level } : {}),
+        ...(resolvedLevels.levels ? { levels: resolvedLevels.levels } : {}),
+        limit: typeof limit === "number" ? limit : 0,
+        ...(query.cursor ? { cursor: query.cursor } : {}),
+        hasMore: false,
+        totalEstimate: 0,
+        cacheKey,
+        datelineSplit: boundsCrossDateline(query.bounds)
+      };
+    }
+
+    const zones = getCandidateZonesForLevels(query.bounds, new Set(resolvedLevels.levels));
+    const page = zones.slice(offset, offset + limit);
+    const nextOffset = offset + page.length;
+    const nextCursor = nextOffset < zones.length ? formatViewportCursor(nextOffset) : undefined;
+
+    return {
+      zones: page,
+      territories: page.map(createLookupResult),
+      ...(resolvedLevels.level !== undefined ? { level: resolvedLevels.level } : {}),
+      levels: resolvedLevels.levels,
+      limit,
+      ...(query.cursor ? { cursor: query.cursor } : {}),
+      ...(nextCursor ? { nextCursor } : {}),
+      hasMore: Boolean(nextCursor),
+      totalEstimate: zones.length,
+      cacheKey,
+      datelineSplit: boundsCrossDateline(query.bounds)
+    };
+  }
+
+  function resolveViewportDeliveryLevels(query: TerritoryViewportDeliveryQuery): {
+    level?: number;
+    levels: number[];
+    invalid: boolean;
+  } {
+    if (query.level !== undefined || query.levels !== undefined) {
+      const levels = resolveLevelSelectors(query);
+
+      if (levels === "invalid") {
+        return { levels: [], invalid: true };
+      }
+
+      const resolvedLevels = [...(levels ?? new Set<number>())].sort((left, right) => left - right);
+
+      return {
+        ...(resolvedLevels.length === 1 && resolvedLevels[0] !== undefined
+          ? { level: resolvedLevels[0] }
+          : {}),
+        levels: resolvedLevels,
+        invalid: resolvedLevels.length === 0
+      };
+    }
+
+    const level = resolveVisibleLevel({
+      bounds: query.bounds,
+      ...(query.zoom === undefined ? {} : { zoom: query.zoom }),
+      ...(query.strategy === undefined ? {} : { strategy: query.strategy })
+    });
+
+    return {
+      level,
+      levels: [level],
+      invalid: false
+    };
+  }
+
+  function createViewportDeliveryCacheKey(
+    query: TerritoryViewportDeliveryQuery,
+    levels: readonly number[],
+    limit: number | "invalid",
+    offset: number | "invalid"
+  ): string {
+    const bounds = normalizeBoundsForCache(query.bounds);
+
+    return [
+      dataset.manifest.datasetId,
+      dataset.manifest.datasetVersion,
+      dataset.manifest.geometryHash,
+      viewportCacheRevision,
+      "viewport-delivery",
+      `levels:${levels.join(",")}`,
+      bounds.west,
+      bounds.south,
+      bounds.east,
+      bounds.north,
+      `limit:${limit}`,
+      `offset:${offset}`
+    ].join(":");
   }
 
   function getCachedIdentity(zone: TerritoryZone): ReturnType<typeof createTerritoryIdentity> {
@@ -438,6 +752,10 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
       return findZonesInBounds(bounds, options).map(createLookupResult);
     },
 
+    findTerritoriesAlongRoute(route, options = {}) {
+      return findRouteTerritories(route, options);
+    },
+
     getAdjacentTerritories(zoneId, options = {}) {
       return this.zoneNeighbors(zoneId, options).map((neighborId) => requireZone(neighborId));
     },
@@ -543,6 +861,10 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
         exitingZoneIds: fromZoneIds.filter((zoneId) => !toSet.has(zoneId)),
         stableZoneIds: toZoneIds.filter((zoneId) => fromSet.has(zoneId))
       };
+    },
+
+    queryTerritoriesInViewport(query) {
+      return queryViewportDelivery(query);
     },
 
     getZonesInBounds(query: BoundsQuery) {
@@ -879,7 +1201,294 @@ function compareAdjacencyEdges(
   );
 }
 
-function normalizeQueryBounds(bounds: TerritoryBounds): TerritoryBounds | undefined {
+function createEmptyRouteResult(
+  mode: "exact" | "sampled",
+  routeLengthM: number
+): TerritoryRouteQueryResult {
+  return {
+    mode,
+    routeLengthM,
+    territories: [],
+    traversal: []
+  };
+}
+
+function normalizeRouteInput(routeInput: TerritoryRouteInput): LngLat[] | undefined {
+  const coordinatesInput =
+    isRecord(routeInput) && routeInput.type === "LineString" ? routeInput.coordinates : routeInput;
+
+  if (!Array.isArray(coordinatesInput) || coordinatesInput.length < 2) {
+    return undefined;
+  }
+
+  const coordinates: LngLat[] = [];
+
+  for (const coordinateInput of coordinatesInput) {
+    const coordinate = readRouteCoordinate(coordinateInput);
+
+    if (!coordinate) {
+      return undefined;
+    }
+
+    coordinates.push(coordinate);
+  }
+
+  return coordinates.length >= 2 ? coordinates : undefined;
+}
+
+function readRouteCoordinate(input: unknown): LngLat | undefined {
+  if (Array.isArray(input)) {
+    const longitude = Number(input[0]);
+    const latitude = Number(input[1]);
+
+    return isValidRouteLngLat(longitude, latitude)
+      ? [normalizeLongitude(longitude), latitude]
+      : undefined;
+  }
+
+  if (!isRecord(input)) {
+    return undefined;
+  }
+
+  const longitude = Number(input.lng);
+  const latitude = Number(input.lat);
+
+  return isValidRouteLngLat(longitude, latitude)
+    ? [normalizeLongitude(longitude), latitude]
+    : undefined;
+}
+
+function isValidRouteLngLat(longitude: number, latitude: number): boolean {
+  return (
+    Number.isFinite(longitude) && Number.isFinite(latitude) && latitude >= -90 && latitude <= 90
+  );
+}
+
+function computeRouteLengthM(route: readonly LngLat[]): number {
+  let lengthM = 0;
+
+  for (let index = 0; index < route.length - 1; index += 1) {
+    const start = route[index];
+    const end = route[index + 1];
+
+    if (start && end) {
+      lengthM += computeLngLatDistanceM(start, end);
+    }
+  }
+
+  return lengthM;
+}
+
+function accumulateRouteSegment(
+  accumulators: Map<string, RouteAccumulator>,
+  segment: TerritoryRouteTraversalSegment,
+  incrementSegmentCount = true
+): void {
+  const existing = accumulators.get(segment.territoryId);
+  const lengthM = segment.lengthM ?? 0;
+
+  if (!existing) {
+    accumulators.set(segment.territoryId, {
+      zone: segment.zone,
+      identity: segment.identity,
+      method: segment.method,
+      lengthM,
+      firstDistanceM: segment.startDistanceM,
+      lastDistanceM: segment.endDistanceM,
+      firstFraction: segment.startFraction,
+      lastFraction: segment.endFraction,
+      firstCoordinate: segment.startCoordinate,
+      lastCoordinate: segment.endCoordinate,
+      segmentCount: 1,
+      boundaryOnly: segment.boundaryOnly === true
+    });
+    return;
+  }
+
+  if (segment.startDistanceM < existing.firstDistanceM) {
+    existing.firstDistanceM = segment.startDistanceM;
+    existing.firstFraction = segment.startFraction;
+    existing.firstCoordinate = segment.startCoordinate;
+  }
+
+  if (segment.endDistanceM >= existing.lastDistanceM) {
+    existing.lastDistanceM = segment.endDistanceM;
+    existing.lastFraction = segment.endFraction;
+    existing.lastCoordinate = segment.endCoordinate;
+  }
+
+  if (incrementSegmentCount) {
+    existing.lengthM += lengthM;
+    existing.segmentCount += 1;
+  }
+
+  existing.boundaryOnly = existing.boundaryOnly && segment.boundaryOnly === true;
+}
+
+function routeAccumulatorsToResults(
+  accumulators: Map<string, RouteAccumulator>
+): TerritoryRouteTerritoryResult[] {
+  return [...accumulators.entries()]
+    .sort(
+      ([leftId, left], [rightId, right]) =>
+        left.firstDistanceM - right.firstDistanceM || leftId.localeCompare(rightId)
+    )
+    .map(([, accumulator]) => ({
+      territoryId: accumulator.zone.id,
+      zone: accumulator.zone,
+      identity: accumulator.identity,
+      method: accumulator.method,
+      entered: accumulator.method === "sampled" ? true : accumulator.lengthM > 0,
+      boundaryOnly: accumulator.method === "exact" ? accumulator.boundaryOnly : false,
+      datasetVersion: accumulator.identity.datasetVersion,
+      geometryVersion: accumulator.identity.geometryVersion,
+      ...(accumulator.method === "exact" ? { intersectionLengthM: accumulator.lengthM } : {}),
+      firstIntersection: accumulator.firstCoordinate,
+      lastIntersection: accumulator.lastCoordinate,
+      routeFractionStart: accumulator.firstFraction,
+      routeFractionEnd: accumulator.lastFraction,
+      segmentCount: accumulator.segmentCount
+    }));
+}
+
+function orderTraversalSegments(
+  traversal: TerritoryRouteTraversalSegment[]
+): TerritoryRouteTraversalSegment[] {
+  return [...traversal]
+    .sort(
+      (left, right) =>
+        left.startDistanceM - right.startDistanceM ||
+        left.endDistanceM - right.endDistanceM ||
+        left.territoryId.localeCompare(right.territoryId)
+    )
+    .map((segment, sequence) => ({ ...segment, sequence }));
+}
+
+function normalizeSampleDistance(input: number | undefined): number {
+  return Number.isFinite(input) && input !== undefined && input > 0
+    ? input
+    : DEFAULT_ROUTE_SAMPLE_DISTANCE_M;
+}
+
+function normalizeSampleCount(input: number | undefined): number {
+  return Number.isInteger(input) && input !== undefined && input >= 2
+    ? Math.min(input, MAX_ROUTE_SAMPLE_COUNT)
+    : MAX_ROUTE_SAMPLE_COUNT;
+}
+
+function sampleRoute(
+  route: readonly LngLat[],
+  routeLengthM: number,
+  sampleDistanceM: number,
+  maxSampleCount: number
+): RouteSamplePoint[] {
+  const samples: RouteSamplePoint[] = [interpolateRouteAtDistance(route, 0, routeLengthM)];
+  const interiorSampleCount = Math.max(
+    0,
+    Math.min(maxSampleCount - 2, Math.floor(routeLengthM / sampleDistanceM))
+  );
+
+  for (let sampleIndex = 1; sampleIndex <= interiorSampleCount; sampleIndex += 1) {
+    const distanceM = Math.min(routeLengthM, sampleIndex * sampleDistanceM);
+
+    if (distanceM > 0 && distanceM < routeLengthM) {
+      samples.push(interpolateRouteAtDistance(route, distanceM, routeLengthM));
+    }
+  }
+
+  if (samples.at(-1)?.distanceM !== routeLengthM) {
+    samples.push(interpolateRouteAtDistance(route, routeLengthM, routeLengthM));
+  }
+
+  return samples;
+}
+
+function interpolateRouteAtDistance(
+  route: readonly LngLat[],
+  distanceM: number,
+  routeLengthM: number
+): RouteSamplePoint {
+  let traversedM = 0;
+
+  for (let index = 0; index < route.length - 1; index += 1) {
+    const start = route[index];
+    const end = route[index + 1];
+
+    if (!start || !end) {
+      continue;
+    }
+
+    const segmentLengthM = computeLngLatDistanceM(start, end);
+
+    if (segmentLengthM <= 0) {
+      continue;
+    }
+
+    if (traversedM + segmentLengthM >= distanceM) {
+      const t = (distanceM - traversedM) / segmentLengthM;
+      const coordinate: LngLat = [
+        start[0] + (end[0] - start[0]) * t,
+        start[1] + (end[1] - start[1]) * t
+      ];
+
+      return {
+        coordinate,
+        distanceM,
+        fraction: routeLengthM > 0 ? distanceM / routeLengthM : 0
+      };
+    }
+
+    traversedM += segmentLengthM;
+  }
+
+  const coordinate = route.at(-1) ?? [0, 0];
+
+  return {
+    coordinate,
+    distanceM: routeLengthM,
+    fraction: routeLengthM > 0 ? 1 : 0
+  };
+}
+
+function normalizeViewportDeliveryLimit(
+  limit: number | undefined,
+  maxLimit: number | undefined
+): number | "invalid" {
+  const ceiling =
+    Number.isInteger(maxLimit) && maxLimit !== undefined && maxLimit > 0
+      ? Math.min(maxLimit, MAX_VIEWPORT_LIMIT)
+      : MAX_VIEWPORT_LIMIT;
+
+  if (limit === undefined) {
+    return Math.min(DEFAULT_VIEWPORT_LIMIT, ceiling);
+  }
+
+  if (!Number.isInteger(limit) || limit < 0) {
+    return "invalid";
+  }
+
+  return Math.min(limit, ceiling);
+}
+
+function parseViewportCursor(cursor: string | undefined): number | "invalid" {
+  if (cursor === undefined || cursor === "") {
+    return 0;
+  }
+
+  const match = /^offset:(\d+)$/.exec(cursor);
+
+  if (!match?.[1]) {
+    return "invalid";
+  }
+
+  return Number(match[1]);
+}
+
+function formatViewportCursor(offset: number): string {
+  return `offset:${offset}`;
+}
+
+function normalizeQueryBoundsParts(bounds: TerritoryBounds): TerritoryBounds[] | undefined {
   if (
     !Number.isFinite(bounds.west) ||
     !Number.isFinite(bounds.south) ||
@@ -889,12 +1498,36 @@ function normalizeQueryBounds(bounds: TerritoryBounds): TerritoryBounds | undefi
     return undefined;
   }
 
-  return {
-    west: Math.min(bounds.west, bounds.east),
-    south: Math.min(bounds.south, bounds.north),
-    east: Math.max(bounds.west, bounds.east),
-    north: Math.max(bounds.south, bounds.north)
-  };
+  const south = Math.min(bounds.south, bounds.north);
+  const north = Math.max(bounds.south, bounds.north);
+
+  if (south < -90 || north > 90) {
+    return undefined;
+  }
+
+  const west = normalizeLongitude(bounds.west);
+  const east = normalizeLongitude(bounds.east);
+
+  if (west <= east) {
+    return [{ west, south, east, north }];
+  }
+
+  return [
+    { west, south, east: 180, north },
+    { west: -180, south, east, north }
+  ];
+}
+
+function boundsCrossDateline(bounds: TerritoryBounds): boolean {
+  return (
+    Number.isFinite(bounds.west) &&
+    Number.isFinite(bounds.east) &&
+    normalizeLongitude(bounds.west) > normalizeLongitude(bounds.east)
+  );
+}
+
+function isRecord(input: unknown): input is Record<string, unknown> {
+  return typeof input === "object" && input !== null;
 }
 
 function isValidCoordinate(coordinate: LatLng): boolean {

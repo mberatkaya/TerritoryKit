@@ -89,6 +89,61 @@ describe("@territory-kit/react-native runtime", () => {
     expect(events).toContain("network-fallback");
   });
 
+  it("queries installed points offline and reports stale dataset versions", async () => {
+    const fixture = await createRegistryFixture(["1.0.0", "1.1.0"]);
+    const storage = new FakeMobileStorage();
+    const runtime = createMobileTerritoryRuntime({
+      registryUrl: fixture.registryUrl,
+      storageAdapter: storage,
+      fetchAdapter: new FakeFetch(fixture.responses)
+    });
+
+    await runtime.installDataset({ datasetId: "territory-kit-test", version: "1.0.0" });
+
+    const point = await runtime.queryPoint({
+      datasetId: "territory-kit-test",
+      coordinate: { lat: 2, lng: 2 },
+      level: 1
+    });
+    const status = await runtime.checkDatasetStatus({ datasetId: "territory-kit-test" });
+    const offline = createMobileTerritoryRuntime({
+      registryUrl: fixture.registryUrl,
+      storageAdapter: storage,
+      offline: true
+    });
+
+    await expect(
+      offline.queryPoint({
+        datasetId: "territory-kit-test",
+        coordinate: { lat: 12, lng: 12 },
+        level: 1
+      })
+    ).resolves.toMatchObject({
+      territoryId: "test:adm1:b",
+      version: "1.0.0"
+    });
+    await expect(
+      offline.queryPoint({
+        datasetId: "missing",
+        coordinate: { lat: 2, lng: 2 },
+        level: 1
+      })
+    ).rejects.toMatchObject({ code: "DATASET_NOT_FOUND" });
+    expect(point).toMatchObject({
+      territoryId: "test:adm1:a",
+      version: "1.0.0"
+    });
+    expect(status).toMatchObject({
+      datasetId: "territory-kit-test",
+      installed: true,
+      installedVersion: "1.0.0",
+      available: true,
+      availableVersion: "1.1.0",
+      stale: true,
+      updateAvailable: true
+    });
+  });
+
   it("keeps the active dataset intact after interrupted downloads and checksum mismatch", async () => {
     const fixture = await createRegistryFixture(["1.0.0", "1.1.0"]);
     const storage = new FakeMobileStorage();

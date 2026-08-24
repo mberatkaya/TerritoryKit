@@ -1,5 +1,14 @@
-import { TerritoryError } from "@territory-kit/dataset";
-import type { TerritoryErrorCode, TerritoryZone } from "@territory-kit/dataset";
+import {
+  TerritoryError,
+  createTerritoryGeometryVersion,
+  hasRingSelfIntersection
+} from "@territory-kit/dataset";
+import type {
+  LngLat,
+  TerritoryErrorCode,
+  TerritoryGeometry,
+  TerritoryZone
+} from "@territory-kit/dataset";
 import type { Feature, FeatureCollection } from "geojson";
 
 export const TERRITORY_ADAPTER_CAPABILITY_NAMES = [
@@ -133,6 +142,8 @@ export interface TerritoryGeoJsonFeatureProperties extends Record<string, unknow
   id: string;
   territoryId: string;
   datasetId: string;
+  datasetVersion?: string;
+  geometryVersion?: string;
   level: number;
   adminLevel: string;
   countryCode?: string;
@@ -140,8 +151,14 @@ export interface TerritoryGeoJsonFeatureProperties extends Record<string, unknow
   parentId?: string;
 }
 
+export type TerritoryGeoJsonPropertyMode = "all" | "minimal";
+
 export interface TerritoryZonesToFeatureCollectionOptions<TState extends object> {
   readonly stateByZoneId?: ReadonlyMap<string, TState>;
+  readonly propertyMode?: TerritoryGeoJsonPropertyMode;
+  readonly datasetVersion?: string;
+  readonly includeGeometryVersion?: boolean;
+  readonly simplifyTolerance?: number;
 }
 
 export interface TerritoryAdapterLifecycleController<TTarget = unknown> {
@@ -222,31 +239,171 @@ export function territoryZonesToFeatureCollection<TState extends object = never>
   zones: readonly TerritoryZone[],
   options: TerritoryZonesToFeatureCollectionOptions<TState> = {}
 ): FeatureCollection {
+  const propertyMode = options.propertyMode ?? "all";
+
   return {
     type: "FeatureCollection",
     features: zones.map((zone): Feature => {
       const state = options.stateByZoneId?.get(zone.id);
-      const properties: TerritoryGeoJsonFeatureProperties = {
-        ...zone.properties,
-        ...(state ?? {}),
+      const baseProperties: TerritoryGeoJsonFeatureProperties = {
         id: zone.id,
         territoryId: zone.id,
         datasetId: zone.datasetId,
+        ...(options.datasetVersion ? { datasetVersion: options.datasetVersion } : {}),
+        ...(options.includeGeometryVersion
+          ? { geometryVersion: createTerritoryGeometryVersion(zone.geometry) }
+          : {}),
         level: zone.level,
         adminLevel: `ADM${zone.level}`,
         ...(zone.countryCode ? { countryCode: zone.countryCode } : {}),
         ...(zone.name ? { name: zone.name } : {}),
         ...(zone.parentId ? { parentId: zone.parentId } : {})
       };
+      const properties: TerritoryGeoJsonFeatureProperties = {
+        ...(propertyMode === "all" ? zone.properties : {}),
+        ...(state ?? {}),
+        ...baseProperties
+      };
 
       return {
         type: "Feature",
         id: zone.id,
-        geometry: zone.geometry,
+        geometry:
+          options.simplifyTolerance !== undefined && options.simplifyTolerance > 0
+            ? simplifyTerritoryGeometry(zone.geometry, options.simplifyTolerance)
+            : zone.geometry,
         properties
       };
     })
   };
+}
+
+export function simplifyTerritoryGeometry(
+  geometry: TerritoryGeometry,
+  tolerance: number
+): TerritoryGeometry {
+  if (!Number.isFinite(tolerance) || tolerance <= 0) {
+    return geometry;
+  }
+
+  if (geometry.type === "Polygon") {
+    return {
+      type: "Polygon",
+      coordinates: geometry.coordinates.map((ring) =>
+        simplifyClosedRing(ring as LngLat[], tolerance)
+      )
+    };
+  }
+
+  return {
+    type: "MultiPolygon",
+    coordinates: geometry.coordinates.map((polygon) =>
+      polygon.map((ring) => simplifyClosedRing(ring as LngLat[], tolerance))
+    )
+  };
+}
+
+export function estimateTerritoryFeatureCollectionBytes(collection: FeatureCollection): number {
+  return new TextEncoder().encode(JSON.stringify(collection)).byteLength;
+}
+
+function simplifyClosedRing(ring: LngLat[], tolerance: number): LngLat[] {
+  if (ring.length <= 4) {
+    return ring;
+  }
+
+  const openRing = isClosedRing(ring) ? ring.slice(0, -1) : [...ring];
+  const simplifiedOpenRing = simplifyOpenLine(openRing, tolerance);
+  const simplifiedRing = closeRing(simplifiedOpenRing);
+
+  if (
+    simplifiedRing.length < 4 ||
+    uniqueCoordinateCount(simplifiedRing) < 3 ||
+    hasRingSelfIntersection(simplifiedRing)
+  ) {
+    return ring;
+  }
+
+  return simplifiedRing;
+}
+
+function simplifyOpenLine(points: LngLat[], tolerance: number): LngLat[] {
+  if (points.length <= 2) {
+    return points;
+  }
+
+  let maxDistance = 0;
+  let maxIndex = 0;
+  const start = points[0];
+  const end = points.at(-1);
+
+  if (!start || !end) {
+    return points;
+  }
+
+  for (let index = 1; index < points.length - 1; index += 1) {
+    const point = points[index];
+
+    if (!point) {
+      continue;
+    }
+
+    const distance = perpendicularDistance(point, start, end);
+
+    if (distance > maxDistance) {
+      maxDistance = distance;
+      maxIndex = index;
+    }
+  }
+
+  if (maxDistance <= tolerance) {
+    return [start, end];
+  }
+
+  const left = simplifyOpenLine(points.slice(0, maxIndex + 1), tolerance);
+  const right = simplifyOpenLine(points.slice(maxIndex), tolerance);
+
+  return left.slice(0, -1).concat(right);
+}
+
+function perpendicularDistance(point: LngLat, start: LngLat, end: LngLat): number {
+  const dx = end[0] - start[0];
+  const dy = end[1] - start[1];
+  const denominator = Math.sqrt(dx * dx + dy * dy);
+
+  if (denominator === 0) {
+    return Math.hypot(point[0] - start[0], point[1] - start[1]);
+  }
+
+  return (
+    Math.abs(dy * point[0] - dx * point[1] + end[0] * start[1] - end[1] * start[0]) / denominator
+  );
+}
+
+function closeRing(ring: LngLat[]): LngLat[] {
+  const first = ring[0];
+  const last = ring.at(-1);
+
+  if (!first) {
+    return ring;
+  }
+
+  return last && coordinatesEqual(first, last) ? ring : [...ring, first];
+}
+
+function isClosedRing(ring: LngLat[]): boolean {
+  const first = ring[0];
+  const last = ring.at(-1);
+
+  return Boolean(first && last && coordinatesEqual(first, last));
+}
+
+function uniqueCoordinateCount(ring: LngLat[]): number {
+  return new Set(ring.slice(0, -1).map((coordinate) => coordinate.join(","))).size;
+}
+
+function coordinatesEqual(left: LngLat, right: LngLat): boolean {
+  return left[0] === right[0] && left[1] === right[1];
 }
 
 export function isTerritoryFeatureCollection(input: unknown): input is FeatureCollection {

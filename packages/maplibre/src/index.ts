@@ -12,6 +12,8 @@ import type {
   TerritoryAdapterOperationContext,
   TerritoryAdapterCapabilities,
   TerritoryAdapterLifecycleState,
+  TerritoryGeoJsonPropertyMode,
+  TerritoryZonesToFeatureCollectionOptions,
   TerritoryRendererAdapter,
   TerritoryRenderSource,
   TerritoryRenderState,
@@ -50,6 +52,10 @@ export interface TerritoryMapLibreLayerOptions {
   lineColor?: string;
   lineWidth?: number;
   stateByZoneId?: ReadonlyMap<string, TerritoryMapLibreState>;
+  propertyMode?: TerritoryGeoJsonPropertyMode;
+  datasetVersion?: string;
+  includeGeometryVersion?: boolean;
+  simplifyTolerance?: number;
 }
 
 export interface TerritoryMapLibreTheme extends TerritoryRenderTheme {
@@ -123,6 +129,9 @@ export interface TerritoryMapLibreLayerBundle {
   };
   layers: Array<Record<string, unknown>>;
 }
+
+export type TerritoryMapLibreFeatureCollectionOptions =
+  TerritoryZonesToFeatureCollectionOptions<TerritoryMapLibreState>;
 
 export interface TerritoryMapLibreLevelPolicy {
   level: TerritoryAdminLevel;
@@ -221,9 +230,22 @@ export interface TerritoryMapLibreController {
 
 export function zonesToFeatureCollection(
   zones: readonly TerritoryZone[],
-  stateByZoneId: ReadonlyMap<string, TerritoryMapLibreState> = new Map()
+  options:
+    | ReadonlyMap<string, TerritoryMapLibreState>
+    | TerritoryMapLibreFeatureCollectionOptions = new Map()
 ): FeatureCollection {
-  return territoryZonesToFeatureCollection(zones, { stateByZoneId });
+  return isTerritoryMapLibreStateMap(options)
+    ? territoryZonesToFeatureCollection(zones, { stateByZoneId: options })
+    : territoryZonesToFeatureCollection(zones, options);
+}
+
+function isTerritoryMapLibreStateMap(
+  input: ReadonlyMap<string, TerritoryMapLibreState> | TerritoryMapLibreFeatureCollectionOptions
+): input is ReadonlyMap<string, TerritoryMapLibreState> {
+  return (
+    typeof (input as { get?: unknown }).get === "function" &&
+    typeof (input as { entries?: unknown }).entries === "function"
+  );
 }
 
 export function createTerritoryMapLibreLayers(
@@ -239,7 +261,7 @@ export function createTerritoryMapLibreLayers(
       id: sourceId,
       spec: {
         type: "geojson",
-        data: zonesToFeatureCollection(zones, options.stateByZoneId),
+        data: zonesToFeatureCollection(zones, options),
         promoteId: "id"
       }
     },

@@ -109,8 +109,31 @@ manual edges should be requested explicitly when the application wants them.
 
 Bounds queries are bbox-intersection primitives for backend/core use. They support level filtering,
 multi-level filtering, stable ordering, invalid-bounds no-match behavior, and max result limits.
-Pagination, vector tiles, mobile payload simplification, and viewport delivery policies remain
-Sprint 2 work.
+
+`queryTerritoriesInViewport()` builds on this primitive for map delivery. It resolves a level from
+zoom when the caller does not provide one, applies a default page limit, returns `hasMore` and
+`nextCursor`, and splits dateline-crossing bounds into two indexed lookups. Full global antimeridian
+geometry normalization is still a dataset-build responsibility; the query helper prevents the
+common mobile viewport case from expanding into an unintended nearly-global bbox.
+
+## Route Query
+
+`findTerritoriesAlongRoute(route, options)` accepts GeoJSON `LineString`, `[lng, lat][]`, or
+`{ lng, lat }[]` input. Invalid coordinates, malformed routes, and routes with no non-zero segment
+return an empty result.
+
+The default `mode: "exact"` performs LineString-to-polygon intersection semantics in core by
+splitting route segments at polygon ring crossings and testing interval midpoints against Polygon,
+MultiPolygon, and hole-aware containment. Results include:
+
+- `territories`: unique territory results sorted by first route contact.
+- `traversal`: ordered route segments that preserve repeated entries such as `A -> B -> A`.
+- `intersectionLengthM`, `firstIntersection`, `lastIntersection`, and route fractions for exact
+  results.
+
+`mode: "sampled"` is an explicit fallback for lightweight clients. It samples route points and runs
+normal point lookup. Sampled results carry `method: "sampled"` and do not report
+`intersectionLengthM`, so approximate output is not confused with exact intersection metadata.
 
 ## PostGIS Setup
 
@@ -167,5 +190,7 @@ migrated before using version-aware imports.
   with deterministic query-client harnesses.
 - Full temporal history and rollback policy are application choices. The schema can store multiple
   dataset versions, but no temporal API is added in Sprint 1.
-- Route-to-territories, GPS noise filtering, MVT serving, MapLibre mobile optimization, and offline
-  installed-region workflows are intentionally out of scope for this sprint.
+- GPS noise filtering and scoring remain application concerns. TerritoryKit returns reusable route
+  metadata but does not decide claim thresholds, cooldowns, or score rules.
+- A live MVT tile server is not added here. Existing registry MVT artifacts remain the preferred
+  delivery path for large ADM3+ render datasets.

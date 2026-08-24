@@ -50,3 +50,23 @@ parents. Turkey ADM3 currently covers Gaziantep districts; an uncovered parent r
 
 Use `createTerritoryMapLibreLevelLayers()` for ADM0-ADM5 zoom policy defaults. ADM3 and deeper
 sources prefer MVT when available; use GeoJSON fallback for small fixtures only.
+
+## Production GeoJSON Payloads
+
+For small installed or backend-filtered viewports, `zonesToFeatureCollection()` can emit minimal
+MapLibre-ready GeoJSON:
+
+```ts
+const data = zonesToFeatureCollection(zones, {
+  propertyMode: "minimal",
+  datasetVersion: "2.0.0",
+  includeGeometryVersion: true,
+  simplifyTolerance: 0.001
+});
+```
+
+`feature.id` stays equal to `territoryId`, and `createTerritoryMapLibreLayers()` keeps
+`promoteId: "id"` for feature-state highlight/selection. `propertyMode: "minimal"` avoids dumping
+raw dataset metadata into the client payload. `simplifyTolerance` is conservative per-ring
+simplification for small payloads; topology-safe shared-boundary simplification should still happen
+at dataset build time for large national artifacts.
