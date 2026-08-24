@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-license-inventory@1",
-  "generatedAt": "2026-08-22T16:26:47.068Z",
+  "generatedAt": "2026-08-24T19:42:10.912Z",
   "scope": "pnpm licenses list --prod --json",
   "summary": {
     "licenseCount": 13,

@@ -1,6 +1,6 @@
 {
   "name": "@territory-kit/data-us",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Thin loader package for TerritoryKit United States pilot datasets.",
   "license": "Apache-2.0",
   "homepage": "https://github.com/mberatkaya/TerritoryKit#readme",
@@ -15,10 +15,10 @@
   "type": "module",
   "sideEffects": false,
   "files": [
-    "dist/*.cjs",
-    "dist/*.d.cts",
-    "dist/*.d.mts",
-    "dist/*.mjs",
+    "dist/**/*.cjs",
+    "dist/**/*.d.cts",
+    "dist/**/*.d.mts",
+    "dist/**/*.mjs",
     "LICENSE",
     "README.md"
   ],

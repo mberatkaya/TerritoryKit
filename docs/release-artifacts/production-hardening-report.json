@@ -1,10 +1,10 @@
 {
   "schemaVersion": "territorykit-production-hardening-report@1",
   "ok": true,
-  "generatedAt": "2026-08-22T16:26:47.124Z",
+  "generatedAt": "2026-08-24T19:42:10.961Z",
   "git": {
-    "branch": "release/v2-stable-hardening",
-    "head": "1c33b1a33fc0e4405a25361448dad86aa45faa4b"
+    "branch": "release/npm-registry-sync",
+    "head": "a85c875a81515f143294babcaa00ee3dcb3dff44"
   },
   "environment": {
     "node": "v24.14.0",
@@ -30,9 +30,9 @@
       "metadata": {
         "vulnerabilities": { "info": 0, "low": 0, "moderate": 4, "high": 9, "critical": 0 },
         "dependencies": 281,
-        "devDependencies": 490,
-        "optionalDependencies": 109,
-        "totalDependencies": 771
+        "devDependencies": 504,
+        "optionalDependencies": 110,
+        "totalDependencies": 785
       }
     },
     "fullAudit": {
@@ -549,9 +549,9 @@
       "metadata": {
         "vulnerabilities": { "info": 0, "low": 0, "moderate": 4, "high": 9, "critical": 0 },
         "dependencies": 281,
-        "devDependencies": 490,
-        "optionalDependencies": 109,
-        "totalDependencies": 771
+        "devDependencies": 504,
+        "optionalDependencies": 110,
+        "totalDependencies": 785
       }
     },
     "workflowSecurity": {
@@ -2257,15 +2257,15 @@
     "packages": [
       {
         "name": "@territory-kit/adapter-core",
-        "version": "1.9.3",
+        "version": "2.1.0",
         "directory": "packages/adapter-core",
         "license": "Apache-2.0",
         "sideEffects": false,
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2275,14 +2275,14 @@
       },
       {
         "name": "@territory-kit/cli",
-        "version": "1.9.3",
+        "version": "2.1.0",
         "directory": "packages/cli",
         "license": "Apache-2.0",
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2292,20 +2292,21 @@
           "@territory-kit/core": "workspace:*",
           "@territory-kit/dataset": "workspace:*",
           "@territory-kit/generators": "workspace:*",
+          "@territory-kit/migration": "workspace:*",
           "@territory-kit/registry": "workspace:*"
         }
       },
       {
         "name": "@territory-kit/core",
-        "version": "1.9.3",
+        "version": "2.1.0",
         "directory": "packages/core",
         "license": "Apache-2.0",
         "sideEffects": false,
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2319,15 +2320,15 @@
       },
       {
         "name": "@territory-kit/data-de",
-        "version": "1.9.3",
+        "version": "2.1.0",
         "directory": "packages/data-de",
         "license": "Apache-2.0",
         "sideEffects": false,
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2337,15 +2338,15 @@
       },
       {
         "name": "@territory-kit/data-id",
-        "version": "1.9.3",
+        "version": "2.1.0",
         "directory": "packages/data-id",
         "license": "Apache-2.0",
         "sideEffects": false,
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2355,15 +2356,15 @@
       },
       {
         "name": "@territory-kit/data-jp",
-        "version": "1.9.3",
+        "version": "2.1.0",
         "directory": "packages/data-jp",
         "license": "Apache-2.0",
         "sideEffects": false,
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2373,15 +2374,15 @@
       },
       {
         "name": "@territory-kit/data-tr",
-        "version": "1.9.3",
+        "version": "2.1.0",
         "directory": "packages/data-tr",
         "license": "Apache-2.0",
         "sideEffects": false,
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2391,15 +2392,15 @@
       },
       {
         "name": "@territory-kit/data-us",
-        "version": "1.9.3",
+        "version": "2.1.0",
         "directory": "packages/data-us",
         "license": "Apache-2.0",
         "sideEffects": false,
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2409,15 +2410,15 @@
       },
       {
         "name": "@territory-kit/dataset",
-        "version": "1.9.3",
+        "version": "2.1.0",
         "directory": "packages/dataset",
         "license": "Apache-2.0",
         "sideEffects": false,
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2427,15 +2428,15 @@
       },
       {
         "name": "@territory-kit/game",
-        "version": "1.9.3",
+        "version": "2.1.0",
         "directory": "packages/game",
         "license": "Apache-2.0",
         "sideEffects": false,
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2448,15 +2449,15 @@
       },
       {
         "name": "@territory-kit/generators",
-        "version": "1.9.3",
+        "version": "2.1.0",
         "directory": "packages/generators",
         "license": "Apache-2.0",
         "sideEffects": false,
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2474,15 +2475,15 @@
       },
       {
         "name": "@territory-kit/leaflet",
-        "version": "1.2.10",
+        "version": "1.2.12",
         "directory": "packages/leaflet",
         "license": "Apache-2.0",
         "sideEffects": false,
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2497,15 +2498,15 @@
       },
       {
         "name": "@territory-kit/maplibre",
-        "version": "1.9.3",
+        "version": "2.1.0",
         "directory": "packages/maplibre",
         "license": "Apache-2.0",
         "sideEffects": false,
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2519,16 +2520,38 @@
         }
       },
       {
+        "name": "@territory-kit/migration",
+        "version": "2.1.0",
+        "directory": "packages/migration",
+        "license": "Apache-2.0",
+        "sideEffects": false,
+        "files": [
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
+          "LICENSE",
+          "README.md"
+        ],
+        "publishConfig": { "access": "public", "registry": "https://registry.npmjs.org/" },
+        "peerDependencies": {},
+        "dependencies": {
+          "@territory-kit/core": "workspace:*",
+          "@territory-kit/dataset": "workspace:*",
+          "polygon-clipping": "^0.15.7"
+        }
+      },
+      {
         "name": "@territory-kit/nestjs",
-        "version": "1.9.3",
+        "version": "2.1.0",
         "directory": "packages/nestjs",
         "license": "Apache-2.0",
         "sideEffects": false,
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2541,15 +2564,15 @@
       },
       {
         "name": "@territory-kit/openlayers",
-        "version": "1.2.10",
+        "version": "1.2.12",
         "directory": "packages/openlayers",
         "license": "Apache-2.0",
         "sideEffects": false,
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2564,15 +2587,15 @@
       },
       {
         "name": "@territory-kit/react-native",
-        "version": "1.1.11",
+        "version": "1.1.13",
         "directory": "packages/react-native",
         "license": "Apache-2.0",
         "sideEffects": false,
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2590,15 +2613,15 @@
       },
       {
         "name": "@territory-kit/registry",
-        "version": "1.9.3",
+        "version": "2.1.0",
         "directory": "packages/registry",
         "license": "Apache-2.0",
         "sideEffects": false,
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2608,15 +2631,15 @@
       },
       {
         "name": "@territory-kit/runtime",
-        "version": "1.9.3",
+        "version": "2.1.0",
         "directory": "packages/runtime",
         "license": "Apache-2.0",
         "sideEffects": false,
         "files": [
-          "dist/*.cjs",
-          "dist/*.d.cts",
-          "dist/*.d.mts",
-          "dist/*.mjs",
+          "dist/**/*.cjs",
+          "dist/**/*.d.cts",
+          "dist/**/*.d.mts",
+          "dist/**/*.mjs",
           "LICENSE",
           "README.md"
         ],
@@ -2636,9 +2659,9 @@
     "packages": [
       {
         "package": "@territory-kit/adapter-core",
-        "tarball": "territory-kit-adapter-core-1.9.3.tgz",
-        "tarballSizeBytes": 7955,
-        "tarballSha256": "3d6d760f1f9e9ccea925aca8d2d1d2b641e845034c48876795f8910d89452fb6",
+        "tarball": "territory-kit-adapter-core-2.1.0.tgz",
+        "tarballSizeBytes": 9027,
+        "tarballSha256": "9a4d1354fec70931e0dcdbde813b348b2f286a8fcdbc4e0147d432e82d6488dc",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2654,10 +2677,10 @@
       },
       {
         "package": "@territory-kit/cli",
-        "tarball": "territory-kit-cli-1.9.3.tgz",
-        "tarballSizeBytes": 94442,
-        "tarballSha256": "3f90d9fd1177972cc9675902a695cb801590be67e3d6d76f8ad7663207fe51ed",
-        "fileCount": 11,
+        "tarball": "territory-kit-cli-2.1.0.tgz",
+        "tarballSizeBytes": 96797,
+        "tarballSha256": "345ccf294845cd2c75fe1218ff59b6707c7a38ca525308b16c5cc386b2985679",
+        "fileCount": 13,
         "entries": [
           "package/LICENSE",
           "package/README.md",
@@ -2665,10 +2688,12 @@
           "package/dist/index.d.cts",
           "package/dist/index.d.mts",
           "package/dist/index.mjs",
+          "package/dist/migrate-spatial-CgqZnmyQ.cjs",
+          "package/dist/migrate-spatial-DsxIzDfn.mjs",
           "package/dist/turkey-adm3-hybrid-BisW1TqX.mjs",
           "package/dist/turkey-adm3-hybrid-CP2Nie0a.cjs",
-          "package/dist/turkey-v2-national-CMaKQN56.cjs",
-          "package/dist/turkey-v2-national-CW-39-vh.mjs",
+          "package/dist/turkey-v2-national-BpNfBC_D.cjs",
+          "package/dist/turkey-v2-national-CIgEc6ur.mjs",
           "package/package.json"
         ],
         "ok": true,
@@ -2676,13 +2701,40 @@
       },
       {
         "package": "@territory-kit/core",
-        "tarball": "territory-kit-core-1.9.3.tgz",
-        "tarballSizeBytes": 34695,
-        "tarballSha256": "d294235b19e3929d9a71d1c907cf7fcf238962d4c195e15475a936e7aa1c8854",
-        "fileCount": 11,
+        "tarball": "territory-kit-core-2.1.0.tgz",
+        "tarballSizeBytes": 54202,
+        "tarballSha256": "0d95a9742823c3016a3b4decfb0b2d9d28c24367afa1bbc6d67d4cae8f3e0673",
+        "fileCount": 48,
         "entries": [
           "package/LICENSE",
           "package/README.md",
+          "package/dist/_virtual/_rolldown/runtime.cjs",
+          "package/dist/binary-index.cjs",
+          "package/dist/binary-index.d.cts",
+          "package/dist/binary-index.d.mts",
+          "package/dist/binary-index.mjs",
+          "package/dist/country-loader.cjs",
+          "package/dist/country-loader.d.cts",
+          "package/dist/country-loader.d.mts",
+          "package/dist/country-loader.mjs",
+          "package/dist/engine.cjs",
+          "package/dist/engine.d.cts",
+          "package/dist/engine.d.mts",
+          "package/dist/engine.mjs",
+          "package/dist/errors.cjs",
+          "package/dist/errors.d.cts",
+          "package/dist/errors.d.mts",
+          "package/dist/errors.mjs",
+          "package/dist/flatbush.cjs",
+          "package/dist/flatbush.mjs",
+          "package/dist/geometry.cjs",
+          "package/dist/geometry.d.cts",
+          "package/dist/geometry.d.mts",
+          "package/dist/geometry.mjs",
+          "package/dist/identity.cjs",
+          "package/dist/identity.d.cts",
+          "package/dist/identity.d.mts",
+          "package/dist/identity.mjs",
           "package/dist/index.cjs",
           "package/dist/index.d.cts",
           "package/dist/index.d.mts",
@@ -2691,6 +2743,16 @@
           "package/dist/legacy-registry.d.cts",
           "package/dist/legacy-registry.d.mts",
           "package/dist/legacy-registry.mjs",
+          "package/dist/query-loader.cjs",
+          "package/dist/query-loader.d.cts",
+          "package/dist/query-loader.d.mts",
+          "package/dist/query-loader.mjs",
+          "package/dist/types.d.cts",
+          "package/dist/types.d.mts",
+          "package/dist/zoom.cjs",
+          "package/dist/zoom.d.cts",
+          "package/dist/zoom.d.mts",
+          "package/dist/zoom.mjs",
           "package/package.json"
         ],
         "ok": true,
@@ -2698,9 +2760,9 @@
       },
       {
         "package": "@territory-kit/data-de",
-        "tarball": "territory-kit-data-de-1.9.3.tgz",
+        "tarball": "territory-kit-data-de-2.1.0.tgz",
         "tarballSizeBytes": 3476,
-        "tarballSha256": "a036ffe94794e9cf68bd29555816c30b0683c7cbe222f6907b23d1e9f3a0ac13",
+        "tarballSha256": "f4bc362b386ac5d3ff66bc5ea9ac3057e8a1938a4a1682e0bf0f53b193360b12",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2716,9 +2778,9 @@
       },
       {
         "package": "@territory-kit/data-id",
-        "tarball": "territory-kit-data-id-1.9.3.tgz",
+        "tarball": "territory-kit-data-id-2.1.0.tgz",
         "tarballSizeBytes": 3494,
-        "tarballSha256": "4f3e8d6eefdd49221c45fd766e2f97b25c9fb828f9794bd07a8d7d9141220ba8",
+        "tarballSha256": "be4d391a1679c9ff1f8ecc4acc39f6ac384fd7dff223b9e23434607386f0dee4",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2734,9 +2796,9 @@
       },
       {
         "package": "@territory-kit/data-jp",
-        "tarball": "territory-kit-data-jp-1.9.3.tgz",
-        "tarballSizeBytes": 3485,
-        "tarballSha256": "f030e5436159f7aba461b188a89a78d4d24fe8eaff85509c6af01e5b07b3e24a",
+        "tarball": "territory-kit-data-jp-2.1.0.tgz",
+        "tarballSizeBytes": 3487,
+        "tarballSha256": "9ba4a11884ce1172080719fa1f05284eccfaaee612d75dcd5eea984f5ccd9fd7",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2752,9 +2814,9 @@
       },
       {
         "package": "@territory-kit/data-tr",
-        "tarball": "territory-kit-data-tr-1.9.3.tgz",
+        "tarball": "territory-kit-data-tr-2.1.0.tgz",
         "tarballSizeBytes": 6148,
-        "tarballSha256": "e6e10917e7f5e7e4ff7918cf1baa528b219db34a18314f0a331c13ee79004a40",
+        "tarballSha256": "1bdc572439d55a78014694f44dbaecd5842d210f6b67a8f536c61d707620f138",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2770,9 +2832,9 @@
       },
       {
         "package": "@territory-kit/data-us",
-        "tarball": "territory-kit-data-us-1.9.3.tgz",
+        "tarball": "territory-kit-data-us-2.1.0.tgz",
         "tarballSizeBytes": 3498,
-        "tarballSha256": "8624783511ecff4b0f4ccade22cf2d8a3b9dfde76b8358d0a978a2fc6c4cb0f7",
+        "tarballSha256": "b7b57d42e686458a65d20410e62798e37d812025b8bd251e28ed9f3dce918231",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2788,9 +2850,9 @@
       },
       {
         "package": "@territory-kit/dataset",
-        "tarball": "territory-kit-dataset-1.9.3.tgz",
-        "tarballSizeBytes": 115619,
-        "tarballSha256": "353cecf0423be68eaf7422963f0d779f72bbb995fcc36ff52488b0111c99608e",
+        "tarball": "territory-kit-dataset-2.1.0.tgz",
+        "tarballSizeBytes": 120543,
+        "tarballSha256": "4b2fa58031df749c992253031eee929d3117467dc84dd03bc13eff89196f4ccb",
         "fileCount": 15,
         "entries": [
           "package/LICENSE",
@@ -2803,10 +2865,10 @@
           "package/dist/turkey-v2.d.cts",
           "package/dist/turkey-v2.d.mts",
           "package/dist/turkey-v2.mjs",
-          "package/dist/types-Cya70DRw.d.cts",
-          "package/dist/types-Cya70DRw.d.mts",
-          "package/dist/validation-DCLjRVHQ.cjs",
-          "package/dist/validation-DPA8JOg3.mjs",
+          "package/dist/types-3RHQtcke.d.cts",
+          "package/dist/types-3RHQtcke.d.mts",
+          "package/dist/validation-D39z0H2A.cjs",
+          "package/dist/validation-DzJyvGCR.mjs",
           "package/package.json"
         ],
         "ok": true,
@@ -2814,9 +2876,9 @@
       },
       {
         "package": "@territory-kit/game",
-        "tarball": "territory-kit-game-1.9.3.tgz",
-        "tarballSizeBytes": 21054,
-        "tarballSha256": "b0625f785d813f8d53370c8aee372ae77b15a094404086e49b90f5891d7d5f93",
+        "tarball": "territory-kit-game-2.1.0.tgz",
+        "tarballSizeBytes": 21048,
+        "tarballSha256": "401150645d0b4f76351386a44a87fd693400ca8afb4fdd867483aaa68b141cbe",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2832,9 +2894,9 @@
       },
       {
         "package": "@territory-kit/generators",
-        "tarball": "territory-kit-generators-1.9.3.tgz",
+        "tarball": "territory-kit-generators-2.1.0.tgz",
         "tarballSizeBytes": 388933,
-        "tarballSha256": "884665a2feea84515c0ecdfdb24ef409691f267df85ccf5263135ab556284477",
+        "tarballSha256": "65139994b177877ee8b0581c1d6aed62b8e004a98494b6dcc749789fe527dce4",
         "fileCount": 15,
         "entries": [
           "package/LICENSE",
@@ -2858,9 +2920,9 @@
       },
       {
         "package": "@territory-kit/leaflet",
-        "tarball": "territory-kit-leaflet-1.2.10.tgz",
-        "tarballSizeBytes": 7918,
-        "tarballSha256": "0661b1ad2bcbd8b2ef3d13b540546e95d35e46b7d56719f864b81201c73c223f",
+        "tarball": "territory-kit-leaflet-1.2.12.tgz",
+        "tarballSizeBytes": 7921,
+        "tarballSha256": "443407d0fd0c36128721a93686db4c9cbd1c9e626b284e69e27404d567d61d0d",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2876,9 +2938,27 @@
       },
       {
         "package": "@territory-kit/maplibre",
-        "tarball": "territory-kit-maplibre-1.9.3.tgz",
-        "tarballSizeBytes": 12095,
-        "tarballSha256": "7c43d19652b8db3ee0accbe0fc712e3a709f2d7643f6236acfbb5a98eb334986",
+        "tarball": "territory-kit-maplibre-2.1.0.tgz",
+        "tarballSizeBytes": 13492,
+        "tarballSha256": "ac5cd6554c6654604bd301c21e79f64ca376604b9433202107a792b515fbadda",
+        "fileCount": 7,
+        "entries": [
+          "package/LICENSE",
+          "package/README.md",
+          "package/dist/index.cjs",
+          "package/dist/index.d.cts",
+          "package/dist/index.d.mts",
+          "package/dist/index.mjs",
+          "package/package.json"
+        ],
+        "ok": true,
+        "issues": []
+      },
+      {
+        "package": "@territory-kit/migration",
+        "tarball": "territory-kit-migration-2.1.0.tgz",
+        "tarballSizeBytes": 7100,
+        "tarballSha256": "254e0cd9a76ebcf5ce3a029d309945d3bf7bf685b9baaf3ccc878a97899ba5cf",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2894,9 +2974,9 @@
       },
       {
         "package": "@territory-kit/nestjs",
-        "tarball": "territory-kit-nestjs-1.9.3.tgz",
-        "tarballSizeBytes": 7368,
-        "tarballSha256": "bc4ec557587d776d36c64057ea8965627702603ccb1cc006d3943b644cc787cd",
+        "tarball": "territory-kit-nestjs-2.1.0.tgz",
+        "tarballSizeBytes": 19336,
+        "tarballSha256": "6ce49fd1430468d1623e10c2028645a1ac4b986bab76b597adbc891aade1081a",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2912,9 +2992,9 @@
       },
       {
         "package": "@territory-kit/openlayers",
-        "tarball": "territory-kit-openlayers-1.2.10.tgz",
-        "tarballSizeBytes": 9336,
-        "tarballSha256": "01da0316f50e331dceb26cad92633266db5e830117a1ff055fb71d89efeea852",
+        "tarball": "territory-kit-openlayers-1.2.12.tgz",
+        "tarballSizeBytes": 9332,
+        "tarballSha256": "e4746ac7ebfa92ef681ba37e7474a8cf641d5edf397f05c58f727a59d92d8d93",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2930,9 +3010,9 @@
       },
       {
         "package": "@territory-kit/react-native",
-        "tarball": "territory-kit-react-native-1.1.11.tgz",
-        "tarballSizeBytes": 31211,
-        "tarballSha256": "6b800746c8c7adac08860aef1a3c8e417d99826f39c8c85796ab20f3361b59b2",
+        "tarball": "territory-kit-react-native-1.1.13.tgz",
+        "tarballSizeBytes": 33128,
+        "tarballSha256": "353e1080d5ff1f5b53f825b0289eb59bfbe68f9be52911c6027c96ecb37d4d2d",
         "fileCount": 11,
         "entries": [
           "package/LICENSE",
@@ -2952,9 +3032,9 @@
       },
       {
         "package": "@territory-kit/registry",
-        "tarball": "territory-kit-registry-1.9.3.tgz",
-        "tarballSizeBytes": 44253,
-        "tarballSha256": "b5655e558efd8b1072a33868ae6e1f3b82c3891025f12cb829a7bcc52ad3baba",
+        "tarball": "territory-kit-registry-2.1.0.tgz",
+        "tarballSizeBytes": 44315,
+        "tarballSha256": "f89b6c3f8181cca583c908ac243eafd8c4e7e0381474a8fafecb51ac5be3b45b",
         "fileCount": 15,
         "entries": [
           "package/LICENSE",
@@ -2978,9 +3058,9 @@
       },
       {
         "package": "@territory-kit/runtime",
-        "tarball": "territory-kit-runtime-1.9.3.tgz",
-        "tarballSizeBytes": 45436,
-        "tarballSha256": "13d2dff6243f275d193961e66dee94408567bb7908bb53ef06c5c57eb5f9abfa",
+        "tarball": "territory-kit-runtime-2.1.0.tgz",
+        "tarballSizeBytes": 45433,
+        "tarballSha256": "dbef27af6917afa9329c0ebf8a080675f8fea0ef2d0e11ebcd91b00e638fabca",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2998,7 +3078,7 @@
   },
   "exports": {
     "ok": true,
-    "checkedExports": 23,
+    "checkedExports": 24,
     "issues": [],
     "results": [
       {
@@ -3114,6 +3194,13 @@
         "types": "packages/maplibre/dist/index.d.mts"
       },
       {
+        "package": "@territory-kit/migration",
+        "subpath": ".",
+        "import": "packages/migration/dist/index.mjs",
+        "require": "packages/migration/dist/index.cjs",
+        "types": "packages/migration/dist/index.d.mts"
+      },
+      {
         "package": "@territory-kit/nestjs",
         "subpath": ".",
         "import": "packages/nestjs/dist/index.mjs",
@@ -3164,7 +3251,7 @@
       }
     ]
   },
-  "importBoundaries": { "ok": true, "scannedFiles": 42, "issues": [] },
+  "importBoundaries": { "ok": true, "scannedFiles": 43, "issues": [] },
   "coverage": {
     "lines": { "total": 4702, "covered": 4091, "skipped": 0, "pct": 87 },
     "statements": { "total": 4805, "covered": 4183, "skipped": 0, "pct": 87.05 },
@@ -3444,6 +3531,6 @@
   },
   "changesetStatus": {
     "ok": true,
-    "output": "🦋  info Packages to be bumped at patch\n🦋  - @territory-kit/example-web-maplibre-turkey 0.0.13\n🦋  - @territory-kit/leaflet 1.2.11\n🦋  - @territory-kit/openlayers 1.2.11\n🦋  - @territory-kit/react-native 1.1.12\n🦋  - @territory-kit/example-nestjs-postgres-game 0.0.13\n🦋  - @territory-kit/example-web-leaflet-turkey 0.0.13\n🦋  - @territory-kit/example-web-openlayers-turkey 0.0.13\n🦋  ---\n🦋  info Running release would release NO packages as a minor\n🦋  ---\n🦋  info Packages to be bumped at major\n🦋  - @territory-kit/adapter-core 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/cli 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/core 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/data-de 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/data-id 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/data-jp 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/data-tr 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/data-us 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/dataset 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/generators 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/game 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/maplibre 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/nestjs 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/registry 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md\n🦋  - @territory-kit/runtime 2.0.0\n🦋    - .changeset/territorykit-v2-stable.md"
+    "output": "[ELIFECYCLE] Command failed with exit code 1.\n\n$ changeset status --verbose\n🦋  error Some packages have been changed but no changesets were found. Run `changeset add` to resolve this error.\n🦋  error If this change doesn't need a release, run `changeset add --empty`."
   }
 }

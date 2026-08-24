@@ -1,5 +1,13 @@
 # @territory-kit/openlayers
 
+## 1.2.12
+
+### Patch Changes
+
+- @territory-kit/adapter-core@2.1.0
+- @territory-kit/dataset@2.1.0
+- @territory-kit/registry@2.1.0
+
 ## 1.2.11
 
 ### Patch Changes

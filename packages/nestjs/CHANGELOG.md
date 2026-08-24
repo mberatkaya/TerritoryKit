@@ -1,5 +1,21 @@
 # @territory-kit/nestjs
 
+## 2.1.0
+
+### Minor Changes
+
+- 04eec5d: Harden the production PostGIS territory repository with dataset-version keyed storage,
+  GiST-backed point and bounds queries, import/upsert helpers, and route query SQL coverage.
+
+- 5cfc615: Add route-to-territory controller and repository workflows backed by exact PostGIS
+  intersection metadata.
+
+### Patch Changes
+
+- Updated dependencies [5fce56b]
+  - @territory-kit/core@2.1.0
+  - @territory-kit/dataset@2.1.0
+
 ## 2.0.0
 
 ### Major Changes

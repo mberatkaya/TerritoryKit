@@ -32,7 +32,7 @@ const fixedGroupPackageJsonPaths = [
 ] as const;
 
 describe("release metadata", () => {
-  it("keeps fixed-group versions Changesets-owned through the 2.0 handoff", () => {
+  it("keeps fixed-group versions Changesets-owned after the 2.0 handoff", () => {
     const rootPackage = readJson<PackageJson>("package.json");
     const changesetConfig = readJson<ChangesetConfig>(".changeset/config.json");
     const fixedPackages = new Set(changesetConfig.fixed.flat());
@@ -56,7 +56,7 @@ describe("release metadata", () => {
 
     const readme = readText("README.md");
     expect(readText("CHANGELOG.md")).toContain("## 2.0.0 - 2026-08-22");
-    expect(readme).toContain("TerritoryKit `2.0.0` is the stable release target");
+    expect(readme).toContain("TerritoryKit `2.1.0` is the current npm sync release");
     expect(readme).toContain("`territory-kit-tr-v2-playable@2.0.0`");
     expect(readme).toMatch(/\| `1\.2\.0`\s+\| Sprint 11/);
     expect(readme).toMatch(/\| `1\.2\.0`\s+\| Sprint 12/);
@@ -71,12 +71,15 @@ describe("release metadata", () => {
       return;
     }
 
-    expect(fixedGroupVersion).toBe("2.0.0");
+    expect(fixedGroupVersion).toBe("2.1.0");
     expect(readme).toMatch(
-      /Public package manifests for\s+the fixed core family are versioned at `2\.0\.0`/
+      /Public package manifests for\s+the fixed core family are versioned at `2\.1\.0`/
     );
+    expect(readText("packages/cli/CHANGELOG.md")).toContain("## 2.1.0");
     expect(readText("packages/cli/CHANGELOG.md")).toContain("## 2.0.0");
+    expect(readText("packages/adapter-core/CHANGELOG.md")).toContain("## 2.1.0");
     expect(readText("packages/adapter-core/CHANGELOG.md")).toContain("## 2.0.0");
+    expect(readText("packages/runtime/CHANGELOG.md")).toContain("## 2.1.0");
     expect(readText("packages/runtime/CHANGELOG.md")).toContain("## 2.0.0");
   });
 });

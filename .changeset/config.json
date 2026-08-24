@@ -26,8 +26,12 @@
   "ignore": [
     "@territory-kit/docs",
     "@territory-kit/example-nestjs-postgis",
+    "@territory-kit/example-nestjs-postgres-game",
     "@territory-kit/example-node-basic",
+    "@territory-kit/example-web-leaflet-turkey",
     "@territory-kit/example-web-maplibre",
+    "@territory-kit/example-web-maplibre-turkey",
+    "@territory-kit/example-web-openlayers-turkey",
     "@territory-kit/shared-testkit"
   ],
   "updateInternalDependencies": "patch"

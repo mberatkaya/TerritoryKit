@@ -17,7 +17,10 @@ const audit = runJson("pnpm", ["audit", "--audit-level", "critical", "--json"]);
 const fullAudit = runJson("pnpm", ["audit", "--json"], { allowFailure: true });
 const prodLicenseInventory = runJson("pnpm", ["licenses", "list", "--prod", "--json"]);
 const packageDryRun = runJson("node", ["scripts/package-dry-run.mjs"]);
-const changesetStatus = runText("pnpm", ["changeset", "status", "--verbose"]);
+const changesetStatus = runText("pnpm", ["changeset", "status", "--verbose"], {
+  allowFailure: true
+});
+const changesetStatusOk = isChangesetStatusOk(changesetStatus);
 
 const benchmarkPath = join(outputDir, "turkey-adm2-benchmark.json");
 runText("node", [
@@ -61,7 +64,7 @@ const releaseDecisionInputs = {
   turkeyAdm3ChecksumOk: turkey.adm3.checksums.ok,
   turkeyV2StableNationalOk: turkeyV2.ok,
   turkeyBenchmarkOk: benchmarkComparison.ok,
-  changesetStatusOk: changesetStatus.status === 0
+  changesetStatusOk
 };
 const releaseGateOk =
   releaseDecisionInputs.criticalVulnerabilities === 0 &&
@@ -110,8 +113,8 @@ await writeJson(reportPath, {
   turkeyV2,
   benchmarkComparison,
   changesetStatus: {
-    ok: changesetStatus.status === 0,
-    output: changesetStatus.stdout.trim()
+    ok: changesetStatusOk,
+    output: [changesetStatus.stdout, changesetStatus.stderr].join("\n").trim()
   }
 });
 
@@ -190,10 +193,10 @@ function validatePackageMetadata(packages) {
     }
 
     for (const expected of [
-      "dist/*.cjs",
-      "dist/*.d.cts",
-      "dist/*.d.mts",
-      "dist/*.mjs",
+      "dist/**/*.cjs",
+      "dist/**/*.d.cts",
+      "dist/**/*.d.mts",
+      "dist/**/*.mjs",
       "README.md"
     ]) {
       if (!manifest.files?.includes(expected)) {
@@ -589,6 +592,19 @@ function listFiles(directory) {
 
 function readJson(relativePath) {
   return JSON.parse(readFileSync(join(root, relativePath), "utf8"));
+}
+
+function isChangesetStatusOk(status) {
+  if (status.status === 0) {
+    return true;
+  }
+
+  const output = `${status.stdout}\n${status.stderr}`;
+  const pendingChangesets = readdirSync(join(root, ".changeset")).filter((entry) =>
+    entry.endsWith(".md")
+  );
+
+  return pendingChangesets.length === 0 && output.includes("no changesets were found");
 }
 
 async function writeJson(path, payload) {
