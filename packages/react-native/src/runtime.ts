@@ -603,11 +603,13 @@ export function createMobileTerritoryRuntime(
     installedAt: string
   ): TerritoryDataset {
     if (isRecord(input) && isRecord(input.manifest) && Array.isArray(input.zones)) {
-      return loadTerritoryDataset(input);
+      const dataset = loadTerritoryDataset(input);
+      assertQueryDatasetMatchesRegistry(dataset, registryDataset);
+      return dataset;
     }
 
     if (isTerritoryQueryArtifact(input)) {
-      return loadTerritoryDataset({
+      const dataset = loadTerritoryDataset({
         manifest: {
           datasetId: input.datasetId,
           datasetVersion: input.datasetVersion,
@@ -620,12 +622,37 @@ export function createMobileTerritoryRuntime(
         },
         zones: input.zones
       });
+      assertQueryDatasetMatchesRegistry(dataset, registryDataset);
+      return dataset;
     }
 
     throw new TerritoryError(
       "DATASET_INVALID",
       "Installed query artifact is neither a TerritoryDataset nor a query artifact."
     );
+  }
+
+  function assertQueryDatasetMatchesRegistry(
+    dataset: TerritoryDataset,
+    registryDataset: TerritoryRegistryDataset
+  ): void {
+    if (
+      dataset.manifest.datasetId !== registryDataset.id ||
+      dataset.manifest.datasetVersion !== registryDataset.version
+    ) {
+      throw new TerritoryError(
+        "DATASET_INVALID",
+        `Installed query artifact ${dataset.manifest.datasetId}@${dataset.manifest.datasetVersion} does not match registry dataset ${registryDataset.id}@${registryDataset.version}.`,
+        {
+          details: {
+            artifactDatasetId: dataset.manifest.datasetId,
+            artifactDatasetVersion: dataset.manifest.datasetVersion,
+            registryDatasetId: registryDataset.id,
+            registryDatasetVersion: registryDataset.version
+          }
+        }
+      );
+    }
   }
 
   async function queryViewport(
