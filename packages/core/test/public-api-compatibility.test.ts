@@ -11,9 +11,15 @@ describe("public API compatibility", () => {
       "TERRITORY_BINARY_SPATIAL_INDEX_MAGIC",
       "TERRITORY_BINARY_SPATIAL_INDEX_SCHEMA_VERSION",
       "TerritoryZoneNotFoundError",
+      "canonicalizeTerritoryGeometry",
+      "computeTerritoryAreaM2",
+      "computeTerritoryRepresentativePoint",
       "createTerritoryBinarySpatialIndex",
       "createTerritoryCountryDatasetDescriptor",
+      "createTerritoryDatasetVersionInfo",
       "createTerritoryEngine",
+      "createTerritoryGeometryVersion",
+      "createTerritoryIdentity",
       "createTerritoryRegistryClient",
       "decodeTerritoryBinarySpatialIndex",
       "defaultZoomLevelStrategy",
@@ -22,6 +28,7 @@ describe("public API compatibility", () => {
       "isTerritoryBinarySpatialIndex",
       "loadTerritoryCountryDataset",
       "loadTerritoryQueryDataset",
+      "normalizeLongitude",
       "validateTerritoryBinarySpatialIndex",
       "zoomToDefaultLevel"
     ]);

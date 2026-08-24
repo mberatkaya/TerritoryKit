@@ -1,10 +1,12 @@
 import type {
+  TerritoryAdminLevel,
   TerritoryAdjacencyArtifact,
   TerritoryAdjacencyEdge,
   TerritoryAdjacencyType,
   TerritoryBBox,
   TerritoryDataset,
   TerritoryGeometry,
+  TerritorySourceClass,
   TerritoryZone
 } from "@territory-kit/dataset";
 import type {
@@ -25,22 +27,85 @@ export interface TerritoryBounds {
 }
 
 export type BoundaryMode = "covers" | "contains";
+export type TerritoryLevelSelector = number | TerritoryAdminLevel;
 
 export interface LocateOptions {
-  level?: number;
+  level?: TerritoryLevelSelector;
   boundaryMode?: BoundaryMode;
 }
 
 export type PolygonToZonesMode = "intersects" | "contains-center";
 
 export interface PolygonToZonesOptions {
-  level?: number;
+  level?: TerritoryLevelSelector;
   boundaryMode?: BoundaryMode;
   mode?: PolygonToZonesMode;
 }
 
 export interface BoundsQuery extends TerritoryBounds {
-  level?: number;
+  level?: TerritoryLevelSelector;
+  limit?: number;
+}
+
+export interface TerritoryPointLookupOptions extends LocateOptions {
+  levels?: TerritoryLevelSelector[];
+}
+
+export interface TerritoryBoundsLookupOptions {
+  level?: TerritoryLevelSelector;
+  levels?: TerritoryLevelSelector[];
+  limit?: number;
+}
+
+export interface TerritoryDatasetVersionInfo {
+  datasetId: string;
+  datasetVersion: string;
+  geometryHash: string;
+  sourceDate: string;
+  buildDate?: string;
+  sourceProvider?: string;
+  artifactChecksum?: string;
+}
+
+export interface TerritoryIdentity {
+  territoryId: string;
+  datasetId: string;
+  datasetVersion: string;
+  geometryVersion: string;
+  geometryHash: string;
+  stableId?: string;
+  sourceClass?: TerritorySourceClass;
+  sourceProvider?: string;
+  sourceNativeId?: string;
+}
+
+export interface TerritoryGeometryMetrics {
+  areaM2: number;
+  areaKm2: number;
+  centroid: [longitude: number, latitude: number];
+  representativePoint: [longitude: number, latitude: number];
+  bbox: TerritoryBBox;
+}
+
+export interface TerritoryHierarchy {
+  territoryId: string;
+  parentId: string | null;
+  ancestorIds: string[];
+  childIds: string[];
+  pathIds: string[];
+  rootId: string;
+  isRoot: boolean;
+  isOrphan: boolean;
+  missingParentId?: string;
+}
+
+export interface TerritoryLookupResult {
+  territoryId: string;
+  zone: TerritoryZone;
+  identity: TerritoryIdentity;
+  geometry: TerritoryGeometry;
+  hierarchy: TerritoryHierarchy;
+  metrics: TerritoryGeometryMetrics;
 }
 
 export interface VisibleZonesQuery {
@@ -124,6 +189,27 @@ export interface TerritoryEngineOptions {
 export interface TerritoryEngine {
   readonly dataset: TerritoryDataset;
   readonly availableLevels: number[];
+  findTerritoryAtPoint(
+    coordinate: LatLng,
+    options?: TerritoryPointLookupOptions
+  ): TerritoryLookupResult | null;
+  findTerritoriesAtPoint(
+    coordinate: LatLng,
+    options?: TerritoryPointLookupOptions
+  ): TerritoryLookupResult[];
+  findTerritoriesInBounds(
+    bounds: TerritoryBounds,
+    options?: TerritoryBoundsLookupOptions
+  ): TerritoryLookupResult[];
+  getAdjacentTerritories(zoneId: string, options?: NeighborOptions): TerritoryZone[];
+  getById(zoneId: string): TerritoryZone | null;
+  getChildren(zoneId: string): TerritoryZone[];
+  getDatasetVersionInfo(): TerritoryDatasetVersionInfo;
+  getGeometry(zoneId: string): TerritoryGeometry | null;
+  getHierarchy(zoneId: string): TerritoryHierarchy | null;
+  getIdentity(zoneId: string): TerritoryIdentity | null;
+  getMetrics(zoneId: string): TerritoryGeometryMetrics | null;
+  getParent(zoneId: string): TerritoryZone | null;
   getZoneById(zoneId: string): TerritoryZone | null;
   getZoneLevel(zoneId: string): number;
   getAdjacencyConnections(

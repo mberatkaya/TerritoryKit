@@ -20,7 +20,7 @@ describe("PostGIS integration harness", () => {
         queries.push({ sql, values });
 
         if (sql === POSTGIS_VIEWPORT_SQL) {
-          const [datasetId, level, west, south, east, north] = values;
+          const [datasetId, datasetVersion, level, west, south, east, north] = values;
           const zones = engine
             .getZonesInBounds({
               west: Number(west),
@@ -29,14 +29,18 @@ describe("PostGIS integration harness", () => {
               north: Number(north),
               level: Number(level)
             })
-            .filter((zone) => zone.datasetId === datasetId)
+            .filter(
+              (zone) =>
+                zone.datasetId === datasetId &&
+                (datasetVersion === null || dataset.manifest.datasetVersion === datasetVersion)
+            )
             .map(toPostgisRow);
 
           return { rows: zones as Row[] };
         }
 
         if (sql === POSTGIS_LOCATE_SQL) {
-          const [datasetId, level, lng, lat] = values;
+          const [datasetId, datasetVersion, level, lng, lat] = values;
           const zoneId = engine.latLngToZone(
             { lng: Number(lng), lat: Number(lat) },
             { level: Number(level) }
@@ -47,7 +51,11 @@ describe("PostGIS integration harness", () => {
 
           return {
             rows:
-              zone && zone.datasetId === datasetId ? ([{ id: zone.id }] as Row[]) : ([] as Row[])
+              zone &&
+              zone.datasetId === datasetId &&
+              (datasetVersion === null || dataset.manifest.datasetVersion === datasetVersion)
+                ? ([toPostgisRow(zone)] as Row[])
+                : ([] as Row[])
           };
         }
 
@@ -84,11 +92,11 @@ describe("PostGIS integration harness", () => {
     expect(queries).toEqual([
       {
         sql: POSTGIS_VIEWPORT_SQL,
-        values: ["territorykit-sample", 3, 28.94, 41, 28.99, 41.04]
+        values: ["territorykit-sample", null, 3, 28.94, 41, 28.99, 41.04, null]
       },
       {
         sql: POSTGIS_LOCATE_SQL,
-        values: ["territorykit-sample", 3, 28.95, 41.01]
+        values: ["territorykit-sample", null, 3, 28.95, 41.01]
       }
     ]);
   });
@@ -98,6 +106,8 @@ function toPostgisRow(zone: TerritoryZone) {
   return {
     id: zone.id,
     dataset_id: zone.datasetId,
+    dataset_version: "0.1.0-alpha.1",
+    geometry_version: `fixture:${zone.id}`,
     level: zone.level,
     parent_id: zone.parentId ?? null,
     child_ids: zone.childIds ?? null,

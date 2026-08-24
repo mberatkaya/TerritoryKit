@@ -14,12 +14,20 @@ import {
 import type { DynamicModule, Provider } from "@nestjs/common";
 import { computeGeometryBBox, computeGeometryCenter } from "@territory-kit/dataset";
 import type { TerritoryDataset, TerritoryGeometry, TerritoryZone } from "@territory-kit/dataset";
-import { createTerritoryEngine } from "@territory-kit/core";
+import {
+  computeTerritoryAreaM2,
+  computeTerritoryRepresentativePoint,
+  createTerritoryEngine,
+  createTerritoryIdentity,
+  normalizeLongitude
+} from "@territory-kit/core";
 import type {
   LatLng,
   TerritoryBounds,
   TerritoryEngine,
   TerritoryEngineOptions,
+  TerritoryGeometryMetrics,
+  TerritoryHierarchy,
   ZoomLevelStrategy
 } from "@territory-kit/core";
 import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -58,6 +66,21 @@ export interface TerritoryRepository {
   locateZone(request: TerritoryLocateRequest): Promise<string | null>;
 }
 
+export interface TerritoryPostgisRepository extends TerritoryRepository {
+  ensureSchema(): Promise<void>;
+  importDataset(
+    dataset: TerritoryDataset,
+    options?: PostgisImportOptions
+  ): Promise<PostgisImportResult>;
+  findAtPoint(request: TerritoryLocateRequest): Promise<TerritoryZone | null>;
+  findInBounds(request: TerritoryViewportRequest & { limit?: number }): Promise<TerritoryZone[]>;
+  findById(territoryId: string): Promise<TerritoryZone | null>;
+  getGeometry(territoryId: string): Promise<TerritoryGeometry | null>;
+  getMetrics(territoryId: string): Promise<TerritoryGeometryMetrics | null>;
+  getHierarchy(territoryId: string): Promise<TerritoryHierarchy | null>;
+  getAdjacentTerritories(territoryId: string): Promise<TerritoryZone[]>;
+}
+
 export class TerritoryViewportQueryDto {
   west!: string;
   south!: string;
@@ -79,18 +102,66 @@ export interface PostgisQueryClient {
 
 export interface PostgisRepositoryOptions {
   datasetId: string;
+  datasetVersion?: string;
   defaultLevel?: number;
+  defaultLimit?: number;
+  ensureSchema?: boolean;
+}
+
+export interface PostgisImportOptions {
+  batchSize?: number;
+  ensureSchema?: boolean;
+}
+
+export interface PostgisImportResult {
+  datasetId: string;
+  datasetVersion: string;
+  geometryHash: string;
+  zoneCount: number;
+  batchCount: number;
+  indexesEnsured: boolean;
 }
 
 interface PostgisZoneRow {
   id: string;
   dataset_id: string;
+  dataset_version?: string;
+  geometry_version?: string;
   level: number;
+  source_admin_level?: string | null;
   parent_id: string | null;
   child_ids: string[] | null;
   neighbor_ids: string[] | null;
   properties: Record<string, unknown> | null;
   geometry: TerritoryGeometry;
+  bbox?: TerritoryGeometry | null;
+  area_m2?: number | null;
+  representative_point?: { type: "Point"; coordinates: [number, number] } | null;
+}
+
+interface ArrayPostgisZoneRow extends PostgisZoneRow {
+  depth: number;
+}
+
+interface PostgisImportRow {
+  id: string;
+  dataset_id: string;
+  dataset_version: string;
+  geometry_version: string;
+  level: number;
+  source_admin_level: string | null;
+  parent_id: string | null;
+  child_ids: string[];
+  neighbor_ids: string[];
+  properties: Record<string, unknown>;
+  geometry: TerritoryGeometry;
+  west: number;
+  south: number;
+  east: number;
+  north: number;
+  area_m2: number;
+  representative_lng: number;
+  representative_lat: number;
 }
 
 interface HeaderResponse {
@@ -242,63 +313,374 @@ export class TerritoryKitModule {
 export function createPostgisTerritoryRepository(
   client: PostgisQueryClient,
   options: PostgisRepositoryOptions
-): TerritoryRepository {
+): TerritoryPostgisRepository {
+  const datasetVersion = options.datasetVersion ?? null;
+  const defaultLimit = options.defaultLimit ?? null;
+
   return {
-    async findVisibleZones(request) {
-      const level = request.level ?? options.defaultLevel ?? 0;
-      const { rows } = await client.query<PostgisZoneRow>(POSTGIS_VIEWPORT_SQL, [
+    async ensureSchema() {
+      await ensurePostgisTerritorySchema(client);
+    },
+
+    async importDataset(dataset, importOptions = {}) {
+      return importTerritoryDatasetToPostgis(client, dataset, {
+        ensureSchema: importOptions.ensureSchema ?? options.ensureSchema ?? true,
+        ...(importOptions.batchSize === undefined ? {} : { batchSize: importOptions.batchSize })
+      });
+    },
+
+    async findAtPoint(request) {
+      const level = request.level ?? options.defaultLevel ?? null;
+      const { rows } = await client.query<PostgisZoneRow>(POSTGIS_POINT_LOOKUP_SQL, [
         options.datasetId,
+        datasetVersion,
+        level,
+        normalizeLongitude(request.coordinate.lng),
+        request.coordinate.lat
+      ]);
+
+      return rows[0] ? postgisRowToZone(rows[0]) : null;
+    },
+
+    async findInBounds(request) {
+      const level = request.level ?? options.defaultLevel ?? null;
+      const limit = request.limit ?? defaultLimit;
+      const { rows } = await client.query<PostgisZoneRow>(POSTGIS_BOUNDS_SQL, [
+        options.datasetId,
+        datasetVersion,
         level,
         request.west,
         request.south,
         request.east,
-        request.north
+        request.north,
+        limit
       ]);
 
       return rows.map(postgisRowToZone);
     },
 
-    async locateZone(request) {
-      const level = request.level ?? options.defaultLevel ?? 0;
-      const { rows } = await client.query<{ id: string }>(POSTGIS_LOCATE_SQL, [
+    async findById(territoryId) {
+      const { rows } = await client.query<PostgisZoneRow>(POSTGIS_FIND_BY_ID_SQL, [
         options.datasetId,
-        level,
-        request.coordinate.lng,
-        request.coordinate.lat
+        datasetVersion,
+        territoryId
       ]);
 
-      return rows[0]?.id ?? null;
+      return rows[0] ? postgisRowToZone(rows[0]) : null;
+    },
+
+    async getGeometry(territoryId) {
+      return (await this.findById(territoryId))?.geometry ?? null;
+    },
+
+    async getMetrics(territoryId) {
+      const { rows } = await client.query<PostgisZoneRow>(POSTGIS_FIND_BY_ID_SQL, [
+        options.datasetId,
+        datasetVersion,
+        territoryId
+      ]);
+
+      return rows[0] ? postgisRowToMetrics(rows[0]) : null;
+    },
+
+    async getHierarchy(territoryId) {
+      const { rows } = await client.query<ArrayPostgisZoneRow>(POSTGIS_HIERARCHY_SQL, [
+        options.datasetId,
+        datasetVersion,
+        territoryId
+      ]);
+
+      return postgisRowsToHierarchy(rows);
+    },
+
+    async getAdjacentTerritories(territoryId) {
+      const { rows } = await client.query<PostgisZoneRow>(POSTGIS_ADJACENT_SQL, [
+        options.datasetId,
+        datasetVersion,
+        territoryId
+      ]);
+
+      return rows.map(postgisRowToZone);
+    },
+
+    async findVisibleZones(request) {
+      const level = request.level ?? options.defaultLevel ?? 0;
+      return this.findInBounds({ ...request, level });
+    },
+
+    async locateZone(request) {
+      return (await this.findAtPoint(request))?.id ?? null;
     }
   };
 }
 
-export const POSTGIS_VIEWPORT_SQL = `
+export async function ensurePostgisTerritorySchema(client: PostgisQueryClient): Promise<void> {
+  await client.query(POSTGIS_SCHEMA_SQL, []);
+  await client.query(POSTGIS_INDEX_SQL, []);
+}
+
+export async function importTerritoryDatasetToPostgis(
+  client: PostgisQueryClient,
+  dataset: TerritoryDataset,
+  options: PostgisImportOptions = {}
+): Promise<PostgisImportResult> {
+  const batchSize = options.batchSize ?? 500;
+  const rows = dataset.zones.map((zone) => postgisImportRow(dataset, zone));
+  let batchCount = 0;
+  let indexesEnsured = false;
+
+  await client.query("begin", []);
+
+  try {
+    if (options.ensureSchema ?? true) {
+      await ensurePostgisTerritorySchema(client);
+      indexesEnsured = true;
+    }
+
+    await client.query(POSTGIS_DELETE_STALE_VERSION_SQL, [
+      dataset.manifest.datasetId,
+      dataset.manifest.datasetVersion,
+      rows.map((row) => row.id)
+    ]);
+
+    for (let start = 0; start < rows.length; start += batchSize) {
+      const batch = rows.slice(start, start + batchSize);
+      await client.query(POSTGIS_IMPORT_ZONES_SQL, [JSON.stringify(batch)]);
+      batchCount += 1;
+    }
+
+    await client.query("commit", []);
+  } catch (error) {
+    await client.query("rollback", []);
+    throw error;
+  }
+
+  return {
+    datasetId: dataset.manifest.datasetId,
+    datasetVersion: dataset.manifest.datasetVersion,
+    geometryHash: dataset.manifest.geometryHash,
+    zoneCount: rows.length,
+    batchCount,
+    indexesEnsured
+  };
+}
+
+export const POSTGIS_SCHEMA_SQL = `
+create extension if not exists postgis;
+
+create table if not exists territory_zones (
+  id text not null,
+  dataset_id text not null,
+  dataset_version text not null,
+  geometry_version text not null,
+  level integer not null,
+  source_admin_level text,
+  parent_id text,
+  child_ids text[] not null default '{}',
+  neighbor_ids text[] not null default '{}',
+  properties jsonb not null default '{}',
+  geometry geometry(MultiPolygon, 4326) not null,
+  bbox geometry(Polygon, 4326) not null,
+  area_m2 double precision not null,
+  representative_point geometry(Point, 4326) not null,
+  imported_at timestamptz not null default now(),
+  primary key (dataset_id, dataset_version, id)
+);
+`;
+
+export const POSTGIS_INDEX_SQL = `
+create index if not exists territory_zones_identity_idx
+  on territory_zones (id);
+
+create index if not exists territory_zones_dataset_level_idx
+  on territory_zones (dataset_id, dataset_version, level);
+
+create index if not exists territory_zones_parent_idx
+  on territory_zones (dataset_id, dataset_version, parent_id);
+
+create index if not exists territory_zones_geometry_gist_idx
+  on territory_zones
+  using gist (geometry);
+
+create index if not exists territory_zones_bbox_gist_idx
+  on territory_zones
+  using gist (bbox);
+`;
+
+const POSTGIS_ZONE_SELECT = `
+  territory_zones.id,
+  territory_zones.dataset_id,
+  territory_zones.dataset_version,
+  territory_zones.geometry_version,
+  territory_zones.level,
+  territory_zones.source_admin_level,
+  territory_zones.parent_id,
+  territory_zones.child_ids,
+  territory_zones.neighbor_ids,
+  territory_zones.properties,
+  ST_AsGeoJSON(territory_zones.geometry)::json as geometry,
+  ST_AsGeoJSON(territory_zones.bbox)::json as bbox,
+  territory_zones.area_m2,
+  ST_AsGeoJSON(territory_zones.representative_point)::json as representative_point
+`;
+
+export const POSTGIS_BOUNDS_SQL = `
 select
+${POSTGIS_ZONE_SELECT}
+from territory_zones
+where territory_zones.dataset_id = $1
+  and ($2::text is null or territory_zones.dataset_version = $2)
+  and ($3::integer is null or territory_zones.level = $3)
+  and territory_zones.bbox && ST_MakeEnvelope($4, $5, $6, $7, 4326)
+  and territory_zones.geometry && ST_MakeEnvelope($4, $5, $6, $7, 4326)
+  and ST_Intersects(territory_zones.geometry, ST_MakeEnvelope($4, $5, $6, $7, 4326))
+order by territory_zones.level asc, territory_zones.id asc
+limit coalesce($8::integer, 2147483647);
+`;
+
+export const POSTGIS_POINT_LOOKUP_SQL = `
+select
+${POSTGIS_ZONE_SELECT}
+from territory_zones
+where territory_zones.dataset_id = $1
+  and ($2::text is null or territory_zones.dataset_version = $2)
+  and ($3::integer is null or territory_zones.level = $3)
+  and territory_zones.geometry && ST_SetSRID(ST_MakePoint($4, $5), 4326)
+  and ST_Covers(territory_zones.geometry, ST_SetSRID(ST_MakePoint($4, $5), 4326))
+order by territory_zones.level desc, territory_zones.id asc
+limit 1;
+`;
+
+export const POSTGIS_FIND_BY_ID_SQL = `
+select
+${POSTGIS_ZONE_SELECT}
+from territory_zones
+where territory_zones.dataset_id = $1
+  and ($2::text is null or territory_zones.dataset_version = $2)
+  and territory_zones.id = $3
+order by territory_zones.dataset_version desc
+limit 1;
+`;
+
+export const POSTGIS_HIERARCHY_SQL = `
+with recursive hierarchy as (
+  select
+${POSTGIS_ZONE_SELECT},
+    0 as depth
+  from territory_zones
+  where territory_zones.dataset_id = $1
+    and ($2::text is null or territory_zones.dataset_version = $2)
+    and territory_zones.id = $3
+  union all
+  select
+${POSTGIS_ZONE_SELECT.replaceAll("\n  ", "\n    ")},
+    hierarchy.depth + 1 as depth
+  from territory_zones
+  join hierarchy on territory_zones.id = hierarchy.parent_id
+  where territory_zones.dataset_id = $1
+    and ($2::text is null or territory_zones.dataset_version = $2)
+)
+select *
+from hierarchy
+order by depth asc;
+`;
+
+export const POSTGIS_ADJACENT_SQL = `
+with source as (
+  select neighbor_ids
+  from territory_zones
+  where dataset_id = $1
+    and ($2::text is null or dataset_version = $2)
+    and id = $3
+  limit 1
+)
+select
+${POSTGIS_ZONE_SELECT}
+from territory_zones
+join source on territory_zones.id = any(source.neighbor_ids)
+where territory_zones.dataset_id = $1
+  and ($2::text is null or territory_zones.dataset_version = $2)
+order by territory_zones.id asc;
+`;
+
+export const POSTGIS_DELETE_STALE_VERSION_SQL = `
+delete from territory_zones
+where dataset_id = $1
+  and dataset_version = $2
+  and not (id = any($3::text[]));
+`;
+
+export const POSTGIS_IMPORT_ZONES_SQL = `
+insert into territory_zones (
   id,
   dataset_id,
+  dataset_version,
+  geometry_version,
   level,
+  source_admin_level,
   parent_id,
   child_ids,
   neighbor_ids,
   properties,
-  ST_AsGeoJSON(geometry)::json as geometry
-from territory_zones
-where dataset_id = $1
-  and level = $2
-  and geometry && ST_MakeEnvelope($3, $4, $5, $6, 4326)
-  and ST_Intersects(geometry, ST_MakeEnvelope($3, $4, $5, $6, 4326))
-order by id asc;
+  geometry,
+  bbox,
+  area_m2,
+  representative_point,
+  imported_at
+)
+select
+  row.id,
+  row.dataset_id,
+  row.dataset_version,
+  row.geometry_version,
+  row.level,
+  row.source_admin_level,
+  row.parent_id,
+  row.child_ids,
+  row.neighbor_ids,
+  row.properties,
+  ST_Multi(ST_SetSRID(ST_GeomFromGeoJSON(row.geometry::text), 4326))::geometry(MultiPolygon, 4326),
+  ST_MakeEnvelope(row.west, row.south, row.east, row.north, 4326),
+  row.area_m2,
+  ST_SetSRID(ST_MakePoint(row.representative_lng, row.representative_lat), 4326),
+  now()
+from jsonb_to_recordset($1::jsonb) as row(
+  id text,
+  dataset_id text,
+  dataset_version text,
+  geometry_version text,
+  level integer,
+  source_admin_level text,
+  parent_id text,
+  child_ids text[],
+  neighbor_ids text[],
+  properties jsonb,
+  geometry jsonb,
+  west double precision,
+  south double precision,
+  east double precision,
+  north double precision,
+  area_m2 double precision,
+  representative_lng double precision,
+  representative_lat double precision
+)
+on conflict (dataset_id, dataset_version, id) do update set
+  geometry_version = excluded.geometry_version,
+  level = excluded.level,
+  source_admin_level = excluded.source_admin_level,
+  parent_id = excluded.parent_id,
+  child_ids = excluded.child_ids,
+  neighbor_ids = excluded.neighbor_ids,
+  properties = excluded.properties,
+  geometry = excluded.geometry,
+  bbox = excluded.bbox,
+  area_m2 = excluded.area_m2,
+  representative_point = excluded.representative_point,
+  imported_at = now();
 `;
 
-export const POSTGIS_LOCATE_SQL = `
-select id
-from territory_zones
-where dataset_id = $1
-  and level = $2
-  and ST_Covers(geometry, ST_SetSRID(ST_MakePoint($3, $4), 4326))
-order by id asc
-limit 1;
-`;
+export const POSTGIS_VIEWPORT_SQL = POSTGIS_BOUNDS_SQL;
+export const POSTGIS_LOCATE_SQL = POSTGIS_POINT_LOOKUP_SQL;
 
 function parseViewportQuery(query: TerritoryViewportQueryDto): TerritoryViewportRequest {
   const west = readFiniteNumber(query.west, "west");
@@ -335,7 +717,6 @@ function parseLocateBody(body: TerritoryLocateBodyDto): TerritoryLocateRequest {
   const level = readOptionalNonNegativeInteger(body.level, "level");
 
   assertRange("lat", lat, -90, 90);
-  assertRange("lng", lng, -180, 180);
 
   return {
     coordinate: { lat, lng },
@@ -404,6 +785,7 @@ function postgisRowToZone(row: PostgisZoneRow): TerritoryZone {
     id: row.id,
     datasetId: row.dataset_id,
     level: row.level,
+    ...(row.source_admin_level ? { sourceAdminLevel: row.source_admin_level } : {}),
     ...(row.parent_id ? { parentId: row.parent_id } : {}),
     ...(row.child_ids ? { childIds: row.child_ids } : {}),
     neighborIds: row.neighbor_ids ?? [],
@@ -411,5 +793,71 @@ function postgisRowToZone(row: PostgisZoneRow): TerritoryZone {
     center: computeGeometryCenter(geometry),
     bbox: computeGeometryBBox(geometry),
     properties: row.properties ?? {}
+  };
+}
+
+function postgisRowToMetrics(row: PostgisZoneRow): TerritoryGeometryMetrics {
+  const zone = postgisRowToZone(row);
+  const areaM2 = row.area_m2 ?? computeTerritoryAreaM2(zone.geometry);
+  const representativePoint =
+    row.representative_point?.coordinates ?? computeTerritoryRepresentativePoint(zone.geometry);
+
+  return {
+    areaM2,
+    areaKm2: areaM2 / 1_000_000,
+    centroid: computeGeometryCenter(zone.geometry),
+    representativePoint,
+    bbox: computeGeometryBBox(zone.geometry)
+  };
+}
+
+function postgisRowsToHierarchy(rows: ArrayPostgisZoneRow[]): TerritoryHierarchy | null {
+  const [zoneRow, ...ancestorRows] = rows.sort((left, right) => left.depth - right.depth);
+
+  if (!zoneRow) {
+    return null;
+  }
+
+  const ancestorIds = ancestorRows.map((row) => row.id);
+  const missingParentId =
+    zoneRow.parent_id && ancestorIds.length === 0 ? zoneRow.parent_id : undefined;
+  const rootId = ancestorIds.at(-1) ?? zoneRow.id;
+
+  return {
+    territoryId: zoneRow.id,
+    parentId: zoneRow.parent_id ?? null,
+    ancestorIds,
+    childIds: zoneRow.child_ids ?? [],
+    pathIds: [...ancestorIds].reverse().concat(zoneRow.id),
+    rootId,
+    isRoot: !zoneRow.parent_id,
+    isOrphan: Boolean(missingParentId),
+    ...(missingParentId ? { missingParentId } : {})
+  };
+}
+
+function postgisImportRow(dataset: TerritoryDataset, zone: TerritoryZone): PostgisImportRow {
+  const identity = createTerritoryIdentity(dataset, zone);
+  const representativePoint = computeTerritoryRepresentativePoint(zone.geometry);
+
+  return {
+    id: zone.id,
+    dataset_id: zone.datasetId || dataset.manifest.datasetId,
+    dataset_version: dataset.manifest.datasetVersion,
+    geometry_version: identity.geometryVersion,
+    level: zone.level,
+    source_admin_level: zone.sourceAdminLevel ?? null,
+    parent_id: zone.parentId ?? null,
+    child_ids: zone.childIds ?? [],
+    neighbor_ids: zone.neighborIds,
+    properties: zone.properties,
+    geometry: zone.geometry,
+    west: zone.bbox[0],
+    south: zone.bbox[1],
+    east: zone.bbox[2],
+    north: zone.bbox[3],
+    area_m2: computeTerritoryAreaM2(zone.geometry),
+    representative_lng: representativePoint[0],
+    representative_lat: representativePoint[1]
   };
 }

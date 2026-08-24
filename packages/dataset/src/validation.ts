@@ -733,6 +733,28 @@ function validateTerritoryPropertiesMetadata(
   );
   readOptionalMetadataString(territory.generationSeed, `${path}.generationSeed`, issues, zoneId);
   readOptionalMetadataString(territory.stableId, `${path}.stableId`, issues, zoneId);
+  readOptionalMetadataString(territory.geometryVersion, `${path}.geometryVersion`, issues, zoneId);
+  readOptionalMetadataString(territory.geometryHash, `${path}.geometryHash`, issues, zoneId);
+  readOptionalMetadataString(
+    territory.originalGeometryHash,
+    `${path}.originalGeometryHash`,
+    issues,
+    zoneId
+  );
+  readOptionalMetadataString(
+    territory.effectiveGeometryHash,
+    `${path}.effectiveGeometryHash`,
+    issues,
+    zoneId
+  );
+  readOptionalMetadataString(territory.revision, `${path}.revision`, issues, zoneId);
+  readOptionalMetadataNonNegativeNumber(territory.areaM2, `${path}.areaM2`, issues, zoneId);
+  readOptionalMetadataLngLat(
+    territory.representativePoint,
+    `${path}.representativePoint`,
+    issues,
+    zoneId
+  );
   validateOptionalMetadataSource(territory.source, `${path}.source`, issues, zoneId);
   validateOptionalGeneratedZoneMetadata(
     territory.generatedZone,
@@ -924,6 +946,65 @@ function readOptionalMetadataBoolean(
   issues.push({
     code: "ZONE_FIELD",
     message: "Expected a boolean when present.",
+    path,
+    severity: "error",
+    ...(zoneId ? { zoneId, featureId: zoneId } : {})
+  });
+  return undefined;
+}
+
+function readOptionalMetadataNonNegativeNumber(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[],
+  zoneId: string | undefined
+): number | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (typeof input === "number" && Number.isFinite(input) && input >= 0) {
+    return input;
+  }
+
+  issues.push({
+    code: "ZONE_FIELD",
+    message: "Expected a non-negative finite number when present.",
+    path,
+    severity: "error",
+    ...(zoneId ? { zoneId, featureId: zoneId } : {})
+  });
+  return undefined;
+}
+
+function readOptionalMetadataLngLat(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[],
+  zoneId: string | undefined
+): [longitude: number, latitude: number] | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (
+    Array.isArray(input) &&
+    input.length === 2 &&
+    typeof input[0] === "number" &&
+    typeof input[1] === "number" &&
+    Number.isFinite(input[0]) &&
+    Number.isFinite(input[1]) &&
+    input[0] >= -180 &&
+    input[0] <= 180 &&
+    input[1] >= -90 &&
+    input[1] <= 90
+  ) {
+    return [input[0], input[1]];
+  }
+
+  issues.push({
+    code: "ZONE_FIELD",
+    message: "representativePoint must be [longitude, latitude] in WGS84 bounds when present.",
     path,
     severity: "error",
     ...(zoneId ? { zoneId, featureId: zoneId } : {})

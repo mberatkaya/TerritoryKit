@@ -18,6 +18,7 @@ package boundaries required for MapLibre, NestJS/PostGIS, generators, and CLI to
 - [Release check](./release-check.md)
 - [Release readiness](./release-readiness.md)
 - [Production checklist](./production-checklist.md)
+- [Production spatial core](./production-spatial-core.md)
 - [Security](./security.md)
 - [Rollback](./rollback.md)
 - [Support matrix](./support-matrix.md)

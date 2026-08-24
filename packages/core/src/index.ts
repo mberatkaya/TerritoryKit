@@ -16,6 +16,14 @@ export {
   loadTerritoryCountryDataset
 } from "./country-loader.js";
 export { loadTerritoryQueryDataset } from "./query-loader.js";
+export {
+  canonicalizeTerritoryGeometry,
+  computeTerritoryAreaM2,
+  computeTerritoryRepresentativePoint,
+  createTerritoryGeometryVersion
+} from "@territory-kit/dataset";
+export { normalizeLongitude } from "./geometry.js";
+export { createTerritoryDatasetVersionInfo, createTerritoryIdentity } from "./identity.js";
 export { defaultZoomLevelStrategy, zoomToDefaultLevel } from "./zoom.js";
 /**
  * @deprecated Import registry APIs from `@territory-kit/registry` or
@@ -68,10 +76,18 @@ export type {
   TerritoryAdjacencyConnection,
   TerritoryAdjacencyConnectionType,
   TerritoryBounds,
+  TerritoryBoundsLookupOptions,
+  TerritoryDatasetVersionInfo,
   TerritoryEngineSpatialIndexSummary,
   TerritoryEngine,
   TerritoryEngineDebugOptions,
   TerritoryEngineOptions,
+  TerritoryGeometryMetrics,
+  TerritoryHierarchy,
+  TerritoryIdentity,
+  TerritoryLevelSelector,
+  TerritoryLookupResult,
+  TerritoryPointLookupOptions,
   ViewportCacheKeyQuery,
   VisibleZonesQuery,
   ZoomLevelStrategy

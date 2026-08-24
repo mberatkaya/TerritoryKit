@@ -1,5 +1,8 @@
 import {
   computeGeometryBBox,
+  computeGeometryCenter,
+  computeTerritoryAreaM2,
+  computeTerritoryRepresentativePoint,
   createTerritoryAdjacencyIndex,
   loadTerritoryDataset
 } from "@territory-kit/dataset";
@@ -20,19 +23,27 @@ import { Flatbush } from "./flatbush.js";
 import {
   bboxIntersectsBounds,
   geometryIntersectsGeometry,
+  normalizeLongitude,
   pointIntersectsGeometry
 } from "./geometry.js";
+import { createTerritoryDatasetVersionInfo, createTerritoryIdentity } from "./identity.js";
 import { defaultZoomLevelStrategy } from "./zoom.js";
 import type {
   BoundsQuery,
   LatLng,
   LocateOptions,
   PolygonToZonesOptions,
+  TerritoryBoundsLookupOptions,
   TerritoryAdjacencyConnection,
   TerritoryAdjacencyConnectionType,
   TerritoryBounds,
   TerritoryEngine,
   TerritoryEngineOptions,
+  TerritoryGeometryMetrics,
+  TerritoryHierarchy,
+  TerritoryLevelSelector,
+  TerritoryLookupResult,
+  TerritoryPointLookupOptions,
   TerritoryEngineSpatialIndexSummary,
   ViewportCacheKeyQuery,
   VisibleZonesQuery
@@ -52,6 +63,9 @@ interface SpatialIndexBuildResult {
 export function createTerritoryEngine(options: TerritoryEngineOptions): TerritoryEngine {
   const dataset = loadTerritoryDataset(options.dataset);
   const zonesById = new Map(dataset.zones.map((zone) => [zone.id, zone]));
+  const identitiesByZoneId = new Map<string, ReturnType<typeof createTerritoryIdentity>>();
+  const metricsByZoneId = new Map<string, TerritoryGeometryMetrics>();
+  const hierarchyByZoneId = new Map<string, TerritoryHierarchy>();
   const availableLevels = [...new Set(dataset.zones.map((zone) => zone.level))].sort(
     (left, right) => left - right
   );
@@ -129,6 +143,26 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
     return sortZones(zones);
   }
 
+  function getCandidateZonesForLevels(
+    bounds: TerritoryBounds,
+    levels: Set<number> | undefined,
+    lookupMode: "index" | "brute-force" = "index"
+  ): TerritoryZone[] {
+    if (!levels) {
+      return getCandidateZones(bounds, undefined, lookupMode);
+    }
+
+    const zonesByIdResult = new Map<string, TerritoryZone>();
+
+    for (const level of levels) {
+      for (const zone of getCandidateZones(bounds, level, lookupMode)) {
+        zonesByIdResult.set(zone.id, zone);
+      }
+    }
+
+    return sortZones([...zonesByIdResult.values()]);
+  }
+
   function resolveVisibleLevel(query: ViewportCacheKeyQuery): number {
     if (query.level !== undefined) {
       return query.level;
@@ -161,41 +195,292 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
   }
 
   function locate(coordinate: LatLng, options: LocateOptions = {}): string | null {
-    if (
-      !isValidCoordinate(coordinate) ||
-      (options.level !== undefined && !isValidLevel(options.level))
-    ) {
-      return null;
+    const match = findMatchingZonesAtPoint(coordinate, options)[0];
+
+    return match?.id ?? null;
+  }
+
+  function findMatchingZonesAtPoint(
+    coordinate: LatLng,
+    options: TerritoryPointLookupOptions = {}
+  ): TerritoryZone[] {
+    const normalizedCoordinate = normalizeCoordinate(coordinate);
+    const levels = resolveLevelSelectors(options);
+
+    if (!normalizedCoordinate || levels === "invalid") {
+      return [];
     }
 
-    const lngLat: LngLat = [coordinate.lng, coordinate.lat];
+    const lngLat: LngLat = [normalizedCoordinate.lng, normalizedCoordinate.lat];
     const boundaryMode = options.boundaryMode ?? "covers";
-    const level = options.level;
-    const candidates = getCandidateZones(
+    const candidates = getCandidateZonesForLevels(
       {
-        west: coordinate.lng,
-        south: coordinate.lat,
-        east: coordinate.lng,
-        north: coordinate.lat
+        west: normalizedCoordinate.lng,
+        south: normalizedCoordinate.lat,
+        east: normalizedCoordinate.lng,
+        north: normalizedCoordinate.lat
       },
-      level,
+      levels,
       debugBruteForceLookup ? "brute-force" : "index"
-    )
-      .filter((zone) => level === undefined || zone.level === level)
-      .sort((left, right) => right.level - left.level || left.id.localeCompare(right.id));
+    ).sort((left, right) => right.level - left.level || left.id.localeCompare(right.id));
 
-    for (const zone of candidates) {
-      if (pointIntersectsGeometry(lngLat, zone.geometry, boundaryMode)) {
-        return zone.id;
+    return candidates.filter((zone) =>
+      pointIntersectsGeometry(lngLat, zone.geometry, boundaryMode)
+    );
+  }
+
+  function findZonesInBounds(
+    bounds: TerritoryBounds,
+    options: TerritoryBoundsLookupOptions = {}
+  ): TerritoryZone[] {
+    const levels = resolveLevelSelectors(options);
+    const limit = normalizeLimit(options.limit);
+
+    if (levels === "invalid" || limit === "invalid") {
+      return [];
+    }
+
+    const zones = getCandidateZonesForLevels(bounds, levels);
+
+    return limit === undefined ? zones : zones.slice(0, limit);
+  }
+
+  function createLookupResult(zone: TerritoryZone): TerritoryLookupResult {
+    const identity = getCachedIdentity(zone);
+    const metrics = createGeometryMetrics(zone);
+    const hierarchy = createHierarchy(zone);
+
+    return {
+      territoryId: identity.territoryId,
+      zone,
+      identity,
+      geometry: zone.geometry,
+      hierarchy,
+      metrics
+    };
+  }
+
+  function getCachedIdentity(zone: TerritoryZone): ReturnType<typeof createTerritoryIdentity> {
+    const cached = identitiesByZoneId.get(zone.id);
+
+    if (cached) {
+      return cached;
+    }
+
+    const identity = createTerritoryIdentity(dataset, zone);
+    identitiesByZoneId.set(zone.id, identity);
+    return identity;
+  }
+
+  function createGeometryMetrics(zone: TerritoryZone): TerritoryGeometryMetrics {
+    const cached = metricsByZoneId.get(zone.id);
+
+    if (cached) {
+      return cached;
+    }
+
+    const areaM2 = computeTerritoryAreaM2(zone.geometry);
+
+    const metrics: TerritoryGeometryMetrics = {
+      areaM2,
+      areaKm2: areaM2 / 1_000_000,
+      centroid: computeGeometryCenter(zone.geometry),
+      representativePoint: computeTerritoryRepresentativePoint(zone.geometry),
+      bbox: [...zone.bbox]
+    };
+
+    metricsByZoneId.set(zone.id, metrics);
+    return metrics;
+  }
+
+  function createHierarchy(zone: TerritoryZone): TerritoryHierarchy {
+    const cached = hierarchyByZoneId.get(zone.id);
+
+    if (cached) {
+      return cached;
+    }
+
+    const ancestorIds: string[] = [];
+    let current = zone;
+    let missingParentId: string | undefined;
+
+    while (current.parentId) {
+      const parent = zonesById.get(current.parentId);
+
+      if (!parent) {
+        missingParentId = current.parentId;
+        break;
+      }
+
+      ancestorIds.push(parent.id);
+      current = parent;
+    }
+
+    const rootId = ancestorIds.at(-1) ?? zone.id;
+
+    const hierarchy: TerritoryHierarchy = {
+      territoryId: zone.id,
+      parentId: zone.parentId ?? null,
+      ancestorIds,
+      childIds: [...(zone.childIds ?? [])],
+      pathIds: [...ancestorIds].reverse().concat(zone.id),
+      rootId,
+      isRoot: !zone.parentId,
+      isOrphan: Boolean(missingParentId),
+      ...(missingParentId ? { missingParentId } : {})
+    };
+
+    hierarchyByZoneId.set(zone.id, hierarchy);
+    return hierarchy;
+  }
+
+  function getSafeZone(zoneId: string): TerritoryZone | null {
+    return zonesById.get(zoneId) ?? null;
+  }
+
+  function getLevelSelectorOption(query: {
+    level?: TerritoryLevelSelector;
+  }): TerritoryBoundsLookupOptions {
+    return query.level === undefined ? {} : { level: query.level };
+  }
+
+  function getPolygonLevelOption(options: PolygonToZonesOptions): {
+    level?: number;
+    invalid: boolean;
+  } {
+    const level = resolveLevelSelector(options.level);
+
+    if (level === "invalid") {
+      return { invalid: true };
+    }
+
+    return level === undefined ? { invalid: false } : { level, invalid: false };
+  }
+
+  function resolveLevelSelectors(options: {
+    level?: TerritoryLevelSelector;
+    levels?: TerritoryLevelSelector[];
+  }): Set<number> | undefined | "invalid" {
+    const levels = new Set<number>();
+    const level = resolveLevelSelector(options.level);
+
+    if (level === "invalid") {
+      return "invalid";
+    }
+
+    if (level !== undefined) {
+      levels.add(level);
+    }
+
+    for (const selector of options.levels ?? []) {
+      const resolved = resolveLevelSelector(selector);
+
+      if (resolved === "invalid") {
+        return "invalid";
+      }
+
+      if (resolved !== undefined) {
+        levels.add(resolved);
       }
     }
 
-    return null;
+    return levels.size > 0 ? levels : undefined;
+  }
+
+  function resolveLevelSelector(
+    selector: TerritoryLevelSelector | undefined
+  ): number | undefined | "invalid" {
+    if (selector === undefined) {
+      return undefined;
+    }
+
+    if (typeof selector === "number") {
+      return isValidLevel(selector) ? selector : "invalid";
+    }
+
+    const match = /^ADM([0-5])$/.exec(selector);
+
+    return match?.[1] ? Number(match[1]) : "invalid";
+  }
+
+  function normalizeLimit(limit: number | undefined): number | undefined | "invalid" {
+    if (limit === undefined) {
+      return undefined;
+    }
+
+    return Number.isInteger(limit) && limit >= 0 ? limit : "invalid";
+  }
+
+  function normalizeCoordinate(coordinate: LatLng): LatLng | null {
+    if (!isValidCoordinate(coordinate)) {
+      return null;
+    }
+
+    return {
+      lat: coordinate.lat,
+      lng: normalizeLongitude(coordinate.lng)
+    };
   }
 
   return {
     dataset,
     availableLevels,
+
+    findTerritoryAtPoint(coordinate, options = {}) {
+      return this.findTerritoriesAtPoint(coordinate, options)[0] ?? null;
+    },
+
+    findTerritoriesAtPoint(coordinate, options = {}) {
+      return findMatchingZonesAtPoint(coordinate, options).map(createLookupResult);
+    },
+
+    findTerritoriesInBounds(bounds, options = {}) {
+      return findZonesInBounds(bounds, options).map(createLookupResult);
+    },
+
+    getAdjacentTerritories(zoneId, options = {}) {
+      return this.zoneNeighbors(zoneId, options).map((neighborId) => requireZone(neighborId));
+    },
+
+    getById: getSafeZone,
+
+    getChildren(zoneId) {
+      return (getSafeZone(zoneId)?.childIds ?? [])
+        .map((childId) => zonesById.get(childId))
+        .filter((zone): zone is TerritoryZone => Boolean(zone));
+    },
+
+    getDatasetVersionInfo() {
+      return createTerritoryDatasetVersionInfo(dataset);
+    },
+
+    getGeometry(zoneId) {
+      return getSafeZone(zoneId)?.geometry ?? null;
+    },
+
+    getHierarchy(zoneId) {
+      const zone = getSafeZone(zoneId);
+
+      return zone ? createHierarchy(zone) : null;
+    },
+
+    getIdentity(zoneId) {
+      const zone = getSafeZone(zoneId);
+
+      return zone ? getCachedIdentity(zone) : null;
+    },
+
+    getMetrics(zoneId) {
+      const zone = getSafeZone(zoneId);
+
+      return zone ? createGeometryMetrics(zone) : null;
+    },
+
+    getParent(zoneId) {
+      const parentId = getSafeZone(zoneId)?.parentId;
+
+      return parentId ? (zonesById.get(parentId) ?? null) : null;
+    },
 
     getZoneById(zoneId) {
       return zonesById.get(zoneId) ?? null;
@@ -261,7 +546,10 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
     },
 
     getZonesInBounds(query: BoundsQuery) {
-      return getCandidateZones(query, query.level);
+      return findZonesInBounds(query, {
+        ...getLevelSelectorOption(query),
+        ...(query.limit === undefined ? {} : { limit: query.limit })
+      });
     },
 
     getViewportCacheKey: createViewportCacheKey,
@@ -316,9 +604,15 @@ export function createTerritoryEngine(options: TerritoryEngineOptions): Territor
       const bounds = bboxToBounds(computeGeometryBBox(geometry));
       const boundaryMode = polygonOptions.boundaryMode ?? "covers";
       const mode = polygonOptions.mode ?? "intersects";
+      const level = getPolygonLevelOption(polygonOptions);
+
+      if (level.invalid) {
+        return [];
+      }
+
       const candidates = getCandidateZones(
         bounds,
-        polygonOptions.level,
+        level.level,
         debugBruteForceLookup ? "brute-force" : "index"
       );
 
@@ -608,9 +902,7 @@ function isValidCoordinate(coordinate: LatLng): boolean {
     Number.isFinite(coordinate.lat) &&
     Number.isFinite(coordinate.lng) &&
     coordinate.lat >= -90 &&
-    coordinate.lat <= 90 &&
-    coordinate.lng >= -180 &&
-    coordinate.lng <= 180
+    coordinate.lat <= 90
   );
 }
 
