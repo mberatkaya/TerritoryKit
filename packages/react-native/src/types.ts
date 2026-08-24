@@ -5,7 +5,7 @@ import type {
   TerritoryRegistryArtifact,
   TerritoryRegistryDataset
 } from "@territory-kit/registry";
-import type { TerritoryBounds, TerritoryEngine } from "@territory-kit/core";
+import type { LatLng, TerritoryBounds, TerritoryEngine } from "@territory-kit/core";
 
 export type MobileTerritoryPlatform = "ios" | "android" | "unknown";
 
@@ -172,6 +172,41 @@ export interface MobileTerritoryViewportQueryResult {
   readonly cached: boolean;
 }
 
+export interface MobileTerritoryPointQueryOptions {
+  readonly datasetId: string;
+  readonly version?: string;
+  readonly coordinate: LatLng;
+  readonly level?: number;
+  readonly levels?: readonly number[];
+  readonly signal?: AbortSignal;
+}
+
+export interface MobileTerritoryPointQueryResult {
+  readonly datasetId: string;
+  readonly version: string;
+  readonly territoryId: string | null;
+  readonly zones: readonly TerritoryZone[];
+}
+
+export interface MobileTerritoryDatasetStatusOptions {
+  readonly datasetId: string;
+  readonly version?: string;
+  readonly signal?: AbortSignal;
+}
+
+export interface MobileTerritoryDatasetStatus {
+  readonly datasetId: string;
+  readonly installed: boolean;
+  readonly installedVersion?: string;
+  readonly available: boolean;
+  readonly availableVersion?: string;
+  readonly stale: boolean;
+  readonly updateAvailable: boolean;
+  readonly registryHash?: string;
+  readonly activeRegistryHash?: string;
+  readonly checkedAt: string;
+}
+
 export interface MobileTerritoryRollbackOptions {
   readonly datasetId: string;
   readonly toVersion?: string;
@@ -209,6 +244,10 @@ export interface MobileTerritoryRuntime {
   queryViewport(
     options: MobileTerritoryViewportQueryOptions
   ): Promise<MobileTerritoryViewportQueryResult>;
+  queryPoint(options: MobileTerritoryPointQueryOptions): Promise<MobileTerritoryPointQueryResult>;
+  checkDatasetStatus(
+    options: MobileTerritoryDatasetStatusOptions
+  ): Promise<MobileTerritoryDatasetStatus>;
   listInstalledDatasets(): Promise<readonly MobileTerritoryActiveDatasetManifest[]>;
   rollbackDataset(
     options: MobileTerritoryRollbackOptions

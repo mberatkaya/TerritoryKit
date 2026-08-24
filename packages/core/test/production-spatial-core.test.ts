@@ -180,6 +180,161 @@ describe("production spatial core contracts", () => {
     });
   });
 
+  it("finds exact route intersections with traversal order, repeat entries, holes, and touches", () => {
+    const engine = createTerritoryEngine({ dataset: createLookupDataset() });
+    const route = {
+      type: "LineString" as const,
+      coordinates: [
+        [0.5, 0.5],
+        [2.5, 0.5],
+        [0.5, 0.5]
+      ] as Array<[number, number]>
+    };
+    const result = engine.findTerritoriesAlongRoute(route, { level: 2 });
+
+    expect(result.mode).toBe("exact");
+    expect(result.territories.map((territory) => territory.territoryId)).toEqual([
+      "parent:child",
+      "donut"
+    ]);
+    expect(result.traversal.map((segment) => segment.territoryId)).toEqual([
+      "parent:child",
+      "donut",
+      "parent:child"
+    ]);
+    expect(result.territories[0]).toMatchObject({
+      method: "exact",
+      entered: true,
+      boundaryOnly: false,
+      datasetVersion: "1.0.0",
+      segmentCount: 2
+    });
+    expect(result.territories[0]?.intersectionLengthM).toBeGreaterThan(0);
+
+    const hole = engine.findTerritoriesAlongRoute(
+      {
+        type: "LineString",
+        coordinates: [
+          [2.5, 2],
+          [5.5, 2]
+        ]
+      },
+      { level: 2 }
+    );
+    expect(hole.territories.map((territory) => territory.territoryId)).toEqual(["donut"]);
+    expect(hole.territories[0]?.segmentCount).toBe(2);
+
+    const onlyHole = engine.findTerritoriesAlongRoute(
+      {
+        type: "LineString",
+        coordinates: [
+          [3.2, 2],
+          [4.8, 2]
+        ]
+      },
+      { level: 2 }
+    );
+    expect(onlyHole.territories).toEqual([]);
+
+    const cornerTouch = engine.findTerritoriesAlongRoute(
+      {
+        type: "LineString",
+        coordinates: [
+          [1, 1],
+          [1.5, 1.5]
+        ]
+      },
+      { level: 2 }
+    );
+    expect(cornerTouch.territories).toEqual([
+      expect.objectContaining({
+        territoryId: "parent:child",
+        entered: false,
+        boundaryOnly: true,
+        intersectionLengthM: 0
+      })
+    ]);
+  });
+
+  it("keeps sampled route fallback explicitly approximate", () => {
+    const engine = createTerritoryEngine({ dataset: createLookupDataset() });
+    const sampled = engine.findTerritoriesAlongRoute(
+      [
+        { lng: 0.5, lat: 0.5 },
+        { lng: 2.5, lat: 0.5 }
+      ],
+      { level: 2, mode: "sampled", sampleDistanceM: 500_000 }
+    );
+
+    expect(sampled.mode).toBe("sampled");
+    expect(sampled.territories.map((territory) => territory.territoryId)).toEqual([
+      "parent:child",
+      "donut"
+    ]);
+    expect(sampled.territories.every((territory) => territory.method === "sampled")).toBe(true);
+    expect(sampled.territories[0]?.intersectionLengthM).toBeUndefined();
+    expect(engine.findTerritoriesAlongRoute({ type: "LineString", coordinates: [[0, 0]] })).toEqual(
+      {
+        mode: "exact",
+        routeLengthM: 0,
+        territories: [],
+        traversal: []
+      }
+    );
+    expect(
+      engine.findTerritoriesAlongRoute({
+        type: "LineString",
+        coordinates: [
+          [0, 0],
+          [Number.NaN, 1]
+        ]
+      }).territories
+    ).toEqual([]);
+  });
+
+  it("delivers production viewport pages with level filters and dateline bounds", () => {
+    const engine = createTerritoryEngine({ dataset: createLookupDataset() });
+    const firstPage = engine.queryTerritoriesInViewport({
+      bounds: { west: -180, south: -1, east: 13, north: 2 },
+      levels: ["ADM2"],
+      limit: 2
+    });
+
+    expect(firstPage).toMatchObject({
+      level: 2,
+      levels: [2],
+      limit: 2,
+      hasMore: true,
+      totalEstimate: 4,
+      datelineSplit: false
+    });
+    expect(firstPage.zones.map((zone) => zone.id)).toEqual(["donut", "multi"]);
+    expect(firstPage.nextCursor).toBe("offset:2");
+
+    const secondPage = engine.queryTerritoriesInViewport({
+      bounds: { west: -180, south: -1, east: 13, north: 2 },
+      levels: ["ADM2"],
+      limit: 2,
+      ...(firstPage.nextCursor ? { cursor: firstPage.nextCursor } : {})
+    });
+    expect(secondPage.zones.map((zone) => zone.id)).toEqual(["parent:child", "wrapped"]);
+    expect(secondPage.hasMore).toBe(false);
+
+    const dateline = engine.queryTerritoriesInViewport({
+      bounds: { west: 179.8, south: 0, east: -178, north: 1 },
+      level: "ADM2"
+    });
+    expect(dateline.datelineSplit).toBe(true);
+    expect(dateline.zones.map((zone) => zone.id)).toEqual(["wrapped"]);
+
+    expect(
+      engine.queryTerritoriesInViewport({
+        bounds: { west: 0, south: -95, east: 1, north: 1 },
+        level: "ADM2"
+      }).zones
+    ).toEqual([]);
+  });
+
   it("creates canonical geometry versions independent of ring orientation and start coordinate", () => {
     const geometryA: TerritoryGeometry = {
       type: "Polygon",

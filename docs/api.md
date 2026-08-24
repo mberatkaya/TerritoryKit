@@ -24,6 +24,11 @@
 - `engine.findTerritoryAtPoint({ lat, lng }, { level, levels, boundaryMode })`
 - `engine.findTerritoriesAtPoint({ lat, lng }, { level, levels, boundaryMode })`
 - `engine.findTerritoriesInBounds({ west, south, east, north }, { level, levels, limit })`
+- `engine.findTerritoriesAlongRoute(route, { level, levels, mode })` returns exact or sampled
+  route-to-territory results with unique territories and ordered traversal segments.
+- `engine.queryTerritoriesInViewport({ bounds, zoom, level, levels, limit, cursor })` returns a
+  production viewport page with `hasMore`, `nextCursor`, `totalEstimate`, and dateline split
+  metadata.
 - `engine.getById(territoryId)`
 - `engine.getIdentity(territoryId)`
 - `engine.getDatasetVersionInfo()`
@@ -55,6 +60,9 @@
 - `createTerritoryIdentity(dataset, zone)`,
   `createTerritoryDatasetVersionInfo(dataset)`,
   `createTerritoryGeometryVersion(geometry)`,
+  `computeLngLatDistanceM(left, right)`,
+  `computeLineStringBounds(route)`,
+  `intersectLineStringWithGeometry(route, geometry, boundaryMode)`,
   `computeTerritoryAreaM2(geometry)`, and
   `computeTerritoryRepresentativePoint(geometry)` expose production identity, version, and geometry
   metric helpers.
@@ -78,6 +86,9 @@
   `assertTerritoryAdapterCapability` model immutable renderer capabilities.
 - `createTerritoryAdapterLifecycle` and `assertTerritoryAdapterAttached` provide shared lifecycle
   guards.
+- `territoryZonesToFeatureCollection(zones, options)` supports stable feature IDs, minimal or full
+  properties, optional `datasetVersion`/`geometryVersion`, and conservative per-ring simplification
+  for small GeoJSON payloads.
 
 ## `@territory-kit/runtime`
 
@@ -128,8 +139,10 @@
 
 ## `@territory-kit/maplibre`
 
-- `zonesToFeatureCollection(zones, stateByZoneId)`
+- `zonesToFeatureCollection(zones, stateByZoneIdOrOptions)`
 - `createTerritoryMapLibreLayers(zones, options)` supports initial `stateByZoneId`.
+- GeoJSON options include `propertyMode: "minimal"`, `datasetVersion`, `includeGeometryVersion`,
+  and `simplifyTolerance`; `feature.id` and source `promoteId` remain stable for feature-state.
 - `createTerritoryMapLibreAdapter({ zones, onZoneClick, onZoneHover })`
 - Adapter lifecycle: `attach`, `detach`, `setSource`, `updateState`, `updateData`, `updateTheme`
 - Adapter conformance: `capabilities`, `lifecycleState`, and `managedSourceId`
@@ -139,14 +152,29 @@
 ## `@territory-kit/nestjs`
 
 - `TerritoryKitModule.forRoot({ dataset, repository })`
-- `TerritoryKitController` exposes `GET /territories` and `POST /territories/locate`
+- `TerritoryKitController` exposes `GET /territories`, `POST /territories/locate`, and
+  `POST /territories/route`
 - Controller query/body parsing rejects invalid numeric input before repository calls.
 - `createPostgisTerritoryRepository(client, options)` uses `ST_Intersects`, `ST_Covers`, and
   GiST-friendly bbox prefilters.
+- `repository.findAlongRoute({ route, level })` uses a LineString GeoJSON route, `ST_Intersects`,
+  `ST_Intersection`, and `ST_Length` to return exact route territory metadata.
 - `importTerritoryDatasetToPostgis(client, dataset, options)` batch upserts a validated dataset into
   the production PostGIS schema with `(dataset_id, dataset_version, id)` identity.
 - `POSTGIS_SCHEMA_SQL`, `POSTGIS_INDEX_SQL`, and query SQL constants are exported for migration and
   snapshot testing.
+
+## `@territory-kit/react-native`
+
+- `createMobileTerritoryRuntime(options)`
+- `installDataset({ datasetId, version, levels, purposes })` installs checksum-verified artifacts.
+- `queryViewport({ datasetId, viewport })` queries visible territories from installed artifacts.
+- `queryPoint({ datasetId, coordinate, level })` performs offline-capable point lookup from the
+  installed polygon dataset.
+- `checkDatasetStatus({ datasetId })` compares the active installed version with the registry or
+  offline registry snapshot and reports `stale` / `updateAvailable`.
+- `rollbackDataset({ datasetId })`, `listInstalledDatasets()`, `cleanupPartialDownloads()`,
+  `setAppState()`, and `handleLowMemory()` manage mobile lifecycle and cache behavior.
 
 ## `@territory-kit/generators`
 

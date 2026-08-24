@@ -111,6 +111,7 @@ package boundaries required for MapLibre, NestJS/PostGIS, generators, and CLI to
 - [Dataset licensing](./dataset-licensing.md)
 - [NestJS and PostGIS](./nestjs-postgis.md)
 - [NestJS OpenAPI contract](./nestjs-openapi.md)
+- [Sprint 2 spatial performance](./sprint-2-spatial-performance.md)
 - [Master sprint checklist](./sprint-checklist.md)
 
 The public roadmap documents major milestones; completion status is tracked in the master sprint

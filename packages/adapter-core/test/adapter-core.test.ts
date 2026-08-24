@@ -9,6 +9,7 @@ import {
   isTerritoryFeatureCollection,
   readFirstTerritoryRenderFeature,
   readTerritoryFeatureId,
+  estimateTerritoryFeatureCollectionBytes,
   territoryZonesToFeatureCollection
 } from "../src/index.js";
 import type { TerritoryZone } from "@territory-kit/dataset";
@@ -155,6 +156,54 @@ describe("adapter-core contracts", () => {
       level: 1,
       adminLevel: "ADM1"
     });
+  });
+
+  it("creates minimal production GeoJSON with optional simplification metadata", () => {
+    const zone = zoneFixture({
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [
+            [28, 40],
+            [28.25, 40],
+            [28.5, 40],
+            [28.75, 40],
+            [29, 40],
+            [29, 41],
+            [28, 41],
+            [28, 40]
+          ]
+        ]
+      },
+      properties: { source: "fixture", privateNote: "do-not-render" }
+    });
+    const raw = territoryZonesToFeatureCollection([zone]);
+    const production = territoryZonesToFeatureCollection([zone], {
+      propertyMode: "minimal",
+      datasetVersion: "1.0.0",
+      includeGeometryVersion: true,
+      simplifyTolerance: 0.01
+    });
+    const feature = production.features[0];
+
+    expect(feature).toMatchObject({
+      id: "tr:adm1:istanbul",
+      properties: {
+        territoryId: "tr:adm1:istanbul",
+        datasetVersion: "1.0.0",
+        geometryVersion: expect.stringMatching(/^fnv1a32:/)
+      }
+    });
+    expect(feature?.properties).not.toHaveProperty("privateNote");
+    expect(feature?.geometry?.type).toBe("Polygon");
+    expect(
+      feature?.geometry?.type === "Polygon" ? feature.geometry.coordinates[0]?.length : 0
+    ).toBeLessThan(
+      zone.geometry.type === "Polygon" ? (zone.geometry.coordinates[0]?.length ?? 0) : 0
+    );
+    expect(estimateTerritoryFeatureCollectionBytes(production)).toBeLessThan(
+      estimateTerritoryFeatureCollectionBytes(raw)
+    );
   });
 
   it("reads territory feature ids by renderer priority", () => {

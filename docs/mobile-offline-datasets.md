@@ -37,6 +37,19 @@ const result = await mobileRuntime.queryViewport({
 `offline: true` reads the registry snapshot from storage when registry metadata is needed. Viewport
 queries read installed artifacts directly and do not require the registry network path.
 
+Point lookup follows the same installed-data contract:
+
+```ts
+const located = await mobileRuntime.queryPoint({
+  datasetId: "territory-kit-tr",
+  coordinate: { lat: 41.01, lng: 28.95 },
+  level: 3
+});
+```
+
+If the dataset is not installed, the runtime throws `DATASET_NOT_FOUND`. It does not synthesize a
+grid, H3 cell, or fallback polygon.
+
 ## Network Fallback
 
 When `fallbackToInstalledOnNetworkError` is not disabled, registry network failures fall back to the
@@ -59,6 +72,21 @@ await mobileRuntime.rollbackDataset({ datasetId: "territory-kit-tr" });
 
 Rollback only switches the active pointer to an already installed complete version. It does not
 download or mutate artifacts.
+
+Applications can check invalidation before deciding to install:
+
+```ts
+const status = await mobileRuntime.checkDatasetStatus({
+  datasetId: "territory-kit-tr"
+});
+
+if (status.updateAvailable) {
+  // Prompt or schedule installDataset({ datasetId, version: status.availableVersion })
+}
+```
+
+The status response compares the active installed version with the registry or offline registry
+snapshot and reports `installedVersion`, `availableVersion`, `stale`, and `updateAvailable`.
 
 ## Binary Indexes
 

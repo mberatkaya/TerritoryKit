@@ -6,6 +6,7 @@ import type {
   TerritoryBBox,
   TerritoryDataset,
   TerritoryGeometry,
+  LngLat,
   TerritorySourceClass,
   TerritoryZone
 } from "@territory-kit/dataset";
@@ -108,10 +109,93 @@ export interface TerritoryLookupResult {
   metrics: TerritoryGeometryMetrics;
 }
 
+export interface TerritoryRouteLineString {
+  type: "LineString";
+  coordinates: readonly LngLat[];
+}
+
+export type TerritoryRouteInput = TerritoryRouteLineString | readonly LatLng[] | readonly LngLat[];
+
+export type TerritoryRouteQueryMode = "exact" | "sampled";
+
+export interface TerritoryRouteQueryOptions {
+  level?: TerritoryLevelSelector;
+  levels?: TerritoryLevelSelector[];
+  boundaryMode?: BoundaryMode;
+  mode?: TerritoryRouteQueryMode;
+  sampleDistanceM?: number;
+  maxSampleCount?: number;
+}
+
+export interface TerritoryRouteTraversalSegment {
+  territoryId: string;
+  zone: TerritoryZone;
+  identity: TerritoryIdentity;
+  method: TerritoryRouteQueryMode;
+  sequence: number;
+  startCoordinate: LngLat;
+  endCoordinate: LngLat;
+  startDistanceM: number;
+  endDistanceM: number;
+  startFraction: number;
+  endFraction: number;
+  lengthM?: number;
+  boundaryOnly?: boolean;
+}
+
+export interface TerritoryRouteTerritoryResult {
+  territoryId: string;
+  zone: TerritoryZone;
+  identity: TerritoryIdentity;
+  method: TerritoryRouteQueryMode;
+  entered: boolean;
+  boundaryOnly: boolean;
+  datasetVersion: string;
+  geometryVersion: string;
+  intersectionLengthM?: number;
+  firstIntersection?: LngLat;
+  lastIntersection?: LngLat;
+  routeFractionStart?: number;
+  routeFractionEnd?: number;
+  segmentCount: number;
+}
+
+export interface TerritoryRouteQueryResult {
+  mode: TerritoryRouteQueryMode;
+  routeLengthM: number;
+  territories: TerritoryRouteTerritoryResult[];
+  traversal: TerritoryRouteTraversalSegment[];
+}
+
 export interface VisibleZonesQuery {
   bounds: TerritoryBounds;
   zoom: number;
   strategy?: ZoomLevelStrategy;
+}
+
+export interface TerritoryViewportDeliveryQuery {
+  bounds: TerritoryBounds;
+  zoom?: number;
+  level?: TerritoryLevelSelector;
+  levels?: TerritoryLevelSelector[];
+  strategy?: ZoomLevelStrategy;
+  limit?: number;
+  cursor?: string;
+  maxLimit?: number;
+}
+
+export interface TerritoryViewportDeliveryResult {
+  zones: TerritoryZone[];
+  territories: TerritoryLookupResult[];
+  level?: number;
+  levels?: number[];
+  limit: number;
+  cursor?: string;
+  nextCursor?: string;
+  hasMore: boolean;
+  totalEstimate: number;
+  cacheKey: string;
+  datelineSplit: boolean;
 }
 
 export interface NeighborOptions {
@@ -201,6 +285,10 @@ export interface TerritoryEngine {
     bounds: TerritoryBounds,
     options?: TerritoryBoundsLookupOptions
   ): TerritoryLookupResult[];
+  findTerritoriesAlongRoute(
+    route: TerritoryRouteInput,
+    options?: TerritoryRouteQueryOptions
+  ): TerritoryRouteQueryResult;
   getAdjacentTerritories(zoneId: string, options?: NeighborOptions): TerritoryZone[];
   getById(zoneId: string): TerritoryZone | null;
   getChildren(zoneId: string): TerritoryZone[];
@@ -222,6 +310,9 @@ export interface TerritoryEngine {
   ): TerritoryAdjacencyEdge[];
   getSpatialIndexSummary(): TerritoryEngineSpatialIndexSummary;
   getLevelTransition(query: LevelTransitionQuery): LevelTransitionPayload;
+  queryTerritoriesInViewport(
+    query: TerritoryViewportDeliveryQuery
+  ): TerritoryViewportDeliveryResult;
   getZonesInBounds(query: BoundsQuery): TerritoryZone[];
   getViewportCacheKey(query: ViewportCacheKeyQuery): string;
   getVisibleZones(query: VisibleZonesQuery): TerritoryZone[];

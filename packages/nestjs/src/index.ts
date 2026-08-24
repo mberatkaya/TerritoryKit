@@ -15,6 +15,7 @@ import type { DynamicModule, Provider } from "@nestjs/common";
 import { computeGeometryBBox, computeGeometryCenter } from "@territory-kit/dataset";
 import type { TerritoryDataset, TerritoryGeometry, TerritoryZone } from "@territory-kit/dataset";
 import {
+  computeLngLatDistanceM,
   computeTerritoryAreaM2,
   computeTerritoryRepresentativePoint,
   createTerritoryEngine,
@@ -28,6 +29,10 @@ import type {
   TerritoryEngineOptions,
   TerritoryGeometryMetrics,
   TerritoryHierarchy,
+  TerritoryRouteInput,
+  TerritoryRouteQueryOptions,
+  TerritoryRouteQueryResult,
+  TerritoryRouteTraversalSegment,
   ZoomLevelStrategy
 } from "@territory-kit/core";
 import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
@@ -52,6 +57,10 @@ export interface TerritoryLocateRequest {
   level?: number;
 }
 
+export interface TerritoryRouteRequest extends TerritoryRouteQueryOptions {
+  route: TerritoryRouteInput;
+}
+
 export interface TerritoryViewportResponse {
   zones: TerritoryZone[];
   cacheKey: string;
@@ -64,6 +73,7 @@ export interface TerritoryLocateResponse {
 export interface TerritoryRepository {
   findVisibleZones(request: TerritoryViewportRequest): Promise<TerritoryZone[]>;
   locateZone(request: TerritoryLocateRequest): Promise<string | null>;
+  findAlongRoute?(request: TerritoryRouteRequest): Promise<TerritoryRouteQueryResult>;
 }
 
 export interface TerritoryPostgisRepository extends TerritoryRepository {
@@ -79,6 +89,7 @@ export interface TerritoryPostgisRepository extends TerritoryRepository {
   getMetrics(territoryId: string): Promise<TerritoryGeometryMetrics | null>;
   getHierarchy(territoryId: string): Promise<TerritoryHierarchy | null>;
   getAdjacentTerritories(territoryId: string): Promise<TerritoryZone[]>;
+  findAlongRoute(request: TerritoryRouteRequest): Promise<TerritoryRouteQueryResult>;
 }
 
 export class TerritoryViewportQueryDto {
@@ -94,6 +105,13 @@ export class TerritoryLocateBodyDto {
   lat!: number;
   lng!: number;
   level?: number;
+}
+
+export class TerritoryRouteBodyDto {
+  route!: unknown;
+  level?: number;
+  levels?: number[];
+  mode?: "exact" | "sampled";
 }
 
 export interface PostgisQueryClient {
@@ -141,6 +159,12 @@ interface PostgisZoneRow {
 
 interface ArrayPostgisZoneRow extends PostgisZoneRow {
   depth: number;
+}
+
+interface PostgisRouteRow extends PostgisZoneRow {
+  intersection_length_m: number | null;
+  route_fraction: number | null;
+  intersection_point: { type: "Point"; coordinates: [number, number] } | null;
 }
 
 interface PostgisImportRow {
@@ -271,6 +295,25 @@ export class TerritoryKitController {
 
     return { zoneId };
   }
+
+  @Post("territories/route")
+  @ApiOperation({ summary: "Return territories intersected by a route LineString." })
+  @ApiBody({ type: TerritoryRouteBodyDto })
+  @ApiResponse({ status: 200, description: "Route territory response." })
+  @ApiResponse({ status: 400, description: "Invalid route request body." })
+  async routeTerritories(@Body() body: TerritoryRouteBodyDto): Promise<TerritoryRouteQueryResult> {
+    const request = parseRouteBody(body);
+
+    if (this.repository?.findAlongRoute && request.mode !== "sampled") {
+      return this.repository.findAlongRoute(request);
+    }
+
+    return this.engine.findTerritoriesAlongRoute(request.route, {
+      ...(request.level === undefined ? {} : { level: request.level }),
+      ...(request.levels === undefined ? {} : { levels: request.levels }),
+      ...(request.mode === undefined ? {} : { mode: request.mode })
+    });
+  }
 }
 
 @Module({})
@@ -357,6 +400,30 @@ export function createPostgisTerritoryRepository(
       ]);
 
       return rows.map(postgisRowToZone);
+    },
+
+    async findAlongRoute(request) {
+      const level = request.level ?? options.defaultLevel ?? null;
+      const route = normalizeRouteForPostgis(request.route);
+      const routeLengthM = computeRouteLengthM(route);
+
+      if (route.length < 2 || routeLengthM <= 0) {
+        return {
+          mode: "exact",
+          routeLengthM,
+          territories: [],
+          traversal: []
+        };
+      }
+
+      const { rows } = await client.query<PostgisRouteRow>(POSTGIS_ROUTE_SQL, [
+        options.datasetId,
+        datasetVersion,
+        level,
+        JSON.stringify({ type: "LineString", coordinates: route })
+      ]);
+
+      return postgisRouteRowsToResult(rows, routeLengthM);
     },
 
     async findById(territoryId) {
@@ -551,6 +618,32 @@ order by territory_zones.level desc, territory_zones.id asc
 limit 1;
 `;
 
+export const POSTGIS_ROUTE_SQL = `
+with route as (
+  select ST_SetSRID(ST_GeomFromGeoJSON($4::text), 4326)::geometry(LineString, 4326) as geometry
+),
+matches as (
+  select
+${POSTGIS_ZONE_SELECT},
+    ST_Length(ST_Transform(ST_Intersection(territory_zones.geometry, route.geometry), 3857)) as intersection_length_m,
+    ST_LineLocatePoint(
+      route.geometry,
+      ST_ClosestPoint(route.geometry, territory_zones.geometry)
+    ) as route_fraction,
+    ST_AsGeoJSON(ST_ClosestPoint(route.geometry, territory_zones.geometry))::json as intersection_point
+  from territory_zones
+  cross join route
+  where territory_zones.dataset_id = $1
+    and ($2::text is null or territory_zones.dataset_version = $2)
+    and ($3::integer is null or territory_zones.level = $3)
+    and territory_zones.geometry && ST_Envelope(route.geometry)
+    and ST_Intersects(territory_zones.geometry, route.geometry)
+)
+select *
+from matches
+order by route_fraction asc, level asc, id asc;
+`;
+
 export const POSTGIS_FIND_BY_ID_SQL = `
 select
 ${POSTGIS_ZONE_SELECT}
@@ -724,6 +817,47 @@ function parseLocateBody(body: TerritoryLocateBodyDto): TerritoryLocateRequest {
   };
 }
 
+function parseRouteBody(body: TerritoryRouteBodyDto): TerritoryRouteRequest {
+  const route = normalizeRouteForPostgis(body.route);
+  const level = readOptionalNonNegativeInteger(body.level, "level");
+  const levels = readOptionalNonNegativeIntegerArray(body.levels, "levels");
+
+  if (body.mode !== undefined && body.mode !== "exact" && body.mode !== "sampled") {
+    throw new BadRequestException("mode must be 'exact' or 'sampled'.");
+  }
+
+  if (route.length < 2 || computeRouteLengthM(route) <= 0) {
+    throw new BadRequestException("route must contain at least two distinct coordinates.");
+  }
+
+  return {
+    route: { type: "LineString", coordinates: route },
+    ...(level === undefined ? {} : { level }),
+    ...(levels === undefined ? {} : { levels }),
+    ...(body.mode === undefined ? {} : { mode: body.mode })
+  };
+}
+
+function readOptionalNonNegativeIntegerArray(input: unknown, field: string): number[] | undefined {
+  if (input === undefined || input === null) {
+    return undefined;
+  }
+
+  if (!Array.isArray(input)) {
+    throw new BadRequestException(`${field} must be an array of non-negative integers.`);
+  }
+
+  return input.map((value, index) => {
+    const parsed = readOptionalNonNegativeInteger(value, `${field}[${index}]`);
+
+    if (parsed === undefined) {
+      throw new BadRequestException(`${field}[${index}] must be a non-negative integer.`);
+    }
+
+    return parsed;
+  });
+}
+
 function readOptionalFiniteNumber(input: unknown, field: string): number | undefined {
   if (input === undefined || input === null || input === "") {
     return undefined;
@@ -776,6 +910,70 @@ function resolveInMemoryViewport(
   }
 
   return engine.getZonesInBounds(request);
+}
+
+function normalizeRouteForPostgis(routeInput: TerritoryRouteInput | unknown): [number, number][] {
+  const coordinatesInput =
+    isRecord(routeInput) && routeInput.type === "LineString" ? routeInput.coordinates : routeInput;
+
+  if (!Array.isArray(coordinatesInput)) {
+    throw new BadRequestException("route must be a GeoJSON LineString or coordinate array.");
+  }
+
+  const coordinates: [number, number][] = [];
+
+  for (const coordinateInput of coordinatesInput) {
+    const coordinate = readRouteCoordinate(coordinateInput);
+
+    if (!coordinate) {
+      throw new BadRequestException("route contains an invalid coordinate.");
+    }
+
+    coordinates.push(coordinate);
+  }
+
+  return coordinates;
+}
+
+function readRouteCoordinate(input: unknown): [number, number] | undefined {
+  if (Array.isArray(input)) {
+    const lng = readRouteNumber(input[0]);
+    const lat = readRouteNumber(input[1]);
+
+    return isValidRouteCoordinate(lng, lat) ? [normalizeLongitude(lng), lat] : undefined;
+  }
+
+  if (!isRecord(input)) {
+    return undefined;
+  }
+
+  const lng = readRouteNumber(input.lng);
+  const lat = readRouteNumber(input.lat);
+
+  return isValidRouteCoordinate(lng, lat) ? [normalizeLongitude(lng), lat] : undefined;
+}
+
+function readRouteNumber(input: unknown): number {
+  return typeof input === "number" ? input : Number.NaN;
+}
+
+function isValidRouteCoordinate(lng: number, lat: number): boolean {
+  return Number.isFinite(lng) && Number.isFinite(lat) && lat >= -90 && lat <= 90;
+}
+
+function computeRouteLengthM(route: readonly [number, number][]): number {
+  let lengthM = 0;
+
+  for (let index = 0; index < route.length - 1; index += 1) {
+    const start = route[index];
+    const end = route[index + 1];
+
+    if (start && end) {
+      lengthM += computeLngLatDistanceM(start, end);
+    }
+  }
+
+  return lengthM;
 }
 
 function postgisRowToZone(row: PostgisZoneRow): TerritoryZone {
@@ -836,6 +1034,75 @@ function postgisRowsToHierarchy(rows: ArrayPostgisZoneRow[]): TerritoryHierarchy
   };
 }
 
+function postgisRouteRowsToResult(
+  rows: PostgisRouteRow[],
+  routeLengthM: number
+): TerritoryRouteQueryResult {
+  const traversal: TerritoryRouteTraversalSegment[] = rows.map((row, sequence) => {
+    const zone = postgisRowToZone(row);
+    const routeFraction = clampRouteFraction(row.route_fraction ?? 0);
+    const coordinate = row.intersection_point?.coordinates ?? zone.center;
+    const lengthM = row.intersection_length_m ?? 0;
+    const identity = {
+      territoryId: row.id,
+      datasetId: row.dataset_id,
+      datasetVersion: row.dataset_version ?? "",
+      geometryVersion: row.geometry_version ?? "",
+      geometryHash: row.geometry_version ?? ""
+    };
+
+    return {
+      territoryId: row.id,
+      zone,
+      identity,
+      method: "exact",
+      sequence,
+      startCoordinate: coordinate,
+      endCoordinate: coordinate,
+      startDistanceM: routeFraction * routeLengthM,
+      endDistanceM: routeFraction * routeLengthM,
+      startFraction: routeFraction,
+      endFraction: routeFraction,
+      lengthM,
+      boundaryOnly: lengthM === 0
+    };
+  });
+
+  return {
+    mode: "exact",
+    routeLengthM,
+    territories: traversal.map((segment) => ({
+      territoryId: segment.territoryId,
+      zone: segment.zone,
+      identity: segment.identity,
+      method: "exact",
+      entered: (segment.lengthM ?? 0) > 0,
+      boundaryOnly: segment.boundaryOnly === true,
+      datasetVersion: segment.identity.datasetVersion,
+      geometryVersion: segment.identity.geometryVersion,
+      intersectionLengthM: segment.lengthM ?? 0,
+      firstIntersection: segment.startCoordinate,
+      lastIntersection: segment.endCoordinate,
+      routeFractionStart: segment.startFraction,
+      routeFractionEnd: segment.endFraction,
+      segmentCount: 1
+    })),
+    traversal
+  };
+}
+
+function clampRouteFraction(value: number): number {
+  if (!Number.isFinite(value) || value <= 0) {
+    return 0;
+  }
+
+  if (value >= 1) {
+    return 1;
+  }
+
+  return value;
+}
+
 function postgisImportRow(dataset: TerritoryDataset, zone: TerritoryZone): PostgisImportRow {
   const identity = createTerritoryIdentity(dataset, zone);
   const representativePoint = computeTerritoryRepresentativePoint(zone.geometry);
@@ -860,4 +1127,8 @@ function postgisImportRow(dataset: TerritoryDataset, zone: TerritoryZone): Postg
     representative_lng: representativePoint[0],
     representative_lat: representativePoint[1]
   };
+}
+
+function isRecord(input: unknown): input is Record<string, unknown> {
+  return typeof input === "object" && input !== null && !Array.isArray(input);
 }

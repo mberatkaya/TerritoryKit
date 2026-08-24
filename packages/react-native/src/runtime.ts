@@ -12,7 +12,8 @@ import {
 import type {
   TerritoryAdminLevel,
   TerritoryDataset,
-  TerritoryQueryArtifact
+  TerritoryQueryArtifact,
+  TerritoryZone
 } from "@territory-kit/dataset";
 import { validateTerritoryDatasetRegistry } from "@territory-kit/registry";
 import type {
@@ -36,6 +37,10 @@ import type {
   MobileTerritoryInstalledArtifact,
   MobileTerritoryInstalledDataset,
   MobileTerritoryInstalledDatasetManifest,
+  MobileTerritoryDatasetStatus,
+  MobileTerritoryDatasetStatusOptions,
+  MobileTerritoryPointQueryOptions,
+  MobileTerritoryPointQueryResult,
   MobileTerritoryRuntime,
   MobileTerritoryRuntimeEvent,
   MobileTerritoryRuntimeListener,
@@ -691,6 +696,110 @@ export function createMobileTerritoryRuntime(
     }
   }
 
+  async function queryPoint(
+    queryOptions: MobileTerritoryPointQueryOptions
+  ): Promise<MobileTerritoryPointQueryResult> {
+    assertUsable("query a mobile point");
+    reportWorkerFallbackOnce();
+    const operation = createOperation(queryOptions.signal);
+    activeOperations.add(operation);
+
+    try {
+      const installed = await loadInstalledDataset({
+        datasetId: queryOptions.datasetId,
+        ...(queryOptions.version !== undefined ? { version: queryOptions.version } : {})
+      });
+      throwIfAborted(operation.controller.signal);
+      const engines = selectPointQueryEngines(installed.engines, queryOptions);
+
+      if (engines.length === 0) {
+        throw new TerritoryError(
+          "ARTIFACT_NOT_FOUND",
+          `No installed query artifact contains the requested point lookup level.`,
+          {
+            details: {
+              datasetId: queryOptions.datasetId,
+              version: installed.dataset.version,
+              level: queryOptions.level,
+              levels: queryOptions.levels
+            }
+          }
+        );
+      }
+
+      const zonesById = new Map<string, TerritoryZone>();
+
+      for (const engine of engines) {
+        for (const match of engine.findTerritoriesAtPoint(queryOptions.coordinate, {
+          ...(queryOptions.level !== undefined ? { level: queryOptions.level } : {}),
+          ...(queryOptions.levels !== undefined ? { levels: [...queryOptions.levels] } : {})
+        })) {
+          zonesById.set(match.territoryId, match.zone);
+        }
+      }
+
+      throwIfAborted(operation.controller.signal);
+      const zones = [...zonesById.values()].sort(
+        (left, right) => right.level - left.level || left.id.localeCompare(right.id)
+      );
+
+      return {
+        datasetId: queryOptions.datasetId,
+        version: installed.dataset.version,
+        territoryId: zones[0]?.id ?? null,
+        zones
+      };
+    } finally {
+      operation.cleanup();
+      activeOperations.delete(operation);
+    }
+  }
+
+  async function checkDatasetStatus(
+    statusOptions: MobileTerritoryDatasetStatusOptions
+  ): Promise<MobileTerritoryDatasetStatus> {
+    assertUsable("check mobile dataset status");
+    const operation = createOperation(statusOptions.signal);
+    activeOperations.add(operation);
+
+    try {
+      const active = await readActiveManifest(statusOptions.datasetId);
+      const installed =
+        active && (await readInstalledManifest(statusOptions.datasetId, active.version))
+          ? true
+          : false;
+      throwIfAborted(operation.controller.signal);
+      const { registry, registryHash } = await loadRegistry(operation.controller.signal);
+      const availableDataset = statusOptions.version
+        ? registry.datasets.find(
+            (dataset) =>
+              dataset.id === statusOptions.datasetId && dataset.version === statusOptions.version
+          )
+        : selectLatestRegistryDataset(registry.datasets, statusOptions.datasetId);
+      const availableVersion = availableDataset?.version;
+      const installedVersion = installed ? active?.version : undefined;
+      const updateAvailable = Boolean(
+        installedVersion && availableVersion && installedVersion !== availableVersion
+      );
+
+      return {
+        datasetId: statusOptions.datasetId,
+        installed,
+        ...(installedVersion ? { installedVersion } : {}),
+        available: Boolean(availableDataset),
+        ...(availableVersion ? { availableVersion } : {}),
+        stale: updateAvailable,
+        updateAvailable,
+        registryHash,
+        ...(active?.registryHash ? { activeRegistryHash: active.registryHash } : {}),
+        checkedAt: now().toISOString()
+      };
+    } finally {
+      operation.cleanup();
+      activeOperations.delete(operation);
+    }
+  }
+
   async function listInstalledDatasets(): Promise<readonly MobileTerritoryActiveDatasetManifest[]> {
     assertUsable("list installed mobile datasets");
     const entries = await options.storageAdapter.listDirectory?.(
@@ -999,6 +1108,8 @@ export function createMobileTerritoryRuntime(
     installDataset,
     loadInstalledDataset,
     queryViewport,
+    queryPoint,
+    checkDatasetStatus,
     listInstalledDatasets,
     rollbackDataset,
     cleanupPartialDownloads,
@@ -1028,6 +1139,38 @@ function selectPinnedDataset(
   }
 
   return match;
+}
+
+function selectLatestRegistryDataset(
+  datasets: readonly TerritoryRegistryDataset[],
+  datasetId: string
+): TerritoryRegistryDataset | undefined {
+  return datasets
+    .filter((dataset) => dataset.id === datasetId)
+    .sort((left, right) =>
+      right.version.localeCompare(left.version, undefined, {
+        numeric: true,
+        sensitivity: "base"
+      })
+    )[0];
+}
+
+function selectPointQueryEngines(
+  engines: readonly TerritoryEngine[],
+  queryOptions: MobileTerritoryPointQueryOptions
+): readonly TerritoryEngine[] {
+  const level = queryOptions.level;
+
+  if (level !== undefined) {
+    return engines.filter((engine) => engine.availableLevels.includes(level));
+  }
+
+  if (queryOptions.levels && queryOptions.levels.length > 0) {
+    const levels = new Set(queryOptions.levels);
+    return engines.filter((engine) => engine.availableLevels.some((level) => levels.has(level)));
+  }
+
+  return engines;
 }
 
 function selectInstallArtifacts(

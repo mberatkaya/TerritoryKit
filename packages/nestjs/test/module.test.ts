@@ -11,6 +11,7 @@ import {
   POSTGIS_INDEX_SQL,
   POSTGIS_LOCATE_SQL,
   POSTGIS_POINT_LOOKUP_SQL,
+  POSTGIS_ROUTE_SQL,
   POSTGIS_SCHEMA_SQL,
   POSTGIS_VIEWPORT_SQL,
   TERRITORY_KIT_ENGINE,
@@ -56,6 +57,29 @@ describe("TerritoryKitModule", () => {
     expect(locate.zoneId).toBe("tr:34:fatih");
   });
 
+  it("serves route intersections through the in-memory engine", async () => {
+    const controller = new TerritoryKitController(
+      createTerritoryEngine({ dataset: createSampleTerritoryDataset() })
+    );
+    const result = await controller.routeTerritories({
+      route: {
+        type: "LineString",
+        coordinates: [
+          [28.94, 41.01],
+          [29.07, 41.01]
+        ]
+      },
+      level: 3
+    });
+
+    expect(result.mode).toBe("exact");
+    expect(result.territories.map((territory) => territory.territoryId)).toEqual([
+      "tr:34:fatih",
+      "tr:34:kadikoy"
+    ]);
+    expect(result.traversal.every((segment) => segment.method === "exact")).toBe(true);
+  });
+
   it("rejects invalid controller input before repository calls", async () => {
     const repository = {
       findVisibleZones: vi.fn(),
@@ -88,7 +112,7 @@ describe("TerritoryKitModule", () => {
       {
         async query(sql, values) {
           queries.push({ sql, values });
-          expect([POSTGIS_VIEWPORT_SQL, POSTGIS_LOCATE_SQL]).toContain(sql);
+          expect([POSTGIS_VIEWPORT_SQL, POSTGIS_LOCATE_SQL, POSTGIS_ROUTE_SQL]).toContain(sql);
           return { rows: [] };
         }
       },
@@ -101,6 +125,18 @@ describe("TerritoryKitModule", () => {
     await expect(
       repository.locateZone({ coordinate: { lat: 41, lng: 389 }, level: 3 })
     ).resolves.toBeNull();
+    await expect(
+      repository.findAlongRoute({
+        route: {
+          type: "LineString",
+          coordinates: [
+            [28.94, 41.01],
+            [29.07, 41.01]
+          ]
+        },
+        level: 3
+      })
+    ).resolves.toMatchObject({ mode: "exact", territories: [] });
     expect(queries).toEqual([
       {
         sql: POSTGIS_BOUNDS_SQL,
@@ -109,11 +145,29 @@ describe("TerritoryKitModule", () => {
       {
         sql: POSTGIS_POINT_LOOKUP_SQL,
         values: ["territorykit-sample", "0.1.0-alpha.1", 3, 29, 41]
+      },
+      {
+        sql: POSTGIS_ROUTE_SQL,
+        values: [
+          "territorykit-sample",
+          "0.1.0-alpha.1",
+          3,
+          JSON.stringify({
+            type: "LineString",
+            coordinates: [
+              [28.94, 41.01],
+              [29.07, 41.01]
+            ]
+          })
+        ]
       }
     ]);
     expect(POSTGIS_VIEWPORT_SQL).toContain("ST_Intersects");
     expect(POSTGIS_VIEWPORT_SQL).toContain("&& ST_MakeEnvelope");
     expect(POSTGIS_LOCATE_SQL).toContain("ST_Covers");
+    expect(POSTGIS_ROUTE_SQL).toContain("ST_Intersects");
+    expect(POSTGIS_ROUTE_SQL).toContain("&& ST_Envelope");
+    expect(POSTGIS_ROUTE_SQL).toContain("ST_Length");
     expect(POSTGIS_SCHEMA_SQL).toContain("geometry(MultiPolygon, 4326)");
     expect(POSTGIS_SCHEMA_SQL).toContain("primary key (dataset_id, dataset_version, id)");
     expect(POSTGIS_INDEX_SQL).toContain("using gist (geometry)");
@@ -305,9 +359,22 @@ describe("TerritoryKitModule", () => {
           if (
             sql === POSTGIS_VIEWPORT_SQL ||
             sql === POSTGIS_LOCATE_SQL ||
-            sql === POSTGIS_FIND_BY_ID_SQL
+            sql === POSTGIS_FIND_BY_ID_SQL ||
+            sql === POSTGIS_ROUTE_SQL
           ) {
-            return { rows: [childRow as Row] };
+            return {
+              rows: [
+                {
+                  ...childRow,
+                  intersection_length_m: 123,
+                  route_fraction: 0.25,
+                  intersection_point: {
+                    type: "Point",
+                    coordinates: [0.25, 0.5]
+                  }
+                } as Row
+              ]
+            };
           }
 
           if (sql === POSTGIS_HIERARCHY_SQL) {
@@ -349,5 +416,31 @@ describe("TerritoryKitModule", () => {
     await expect(repository.getAdjacentTerritories("pg:1")).resolves.toEqual([
       expect.objectContaining({ id: "pg:2" })
     ]);
+    await expect(
+      repository.findAlongRoute({
+        route: {
+          type: "LineString",
+          coordinates: [
+            [0, 0.5],
+            [1, 0.5]
+          ]
+        }
+      })
+    ).resolves.toMatchObject({
+      territories: [
+        {
+          territoryId: "pg:1",
+          intersectionLengthM: 123,
+          routeFractionStart: 0.25
+        }
+      ],
+      traversal: [
+        {
+          territoryId: "pg:1",
+          startFraction: 0.25,
+          lengthM: 123
+        }
+      ]
+    });
   });
 });

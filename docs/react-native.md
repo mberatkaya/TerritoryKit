@@ -45,10 +45,24 @@ const visible = await mobileRuntime.queryViewport({
     zoom: 7
   }
 });
+
+const point = await mobileRuntime.queryPoint({
+  datasetId: "territory-kit-tr",
+  coordinate: { lat: 41.01, lng: 28.95 },
+  level: 3
+});
+
+const status = await mobileRuntime.checkDatasetStatus({
+  datasetId: "territory-kit-tr"
+});
 ```
 
 `version` is required for install. Mobile offline behavior should be pinned to immutable dataset
 versions; mutable "latest" semantics belong in the registry refresh decision before install.
+`checkDatasetStatus()` reports whether the active installed version is stale relative to the
+registry or offline registry snapshot. `queryPoint()` and `queryViewport()` only use installed
+polygon artifacts; if no active dataset exists, they fail with `DATASET_NOT_FOUND` instead of
+generating fallback cells.
 
 ## Storage Adapter
 
