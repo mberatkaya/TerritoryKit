@@ -8,7 +8,8 @@ export default defineConfig({
     "@territory-kit/core",
     "@territory-kit/dataset",
     "@territory-kit/generators",
-    "@territory-kit/generators/turkey-adm3"
+    "@territory-kit/generators/turkey-adm3",
+    "@territory-kit/migration"
   ],
   format: ["esm", "cjs"],
   platform: "node",

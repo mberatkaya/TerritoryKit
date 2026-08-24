@@ -34,6 +34,11 @@ const sourceRules = [
       "@territory-kit/game may depend only on core geometry APIs and dataset migration types"
   },
   {
+    packageDir: "packages/migration",
+    allowed: new Set(["@territory-kit/core", "@territory-kit/dataset"]),
+    description: "@territory-kit/migration may depend only on generic core and dataset APIs"
+  },
+  {
     packageDir: "packages/runtime",
     allowed: new Set([
       "@territory-kit/adapter-core",
@@ -98,10 +103,12 @@ const sourceRules = [
       "@territory-kit/core",
       "@territory-kit/dataset",
       "@territory-kit/generators",
+      "@territory-kit/migration",
       "@territory-kit/registry",
       "@territory-kit/registry/node"
     ]),
-    description: "@territory-kit/cli may depend on core, dataset, generators, and registry only"
+    description:
+      "@territory-kit/cli may depend on core, dataset, generators, migration, and registry only"
   },
   {
     packageDir: "packages/shared-testkit",
