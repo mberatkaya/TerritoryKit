@@ -6,8 +6,8 @@ independent from map renderers, backend frameworks, and game-specific state.
 
 ## Current Release
 
-TerritoryKit `2.0.0` is the stable release target for the V2 line. Public package manifests for
-the fixed core family are versioned at `2.0.0` after the Changesets Version Packages PR; the root
+TerritoryKit `2.1.0` is the current npm sync release for the V2 line. Public package manifests for
+the fixed core family are versioned at `2.1.0` after the Changesets Version Packages step; the root
 workspace stays private and its `0.0.0-private` version is tooling metadata, not a public product
 version.
 

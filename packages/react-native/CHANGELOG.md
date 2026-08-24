@@ -1,5 +1,20 @@
 # @territory-kit/react-native
 
+## 1.1.13
+
+### Patch Changes
+
+- 5cfc615: Add offline/cache runtime improvements and MapLibre Native structural helpers for
+  registry-backed mobile delivery.
+
+- 5fce56b: Reject installed query artifacts whose dataset version does not match the registry,
+  preventing mixed-version mobile caches during spatial migrations.
+
+- Updated dependencies [5fce56b]
+  - @territory-kit/core@2.1.0
+  - @territory-kit/dataset@2.1.0
+  - @territory-kit/registry@2.1.0
+
 ## 1.1.12
 
 ### Patch Changes

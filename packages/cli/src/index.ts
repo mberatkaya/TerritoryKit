@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { createHash } from "node:crypto";
+import { realpathSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { performance } from "node:perf_hooks";
@@ -6928,10 +6929,22 @@ Options:
   --force`);
 }
 
-const currentEntry = process.argv[1] ? pathToFileURL(process.argv[1]).href : undefined;
-
-if (currentEntry === import.meta.url) {
+if (isCliEntrypoint()) {
   runCli().then((exitCode) => {
     process.exitCode = exitCode;
   });
+}
+
+function isCliEntrypoint(): boolean {
+  const currentEntry = process.argv[1];
+
+  if (!currentEntry) {
+    return false;
+  }
+
+  try {
+    return realpathSync(currentEntry) === realpathSync(fileURLToPath(import.meta.url));
+  } catch {
+    return pathToFileURL(currentEntry).href === import.meta.url;
+  }
 }

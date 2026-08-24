@@ -1768,6 +1768,13 @@ describe("territory cli", () => {
       await rm(tempDir, { force: true, recursive: true });
     }
   });
+
+  it("shows spatial migration help", async () => {
+    await expect(captureCliRaw(["migrate-spatial", "--help"])).resolves.toMatchObject({
+      code: 0,
+      output: expect.stringContaining("territory migrate-spatial --source")
+    });
+  });
 });
 
 async function captureCli(args: string[]): Promise<{ code: number; payload: unknown }> {

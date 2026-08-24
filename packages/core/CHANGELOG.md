@@ -1,5 +1,22 @@
 # @territory-kit/core
 
+## 2.1.0
+
+### Minor Changes
+
+- c2fd881: Add production spatial provider contracts with stable territory identity,
+  dataset/geometry versioning, point and bounds territory queries, and public geometry helpers.
+
+- 5cfc615: Add exact and sampled route-to-territory workflows with traversal metadata, route length
+  reporting, repeat-entry handling, and exact polygon intersection utilities.
+
+- 5fce56b: Add H3 removal readiness identity regressions and geometry-version safety coverage.
+
+### Patch Changes
+
+- @territory-kit/dataset@2.1.0
+- @territory-kit/registry@2.1.0
+
 ## 2.0.0
 
 ### Major Changes

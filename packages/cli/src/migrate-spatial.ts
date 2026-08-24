@@ -7,6 +7,12 @@ import type { SourceSpatialRecord, SpatialMigrationStrategy } from "@territory-k
 
 export async function runMigrateSpatial(args: string[]): Promise<number> {
   const flags = parseFlags(args);
+
+  if (flags.has("help") || flags.has("h")) {
+    printMigrateSpatialHelp();
+    return 0;
+  }
+
   const positional = getPositionalArgs(args);
   const sourcePath = getFlag(flags, "source") ?? positional[0];
   const targetDatasetPath =
@@ -302,6 +308,22 @@ async function writeJsonOutput(path: string, payload: unknown, force: boolean): 
 
 function printJson(payload: unknown): void {
   console.log(JSON.stringify(payload, null, 2));
+}
+
+function printMigrateSpatialHelp(): void {
+  console.log(`territory migrate-spatial --source <source-zones.json> --target-dataset <dataset.json>
+
+Options:
+  --strategy centroid|max-overlap
+  --target-level <level>
+  --source-system <id>
+  --source-version <version>
+  --tool-version <version>
+  --min-overlap-ratio <ratio>
+  --ambiguity-delta-ratio <ratio>
+  --build-date <iso-date>
+  --output <migration-plan.json>
+  --force`);
 }
 
 function createCliIssue(message: string): {

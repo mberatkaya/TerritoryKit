@@ -1,5 +1,17 @@
 # @territory-kit/adapter-core
 
+## 2.1.0
+
+### Minor Changes
+
+- 5cfc615: Add production GeoJSON delivery options for renderer adapters, including stable feature
+  IDs, dataset and geometry version properties, minimal/all property modes, topology-safe geometry
+  simplification, and feature collection byte estimation.
+
+### Patch Changes
+
+- @territory-kit/dataset@2.1.0
+
 ## 2.0.0
 
 ### Major Changes

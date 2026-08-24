@@ -1,5 +1,13 @@
 # @territory-kit/dataset
 
+## 2.1.0
+
+### Minor Changes
+
+- c2fd881: Add dataset and geometry versioning primitives for stable territory identity, including
+  canonical geometry hashing, area and representative point helpers, and validation for
+  `geometryVersion` metadata.
+
 ## 2.0.0
 
 ### Major Changes

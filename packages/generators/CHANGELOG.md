@@ -1,5 +1,13 @@
 # @territory-kit/generators
 
+## 2.1.0
+
+### Patch Changes
+
+- Updated dependencies [5fce56b]
+  - @territory-kit/core@2.1.0
+  - @territory-kit/dataset@2.1.0
+
 ## 2.0.0
 
 ### Major Changes

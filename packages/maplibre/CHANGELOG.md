@@ -1,5 +1,19 @@
 # @territory-kit/maplibre
 
+## 2.1.0
+
+### Minor Changes
+
+- 5cfc615: Add MapLibre production delivery controls for registry-backed GeoJSON, including
+  adapter-core feature options, stable promoted IDs, dataset/geometry version properties, and
+  geometry simplification for viewport payloads.
+
+### Patch Changes
+
+- @territory-kit/adapter-core@2.1.0
+- @territory-kit/dataset@2.1.0
+- @territory-kit/registry@2.1.0
+
 ## 2.0.0
 
 ### Major Changes

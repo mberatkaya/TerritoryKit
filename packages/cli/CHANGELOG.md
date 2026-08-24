@@ -1,5 +1,22 @@
 # @territory-kit/cli
 
+## 2.1.0
+
+### Minor Changes
+
+- 5fce56b: Add `territory migrate-spatial` for dry-run legacy spatial ID to TerritoryKit territory
+  mapping, including centroid and maximum-overlap strategies, JSON reports, conflict summaries, and
+  H3 removal readiness workflows.
+
+### Patch Changes
+
+- Updated dependencies [5fce56b]
+  - @territory-kit/migration@2.1.0
+  - @territory-kit/core@2.1.0
+  - @territory-kit/generators@2.1.0
+  - @territory-kit/dataset@2.1.0
+  - @territory-kit/registry@2.1.0
+
 ## 2.0.0
 
 ### Major Changes
