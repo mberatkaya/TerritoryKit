@@ -183,6 +183,13 @@ export interface TerritoryGlobalMetadata {
   algorithmVersion?: string;
   generationSeed?: string;
   stableId?: string;
+  geometryVersion?: string;
+  geometryHash?: string;
+  originalGeometryHash?: string;
+  effectiveGeometryHash?: string;
+  revision?: string;
+  areaM2?: number;
+  representativePoint?: LngLat;
   semanticReviewStatus?: TerritorySemanticReviewStatus;
   coverageStatus?: TerritoryCoverageStatus;
   codes?: TerritoryCodes;

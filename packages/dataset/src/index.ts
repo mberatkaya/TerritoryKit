@@ -1,7 +1,11 @@
 export { createTerritoryDatasetFromGeoJson, loadTerritoryDatasetFromGeoJson } from "./geojson.js";
 export {
+  canonicalizeTerritoryGeometry,
   computeGeometryBBox,
   computeGeometryCenter,
+  computeTerritoryAreaM2,
+  computeTerritoryRepresentativePoint,
+  createTerritoryGeometryVersion,
   geometryToPolygons,
   hasRingSelfIntersection
 } from "./geometry.js";

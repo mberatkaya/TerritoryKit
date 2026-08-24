@@ -178,6 +178,18 @@ export const territoryDatasetJsonSchema = {
                   algorithmVersion: { type: "string", minLength: 1 },
                   generationSeed: { type: "string", minLength: 1 },
                   stableId: { type: "string", minLength: 1 },
+                  geometryVersion: { type: "string", minLength: 1 },
+                  geometryHash: { type: "string", minLength: 1 },
+                  originalGeometryHash: { type: "string", minLength: 1 },
+                  effectiveGeometryHash: { type: "string", minLength: 1 },
+                  revision: { type: "string", minLength: 1 },
+                  areaM2: { type: "number", minimum: 0 },
+                  representativePoint: {
+                    type: "array",
+                    prefixItems: [{ type: "number" }, { type: "number" }],
+                    minItems: 2,
+                    maxItems: 2
+                  },
                   semanticReviewStatus: {
                     enum: [
                       "reviewed",

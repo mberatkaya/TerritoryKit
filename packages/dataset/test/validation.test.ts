@@ -105,6 +105,49 @@ describe("validateTerritoryDataset", () => {
     );
   });
 
+  it("validates production identity and geometry metadata fields", () => {
+    const dataset = validDataset();
+    dataset.zones[1] = {
+      ...dataset.zones[1]!,
+      properties: {
+        territory: {
+          stableId: "stable-child",
+          geometryVersion: "boundary-v1",
+          geometryHash: "fnv1a32:abcd1234",
+          originalGeometryHash: "fnv1a32:abcd1234",
+          effectiveGeometryHash: "fnv1a32:abcd1234",
+          revision: "1",
+          areaM2: 1000,
+          representativePoint: [1, 1]
+        }
+      }
+    };
+
+    expect(validateTerritoryDataset(dataset).ok).toBe(true);
+
+    dataset.zones[1] = {
+      ...dataset.zones[1]!,
+      properties: {
+        territory: {
+          geometryVersion: "",
+          areaM2: -1,
+          representativePoint: [200, 1]
+        }
+      }
+    };
+
+    const result = validateTerritoryDataset(dataset);
+
+    expect(result.ok).toBe(false);
+    expect(result.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ path: "$.zones[1].properties.territory.geometryVersion" }),
+        expect.objectContaining({ path: "$.zones[1].properties.territory.areaM2" }),
+        expect.objectContaining({ path: "$.zones[1].properties.territory.representativePoint" })
+      ])
+    );
+  });
+
   it("rejects invalid lower-admin territory metadata", () => {
     const dataset = validDataset();
     dataset.zones[1] = {

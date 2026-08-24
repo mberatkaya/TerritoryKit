@@ -2,11 +2,17 @@ import { computeGeometryBBox, geometryToPolygons } from "@territory-kit/dataset"
 import type { LngLat, TerritoryGeometry } from "@territory-kit/dataset";
 import type { BoundaryMode, TerritoryBounds } from "./types.js";
 
+type RingPointRelation = "outside" | "inside" | "boundary";
+
+const POINT_ON_SEGMENT_EPSILON = 1e-12;
+
 export function pointIntersectsGeometry(
   coordinate: LngLat,
   geometry: TerritoryGeometry,
   boundaryMode: BoundaryMode
 ): boolean {
+  const normalizedCoordinate: LngLat = [normalizeLongitude(coordinate[0]), coordinate[1]];
+
   for (const polygon of geometryToPolygons(geometry)) {
     const outerRing = polygon[0];
 
@@ -14,20 +20,40 @@ export function pointIntersectsGeometry(
       continue;
     }
 
-    const outer = pointInRing(coordinate, outerRing, boundaryMode);
+    const outer = pointInRing(normalizedCoordinate, outerRing);
+    const coveredByOuter =
+      outer === "inside" || (outer === "boundary" && boundaryMode === "covers");
 
-    if (!outer) {
+    if (!coveredByOuter) {
       continue;
     }
 
-    const isInsideHole = polygon.slice(1).some((hole) => pointInRing(coordinate, hole, "covers"));
+    const isExcludedByHole = polygon.slice(1).some((hole) => {
+      const relation = pointInRing(normalizedCoordinate, hole);
 
-    if (!isInsideHole) {
+      return relation === "inside" || (relation === "boundary" && boundaryMode === "contains");
+    });
+
+    if (!isExcludedByHole) {
       return true;
     }
   }
 
   return false;
+}
+
+export function normalizeLongitude(longitude: number): number {
+  if (!Number.isFinite(longitude)) {
+    return longitude;
+  }
+
+  if (longitude >= -180 && longitude <= 180) {
+    return longitude;
+  }
+
+  const wrapped = ((((longitude + 180) % 360) + 360) % 360) - 180;
+
+  return wrapped === -180 && longitude > 0 ? 180 : wrapped;
 }
 
 export function bboxIntersectsBounds(
@@ -137,7 +163,7 @@ function geometryToSegments(geometry: TerritoryGeometry): Array<[LngLat, LngLat]
   return segments;
 }
 
-function pointInRing(coordinate: LngLat, ring: LngLat[], boundaryMode: BoundaryMode): boolean {
+function pointInRing(coordinate: LngLat, ring: LngLat[]): RingPointRelation {
   let inside = false;
   const [longitude, latitude] = coordinate;
 
@@ -154,7 +180,7 @@ function pointInRing(coordinate: LngLat, ring: LngLat[], boundaryMode: BoundaryM
     }
 
     if (isPointOnSegment(coordinate, previous, current)) {
-      return boundaryMode === "covers";
+      return "boundary";
     }
 
     const intersects =
@@ -168,14 +194,14 @@ function pointInRing(coordinate: LngLat, ring: LngLat[], boundaryMode: BoundaryM
     }
   }
 
-  return inside;
+  return inside ? "inside" : "outside";
 }
 
 function isPointOnSegment(point: LngLat, start: LngLat, end: LngLat): boolean {
   const cross =
     (point[1] - start[1]) * (end[0] - start[0]) - (point[0] - start[0]) * (end[1] - start[1]);
 
-  if (Math.abs(cross) > Number.EPSILON) {
+  if (Math.abs(cross) > POINT_ON_SEGMENT_EPSILON) {
     return false;
   }
 
