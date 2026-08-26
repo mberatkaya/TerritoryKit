@@ -87,8 +87,11 @@ Türkiye
 ```
 
 The fixture exists to test ADM3 validation, stable IDs, explicit parent links, children, adjacency,
-registry fallback, and MapLibre rendering metadata. It must not be used as official boundary data.
+registry fallback, and MapLibre rendering metadata. It is explicitly tagged as
+`boundarySourceClass: "synthetic-test"`, `boundaryKind: "estimated"`, `confidence: "low"`, and
+`administrative: false`. Turkey V2 production validation rejects it with
+`SYNTHETIC_SOURCE_NOT_PUBLISHABLE`; it must not be used as official boundary data.
 
 Any future Turkey neighbourhood ingestion must pass the same official/open-data manifest gate:
-source URL, source date, checksum, license, attribution, redistribution, commercial-use, and
-modification status.
+source URL, provider/source ID, source date when known, source snapshot checksum, geometry hash,
+license, attribution, redistribution, commercial-use, and modification status.

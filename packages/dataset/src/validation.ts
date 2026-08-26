@@ -6,10 +6,14 @@ import type {
   LngLat,
   TerritoryAdminLevel,
   TerritoryBBox,
+  TerritoryBoundaryConfidence,
+  TerritoryBoundaryKind,
+  TerritoryBoundarySourceClass,
   TerritoryCoverageStatus,
   TerritoryDataset,
   TerritoryDatasetManifest,
   TerritoryGeometry,
+  TerritoryLicenseState,
   TerritorySemanticAdminType,
   TerritorySemanticReviewStatus,
   TerritorySourceClass,
@@ -19,7 +23,11 @@ import type {
 } from "./types.js";
 import {
   TERRITORY_ADMIN_LEVELS,
+  TERRITORY_BOUNDARY_CONFIDENCES,
+  TERRITORY_BOUNDARY_KINDS,
+  TERRITORY_BOUNDARY_SOURCE_CLASSES,
   TERRITORY_COVERAGE_STATUSES,
+  TERRITORY_LICENSE_STATES,
   TERRITORY_SEMANTIC_ADMIN_TYPES,
   TERRITORY_SEMANTIC_REVIEW_STATUSES,
   TERRITORY_SOURCE_CLASSES,
@@ -716,11 +724,42 @@ function validateTerritoryPropertiesMetadata(
   readOptionalMetadataString(territory.provinceCode, `${path}.provinceCode`, issues, zoneId);
   readOptionalMetadataString(territory.districtCode, `${path}.districtCode`, issues, zoneId);
   readOptionalMetadataSourceClass(territory.sourceClass, `${path}.sourceClass`, issues, zoneId);
+  readOptionalMetadataBoundaryKind(territory.boundaryKind, `${path}.boundaryKind`, issues, zoneId);
+  readOptionalMetadataBoundarySourceClass(
+    territory.boundarySourceClass,
+    `${path}.boundarySourceClass`,
+    issues,
+    zoneId
+  );
+  readOptionalMetadataBoundaryConfidence(
+    territory.confidence,
+    `${path}.confidence`,
+    issues,
+    zoneId
+  );
+  readOptionalMetadataBoolean(territory.administrative, `${path}.administrative`, issues, zoneId);
+  readOptionalMetadataString(territory.providerId, `${path}.providerId`, issues, zoneId);
+  readOptionalMetadataString(territory.providerName, `${path}.providerName`, issues, zoneId);
   readOptionalMetadataString(territory.sourceProvider, `${path}.sourceProvider`, issues, zoneId);
+  readOptionalMetadataString(territory.sourceId, `${path}.sourceId`, issues, zoneId);
   readOptionalMetadataString(territory.sourceDatasetId, `${path}.sourceDatasetId`, issues, zoneId);
   readOptionalMetadataString(territory.sourceNativeId, `${path}.sourceNativeId`, issues, zoneId);
   readOptionalMetadataString(territory.sourceDate, `${path}.sourceDate`, issues, zoneId);
+  readOptionalMetadataString(territory.sourceVersion, `${path}.sourceVersion`, issues, zoneId);
   readOptionalMetadataString(territory.sourceUrl, `${path}.sourceUrl`, issues, zoneId);
+  readOptionalMetadataString(
+    territory.sourceSnapshotId,
+    `${path}.sourceSnapshotId`,
+    issues,
+    zoneId
+  );
+  readOptionalMetadataString(
+    territory.sourceSnapshotChecksum,
+    `${path}.sourceSnapshotChecksum`,
+    issues,
+    zoneId
+  );
+  readOptionalMetadataLicenseState(territory.licenseState, `${path}.licenseState`, issues, zoneId);
   readOptionalMetadataString(territory.license, `${path}.license`, issues, zoneId);
   readOptionalMetadataString(territory.attribution, `${path}.attribution`, issues, zoneId);
   readOptionalMetadataBoolean(territory.official, `${path}.official`, issues, zoneId);
@@ -902,6 +941,115 @@ function readOptionalMetadataCoverageStatus(
   return undefined;
 }
 
+function readOptionalMetadataBoundaryKind(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[],
+  zoneId: string | undefined
+): TerritoryBoundaryKind | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (
+    typeof input === "string" &&
+    TERRITORY_BOUNDARY_KINDS.includes(input as TerritoryBoundaryKind)
+  ) {
+    return input as TerritoryBoundaryKind;
+  }
+
+  issues.push({
+    code: "INVALID_BOUNDARY_METADATA",
+    message: "Expected boundaryKind to be administrative or estimated.",
+    path,
+    severity: "error",
+    ...(zoneId ? { zoneId, featureId: zoneId } : {})
+  });
+  return undefined;
+}
+
+function readOptionalMetadataBoundarySourceClass(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[],
+  zoneId: string | undefined
+): TerritoryBoundarySourceClass | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (
+    typeof input === "string" &&
+    TERRITORY_BOUNDARY_SOURCE_CLASSES.includes(input as TerritoryBoundarySourceClass)
+  ) {
+    return input as TerritoryBoundarySourceClass;
+  }
+
+  issues.push({
+    code: "INVALID_BOUNDARY_METADATA",
+    message:
+      "Expected boundarySourceClass to be official-national, official-local, osm-administrative, smart-derived, or synthetic-test.",
+    path,
+    severity: "error",
+    ...(zoneId ? { zoneId, featureId: zoneId } : {})
+  });
+  return undefined;
+}
+
+function readOptionalMetadataBoundaryConfidence(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[],
+  zoneId: string | undefined
+): TerritoryBoundaryConfidence | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (
+    typeof input === "string" &&
+    TERRITORY_BOUNDARY_CONFIDENCES.includes(input as TerritoryBoundaryConfidence)
+  ) {
+    return input as TerritoryBoundaryConfidence;
+  }
+
+  issues.push({
+    code: "INVALID_BOUNDARY_METADATA",
+    message: "Expected confidence to be authoritative, high, medium, or low.",
+    path,
+    severity: "error",
+    ...(zoneId ? { zoneId, featureId: zoneId } : {})
+  });
+  return undefined;
+}
+
+function readOptionalMetadataLicenseState(
+  input: unknown,
+  path: string,
+  issues: TerritoryValidationIssue[],
+  zoneId: string | undefined
+): TerritoryLicenseState | undefined {
+  if (input === undefined) {
+    return undefined;
+  }
+
+  if (
+    typeof input === "string" &&
+    TERRITORY_LICENSE_STATES.includes(input as TerritoryLicenseState)
+  ) {
+    return input as TerritoryLicenseState;
+  }
+
+  issues.push({
+    code: "INVALID_BOUNDARY_METADATA",
+    message: "Expected licenseState to be approved, pending, restricted, or unknown.",
+    path,
+    severity: "error",
+    ...(zoneId ? { zoneId, featureId: zoneId } : {})
+  });
+  return undefined;
+}
+
 function readOptionalMetadataSourceClass(
   input: unknown,
   path: string,
@@ -1035,12 +1183,29 @@ function validateOptionalMetadataSource(
 
   readOptionalMetadataString(input.provider, `${path}.provider`, issues, zoneId);
   readOptionalMetadataSourceClass(input.sourceClass, `${path}.sourceClass`, issues, zoneId);
+  readOptionalMetadataBoundarySourceClass(
+    input.boundarySourceClass,
+    `${path}.boundarySourceClass`,
+    issues,
+    zoneId
+  );
+  readOptionalMetadataString(input.providerId, `${path}.providerId`, issues, zoneId);
+  readOptionalMetadataString(input.providerName, `${path}.providerName`, issues, zoneId);
   readOptionalMetadataString(input.sourceDatasetId, `${path}.sourceDatasetId`, issues, zoneId);
   readOptionalMetadataString(input.sourceId, `${path}.sourceId`, issues, zoneId);
   readOptionalMetadataString(input.sourceNativeId, `${path}.sourceNativeId`, issues, zoneId);
   readOptionalMetadataString(input.sourceUrl, `${path}.sourceUrl`, issues, zoneId);
   readOptionalMetadataString(input.sourceDate, `${path}.sourceDate`, issues, zoneId);
+  readOptionalMetadataString(input.sourceVersion, `${path}.sourceVersion`, issues, zoneId);
+  readOptionalMetadataString(input.sourceSnapshotId, `${path}.sourceSnapshotId`, issues, zoneId);
+  readOptionalMetadataString(
+    input.sourceSnapshotChecksum,
+    `${path}.sourceSnapshotChecksum`,
+    issues,
+    zoneId
+  );
   readOptionalMetadataString(input.importedAt, `${path}.importedAt`, issues, zoneId);
+  readOptionalMetadataLicenseState(input.licenseState, `${path}.licenseState`, issues, zoneId);
   readOptionalMetadataString(input.license, `${path}.license`, issues, zoneId);
   readOptionalMetadataString(input.attribution, `${path}.attribution`, issues, zoneId);
 }

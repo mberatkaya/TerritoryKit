@@ -260,6 +260,27 @@ describe("Turkey V2 national playable build", () => {
     expect(result.coverage.provinceCount).toBe(81);
     expect(result.coverage.districtCount).toBe(2);
     expect(result.coverage.generatedZoneCount).toBeGreaterThan(0);
+    expect(result.coverage.districts.map((district) => district.availabilityStatus)).toEqual([
+      "estimated",
+      "estimated"
+    ]);
+    expect(result.coverage.districts.map((district) => district.availabilityReasonCode)).toEqual([
+      "smart-derived-fallback",
+      "smart-derived-fallback"
+    ]);
+    expect(result.coverage.provinces[0]).toMatchObject({
+      availabilityStatus: "estimated",
+      availabilityReasonCodes: ["smart-derived-fallback"],
+      adm2AvailabilityStatusCounts: expect.objectContaining({ estimated: 2 })
+    });
+    expect(result.levels.ADM3.zones[0]?.properties.territory).toMatchObject({
+      boundaryKind: "estimated",
+      boundarySourceClass: "smart-derived",
+      confidence: "medium",
+      administrative: false,
+      licenseState: "approved",
+      sourceSnapshotChecksum: expect.any(String)
+    });
     expect(result.coverage.officialZoneCount).toBe(0);
     expect(result.coverage.finalCoveragePercent).toBeGreaterThanOrEqual(99.99);
     expect(result.coverage.districts.every((district) => district.qualityStatus === "ok")).toBe(
@@ -397,9 +418,27 @@ describe("Turkey V2 national playable build", () => {
     expect(result.coverage.osmZoneCount).toBe(1);
     expect(result.coverage.generatedZoneCount).toBeGreaterThan(0);
     expect(result.coverage.hybridDistricts).toContain("tr:adm2:01-a");
+    expect(
+      result.coverage.districts.find((district) => district.districtId === "tr:adm2:01-a")
+    ).toMatchObject({
+      availabilityStatus: "mixed",
+      availabilityReasonCode: "mixed-source-priority"
+    });
     expect(result.provenance.summary.sourceClasses).toMatchObject({
       official: 1,
       osm: 1
+    });
+    expect(result.provenance.zones.find((zone) => zone.sourceClass === "official")).toMatchObject({
+      boundaryKind: "administrative",
+      boundarySourceClass: "official-local",
+      confidence: "authoritative",
+      licenseState: "approved"
+    });
+    expect(result.provenance.zones.find((zone) => zone.sourceClass === "osm")).toMatchObject({
+      boundaryKind: "administrative",
+      boundarySourceClass: "osm-administrative",
+      confidence: "high",
+      licenseState: "approved"
     });
     expect(result.distributionPolicy.policies.map((policy) => policy.license)).toContain(
       "ODbL-1.0"

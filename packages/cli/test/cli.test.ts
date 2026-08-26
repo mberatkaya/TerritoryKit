@@ -2404,12 +2404,18 @@ function createCliTurkeyV2Dataset(options: { official?: boolean } = {}): unknown
   const datasetId = "territory-kit-tr-v2-cli";
   const source = {
     provider: "fixture-official-provider",
+    providerId: "fixture-official-provider",
+    providerName: "Fixture official provider",
     sourceClass: "official",
+    boundarySourceClass: "official-local",
     sourceDatasetId: "fixture-official",
     sourceId: "official-1",
     sourceNativeId: "official-1",
     sourceUrl: "https://data.example.test/tr/adm3",
     sourceDate: "2026-08-01",
+    sourceVersion: "fixture-v1",
+    sourceSnapshotChecksum: "sha256:cli-fixture-source-snapshot",
+    licenseState: "approved",
     license: "CC BY 4.0",
     attribution: "Fixture"
   };
@@ -2499,11 +2505,21 @@ function createCliTurkeyV2Dataset(options: { official?: boolean } = {}): unknown
           provinceCode: "34",
           districtCode: "003",
           sourceClass: "official",
+          boundaryKind: "administrative",
+          boundarySourceClass: "official-local",
+          confidence: "authoritative",
+          administrative: true,
+          providerId: source.providerId,
+          providerName: source.providerName,
           sourceProvider: source.provider,
+          sourceId: source.sourceId,
           sourceDatasetId: source.sourceDatasetId,
           sourceNativeId: source.sourceNativeId,
           sourceDate: source.sourceDate,
+          sourceVersion: source.sourceVersion,
           sourceUrl: source.sourceUrl,
+          sourceSnapshotChecksum: source.sourceSnapshotChecksum,
+          licenseState: source.licenseState,
           license: source.license,
           attribution: source.attribution,
           official: options.official ?? true,
@@ -2511,6 +2527,7 @@ function createCliTurkeyV2Dataset(options: { official?: boolean } = {}): unknown
           coverageStatus: "verified",
           semanticReviewStatus: "reviewed",
           stableId: "tr:adm3:34-003-official-1",
+          geometryHash: "sha256:cli-tr-v2-official-1",
           source
         }
       })

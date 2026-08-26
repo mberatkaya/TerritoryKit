@@ -20,6 +20,14 @@ interface Adm3FixtureOptions {
   generated?: boolean;
   omitProvenance?: boolean;
   omitAlgorithmVersion?: boolean;
+  boundarySourceClass?: string;
+  boundaryKind?: string;
+  confidence?: string;
+  administrative?: boolean;
+  licenseState?: string;
+  omitBoundarySourceClass?: boolean;
+  omitSourceSnapshotChecksum?: boolean;
+  omitGeometryHash?: boolean;
   coverageStatus?: string;
   semanticReviewStatus?: string;
   provinceCode?: string;
@@ -150,11 +158,14 @@ export function createAdm3Zone(options: Adm3FixtureOptions): TerritoryZone {
   const sourceNativeId =
     options.sourceNativeId ??
     (options.sourceClass === "generated" ? options.id : `${options.sourceClass}-native`);
-  const source = options.omitProvenance
+  const source: Record<string, string | undefined> = options.omitProvenance
     ? {}
     : {
         provider: options.sourceClass === "osm" ? "openstreetmap" : "fixture-official-provider",
         sourceClass: options.sourceClass,
+        boundarySourceClass: boundarySourceClassFor(options.sourceClass),
+        providerId: options.sourceClass === "osm" ? "openstreetmap" : "fixture-official-provider",
+        providerName: options.sourceClass === "osm" ? "OpenStreetMap" : "Fixture official source",
         sourceDatasetId: options.sourceClass === "osm" ? "openstreetmap" : "fixture-official",
         sourceId: sourceNativeId,
         sourceNativeId,
@@ -162,6 +173,11 @@ export function createAdm3Zone(options: Adm3FixtureOptions): TerritoryZone {
           options.sourceClass === "osm"
             ? "https://www.openstreetmap.org/"
             : "https://data.example.test/tr/adm3",
+        sourceVersion: "fixture-v1",
+        ...(options.omitSourceSnapshotChecksum
+          ? {}
+          : { sourceSnapshotChecksum: "sha256:fixture-source-snapshot" }),
+        licenseState: "approved",
         sourceDate: "2026-08-01",
         license: options.sourceClass === "osm" ? "ODbL-1.0" : "CC BY 4.0",
         attribution: options.sourceClass === "osm" ? "OpenStreetMap contributors" : "Fixture"
@@ -207,11 +223,30 @@ export function createAdm3Zone(options: Adm3FixtureOptions): TerritoryZone {
       provinceCode,
       districtCode,
       sourceClass: options.sourceClass,
+      ...(options.omitBoundarySourceClass
+        ? {}
+        : {
+            boundarySourceClass:
+              options.boundarySourceClass ?? boundarySourceClassFor(options.sourceClass)
+          }),
+      boundaryKind: options.boundaryKind ?? boundaryKindFor(options.sourceClass),
+      confidence: options.confidence ?? confidenceFor(options.sourceClass),
+      administrative:
+        options.administrative ??
+        (options.sourceClass === "official" && options.boundarySourceClass !== "smart-derived"),
+      providerId: source.providerId,
+      providerName: source.providerName,
       sourceProvider: source.provider,
+      sourceId: source.sourceId,
       sourceDatasetId: source.sourceDatasetId,
       sourceNativeId,
       sourceDate: source.sourceDate,
+      sourceVersion: source.sourceVersion,
       sourceUrl: source.sourceUrl,
+      ...(options.omitSourceSnapshotChecksum
+        ? {}
+        : { sourceSnapshotChecksum: source.sourceSnapshotChecksum }),
+      licenseState: options.licenseState ?? source.licenseState,
       license: source.license,
       attribution: source.attribution,
       official: options.official ?? options.sourceClass === "official",
@@ -226,11 +261,40 @@ export function createAdm3Zone(options: Adm3FixtureOptions): TerritoryZone {
       coverageStatus:
         options.coverageStatus ?? (options.sourceClass === "generated" ? "generated" : "verified"),
       stableId: options.stableId ?? options.id,
+      ...(options.omitGeometryHash ? {} : { geometryHash: `sha256:${options.id}` }),
       source,
       ...(generatedZone ? { generatedZone } : {})
     },
     multipolygon: options.multipolygon
   });
+}
+
+function boundarySourceClassFor(sourceClass: TerritorySourceClass): string {
+  if (sourceClass === "official") {
+    return "official-local";
+  }
+
+  if (sourceClass === "osm") {
+    return "osm-administrative";
+  }
+
+  return "smart-derived";
+}
+
+function boundaryKindFor(sourceClass: TerritorySourceClass): string {
+  return sourceClass === "generated" ? "estimated" : "administrative";
+}
+
+function confidenceFor(sourceClass: TerritorySourceClass): string {
+  if (sourceClass === "official") {
+    return "authoritative";
+  }
+
+  if (sourceClass === "osm") {
+    return "high";
+  }
+
+  return "medium";
 }
 
 export function createLegacySchemaV1Dataset(): TerritoryDataset {

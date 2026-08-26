@@ -4,8 +4,10 @@ import type {
   TerritoryAdminLevel,
   TerritoryAdjacencyArtifact,
   TerritoryBBox,
+  TerritoryBoundarySourceClass,
   TerritoryDataset,
   TerritoryGeometry,
+  TerritoryLicenseState,
   TerritorySemanticAdminType,
   TerritoryZone
 } from "@territory-kit/dataset";
@@ -193,11 +195,14 @@ export interface TerritoryCountrySourceLockLevel {
   sourceVersion?: string;
   sourceDate?: string;
   license?: string;
+  licenseState?: TerritoryLicenseState;
   licenseUrl?: string;
   licenseDetail?: string;
   attribution?: string;
   redistributionStatus?: string;
   commercialUseStatus?: string;
+  boundarySourceClass?: TerritoryBoundarySourceClass;
+  sourceSnapshotChecksum?: string;
   sha256?: string;
   sizeBytes?: number;
   originalFilename?: string;

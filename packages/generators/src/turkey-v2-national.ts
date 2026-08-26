@@ -89,6 +89,15 @@ export const TURKEY_V2_ADM2_EXPECTED_COUNT = TURKEY_V2_NATIONAL_EXPECTED_COUNTS.
 export type TurkeyV2NationalOutputMode = "plan" | "build" | "publish-ready";
 export type TurkeyV2NationalBuildMode = "partial" | "publish-ready";
 export type TurkeyV2NationalSourceStatus = "artifact-loaded" | "disabled" | "not-built";
+export type TurkeyV2Adm3AvailabilityStatus =
+  "official" | "osm-administrative" | "estimated" | "mixed" | "unavailable" | "failed";
+export type TurkeyV2Adm3AvailabilityReasonCode =
+  | "official-source-approved"
+  | "osm-administrative-source-selected"
+  | "smart-derived-fallback"
+  | "mixed-source-priority"
+  | "no-adm3-zones-built"
+  | "quality-gate-failed";
 
 export interface TurkeyV2NationalSourceLock {
   schemaVersion: typeof TURKEY_V2_NATIONAL_SOURCE_LOCK_SCHEMA_VERSION;
@@ -308,6 +317,9 @@ export interface TurkeyV2NationalProvinceCoverage {
   gapAreaKm2: number;
   qualityStatus: "ok" | "failed";
   primaryCoverageClass: TerritorySourceClass;
+  availabilityStatus: TurkeyV2Adm3AvailabilityStatus;
+  availabilityReasonCodes: TurkeyV2Adm3AvailabilityReasonCode[];
+  adm2AvailabilityStatusCounts: Record<TurkeyV2Adm3AvailabilityStatus, number>;
 }
 
 export interface TurkeyV2NationalDistrictCoverage {
@@ -327,6 +339,8 @@ export interface TurkeyV2NationalDistrictCoverage {
   finalCoveragePercent: number;
   gapAreaKm2: number;
   qualityStatus: "ok" | "failed";
+  availabilityStatus: TurkeyV2Adm3AvailabilityStatus;
+  availabilityReasonCode: TurkeyV2Adm3AvailabilityReasonCode;
   deterministicHash: string;
   artifactPath: string;
 }
@@ -1165,6 +1179,14 @@ function createNationalCoverage(input: {
       district.coverage.officialEffectiveCount +
       district.coverage.osmEffectiveCount +
       district.coverage.generatedEffectiveCount;
+    const qualityStatus =
+      zoneCount > 0 && district.coverage.finalCoveragePercent >= 99.99 ? "ok" : "failed";
+    const availability = classifyAdm3Availability({
+      officialCount: district.coverage.officialEffectiveCount,
+      osmCount: district.coverage.osmEffectiveCount,
+      generatedCount: district.coverage.generatedEffectiveCount,
+      qualityStatus
+    });
     return {
       districtId: district.coverage.districtId,
       districtCode: district.coverage.districtCode,
@@ -1181,8 +1203,9 @@ function createNationalCoverage(input: {
       generatedCoveragePercent: district.coverage.generatedCoveragePercent,
       finalCoveragePercent: district.coverage.finalCoveragePercent,
       gapAreaKm2: district.coverage.remainingGapAreaKm2,
-      qualityStatus:
-        zoneCount > 0 && district.coverage.finalCoveragePercent >= 99.99 ? "ok" : "failed",
+      qualityStatus,
+      availabilityStatus: availability.status,
+      availabilityReasonCode: availability.reasonCode,
       deterministicHash: district.deterministicHash,
       artifactPath: `districts/${safeArtifactSegment(district.coverage.districtId)}`
     } satisfies TurkeyV2NationalDistrictCoverage;
@@ -1323,6 +1346,11 @@ function createProvinceCoverage(
         ([leftClass, leftCount], [rightClass, rightCount]) =>
           rightCount - leftCount || leftClass.localeCompare(rightClass)
       )[0]?.[0] as TerritorySourceClass;
+      const availabilityStatusCounts = countAdm3AvailabilityStatuses(districts);
+      const availabilityReasonCodes = sortedUnique(
+        districts.map((district) => district.availabilityReasonCode)
+      );
+      const availabilityStatus = classifyProvinceAdm3Availability(availabilityStatusCounts);
 
       return {
         provinceCode,
@@ -1345,10 +1373,100 @@ function createProvinceCoverage(
         qualityStatus: districts.every((district) => district.qualityStatus === "ok")
           ? "ok"
           : "failed",
-        primaryCoverageClass
+        primaryCoverageClass,
+        availabilityStatus,
+        availabilityReasonCodes,
+        adm2AvailabilityStatusCounts: availabilityStatusCounts
       } satisfies TurkeyV2NationalProvinceCoverage;
     })
     .sort((left, right) => left.provinceCode.localeCompare(right.provinceCode));
+}
+
+function classifyAdm3Availability(input: {
+  officialCount: number;
+  osmCount: number;
+  generatedCount: number;
+  qualityStatus: "ok" | "failed";
+}): {
+  status: TurkeyV2Adm3AvailabilityStatus;
+  reasonCode: TurkeyV2Adm3AvailabilityReasonCode;
+} {
+  const zoneCount = input.officialCount + input.osmCount + input.generatedCount;
+
+  if (zoneCount === 0) {
+    return { status: "unavailable", reasonCode: "no-adm3-zones-built" };
+  }
+
+  if (input.qualityStatus !== "ok") {
+    return { status: "failed", reasonCode: "quality-gate-failed" };
+  }
+
+  const positiveClassCount = [
+    input.officialCount > 0,
+    input.osmCount > 0,
+    input.generatedCount > 0
+  ].filter(Boolean).length;
+
+  if (positiveClassCount > 1) {
+    return { status: "mixed", reasonCode: "mixed-source-priority" };
+  }
+
+  if (input.officialCount > 0) {
+    return { status: "official", reasonCode: "official-source-approved" };
+  }
+
+  if (input.osmCount > 0) {
+    return {
+      status: "osm-administrative",
+      reasonCode: "osm-administrative-source-selected"
+    };
+  }
+
+  return { status: "estimated", reasonCode: "smart-derived-fallback" };
+}
+
+function classifyProvinceAdm3Availability(
+  counts: Record<TurkeyV2Adm3AvailabilityStatus, number>
+): TurkeyV2Adm3AvailabilityStatus {
+  const present = Object.entries(counts)
+    .filter(([, count]) => count > 0)
+    .map(([status]) => status as TurkeyV2Adm3AvailabilityStatus)
+    .sort();
+
+  if (present.length === 1) {
+    return present[0]!;
+  }
+
+  if (present.length === 0) {
+    return "unavailable";
+  }
+
+  return present.every((status) => status === "failed" || status === "unavailable")
+    ? "failed"
+    : "mixed";
+}
+
+function countAdm3AvailabilityStatuses(
+  districts: readonly TurkeyV2NationalDistrictCoverage[]
+): Record<TurkeyV2Adm3AvailabilityStatus, number> {
+  const counts = createEmptyAdm3AvailabilityStatusCounts();
+
+  for (const district of districts) {
+    counts[district.availabilityStatus] += 1;
+  }
+
+  return counts;
+}
+
+function createEmptyAdm3AvailabilityStatusCounts(): Record<TurkeyV2Adm3AvailabilityStatus, number> {
+  return {
+    official: 0,
+    "osm-administrative": 0,
+    estimated: 0,
+    mixed: 0,
+    unavailable: 0,
+    failed: 0
+  };
 }
 
 function createNationalHierarchyReport(
@@ -2131,6 +2249,10 @@ function readZoneSourceClass(zone: TerritoryZone): string | undefined {
   const territory = territoryMetadata(zone);
   const source = isRecord(territory.source) ? territory.source : {};
   return readString(territory.sourceClass) ?? readString(source.sourceClass);
+}
+
+function sortedUnique<T extends string>(values: readonly T[]): T[] {
+  return [...new Set(values)].sort((left, right) => left.localeCompare(right));
 }
 
 function readString(input: unknown): string | undefined {

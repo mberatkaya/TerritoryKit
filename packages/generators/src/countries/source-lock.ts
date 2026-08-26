@@ -350,6 +350,19 @@ export function validateTerritoryCountrySourceLock(
           level: level.adminLevel
         });
       }
+
+      if (
+        level.sourceSnapshotChecksum &&
+        level.sha256 &&
+        level.sourceSnapshotChecksum !== level.sha256
+      ) {
+        issues.push({
+          code: "SOURCE_SNAPSHOT_CHECKSUM_MISMATCH",
+          severity: "error",
+          message: "Source snapshot checksum must match the locked SHA-256.",
+          level: level.adminLevel
+        });
+      }
     }
   }
 
@@ -587,11 +600,14 @@ function createLockLevel(
     ...(source.sourceVersion ? { sourceVersion: source.sourceVersion } : {}),
     ...(source.sourceDate ? { sourceDate: source.sourceDate } : {}),
     license: source.sourceLicense ?? "unknown",
+    licenseState: source.redistributionStatus === "restricted" ? "restricted" : "approved",
     ...(source.licenseUrl ? { licenseUrl: source.licenseUrl } : {}),
     ...(source.licenseDetail ? { licenseDetail: source.licenseDetail } : {}),
     attribution: source.attribution,
     ...(source.redistributionStatus ? { redistributionStatus: source.redistributionStatus } : {}),
     ...(source.commercialUseStatus ? { commercialUseStatus: source.commercialUseStatus } : {}),
+    boundarySourceClass: "official-national",
+    sourceSnapshotChecksum: artifact.sha256,
     sha256: artifact.sha256,
     sizeBytes: artifact.sizeBytes,
     ...(source.originalFilename ? { originalFilename: source.originalFilename } : {}),

@@ -47,6 +47,19 @@ export type TerritoryCoverageStatus =
 
 export type TerritorySourceClass = "official" | "osm" | "generated";
 
+export type TerritoryBoundaryKind = "administrative" | "estimated";
+
+export type TerritoryBoundarySourceClass =
+  | "official-national"
+  | "official-local"
+  | "osm-administrative"
+  | "smart-derived"
+  | "synthetic-test";
+
+export type TerritoryBoundaryConfidence = "authoritative" | "high" | "medium" | "low";
+
+export type TerritoryLicenseState = "approved" | "pending" | "restricted" | "unknown";
+
 export type LngLat = [longitude: number, latitude: number];
 
 export type TerritoryBBox = [west: number, south: number, east: number, north: number];
@@ -135,12 +148,19 @@ export interface TerritoryNames {
 export interface TerritorySourceMetadata {
   provider: string;
   sourceClass?: TerritorySourceClass;
+  boundarySourceClass?: TerritoryBoundarySourceClass;
+  providerId?: string;
+  providerName?: string;
   sourceDatasetId?: string;
   sourceId?: string;
   sourceNativeId?: string;
   sourceUrl?: string;
   sourceDate?: string;
+  sourceVersion?: string;
+  sourceSnapshotId?: string;
+  sourceSnapshotChecksum?: string;
   importedAt?: string;
+  licenseState?: TerritoryLicenseState;
   license?: string;
   attribution?: string;
 }
@@ -171,11 +191,22 @@ export interface TerritoryGlobalMetadata {
   provinceCode?: string;
   districtCode?: string;
   sourceClass?: TerritorySourceClass;
+  boundaryKind?: TerritoryBoundaryKind;
+  boundarySourceClass?: TerritoryBoundarySourceClass;
+  confidence?: TerritoryBoundaryConfidence;
+  administrative?: boolean;
+  providerId?: string;
+  providerName?: string;
   sourceProvider?: string;
+  sourceId?: string;
   sourceDatasetId?: string;
   sourceNativeId?: string;
   sourceDate?: string;
+  sourceVersion?: string;
   sourceUrl?: string;
+  sourceSnapshotId?: string;
+  sourceSnapshotChecksum?: string;
+  licenseState?: TerritoryLicenseState;
   license?: string;
   attribution?: string;
   official?: boolean;
@@ -230,6 +261,10 @@ export type TerritoryValidationCode =
   | "MISSING_GENERATOR_VERSION"
   | "INVALID_GENERATED_SEMANTIC_TYPE"
   | "MISSING_SOURCE_PROVENANCE"
+  | "INVALID_BOUNDARY_METADATA"
+  | "MISSING_BOUNDARY_PROVENANCE"
+  | "LICENSE_GATE_FAILED"
+  | "SYNTHETIC_SOURCE_NOT_PUBLISHABLE"
   | "INVALID_PARENT_LEVEL"
   | "ADM3_ORPHAN"
   | "HIERARCHY_CODE_MISMATCH"

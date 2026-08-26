@@ -1,11 +1,19 @@
 import {
+  TERRITORY_BOUNDARY_CONFIDENCES,
+  TERRITORY_BOUNDARY_KINDS,
+  TERRITORY_BOUNDARY_SOURCE_CLASSES,
   TERRITORY_COVERAGE_STATUSES,
+  TERRITORY_LICENSE_STATES,
   TERRITORY_SEMANTIC_REVIEW_STATUSES,
   TERRITORY_SOURCE_CLASSES
 } from "./global.js";
 import { validateTerritoryDataset } from "./validation.js";
 import type {
   TerritoryDataset,
+  TerritoryBoundaryConfidence,
+  TerritoryBoundaryKind,
+  TerritoryBoundarySourceClass,
+  TerritoryLicenseState,
   TerritorySourceClass,
   TerritoryValidationCode,
   TerritoryValidationIssue,
@@ -17,23 +25,43 @@ import type {
 export const TURKEY_V2_DATA_CONTRACT_VERSION = "territorykit-tr-v2-data-contract@1" as const;
 export const TURKEY_V2_DATASET_VALIDATION_PROFILE = "tr-v2" as const;
 export const TURKEY_V2_SOURCE_CLASS_PRIORITY = ["official", "osm", "generated"] as const;
+export const TURKEY_V2_APPROVED_OFFICIAL_BOUNDARY_SOURCE_CLASSES = [
+  "official-national",
+  "official-local"
+] as const satisfies readonly TerritoryBoundarySourceClass[];
 
 export type TurkeyV2DatasetValidationProfile = typeof TURKEY_V2_DATASET_VALIDATION_PROFILE;
 
 export interface TurkeyV2ValidationOptions {
   profile?: TurkeyV2DatasetValidationProfile;
+  allowSyntheticTest?: boolean;
 }
 
 interface TurkeyV2ZoneMetadata {
   sourceClass: string | undefined;
+  boundaryKind: string | undefined;
+  boundarySourceClass: string | undefined;
+  confidence: string | undefined;
+  administrative: boolean | undefined;
+  providerId: string | undefined;
+  providerName: string | undefined;
   sourceProvider: string | undefined;
   sourceDatasetId: string | undefined;
   sourceNativeId: string | undefined;
   sourceId: string | undefined;
   sourceDate: string | undefined;
+  sourceVersion: string | undefined;
   sourceUrl: string | undefined;
+  sourceSnapshotId: string | undefined;
+  sourceSnapshotChecksum: string | undefined;
+  sourceLockChecksum: string | undefined;
+  licenseState: string | undefined;
   license: string | undefined;
   attribution: string | undefined;
+  redistributionPolicy: string | undefined;
+  commercialUsePolicy: string | undefined;
+  modificationPolicy: string | undefined;
+  geometryHash: string | undefined;
   official: boolean | undefined;
   generated: boolean | undefined;
   algorithmVersion: string | undefined;
@@ -54,7 +82,7 @@ interface TurkeyV2ZoneMetadata {
 
 export function validateTurkeyV2Dataset(
   input: unknown,
-  _options: TurkeyV2ValidationOptions = {}
+  options: TurkeyV2ValidationOptions = {}
 ): TerritoryValidationResult {
   const base = validateTerritoryDataset(input);
 
@@ -67,7 +95,7 @@ export function validateTurkeyV2Dataset(
 
   const issues = sortAndDedupeIssues([
     ...base.issues,
-    ...validateTurkeyV2DatasetObject(base.dataset)
+    ...validateTurkeyV2DatasetObject(base.dataset, options)
   ]);
   const ok = issues.every((issue) => issue.severity !== "error");
 
@@ -78,7 +106,10 @@ export function validateTurkeyV2Dataset(
   };
 }
 
-function validateTurkeyV2DatasetObject(dataset: TerritoryDataset): TerritoryValidationIssue[] {
+function validateTurkeyV2DatasetObject(
+  dataset: TerritoryDataset,
+  options: TurkeyV2ValidationOptions
+): TerritoryValidationIssue[] {
   const issues: TerritoryValidationIssue[] = [];
   const zonesById = new Map(dataset.zones.map((zone) => [zone.id, zone]));
   const pathById = new Map(dataset.zones.map((zone, index) => [zone.id, `$.zones[${index}]`]));
@@ -113,6 +144,15 @@ function validateTurkeyV2DatasetObject(dataset: TerritoryDataset): TerritoryVali
 
     validateSourceFlags({ dataset, zone, metadata, sourceClass, path, issues });
     validateSourceClassContract({ dataset, zone, metadata, sourceClass, path, issues });
+    validateBoundaryGovernance({
+      dataset,
+      zone,
+      metadata,
+      sourceClass,
+      path,
+      issues,
+      allowSyntheticTest: options.allowSyntheticTest === true
+    });
 
     const stableId = metadata.stableId ?? zone.id;
     const existing = stableIds.get(stableId);
@@ -135,6 +175,352 @@ function validateTurkeyV2DatasetObject(dataset: TerritoryDataset): TerritoryVali
   }
 
   return issues;
+}
+
+function validateBoundaryGovernance(input: {
+  dataset: TerritoryDataset;
+  zone: TerritoryZone;
+  metadata: TurkeyV2ZoneMetadata;
+  sourceClass: TerritorySourceClass;
+  path: string;
+  issues: TerritoryValidationIssue[];
+  allowSyntheticTest: boolean;
+}): void {
+  const boundarySourceClass = readBoundarySourceClassOrIssue(input);
+  const boundaryKind = readBoundaryKindOrIssue(input);
+  const confidence = readBoundaryConfidenceOrIssue(input);
+  const licenseState = readLicenseStateOrIssue(input);
+  const administrative = input.metadata.administrative;
+
+  if (!boundarySourceClass || !boundaryKind || !confidence || !licenseState) {
+    return;
+  }
+
+  const expectedSourceClass = sourceClassForBoundarySourceClass(boundarySourceClass);
+
+  if (input.sourceClass !== expectedSourceClass) {
+    pushIssue(input.issues, {
+      code: "INVALID_BOUNDARY_METADATA",
+      message: `Turkey V2 ADM3 zone '${input.zone.id}' has sourceClass/boundarySourceClass conflict.`,
+      dataset: input.dataset,
+      zone: input.zone,
+      path: `${input.path}.properties.territory.boundarySourceClass`,
+      field: "sourceClass,boundarySourceClass",
+      expected: { sourceClass: expectedSourceClass, boundarySourceClass },
+      actual: { sourceClass: input.sourceClass, boundarySourceClass },
+      parentId: input.metadata.parentId
+    });
+  }
+
+  if (
+    (boundarySourceClass === "smart-derived" || boundarySourceClass === "synthetic-test") &&
+    boundaryKind !== "estimated"
+  ) {
+    pushIssue(input.issues, {
+      code: "INVALID_BOUNDARY_METADATA",
+      message: `Turkey V2 ${boundarySourceClass} ADM3 zone '${input.zone.id}' must use boundaryKind estimated.`,
+      dataset: input.dataset,
+      zone: input.zone,
+      path: `${input.path}.properties.territory.boundaryKind`,
+      field: "boundaryKind",
+      expected: "estimated",
+      actual: boundaryKind,
+      parentId: input.metadata.parentId
+    });
+  }
+
+  if (
+    (boundarySourceClass === "official-national" || boundarySourceClass === "official-local") &&
+    boundaryKind !== "administrative"
+  ) {
+    pushIssue(input.issues, {
+      code: "INVALID_BOUNDARY_METADATA",
+      message: `Turkey V2 official ADM3 zone '${input.zone.id}' must use boundaryKind administrative.`,
+      dataset: input.dataset,
+      zone: input.zone,
+      path: `${input.path}.properties.territory.boundaryKind`,
+      field: "boundaryKind",
+      expected: "administrative",
+      actual: boundaryKind,
+      parentId: input.metadata.parentId
+    });
+  }
+
+  if (boundarySourceClass === "osm-administrative" && boundaryKind !== "administrative") {
+    pushIssue(input.issues, {
+      code: "INVALID_BOUNDARY_METADATA",
+      message: `Turkey V2 OSM administrative ADM3 zone '${input.zone.id}' must use boundaryKind administrative.`,
+      dataset: input.dataset,
+      zone: input.zone,
+      path: `${input.path}.properties.territory.boundaryKind`,
+      field: "boundaryKind",
+      expected: "administrative",
+      actual: boundaryKind,
+      parentId: input.metadata.parentId
+    });
+  }
+
+  if (boundarySourceClass === "smart-derived" && input.metadata.administrative !== false) {
+    pushIssue(input.issues, {
+      code: "INVALID_BOUNDARY_METADATA",
+      message: `Turkey V2 smart-derived ADM3 zone '${input.zone.id}' must declare administrative false.`,
+      dataset: input.dataset,
+      zone: input.zone,
+      path: `${input.path}.properties.territory.administrative`,
+      field: "administrative",
+      expected: false,
+      actual: administrative,
+      parentId: input.metadata.parentId
+    });
+  }
+
+  if (
+    (boundarySourceClass === "official-national" || boundarySourceClass === "official-local") &&
+    input.metadata.administrative !== true
+  ) {
+    pushIssue(input.issues, {
+      code: "INVALID_BOUNDARY_METADATA",
+      message: `Turkey V2 official ADM3 zone '${input.zone.id}' must declare administrative true.`,
+      dataset: input.dataset,
+      zone: input.zone,
+      path: `${input.path}.properties.territory.administrative`,
+      field: "administrative",
+      expected: true,
+      actual: administrative,
+      parentId: input.metadata.parentId
+    });
+  }
+
+  if (boundarySourceClass === "osm-administrative" && input.metadata.administrative !== false) {
+    pushIssue(input.issues, {
+      code: "INVALID_BOUNDARY_METADATA",
+      message: `Turkey V2 OSM administrative ADM3 zone '${input.zone.id}' must declare administrative false unless an approved official source replaces it.`,
+      dataset: input.dataset,
+      zone: input.zone,
+      path: `${input.path}.properties.territory.administrative`,
+      field: "administrative",
+      expected: false,
+      actual: administrative,
+      parentId: input.metadata.parentId
+    });
+  }
+
+  if (boundarySourceClass === "synthetic-test" && !input.allowSyntheticTest) {
+    pushIssue(input.issues, {
+      code: "SYNTHETIC_SOURCE_NOT_PUBLISHABLE",
+      message: `Turkey V2 synthetic-test ADM3 zone '${input.zone.id}' is not publishable by production validation.`,
+      dataset: input.dataset,
+      zone: input.zone,
+      path: `${input.path}.properties.territory.boundarySourceClass`,
+      field: "boundarySourceClass",
+      expected: "publishable source class",
+      actual: boundarySourceClass,
+      parentId: input.metadata.parentId
+    });
+  }
+
+  if (confidence === "authoritative" && !isAuthoritativeLicenseApproved(input.metadata)) {
+    pushIssue(input.issues, {
+      code: "LICENSE_GATE_FAILED",
+      message: `Turkey V2 authoritative ADM3 zone '${input.zone.id}' requires an approved official source and passed license gate.`,
+      dataset: input.dataset,
+      zone: input.zone,
+      path: `${input.path}.properties.territory`,
+      field: "confidence,boundarySourceClass,licenseState",
+      expected: {
+        boundarySourceClass: [...TURKEY_V2_APPROVED_OFFICIAL_BOUNDARY_SOURCE_CLASSES],
+        licenseState: "approved",
+        redistributionPolicy: "allowed"
+      },
+      actual: {
+        boundarySourceClass,
+        licenseState,
+        redistributionPolicy: input.metadata.redistributionPolicy
+      },
+      parentId: input.metadata.parentId
+    });
+  }
+
+  if (!hasRequiredPublishedBoundaryProvenance(input.metadata)) {
+    pushIssue(input.issues, {
+      code: "MISSING_BOUNDARY_PROVENANCE",
+      message: `Turkey V2 ADM3 zone '${input.zone.id}' must carry provider/source identity, license state, attribution, geometry hash, and source snapshot checksum.`,
+      dataset: input.dataset,
+      zone: input.zone,
+      path: `${input.path}.properties.territory`,
+      field: "boundary provenance",
+      expected:
+        "providerId/sourceProvider, sourceId/sourceDatasetId/sourceNativeId, attribution, licenseState, geometryHash, sourceSnapshotChecksum",
+      actual: {
+        providerId: input.metadata.providerId,
+        sourceProvider: input.metadata.sourceProvider,
+        sourceId: input.metadata.sourceId,
+        sourceDatasetId: input.metadata.sourceDatasetId,
+        sourceNativeId: input.metadata.sourceNativeId,
+        attribution: input.metadata.attribution,
+        licenseState: input.metadata.licenseState,
+        geometryHash: input.metadata.geometryHash,
+        sourceSnapshotChecksum: input.metadata.sourceSnapshotChecksum
+      },
+      parentId: input.metadata.parentId
+    });
+  }
+}
+
+function sourceClassForBoundarySourceClass(
+  boundarySourceClass: TerritoryBoundarySourceClass
+): TerritorySourceClass {
+  if (boundarySourceClass === "official-national" || boundarySourceClass === "official-local") {
+    return "official";
+  }
+
+  if (boundarySourceClass === "osm-administrative") {
+    return "osm";
+  }
+
+  return "generated";
+}
+
+function readBoundarySourceClassOrIssue(input: {
+  dataset: TerritoryDataset;
+  zone: TerritoryZone;
+  metadata: TurkeyV2ZoneMetadata;
+  sourceClass: TerritorySourceClass;
+  path: string;
+  issues: TerritoryValidationIssue[];
+}): TerritoryBoundarySourceClass | undefined {
+  const boundarySourceClass = input.metadata.boundarySourceClass;
+
+  if (
+    typeof boundarySourceClass === "string" &&
+    TERRITORY_BOUNDARY_SOURCE_CLASSES.includes(boundarySourceClass as TerritoryBoundarySourceClass)
+  ) {
+    return boundarySourceClass as TerritoryBoundarySourceClass;
+  }
+
+  pushIssue(input.issues, {
+    code: "INVALID_BOUNDARY_METADATA",
+    message: `Turkey V2 ADM3 zone '${input.zone.id}' must declare canonical boundarySourceClass.`,
+    dataset: input.dataset,
+    zone: input.zone,
+    path: `${input.path}.properties.territory.boundarySourceClass`,
+    field: "boundarySourceClass",
+    expected: [...TERRITORY_BOUNDARY_SOURCE_CLASSES],
+    actual: boundarySourceClass,
+    parentId: input.metadata.parentId
+  });
+  return undefined;
+}
+
+function readBoundaryKindOrIssue(input: {
+  dataset: TerritoryDataset;
+  zone: TerritoryZone;
+  metadata: TurkeyV2ZoneMetadata;
+  path: string;
+  issues: TerritoryValidationIssue[];
+}): TerritoryBoundaryKind | undefined {
+  const boundaryKind = input.metadata.boundaryKind;
+
+  if (
+    typeof boundaryKind === "string" &&
+    TERRITORY_BOUNDARY_KINDS.includes(boundaryKind as TerritoryBoundaryKind)
+  ) {
+    return boundaryKind as TerritoryBoundaryKind;
+  }
+
+  pushIssue(input.issues, {
+    code: "INVALID_BOUNDARY_METADATA",
+    message: `Turkey V2 ADM3 zone '${input.zone.id}' must declare boundaryKind.`,
+    dataset: input.dataset,
+    zone: input.zone,
+    path: `${input.path}.properties.territory.boundaryKind`,
+    field: "boundaryKind",
+    expected: [...TERRITORY_BOUNDARY_KINDS],
+    actual: boundaryKind,
+    parentId: input.metadata.parentId
+  });
+  return undefined;
+}
+
+function readBoundaryConfidenceOrIssue(input: {
+  dataset: TerritoryDataset;
+  zone: TerritoryZone;
+  metadata: TurkeyV2ZoneMetadata;
+  path: string;
+  issues: TerritoryValidationIssue[];
+}): TerritoryBoundaryConfidence | undefined {
+  const confidence = input.metadata.confidence;
+
+  if (
+    typeof confidence === "string" &&
+    TERRITORY_BOUNDARY_CONFIDENCES.includes(confidence as TerritoryBoundaryConfidence)
+  ) {
+    return confidence as TerritoryBoundaryConfidence;
+  }
+
+  pushIssue(input.issues, {
+    code: "INVALID_BOUNDARY_METADATA",
+    message: `Turkey V2 ADM3 zone '${input.zone.id}' must declare confidence.`,
+    dataset: input.dataset,
+    zone: input.zone,
+    path: `${input.path}.properties.territory.confidence`,
+    field: "confidence",
+    expected: [...TERRITORY_BOUNDARY_CONFIDENCES],
+    actual: confidence,
+    parentId: input.metadata.parentId
+  });
+  return undefined;
+}
+
+function readLicenseStateOrIssue(input: {
+  dataset: TerritoryDataset;
+  zone: TerritoryZone;
+  metadata: TurkeyV2ZoneMetadata;
+  path: string;
+  issues: TerritoryValidationIssue[];
+}): TerritoryLicenseState | undefined {
+  const licenseState = input.metadata.licenseState;
+
+  if (
+    typeof licenseState === "string" &&
+    TERRITORY_LICENSE_STATES.includes(licenseState as TerritoryLicenseState)
+  ) {
+    return licenseState as TerritoryLicenseState;
+  }
+
+  pushIssue(input.issues, {
+    code: "INVALID_BOUNDARY_METADATA",
+    message: `Turkey V2 ADM3 zone '${input.zone.id}' must declare licenseState.`,
+    dataset: input.dataset,
+    zone: input.zone,
+    path: `${input.path}.properties.territory.licenseState`,
+    field: "licenseState",
+    expected: [...TERRITORY_LICENSE_STATES],
+    actual: licenseState,
+    parentId: input.metadata.parentId
+  });
+  return undefined;
+}
+
+function isAuthoritativeLicenseApproved(metadata: TurkeyV2ZoneMetadata): boolean {
+  const officialSource = TURKEY_V2_APPROVED_OFFICIAL_BOUNDARY_SOURCE_CLASSES.includes(
+    metadata.boundarySourceClass as (typeof TURKEY_V2_APPROVED_OFFICIAL_BOUNDARY_SOURCE_CLASSES)[number]
+  );
+  const redistributionAllowed =
+    metadata.redistributionPolicy === undefined || metadata.redistributionPolicy === "allowed";
+
+  return officialSource && metadata.licenseState === "approved" && redistributionAllowed;
+}
+
+function hasRequiredPublishedBoundaryProvenance(metadata: TurkeyV2ZoneMetadata): boolean {
+  return Boolean(
+    (metadata.providerId || metadata.sourceProvider) &&
+    (metadata.sourceId || metadata.sourceDatasetId || metadata.sourceNativeId) &&
+    metadata.attribution &&
+    metadata.licenseState &&
+    metadata.geometryHash &&
+    metadata.sourceSnapshotChecksum
+  );
 }
 
 function validateAdm3Parent(input: {
@@ -467,6 +853,17 @@ function readTurkeyV2ZoneMetadata(zone: TerritoryZone): TurkeyV2ZoneMetadata {
 
   return {
     sourceClass: readString(territory.sourceClass) ?? readString(source.sourceClass),
+    boundaryKind: readString(territory.boundaryKind),
+    boundarySourceClass:
+      readString(territory.boundarySourceClass) ?? readString(source.boundarySourceClass),
+    confidence: readString(territory.confidence),
+    administrative: readBoolean(territory.administrative),
+    providerId:
+      readString(territory.providerId) ??
+      readString(source.providerId) ??
+      readString(territory.sourceProvider) ??
+      readString(source.provider),
+    providerName: readString(territory.providerName) ?? readString(source.providerName),
     sourceProvider:
       readString(territory.sourceProvider) ??
       readString(source.provider) ??
@@ -478,9 +875,27 @@ function readTurkeyV2ZoneMetadata(zone: TerritoryZone): TurkeyV2ZoneMetadata {
       readString(source.sourceId),
     sourceId: readString(territory.sourceId) ?? readString(source.sourceId),
     sourceDate: readString(territory.sourceDate) ?? readString(source.sourceDate),
+    sourceVersion: readString(territory.sourceVersion) ?? readString(source.sourceVersion),
     sourceUrl: readString(territory.sourceUrl) ?? readString(source.sourceUrl),
+    sourceSnapshotId:
+      readString(territory.sourceSnapshotId) ??
+      readString(source.sourceSnapshotId) ??
+      readString(territory.sourceLockReference),
+    sourceSnapshotChecksum:
+      readString(territory.sourceSnapshotChecksum) ??
+      readString(source.sourceSnapshotChecksum) ??
+      readString(territory.sourceLockChecksum),
+    sourceLockChecksum: readString(territory.sourceLockChecksum),
+    licenseState: readString(territory.licenseState) ?? readString(source.licenseState),
     license: readString(territory.license) ?? readString(source.license),
     attribution: readString(territory.attribution) ?? readString(source.attribution),
+    redistributionPolicy: readString(territory.redistributionPolicy),
+    commercialUsePolicy: readString(territory.commercialUsePolicy),
+    modificationPolicy: readString(territory.modificationPolicy),
+    geometryHash:
+      readString(territory.geometryHash) ??
+      readString(territory.effectiveGeometryHash) ??
+      readString(territory.originalGeometryHash),
     official: readBoolean(territory.official),
     generated: readBoolean(territory.generated),
     algorithmVersion:

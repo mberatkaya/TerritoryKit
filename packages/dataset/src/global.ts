@@ -1,10 +1,14 @@
 import { TERRITORY_SCHEMA_VERSION } from "./schema.js";
 import type {
   TerritoryAdminLevel,
+  TerritoryBoundaryConfidence,
+  TerritoryBoundaryKind,
+  TerritoryBoundarySourceClass,
   TerritoryCoverageStatus,
   TerritoryGeometryDetailLevel,
   TerritoryGlobalDatasetManifest,
   TerritoryGlobalMetadata,
+  TerritoryLicenseState,
   TerritorySemanticReviewStatus,
   TerritorySemanticAdminType,
   TerritorySourceClass,
@@ -44,6 +48,29 @@ export const TERRITORY_SOURCE_CLASSES = [
   "osm",
   "generated"
 ] as const satisfies readonly TerritorySourceClass[];
+export const TERRITORY_BOUNDARY_KINDS = [
+  "administrative",
+  "estimated"
+] as const satisfies readonly TerritoryBoundaryKind[];
+export const TERRITORY_BOUNDARY_SOURCE_CLASSES = [
+  "official-national",
+  "official-local",
+  "osm-administrative",
+  "smart-derived",
+  "synthetic-test"
+] as const satisfies readonly TerritoryBoundarySourceClass[];
+export const TERRITORY_BOUNDARY_CONFIDENCES = [
+  "authoritative",
+  "high",
+  "medium",
+  "low"
+] as const satisfies readonly TerritoryBoundaryConfidence[];
+export const TERRITORY_LICENSE_STATES = [
+  "approved",
+  "pending",
+  "restricted",
+  "unknown"
+] as const satisfies readonly TerritoryLicenseState[];
 export const TERRITORY_SEMANTIC_REVIEW_STATUSES = [
   "reviewed",
   "review-required",
@@ -268,6 +295,47 @@ export function validateTerritoryGlobalMetadata(
   );
   const parentId = readOptionalString(input.parentId, "$.parentId", issues);
   const sourceParentId = readOptionalString(input.sourceParentId, "$.sourceParentId", issues);
+  const sourceClass =
+    input.sourceClass === undefined
+      ? undefined
+      : readSourceClass(input.sourceClass, "$.sourceClass", issues);
+  const boundaryKind =
+    input.boundaryKind === undefined
+      ? undefined
+      : readBoundaryKind(input.boundaryKind, "$.boundaryKind", issues);
+  const boundarySourceClass =
+    input.boundarySourceClass === undefined
+      ? undefined
+      : readBoundarySourceClass(input.boundarySourceClass, "$.boundarySourceClass", issues);
+  const confidence =
+    input.confidence === undefined
+      ? undefined
+      : readBoundaryConfidence(input.confidence, "$.confidence", issues);
+  const administrative =
+    input.administrative === undefined
+      ? undefined
+      : readOptionalBoolean(input.administrative, "$.administrative", issues);
+  const providerId = readOptionalString(input.providerId, "$.providerId", issues);
+  const providerName = readOptionalString(input.providerName, "$.providerName", issues);
+  const sourceId = readOptionalString(input.sourceId, "$.sourceId", issues);
+  const sourceProvider = readOptionalString(input.sourceProvider, "$.sourceProvider", issues);
+  const sourceDatasetId = readOptionalString(input.sourceDatasetId, "$.sourceDatasetId", issues);
+  const sourceNativeId = readOptionalString(input.sourceNativeId, "$.sourceNativeId", issues);
+  const sourceDate = readOptionalString(input.sourceDate, "$.sourceDate", issues);
+  const sourceVersion = readOptionalString(input.sourceVersion, "$.sourceVersion", issues);
+  const sourceUrl = readOptionalString(input.sourceUrl, "$.sourceUrl", issues);
+  const sourceSnapshotId = readOptionalString(input.sourceSnapshotId, "$.sourceSnapshotId", issues);
+  const sourceSnapshotChecksum = readOptionalString(
+    input.sourceSnapshotChecksum,
+    "$.sourceSnapshotChecksum",
+    issues
+  );
+  const licenseState =
+    input.licenseState === undefined
+      ? undefined
+      : readLicenseState(input.licenseState, "$.licenseState", issues);
+  const license = readOptionalString(input.license, "$.license", issues);
+  const attribution = readOptionalString(input.attribution, "$.attribution", issues);
   const semanticReviewStatus = readSemanticReviewStatus(
     input.semanticReviewStatus,
     "$.semanticReviewStatus",
@@ -306,6 +374,25 @@ export function validateTerritoryGlobalMetadata(
       ...(hierarchyDepth !== undefined ? { hierarchyDepth } : {}),
       ...(parentId ? { parentId } : {}),
       ...(sourceParentId ? { sourceParentId } : {}),
+      ...(sourceClass ? { sourceClass } : {}),
+      ...(boundaryKind ? { boundaryKind } : {}),
+      ...(boundarySourceClass ? { boundarySourceClass } : {}),
+      ...(confidence ? { confidence } : {}),
+      ...(administrative !== undefined ? { administrative } : {}),
+      ...(providerId ? { providerId } : {}),
+      ...(providerName ? { providerName } : {}),
+      ...(sourceProvider ? { sourceProvider } : {}),
+      ...(sourceId ? { sourceId } : {}),
+      ...(sourceDatasetId ? { sourceDatasetId } : {}),
+      ...(sourceNativeId ? { sourceNativeId } : {}),
+      ...(sourceDate ? { sourceDate } : {}),
+      ...(sourceVersion ? { sourceVersion } : {}),
+      ...(sourceUrl ? { sourceUrl } : {}),
+      ...(sourceSnapshotId ? { sourceSnapshotId } : {}),
+      ...(sourceSnapshotChecksum ? { sourceSnapshotChecksum } : {}),
+      ...(licenseState ? { licenseState } : {}),
+      ...(license ? { license } : {}),
+      ...(attribution ? { attribution } : {}),
       ...(semanticReviewStatus ? { semanticReviewStatus } : {}),
       ...(coverageStatus ? { coverageStatus } : {}),
       ...(codes ? { codes } : {}),
@@ -648,6 +735,124 @@ function readSemanticAdminType(
   return undefined;
 }
 
+function readSourceClass(
+  input: unknown,
+  path: string,
+  issues: TerritoryGlobalValidationIssue[]
+): TerritorySourceClass | undefined {
+  if (
+    typeof input === "string" &&
+    TERRITORY_SOURCE_CLASSES.includes(input as TerritorySourceClass)
+  ) {
+    return input as TerritorySourceClass;
+  }
+
+  issues.push({
+    code: "GLOBAL_METADATA",
+    message: "sourceClass must be official, osm, or generated.",
+    path
+  });
+  return undefined;
+}
+
+function readBoundaryKind(
+  input: unknown,
+  path: string,
+  issues: TerritoryGlobalValidationIssue[]
+): TerritoryBoundaryKind | undefined {
+  if (
+    typeof input === "string" &&
+    TERRITORY_BOUNDARY_KINDS.includes(input as TerritoryBoundaryKind)
+  ) {
+    return input as TerritoryBoundaryKind;
+  }
+
+  issues.push({
+    code: "GLOBAL_METADATA",
+    message: "boundaryKind must be administrative or estimated.",
+    path
+  });
+  return undefined;
+}
+
+function readBoundarySourceClass(
+  input: unknown,
+  path: string,
+  issues: TerritoryGlobalValidationIssue[]
+): TerritoryBoundarySourceClass | undefined {
+  if (
+    typeof input === "string" &&
+    TERRITORY_BOUNDARY_SOURCE_CLASSES.includes(input as TerritoryBoundarySourceClass)
+  ) {
+    return input as TerritoryBoundarySourceClass;
+  }
+
+  issues.push({
+    code: "GLOBAL_METADATA",
+    message:
+      "boundarySourceClass must be official-national, official-local, osm-administrative, smart-derived, or synthetic-test.",
+    path
+  });
+  return undefined;
+}
+
+function readBoundaryConfidence(
+  input: unknown,
+  path: string,
+  issues: TerritoryGlobalValidationIssue[]
+): TerritoryBoundaryConfidence | undefined {
+  if (
+    typeof input === "string" &&
+    TERRITORY_BOUNDARY_CONFIDENCES.includes(input as TerritoryBoundaryConfidence)
+  ) {
+    return input as TerritoryBoundaryConfidence;
+  }
+
+  issues.push({
+    code: "GLOBAL_METADATA",
+    message: "confidence must be authoritative, high, medium, or low.",
+    path
+  });
+  return undefined;
+}
+
+function readLicenseState(
+  input: unknown,
+  path: string,
+  issues: TerritoryGlobalValidationIssue[]
+): TerritoryLicenseState | undefined {
+  if (
+    typeof input === "string" &&
+    TERRITORY_LICENSE_STATES.includes(input as TerritoryLicenseState)
+  ) {
+    return input as TerritoryLicenseState;
+  }
+
+  issues.push({
+    code: "GLOBAL_METADATA",
+    message: "licenseState must be approved, pending, restricted, or unknown.",
+    path
+  });
+  return undefined;
+}
+
+function readOptionalBoolean(
+  input: unknown,
+  path: string,
+  issues: TerritoryGlobalValidationIssue[]
+): boolean | undefined {
+  if (typeof input === "boolean") {
+    return input;
+  }
+
+  issues.push({
+    code: "GLOBAL_METADATA",
+    message: "Expected a boolean.",
+    path
+  });
+  return undefined;
+}
+
 function readSemanticReviewStatus(
   input: unknown,
   path: string,
@@ -811,6 +1016,22 @@ function readRequiredSourceMetadata(
     issues
   );
   const sourceId = readOptionalString(input.sourceId, `${path}.sourceId`, issues);
+  const sourceClass =
+    input.sourceClass === undefined
+      ? undefined
+      : readSourceClass(input.sourceClass, `${path}.sourceClass`, issues);
+  const boundarySourceClass =
+    input.boundarySourceClass === undefined
+      ? undefined
+      : readBoundarySourceClass(input.boundarySourceClass, `${path}.boundarySourceClass`, issues);
+  const providerId = readOptionalString(input.providerId, `${path}.providerId`, issues);
+  const providerName = readOptionalString(input.providerName, `${path}.providerName`, issues);
+  const sourceDatasetId = readOptionalString(
+    input.sourceDatasetId,
+    `${path}.sourceDatasetId`,
+    issues
+  );
+  const sourceNativeId = readOptionalString(input.sourceNativeId, `${path}.sourceNativeId`, issues);
   const sourceUrl = readOptionalString(input.sourceUrl, `${path}.sourceUrl`, issues);
   const sourceDate = readRequiredString(
     input.sourceDate,
@@ -818,7 +1039,22 @@ function readRequiredSourceMetadata(
     "GLOBAL_METADATA",
     issues
   );
+  const sourceVersion = readOptionalString(input.sourceVersion, `${path}.sourceVersion`, issues);
+  const sourceSnapshotId = readOptionalString(
+    input.sourceSnapshotId,
+    `${path}.sourceSnapshotId`,
+    issues
+  );
+  const sourceSnapshotChecksum = readOptionalString(
+    input.sourceSnapshotChecksum,
+    `${path}.sourceSnapshotChecksum`,
+    issues
+  );
   const importedAt = readOptionalString(input.importedAt, `${path}.importedAt`, issues);
+  const licenseState =
+    input.licenseState === undefined
+      ? undefined
+      : readLicenseState(input.licenseState, `${path}.licenseState`, issues);
   const license = readRequiredString(input.license, `${path}.license`, "GLOBAL_METADATA", issues);
   const attribution = readRequiredString(
     input.attribution,
@@ -833,10 +1069,20 @@ function readRequiredSourceMetadata(
 
   return {
     provider,
+    ...(sourceClass ? { sourceClass } : {}),
+    ...(boundarySourceClass ? { boundarySourceClass } : {}),
+    ...(providerId ? { providerId } : {}),
+    ...(providerName ? { providerName } : {}),
+    ...(sourceDatasetId ? { sourceDatasetId } : {}),
     ...(sourceId ? { sourceId } : {}),
+    ...(sourceNativeId ? { sourceNativeId } : {}),
     ...(sourceUrl ? { sourceUrl } : {}),
     sourceDate,
+    ...(sourceVersion ? { sourceVersion } : {}),
+    ...(sourceSnapshotId ? { sourceSnapshotId } : {}),
+    ...(sourceSnapshotChecksum ? { sourceSnapshotChecksum } : {}),
     ...(importedAt ? { importedAt } : {}),
+    ...(licenseState ? { licenseState } : {}),
     license,
     attribution
   };

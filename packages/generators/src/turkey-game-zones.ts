@@ -948,6 +948,7 @@ function createTurkeyGameZone(input: {
   });
   const bbox = computeGeometryBBox(input.candidate.geometry);
   const name = `Generated game zone ${input.displayIndex + 1}`;
+  const sourceSnapshotChecksum = sha256Hex(serializeJsonStable(input.configuration));
 
   return {
     id,
@@ -976,9 +977,19 @@ function createTurkeyGameZone(input: {
         provinceCode: input.provinceCode,
         districtCode: input.districtCode,
         sourceClass: "generated",
+        boundaryKind: "estimated",
+        boundarySourceClass: "smart-derived",
+        confidence: "medium",
+        administrative: false,
+        providerId: "territory-kit-generated",
+        providerName: "TerritoryKit game-zone generator",
         sourceProvider: "territory-kit-generated",
+        sourceId: "tr-adm3-game-zones",
         sourceDatasetId: "tr-adm3-game-zones",
         sourceDate: input.configuration.algorithmVersion,
+        sourceVersion: input.configuration.algorithmVersion,
+        sourceSnapshotChecksum,
+        licenseState: "approved",
         license: "Apache-2.0",
         attribution: "TerritoryKit generated game zones from ADM2 boundaries",
         official: false,
@@ -992,8 +1003,15 @@ function createTurkeyGameZone(input: {
         source: {
           provider: "territory-kit-generated",
           sourceClass: "generated",
+          boundarySourceClass: "smart-derived",
+          providerId: "territory-kit-generated",
+          providerName: "TerritoryKit game-zone generator",
           sourceDatasetId: "tr-adm3-game-zones",
+          sourceId: "tr-adm3-game-zones",
           sourceDate: input.configuration.algorithmVersion,
+          sourceVersion: input.configuration.algorithmVersion,
+          sourceSnapshotChecksum,
+          licenseState: "approved",
           license: "Apache-2.0",
           attribution: "TerritoryKit generated game zones from ADM2 boundaries"
         },

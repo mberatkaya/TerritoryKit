@@ -166,11 +166,30 @@ export const territoryDatasetJsonSchema = {
                   provinceCode: { type: "string", minLength: 1 },
                   districtCode: { type: "string", minLength: 1 },
                   sourceClass: { enum: ["official", "osm", "generated"] },
+                  boundaryKind: { enum: ["administrative", "estimated"] },
+                  boundarySourceClass: {
+                    enum: [
+                      "official-national",
+                      "official-local",
+                      "osm-administrative",
+                      "smart-derived",
+                      "synthetic-test"
+                    ]
+                  },
+                  confidence: { enum: ["authoritative", "high", "medium", "low"] },
+                  administrative: { type: "boolean" },
+                  providerId: { type: "string", minLength: 1 },
+                  providerName: { type: "string", minLength: 1 },
                   sourceProvider: { type: "string", minLength: 1 },
+                  sourceId: { type: "string", minLength: 1 },
                   sourceDatasetId: { type: "string", minLength: 1 },
                   sourceNativeId: { type: "string", minLength: 1 },
                   sourceDate: { type: "string", minLength: 1 },
+                  sourceVersion: { type: "string", minLength: 1 },
                   sourceUrl: { type: "string", minLength: 1 },
+                  sourceSnapshotId: { type: "string", minLength: 1 },
+                  sourceSnapshotChecksum: { type: "string", minLength: 1 },
+                  licenseState: { enum: ["approved", "pending", "restricted", "unknown"] },
                   license: { type: "string", minLength: 1 },
                   attribution: { type: "string", minLength: 1 },
                   official: { type: "boolean" },
@@ -216,12 +235,27 @@ export const territoryDatasetJsonSchema = {
                     properties: {
                       provider: { type: "string", minLength: 1 },
                       sourceClass: { enum: ["official", "osm", "generated"] },
+                      boundarySourceClass: {
+                        enum: [
+                          "official-national",
+                          "official-local",
+                          "osm-administrative",
+                          "smart-derived",
+                          "synthetic-test"
+                        ]
+                      },
+                      providerId: { type: "string", minLength: 1 },
+                      providerName: { type: "string", minLength: 1 },
                       sourceDatasetId: { type: "string", minLength: 1 },
                       sourceId: { type: "string", minLength: 1 },
                       sourceNativeId: { type: "string", minLength: 1 },
                       sourceUrl: { type: "string", minLength: 1 },
                       sourceDate: { type: "string", minLength: 1 },
+                      sourceVersion: { type: "string", minLength: 1 },
+                      sourceSnapshotId: { type: "string", minLength: 1 },
+                      sourceSnapshotChecksum: { type: "string", minLength: 1 },
                       importedAt: { type: "string", minLength: 1 },
+                      licenseState: { enum: ["approved", "pending", "restricted", "unknown"] },
                       license: { type: "string", minLength: 1 },
                       attribution: { type: "string", minLength: 1 }
                     }

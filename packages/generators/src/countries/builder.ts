@@ -1010,6 +1010,32 @@ function buildLevelZones(input: {
       feature.rawProperties,
       "territorykit.sourceClass"
     );
+    const featureBoundaryKind = readStringPropertyPath(
+      feature.rawProperties,
+      "territorykit.boundaryKind"
+    );
+    const featureBoundarySourceClass = readStringPropertyPath(
+      feature.rawProperties,
+      "territorykit.boundarySourceClass"
+    );
+    const featureConfidence = readStringPropertyPath(
+      feature.rawProperties,
+      "territorykit.confidence"
+    );
+    const featureAdministrative = readBooleanPropertyPath(
+      feature.rawProperties,
+      "territorykit.administrative"
+    );
+    const featureProviderId = readStringPropertyPath(
+      feature.rawProperties,
+      "territorykit.providerId"
+    );
+    const featureProviderName = readStringPropertyPath(
+      feature.rawProperties,
+      "territorykit.providerName"
+    );
+    const featureSourceId =
+      readStringPropertyPath(feature.rawProperties, "territorykit.sourceId") ?? feature.sourceId;
     const featureSourceNativeId = readStringPropertyPath(
       feature.rawProperties,
       "territorykit.sourceNativeId"
@@ -1022,6 +1048,12 @@ function buildLevelZones(input: {
       feature.rawProperties,
       "territorykit.geometryHash"
     );
+    const featureSourceSnapshotChecksum =
+      readStringPropertyPath(feature.rawProperties, "territorykit.sourceSnapshotChecksum") ??
+      input.sourceLockLevel.sha256;
+    const featureLicenseState =
+      readStringPropertyPath(feature.rawProperties, "territorykit.licenseState") ??
+      (input.sourceLockLevel.redistributionStatus === "allowed" ? "approved" : undefined);
     const featureOfficial = readBooleanPropertyPath(feature.rawProperties, "territorykit.official");
     const featureGenerated = readBooleanPropertyPath(
       feature.rawProperties,
@@ -1065,10 +1097,23 @@ function buildLevelZones(input: {
           hierarchyDepth: getAdminLevelDepth(input.level),
           ...(feature.parentSourceId ? { sourceParentId: feature.parentSourceId } : {}),
           ...(featureSourceClass ? { sourceClass: featureSourceClass } : {}),
+          ...(featureBoundaryKind ? { boundaryKind: featureBoundaryKind } : {}),
+          ...(featureBoundarySourceClass
+            ? { boundarySourceClass: featureBoundarySourceClass }
+            : {}),
+          ...(featureConfidence ? { confidence: featureConfidence } : {}),
+          ...(featureAdministrative !== undefined ? { administrative: featureAdministrative } : {}),
+          ...(featureProviderId ? { providerId: featureProviderId } : {}),
+          ...(featureProviderName ? { providerName: featureProviderName } : {}),
           ...(featureOfficial !== undefined ? { official: featureOfficial } : {}),
           ...(featureGenerated !== undefined ? { generated: featureGenerated } : {}),
+          ...(featureSourceId ? { sourceId: featureSourceId } : {}),
           ...(featureSourceNativeId ? { sourceNativeId: featureSourceNativeId } : {}),
           ...(featureSourceVersion ? { sourceVersion: featureSourceVersion } : {}),
+          ...(featureSourceSnapshotChecksum
+            ? { sourceSnapshotChecksum: featureSourceSnapshotChecksum }
+            : {}),
+          ...(featureLicenseState ? { licenseState: featureLicenseState } : {}),
           ...(featureGeometryHash ? { geometryHash: featureGeometryHash } : {}),
           ...(featureParentAdm2Id ? { parentAdm2Id: featureParentAdm2Id } : {}),
           semanticReviewStatus:
@@ -1084,12 +1129,21 @@ function buildLevelZones(input: {
           },
           source: {
             provider: featureSourceProvider,
-            ...(feature.sourceId ? { sourceId: feature.sourceId } : {}),
+            ...(featureSourceClass ? { sourceClass: featureSourceClass } : {}),
+            ...(featureBoundarySourceClass
+              ? { boundarySourceClass: featureBoundarySourceClass }
+              : {}),
+            ...(featureProviderId ? { providerId: featureProviderId } : {}),
+            ...(featureProviderName ? { providerName: featureProviderName } : {}),
+            ...(featureSourceId ? { sourceId: featureSourceId } : {}),
             ...(featureSourceUrl ? { sourceUrl: featureSourceUrl } : {}),
             ...(featureSourceDate ? { sourceDate: featureSourceDate } : {}),
-            ...(featureSourceClass ? { sourceClass: featureSourceClass } : {}),
             ...(featureSourceNativeId ? { sourceNativeId: featureSourceNativeId } : {}),
             ...(featureSourceVersion ? { sourceVersion: featureSourceVersion } : {}),
+            ...(featureSourceSnapshotChecksum
+              ? { sourceSnapshotChecksum: featureSourceSnapshotChecksum }
+              : {}),
+            ...(featureLicenseState ? { licenseState: featureLicenseState } : {}),
             ...(featureLicense ? { license: featureLicense } : {}),
             ...(featureAttribution ? { attribution: featureAttribution } : {}),
             importedAt: input.buildDate

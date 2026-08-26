@@ -1,8 +1,8 @@
 # Country Source Locks
 
 Country source locks make boundary imports reproducible. A lock records the resolved source URL or
-local source path, SHA-256, byte size, license, attribution, source version, release type, and a
-stable content hash.
+local source path, SHA-256, byte size, license, attribution, source version, release type, boundary
+source class, license gate state, source snapshot checksum, and a stable content hash.
 
 ## Resolve
 
@@ -52,3 +52,18 @@ The resolver recognizes common geoBoundaries-style keys:
 
 Available levels without license, attribution, or checksum metadata are rejected by source-lock
 validation.
+
+## Boundary Governance Fields
+
+New source locks should preserve these fields when a boundary can be published:
+
+- `boundarySourceClass`: `official-national`, `official-local`, `osm-administrative`,
+  `smart-derived`, or `synthetic-test`.
+- `licenseState`: `approved`, `pending`, `restricted`, or `unknown`.
+- `sourceSnapshotChecksum`: checksum of the exact source snapshot used to build the geometry.
+
+For ordinary country ADM0-ADM2 locks, reviewed national sources are recorded as
+`boundarySourceClass: "official-national"`. Turkey province-scoped ADM3 locks record each approved
+municipal/province source as `official-local`, while the synthetic top-level ADM3 summary carries a
+deterministic checksum over the province source-lock extension. Missing Turkey ADM3 sources remain
+unavailable in the lock and coverage reports; they are not replaced with fake ADM3 geometry.

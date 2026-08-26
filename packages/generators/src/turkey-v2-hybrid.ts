@@ -8,6 +8,10 @@ import { validateTurkeyV2Dataset } from "@territory-kit/dataset/turkey-v2";
 import type {
   LngLat,
   TerritoryAdjacencyArtifact,
+  TerritoryBoundaryConfidence,
+  TerritoryBoundaryKind,
+  TerritoryBoundarySourceClass,
+  TerritoryLicenseState,
   TerritoryDataset,
   TerritoryGeometry,
   TerritorySourceClass,
@@ -237,15 +241,22 @@ export interface TurkeyV2HybridQualityReport {
 export interface TurkeyV2HybridProvenanceItem {
   zoneId: string;
   sourceClass: TurkeyV2HybridSourceClass;
+  boundaryKind: TerritoryBoundaryKind;
+  boundarySourceClass: TerritoryBoundarySourceClass;
+  confidence: TerritoryBoundaryConfidence;
   providerClass: TurkeyV2HybridProviderClass;
   providerId: string;
   providerName: string;
   sourceDatasetId: string;
+  sourceId: string;
   sourceNativeId: string;
   sourceDate: string;
+  sourceVersion?: string;
   retrievedAt?: string;
   buildDate: string;
   sourceUrl?: string;
+  sourceSnapshotChecksum: string;
+  licenseState: TerritoryLicenseState;
   license: string;
   attribution: string;
   redistributionPolicy: string;
@@ -438,10 +449,14 @@ interface CandidateMetadata {
   providerId: string;
   providerName: string;
   sourceDatasetId: string;
+  sourceId: string;
   sourceNativeId: string;
   sourceDate: string;
+  sourceVersion?: string;
   retrievedAt?: string;
   sourceUrl?: string;
+  sourceSnapshotChecksum?: string;
+  licenseState?: TerritoryLicenseState;
   license: string;
   attribution: string;
   redistributionPolicy: string;
@@ -1401,6 +1416,13 @@ function createEffectiveRealZone(input: {
       : sha256Hex(
           serializeJsonStable(clippingMultiPolygonToTerritoryGeometry(input.originalGeometry))
         );
+  const boundarySourceClass = boundarySourceClassForReal(input.sourceClass);
+  const licenseState = licenseStateFromPolicy(input.metadata);
+  const confidence = confidenceForRealSource(input.sourceClass, licenseState);
+  const sourceSnapshotChecksum =
+    input.metadata.sourceSnapshotChecksum ??
+    input.metadata.sourceLockChecksum ??
+    originalGeometryHash;
   const bbox = computeGeometryBBox(input.geometry);
 
   return {
@@ -1429,14 +1451,25 @@ function createEffectiveRealZone(input: {
         provinceCode: input.provinceCode,
         districtCode: input.districtCode,
         sourceClass: input.sourceClass,
+        boundaryKind: "administrative",
+        boundarySourceClass,
+        confidence,
+        administrative: input.sourceClass === "official",
         providerClass: input.metadata.providerClass,
         providerId: input.metadata.providerId,
         providerName: input.metadata.providerName,
         sourceProvider: input.metadata.providerId,
+        sourceId: input.metadata.sourceId,
         sourceDatasetId: input.metadata.sourceDatasetId,
         sourceNativeId: input.metadata.sourceNativeId,
         sourceDate: input.metadata.sourceDate,
+        ...(input.metadata.sourceVersion ? { sourceVersion: input.metadata.sourceVersion } : {}),
         ...(input.metadata.sourceUrl ? { sourceUrl: input.metadata.sourceUrl } : {}),
+        ...(input.metadata.sourceLockReference
+          ? { sourceSnapshotId: input.metadata.sourceLockReference }
+          : {}),
+        sourceSnapshotChecksum,
+        licenseState,
         license: input.metadata.license,
         attribution: input.metadata.attribution,
         official: input.sourceClass === "official",
@@ -1460,11 +1493,20 @@ function createEffectiveRealZone(input: {
           ...source,
           provider: input.metadata.providerId,
           sourceClass: input.sourceClass,
+          boundarySourceClass,
+          providerId: input.metadata.providerId,
+          providerName: input.metadata.providerName,
           sourceDatasetId: input.metadata.sourceDatasetId,
-          sourceId: readString(source.sourceId) ?? input.metadata.sourceNativeId,
+          sourceId: input.metadata.sourceId,
           sourceNativeId: input.metadata.sourceNativeId,
           sourceDate: input.metadata.sourceDate,
+          ...(input.metadata.sourceVersion ? { sourceVersion: input.metadata.sourceVersion } : {}),
           ...(input.metadata.sourceUrl ? { sourceUrl: input.metadata.sourceUrl } : {}),
+          ...(input.metadata.sourceLockReference
+            ? { sourceSnapshotId: input.metadata.sourceLockReference }
+            : {}),
+          sourceSnapshotChecksum,
+          licenseState,
           license: input.metadata.license,
           attribution: input.metadata.attribution
         }
@@ -1494,6 +1536,7 @@ function createEffectiveGeneratedZone(input: {
     readString(generatedZone.generationSeed) ??
     readString(generatedZone.seed) ??
     "kaprota-v2";
+  const sourceSnapshotChecksum = input.configurationHash;
 
   return {
     ...input.zone,
@@ -1521,13 +1564,21 @@ function createEffectiveGeneratedZone(input: {
         provinceCode: input.provinceCode,
         districtCode: input.districtCode,
         sourceClass: "generated",
+        boundaryKind: "estimated",
+        boundarySourceClass: "smart-derived",
+        confidence: "medium",
+        administrative: false,
         providerClass: "generated",
         providerId: "territory-kit-generated",
         providerName: "TerritoryKit game-zone generator",
         sourceProvider: "territory-kit-generated",
+        sourceId: "tr-adm3-game-zone-v2",
         sourceDatasetId: "tr-adm3-game-zone-v2",
         sourceNativeId: readString(territory.sourceNativeId) ?? input.zone.id,
         sourceDate: TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
+        sourceVersion: TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
+        sourceSnapshotChecksum,
+        licenseState: "approved",
         license: "Apache-2.0",
         attribution: "TerritoryKit generated game zones from ADM2 boundaries",
         official: false,
@@ -1551,10 +1602,16 @@ function createEffectiveGeneratedZone(input: {
         source: {
           provider: "territory-kit-generated",
           sourceClass: "generated",
+          boundarySourceClass: "smart-derived",
+          providerId: "territory-kit-generated",
+          providerName: "TerritoryKit game-zone generator",
           sourceDatasetId: "tr-adm3-game-zone-v2",
           sourceId: input.zone.id,
           sourceNativeId: input.zone.id,
           sourceDate: TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
+          sourceVersion: TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
+          sourceSnapshotChecksum,
+          licenseState: "approved",
           license: "Apache-2.0",
           attribution: "TerritoryKit generated game zones from ADM2 boundaries"
         },
@@ -1822,25 +1879,41 @@ function createProvenanceItem(
   const territory = territoryMetadata(zone);
   const sourceClass = readSourceClass(zone);
   const providerClass = readProviderClass(territory, sourceClass);
+  const boundarySourceClass = readBoundarySourceClass(territory, sourceClass);
+  const licenseState = readLicenseState(territory, providerClass);
   const seed = readString(territory.generationSeed);
   const retrievedAt = readString(territory.retrievedAt);
   const sourceUrl = readString(territory.sourceUrl);
+  const sourceVersion = readString(territory.sourceVersion);
   const sourceLockReference = readString(territory.sourceLockReference);
   const sourceLockChecksum = readString(territory.sourceLockChecksum);
+  const sourceSnapshotChecksum =
+    readString(territory.sourceSnapshotChecksum) ??
+    sourceLockChecksum ??
+    readString(territory.effectiveGeometryHash) ??
+    geometryHash(zone.geometry);
   const item: TurkeyV2HybridProvenanceItem = {
     zoneId: zone.id,
     sourceClass,
+    boundaryKind:
+      readString(territory.boundaryKind) === "estimated" ? "estimated" : "administrative",
+    boundarySourceClass,
+    confidence: readBoundaryConfidence(territory, boundarySourceClass, licenseState),
     providerClass,
     providerId:
       readString(territory.providerId) ?? readString(territory.sourceProvider) ?? "unknown",
     providerName:
       readString(territory.providerName) ?? readString(territory.providerId) ?? "unknown",
     sourceDatasetId: readString(territory.sourceDatasetId) ?? zone.datasetId,
+    sourceId: readString(territory.sourceId) ?? readString(territory.sourceNativeId) ?? zone.id,
     sourceNativeId: readString(territory.sourceNativeId) ?? zone.id,
     sourceDate: readString(territory.sourceDate) ?? "unknown",
+    ...(sourceVersion ? { sourceVersion } : {}),
     ...(retrievedAt ? { retrievedAt } : {}),
     buildDate,
     ...(sourceUrl ? { sourceUrl } : {}),
+    sourceSnapshotChecksum,
+    licenseState,
     license: readString(territory.license) ?? "unknown",
     attribution: readString(territory.attribution) ?? "unknown",
     redistributionPolicy:
@@ -2204,6 +2277,11 @@ function readCandidateMetadata(
   const sourceUrl = readString(territory.sourceUrl) ?? readString(source.sourceUrl);
   const sourceLockReference = readString(territory.sourceLockReference);
   const sourceLockChecksum = readString(territory.sourceLockChecksum);
+  const sourceId = readString(territory.sourceId) ?? readString(source.sourceId) ?? sourceNativeId;
+  const sourceVersion = readString(territory.sourceVersion) ?? readString(source.sourceVersion);
+  const sourceSnapshotChecksum =
+    readString(territory.sourceSnapshotChecksum) ?? readString(source.sourceSnapshotChecksum);
+  const licenseState = readOptionalLicenseState(territory) ?? readOptionalLicenseState(source);
 
   return {
     sourceClass,
@@ -2220,10 +2298,14 @@ function readCandidateMetadata(
       (sourceClass === "osm" ? "OpenStreetMap" : "Official source"),
     sourceDatasetId:
       readString(territory.sourceDatasetId) ?? readString(source.sourceDatasetId) ?? zone.datasetId,
+    sourceId,
     sourceNativeId,
     sourceDate: readString(territory.sourceDate) ?? readString(source.sourceDate) ?? "unknown",
+    ...(sourceVersion ? { sourceVersion } : {}),
     ...(retrievedAt ? { retrievedAt } : {}),
     ...(sourceUrl ? { sourceUrl } : {}),
+    ...(sourceSnapshotChecksum ? { sourceSnapshotChecksum } : {}),
+    ...(licenseState ? { licenseState } : {}),
     license:
       readString(territory.license) ??
       readString(source.license) ??
@@ -2261,6 +2343,7 @@ function hasRequiredProvenance(metadata: CandidateMetadata): boolean {
   return Boolean(
     metadata.providerId &&
     metadata.sourceDatasetId &&
+    metadata.sourceId &&
     metadata.sourceNativeId &&
     metadata.license &&
     metadata.attribution
@@ -2286,6 +2369,122 @@ function readProviderClass(
   }
 
   return sourceClass;
+}
+
+function boundarySourceClassForReal(sourceClass: "official" | "osm"): TerritoryBoundarySourceClass {
+  return sourceClass === "official" ? "official-local" : "osm-administrative";
+}
+
+function readBoundarySourceClass(
+  territory: Record<string, unknown>,
+  sourceClass: TurkeyV2HybridSourceClass
+): TerritoryBoundarySourceClass {
+  const value =
+    readString(territory.boundarySourceClass) ??
+    (isRecord(territory.source) ? readString(territory.source.boundarySourceClass) : undefined);
+
+  if (
+    value === "official-national" ||
+    value === "official-local" ||
+    value === "osm-administrative" ||
+    value === "smart-derived" ||
+    value === "synthetic-test"
+  ) {
+    return value;
+  }
+
+  if (sourceClass === "osm") {
+    return "osm-administrative";
+  }
+
+  if (sourceClass === "generated") {
+    return "smart-derived";
+  }
+
+  return "official-local";
+}
+
+function licenseStateFromPolicy(
+  metadata: Pick<CandidateMetadata, "redistributionPolicy" | "licenseState">
+): TerritoryLicenseState {
+  if (metadata.licenseState) {
+    return metadata.licenseState;
+  }
+
+  return metadata.redistributionPolicy === "allowed" ? "approved" : "restricted";
+}
+
+function readOptionalLicenseState(
+  input: Record<string, unknown>
+): TerritoryLicenseState | undefined {
+  const value = readString(input.licenseState);
+
+  if (
+    value === "approved" ||
+    value === "pending" ||
+    value === "restricted" ||
+    value === "unknown"
+  ) {
+    return value;
+  }
+
+  return undefined;
+}
+
+function readLicenseState(
+  territory: Record<string, unknown>,
+  providerClass: TurkeyV2HybridProviderClass
+): TerritoryLicenseState {
+  const value =
+    readString(territory.licenseState) ??
+    (isRecord(territory.source) ? readString(territory.source.licenseState) : undefined);
+
+  if (
+    value === "approved" ||
+    value === "pending" ||
+    value === "restricted" ||
+    value === "unknown"
+  ) {
+    return value;
+  }
+
+  return defaultRedistributionPolicy(providerClass) === "allowed" ? "approved" : "restricted";
+}
+
+function confidenceForRealSource(
+  sourceClass: "official" | "osm",
+  licenseState: TerritoryLicenseState
+): TerritoryBoundaryConfidence {
+  if (sourceClass === "official" && licenseState === "approved") {
+    return "authoritative";
+  }
+
+  return sourceClass === "osm" ? "high" : "medium";
+}
+
+function readBoundaryConfidence(
+  territory: Record<string, unknown>,
+  boundarySourceClass: TerritoryBoundarySourceClass,
+  licenseState: TerritoryLicenseState
+): TerritoryBoundaryConfidence {
+  const value = readString(territory.confidence);
+
+  if (value === "authoritative" || value === "high" || value === "medium" || value === "low") {
+    return value;
+  }
+
+  if (
+    (boundarySourceClass === "official-national" || boundarySourceClass === "official-local") &&
+    licenseState === "approved"
+  ) {
+    return "authoritative";
+  }
+
+  if (boundarySourceClass === "osm-administrative") {
+    return "high";
+  }
+
+  return boundarySourceClass === "synthetic-test" ? "low" : "medium";
 }
 
 function readSourceClass(zone: TerritoryZone): TurkeyV2HybridSourceClass {

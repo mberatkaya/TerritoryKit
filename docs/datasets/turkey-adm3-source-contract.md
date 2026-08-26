@@ -10,6 +10,8 @@ Required metadata:
 - `sourceUrl`, optional `downloadUrl` or `sourcePath`
 - `sourceDate`, optional `sourceVersion`, optional `retrievedAt`
 - `license`, optional `licenseUrl`, `attribution`
+- `licenseState: "approved"` for production ADM3 publication
+- `boundarySourceClass: "official-local"` unless a reviewed national ADM3 source is added
 - `redistributionStatus: "allowed"` for production builds
 - `crs: "EPSG:4326"` unless a reprojection adapter is added
 - `format: "GeoJSON"` or `"KML"`
@@ -45,3 +47,11 @@ source model.
 `territory country source lock TR --adm3-provinces ...` writes ADM3 details under
 `extensions.turkeyAdm3`. The top-level `ADM3` lock level is a synthetic summary; verification reads
 the extension and checks each available province source independently.
+
+Each available province source-lock entry preserves `licenseState`, `boundarySourceClass`, and
+`sourceSnapshotChecksum`. The built ADM3 features copy those values into
+`zone.properties.territory` together with `boundaryKind: "administrative"`,
+`confidence: "authoritative"`, `administrative: true`, provider/source IDs, attribution, license,
+source date when known, and the effective geometry hash. A province whose official source is
+missing, restricted, or checksum-invalid is represented as unavailable coverage, not as generated or
+synthetic ADM3.

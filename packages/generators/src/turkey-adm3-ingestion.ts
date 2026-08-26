@@ -10,8 +10,10 @@ import type {
   GeometryQualityIssue,
   LngLat,
   TerritoryAdminLevel,
+  TerritoryBoundarySourceClass,
   TerritoryDataset,
   TerritoryGeometry,
+  TerritoryLicenseState,
   TerritorySemanticAdminType,
   TerritoryZone
 } from "@territory-kit/dataset";
@@ -88,8 +90,13 @@ export interface TurkeyAdm3ProvinceCatalogEntry {
   sourceVersion?: string;
   retrievedAt?: string;
   license: string;
+  licenseState?: TerritoryLicenseState;
   licenseUrl?: string;
   attribution: string;
+  boundarySourceClass?: Extract<
+    TerritoryBoundarySourceClass,
+    "official-national" | "official-local"
+  >;
   redistributionStatus: "allowed" | "restricted" | "unknown";
   commercialUseStatus?: "allowed" | "restricted" | "unknown";
   modificationStatus?: "allowed" | "restricted" | "unknown";
@@ -155,14 +162,17 @@ export interface TurkeyAdm3ProvinceSourceLock {
   sourceVersion?: string;
   retrievedAt?: string;
   license?: string;
+  licenseState?: TerritoryLicenseState;
   licenseUrl?: string;
   attribution?: string;
+  boundarySourceClass?: TerritoryBoundarySourceClass;
   redistributionStatus?: string;
   commercialUseStatus?: string;
   modificationStatus?: string;
   crs?: string;
   format?: string;
   sha256?: string;
+  sourceSnapshotChecksum?: string;
   sizeBytes?: number;
   sourceFeatureCount?: number;
   adapter?: TurkeyAdm3ProviderAdapterConfig;
@@ -265,8 +275,28 @@ export interface TurkeyAdm3CoverageManifest {
       checksum?: string;
       byteSize?: number;
       fallbackLevel: "ADM2";
+      reasonCode:
+        | "official-local-source-built"
+        | "source-unavailable"
+        | "license-blocked"
+        | "checksum-failed"
+        | "build-failed";
       fallbackReason?: string;
       parentAdm2Ids: string[];
+      adm2: Record<
+        string,
+        {
+          adm2Id: string;
+          status: "official-local" | "unavailable" | "failed";
+          reasonCode:
+            | "official-local-source-built"
+            | "source-unavailable"
+            | "license-blocked"
+            | "checksum-failed"
+            | "build-failed";
+          featureCount: number;
+        }
+      >;
     }
   >;
 }
@@ -332,8 +362,10 @@ export function createDefaultTurkeyAdm3SourceCatalog(): TurkeyAdm3SourceCatalog 
         sourceVersion: TURKEY_GAZIANTEP_ADM3_SOURCE_DATE,
         retrievedAt: TURKEY_GAZIANTEP_ADM3_RETRIEVED_AT,
         license: "CC BY 4.0",
+        licenseState: "approved",
         licenseUrl: TURKEY_GAZIANTEP_ADM3_LICENSE_URL,
         attribution: TURKEY_GAZIANTEP_ADM3_ATTRIBUTION,
+        boundarySourceClass: "official-local",
         redistributionStatus: "allowed",
         commercialUseStatus: "allowed",
         modificationStatus: "allowed",
@@ -529,6 +561,7 @@ export async function createTurkeyAdm3SourceLockExtension(
           ...createProvinceLock(entry),
           status: "byte-size-failed",
           sha256: artifact.sha256,
+          sourceSnapshotChecksum: artifact.sha256,
           sizeBytes: artifact.sizeBytes,
           ...((artifact.sourcePath ?? entry.sourcePath)
             ? { sourcePath: artifact.sourcePath ?? entry.sourcePath }
@@ -544,6 +577,7 @@ export async function createTurkeyAdm3SourceLockExtension(
         ...createProvinceLock(entry),
         status: "available",
         sha256: artifact.sha256,
+        sourceSnapshotChecksum: artifact.sha256,
         sizeBytes: artifact.sizeBytes,
         ...(artifact.sourcePath ? { sourcePath: artifact.sourcePath } : {}),
         ...(artifact.originalUrl ? { resolvedDownloadUrl: artifact.originalUrl } : {}),
@@ -711,6 +745,19 @@ export function validateTurkeyAdm3SourceLockExtension(
       );
     }
 
+    if (
+      province.sourceSnapshotChecksum &&
+      province.sha256 &&
+      province.sourceSnapshotChecksum !== province.sha256
+    ) {
+      issues.push(
+        createIssue(
+          "TR_ADM3_SOURCE_SNAPSHOT_CHECKSUM_MISMATCH",
+          `Province ${province.provinceCode} ADM3 source snapshot checksum must match SHA-256.`
+        )
+      );
+    }
+
     if (province.sizeBytes === undefined) {
       issues.push(
         createIssue(
@@ -754,10 +801,15 @@ export function createTurkeyAdm3SyntheticSourceLockLevel(
     sourceVersion: extension.catalogHash,
     ...(sourceDate ? { sourceDate } : {}),
     ...(license ? { license } : {}),
+    licenseState: available.some((province) => province.licenseState !== "approved")
+      ? "unknown"
+      : "approved",
     ...(attribution ? { attribution } : {}),
+    boundarySourceClass: "official-local",
     redistributionStatus: available.some((province) => province.redistributionStatus !== "allowed")
       ? "unknown"
       : "allowed",
+    sourceSnapshotChecksum: sha256Hex(serializeJsonStable(extension)),
     sha256: sha256Hex(serializeJsonStable(extension)),
     sizeBytes: available.reduce((sum, province) => sum + (province.sizeBytes ?? 0), 0),
     sourceFeatureCount: available.reduce(
@@ -1107,6 +1159,25 @@ export function createTurkeyAdm3CoverageManifest(input: {
               : source.status === "source-unavailable"
                 ? "fallback-adm2"
                 : source.status);
+        const reasonCode = adm3CoverageReasonCode(status, source.status);
+        const parentAdm2Ids = [
+          ...new Set(zones.flatMap((built) => (built.zone.parentId ? [built.zone.parentId] : [])))
+        ].sort();
+        const adm2 = Object.fromEntries(
+          parentAdm2Ids.map((parentId) => {
+            const featureCount = zones.filter((built) => built.zone.parentId === parentId).length;
+
+            return [
+              parentId,
+              {
+                adm2Id: parentId,
+                status: "official-local" as const,
+                reasonCode: "official-local-source-built" as const,
+                featureCount
+              }
+            ];
+          })
+        );
 
         return [
           provinceCode,
@@ -1126,14 +1197,12 @@ export function createTurkeyAdm3CoverageManifest(input: {
             ...(source.sha256 ? { checksum: source.sha256 } : {}),
             ...(source.sizeBytes !== undefined ? { byteSize: source.sizeBytes } : {}),
             fallbackLevel: "ADM2" as const,
+            reasonCode,
             ...(zones.length === 0
               ? { fallbackReason: source.unavailableReason ?? "No ADM3 features built." }
               : {}),
-            parentAdm2Ids: [
-              ...new Set(
-                zones.flatMap((built) => (built.zone.parentId ? [built.zone.parentId] : []))
-              )
-            ].sort()
+            parentAdm2Ids,
+            adm2
           }
         ];
       })
@@ -1152,6 +1221,29 @@ export function createTurkeyAdm3CoverageManifest(input: {
     requestedProvinceCount: input.extension.requestedProvinceCodes.length,
     provinces
   };
+}
+
+function adm3CoverageReasonCode(
+  status: TurkeyAdm3ProvinceBuildStatus,
+  sourceStatus: TurkeyAdm3ProvinceSourceLock["status"]
+): TurkeyAdm3CoverageManifest["provinces"][string]["reasonCode"] {
+  if (status === "built" || status === "built-with-warnings") {
+    return "official-local-source-built";
+  }
+
+  if (sourceStatus === "license-blocked" || status === "license-blocked") {
+    return "license-blocked";
+  }
+
+  if (sourceStatus === "checksum-failed" || status === "checksum-failed") {
+    return "checksum-failed";
+  }
+
+  if (sourceStatus === "source-unavailable" || status === "fallback-adm2") {
+    return "source-unavailable";
+  }
+
+  return "build-failed";
 }
 
 export function createTurkeyAdm3SourceQualityReport(input: {
@@ -1450,8 +1542,11 @@ function createProvinceLock(entry: TurkeyAdm3ProvinceCatalogEntry): TurkeyAdm3Pr
     ...(entry.sourceVersion ? { sourceVersion: entry.sourceVersion } : {}),
     ...(entry.retrievedAt ? { retrievedAt: entry.retrievedAt } : {}),
     license: entry.license,
+    licenseState:
+      entry.licenseState ?? licenseStateFromRedistributionStatus(entry.redistributionStatus),
     ...(entry.licenseUrl ? { licenseUrl: entry.licenseUrl } : {}),
     attribution: entry.attribution,
+    boundarySourceClass: entry.boundarySourceClass ?? "official-local",
     redistributionStatus: entry.redistributionStatus,
     ...(entry.commercialUseStatus ? { commercialUseStatus: entry.commercialUseStatus } : {}),
     ...(entry.modificationStatus ? { modificationStatus: entry.modificationStatus } : {}),
@@ -1554,6 +1649,18 @@ function validateCatalogEntry(provinceCode: string, input: unknown): TerritoryCo
 
 function normalizeProvinceCodes(codes: readonly string[]): string[] {
   return [...new Set(codes.map(normalizeProvinceCode))].sort();
+}
+
+function licenseStateFromRedistributionStatus(input: string | undefined): TerritoryLicenseState {
+  if (input === "allowed") {
+    return "approved";
+  }
+
+  if (input === "restricted") {
+    return "restricted";
+  }
+
+  return "unknown";
 }
 
 function normalizeProvinceCode(code: string): string {
@@ -1693,11 +1800,20 @@ function createAdm3RawProperties(input: {
       semanticType: input.semanticType,
       localType: input.localType,
       sourceClass: "official",
+      boundaryKind: "administrative",
+      boundarySourceClass: input.province.boundarySourceClass ?? "official-local",
+      confidence: "authoritative",
+      administrative: true,
+      providerId: input.province.providerId,
       official: true,
       generated: false,
       sourceUrl: input.province.sourceUrl,
       sourceDate: input.province.sourceDate,
       sourceVersion: input.province.sourceVersion,
+      sourceSnapshotChecksum: input.province.sourceSnapshotChecksum ?? input.province.sha256,
+      licenseState:
+        input.province.licenseState ??
+        licenseStateFromRedistributionStatus(input.province.redistributionStatus),
       geometryHash,
       license: input.province.license,
       attribution: input.province.attribution

@@ -211,6 +211,55 @@ describe("Turkey V2 dataset contract", () => {
         code: "MISSING_SOURCE_PROVENANCE"
       },
       {
+        name: "smart-derived marked administrative",
+        dataset: createTurkeyV2Fixture([
+          createAdm3Zone({
+            id: "tr:adm3:smart-derived-administrative",
+            name: "Smart Derived Administrative",
+            semanticType: "generated-zone",
+            sourceClass: "generated",
+            boundarySourceClass: "smart-derived",
+            administrative: true,
+            sourceNativeId: "1",
+            west: 28.94,
+            east: 28.96
+          })
+        ]),
+        code: "INVALID_BOUNDARY_METADATA"
+      },
+      {
+        name: "missing source snapshot checksum",
+        dataset: createTurkeyV2Fixture([
+          createAdm3Zone({
+            id: "tr:adm3:missing-source-snapshot",
+            name: "Missing Source Snapshot",
+            semanticType: "neighbourhood",
+            sourceClass: "official",
+            sourceNativeId: "1",
+            omitSourceSnapshotChecksum: true,
+            west: 28.94,
+            east: 28.96
+          })
+        ]),
+        code: "MISSING_BOUNDARY_PROVENANCE"
+      },
+      {
+        name: "authoritative source license not approved",
+        dataset: createTurkeyV2Fixture([
+          createAdm3Zone({
+            id: "tr:adm3:authoritative-license-pending",
+            name: "Authoritative License Pending",
+            semanticType: "neighbourhood",
+            sourceClass: "official",
+            sourceNativeId: "1",
+            licenseState: "pending",
+            west: 28.94,
+            east: 28.96
+          })
+        ]),
+        code: "LICENSE_GATE_FAILED"
+      },
+      {
         name: "invalid coverage status",
         dataset: createTurkeyV2Fixture([
           createAdm3Zone({
@@ -328,6 +377,15 @@ describe("Turkey V2 dataset contract", () => {
     expect(TERRITORY_SEMANTIC_ADMIN_TYPES).toContain("generated-zone");
     expect(zoneSchema.semanticType.enum).toContain("generated-zone");
     expect(territorySchema.sourceClass.enum).toEqual(["official", "osm", "generated"]);
+    expect(territorySchema.boundaryKind.enum).toEqual(["administrative", "estimated"]);
+    expect(territorySchema.boundarySourceClass.enum).toEqual([
+      "official-national",
+      "official-local",
+      "osm-administrative",
+      "smart-derived",
+      "synthetic-test"
+    ]);
+    expect(territorySchema.confidence.enum).toEqual(["authoritative", "high", "medium", "low"]);
     expect(territorySchema.semanticType.enum).toContain("generated-zone");
   });
 

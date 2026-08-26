@@ -31,6 +31,23 @@ The local build uses reviewed official ADM3 artifacts when they are present at
 `.territory/build/TR/ADM3/official/levels/ADM3/dataset.json`. OSM is reported as `not-built` unless
 an OSM artifact is provided with `--osm-artifact`.
 
+## ADM3 Availability Status
+
+`coverage.json` reports ADM3 availability for every built ADM2 district and rolls those statuses up
+by province. This is separate from final playable coverage percent:
+
+- `official`: approved official ADM3 geometry covers the district.
+- `osm-administrative`: reviewed OSM administrative geometry is selected.
+- `estimated`: smart-derived playable geometry fills the district.
+- `mixed`: more than one source class contributes after priority clipping.
+- `unavailable`: no ADM3 zones were built for that ADM2.
+- `failed`: ADM3 geometry exists but did not pass quality gates.
+
+Reason codes are deterministic: `official-source-approved`,
+`osm-administrative-source-selected`, `smart-derived-fallback`, `mixed-source-priority`,
+`no-adm3-zones-built`, and `quality-gate-failed`. Missing official ADM3 data is represented as
+`estimated` or `unavailable` coverage, never as fake official neighbourhood geometry.
+
 ## Stable 2.0.0 Verification Snapshot
 
 The 2026-08-22 publish-ready rebuild verified the full stable national contract with:

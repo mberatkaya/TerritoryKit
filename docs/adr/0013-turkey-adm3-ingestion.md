@@ -20,6 +20,12 @@ normal TerritoryKit artifacts, but ADM3 source acquisition and parsing are provi
 Partial builds require explicit `--allow-partial`. Missing provinces are represented as ADM2
 fallback coverage, never as completed ADM3 coverage.
 
+ADM3 locks and artifacts must also preserve canonical boundary governance metadata:
+`boundarySourceClass`, `boundaryKind`, `confidence`, `administrative`, `licenseState`,
+`sourceSnapshotChecksum`, provider/source IDs, attribution, source date when known, and geometry
+hash. Synthetic test fixtures and smart-derived playable geometry are not official ADM3 and cannot
+be published by the production Turkey V2 validation path.
+
 ## Consequences
 
 - New province sources can be added through catalog entries rather than core builder rewrites.

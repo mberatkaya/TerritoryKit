@@ -11,6 +11,7 @@ import {
   createTurkeyAdm3StableKey,
   createTurkeyAdm3TerritoryId,
   parseTurkeyGaziantepAdm3Kml,
+  serializeJsonStable,
   sha256Hex,
   verifyTerritoryCountrySourceLock
 } from "../src/index.js";
@@ -46,7 +47,10 @@ describe("Turkey ADM3 ingestion infrastructure", () => {
       });
       expect(lockResult.lock?.levels.ADM3).toMatchObject({
         status: "available",
-        sourceFeatureCount: 3
+        sourceFeatureCount: 3,
+        boundarySourceClass: "official-local",
+        licenseState: "approved",
+        sourceSnapshotChecksum: lockResult.lock?.levels.ADM3?.sha256
       });
       expect(lockResult.lock && (await verifyTerritoryCountrySourceLock(lockResult.lock)).ok).toBe(
         true
@@ -150,6 +154,43 @@ describe("Turkey ADM3 ingestion infrastructure", () => {
       await rm(second.tempDir, { recursive: true, force: true });
     }
   }, 20_000);
+
+  it("serializes ADM3 source-lock metadata deterministically", async () => {
+    const fixture = await createTurkeyAdm3Fixture();
+
+    try {
+      const first = await createTerritoryCountrySourceLock({
+        country: "TR",
+        levels: ["ADM0", "ADM1", "ADM2", "ADM3"],
+        metadataPath: fixture.nationalMetadataPath,
+        adm3CatalogPath: fixture.adm3CatalogPath,
+        adm3Provinces: ["27", "54"],
+        buildDate: BUILD_DATE
+      });
+      const second = await createTerritoryCountrySourceLock({
+        country: "TR",
+        levels: ["ADM0", "ADM1", "ADM2", "ADM3"],
+        metadataPath: fixture.nationalMetadataPath,
+        adm3CatalogPath: fixture.adm3CatalogPath,
+        adm3Provinces: ["27", "54"],
+        buildDate: BUILD_DATE
+      });
+
+      expect(first.issues).toEqual([]);
+      expect(second.issues).toEqual([]);
+      expect(first.lock).toBeDefined();
+      expect(second.lock).toBeDefined();
+      expect(serializeJsonStable(first.lock)).toBe(serializeJsonStable(second.lock));
+      expect(first.lock?.levels.ADM3).toMatchObject({
+        status: "available",
+        boundarySourceClass: "official-local",
+        licenseState: "approved",
+        sourceSnapshotChecksum: first.lock?.levels.ADM3?.sha256
+      });
+    } finally {
+      await rm(fixture.tempDir, { recursive: true, force: true });
+    }
+  }, 15_000);
 
   it("fails strict builds when an ADM3 parent cannot be resolved", async () => {
     const fixture = await createTurkeyAdm3Fixture({ missingParentMapping: true });
@@ -347,6 +388,28 @@ describe("Turkey ADM3 ingestion infrastructure", () => {
         "tr:adm2:54988432b26387222249237",
         "tr:adm2:54988432b61004264745956"
       ]);
+      const gaziantepTerritory = adm3?.[0]?.properties.territory as
+        Record<string, unknown> | undefined;
+
+      expect(gaziantepTerritory).toMatchObject({
+        boundaryKind: "administrative",
+        boundarySourceClass: "official-local",
+        confidence: "authoritative",
+        administrative: true,
+        providerId: "gaziantep-open-data",
+        sourceId: "100001",
+        sourceVersion: "fixture",
+        sourceSnapshotChecksum: expect.any(String),
+        licenseState: "approved",
+        geometryHash: expect.any(String)
+      });
+      expect(gaziantepTerritory?.source).toMatchObject({
+        boundarySourceClass: "official-local",
+        providerId: "gaziantep-open-data",
+        sourceVersion: "fixture",
+        sourceSnapshotChecksum: expect.any(String),
+        licenseState: "approved"
+      });
       await expect(readFile(join(outputPath, "coverage.json"), "utf8")).resolves.toContain('"27"');
     } finally {
       await rm(fixture.tempDir, { recursive: true, force: true });

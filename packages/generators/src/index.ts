@@ -362,6 +362,8 @@ export type {
 } from "./turkey-v2-hybrid.js";
 export type {
   TurkeyV2DistrictBuildOverride,
+  TurkeyV2Adm3AvailabilityReasonCode,
+  TurkeyV2Adm3AvailabilityStatus,
   TurkeyV2NationalAdmLevelLock,
   TurkeyV2NationalAdmSourceLock,
   TurkeyV2NationalArtifactPayloads,

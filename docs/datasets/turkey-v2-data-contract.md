@@ -23,7 +23,7 @@ not part of the Turkey V2 production hierarchy in this contract.
 
 ## Source Classes
 
-`sourceClass` is one of:
+`sourceClass` remains the legacy final-source family:
 
 - `official`
 - `osm`
@@ -36,6 +36,28 @@ national playable artifacts are produced by the Turkey V2 national build.
 See [Turkey V2 source class and provenance](./turkey-v2-source-provenance.md) for the dedicated
 source reference.
 
+Turkey ADM3 boundaries also carry canonical boundary governance fields. These fields prevent
+official neighbourhood polygons, OSM administrative boundaries, smart-derived playable coverage, and
+synthetic tests from being represented as the same thing.
+
+| Field                 | Values                                                                                         | Meaning                                                                  |
+| --------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `boundaryKind`        | `administrative`, `estimated`                                                                  | Whether the polygon claims to be an administrative boundary or estimate. |
+| `boundarySourceClass` | `official-national`, `official-local`, `osm-administrative`, `smart-derived`, `synthetic-test` | Auditable provenance class for the boundary geometry.                    |
+| `confidence`          | `authoritative`, `high`, `medium`, `low`                                                       | Confidence in the boundary representation.                               |
+| `licenseState`        | `approved`, `pending`, `restricted`, `unknown`                                                 | Publication gate state for the source license and redistribution terms.  |
+
+Required invariants:
+
+- `smart-derived` boundaries are always `boundaryKind: "estimated"` and `administrative: false`.
+- `synthetic-test` boundaries are always `boundaryKind: "estimated"` and are rejected by the
+  production Turkey V2 publish validation path.
+- `authoritative` confidence requires `boundarySourceClass: "official-national"` or
+  `"official-local"` and `licenseState: "approved"`.
+- `osm-administrative` boundaries may be `boundaryKind: "administrative"`, but
+  `administrative: false` until an approved official source replaces them.
+- Missing official ADM3 coverage is represented in coverage reports, not by fake ADM3 zones.
+
 ## Metadata Fields
 
 Schema-v1 stores additive metadata under `zone.properties.territory`. The strict profile accepts the
@@ -44,13 +66,23 @@ existing nested `source` object and the V2 top-level aliases below.
 | Field                                 | Type    | Required in TR V2           | Source classes | Notes                                              |
 | ------------------------------------- | ------- | --------------------------- | -------------- | -------------------------------------------------- |
 | `sourceClass`                         | string  | yes                         | all            | `official`, `osm`, or `generated`                  |
+| `boundaryKind`                        | string  | yes                         | ADM3           | `administrative` or `estimated`                    |
+| `boundarySourceClass`                 | string  | yes                         | ADM3           | Canonical provenance class                         |
+| `confidence`                          | string  | yes                         | ADM3           | `authoritative`, `high`, `medium`, or `low`        |
+| `administrative`                      | boolean | yes                         | ADM3           | True only for approved official admin boundaries   |
+| `providerId`                          | string  | yes                         | ADM3           | Stable provider identifier                         |
 | `sourceProvider` or `source.provider` | string  | real sources                | official, osm  | Must identify publisher/provider                   |
+| `sourceId`                            | string  | yes                         | ADM3           | Stable source or source-object identifier          |
 | `sourceDatasetId`                     | string  | conditional                 | all            | Verifiable source reference when URL is not enough |
 | `sourceNativeId`                      | string  | real sources when available | official, osm  | Preferred stable identity input                    |
 | `sourceDate`                          | string  | real sources                | official, osm  | Source snapshot date                               |
 | `sourceUrl`                           | string  | conditional                 | official, osm  | Or equivalent repository provenance reference      |
+| `sourceVersion`                       | string  | when known                  | all            | Source release/version label                       |
+| `sourceSnapshotChecksum`              | string  | yes                         | ADM3           | Checksum of source snapshot or deterministic input |
+| `licenseState`                        | string  | yes                         | ADM3           | License gate result                                |
 | `license`                             | string  | real sources                | official, osm  | Preserve source license                            |
 | `attribution`                         | string  | real sources                | official, osm  | Preserve attribution                               |
+| `geometryHash`                        | string  | yes                         | ADM3           | Hash of effective published geometry               |
 | `official`                            | boolean | yes                         | all            | Must match `sourceClass`                           |
 | `generated`                           | boolean | yes                         | all            | Must match `sourceClass`                           |
 | `algorithmVersion`                    | string  | generated                   | generated      | Generator contract version                         |
@@ -86,10 +118,14 @@ The profile reports deterministic JSON and non-zero exit codes for invalid datas
 codes include:
 
 - `INVALID_SOURCE_CLASS`
+- `INVALID_BOUNDARY_METADATA`
 - `SOURCE_FLAG_CONFLICT`
 - `MISSING_GENERATOR_VERSION`
 - `INVALID_GENERATED_SEMANTIC_TYPE`
 - `MISSING_SOURCE_PROVENANCE`
+- `MISSING_BOUNDARY_PROVENANCE`
+- `LICENSE_GATE_FAILED`
+- `SYNTHETIC_SOURCE_NOT_PUBLISHABLE`
 - `INVALID_PARENT_LEVEL`
 - `ADM3_ORPHAN`
 - `HIERARCHY_CODE_MISMATCH`
