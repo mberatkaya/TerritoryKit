@@ -1,0 +1,832 @@
+{
+  "country": "TR",
+  "generatedAt": "2026-08-26T00:00:00.000Z",
+  "level": "ADM3",
+  "provinces": [
+    {
+      "code": "01",
+      "name": "Adana",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-01-nvi-maks-authority-path",
+        "tr-adm3-osm-01-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "02",
+      "name": "Adıyaman",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-02-nvi-maks-authority-path",
+        "tr-adm3-osm-02-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "03",
+      "name": "Afyonkarahisar",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-local-03-afyonkarahisar-belediyesi-ulasav",
+        "tr-adm3-osm-03-geofabrik-turkey"
+      ],
+      "status": "partial-official"
+    },
+    {
+      "code": "04",
+      "name": "Ağrı",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-04-nvi-maks-authority-path",
+        "tr-adm3-osm-04-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "05",
+      "name": "Amasya",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-05-nvi-maks-authority-path",
+        "tr-adm3-osm-05-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "06",
+      "name": "Ankara",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-local-06-ankara-buyuksehir-belediyesi-aski-arcgis-planning-service",
+        "tr-adm3-osm-06-geofabrik-turkey"
+      ],
+      "status": "official-service-only"
+    },
+    {
+      "code": "07",
+      "name": "Antalya",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-07-nvi-maks-authority-path",
+        "tr-adm3-osm-07-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "08",
+      "name": "Artvin",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-local-08-artvin-il-ozel-idaresi-arcgis-service",
+        "tr-adm3-osm-08-geofabrik-turkey"
+      ],
+      "status": "official-service-only"
+    },
+    {
+      "code": "09",
+      "name": "Aydın",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-09-nvi-maks-authority-path",
+        "tr-adm3-osm-09-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "10",
+      "name": "Balıkesir",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-10-nvi-maks-authority-path",
+        "tr-adm3-osm-10-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "11",
+      "name": "Bilecik",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-11-nvi-maks-authority-path",
+        "tr-adm3-osm-11-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "12",
+      "name": "Bingöl",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-12-nvi-maks-authority-path",
+        "tr-adm3-osm-12-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "13",
+      "name": "Bitlis",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-13-nvi-maks-authority-path",
+        "tr-adm3-osm-13-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "14",
+      "name": "Bolu",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-14-nvi-maks-authority-path",
+        "tr-adm3-osm-14-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "15",
+      "name": "Burdur",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-15-nvi-maks-authority-path",
+        "tr-adm3-osm-15-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "16",
+      "name": "Bursa",
+      "productionEligible": true,
+      "sources": [
+        "tr-adm3-official-local-16-bursa-buyuksehir-belediyesi-open-data",
+        "tr-adm3-osm-16-geofabrik-turkey"
+      ],
+      "status": "official-ready"
+    },
+    {
+      "code": "17",
+      "name": "Çanakkale",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-17-nvi-maks-authority-path",
+        "tr-adm3-osm-17-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "18",
+      "name": "Çankırı",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-18-nvi-maks-authority-path",
+        "tr-adm3-osm-18-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "19",
+      "name": "Çorum",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-19-nvi-maks-authority-path",
+        "tr-adm3-osm-19-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "20",
+      "name": "Denizli",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-local-20-denizli-buyuksehir-belediyesi-open-data",
+        "tr-adm3-osm-20-geofabrik-turkey"
+      ],
+      "status": "official-license-review"
+    },
+    {
+      "code": "21",
+      "name": "Diyarbakır",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-21-nvi-maks-authority-path",
+        "tr-adm3-osm-21-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "22",
+      "name": "Edirne",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-22-nvi-maks-authority-path",
+        "tr-adm3-osm-22-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "23",
+      "name": "Elazığ",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-23-nvi-maks-authority-path",
+        "tr-adm3-osm-23-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "24",
+      "name": "Erzincan",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-local-24-erzincan-il-ozel-idaresi-arcgis-service",
+        "tr-adm3-osm-24-geofabrik-turkey"
+      ],
+      "status": "partial-official"
+    },
+    {
+      "code": "25",
+      "name": "Erzurum",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-25-nvi-maks-authority-path",
+        "tr-adm3-osm-25-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "26",
+      "name": "Eskişehir",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-26-nvi-maks-authority-path",
+        "tr-adm3-osm-26-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "27",
+      "name": "Gaziantep",
+      "productionEligible": true,
+      "sources": [
+        "tr-adm3-official-local-27-gaziantep-buyuksehir-belediyesi-open-data-via-ulasav",
+        "tr-adm3-osm-27-geofabrik-turkey"
+      ],
+      "status": "official-ready"
+    },
+    {
+      "code": "28",
+      "name": "Giresun",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-28-nvi-maks-authority-path",
+        "tr-adm3-osm-28-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "29",
+      "name": "Gümüşhane",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-29-nvi-maks-authority-path",
+        "tr-adm3-osm-29-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "30",
+      "name": "Hakkari",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-30-nvi-maks-authority-path",
+        "tr-adm3-osm-30-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "31",
+      "name": "Hatay",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-31-nvi-maks-authority-path",
+        "tr-adm3-osm-31-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "32",
+      "name": "Isparta",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-32-nvi-maks-authority-path",
+        "tr-adm3-osm-32-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "33",
+      "name": "Mersin",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-local-33-mersin-yenisehir-belediyesi-ulasav",
+        "tr-adm3-osm-33-geofabrik-turkey"
+      ],
+      "status": "partial-official"
+    },
+    {
+      "code": "34",
+      "name": "İstanbul",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-local-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces",
+        "tr-adm3-osm-34-geofabrik-turkey"
+      ],
+      "status": "official-license-review"
+    },
+    {
+      "code": "35",
+      "name": "İzmir",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-local-35-izmir-buyuksehir-belediyesi-kent-rehberi-arcgis",
+        "tr-adm3-osm-35-geofabrik-turkey"
+      ],
+      "status": "official-license-review"
+    },
+    {
+      "code": "36",
+      "name": "Kars",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-36-nvi-maks-authority-path",
+        "tr-adm3-osm-36-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "37",
+      "name": "Kastamonu",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-37-nvi-maks-authority-path",
+        "tr-adm3-osm-37-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "38",
+      "name": "Kayseri",
+      "productionEligible": true,
+      "sources": [
+        "tr-adm3-official-local-38-kayseri-buyuksehir-belediyesi-open-data-via-ulasav",
+        "tr-adm3-osm-38-geofabrik-turkey"
+      ],
+      "status": "official-ready"
+    },
+    {
+      "code": "39",
+      "name": "Kırklareli",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-39-nvi-maks-authority-path",
+        "tr-adm3-osm-39-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "40",
+      "name": "Kırşehir",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-40-nvi-maks-authority-path",
+        "tr-adm3-osm-40-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "41",
+      "name": "Kocaeli",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-41-nvi-maks-authority-path",
+        "tr-adm3-osm-41-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "42",
+      "name": "Konya",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-local-42-konya-buyuksehir-belediyesi-open-data-via-ulasav",
+        "tr-adm3-osm-42-geofabrik-turkey"
+      ],
+      "status": "official-license-review"
+    },
+    {
+      "code": "43",
+      "name": "Kütahya",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-43-nvi-maks-authority-path",
+        "tr-adm3-osm-43-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "44",
+      "name": "Malatya",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-44-nvi-maks-authority-path",
+        "tr-adm3-osm-44-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "45",
+      "name": "Manisa",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-45-nvi-maks-authority-path",
+        "tr-adm3-osm-45-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "46",
+      "name": "Kahramanmaraş",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-46-nvi-maks-authority-path",
+        "tr-adm3-osm-46-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "47",
+      "name": "Mardin",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-47-nvi-maks-authority-path",
+        "tr-adm3-osm-47-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "48",
+      "name": "Muğla",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-local-48-mugla-buyuksehir-belediyesi-cbs",
+        "tr-adm3-osm-48-geofabrik-turkey"
+      ],
+      "status": "official-license-review"
+    },
+    {
+      "code": "49",
+      "name": "Muş",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-49-nvi-maks-authority-path",
+        "tr-adm3-osm-49-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "50",
+      "name": "Nevşehir",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-50-nvi-maks-authority-path",
+        "tr-adm3-osm-50-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "51",
+      "name": "Niğde",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-51-nvi-maks-authority-path",
+        "tr-adm3-osm-51-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "52",
+      "name": "Ordu",
+      "productionEligible": true,
+      "sources": [
+        "tr-adm3-official-local-52-ordu-buyuksehir-belediyesi-open-data",
+        "tr-adm3-osm-52-geofabrik-turkey"
+      ],
+      "status": "official-ready"
+    },
+    {
+      "code": "53",
+      "name": "Rize",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-53-nvi-maks-authority-path",
+        "tr-adm3-osm-53-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "54",
+      "name": "Sakarya",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-local-54-sakarya-buyuksehir-belediyesi-open-data",
+        "tr-adm3-osm-54-geofabrik-turkey"
+      ],
+      "status": "official-license-review"
+    },
+    {
+      "code": "55",
+      "name": "Samsun",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-55-nvi-maks-authority-path",
+        "tr-adm3-osm-55-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "56",
+      "name": "Siirt",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-56-nvi-maks-authority-path",
+        "tr-adm3-osm-56-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "57",
+      "name": "Sinop",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-57-nvi-maks-authority-path",
+        "tr-adm3-osm-57-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "58",
+      "name": "Sivas",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-local-58-sivas-belediyesi-open-data-via-ulasav",
+        "tr-adm3-osm-58-geofabrik-turkey"
+      ],
+      "status": "official-license-review"
+    },
+    {
+      "code": "59",
+      "name": "Tekirdağ",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-local-59-tekirdag-corlu-belediyesi-ulasav",
+        "tr-adm3-osm-59-geofabrik-turkey"
+      ],
+      "status": "partial-official"
+    },
+    {
+      "code": "60",
+      "name": "Tokat",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-60-nvi-maks-authority-path",
+        "tr-adm3-osm-60-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "61",
+      "name": "Trabzon",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-61-nvi-maks-authority-path",
+        "tr-adm3-osm-61-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "62",
+      "name": "Tunceli",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-62-nvi-maks-authority-path",
+        "tr-adm3-osm-62-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "63",
+      "name": "Şanlıurfa",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-63-nvi-maks-authority-path",
+        "tr-adm3-osm-63-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "64",
+      "name": "Uşak",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-local-64-usak-belediyesi-ulasav",
+        "tr-adm3-osm-64-geofabrik-turkey"
+      ],
+      "status": "partial-official"
+    },
+    {
+      "code": "65",
+      "name": "Van",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-local-65-van-buyuksehir-belediyesi-ulasav",
+        "tr-adm3-osm-65-geofabrik-turkey"
+      ],
+      "status": "partial-official"
+    },
+    {
+      "code": "66",
+      "name": "Yozgat",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-66-nvi-maks-authority-path",
+        "tr-adm3-osm-66-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "67",
+      "name": "Zonguldak",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-67-nvi-maks-authority-path",
+        "tr-adm3-osm-67-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "68",
+      "name": "Aksaray",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-68-nvi-maks-authority-path",
+        "tr-adm3-osm-68-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "69",
+      "name": "Bayburt",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-69-nvi-maks-authority-path",
+        "tr-adm3-osm-69-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "70",
+      "name": "Karaman",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-70-nvi-maks-authority-path",
+        "tr-adm3-osm-70-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "71",
+      "name": "Kırıkkale",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-71-nvi-maks-authority-path",
+        "tr-adm3-osm-71-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "72",
+      "name": "Batman",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-72-nvi-maks-authority-path",
+        "tr-adm3-osm-72-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "73",
+      "name": "Şırnak",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-73-nvi-maks-authority-path",
+        "tr-adm3-osm-73-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "74",
+      "name": "Bartın",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-74-nvi-maks-authority-path",
+        "tr-adm3-osm-74-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "75",
+      "name": "Ardahan",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-75-nvi-maks-authority-path",
+        "tr-adm3-osm-75-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "76",
+      "name": "Iğdır",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-76-nvi-maks-authority-path",
+        "tr-adm3-osm-76-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "77",
+      "name": "Yalova",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-77-nvi-maks-authority-path",
+        "tr-adm3-osm-77-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "78",
+      "name": "Karabük",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-78-nvi-maks-authority-path",
+        "tr-adm3-osm-78-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "79",
+      "name": "Kilis",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-79-nvi-maks-authority-path",
+        "tr-adm3-osm-79-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "80",
+      "name": "Osmaniye",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-80-nvi-maks-authority-path",
+        "tr-adm3-osm-80-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    },
+    {
+      "code": "81",
+      "name": "Düzce",
+      "productionEligible": false,
+      "sources": [
+        "tr-adm3-official-national-81-nvi-maks-authority-path",
+        "tr-adm3-osm-81-geofabrik-turkey"
+      ],
+      "status": "official-restricted"
+    }
+  ],
+  "schemaVersion": "territorykit-tr-adm3-source-coverage@1",
+  "summary": {
+    "provinceCount": 81,
+    "sourceCount": 162,
+    "statusCounts": {
+      "official-license-review": 7,
+      "official-ready": 4,
+      "official-restricted": 62,
+      "official-service-only": 2,
+      "osm-candidate": 0,
+      "partial-official": 6,
+      "research-required": 0,
+      "unavailable": 0
+    }
+  }
+}

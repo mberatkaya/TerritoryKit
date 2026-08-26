@@ -26,3 +26,8 @@ Reviewed ADM3 province sources are recorded in `datasets/sources/TR/adm3-catalog
 under `extensions.turkeyAdm3` by `territory country source lock TR --adm3-provinces ...`. See
 [Turkey ADM3 source contract](./turkey-adm3-source-contract.md) and
 [Turkey ADM3 ingestion](./turkey-adm3-ingestion.md).
+
+Sprint 2 source discovery adds a non-production source registry at
+`datasets/sources/TR/adm3/source-registry.json`. It records national assessments, all 81 province
+statuses, official/OSM candidate separation, and production eligibility gates without adding new
+ADM3 polygons to the production catalog.

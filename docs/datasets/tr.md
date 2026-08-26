@@ -24,10 +24,16 @@ ADM3 ingestion is now catalog-driven by province. Use
 `territory country source lock TR --adm3-provinces <codes> --adm3-catalog <catalog>` and build with
 `--allow-partial` when coverage is intentionally incomplete.
 
+Sprint 2 source discovery is tracked separately from production ingestion. The 81-province ADM3
+source registry lives under `datasets/sources/TR/adm3/source-registry.json`, with national source
+assessments and machine-readable coverage in `reports/tr-adm3/source-coverage.json`.
+
 See:
 
 - [Turkey administrative model](./turkey-administrative-model.md)
 - [Turkey sources](./turkey-sources.md)
+- [Turkey ADM3 source strategy](./tr-adm3-source-strategy.md)
+- [Turkey ADM3 source registry](./tr-adm3-source-registry.md)
 - [Turkey national coverage](./turkey-national-coverage.md)
 - [Turkey build](./turkey-build.md)
 - [Turkey licensing](./turkey-licensing.md)
