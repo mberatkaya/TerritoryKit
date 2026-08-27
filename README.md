@@ -124,6 +124,10 @@ administrative boundaries. ADM4 remains source-model blocked. See
 [docs/datasets/turkey-sources.md](./docs/datasets/turkey-sources.md), and the partial Gaziantep
 ADM3 pilot in
 [docs/datasets/turkey-neighbourhoods.md](./docs/datasets/turkey-neighbourhoods.md).
+The Turkey ADM3 smart fallback engine adds barrier-guided generated coverage for districts that
+lack official or OSM administrative ADM3 polygons, while keeping every derived result marked
+non-official and estimated. See
+[docs/datasets/turkey-smart-fallback.md](./docs/datasets/turkey-smart-fallback.md).
 Turkey V2 defines the additive data contract for mixing official, OSM, and generated ADM3 game
 zones without presenting generated zones as official mahalle/koy records. The stable national
 builder applies official > OSM > generated priority, emits registry/checksum/source-lock evidence,
@@ -232,6 +236,7 @@ actions after workflow verification.
 - [Turkey V2 source provenance](./docs/datasets/turkey-v2-source-provenance.md)
 - [Turkey V2 hybrid coverage](./docs/datasets/turkey-v2-hybrid-coverage.md)
 - [Turkey V2 migration](./docs/datasets/turkey-v2-migration.md)
+- [Turkey smart fallback](./docs/datasets/turkey-smart-fallback.md)
 - [Turkey licensing](./docs/datasets/turkey-licensing.md)
 - [Turkey neighbourhoods](./docs/datasets/turkey-neighbourhoods.md)
 - [Dataset providers](./docs/datasets/providers.md)

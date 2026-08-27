@@ -34,12 +34,20 @@ import type {
   TurkeyGameZoneFragmentStrategy,
   TurkeyGameZoneProfile
 } from "./turkey-game-zones.js";
+import { buildTurkeySmartFallbackWithAdjacency } from "./turkey-smart-fallback.js";
+import type {
+  TurkeySmartFallbackBuildResult,
+  TurkeySmartFallbackLocalitySeed,
+  TurkeySmartFallbackOptions,
+  TurkeySmartFallbackProfile
+} from "./turkey-smart-fallback.js";
 import {
   createDatasetGeometryHash,
   isRecord,
   serializeJsonStable,
   sha256Hex
 } from "./sources/utils.js";
+import type { FeatureCollection } from "geojson";
 
 export const TURKEY_V2_HYBRID_COVERAGE_SCHEMA_VERSION =
   "territorykit-tr-v2-hybrid-coverage@1" as const;
@@ -96,7 +104,8 @@ export interface TurkeyV2HybridIssue {
 
 export interface TurkeyV2HybridGeneratedOptions {
   enabled: boolean;
-  profile?: TurkeyGameZoneProfile;
+  strategy?: "legacy" | "smart";
+  profile?: TurkeyGameZoneProfile | TurkeySmartFallbackProfile;
   seed?: string;
   targetAreaKm2?: number;
   targetZoneCount?: number;
@@ -105,6 +114,17 @@ export interface TurkeyV2HybridGeneratedOptions {
   maxZonesPerDistrict?: number;
   minFragmentAreaKm2?: number;
   fragmentStrategy?: TurkeyGameZoneFragmentStrategy;
+  fallbackToLegacyOnSmartFailure?: boolean;
+  smartFallback?: {
+    profile?: TurkeySmartFallbackProfile;
+    roads?: FeatureCollection;
+    railways?: FeatureCollection;
+    water?: FeatureCollection;
+    landuse?: FeatureCollection;
+    parks?: FeatureCollection;
+    localitySeeds?: readonly TurkeySmartFallbackLocalitySeed[];
+    options?: TurkeySmartFallbackOptions;
+  };
 }
 
 export interface TurkeyV2HybridDistrictBuildOptions {
@@ -149,6 +169,7 @@ export interface TurkeyV2HybridDistrictBuildResult {
   adjacency: TerritoryAdjacencyArtifact;
   adjacencyStatistics: Awaited<ReturnType<typeof buildTerritoryAdjacency>>["statistics"];
   generatedResult?: TurkeyGameZoneBuildResult;
+  smartFallbackResult?: TurkeySmartFallbackBuildResult;
   deterministicHash: string;
   issues: TurkeyV2HybridIssue[];
 }
@@ -182,9 +203,10 @@ export interface TurkeyV2HybridCoverageReport {
   overlapRemovedByPriorityKm2: number;
   rejectedSliverAreaKm2: number;
   sourceCounts: Record<TurkeyV2HybridSourceClass, number>;
-  profile: TurkeyGameZoneProfile;
+  profile: TurkeyGameZoneProfile | TurkeySmartFallbackProfile;
   selectedProfile?: string;
-  algorithmVersion: typeof TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION;
+  algorithmVersion: string;
+  generatedStrategy: "legacy" | "smart" | "none";
   status: "ok" | "quality-failed" | "build-failed";
 }
 
@@ -550,6 +572,7 @@ export async function buildTurkeyV2HybridDistrict(
   const generationGeometry = clippingMultiPolygonToTerritoryGeometry(missingGeometry);
   const generatedOptions = options.generated ?? { enabled: true, profile: "auto" as const };
   let generatedResult: TurkeyGameZoneBuildResult | undefined;
+  let smartFallbackResult: TurkeySmartFallbackBuildResult | undefined;
   let generatedEffective: TerritoryZone[] = [];
   let generatedSliverAreaKm2 = 0;
 
@@ -565,43 +588,85 @@ export async function buildTurkeyV2HybridDistrict(
       bbox: computeGeometryBBox(generationGeometry),
       center: computeSafeGeometryCenter(generationGeometry)
     };
-    generatedResult = buildTurkeyGameZones({
-      district: generationDistrict,
-      provinceCode: options.provinceCode,
-      districtCode: options.districtCode,
-      profile: generatedOptions.profile ?? "auto",
-      seed: generatedOptions.seed ?? "kaprota-v2",
-      excludedOrOccupiedZones: [],
-      ...(generatedOptions.targetAreaKm2 !== undefined
-        ? { targetAreaKm2: generatedOptions.targetAreaKm2 }
-        : {}),
-      ...(generatedOptions.targetZoneCount !== undefined
-        ? { targetZoneCount: generatedOptions.targetZoneCount }
-        : {}),
-      ...(generatedOptions.minAreaKm2 !== undefined
-        ? { minAreaKm2: generatedOptions.minAreaKm2 }
-        : {}),
-      ...(generatedOptions.maxAreaKm2 !== undefined
-        ? { maxAreaKm2: generatedOptions.maxAreaKm2 }
-        : {}),
-      ...(generatedOptions.maxZonesPerDistrict !== undefined
-        ? { maxZonesPerDistrict: generatedOptions.maxZonesPerDistrict }
-        : {}),
-      ...(generatedOptions.minFragmentAreaKm2 !== undefined
-        ? { minFragmentAreaKm2: generatedOptions.minFragmentAreaKm2 }
-        : {}),
-      ...(generatedOptions.fragmentStrategy
-        ? { fragmentStrategy: generatedOptions.fragmentStrategy }
-        : {})
-    });
-    const configurationHash = sha256Hex(serializeJsonStable(generatedResult.configuration));
+    const generatedStrategy = resolveGeneratedStrategy(generatedOptions);
+    let candidateGeneratedZones: TerritoryZone[] = [];
+    let configurationHash = "";
+
+    if (generatedStrategy === "smart") {
+      smartFallbackResult = await buildTurkeySmartFallbackWithAdjacency({
+        parent: generationDistrict,
+        provinceCode: options.provinceCode,
+        districtCode: options.districtCode,
+        profile: toSmartFallbackProfile(
+          generatedOptions.smartFallback?.profile ?? generatedOptions.profile ?? "auto"
+        ),
+        ...(generatedOptions.smartFallback?.roads
+          ? { roads: generatedOptions.smartFallback.roads }
+          : {}),
+        ...(generatedOptions.smartFallback?.railways
+          ? { railways: generatedOptions.smartFallback.railways }
+          : {}),
+        ...(generatedOptions.smartFallback?.water
+          ? { water: generatedOptions.smartFallback.water }
+          : {}),
+        ...(generatedOptions.smartFallback?.landuse
+          ? { landuse: generatedOptions.smartFallback.landuse }
+          : {}),
+        ...(generatedOptions.smartFallback?.parks
+          ? { parks: generatedOptions.smartFallback.parks }
+          : {}),
+        ...(generatedOptions.smartFallback?.localitySeeds
+          ? { localitySeeds: generatedOptions.smartFallback.localitySeeds }
+          : {}),
+        options: createSmartFallbackOptions(generatedOptions)
+      });
+
+      if (smartFallbackResult.quality.ok) {
+        issues.push(...mapSmartFallbackIssues(smartFallbackResult.issues));
+        candidateGeneratedZones = smartFallbackResult.zones;
+        configurationHash = smartFallbackResult.manifest.contentHash;
+      } else if (generatedOptions.fallbackToLegacyOnSmartFailure ?? true) {
+        issues.push(...mapSmartFallbackIssues(smartFallbackResult.issues, "warning"));
+        issues.push({
+          code: "TR_V2_HYBRID_LEGACY_FALLBACK_USED",
+          severity: "warning",
+          message:
+            "Smart fallback failed quality gates, so the district used the legacy generated-zone fallback.",
+          parentId: options.district.id,
+          details: {
+            smartFallbackStatus: smartFallbackResult.status,
+            smartFallbackHash: smartFallbackResult.deterministicHash
+          }
+        });
+        generatedResult = buildLegacyGeneratedResult({
+          district: generationDistrict,
+          provinceCode: options.provinceCode,
+          districtCode: options.districtCode,
+          options: generatedOptions
+        });
+        candidateGeneratedZones = generatedResult.zones;
+        configurationHash = sha256Hex(serializeJsonStable(generatedResult.configuration));
+      } else {
+        issues.push(...mapSmartFallbackIssues(smartFallbackResult.issues));
+      }
+    } else {
+      generatedResult = buildLegacyGeneratedResult({
+        district: generationDistrict,
+        provinceCode: options.provinceCode,
+        districtCode: options.districtCode,
+        options: generatedOptions
+      });
+      candidateGeneratedZones = generatedResult.zones;
+      configurationHash = sha256Hex(serializeJsonStable(generatedResult.configuration));
+    }
+
     const generatedOutput = buildEffectiveGeneratedZones({
       district: options.district,
       provinceCode: options.provinceCode,
       districtCode: options.districtCode,
       districtGeometry,
       realMask,
-      zones: generatedResult.zones,
+      zones: candidateGeneratedZones,
       minimumEffectiveAreaKm2,
       buildDate,
       configurationHash
@@ -610,6 +675,7 @@ export async function buildTurkeyV2HybridDistrict(
     generatedSliverAreaKm2 = generatedOutput.sliverAreaKm2;
 
     if (
+      candidateGeneratedZones.length > 0 &&
       generatedEffective.length === 0 &&
       missingBeforeGeneratedAreaKm2 >= minimumEffectiveAreaKm2
     ) {
@@ -620,13 +686,14 @@ export async function buildTurkeyV2HybridDistrict(
         geometry: generationGeometry,
         buildDate,
         seed: generatedOptions.seed ?? "kaprota-v2",
-        configurationHash,
+        configurationHash: configurationHash || generatedOptions.seed || "kaprota-v2",
         effectiveGeometry: missingGeometry
       });
 
       generatedEffective = [fallbackZone];
       generatedResult = undefined;
-    } else {
+      smartFallbackResult = undefined;
+    } else if (generatedResult) {
       issues.push(
         ...generatedResult.issues.map((issue) => ({
           code: `TR_V2_HYBRID_GENERATOR_${issue.code}`,
@@ -707,6 +774,7 @@ export async function buildTurkeyV2HybridDistrict(
     realZones,
     generatedZones: generatedEffective,
     ...(generatedResult ? { generatedResult } : {}),
+    ...(smartFallbackResult ? { smartFallbackResult } : {}),
     missingBeforeGeneratedAreaKm2,
     finalZones: zones,
     rejectedSliverAreaKm2:
@@ -769,6 +837,7 @@ export async function buildTurkeyV2HybridDistrict(
     gapToleranceKm2,
     parentOutsideToleranceKm2,
     ...(generatedResult ? { generatedResult } : {}),
+    ...(smartFallbackResult ? { smartFallbackResult } : {}),
     deterministicHash: preliminaryHash
   });
   const deterministicHash = sha256Hex(
@@ -807,8 +876,9 @@ export async function buildTurkeyV2HybridDistrict(
     adjacency: adjacency.artifact,
     adjacencyStatistics: adjacency.statistics,
     ...(generatedResult ? { generatedResult } : {}),
+    ...(smartFallbackResult ? { smartFallbackResult } : {}),
     deterministicHash,
-    issues: sortIssues([...issues, ...finalQuality.issues])
+    issues: uniqueIssues([...issues, ...finalQuality.issues])
   };
 }
 
@@ -822,6 +892,113 @@ function isUsableGeneratedFallback(result: TurkeyV2HybridDistrictBuildResult): b
     result.quality.summary.siblingOverlapAfterPriorityCount === 0 &&
     result.quality.summary.realGeneratedOverlapKm2 === 0
   );
+}
+
+function resolveGeneratedStrategy(options: TurkeyV2HybridGeneratedOptions): "legacy" | "smart" {
+  return options.strategy ?? (options.smartFallback ? "smart" : "legacy");
+}
+
+function buildLegacyGeneratedResult(input: {
+  district: TerritoryZone;
+  provinceCode: string;
+  districtCode: string;
+  options: TurkeyV2HybridGeneratedOptions;
+}): TurkeyGameZoneBuildResult {
+  return buildTurkeyGameZones({
+    district: input.district,
+    provinceCode: input.provinceCode,
+    districtCode: input.districtCode,
+    profile: toLegacyGameZoneProfile(input.options.profile),
+    seed: input.options.seed ?? "kaprota-v2",
+    excludedOrOccupiedZones: [],
+    ...(input.options.targetAreaKm2 !== undefined
+      ? { targetAreaKm2: input.options.targetAreaKm2 }
+      : {}),
+    ...(input.options.targetZoneCount !== undefined
+      ? { targetZoneCount: input.options.targetZoneCount }
+      : {}),
+    ...(input.options.minAreaKm2 !== undefined ? { minAreaKm2: input.options.minAreaKm2 } : {}),
+    ...(input.options.maxAreaKm2 !== undefined ? { maxAreaKm2: input.options.maxAreaKm2 } : {}),
+    ...(input.options.maxZonesPerDistrict !== undefined
+      ? { maxZonesPerDistrict: input.options.maxZonesPerDistrict }
+      : {}),
+    ...(input.options.minFragmentAreaKm2 !== undefined
+      ? { minFragmentAreaKm2: input.options.minFragmentAreaKm2 }
+      : {}),
+    ...(input.options.fragmentStrategy ? { fragmentStrategy: input.options.fragmentStrategy } : {})
+  });
+}
+
+function createSmartFallbackOptions(
+  options: TurkeyV2HybridGeneratedOptions
+): TurkeySmartFallbackOptions {
+  return {
+    ...(options.smartFallback?.options ?? {}),
+    ...(options.seed ? { seed: options.seed } : {}),
+    ...(options.targetAreaKm2 !== undefined ? { targetAreaKm2: options.targetAreaKm2 } : {}),
+    ...(options.targetZoneCount !== undefined
+      ? { targetTerritoryCount: options.targetZoneCount }
+      : {}),
+    ...(options.minAreaKm2 !== undefined ? { minAreaKm2: options.minAreaKm2 } : {}),
+    ...(options.maxAreaKm2 !== undefined ? { maxAreaKm2: options.maxAreaKm2 } : {}),
+    ...(options.maxZonesPerDistrict !== undefined
+      ? { maxTerritories: options.maxZonesPerDistrict }
+      : {}),
+    ...(options.minFragmentAreaKm2 !== undefined
+      ? { minFragmentAreaKm2: options.minFragmentAreaKm2 }
+      : {})
+  };
+}
+
+function toSmartFallbackProfile(
+  profile: TurkeyGameZoneProfile | TurkeySmartFallbackProfile
+): TurkeySmartFallbackProfile {
+  if (
+    profile === "dense-urban" ||
+    profile === "urban" ||
+    profile === "suburban" ||
+    profile === "rural" ||
+    profile === "auto" ||
+    profile === "custom"
+  ) {
+    return profile;
+  }
+
+  return "auto";
+}
+
+function toLegacyGameZoneProfile(
+  profile: TurkeyGameZoneProfile | TurkeySmartFallbackProfile | undefined
+): TurkeyGameZoneProfile {
+  if (
+    profile === "urban" ||
+    profile === "suburban" ||
+    profile === "rural" ||
+    profile === "auto" ||
+    profile === "custom"
+  ) {
+    return profile;
+  }
+
+  if (profile === "dense-urban") {
+    return "urban";
+  }
+
+  return "auto";
+}
+
+function mapSmartFallbackIssues(
+  issues: readonly TurkeySmartFallbackBuildResult["issues"][number][],
+  severityOverride?: TurkeyV2HybridIssueSeverity
+): TurkeyV2HybridIssue[] {
+  return issues.map((issue) => ({
+    code: `TR_V2_HYBRID_${issue.code}`,
+    severity: severityOverride ?? issue.severity,
+    message: issue.message,
+    ...(issue.zoneId ? { zoneId: issue.zoneId } : {}),
+    ...(issue.parentId ? { parentId: issue.parentId } : {}),
+    ...(issue.details ? { details: issue.details } : {})
+  }));
 }
 
 export async function buildTurkeyV2HybridBatch(
@@ -1390,6 +1567,24 @@ function safeIdentitySegment(input: string): string {
   return normalized.length > 0 ? normalized : "zone";
 }
 
+function safeGeneratedLocalTypeName(input: string | undefined): string {
+  if (!input) {
+    return "Generated game zone";
+  }
+
+  const normalized = input.toLocaleLowerCase("tr");
+
+  return normalized === "mahalle" || normalized === "koy" || normalized === "köy"
+    ? "Generated game zone"
+    : input;
+}
+
+function readGeneratedConfidence(input: Record<string, unknown>): TerritoryBoundaryConfidence {
+  const value = readString(input.confidence);
+
+  return value === "high" || value === "medium" || value === "low" ? value : "medium";
+}
+
 function createEffectiveRealZone(input: {
   zone: TerritoryZone;
   district: TerritoryZone;
@@ -1528,6 +1723,7 @@ function createEffectiveGeneratedZone(input: {
   const territory = isRecord(input.zone.properties.territory)
     ? input.zone.properties.territory
     : {};
+  const source = isRecord(territory.source) ? territory.source : {};
   const generatedZone = isRecord(territory.generatedZone) ? territory.generatedZone : {};
   const geometryHashValue = geometryHash(input.geometry);
   const bbox = computeGeometryBBox(input.geometry);
@@ -1536,7 +1732,45 @@ function createEffectiveGeneratedZone(input: {
     readString(generatedZone.generationSeed) ??
     readString(generatedZone.seed) ??
     "kaprota-v2";
-  const sourceSnapshotChecksum = input.configurationHash;
+  const algorithmVersion =
+    readString(territory.algorithmVersion) ??
+    readString(generatedZone.algorithmVersion) ??
+    TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION;
+  const providerId =
+    readString(territory.providerId) ??
+    readString(source.providerId) ??
+    readString(territory.sourceProvider) ??
+    "territory-kit-generated";
+  const providerName =
+    readString(territory.providerName) ??
+    readString(source.providerName) ??
+    "TerritoryKit game-zone generator";
+  const sourceDatasetId =
+    readString(territory.sourceDatasetId) ??
+    readString(source.sourceDatasetId) ??
+    "tr-adm3-game-zone-v2";
+  const sourceId =
+    readString(territory.sourceId) ?? readString(source.sourceId) ?? "tr-adm3-game-zone-v2";
+  const sourceNativeId =
+    readString(territory.sourceNativeId) ?? readString(source.sourceNativeId) ?? input.zone.id;
+  const sourceDate =
+    readString(territory.sourceDate) ?? readString(source.sourceDate) ?? algorithmVersion;
+  const sourceVersion =
+    readString(territory.sourceVersion) ?? readString(source.sourceVersion) ?? algorithmVersion;
+  const sourceUrl = readString(territory.sourceUrl) ?? readString(source.sourceUrl);
+  const sourceSnapshotId =
+    readString(territory.sourceSnapshotId) ?? readString(source.sourceSnapshotId);
+  const sourceSnapshotChecksum =
+    readString(territory.sourceSnapshotChecksum) ??
+    readString(source.sourceSnapshotChecksum) ??
+    input.configurationHash;
+  const license = readString(territory.license) ?? readString(source.license) ?? "Apache-2.0";
+  const attribution =
+    readString(territory.attribution) ??
+    readString(source.attribution) ??
+    "TerritoryKit generated game zones from ADM2 boundaries";
+  const localTypeName = safeGeneratedLocalTypeName(readString(territory.localTypeName));
+  const confidence = readGeneratedConfidence(territory);
 
   return {
     ...input.zone,
@@ -1557,7 +1791,7 @@ function createEffectiveGeneratedZone(input: {
         sourceAdminLevel: "ADM3",
         semanticType: "generated-zone",
         localType: "generated-zone",
-        localTypeName: "Generated game zone",
+        localTypeName,
         hierarchyDepth: 3,
         parentId: input.district.id,
         countryCode: "TR",
@@ -1566,24 +1800,26 @@ function createEffectiveGeneratedZone(input: {
         sourceClass: "generated",
         boundaryKind: "estimated",
         boundarySourceClass: "smart-derived",
-        confidence: "medium",
+        confidence,
         administrative: false,
         providerClass: "generated",
-        providerId: "territory-kit-generated",
-        providerName: "TerritoryKit game-zone generator",
-        sourceProvider: "territory-kit-generated",
-        sourceId: "tr-adm3-game-zone-v2",
-        sourceDatasetId: "tr-adm3-game-zone-v2",
-        sourceNativeId: readString(territory.sourceNativeId) ?? input.zone.id,
-        sourceDate: TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
-        sourceVersion: TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
+        providerId,
+        providerName,
+        sourceProvider: providerId,
+        sourceId,
+        sourceDatasetId,
+        sourceNativeId,
+        sourceDate,
+        sourceVersion,
+        ...(sourceUrl ? { sourceUrl } : {}),
+        ...(sourceSnapshotId ? { sourceSnapshotId } : {}),
         sourceSnapshotChecksum,
         licenseState: "approved",
-        license: "Apache-2.0",
-        attribution: "TerritoryKit generated game zones from ADM2 boundaries",
+        license,
+        attribution,
         official: false,
         generated: true,
-        algorithmVersion: TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
+        algorithmVersion,
         generationSeed: seed,
         semanticReviewStatus: "not-applicable",
         coverageStatus: "generated",
@@ -1600,26 +1836,29 @@ function createEffectiveGeneratedZone(input: {
         generatorConfigurationHash: input.configurationHash,
         parentGeometryHash: geometryHash(input.district.geometry),
         source: {
-          provider: "territory-kit-generated",
+          ...source,
+          provider: providerId,
           sourceClass: "generated",
           boundarySourceClass: "smart-derived",
-          providerId: "territory-kit-generated",
-          providerName: "TerritoryKit game-zone generator",
-          sourceDatasetId: "tr-adm3-game-zone-v2",
-          sourceId: input.zone.id,
-          sourceNativeId: input.zone.id,
-          sourceDate: TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
-          sourceVersion: TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
+          providerId,
+          providerName,
+          sourceDatasetId,
+          sourceId,
+          sourceNativeId,
+          sourceDate,
+          sourceVersion,
+          ...(sourceUrl ? { sourceUrl } : {}),
+          ...(sourceSnapshotId ? { sourceSnapshotId } : {}),
           sourceSnapshotChecksum,
           licenseState: "approved",
-          license: "Apache-2.0",
-          attribution: "TerritoryKit generated game zones from ADM2 boundaries"
+          license,
+          attribution
         },
         generatedZone: {
           ...generatedZone,
           algorithm:
             readString(generatedZone.algorithm) ?? "deterministic-clipped-grid-tessellation",
-          algorithmVersion: TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
+          algorithmVersion,
           seed,
           generationSeed: seed,
           configurationHash: input.configurationHash,
@@ -1645,6 +1884,7 @@ function createCoverageReport(input: {
   realZones: readonly TerritoryZone[];
   generatedZones: readonly TerritoryZone[];
   generatedResult?: TurkeyGameZoneBuildResult;
+  smartFallbackResult?: TurkeySmartFallbackBuildResult;
   missingBeforeGeneratedAreaKm2: number;
   finalZones: readonly TerritoryZone[];
   rejectedSliverAreaKm2: number;
@@ -1691,9 +1931,24 @@ function createCoverageReport(input: {
       osm: input.osmEffective.length,
       generated: input.generatedZones.length
     },
-    profile: input.generatedResult?.configuration.profile ?? "auto",
-    ...(input.generatedResult ? { selectedProfile: input.generatedResult.selectedProfile } : {}),
-    algorithmVersion: TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
+    profile:
+      input.generatedResult?.configuration.profile ??
+      input.smartFallbackResult?.configuration.profile ??
+      "auto",
+    ...(input.generatedResult
+      ? { selectedProfile: input.generatedResult.selectedProfile }
+      : input.smartFallbackResult
+        ? { selectedProfile: input.smartFallbackResult.selectedProfile }
+        : {}),
+    algorithmVersion:
+      input.generatedResult?.configuration.algorithmVersion ??
+      input.smartFallbackResult?.configuration.algorithmVersion ??
+      TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
+    generatedStrategy: input.generatedResult
+      ? "legacy"
+      : input.smartFallbackResult
+        ? "smart"
+        : "none",
     status: "ok"
   };
 }
@@ -1716,6 +1971,7 @@ function createQualityReport(input: {
   gapToleranceKm2: number;
   parentOutsideToleranceKm2: number;
   generatedResult?: TurkeyGameZoneBuildResult;
+  smartFallbackResult?: TurkeySmartFallbackBuildResult;
   deterministicHash: string;
 }): TurkeyV2HybridQualityReport {
   const finalOverlaps = validateGeometryDataset(input.dataset, {
@@ -1773,7 +2029,7 @@ function createQualityReport(input: {
   const strictValidationErrorCount = input.trV2Validation.issues.filter(
     (issue) => issue.severity === "error"
   ).length;
-  const generatedQualityErrorCount =
+  const legacyGeneratedQualityErrorCount =
     input.generatedResult?.issues.filter(
       (issue) =>
         issue.severity === "error" &&
@@ -1783,6 +2039,12 @@ function createQualityReport(input: {
           emptyGeometryCount === 0
         )
     ).length ?? 0;
+  const smartGeneratedQualityErrorCount =
+    input.smartFallbackResult && !input.generatedResult
+      ? input.smartFallbackResult.issues.filter((issue) => issue.severity === "error").length
+      : 0;
+  const generatedQualityErrorCount =
+    legacyGeneratedQualityErrorCount + smartGeneratedQualityErrorCount;
   const sliverRejections = input.rejections.rejections.filter(
     (rejection) => rejection.reason === "below-minimum-effective-area"
   );
@@ -1936,10 +2198,15 @@ function createProvenanceItem(
 
   if (sourceClass === "generated") {
     const generatorConfigurationHash = readString(territory.generatorConfigurationHash);
+    const generatedZone = isRecord(territory.generatedZone) ? territory.generatedZone : {};
+    const algorithmVersion =
+      readString(territory.algorithmVersion) ??
+      readString(generatedZone.algorithmVersion) ??
+      TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION;
 
     return {
       ...item,
-      algorithmVersion: TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
+      algorithmVersion,
       ...(seed ? { generatorSeedHash: sha256Hex(seed) } : {}),
       ...(generatorConfigurationHash ? { generatorConfigurationHash } : {}),
       parentGeometryHash: readString(territory.parentGeometryHash) ?? districtGeometryHash
@@ -3103,6 +3370,29 @@ function sortIssues(issues: readonly TurkeyV2HybridIssue[]): TurkeyV2HybridIssue
       (left.zoneId ?? "").localeCompare(right.zoneId ?? "") ||
       left.message.localeCompare(right.message)
   );
+}
+
+function uniqueIssues(issues: readonly TurkeyV2HybridIssue[]): TurkeyV2HybridIssue[] {
+  const seen = new Set<string>();
+  const unique: TurkeyV2HybridIssue[] = [];
+
+  for (const issue of sortIssues(issues)) {
+    const key = serializeJsonStable({
+      code: issue.code,
+      severity: issue.severity,
+      zoneId: issue.zoneId ?? "",
+      parentId: issue.parentId ?? "",
+      message: issue.message,
+      details: issue.details ?? {}
+    });
+
+    if (!seen.has(key)) {
+      seen.add(key);
+      unique.push(issue);
+    }
+  }
+
+  return unique;
 }
 
 function percentage(value: number, total: number): number {

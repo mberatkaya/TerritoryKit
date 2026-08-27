@@ -8,9 +8,11 @@ import type {
   TerritorySourceClass,
   TerritoryZone
 } from "@territory-kit/dataset";
+import type { Feature, FeatureCollection, LineString } from "geojson";
 import { describe, expect, it } from "vitest";
 import {
   TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
+  TURKEY_SMART_FALLBACK_ALGORITHM_VERSION,
   buildTurkeyV2HybridBatch,
   buildTurkeyV2HybridDistrict,
   createTurkeyV2ZoneMigrationPlan
@@ -385,6 +387,137 @@ describe("Turkey V2 hybrid coverage pipeline", () => {
     ).toBe(true);
   });
 
+  it("uses smart fallback as the generated source when barriers pass quality gates", async () => {
+    const district = districtZone("smart-generated-only", rectangle(0, 0, 1, 1));
+    const result = await buildTurkeyV2HybridDistrict({
+      district,
+      provinceCode: "01",
+      districtCode: "smart-generated-only",
+      generated: {
+        enabled: true,
+        strategy: "smart",
+        profile: "custom",
+        targetZoneCount: 4,
+        targetAreaKm2: 3000,
+        minAreaKm2: 1,
+        maxAreaKm2: 5000,
+        maxZonesPerDistrict: 6,
+        minFragmentAreaKm2: 1,
+        seed: "smart-test",
+        smartFallback: {
+          roads: lineCollection([
+            lineFeature(
+              "primary-v",
+              [
+                [0.5, 0],
+                [0.5, 1]
+              ],
+              { highway: "primary", source: "openstreetmap" }
+            ),
+            lineFeature(
+              "secondary-h",
+              [
+                [0, 0.5],
+                [1, 0.5]
+              ],
+              { highway: "secondary", source: "openstreetmap" }
+            )
+          ]),
+          options: {
+            minMeanQualityScore: 0.35,
+            minMeanBarrierAlignment: 0.2
+          }
+        }
+      },
+      buildDate: "2026-08-13T00:00:00.000Z"
+    });
+
+    expect(result.quality.ok).toBe(true);
+    expect(result.coverage.generatedStrategy).toBe("smart");
+    expect(result.coverage.algorithmVersion).toBe(TURKEY_SMART_FALLBACK_ALGORITHM_VERSION);
+    expect(result.smartFallbackResult?.quality.ok).toBe(true);
+    expect(result.generatedResult).toBeUndefined();
+    expect(result.effective.generated).toHaveLength(4);
+    expect(
+      result.effective.generated.every((zone) => {
+        const territory = zone.properties.territory as Record<string, unknown>;
+        return (
+          territory.algorithmVersion === TURKEY_SMART_FALLBACK_ALGORITHM_VERSION &&
+          territory.localTypeName === "Smart derived territory" &&
+          territory.administrative === false &&
+          territory.official === false
+        );
+      })
+    ).toBe(true);
+    expect(result.provenance.zones).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          algorithmVersion: TURKEY_SMART_FALLBACK_ALGORITHM_VERSION,
+          providerId: "openstreetmap",
+          license: "ODbL-1.0"
+        })
+      ])
+    );
+  });
+
+  it("falls back to legacy generated zones when smart fallback is rejected", async () => {
+    const district = districtZone("smart-rejected-legacy", rectangle(0, 0, 1, 1));
+    const result = await buildTurkeyV2HybridDistrict({
+      district,
+      provinceCode: "01",
+      districtCode: "smart-rejected-legacy",
+      generated: {
+        enabled: true,
+        strategy: "smart",
+        profile: "custom",
+        targetZoneCount: 4,
+        targetAreaKm2: 3000,
+        minAreaKm2: 1,
+        maxAreaKm2: 5000,
+        maxZonesPerDistrict: 6,
+        minFragmentAreaKm2: 1,
+        seed: "smart-test",
+        smartFallback: {
+          roads: lineCollection([
+            lineFeature(
+              "service",
+              [
+                [0.5, 0],
+                [0.5, 1]
+              ],
+              { highway: "service", source: "openstreetmap" }
+            )
+          ]),
+          options: {
+            minMeanQualityScore: 0.35,
+            minMeanBarrierAlignment: 0.2
+          }
+        }
+      },
+      buildDate: "2026-08-13T00:00:00.000Z"
+    });
+
+    expect(result.smartFallbackResult?.quality.ok).toBe(false);
+    expect(result.generatedResult?.quality.ok).toBe(true);
+    expect(result.quality.ok).toBe(true);
+    expect(result.coverage.generatedStrategy).toBe("legacy");
+    expect(result.coverage.algorithmVersion).toBe(TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION);
+    expect(
+      result.effective.generated.every((zone) => {
+        const territory = zone.properties.territory as Record<string, unknown>;
+        return territory.algorithmVersion === TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION;
+      })
+    ).toBe(true);
+    expect(result.issues).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: "TR_V2_HYBRID_LEGACY_FALLBACK_USED",
+          severity: "warning"
+        })
+      ])
+    );
+  });
+
   it("preserves approved repository source metadata for real official and OSM records", async () => {
     const catalog = JSON.parse(
       await readFile(resolve(ROOT, "datasets/sources/TR/adm3-catalog.json"), "utf8")
@@ -696,6 +829,29 @@ function withSourceMetadata(
           attribution: metadata.attribution
         }
       }
+    }
+  };
+}
+
+function lineCollection(features: Feature<LineString>[]): FeatureCollection {
+  return {
+    type: "FeatureCollection",
+    features
+  };
+}
+
+function lineFeature(
+  id: string,
+  coordinates: LngLat[],
+  properties: Record<string, string>
+): Feature<LineString> {
+  return {
+    type: "Feature",
+    id,
+    properties,
+    geometry: {
+      type: "LineString",
+      coordinates
     }
   };
 }
