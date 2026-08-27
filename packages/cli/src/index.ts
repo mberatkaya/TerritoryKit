@@ -1063,7 +1063,9 @@ async function runTurkeyAdm3Generate(args: string[]): Promise<number> {
     getFlag(flags, "district") ?? getFlag(flags, "input") ?? getFlag(flags, "dataset");
   const outputRoot = getFlag(flags, "output");
   const districtId = getFlag(flags, "district-id") ?? getFlag(flags, "zone-id");
-  const profile = (getFlag(flags, "profile") ?? "auto") as TurkeyGameZoneProfile;
+  const profileRaw = getFlag(flags, "profile") ?? "auto";
+  const strategyRaw = getFlag(flags, "strategy") ?? (flags.has("smart") ? "smart" : "legacy");
+  const strategy = strategyRaw === "legacy" || strategyRaw === "smart" ? strategyRaw : undefined;
   const seed = getFlag(flags, "seed");
   const fragmentStrategy = getFlag(flags, "fragment-strategy") as
     TurkeyGameZoneFragmentStrategy | undefined;
@@ -1082,13 +1084,14 @@ async function runTurkeyAdm3Generate(args: string[]): Promise<number> {
   );
   const urbanityHint = readTurkeyAdm3UrbanityHint(flags);
 
-  if (!inputPath || !outputRoot) {
+  if (!inputPath || !outputRoot || !strategy) {
     printJson({
       ok: false,
       command: "tr adm3 generate",
       issues: [
         ...(!inputPath ? [createCliIssue("--district, --input, or --dataset is required.")] : []),
-        ...(!outputRoot ? [createCliIssue("--output is required.")] : [])
+        ...(!outputRoot ? [createCliIssue("--output is required.")] : []),
+        ...(!strategy ? [createCliIssue("--strategy must be either 'legacy' or 'smart'.")] : [])
       ]
     });
     return 2;
@@ -1102,11 +1105,36 @@ async function runTurkeyAdm3Generate(args: string[]): Promise<number> {
   try {
     const district = await readTurkeyAdm3GenerateDistrict(inputPath, districtId);
     const { provinceCode, districtCode } = resolveTurkeyAdm3GenerateCodes(district, flags);
+
+    if (strategy === "smart") {
+      const command = await import("./turkey-adm3-smart-generate.js");
+      return command.runTurkeyAdm3SmartGenerate({
+        startedAt,
+        flags,
+        district,
+        provinceCode,
+        districtCode,
+        outputRoot,
+        profileRaw,
+        ...(seed ? { seed } : {}),
+        ...(targetAreaKm2 !== undefined ? { targetAreaKm2 } : {}),
+        ...(targetZoneCount !== undefined ? { targetZoneCount } : {}),
+        ...(minAreaKm2 !== undefined ? { minAreaKm2 } : {}),
+        ...(maxAreaKm2 !== undefined ? { maxAreaKm2 } : {}),
+        ...(maxZonesPerDistrict !== undefined ? { maxZonesPerDistrict } : {}),
+        ...(minFragmentAreaKm2 !== undefined ? { minFragmentAreaKm2 } : {}),
+        ...(population !== undefined ? { population } : {}),
+        ...(populationDensityPerKm2 !== undefined ? { populationDensityPerKm2 } : {}),
+        ...(urbanityHint ? { urbanityHint } : {}),
+        ...(fragmentStrategy ? { fragmentStrategy } : {})
+      });
+    }
+
     const generatorOptions = {
       district,
       provinceCode,
       districtCode,
-      profile,
+      profile: toTurkeyAdm3LegacyFallbackProfile(profileRaw),
       ...(seed ? { seed } : {}),
       ...(targetAreaKm2 ? { targetAreaKm2 } : {}),
       ...(targetZoneCount ? { targetZoneCount } : {}),
@@ -1308,6 +1336,10 @@ function readTurkeyAdm3UrbanityHint(
   }
 
   return undefined;
+}
+
+function toTurkeyAdm3LegacyFallbackProfile(input: string): TurkeyGameZoneProfile {
+  return input === "dense-urban" ? "urban" : (input as TurkeyGameZoneProfile);
 }
 
 function territoryDatasetToFeatureCollection(dataset: TerritoryDataset): Record<string, unknown> {
@@ -6527,7 +6559,8 @@ Commands:
 Options:
   --registry <json> --fallbacks <json> --allow-experimental --allow-runtime
   --official --osm --fill-gaps --output <json>
-  generate --dataset <adm2.json> --district-id <id> --profile auto --output <dir>`);
+  generate --dataset <adm2.json> --district-id <id> --profile auto --output <dir>
+  generate --strategy smart --roads <geojson> --water <geojson> --railways <geojson> --output <dir>`);
 }
 
 function printTurkeyAdm3ProvidersHelp(): void {

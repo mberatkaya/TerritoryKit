@@ -241,6 +241,114 @@ describe("territory cli Turkey ADM3 full coverage", () => {
     }
   });
 
+  it("generates smart fallback artifacts with manifest and legacy comparison", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-adm3-smart-fallback-"));
+    const adm2DatasetPath = join(tempDir, "adm2-dataset.json");
+    const roadsPath = join(tempDir, "roads.geojson");
+    const outputPath = join(tempDir, "smart-zones");
+
+    try {
+      await writeFile(adm2DatasetPath, JSON.stringify(createAdm2FixtureDataset()), "utf8");
+      await writeFile(
+        roadsPath,
+        JSON.stringify({
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              id: "primary-v",
+              properties: { highway: "primary", source: "openstreetmap" },
+              geometry: {
+                type: "LineString",
+                coordinates: [
+                  [35.1, 37],
+                  [35.1, 37.2]
+                ]
+              }
+            },
+            {
+              type: "Feature",
+              id: "secondary-h",
+              properties: { highway: "secondary", source: "openstreetmap" },
+              geometry: {
+                type: "LineString",
+                coordinates: [
+                  [35, 37.1],
+                  [35.2, 37.1]
+                ]
+              }
+            }
+          ]
+        }),
+        "utf8"
+      );
+
+      const result = await captureCli([
+        "tr",
+        "adm3",
+        "generate",
+        "--strategy",
+        "smart",
+        "--dataset",
+        adm2DatasetPath,
+        "--district-id",
+        "tr:adm2:54988432b39717738295698",
+        "--profile",
+        "custom",
+        "--seed",
+        "smart-cli",
+        "--province-code",
+        "01",
+        "--district-code",
+        "001",
+        "--roads",
+        roadsPath,
+        "--target-zone-count",
+        "4",
+        "--target-area",
+        "100",
+        "--min-area",
+        "1",
+        "--max-area",
+        "200",
+        "--min-fragment-area",
+        "1",
+        "--min-quality-score",
+        "0.3",
+        "--min-barrier-alignment",
+        "0.1",
+        "--output",
+        outputPath
+      ]);
+
+      expect(result).toMatchObject({
+        code: 0,
+        payload: {
+          ok: true,
+          command: "tr adm3 generate",
+          data: {
+            strategy: "smart",
+            selectedProfile: "custom",
+            algorithmVersion: "smart-derived-v1",
+            producedZoneCount: 4,
+            trV2ValidationOk: true
+          }
+        }
+      });
+      await expect(readFile(join(outputPath, "manifest.json"), "utf8")).resolves.toContain(
+        "smart-derived-v1"
+      );
+      await expect(readFile(join(outputPath, "comparison.json"), "utf8")).resolves.toContain(
+        "territorykit-tr-adm3-smart-fallback-comparison@1"
+      );
+      await expect(readFile(join(outputPath, "dataset.json"), "utf8")).resolves.toContain(
+        "Smart derived territory"
+      );
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
   it("rejects invalid Turkey V2 game-zone CLI configuration", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-adm3-game-zone-invalid-"));
     const adm2DatasetPath = join(tempDir, "adm2-dataset.json");

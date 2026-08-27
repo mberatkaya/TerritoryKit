@@ -189,6 +189,18 @@ export {
   validateTurkeyGameZoneGeneratorOptions
 } from "./turkey-game-zones.js";
 export {
+  DEFAULT_TURKEY_SMART_FALLBACK_BARRIER_CONFIG,
+  TURKEY_SMART_FALLBACK_ALGORITHM_VERSION,
+  TURKEY_SMART_FALLBACK_CONFIGURATION_SCHEMA_VERSION,
+  TURKEY_SMART_FALLBACK_MANIFEST_SCHEMA_VERSION,
+  TURKEY_SMART_FALLBACK_QUALITY_SCHEMA_VERSION,
+  buildTurkeySmartFallback,
+  buildTurkeySmartFallbackWithAdjacency,
+  createTurkeySmartFallbackDataset,
+  normalizeTurkeySmartFallbackBarriers,
+  resolveTurkeySmartFallbackConfiguration
+} from "./turkey-smart-fallback.js";
+export {
   TURKEY_ADM3_COVERAGE_SCHEMA_VERSION,
   TURKEY_ADM3_IMPORT_REPORT_SCHEMA_VERSION,
   TURKEY_ADM3_PROVENANCE_SCHEMA_VERSION,
@@ -324,6 +336,28 @@ export type {
   TurkeyGameZoneQualityReport,
   TurkeyGameZoneUrbanityHint
 } from "./turkey-game-zones.js";
+export type {
+  ResolvedTurkeySmartFallbackProfile,
+  TurkeySmartFallbackBarrier,
+  TurkeySmartFallbackBarrierClass,
+  TurkeySmartFallbackBarrierConfig,
+  TurkeySmartFallbackBarrierLayer,
+  TurkeySmartFallbackBarrierStrengthClass,
+  TurkeySmartFallbackBuildResult,
+  TurkeySmartFallbackConfiguration,
+  TurkeySmartFallbackInput,
+  TurkeySmartFallbackIssue,
+  TurkeySmartFallbackIssueCode,
+  TurkeySmartFallbackLocalitySeed,
+  TurkeySmartFallbackManifest,
+  TurkeySmartFallbackOptions,
+  TurkeySmartFallbackProfile,
+  TurkeySmartFallbackQualityReport,
+  TurkeySmartFallbackSourceMetadata,
+  TurkeySmartFallbackSourceStrategy,
+  TurkeySmartFallbackStatus,
+  TurkeySmartFallbackZoneQuality
+} from "./turkey-smart-fallback.js";
 export type {
   TurkeyAdm3AcquireSource,
   TurkeyAdm3CoverageManifest,
