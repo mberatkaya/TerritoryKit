@@ -1,0 +1,72 @@
+{
+  "country": "TR",
+  "generatedAt": "2026-08-26T00:00:00.000Z",
+  "level": "ADM3",
+  "schemaVersion": "territorykit-tr-adm3-national-source-assessments@1",
+  "sources": [
+    {
+      "access": "restricted",
+      "authoritative": true,
+      "authorityType": "national-government",
+      "coverage": "national",
+      "evidenceUrls": [
+        "https://maks.nvi.gov.tr/",
+        "https://adres.nvi.gov.tr/Home",
+        "https://www.youtube.com/watch?v=mE2PuqUmtUw"
+      ],
+      "formats": ["restricted MAKS service/export"],
+      "geometryAvailable": "unknown",
+      "licenseState": "restricted",
+      "notes": "MAKS is the national authority path for spatialized address data and UAVT linkage, but no public WFS/WMS/API or redistributable ADM3 polygon download was found. Treat as authority-request only.",
+      "productionEligible": false,
+      "provider": "NVI Mekansal Adres Kayit Sistemi (MAKS)",
+      "redistribution": "unclear"
+    },
+    {
+      "access": "request-required",
+      "authoritative": false,
+      "authorityType": "national-government",
+      "coverage": "national",
+      "evidenceUrls": [
+        "https://tucbs.gov.tr/",
+        "https://www.turkiye.gov.tr/csb-tucbs-8514",
+        "https://cbs.csb.gov.tr/"
+      ],
+      "formats": ["metadata catalog", "WMS/WFS/WMTS/WCS when a data owner grants access"],
+      "geometryAvailable": "unknown",
+      "licenseState": "review-required",
+      "notes": "TUCBS is the national geographic information platform and request channel. Public pages confirm identity-gated access and data-owner permission controls; no openly redistributable ADM3 layer was locked.",
+      "productionEligible": false,
+      "provider": "TUCBS Ulusal Cografi Bilgi Platformu",
+      "redistribution": "unclear"
+    },
+    {
+      "access": "restricted",
+      "authoritative": true,
+      "authorityType": "national-government",
+      "coverage": "national",
+      "evidenceUrls": ["https://adres.nvi.gov.tr/Home", "https://maks.nvi.gov.tr/"],
+      "formats": ["restricted address registry interface"],
+      "geometryAvailable": false,
+      "licenseState": "restricted",
+      "notes": "NVI/UAVT is authoritative for stable address components and neighbourhood identifiers, but the public interface is not an ADM3 polygon distribution endpoint.",
+      "productionEligible": false,
+      "provider": "NVI Adres Kayit Sistemi / UAVT",
+      "redistribution": "unclear"
+    },
+    {
+      "access": "public-download",
+      "authoritative": true,
+      "authorityType": "national-government",
+      "coverage": "partial",
+      "evidenceUrls": ["https://www.harita.gov.tr/urun/turkiye-mulki-idare-sinirlari/232"],
+      "formats": ["map/product download"],
+      "geometryAvailable": "unknown",
+      "licenseState": "review-required",
+      "notes": "Harita Genel Mudurlugu publishes a national mulki idare boundary product, but current evidence points at country/province/district/village administrative boundaries rather than a reviewed urban mahalle polygon source for TerritoryKit ADM3.",
+      "productionEligible": false,
+      "provider": "Harita Genel Mudurlugu Turkiye Mulki Idare Sinirlari",
+      "redistribution": "unclear"
+    }
+  ]
+}

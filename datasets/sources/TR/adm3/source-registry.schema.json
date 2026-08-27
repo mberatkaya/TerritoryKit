@@ -1,0 +1,345 @@
+{
+  "$defs": {
+    "access": {
+      "additionalProperties": false,
+      "properties": {
+        "formats": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "geometryAvailable": {
+          "enum": [true, false, "unknown"]
+        },
+        "type": {
+          "enum": [
+            "public-download",
+            "public-api",
+            "authenticated",
+            "request-required",
+            "restricted",
+            "unknown"
+          ]
+        },
+        "urls": {
+          "type": "object"
+        }
+      },
+      "required": ["type", "formats", "geometryAvailable", "urls"],
+      "type": "object"
+    },
+    "license": {
+      "additionalProperties": false,
+      "properties": {
+        "commercialUse": {
+          "enum": ["allowed", "prohibited", "unclear"]
+        },
+        "modification": {
+          "enum": ["allowed", "prohibited", "unclear"]
+        },
+        "name": {
+          "type": "string"
+        },
+        "redistribution": {
+          "enum": ["allowed", "prohibited", "unclear"]
+        },
+        "state": {
+          "enum": ["approved", "review-required", "restricted", "unknown"]
+        }
+      },
+      "required": ["state", "redistribution", "commercialUse", "modification", "name"],
+      "type": "object"
+    },
+    "nationalSource": {
+      "additionalProperties": false,
+      "properties": {
+        "access": {
+          "enum": [
+            "public-download",
+            "public-api",
+            "authenticated",
+            "request-required",
+            "restricted",
+            "unknown"
+          ]
+        },
+        "authoritative": {
+          "type": "boolean"
+        },
+        "authorityType": {
+          "const": "national-government"
+        },
+        "coverage": {
+          "enum": ["national", "partial", "unknown"]
+        },
+        "evidenceUrls": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "formats": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "geometryAvailable": {
+          "enum": [true, false, "unknown"]
+        },
+        "licenseState": {
+          "enum": ["approved", "review-required", "restricted", "unknown"]
+        },
+        "notes": {
+          "type": "string"
+        },
+        "productionEligible": {
+          "type": "boolean"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "redistribution": {
+          "enum": ["allowed", "not-allowed", "unclear"]
+        }
+      },
+      "required": [
+        "provider",
+        "authorityType",
+        "coverage",
+        "geometryAvailable",
+        "access",
+        "formats",
+        "licenseState",
+        "redistribution",
+        "authoritative",
+        "productionEligible",
+        "notes",
+        "evidenceUrls"
+      ],
+      "type": "object"
+    },
+    "priority": {
+      "enum": ["P0", "P1", "P2", "P3", "P4", "P5", "P6"]
+    },
+    "provider": {
+      "additionalProperties": false,
+      "properties": {
+        "authorityType": {
+          "enum": ["national-government", "local-government", "other-government", "community"]
+        },
+        "class": {
+          "enum": [
+            "official-national",
+            "official-local",
+            "osm-administrative",
+            "smart-derived",
+            "synthetic-test"
+          ]
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": ["name", "authorityType", "class"],
+      "type": "object"
+    },
+    "province": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "pattern": "^[0-9]{2}$",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "sources": {
+          "items": {
+            "$ref": "#/$defs/source"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "sourceSummary": {
+          "type": "object"
+        },
+        "status": {
+          "enum": [
+            "official-ready",
+            "official-license-review",
+            "official-restricted",
+            "official-service-only",
+            "partial-official",
+            "osm-candidate",
+            "research-required",
+            "unavailable"
+          ]
+        }
+      },
+      "required": ["code", "name", "status", "sourceSummary", "sources"],
+      "type": "object"
+    },
+    "source": {
+      "additionalProperties": false,
+      "properties": {
+        "access": {
+          "$ref": "#/$defs/access"
+        },
+        "administrative": {
+          "type": "boolean"
+        },
+        "authoritative": {
+          "type": "boolean"
+        },
+        "boundarySourceClass": {
+          "enum": [
+            "official-national",
+            "official-local",
+            "osm-administrative",
+            "smart-derived",
+            "synthetic-test"
+          ]
+        },
+        "coverage": {
+          "enum": ["national", "province", "districts", "partial", "unknown"]
+        },
+        "discoveryConfidence": {
+          "enum": ["verified", "probable", "unverified"]
+        },
+        "fields": {
+          "type": "object"
+        },
+        "id": {
+          "type": "string"
+        },
+        "license": {
+          "$ref": "#/$defs/license"
+        },
+        "lifecycle": {
+          "enum": ["discovered", "verified", "downloaded", "approved"]
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "priority": {
+          "$ref": "#/$defs/priority"
+        },
+        "productionEligible": {
+          "type": "boolean"
+        },
+        "provider": {
+          "$ref": "#/$defs/provider"
+        },
+        "sourceDate": {
+          "type": ["string", "null"]
+        },
+        "sourceId": {
+          "type": "string"
+        },
+        "sourceInventoryStatus": {
+          "type": "string"
+        },
+        "verification": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "sourceId",
+        "provider",
+        "boundarySourceClass",
+        "priority",
+        "access",
+        "license",
+        "lifecycle",
+        "discoveryConfidence",
+        "authoritative",
+        "administrative",
+        "productionEligible",
+        "coverage",
+        "fields",
+        "verification",
+        "notes"
+      ],
+      "type": "object"
+    },
+    "sourcePriority": {
+      "additionalProperties": false,
+      "properties": {
+        "boundarySourceClass": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "priority": {
+          "$ref": "#/$defs/priority"
+        },
+        "productionDefault": {
+          "type": "boolean"
+        }
+      },
+      "required": ["priority", "boundarySourceClass", "description", "productionDefault"],
+      "type": "object"
+    }
+  },
+  "$id": "https://territory-kit.local/schemas/tr-adm3-source-registry.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "country": {
+      "const": "TR"
+    },
+    "generatedAt": {
+      "type": "string"
+    },
+    "level": {
+      "const": "ADM3"
+    },
+    "nationalSources": {
+      "items": {
+        "$ref": "#/$defs/nationalSource"
+      },
+      "minItems": 3,
+      "type": "array"
+    },
+    "provinces": {
+      "items": {
+        "$ref": "#/$defs/province"
+      },
+      "maxItems": 81,
+      "minItems": 81,
+      "type": "array"
+    },
+    "schemaVersion": {
+      "const": "territorykit-tr-adm3-source-registry@1"
+    },
+    "sourcePriority": {
+      "items": {
+        "$ref": "#/$defs/sourcePriority"
+      },
+      "minItems": 7,
+      "type": "array"
+    },
+    "summary": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "country",
+    "level",
+    "generatedAt",
+    "summary",
+    "nationalSources",
+    "sourcePriority",
+    "provinces"
+  ],
+  "title": "TerritoryKit Turkey ADM3 source registry",
+  "type": "object"
+}

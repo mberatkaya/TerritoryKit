@@ -1,6 +1,43 @@
 {
   "schemaVersion": "territorykit-source-priority@1",
   "country": "TR",
+  "adm3Priority": [
+    {
+      "priority": "P0",
+      "boundarySourceClass": "official-national",
+      "description": "National authoritative ADM3 geometry with usable redistribution rights and source-lock metadata."
+    },
+    {
+      "priority": "P1",
+      "boundarySourceClass": "official-local",
+      "description": "Municipality official open vector ADM3 dataset with approved license evidence."
+    },
+    {
+      "priority": "P2",
+      "boundarySourceClass": "official-local",
+      "description": "Municipality official GIS/API/WFS source requiring adapter, access, or license review."
+    },
+    {
+      "priority": "P3",
+      "boundarySourceClass": "official-local",
+      "description": "Other official government dataset or authority export outside the municipal open-data path."
+    },
+    {
+      "priority": "P4",
+      "boundarySourceClass": "osm-administrative",
+      "description": "OSM administrative polygon fallback candidate; never authoritative for Turkey ADM3."
+    },
+    {
+      "priority": "P5",
+      "boundarySourceClass": "smart-derived",
+      "description": "Future smart-derived fallback class; not emitted as a Sprint 2 source."
+    },
+    {
+      "priority": "P6",
+      "boundarySourceClass": "synthetic-test",
+      "description": "Synthetic test/gameplay class; not emitted as a Sprint 2 source."
+    }
+  ],
   "defaultPrecedence": [
     "official-national-redistributable",
     "official-local-redistributable",

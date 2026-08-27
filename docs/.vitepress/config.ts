@@ -34,6 +34,8 @@ export default defineConfig({
       { text: "Turkey Administrative Model", link: "/datasets/turkey-administrative-model" },
       { text: "Turkey National Coverage", link: "/datasets/turkey-national-coverage" },
       { text: "Turkey Sources", link: "/datasets/turkey-sources" },
+      { text: "Turkey ADM3 Source Strategy", link: "/datasets/tr-adm3-source-strategy" },
+      { text: "Turkey ADM3 Source Registry", link: "/datasets/tr-adm3-source-registry" },
       { text: "Turkey V2 Data Contract", link: "/datasets/turkey-v2-data-contract" },
       { text: "Turkey V2 Source Provenance", link: "/datasets/turkey-v2-source-provenance" },
       { text: "Turkey V2 Migration", link: "/datasets/turkey-v2-migration" },

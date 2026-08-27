@@ -10,6 +10,10 @@ Machine-readable inventory:
 - `datasets/registry/tr-adm3-source-inventory.json`
 - `datasets/registry/tr-adm3-source-inventory.schema.json`
 
+Sprint 2 normalizes this audit input into the source-registry contract at
+`datasets/sources/TR/adm3/source-registry.json`. Use the source registry for production-safety
+status counts, source priority, national assessments, and OSM fallback semantics.
+
 ## Scope
 
 Reviewed source tiers, in priority order:
