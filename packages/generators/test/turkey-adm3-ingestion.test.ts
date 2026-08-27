@@ -5,18 +5,26 @@ import { loadTerritoryDataset } from "@territory-kit/dataset";
 import { describe, expect, it } from "vitest";
 import {
   TURKEY_ADM3_SOURCE_CATALOG_SCHEMA_VERSION,
+  TURKEY_ADM3_SOURCE_REGISTRY_SCHEMA_VERSION,
   TURKEY_GAZIANTEP_ADM3_PARENT_MAPPINGS,
   buildTerritoryCountryDatasetPath,
   createTerritoryCountrySourceLock,
   createTurkeyAdm3StableKey,
   createTurkeyAdm3TerritoryId,
   parseTurkeyGaziantepAdm3Kml,
+  parseTurkeyAdm3ProviderSource,
+  readTurkeyAdm3SourceCatalog,
   serializeJsonStable,
   sha256Hex,
   verifyTerritoryCountrySourceLock
 } from "../src/index.js";
 import type { TerritoryAdminLevel } from "@territory-kit/dataset";
-import type { TurkeyAdm3SourceCatalog } from "../src/index.js";
+import type {
+  TurkeyAdm3AdapterParseResult,
+  TurkeyAdm3ProviderAdapterConfig,
+  TurkeyAdm3RawProviderFeature,
+  TurkeyAdm3SourceCatalog
+} from "../src/index.js";
 
 const BUILD_DATE = "2026-07-28T00:00:00.000Z";
 
@@ -109,10 +117,334 @@ describe("Turkey ADM3 ingestion infrastructure", () => {
       await expect(
         readFile(join(outputPath, "adm3-quality-gates.json"), "utf8")
       ).resolves.toContain("territorykit-tr-adm3-quality@1");
+      const importReport = JSON.parse(
+        await readFile(join(outputPath, "adm3-import-report.json"), "utf8")
+      ) as { schemaVersion: string; summary: { acceptedCount: number; sourceCount: number } };
+      const unresolvedReport = JSON.parse(
+        await readFile(join(outputPath, "adm3-unresolved-report.json"), "utf8")
+      ) as { records: unknown[]; summary: { unresolvedCount: number } };
+      const repairReport = JSON.parse(
+        await readFile(join(outputPath, "adm3-repair-report.json"), "utf8")
+      ) as { featuresRejected: number };
+
+      expect(importReport).toMatchObject({
+        schemaVersion: "territorykit-tr-adm3-import-report@1",
+        summary: { acceptedCount: 3, sourceCount: 2 }
+      });
+      expect(unresolvedReport.summary.unresolvedCount).toBe(0);
+      expect(unresolvedReport.records).toEqual([]);
+      expect(repairReport.featuresRejected).toBe(0);
     } finally {
       await rm(fixture.tempDir, { recursive: true, force: true });
     }
   }, 15_000);
+
+  it("parses provider transports with CRS handling and full-fidelity geometry", () => {
+    const geoJson = parseAdm3Source(
+      {
+        provinceCode: "34",
+        provinceName: "İstanbul",
+        providerId: "fixture-geojson",
+        format: "GeoJSON",
+        crs: "EPSG:4326",
+        adapter: propertyMapAdapter({
+          id: "geojson-property-map",
+          parentMappings: { TR34A: "tr:adm2:tr34a" }
+        })
+      },
+      JSON.stringify(
+        featureCollection([
+          adm3Feature({
+            sourceId: "geo-1",
+            name: "Şişli",
+            parentCode: "TR34A",
+            geometry: {
+              type: "MultiPolygon",
+              coordinates: [
+                [
+                  [
+                    [28.9, 41],
+                    [28.92, 41],
+                    [28.92, 41.02],
+                    [28.9, 41.02],
+                    [28.9, 41]
+                  ]
+                ],
+                [
+                  [
+                    [28.93, 41.03],
+                    [28.95, 41.03],
+                    [28.95, 41.05],
+                    [28.93, 41.05],
+                    [28.93, 41.03]
+                  ]
+                ]
+              ]
+            }
+          })
+        ])
+      )
+    );
+    const json = parseAdm3Source(
+      {
+        provinceCode: "34",
+        provinceName: "İstanbul",
+        providerId: "fixture-json",
+        format: "JSON",
+        crs: "EPSG:4326",
+        adapter: {
+          id: "json-feature-map",
+          nameProperty: "attrs.ad",
+          sourceIdProperty: "attrs.uid",
+          parentProperty: "attrs.parent",
+          featureArrayPath: "payload.items",
+          geometryProperty: "geom",
+          defaultSemanticType: "neighbourhood",
+          defaultLocalType: "Mahalle",
+          parentMappings: { TR34B: "tr:adm2:tr34b" }
+        }
+      },
+      JSON.stringify({
+        payload: {
+          items: [
+            {
+              attrs: { ad: "Üsküdar", uid: "json-1", parent: "TR34B" },
+              geom: square(29.01, 41.01, 29.03, 41.03)
+            }
+          ]
+        }
+      })
+    );
+    const kml = createKmlWithHoleFixture();
+    const kmlResult = parseAdm3Source(
+      {
+        provinceCode: "34",
+        provinceName: "İstanbul",
+        providerId: "fixture-kml",
+        format: "KML",
+        crs: "EPSG:4326",
+        adapter: fieldMapAdapter({
+          id: "kml-description-table",
+          parentMappings: { TR34C: "tr:adm2:tr34c" }
+        })
+      },
+      kml
+    );
+    const kmzResult = parseAdm3Source(
+      {
+        provinceCode: "34",
+        provinceName: "İstanbul",
+        providerId: "fixture-kmz",
+        format: "KMZ",
+        crs: "EPSG:4326",
+        adapter: fieldMapAdapter({
+          id: "kmz-kml-description-table",
+          parentMappings: { TR34C: "tr:adm2:tr34c" }
+        })
+      },
+      createZipArchive([{ filename: "doc.kml", data: Buffer.from(kml, "utf8") }])
+    );
+    const arcGis = parseAdm3Source(
+      {
+        provinceCode: "34",
+        provinceName: "İstanbul",
+        providerId: "fixture-arcgis",
+        format: "ArcGIS REST",
+        crs: "EPSG:3857",
+        adapter: fieldMapAdapter({
+          id: "arcgis-rest-json",
+          parentMappings: { TR34D: "tr:adm2:tr34d" }
+        })
+      },
+      JSON.stringify({
+        objectIdFieldName: "OBJECTID",
+        spatialReference: { wkid: 3857 },
+        features: [
+          {
+            attributes: {
+              OBJECTID: 7,
+              AD: "Güneşli",
+              KIMLIKNO: "arc-1",
+              ILCEID: "TR34D"
+            },
+            geometry: {
+              rings: [webMercatorSquare(29.02, 41.02, 29.04, 41.04)],
+              spatialReference: { wkid: 3857 }
+            }
+          }
+        ]
+      })
+    );
+    const wfs = parseAdm3Source(
+      {
+        provinceCode: "06",
+        provinceName: "Ankara",
+        providerId: "fixture-wfs",
+        format: "WFS",
+        crs: "EPSG:4326",
+        adapter: propertyMapAdapter({
+          id: "wfs-geojson-property-map",
+          parentMappings: { TR06A: "tr:adm2:tr06a" }
+        })
+      },
+      JSON.stringify(
+        featureCollection([
+          adm3Feature({
+            sourceId: "wfs-1",
+            name: "Kızılay",
+            parentCode: "TR06A",
+            geometry: square(32.85, 39.91, 32.87, 39.93)
+          })
+        ])
+      )
+    );
+    const shapefile = parseAdm3Source(
+      {
+        provinceCode: "35",
+        provinceName: "İzmir",
+        providerId: "fixture-shapefile",
+        format: "Shapefile ZIP",
+        crs: "EPSG:4326",
+        adapter: fieldMapAdapter({
+          id: "shapefile-zip-property-map",
+          parentMappings: { TR35A: "tr:adm2:tr35a" }
+        })
+      },
+      createShapefileZip([
+        {
+          properties: { AD: "Çiğli", KIMLIKNO: "shp-1", ILCEID: "TR35A" },
+          rings: [closedRing(26.95, 38.48, 26.97, 38.5)]
+        }
+      ])
+    );
+
+    for (const result of [geoJson, json, kmlResult, kmzResult, arcGis, wfs, shapefile]) {
+      expect(errorIssueCodes(result)).toEqual([]);
+      expect(result.report.acceptedFeatureCount).toBe(1);
+    }
+
+    expect(expectOnlyFeature(geoJson).geometry.type).toBe("MultiPolygon");
+    expect(expectOnlyFeature(json).name).toBe("Üsküdar");
+    const kmlFeature = expectOnlyFeature(kmlResult);
+
+    expect(kmlFeature.name).toBe("Kağıthane");
+    expect(kmlFeature.geometry.type).toBe("Polygon");
+    if (kmlFeature.geometry.type !== "Polygon") {
+      throw new Error("Expected KML fixture to parse as a Polygon.");
+    }
+    expect(kmlFeature.geometry.coordinates).toHaveLength(2);
+    expect(expectOnlyFeature(kmzResult).effectiveGeometryHash).toBe(
+      kmlFeature.effectiveGeometryHash
+    );
+    expect(arcGis.report.crsHandling).toMatchObject({
+      sourceCrs: "EPSG:3857",
+      operation: "reprojected"
+    });
+    const arcGisFeature = expectOnlyFeature(arcGis);
+
+    if (arcGisFeature.geometry.type !== "Polygon") {
+      throw new Error("Expected ArcGIS fixture to parse as a Polygon.");
+    }
+    expect(arcGisFeature.geometry.coordinates[0]?.[0]?.[0]).toBeCloseTo(29.02, 5);
+    expect(expectOnlyFeature(wfs).name).toBe("Kızılay");
+    expect(expectOnlyFeature(shapefile).sourceId).toBe("shp-1");
+  });
+
+  it("rejects unsupported CRS, unsafe XML, and unsupported geometry without fallback", () => {
+    const unsupportedCrs = parseAdm3Source(
+      {
+        provinceCode: "34",
+        provinceName: "İstanbul",
+        providerId: "fixture-unsupported-crs",
+        format: "GeoJSON",
+        crs: "EPSG:5254",
+        adapter: propertyMapAdapter({
+          id: "geojson-property-map",
+          parentMappings: { TR34A: "tr:adm2:tr34a" }
+        })
+      },
+      JSON.stringify(
+        featureCollection([
+          adm3Feature({
+            sourceId: "geo-1",
+            name: "Şişli",
+            parentCode: "TR34A",
+            geometry: square(28.9, 41, 28.92, 41.02)
+          })
+        ])
+      )
+    );
+    const unsafeKml = parseAdm3Source(
+      {
+        provinceCode: "34",
+        provinceName: "İstanbul",
+        providerId: "fixture-unsafe-kml",
+        format: "KML",
+        crs: "EPSG:4326",
+        adapter: fieldMapAdapter({
+          id: "kml-description-table",
+          parentMappings: { TR34A: "tr:adm2:tr34a" }
+        })
+      },
+      `<!DOCTYPE kml [<!ENTITY xxe SYSTEM "file:///etc/passwd">]><kml><Document /></kml>`
+    );
+    const malformedKmz = parseAdm3Source(
+      {
+        provinceCode: "34",
+        provinceName: "İstanbul",
+        providerId: "fixture-malformed-kmz",
+        format: "KMZ",
+        crs: "EPSG:4326",
+        adapter: fieldMapAdapter({
+          id: "kmz-kml-description-table",
+          parentMappings: { TR34A: "tr:adm2:tr34a" }
+        })
+      },
+      createZipArchive([{ filename: "readme.txt", data: Buffer.from("not a KML", "utf8") }])
+    );
+    const unsupportedGeometry = parseAdm3Source(
+      {
+        provinceCode: "34",
+        provinceName: "İstanbul",
+        providerId: "fixture-linestring",
+        format: "GeoJSON",
+        crs: "EPSG:4326",
+        adapter: propertyMapAdapter({
+          id: "geojson-property-map",
+          parentMappings: { TR34A: "tr:adm2:tr34a" }
+        })
+      },
+      JSON.stringify(
+        featureCollection([
+          {
+            type: "Feature",
+            properties: {
+              code: "line-1",
+              name: "Levent",
+              districtCode: "TR34A",
+              semanticType: "neighbourhood"
+            },
+            geometry: {
+              type: "LineString",
+              coordinates: [
+                [28.9, 41],
+                [28.92, 41.02]
+              ]
+            }
+          }
+        ])
+      )
+    );
+
+    expect(unsupportedCrs.features).toEqual([]);
+    expect(errorIssueCodes(unsupportedCrs)).toContain("TR_ADM3_CRS_UNSUPPORTED");
+    expect(errorIssueCodes(unsafeKml)).toContain("TR_ADM3_SOURCE_XML_UNSAFE");
+    expect(errorIssueCodes(malformedKmz)).toContain("TR_ADM3_SOURCE_PARSE_FAILED");
+    expect(unsupportedGeometry.features).toEqual([]);
+    expect(unsupportedGeometry.issues.map((issue) => issue.code)).toContain(
+      "TR_ADM3_UNSUPPORTED_GEOMETRY"
+    );
+  });
 
   it("keeps ADM3 stable IDs deterministic across source and coordinate order changes", async () => {
     const first = await createTurkeyAdm3Fixture();
@@ -186,6 +518,86 @@ describe("Turkey ADM3 ingestion infrastructure", () => {
         boundarySourceClass: "official-local",
         licenseState: "approved",
         sourceSnapshotChecksum: first.lock?.levels.ADM3?.sha256
+      });
+    } finally {
+      await rm(fixture.tempDir, { recursive: true, force: true });
+    }
+  }, 15_000);
+
+  it("uses the Sprint 2 registry as source of truth and blocks non-approved licenses", async () => {
+    const fixture = await createTurkeyAdm3Fixture();
+    const registryPath = join(fixture.tempDir, "source-registry.json");
+
+    try {
+      await writeJson(
+        registryPath,
+        createAdm3SourceRegistry({
+          approvedProvince: {
+            code: "27",
+            name: "Gaziantep",
+            registryEntryId: "registry-27-official",
+            providerName: "Registry Gaziantep Municipality",
+            sourceId: "fixture-provider-27-adm3",
+            sourceUrl: "fixture://fixture-provider-27",
+            format: "GeoJSON",
+            featureCount: 2
+          },
+          reviewProvince: {
+            code: "54",
+            name: "Sakarya",
+            registryEntryId: "registry-54-review",
+            providerName: "Registry Sakarya Municipality",
+            sourceId: "fixture-provider-54-adm3",
+            sourceUrl: "fixture://fixture-provider-54",
+            format: "GeoJSON"
+          }
+        })
+      );
+
+      const bridgedCatalog = await readTurkeyAdm3SourceCatalog({
+        catalogPath: fixture.adm3CatalogPath,
+        registryPath
+      });
+
+      expect(bridgedCatalog.provinces["27"]).toMatchObject({
+        providerId: "registry-27-official",
+        providerName: "Registry Gaziantep Municipality",
+        registryEntryId: "registry-27-official",
+        productionEligible: true,
+        sourceLifecycle: "approved"
+      });
+      expect(bridgedCatalog.provinces["54"]).toMatchObject({
+        providerId: "registry-54-review",
+        productionEligible: false,
+        licenseState: "pending"
+      });
+
+      const lockResult = await createTerritoryCountrySourceLock({
+        country: "TR",
+        levels: ["ADM0", "ADM1", "ADM2", "ADM3"],
+        metadataPath: fixture.nationalMetadataPath,
+        adm3CatalogPath: fixture.adm3CatalogPath,
+        adm3RegistryPath: registryPath,
+        adm3Provinces: ["27", "54"],
+        buildDate: BUILD_DATE
+      });
+
+      expect(lockResult.issues).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ code: "TR_ADM3_SOURCE_LICENSE_PENDING" }),
+          expect.objectContaining({ code: "TR_ADM3_SOURCE_NOT_APPROVED_FOR_PRODUCTION" })
+        ])
+      );
+      expect(lockResult.lock?.extensions?.turkeyAdm3?.provinces["27"]).toMatchObject({
+        status: "available",
+        providerId: "registry-27-official",
+        registryEntryId: "registry-27-official",
+        importerVersion: "territorykit-tr-adm3-importer@3"
+      });
+      expect(lockResult.lock?.extensions?.turkeyAdm3?.provinces["54"]).toMatchObject({
+        status: "license-blocked",
+        providerId: "registry-54-review",
+        registryEntryId: "registry-54-review"
       });
     } finally {
       await rm(fixture.tempDir, { recursive: true, force: true });
@@ -416,6 +828,110 @@ describe("Turkey ADM3 ingestion infrastructure", () => {
     }
   }, 15_000);
 });
+
+function parseAdm3Source(
+  source: {
+    provinceCode: string;
+    provinceName: string;
+    providerId: string;
+    format: string;
+    crs: string;
+    adapter: TurkeyAdm3ProviderAdapterConfig;
+  },
+  input: string | Uint8Array
+): TurkeyAdm3AdapterParseResult {
+  return parseTurkeyAdm3ProviderSource(source, input);
+}
+
+function propertyMapAdapter(input: {
+  id: TurkeyAdm3ProviderAdapterConfig["id"];
+  parentMappings: Record<string, string>;
+}): TurkeyAdm3ProviderAdapterConfig {
+  return {
+    id: input.id,
+    nameProperty: "name",
+    sourceIdProperty: "code",
+    parentProperty: "districtCode",
+    semanticTypeProperty: "semanticType",
+    defaultSemanticType: "neighbourhood",
+    defaultLocalType: "Mahalle",
+    parentMappings: input.parentMappings
+  };
+}
+
+function fieldMapAdapter(input: {
+  id: TurkeyAdm3ProviderAdapterConfig["id"];
+  parentMappings: Record<string, string>;
+}): TurkeyAdm3ProviderAdapterConfig {
+  return {
+    id: input.id,
+    nameField: "AD",
+    sourceIdField: "KIMLIKNO",
+    parentField: "ILCEID",
+    defaultSemanticType: "neighbourhood",
+    defaultLocalType: "Mahalle",
+    parentMappings: input.parentMappings
+  };
+}
+
+function expectOnlyFeature(result: TurkeyAdm3AdapterParseResult): TurkeyAdm3RawProviderFeature {
+  expect(result.features).toHaveLength(1);
+  const feature = result.features[0];
+
+  if (!feature) {
+    throw new Error("Expected one parsed ADM3 feature.");
+  }
+
+  return feature;
+}
+
+function errorIssueCodes(result: TurkeyAdm3AdapterParseResult): string[] {
+  return result.issues
+    .filter((issue) => issue.severity !== "warning")
+    .map((issue) => issue.code)
+    .sort();
+}
+
+function createKmlWithHoleFixture(): string {
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <Placemark id="kml-1">
+      <ExtendedData>
+        <Data name="AD"><value>Kağıthane</value></Data>
+        <Data name="KIMLIKNO"><value>kml-1</value></Data>
+        <Data name="ILCEID"><value>TR34C</value></Data>
+      </ExtendedData>
+      <Polygon>
+        <outerBoundaryIs><LinearRing><coordinates>
+          28.96,41.07,0 28.99,41.07,0 28.99,41.10,0 28.96,41.10,0 28.96,41.07,0
+        </coordinates></LinearRing></outerBoundaryIs>
+        <innerBoundaryIs><LinearRing><coordinates>
+          28.97,41.08,0 28.98,41.08,0 28.98,41.09,0 28.97,41.09,0 28.97,41.08,0
+        </coordinates></LinearRing></innerBoundaryIs>
+      </Polygon>
+    </Placemark>
+  </Document>
+</kml>`;
+}
+
+function webMercatorSquare(
+  west: number,
+  south: number,
+  east: number,
+  north: number
+): Array<[number, number]> {
+  return closedRing(west, south, east, north).map(([lng, lat]) => lonLatToWebMercator(lng, lat));
+}
+
+function lonLatToWebMercator(lng: number, lat: number): [number, number] {
+  const originShift = 20037508.34;
+  const x = (lng * originShift) / 180;
+  const y =
+    ((Math.log(Math.tan(((90 + lat) * Math.PI) / 360)) / (Math.PI / 180)) * originShift) / 180;
+
+  return [x, y];
+}
 
 async function buildAdm3Ids(fixture: TurkeyAdm3Fixture): Promise<string[]> {
   const sourceLockPath = join(
@@ -692,6 +1208,92 @@ function createGaziantepCatalog(sourcePath: string, kml: string): TurkeyAdm3Sour
   };
 }
 
+interface RegistryFixtureProvince {
+  code: string;
+  name: string;
+  registryEntryId: string;
+  providerName: string;
+  sourceId: string;
+  sourceUrl: string;
+  format: string;
+  featureCount?: number;
+}
+
+function createAdm3SourceRegistry(input: {
+  approvedProvince: RegistryFixtureProvince;
+  reviewProvince: RegistryFixtureProvince;
+}): unknown {
+  return {
+    schemaVersion: TURKEY_ADM3_SOURCE_REGISTRY_SCHEMA_VERSION,
+    country: "TR",
+    level: "ADM3",
+    generatedAt: BUILD_DATE,
+    provinces: [
+      {
+        code: input.approvedProvince.code,
+        name: input.approvedProvince.name,
+        status: "complete",
+        sources: [registrySource(input.approvedProvince, "approved")]
+      },
+      {
+        code: input.reviewProvince.code,
+        name: input.reviewProvince.name,
+        status: "needs-review",
+        sources: [registrySource(input.reviewProvince, "review-required")]
+      }
+    ]
+  };
+}
+
+function registrySource(
+  province: RegistryFixtureProvince,
+  licenseState: "approved" | "review-required"
+): unknown {
+  const approved = licenseState === "approved";
+
+  return {
+    id: province.registryEntryId,
+    sourceId: province.sourceId,
+    provider: {
+      name: province.providerName,
+      authorityType: "local-government",
+      class: "official-local"
+    },
+    boundarySourceClass: "official-local",
+    access: {
+      type: "public-download",
+      formats: [province.format],
+      geometryAvailable: true,
+      urls: {
+        dataset: province.sourceUrl,
+        license: "https://creativecommons.org/licenses/by/4.0/"
+      }
+    },
+    license: {
+      state: licenseState,
+      redistribution: "allowed",
+      commercialUse: "allowed",
+      modification: "allowed",
+      name: approved ? "CC BY 4.0" : "license pending review"
+    },
+    lifecycle: approved ? "approved" : "discovered",
+    productionEligible: approved,
+    sourceDate: approved ? "2026-07-28" : null,
+    fields: {
+      nameField: "name",
+      sourceNativeIdField: "code",
+      districtParentField: "districtCode"
+    },
+    verification: {
+      checkedAt: BUILD_DATE,
+      evidenceUrls: [province.sourceUrl],
+      ...(province.featureCount !== undefined ? { featureCount: province.featureCount } : {}),
+      sourceDate: approved ? "2026-07-28" : null
+    },
+    notes: []
+  };
+}
+
 function adm3CatalogEntry(input: {
   provinceCode: string;
   provinceName: string;
@@ -797,18 +1399,27 @@ function square(
   north: number,
   reverseRing = false
 ): unknown {
-  const ring = [
+  const ring = closedRing(west, south, east, north);
+
+  return {
+    type: "Polygon",
+    coordinates: [reverseRing ? [...ring].reverse() : ring]
+  };
+}
+
+function closedRing(
+  west: number,
+  south: number,
+  east: number,
+  north: number
+): Array<[number, number]> {
+  return [
     [west, south],
     [east, south],
     [east, north],
     [west, north],
     [west, south]
   ];
-
-  return {
-    type: "Polygon",
-    coordinates: [reverseRing ? [...ring].reverse() : ring]
-  };
 }
 
 function bowtieGeometry(west: number, south: number): unknown {
@@ -866,6 +1477,212 @@ function placemark(
     </coordinates></LinearRing></outerBoundaryIs>
   </Polygon>
 </Placemark>`;
+}
+
+interface ZipEntryFixture {
+  filename: string;
+  data: Buffer;
+}
+
+function createZipArchive(entries: readonly ZipEntryFixture[]): Uint8Array {
+  const localParts: Buffer[] = [];
+  const centralParts: Buffer[] = [];
+  let offset = 0;
+
+  for (const entry of entries) {
+    const filename = Buffer.from(entry.filename, "utf8");
+    const localHeader = Buffer.alloc(30 + filename.byteLength);
+
+    localHeader.writeUInt32LE(0x04034b50, 0);
+    localHeader.writeUInt16LE(20, 4);
+    localHeader.writeUInt16LE(0, 6);
+    localHeader.writeUInt16LE(0, 8);
+    localHeader.writeUInt32LE(0, 10);
+    localHeader.writeUInt32LE(0, 14);
+    localHeader.writeUInt32LE(entry.data.byteLength, 18);
+    localHeader.writeUInt32LE(entry.data.byteLength, 22);
+    localHeader.writeUInt16LE(filename.byteLength, 26);
+    localHeader.writeUInt16LE(0, 28);
+    filename.copy(localHeader, 30);
+    localParts.push(localHeader, entry.data);
+
+    const centralHeader = Buffer.alloc(46 + filename.byteLength);
+
+    centralHeader.writeUInt32LE(0x02014b50, 0);
+    centralHeader.writeUInt16LE(20, 4);
+    centralHeader.writeUInt16LE(20, 6);
+    centralHeader.writeUInt16LE(0, 8);
+    centralHeader.writeUInt16LE(0, 10);
+    centralHeader.writeUInt32LE(0, 12);
+    centralHeader.writeUInt32LE(0, 16);
+    centralHeader.writeUInt32LE(entry.data.byteLength, 20);
+    centralHeader.writeUInt32LE(entry.data.byteLength, 24);
+    centralHeader.writeUInt16LE(filename.byteLength, 28);
+    centralHeader.writeUInt16LE(0, 30);
+    centralHeader.writeUInt16LE(0, 32);
+    centralHeader.writeUInt16LE(0, 34);
+    centralHeader.writeUInt16LE(0, 36);
+    centralHeader.writeUInt32LE(0, 38);
+    centralHeader.writeUInt32LE(offset, 42);
+    filename.copy(centralHeader, 46);
+    centralParts.push(centralHeader);
+    offset += localHeader.byteLength + entry.data.byteLength;
+  }
+
+  const centralDirectoryOffset = offset;
+  const centralDirectory = Buffer.concat(centralParts);
+  const endOfCentralDirectory = Buffer.alloc(22);
+
+  endOfCentralDirectory.writeUInt32LE(0x06054b50, 0);
+  endOfCentralDirectory.writeUInt16LE(0, 4);
+  endOfCentralDirectory.writeUInt16LE(0, 6);
+  endOfCentralDirectory.writeUInt16LE(entries.length, 8);
+  endOfCentralDirectory.writeUInt16LE(entries.length, 10);
+  endOfCentralDirectory.writeUInt32LE(centralDirectory.byteLength, 12);
+  endOfCentralDirectory.writeUInt32LE(centralDirectoryOffset, 16);
+  endOfCentralDirectory.writeUInt16LE(0, 20);
+
+  return Buffer.concat([...localParts, centralDirectory, endOfCentralDirectory]);
+}
+
+interface ShapefileFeatureFixture {
+  properties: Record<string, string>;
+  rings: Array<Array<[number, number]>>;
+}
+
+function createShapefileZip(features: readonly ShapefileFeatureFixture[]): Uint8Array {
+  return createZipArchive([
+    { filename: "neighbourhoods.shp", data: createShp(features) },
+    { filename: "neighbourhoods.dbf", data: createDbf(features) },
+    {
+      filename: "neighbourhoods.prj",
+      data: Buffer.from(
+        'GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984"],PRIMEM["Greenwich",0],UNIT["Degree",0.0174532925199433],AUTHORITY["EPSG",4326]]',
+        "utf8"
+      )
+    }
+  ]);
+}
+
+function createShp(features: readonly ShapefileFeatureFixture[]): Buffer {
+  const records = features.map((feature, index) => createShpRecord(feature, index + 1));
+  const body = Buffer.concat(records);
+  const header = Buffer.alloc(100);
+  const bounds = calculateBounds(features.flatMap((feature) => feature.rings.flat()));
+
+  header.writeInt32BE(9994, 0);
+  header.writeInt32BE((header.byteLength + body.byteLength) / 2, 24);
+  header.writeInt32LE(1000, 28);
+  header.writeInt32LE(5, 32);
+  writeBounds(header, 36, bounds);
+
+  return Buffer.concat([header, body]);
+}
+
+function createShpRecord(feature: ShapefileFeatureFixture, recordNumber: number): Buffer {
+  const points = feature.rings.flat();
+  const content = Buffer.alloc(44 + feature.rings.length * 4 + points.length * 16);
+  const header = Buffer.alloc(8);
+  const bounds = calculateBounds(points);
+  let pointStart = 0;
+  let pointOffset = 44 + feature.rings.length * 4;
+
+  content.writeInt32LE(5, 0);
+  writeBounds(content, 4, bounds);
+  content.writeInt32LE(feature.rings.length, 36);
+  content.writeInt32LE(points.length, 40);
+
+  for (const [partIndex, ring] of feature.rings.entries()) {
+    content.writeInt32LE(pointStart, 44 + partIndex * 4);
+    pointStart += ring.length;
+  }
+
+  for (const [lng, lat] of points) {
+    content.writeDoubleLE(lng, pointOffset);
+    content.writeDoubleLE(lat, pointOffset + 8);
+    pointOffset += 16;
+  }
+
+  header.writeInt32BE(recordNumber, 0);
+  header.writeInt32BE(content.byteLength / 2, 4);
+
+  return Buffer.concat([header, content]);
+}
+
+function createDbf(features: readonly ShapefileFeatureFixture[]): Buffer {
+  const fieldNames = [...new Set(features.flatMap((feature) => Object.keys(feature.properties)))];
+  const fields = fieldNames.map((name) => ({ name, length: 80 }));
+  const headerLength = 32 + fields.length * 32 + 1;
+  const recordLength = 1 + fields.reduce((sum, field) => sum + field.length, 0);
+  const buffer = Buffer.alloc(headerLength + features.length * recordLength + 1, 0);
+
+  buffer[0] = 0x03;
+  buffer[1] = 126;
+  buffer[2] = 7;
+  buffer[3] = 28;
+  buffer.writeUInt32LE(features.length, 4);
+  buffer.writeUInt16LE(headerLength, 8);
+  buffer.writeUInt16LE(recordLength, 10);
+  buffer[29] = 0x57;
+
+  for (const [index, field] of fields.entries()) {
+    const offset = 32 + index * 32;
+    const name = Buffer.from(field.name, "ascii");
+
+    name.copy(buffer, offset, 0, Math.min(name.byteLength, 10));
+    buffer[offset + 11] = "C".charCodeAt(0);
+    buffer[offset + 16] = field.length;
+  }
+
+  buffer[headerLength - 1] = 0x0d;
+
+  for (const [rowIndex, feature] of features.entries()) {
+    const rowOffset = headerLength + rowIndex * recordLength;
+    let fieldOffset = rowOffset + 1;
+
+    buffer.fill(0x20, rowOffset, rowOffset + recordLength);
+
+    for (const field of fields) {
+      const value = Buffer.from(feature.properties[field.name] ?? "", "utf8");
+
+      value.copy(buffer, fieldOffset, 0, Math.min(value.byteLength, field.length));
+      fieldOffset += field.length;
+    }
+  }
+
+  buffer[buffer.byteLength - 1] = 0x1a;
+
+  return buffer;
+}
+
+function calculateBounds(points: readonly [number, number][]): {
+  west: number;
+  south: number;
+  east: number;
+  north: number;
+} {
+  const first = points[0] ?? [0, 0];
+
+  return points.reduce(
+    (bounds, [lng, lat]) => ({
+      west: Math.min(bounds.west, lng),
+      south: Math.min(bounds.south, lat),
+      east: Math.max(bounds.east, lng),
+      north: Math.max(bounds.north, lat)
+    }),
+    { west: first[0], south: first[1], east: first[0], north: first[1] }
+  );
+}
+
+function writeBounds(
+  buffer: Buffer,
+  offset: number,
+  bounds: { west: number; south: number; east: number; north: number }
+): void {
+  buffer.writeDoubleLE(bounds.west, offset);
+  buffer.writeDoubleLE(bounds.south, offset + 8);
+  buffer.writeDoubleLE(bounds.east, offset + 16);
+  buffer.writeDoubleLE(bounds.north, offset + 24);
 }
 
 async function writeJson(path: string, input: unknown): Promise<void> {

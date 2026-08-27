@@ -237,6 +237,7 @@ export interface TerritorySourceLockCreateOptions {
   releaseType?: string;
   adm3Provinces?: readonly string[];
   adm3CatalogPath?: string;
+  adm3RegistryPath?: string;
   outputPath?: string;
   metadataPath?: string;
   metadataUrl?: string;

@@ -149,19 +149,10 @@ function resolveParent(
     };
   }
 
-  const explicitParent = findExplicitParent(child, parents);
+  const explicitParent = resolveExplicitParent(child, parents, tolerance);
 
   if (explicitParent) {
-    const containmentIssue = verifyParentContainsChild(explicitParent, child, tolerance);
-
-    return {
-      childId: child.zone.id,
-      parentId: explicitParent.zone.id,
-      method: child.sourceParentId ? "explicit-source-parent" : "official-code",
-      confidence: containmentIssue ? 0.8 : 1,
-      candidateParentIds: [explicitParent.zone.id],
-      issues: containmentIssue ? [containmentIssue] : []
-    };
+    return explicitParent;
   }
 
   const centerCandidates = parents
@@ -284,24 +275,88 @@ function compareParentSpecificity(left: BuiltCountryZone, right: BuiltCountryZon
   );
 }
 
-function findExplicitParent(
+function resolveExplicitParent(
   child: BuiltCountryZone,
-  parents: readonly BuiltCountryZone[]
-): BuiltCountryZone | undefined {
-  if (child.sourceParentId) {
-    const bySourceId = parents.find(
-      (parent) =>
-        parent.zone.id === child.sourceParentId ||
-        parent.sourceId === child.sourceParentId ||
-        parent.officialCode === child.sourceParentId
-    );
-
-    if (bySourceId) {
-      return bySourceId;
-    }
+  parents: readonly BuiltCountryZone[],
+  tolerance: number
+): TerritoryHierarchyResolution | undefined {
+  if (!child.sourceParentId) {
+    return undefined;
   }
 
-  return undefined;
+  const idCandidates = parents.filter(
+    (parent) =>
+      parent.zone.id === child.sourceParentId ||
+      parent.sourceId === child.sourceParentId ||
+      parent.officialCode === child.sourceParentId
+  );
+  const idResolution = resolveExplicitCandidates(child, idCandidates, tolerance, "source id");
+
+  if (idResolution) {
+    return idResolution;
+  }
+
+  const normalizedChildParent = normalizeParentNameKey(child.sourceParentId);
+  const nameCandidates = parents.filter(
+    (parent) => normalizeParentNameKey(parent.zone.name ?? "") === normalizedChildParent
+  );
+
+  return resolveExplicitCandidates(child, nameCandidates, tolerance, "district name");
+}
+
+function resolveExplicitCandidates(
+  child: BuiltCountryZone,
+  candidates: readonly BuiltCountryZone[],
+  tolerance: number,
+  evidence: "source id" | "district name"
+): TerritoryHierarchyResolution | undefined {
+  if (candidates.length === 0) {
+    return undefined;
+  }
+
+  if (candidates.length > 1) {
+    return {
+      childId: child.zone.id,
+      method: "ambiguous",
+      candidateParentIds: candidates.map((candidate) => candidate.zone.id).sort(),
+      issues: [
+        {
+          code: "PARENT_AMBIGUOUS",
+          severity: "error",
+          message: `Multiple parent candidates matched the child ${evidence}.`
+        }
+      ]
+    };
+  }
+
+  const candidate = candidates[0];
+
+  if (!candidate) {
+    return undefined;
+  }
+
+  const containmentIssue = verifyParentContainsChild(candidate, child, tolerance);
+
+  return {
+    childId: child.zone.id,
+    parentId: candidate.zone.id,
+    method: evidence === "source id" ? "explicit-source-parent" : "official-code",
+    confidence: containmentIssue ? 0.8 : 1,
+    candidateParentIds: [candidate.zone.id],
+    issues: containmentIssue ? [containmentIssue] : []
+  };
+}
+
+function normalizeParentNameKey(input: string): string {
+  return input
+    .trim()
+    .normalize("NFKC")
+    .toLocaleLowerCase("tr-TR")
+    .replace(/\bilçesi\b/g, "")
+    .replace(/\bilcesi\b/g, "")
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function verifyParentContainsChild(

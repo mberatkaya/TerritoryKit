@@ -25,6 +25,8 @@ describe("territory cli Turkey ADM3 ingestion", () => {
           fixture.metadataPath,
           "--adm3-catalog",
           fixture.catalogPath,
+          "--adm3-registry",
+          fixture.registryPath,
           "--adm3-provinces",
           "27",
           "--output",
@@ -44,6 +46,12 @@ describe("territory cli Turkey ADM3 ingestion", () => {
                   summary: {
                     availableProvinceCount: 1,
                     sourceFeatureCount: 1
+                  },
+                  provinces: {
+                    "27": {
+                      providerId: "cli-registry-provider",
+                      registryEntryId: "cli-registry-provider"
+                    }
                   }
                 }
               }
@@ -108,13 +116,14 @@ async function captureCli(args: string[]): Promise<{ code: number; payload: unkn
 
 async function createFixture(
   tempDir: string
-): Promise<{ metadataPath: string; catalogPath: string }> {
+): Promise<{ metadataPath: string; catalogPath: string; registryPath: string }> {
   const adm0Path = join(tempDir, "adm0.geojson");
   const adm1Path = join(tempDir, "adm1.geojson");
   const adm2Path = join(tempDir, "adm2.geojson");
   const adm3Path = join(tempDir, "adm3.geojson");
   const metadataPath = join(tempDir, "metadata.json");
   const catalogPath = join(tempDir, "adm3-catalog.json");
+  const registryPath = join(tempDir, "adm3-source-registry.json");
   const adm3 = featureCollection([
     {
       type: "Feature",
@@ -197,8 +206,64 @@ async function createFixture(
       }
     }
   });
+  await writeJson(registryPath, {
+    schemaVersion: "territorykit-tr-adm3-source-registry@1",
+    country: "TR",
+    level: "ADM3",
+    generatedAt: "2026-07-28T00:00:00.000Z",
+    provinces: [
+      {
+        code: "27",
+        name: "Gaziantep",
+        status: "complete",
+        sources: [
+          {
+            id: "cli-registry-provider",
+            sourceId: "cli-fixture-adm3",
+            provider: {
+              name: "CLI Registry Provider",
+              authorityType: "local-government",
+              class: "official-local"
+            },
+            boundarySourceClass: "official-local",
+            access: {
+              type: "public-download",
+              formats: ["GeoJSON"],
+              geometryAvailable: true,
+              urls: {
+                dataset: "fixture://cli-adm3",
+                license: "https://creativecommons.org/licenses/by/4.0/"
+              }
+            },
+            license: {
+              state: "approved",
+              redistribution: "allowed",
+              commercialUse: "allowed",
+              modification: "allowed",
+              name: "CC BY 4.0"
+            },
+            lifecycle: "approved",
+            productionEligible: true,
+            sourceDate: "2026-07-28",
+            fields: {
+              nameField: "name",
+              sourceNativeIdField: "code",
+              districtParentField: "districtCode"
+            },
+            verification: {
+              checkedAt: "2026-07-28T00:00:00.000Z",
+              evidenceUrls: ["fixture://cli-adm3"],
+              featureCount: 1,
+              sourceDate: "2026-07-28"
+            },
+            notes: []
+          }
+        ]
+      }
+    ]
+  });
 
-  return { metadataPath, catalogPath };
+  return { metadataPath, catalogPath, registryPath };
 }
 
 function feature(

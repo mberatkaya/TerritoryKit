@@ -190,18 +190,23 @@ export {
 } from "./turkey-game-zones.js";
 export {
   TURKEY_ADM3_COVERAGE_SCHEMA_VERSION,
+  TURKEY_ADM3_IMPORT_REPORT_SCHEMA_VERSION,
   TURKEY_ADM3_PROVENANCE_SCHEMA_VERSION,
   TURKEY_ADM3_QUALITY_SCHEMA_VERSION,
+  TURKEY_ADM3_SOURCE_REGISTRY_SCHEMA_VERSION,
   TURKEY_ADM3_SOURCE_CATALOG_SCHEMA_VERSION,
   TURKEY_ADM3_SOURCE_LOCK_SCHEMA_VERSION,
+  TURKEY_ADM3_UNRESOLVED_REPORT_SCHEMA_VERSION,
   TURKEY_V2_ADM3_STABLE_ID_STANDARD,
   createDefaultTurkeyAdm3SourceCatalog,
+  createTurkeyAdm3ImportReport,
   createTurkeyAdm3CoverageManifest,
   createTurkeyAdm3SourceLockExtension,
   createTurkeyAdm3SourceQualityReport,
   createTurkeyAdm3StableKey,
   createTurkeyAdm3SyntheticSourceLockLevel,
   createTurkeyAdm3TerritoryId,
+  createTurkeyAdm3UnresolvedReport,
   createTurkeyV2Adm3StableKey,
   createTurkeyV2Adm3TerritoryId,
   isTurkeyAdm3SourceLockExtension,
@@ -210,10 +215,20 @@ export {
   normalizeTurkeyAdm3Name,
   parseTurkeyAdm3ProvinceSource,
   readTurkeyAdm3SourceCatalog,
+  readTurkeyAdm3SourceRegistry,
   validateTurkeyAdm3SourceCatalog,
   validateTurkeyAdm3SourceLockExtension,
   verifyTurkeyAdm3SourceLockExtension
 } from "./turkey-adm3-ingestion.js";
+export {
+  TURKEY_ADM3_IMPORTER_VERSION,
+  defaultTurkeyAdm3AdapterForFormat,
+  isSupportedTurkeyAdm3Adapter,
+  isSupportedTurkeyAdm3Crs,
+  isSupportedTurkeyAdm3SourceFormat,
+  normalizeTurkeyAdm3SourceFormat,
+  parseTurkeyAdm3ProviderSource
+} from "./turkey-adm3-adapters.js";
 export {
   TURKEY_ADM3_OSM_ATTRIBUTION,
   TURKEY_ADM3_OSM_DOWNLOAD_URL,
@@ -318,16 +333,31 @@ export type {
   TurkeyAdm3ProvinceBuildStatus,
   TurkeyAdm3ProvinceCatalogEntry,
   TurkeyAdm3ProvinceSourceLock,
-  TurkeyAdm3ProviderAdapterConfig,
-  TurkeyAdm3ProviderAdapterId,
+  TurkeyAdm3ImportReport,
   TurkeyAdm3ProvenanceReport,
   TurkeyAdm3QualityGateReport,
   TurkeyAdm3SourceCatalog,
+  TurkeyAdm3SourceRegistry,
+  TurkeyAdm3SourceRegistryProvince,
+  TurkeyAdm3SourceRegistrySource,
   TurkeyAdm3SourceLockCreateOptions,
   TurkeyAdm3SourceLockExtension,
+  TurkeyAdm3UnresolvedReport,
   TurkeyV2Adm3StableIdInput,
   TurkeyV2Adm3StableIdSourceClass
 } from "./turkey-adm3-ingestion.js";
+export type {
+  TurkeyAdm3AdapterParseReport,
+  TurkeyAdm3AdapterParseResult,
+  TurkeyAdm3AdapterSourceContext,
+  TurkeyAdm3CrsHandling,
+  TurkeyAdm3CrsOperation,
+  TurkeyAdm3NormalizedCrs,
+  TurkeyAdm3ProviderAdapterConfig,
+  TurkeyAdm3ProviderAdapterId,
+  TurkeyAdm3RawProviderFeature,
+  TurkeyAdm3SourceFormat
+} from "./turkey-adm3-adapters.js";
 export type {
   TurkeyAdm3OsmExtractOptions,
   TurkeyAdm3OsmExtractResult,

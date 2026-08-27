@@ -2281,6 +2281,7 @@ async function runCountrySourceLock(args: string[]): Promise<number> {
   const cacheDir = getFlag(flags, "cache-dir");
   const adm3Provinces = readCommaSeparatedFlag(flags, "adm3-provinces");
   const adm3CatalogPath = getFlag(flags, "adm3-catalog") ?? getFlag(flags, "adm3-catalog-path");
+  const adm3RegistryPath = getFlag(flags, "adm3-registry") ?? getFlag(flags, "adm3-registry-path");
   const flagIssues: CliIssue[] = [];
   const maxSourceBytes = readOptionalPositiveIntegerFlag(flags, "max-source-bytes", flagIssues);
 
@@ -2301,6 +2302,7 @@ async function runCountrySourceLock(args: string[]): Promise<number> {
       ...(releaseType ? { releaseType } : {}),
       ...(adm3Provinces.length > 0 ? { adm3Provinces } : {}),
       ...(adm3CatalogPath ? { adm3CatalogPath } : {}),
+      ...(adm3RegistryPath ? { adm3RegistryPath } : {}),
       ...(outputPath ? { outputPath } : {}),
       ...(metadataPath ? { metadataPath } : {}),
       ...(metadataUrl ? { metadataUrl } : {}),
@@ -6624,6 +6626,7 @@ Options:
   --metadata <metadata.json>
   --metadata-url <metadata-url>
   --adm3-provinces 27,34,54
+  --adm3-registry <tr-adm3-source-registry.json>
   --adm3-catalog <tr-adm3-catalog.json>
   --cache-dir <dir>
   --max-source-bytes <bytes>

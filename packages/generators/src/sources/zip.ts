@@ -13,6 +13,48 @@ export interface ZipMemberExtraction {
   compressionMethod: number;
 }
 
+export interface ZipMemberInfo {
+  filename: string;
+  compressedSize: number;
+  uncompressedSize: number;
+  compressionMethod: number;
+}
+
+export function listZipMembers(input: Uint8Array): ZipMemberInfo[] {
+  const archive = Buffer.from(input);
+  const eocdOffset = findEndOfCentralDirectory(archive);
+  const centralDirectorySize = archive.readUInt32LE(eocdOffset + 12);
+  const centralDirectoryOffset = archive.readUInt32LE(eocdOffset + 16);
+  const centralDirectoryEnd = centralDirectoryOffset + centralDirectorySize;
+  let offset = centralDirectoryOffset;
+  const members: ZipMemberInfo[] = [];
+
+  while (offset < centralDirectoryEnd) {
+    if (archive.readUInt32LE(offset) !== CENTRAL_DIRECTORY_SIGNATURE) {
+      throw new Error("Invalid ZIP central directory entry.");
+    }
+
+    const compressionMethod = archive.readUInt16LE(offset + 10);
+    const compressedSize = archive.readUInt32LE(offset + 20);
+    const uncompressedSize = archive.readUInt32LE(offset + 24);
+    const filenameLength = archive.readUInt16LE(offset + 28);
+    const extraLength = archive.readUInt16LE(offset + 30);
+    const commentLength = archive.readUInt16LE(offset + 32);
+    const filename = archive.subarray(offset + 46, offset + 46 + filenameLength).toString("utf8");
+
+    members.push({
+      filename: normalizeZipMemberName(filename),
+      compressedSize,
+      uncompressedSize,
+      compressionMethod
+    });
+
+    offset += 46 + filenameLength + extraLength + commentLength;
+  }
+
+  return members.sort((left, right) => left.filename.localeCompare(right.filename));
+}
+
 export function extractZipMember(input: Uint8Array, requestedMember: string): ZipMemberExtraction {
   const archive = Buffer.from(input);
   const member = normalizeZipMemberName(requestedMember);
@@ -34,9 +76,11 @@ export function extractZipMember(input: Uint8Array, requestedMember: string): Zi
     const extraLength = archive.readUInt16LE(offset + 30);
     const commentLength = archive.readUInt16LE(offset + 32);
     const localHeaderOffset = archive.readUInt32LE(offset + 42);
-    const filename = archive.subarray(offset + 46, offset + 46 + filenameLength).toString("utf8");
+    const filename = normalizeZipMemberName(
+      archive.subarray(offset + 46, offset + 46 + filenameLength).toString("utf8")
+    );
 
-    if (normalizeZipMemberName(filename) === member) {
+    if (filename === member) {
       return {
         filename,
         bytes: readZipMemberBytes({
@@ -104,5 +148,17 @@ function findEndOfCentralDirectory(archive: Buffer): number {
 }
 
 function normalizeZipMemberName(input: string): string {
-  return input.replace(/^\/+/, "").replaceAll("\\", "/");
+  const normalized = input.replace(/^\/+/, "").replaceAll("\\", "/");
+  const parts = normalized.split("/");
+
+  if (
+    normalized.length === 0 ||
+    normalized.startsWith("../") ||
+    normalized.includes("/../") ||
+    parts.some((part) => part === "..")
+  ) {
+    throw new Error(`Unsafe ZIP member name '${input}'.`);
+  }
+
+  return normalized;
 }

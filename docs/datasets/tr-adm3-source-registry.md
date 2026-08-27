@@ -32,4 +32,14 @@ Do not add checksums for sources that have not been downloaded through an approv
 
 ## Production Safety
 
-The source registry is discovery infrastructure. It does not change `datasets/sources/TR/adm3-catalog.json`, does not download new polygon files, and does not add discovered provinces to the production Turkey V2 build.
+The source registry is the production eligibility source of truth for the generic Turkey ADM3
+importer. A source is allowed into source-lock creation only when it is official-local or
+official-national, lifecycle-approved, license-approved, redistribution-allowed, public-download or
+public-API accessible, geometry-available, and `productionEligible: true`.
+
+`datasets/sources/TR/adm3-catalog.json` remains a technical sidecar while checksums, fixture paths,
+adapter config, and parent mappings are not fully represented in the registry. Passing
+`--adm3-registry` and `--adm3-catalog` together lets the source lock take legal/source status from
+the registry and technical lock details from the catalog. Discovered, restricted, service-only,
+review-required, OSM, generated, or otherwise non-approved sources remain blocked and are reported
+as unavailable province coverage.

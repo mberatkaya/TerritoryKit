@@ -20,7 +20,7 @@ territory import geoboundaries --input ./geoBoundaries-TUR-ADM1.geojson --countr
 territory import geojson --input ./regions.geojson --country TR --admin-level ADM2 --name-property region.name --output ./dist/regions
 territory country list
 territory country source lock TR --output ./dist/tr/sources.lock.json
-territory country source lock TR --levels ADM0,ADM1,ADM2,ADM3 --adm3-provinces 27,34,54 --adm3-catalog datasets/sources/TR/adm3-catalog.json --output ./dist/tr/sources.lock.json
+territory country source lock TR --levels ADM0,ADM1,ADM2,ADM3 --adm3-provinces 27,34,54 --adm3-registry datasets/sources/TR/adm3/source-registry.json --adm3-catalog datasets/sources/TR/adm3-catalog.json --output ./dist/tr/sources.lock.json
 territory country source verify ./dist/tr/sources.lock.json
 territory country build TR --source-lock ./dist/tr/sources.lock.json --levels ADM0,ADM1,ADM2,ADM3 --allow-partial --output ./dist/tr --build-adjacency --strict
 territory country validate ./dist/tr --strict
@@ -94,8 +94,11 @@ checksums source artifacts, `source verify` re-validates a lock, `build` writes 
 quality reports, hierarchy reports, identity maps, level datasets, and optional ADM1/ADM2 adjacency
 artifacts, `validate` checks artifact checksums and dataset validity, and `inspect` prints a
 compact summary. Use `--allow-partial` when intentionally building partial lower-admin fixtures.
-For Turkey ADM3, pass `--adm3-provinces` and `--adm3-catalog` during source lock creation; the build
-will emit province coverage, quality gate, and source provenance reports.
+For Turkey ADM3, pass `--adm3-provinces`, `--adm3-registry`, and `--adm3-catalog` during source
+lock creation. The registry is the production eligibility source of truth; the catalog supplies
+technical source-lock details such as checksums, source paths, adapters, and parent mappings. The
+build emits province coverage, import, unresolved-feature, repair, quality gate, and source
+provenance reports.
 
 `territory tr adm3 hybrid build` builds a Turkey V2 district or batch artifact with fixed
 `official > osm > generated` priority. It accepts `--district`, `--district-id`, `--official`,

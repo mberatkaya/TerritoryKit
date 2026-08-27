@@ -40,13 +40,16 @@ import {
 import {
   createTurkeyAdm3CoverageManifest,
   createTurkeyAdm3SyntheticSourceLockLevel,
+  createTurkeyAdm3UnresolvedReport,
   loadTurkeyAdm3ParsedFeatures
 } from "../turkey-adm3-ingestion.js";
 import type {
+  TurkeyAdm3ImportReport,
   TurkeyAdm3ProvinceBuildStatus,
   TurkeyAdm3ProvenanceReport,
   TurkeyAdm3QualityGateReport,
-  TurkeyAdm3SourceLockExtension
+  TurkeyAdm3SourceLockExtension,
+  TurkeyAdm3UnresolvedReport
 } from "../turkey-adm3-ingestion.js";
 import {
   applyHierarchyResolutions,
@@ -102,6 +105,8 @@ export async function buildTerritoryCountryDataset(
   let turkeyAdm3ProvinceStatuses: Record<string, TurkeyAdm3ProvinceBuildStatus> | undefined;
   let turkeyAdm3QualityReport: TurkeyAdm3QualityGateReport | undefined;
   let turkeyAdm3ProvenanceReport: TurkeyAdm3ProvenanceReport | undefined;
+  let turkeyAdm3ImportReport: TurkeyAdm3ImportReport | undefined;
+  let turkeyAdm3UnresolvedReport: TurkeyAdm3UnresolvedReport | undefined;
   const runPhase = createPhaseRunner({
     country: config.countryCodeAlpha2,
     ...(options.phaseTimeoutMs ? { timeoutMs: options.phaseTimeoutMs } : {}),
@@ -126,6 +131,8 @@ export async function buildTerritoryCountryDataset(
       turkeyAdm3ProvinceStatuses = parsed.provinceStatuses;
       turkeyAdm3QualityReport = parsed.qualityReport;
       turkeyAdm3ProvenanceReport = parsed.provenance;
+      turkeyAdm3ImportReport = parsed.importReport;
+      turkeyAdm3UnresolvedReport = parsed.unresolvedReport;
 
       if (parsed.features.length === 0) {
         unavailableLevels.push(level);
@@ -370,6 +377,41 @@ export async function buildTerritoryCountryDataset(
     )
   );
 
+  if (turkeyAdm3UnresolvedReport) {
+    const adm3ById = new Map((builtByLevel.ADM3 ?? []).map((built) => [built.zone.id, built]));
+    const hierarchyRecords = hierarchyReport.resolutions
+      .filter((resolution) => adm3ById.has(resolution.childId))
+      .flatMap((resolution) =>
+        resolution.issues.map((issue) => {
+          const built = adm3ById.get(resolution.childId);
+          const territory =
+            built && isRecord(built.zone.properties.territory)
+              ? built.zone.properties.territory
+              : {};
+          const provinceCode =
+            readStringPropertyPath(territory, "adm3.provinceCode") ??
+            readStringPropertyPath(territory, "provinceCode");
+          const providerId =
+            readStringPropertyPath(territory, "providerId") ??
+            readStringPropertyPath(territory, "source.providerId");
+
+          return {
+            ...(provinceCode ? { provinceCode } : {}),
+            ...(providerId ? { providerId } : {}),
+            featureId: resolution.childId,
+            code: issue.code,
+            severity: issue.severity,
+            message: issue.message
+          };
+        })
+      );
+
+    turkeyAdm3UnresolvedReport = createTurkeyAdm3UnresolvedReport({
+      generatedAt: buildDate,
+      records: [...turkeyAdm3UnresolvedReport.records, ...hierarchyRecords]
+    });
+  }
+
   const allBuilt = attachChildIds(
     applyHierarchyResolutions(
       Object.values(builtByLevel)
@@ -497,6 +539,10 @@ export async function buildTerritoryCountryDataset(
               ...(turkeyAdm3QualityReport ? { qualityReport: turkeyAdm3QualityReport } : {}),
               ...(turkeyAdm3ProvenanceReport
                 ? { provenanceReport: turkeyAdm3ProvenanceReport }
+                : {}),
+              ...(turkeyAdm3ImportReport ? { importReport: turkeyAdm3ImportReport } : {}),
+              ...(turkeyAdm3UnresolvedReport
+                ? { unresolvedReport: turkeyAdm3UnresolvedReport }
                 : {})
             }
           }
@@ -1592,6 +1638,8 @@ function createCountryArtifactFiles(input: {
     provinceStatuses?: Record<string, TurkeyAdm3ProvinceBuildStatus>;
     qualityReport?: TurkeyAdm3QualityGateReport;
     provenanceReport?: TurkeyAdm3ProvenanceReport;
+    importReport?: TurkeyAdm3ImportReport;
+    unresolvedReport?: TurkeyAdm3UnresolvedReport;
   };
 }): Map<string, string | Uint8Array> {
   const files = new Map<string, string | Uint8Array>();
@@ -1635,6 +1683,23 @@ function createCountryArtifactFiles(input: {
         "adm3-source-provenance-report.json",
         serializeJsonStable(input.turkeyAdm3.provenanceReport)
       );
+    }
+
+    if (input.turkeyAdm3.importReport) {
+      files.set("adm3-import-report.json", serializeJsonStable(input.turkeyAdm3.importReport));
+    }
+
+    if (input.turkeyAdm3.unresolvedReport) {
+      files.set(
+        "adm3-unresolved-report.json",
+        serializeJsonStable(input.turkeyAdm3.unresolvedReport)
+      );
+    }
+
+    const adm3RepairReport = input.repairReportsByLevel.ADM3;
+
+    if (adm3RepairReport) {
+      files.set("adm3-repair-report.json", serializeJsonStable(adm3RepairReport));
     }
   }
 

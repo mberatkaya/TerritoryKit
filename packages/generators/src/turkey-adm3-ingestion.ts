@@ -33,8 +33,7 @@ import {
   TURKEY_GAZIANTEP_ADM3_SOURCE_DATE,
   TURKEY_GAZIANTEP_ADM3_SOURCE_SHA256,
   TURKEY_GAZIANTEP_ADM3_SOURCE_SIZE_BYTES,
-  TURKEY_GAZIANTEP_ADM3_SOURCE_URL,
-  parseTurkeyGaziantepAdm3Kml
+  TURKEY_GAZIANTEP_ADM3_SOURCE_URL
 } from "./turkey-adm3-pilot.js";
 import {
   isRecord,
@@ -42,22 +41,33 @@ import {
   serializeJsonStable,
   sha256Hex
 } from "./sources/utils.js";
+import {
+  TURKEY_ADM3_IMPORTER_VERSION,
+  defaultTurkeyAdm3AdapterForFormat,
+  isSupportedTurkeyAdm3Adapter,
+  isSupportedTurkeyAdm3Crs,
+  isSupportedTurkeyAdm3SourceFormat,
+  normalizeTurkeyAdm3SourceFormat,
+  parseTurkeyAdm3ProviderSource
+} from "./turkey-adm3-adapters.js";
+import type {
+  TurkeyAdm3AdapterParseReport,
+  TurkeyAdm3ProviderAdapterConfig,
+  TurkeyAdm3ProviderAdapterId,
+  TurkeyAdm3SourceFormat
+} from "./turkey-adm3-adapters.js";
 
 export const TURKEY_ADM3_SOURCE_CATALOG_SCHEMA_VERSION = "territorykit-tr-adm3-source-catalog@1";
+export const TURKEY_ADM3_SOURCE_REGISTRY_SCHEMA_VERSION = "territorykit-tr-adm3-source-registry@1";
 export const TURKEY_ADM3_SOURCE_LOCK_SCHEMA_VERSION = "territorykit-tr-adm3-source-lock@1";
 export const TURKEY_ADM3_COVERAGE_SCHEMA_VERSION = "territorykit-tr-adm3-coverage@1";
 export const TURKEY_ADM3_QUALITY_SCHEMA_VERSION = "territorykit-tr-adm3-quality@1";
 export const TURKEY_ADM3_PROVENANCE_SCHEMA_VERSION = "territorykit-tr-adm3-provenance@1";
+export const TURKEY_ADM3_IMPORT_REPORT_SCHEMA_VERSION = "territorykit-tr-adm3-import-report@1";
+export const TURKEY_ADM3_UNRESOLVED_REPORT_SCHEMA_VERSION =
+  "territorykit-tr-adm3-unresolved-report@1";
 
 const TURKEY_BBOX: [west: number, south: number, east: number, north: number] = [25, 35, 46, 43];
-const ALLOWED_ADM3_SEMANTIC_TYPES = new Set<TerritorySemanticAdminType>([
-  "neighbourhood",
-  "village",
-  "locality",
-  "administrative-unit"
-]);
-
-export type TurkeyAdm3ProviderAdapterId = "geojson-property-map" | "kml-description-table";
 export type TurkeyAdm3ProvinceBuildStatus =
   | "available"
   | "source-unavailable"
@@ -93,43 +103,26 @@ export interface TurkeyAdm3ProvinceCatalogEntry {
   licenseState?: TerritoryLicenseState;
   licenseUrl?: string;
   attribution: string;
-  boundarySourceClass?: Extract<
-    TerritoryBoundarySourceClass,
-    "official-national" | "official-local"
-  >;
+  boundarySourceClass?: TerritoryBoundarySourceClass;
   redistributionStatus: "allowed" | "restricted" | "unknown";
   commercialUseStatus?: "allowed" | "restricted" | "unknown";
   modificationStatus?: "allowed" | "restricted" | "unknown";
   crs: string;
-  format: "GeoJSON" | "KML";
+  format: TurkeyAdm3SourceFormat;
   expectedSha256?: string;
   expectedByteSize?: number;
   expectedFeatureCount?: number;
   adapter: TurkeyAdm3ProviderAdapterConfig;
+  registryEntryId?: string;
+  productionEligible?: boolean;
+  sourceRegistryStatus?: string;
+  sourceLifecycle?: string;
+  sourceAccessType?: string;
+  evidenceUrls?: string[];
+  authorityType?: string;
+  datasetIdentifier?: string;
   notes?: string[];
 }
-
-export type TurkeyAdm3ProviderAdapterConfig =
-  | {
-      id: "geojson-property-map";
-      nameProperty: string;
-      sourceIdProperty: string;
-      parentProperty: string;
-      semanticTypeProperty?: string;
-      localTypeProperty?: string;
-      defaultSemanticType?: TerritorySemanticAdminType;
-      defaultLocalType?: string;
-      parentMappings?: Record<string, string>;
-    }
-  | {
-      id: "kml-description-table";
-      nameField: string;
-      sourceIdField: string;
-      parentField: string;
-      defaultSemanticType: TerritorySemanticAdminType;
-      defaultLocalType: string;
-      parentMappings: Record<string, string>;
-    };
 
 export interface TurkeyAdm3SourceLockExtension {
   schemaVersion: typeof TURKEY_ADM3_SOURCE_LOCK_SCHEMA_VERSION;
@@ -176,6 +169,15 @@ export interface TurkeyAdm3ProvinceSourceLock {
   sizeBytes?: number;
   sourceFeatureCount?: number;
   adapter?: TurkeyAdm3ProviderAdapterConfig;
+  registryEntryId?: string;
+  productionEligible?: boolean;
+  sourceRegistryStatus?: string;
+  sourceLifecycle?: string;
+  sourceAccessType?: string;
+  evidenceUrls?: string[];
+  authorityType?: string;
+  datasetIdentifier?: string;
+  importerVersion?: typeof TURKEY_ADM3_IMPORTER_VERSION;
   unavailableReason?: string;
   issues?: TerritoryCountryBuildIssue[];
 }
@@ -207,6 +209,7 @@ export interface TurkeyAdm3AcquireSource {
 
 export interface TurkeyAdm3SourceLockCreateOptions {
   catalogPath?: string;
+  registryPath?: string;
   provinceCodes: readonly string[];
   generatedAt: string;
   cwd: string;
@@ -233,6 +236,8 @@ export interface TurkeyAdm3ParsedSourceResult {
   provinceStatuses: Record<string, TurkeyAdm3ProvinceBuildStatus>;
   qualityReport: TurkeyAdm3QualityGateReport;
   provenance: TurkeyAdm3ProvenanceReport;
+  importReport: TurkeyAdm3ImportReport;
+  unresolvedReport: TurkeyAdm3UnresolvedReport;
 }
 
 export interface TurkeyAdm3LoadOptions {
@@ -244,6 +249,62 @@ export interface TurkeyAdm3LoadOptions {
   noCache?: boolean;
   refresh?: boolean;
   acquireSource: TurkeyAdm3AcquireSource;
+}
+
+export interface TurkeyAdm3SourceRegistry {
+  schemaVersion: typeof TURKEY_ADM3_SOURCE_REGISTRY_SCHEMA_VERSION;
+  country: "TR";
+  level: "ADM3";
+  generatedAt: string;
+  provinces: TurkeyAdm3SourceRegistryProvince[];
+}
+
+export interface TurkeyAdm3SourceRegistryProvince {
+  code: string;
+  name: string;
+  status: string;
+  sources: TurkeyAdm3SourceRegistrySource[];
+}
+
+export interface TurkeyAdm3SourceRegistrySource {
+  id: string;
+  sourceId: string;
+  provider: {
+    name: string;
+    authorityType: string;
+    class: string;
+  };
+  boundarySourceClass: TerritoryBoundarySourceClass;
+  access: {
+    type: string;
+    formats: string[];
+    geometryAvailable: true | false | "unknown";
+    urls: Record<string, string>;
+  };
+  license: {
+    state: string;
+    redistribution: string;
+    commercialUse: string;
+    modification: string;
+    name: string;
+  };
+  lifecycle: string;
+  productionEligible: boolean;
+  sourceDate: string | null;
+  fields: {
+    nameField?: string | null;
+    sourceNativeIdField?: string | null;
+    districtParentField?: string | null;
+  };
+  verification?: {
+    checkedAt?: string;
+    evidenceUrls?: string[];
+    featureCount?: number | null;
+    sourceDate?: string | null;
+    expectedByteSize?: number;
+    expectedSha256?: string;
+  };
+  notes?: string[];
 }
 
 export interface TurkeyAdm3CoverageManifest {
@@ -341,7 +402,90 @@ export interface TurkeyAdm3ProvenanceReport {
     sha256?: string;
     sizeBytes?: number;
     sourceFeatureCount?: number;
+    registryEntryId?: string;
+    productionEligible?: boolean;
+    sourceRegistryStatus?: string;
+    sourceLifecycle?: string;
+    sourceAccessType?: string;
+    evidenceUrls?: string[];
+    authorityType?: string;
+    datasetIdentifier?: string;
+    importerVersion?: string;
+    adapterId?: TurkeyAdm3ProviderAdapterId;
     status: TurkeyAdm3ProvinceBuildStatus;
+  }>;
+}
+
+export interface TurkeyAdm3ImportReport {
+  schemaVersion: typeof TURKEY_ADM3_IMPORT_REPORT_SCHEMA_VERSION;
+  country: "TR";
+  level: "ADM3";
+  generatedAt: string;
+  importerVersion: typeof TURKEY_ADM3_IMPORTER_VERSION;
+  summary: {
+    requestedProvinceCount: number;
+    sourceCount: number;
+    featureCount: number;
+    parsedCount: number;
+    acceptedCount: number;
+    rejectedCount: number;
+    unresolvedCount: number;
+    duplicateIdCount: number;
+    duplicateNameCount: number;
+  };
+  sources: Array<{
+    provinceCode: string;
+    provinceName: string;
+    providerId?: string;
+    providerName?: string;
+    sourceId?: string;
+    registryEntryId?: string;
+    status: TurkeyAdm3ProvinceBuildStatus;
+    adapterId?: TurkeyAdm3ProviderAdapterId;
+    format?: string;
+    transportType?: string;
+    sourceUrl?: string;
+    sha256?: string;
+    sizeBytes?: number;
+    sourceFeatureCount?: number;
+    parsedCount: number;
+    acceptedCount: number;
+    rejectedCount: number;
+    unresolvedCount: number;
+    duplicateIds: string[];
+    duplicateNames: Array<{ name: string; parent: string; count: number }>;
+    geometryTypeDistribution: Record<string, number>;
+    crsHandling?: TurkeyAdm3AdapterParseReport["crsHandling"];
+    parentMatching: {
+      mappedParentCount: number;
+      rawParentCount: number;
+      missingParentCount: number;
+    };
+  }>;
+}
+
+export interface TurkeyAdm3UnresolvedReport {
+  schemaVersion: typeof TURKEY_ADM3_UNRESOLVED_REPORT_SCHEMA_VERSION;
+  country: "TR";
+  level: "ADM3";
+  generatedAt: string;
+  summary: {
+    unresolvedCount: number;
+    unknownDistrictCount: number;
+    ambiguousParentCount: number;
+    missingSourceIdCount: number;
+    missingRequiredFieldCount: number;
+    unsupportedGeometryCount: number;
+    unknownCrsCount: number;
+    licenseBlockCount: number;
+  };
+  records: Array<{
+    provinceCode?: string;
+    providerId?: string;
+    featureId?: string;
+    code: string;
+    severity: "info" | "warning" | "error";
+    message: string;
   }>;
 }
 
@@ -399,14 +543,16 @@ export function createDefaultTurkeyAdm3SourceCatalog(): TurkeyAdm3SourceCatalog 
 export async function readTurkeyAdm3SourceCatalog(
   options: {
     catalogPath?: string;
+    registryPath?: string;
     cwd?: string;
   } = {}
 ): Promise<TurkeyAdm3SourceCatalog> {
   const catalogPath = options.catalogPath ?? "datasets/sources/TR/adm3-catalog.json";
 
-  if (!options.catalogPath) {
+  if (!options.catalogPath && !options.registryPath) {
     try {
-      return await readTurkeyAdm3SourceCatalog({
+      return await readTurkeyAdm3CatalogFromRegistry({
+        registryPath: "datasets/sources/TR/adm3/source-registry.json",
         catalogPath,
         ...(options.cwd ? { cwd: options.cwd } : {})
       });
@@ -423,6 +569,14 @@ export async function readTurkeyAdm3SourceCatalog(
     }
 
     return createDefaultTurkeyAdm3SourceCatalog();
+  }
+
+  if (options.registryPath) {
+    return readTurkeyAdm3CatalogFromRegistry({
+      registryPath: options.registryPath,
+      catalogPath,
+      ...(options.cwd ? { cwd: options.cwd } : {})
+    });
   }
 
   const input = JSON.parse(
@@ -444,6 +598,291 @@ export async function readTurkeyAdm3SourceCatalog(
   }
 
   return input as unknown as TurkeyAdm3SourceCatalog;
+}
+
+export async function readTurkeyAdm3SourceRegistry(
+  options: {
+    registryPath?: string;
+    cwd?: string;
+  } = {}
+): Promise<TurkeyAdm3SourceRegistry> {
+  const registryPath = options.registryPath ?? "datasets/sources/TR/adm3/source-registry.json";
+  const input = JSON.parse(
+    await readFile(resolve(options.cwd ?? process.cwd(), registryPath), "utf8")
+  ) as unknown;
+
+  if (
+    !isRecord(input) ||
+    input.schemaVersion !== TURKEY_ADM3_SOURCE_REGISTRY_SCHEMA_VERSION ||
+    input.country !== "TR" ||
+    input.level !== "ADM3" ||
+    !Array.isArray(input.provinces)
+  ) {
+    throw new Error("Turkey ADM3 source registry is invalid.");
+  }
+
+  return input as unknown as TurkeyAdm3SourceRegistry;
+}
+
+async function readTurkeyAdm3CatalogFromRegistry(options: {
+  registryPath: string;
+  catalogPath: string;
+  cwd?: string;
+}): Promise<TurkeyAdm3SourceCatalog> {
+  const cwd = options.cwd ?? process.cwd();
+  const registry = await readTurkeyAdm3SourceRegistry({
+    registryPath: options.registryPath,
+    cwd
+  });
+  const technicalCatalog = await readTurkeyAdm3TechnicalCatalog({
+    catalogPath: options.catalogPath,
+    cwd
+  }).catch(() => createDefaultTurkeyAdm3SourceCatalog());
+  const technicalEntries = Object.values(technicalCatalog.provinces);
+  const provinces = Object.fromEntries(
+    registry.provinces
+      .map((province) => {
+        const source = selectRegistrySourceForProvince(province);
+
+        if (!source) {
+          return undefined;
+        }
+
+        const technical = findTechnicalCatalogEntry(province.code, source, technicalEntries);
+        const entry = createCatalogEntryFromRegistry(province, source, technical);
+
+        return [normalizeProvinceCode(province.code), entry] as const;
+      })
+      .filter((entry): entry is readonly [string, TurkeyAdm3ProvinceCatalogEntry] => Boolean(entry))
+      .sort(([left], [right]) => left.localeCompare(right))
+  );
+
+  return {
+    schemaVersion: TURKEY_ADM3_SOURCE_CATALOG_SCHEMA_VERSION,
+    country: "TR",
+    generatedAt: registry.generatedAt,
+    provinces
+  };
+}
+
+async function readTurkeyAdm3TechnicalCatalog(options: {
+  catalogPath: string;
+  cwd: string;
+}): Promise<TurkeyAdm3SourceCatalog> {
+  const input = JSON.parse(
+    await readFile(resolve(options.cwd, options.catalogPath), "utf8")
+  ) as unknown;
+
+  if (
+    !isRecord(input) ||
+    input.schemaVersion !== TURKEY_ADM3_SOURCE_CATALOG_SCHEMA_VERSION ||
+    input.country !== "TR" ||
+    !isRecord(input.provinces)
+  ) {
+    throw new Error("Turkey ADM3 technical source catalog is invalid.");
+  }
+
+  return input as unknown as TurkeyAdm3SourceCatalog;
+}
+
+function selectRegistrySourceForProvince(
+  province: TurkeyAdm3SourceRegistryProvince
+): TurkeyAdm3SourceRegistrySource | undefined {
+  return (
+    [...province.sources]
+      .sort(compareRegistrySources)
+      .find((source) => isRegistrySourceOfficial(source)) ??
+    [...province.sources].sort(compareRegistrySources)[0]
+  );
+}
+
+function compareRegistrySources(
+  left: TurkeyAdm3SourceRegistrySource,
+  right: TurkeyAdm3SourceRegistrySource
+): number {
+  return registrySourceRank(left) - registrySourceRank(right) || left.id.localeCompare(right.id);
+}
+
+function registrySourceRank(source: TurkeyAdm3SourceRegistrySource): number {
+  if (isRegistrySourceApprovedForProduction(source)) {
+    return 0;
+  }
+
+  if (isRegistrySourceOfficial(source)) {
+    return 1;
+  }
+
+  return 2;
+}
+
+function isRegistrySourceOfficial(source: TurkeyAdm3SourceRegistrySource): boolean {
+  return (
+    source.boundarySourceClass === "official-local" ||
+    source.boundarySourceClass === "official-national"
+  );
+}
+
+function isRegistrySourceApprovedForProduction(source: TurkeyAdm3SourceRegistrySource): boolean {
+  return (
+    source.productionEligible === true &&
+    source.lifecycle === "approved" &&
+    source.license.state === "approved" &&
+    source.license.redistribution === "allowed" &&
+    source.access.geometryAvailable === true &&
+    (source.access.type === "public-download" || source.access.type === "public-api") &&
+    isRegistrySourceOfficial(source)
+  );
+}
+
+function findTechnicalCatalogEntry(
+  provinceCode: string,
+  source: TurkeyAdm3SourceRegistrySource,
+  entries: readonly TurkeyAdm3ProvinceCatalogEntry[]
+): TurkeyAdm3ProvinceCatalogEntry | undefined {
+  const normalizedProvinceCode = normalizeProvinceCode(provinceCode);
+  const sourceUrls = new Set(
+    [source.access.urls.dataset, source.access.urls.download, source.access.urls.service].filter(
+      (value): value is string => Boolean(value)
+    )
+  );
+
+  return entries.find((entry) => {
+    if (normalizeProvinceCode(entry.provinceCode) !== normalizedProvinceCode) {
+      return false;
+    }
+
+    return (
+      entry.registryEntryId === source.id ||
+      entry.providerId === source.id ||
+      entry.sourceId === source.sourceId ||
+      sourceUrls.has(entry.sourceUrl) ||
+      Boolean(entry.downloadUrl && sourceUrls.has(entry.downloadUrl))
+    );
+  });
+}
+
+function createCatalogEntryFromRegistry(
+  province: TurkeyAdm3SourceRegistryProvince,
+  source: TurkeyAdm3SourceRegistrySource,
+  technical: TurkeyAdm3ProvinceCatalogEntry | undefined
+): TurkeyAdm3ProvinceCatalogEntry {
+  const format =
+    normalizeTurkeyAdm3SourceFormat(source.access.formats[0] ?? technical?.format ?? "JSON") ??
+    "JSON";
+  const adapter =
+    technical?.adapter ??
+    createAdapterConfigFromRegistrySource(source, format) ??
+    ({
+      id: defaultTurkeyAdm3AdapterForFormat(format) ?? "json-feature-map",
+      defaultSemanticType: "neighbourhood",
+      defaultLocalType: "Mahalle"
+    } satisfies TurkeyAdm3ProviderAdapterConfig);
+  const verificationSourceDate = source.verification?.sourceDate ?? undefined;
+  const sourceDate =
+    source.sourceDate ?? verificationSourceDate ?? technical?.sourceDate ?? "unknown";
+  const evidenceUrls = [
+    ...(source.verification?.evidenceUrls ?? []),
+    ...(technical?.evidenceUrls ?? [])
+  ].sort();
+  const sourceUrl =
+    source.access.urls.dataset ?? technical?.sourceUrl ?? `registry://TR/ADM3/${source.id}`;
+  const downloadUrl = source.access.urls.download ?? technical?.downloadUrl;
+  const sourceVersion = technical?.sourceVersion ?? sourceDate;
+  const retrievedAt = source.verification?.checkedAt ?? technical?.retrievedAt;
+  const licenseUrl = source.access.urls.license ?? technical?.licenseUrl;
+  const expectedSha256 = technical?.expectedSha256 ?? source.verification?.expectedSha256;
+  const expectedByteSize = technical?.expectedByteSize ?? source.verification?.expectedByteSize;
+  const registryFeatureCount = source.verification?.featureCount ?? undefined;
+  const expectedFeatureCount = technical?.expectedFeatureCount ?? registryFeatureCount;
+
+  return {
+    provinceCode: normalizeProvinceCode(province.code),
+    provinceName: province.name,
+    providerId: source.id,
+    providerName: source.provider.name,
+    sourceId: source.sourceId,
+    sourceUrl,
+    ...(downloadUrl ? { downloadUrl } : {}),
+    ...(technical?.sourcePath ? { sourcePath: technical.sourcePath } : {}),
+    sourceDate,
+    sourceVersion,
+    ...(retrievedAt ? { retrievedAt } : {}),
+    license: source.license.name,
+    licenseState: mapRegistryLicenseState(source.license.state),
+    ...(licenseUrl ? { licenseUrl } : {}),
+    attribution: technical?.attribution ?? `${source.provider.name}, ${source.sourceId}`,
+    boundarySourceClass: source.boundarySourceClass,
+    redistributionStatus: mapRegistryPermission(source.license.redistribution),
+    commercialUseStatus: mapRegistryPermission(source.license.commercialUse),
+    modificationStatus: mapRegistryPermission(source.license.modification),
+    crs: technical?.crs ?? "unknown",
+    format,
+    ...(expectedSha256 ? { expectedSha256 } : {}),
+    ...(expectedByteSize !== undefined ? { expectedByteSize } : {}),
+    ...(expectedFeatureCount !== undefined ? { expectedFeatureCount } : {}),
+    adapter,
+    registryEntryId: source.id,
+    productionEligible: isRegistrySourceApprovedForProduction(source),
+    sourceRegistryStatus: province.status,
+    sourceLifecycle: source.lifecycle,
+    sourceAccessType: source.access.type,
+    ...(evidenceUrls.length > 0 ? { evidenceUrls } : {}),
+    authorityType: source.provider.authorityType,
+    datasetIdentifier: source.sourceId,
+    notes: [...(source.notes ?? []), ...(technical?.notes ?? [])].sort()
+  };
+}
+
+function createAdapterConfigFromRegistrySource(
+  source: TurkeyAdm3SourceRegistrySource,
+  format: TurkeyAdm3SourceFormat
+): TurkeyAdm3ProviderAdapterConfig | undefined {
+  const id = defaultTurkeyAdm3AdapterForFormat(format);
+
+  if (!id) {
+    return undefined;
+  }
+
+  return {
+    id,
+    ...(source.fields.nameField ? { nameProperty: source.fields.nameField } : {}),
+    ...(source.fields.sourceNativeIdField
+      ? { sourceIdProperty: source.fields.sourceNativeIdField }
+      : {}),
+    ...(source.fields.districtParentField
+      ? { parentProperty: source.fields.districtParentField }
+      : {}),
+    defaultSemanticType: "neighbourhood",
+    defaultLocalType: "Mahalle"
+  };
+}
+
+function mapRegistryLicenseState(input: string): TerritoryLicenseState {
+  if (input === "approved") {
+    return "approved";
+  }
+
+  if (input === "restricted") {
+    return "restricted";
+  }
+
+  if (input === "review-required") {
+    return "pending";
+  }
+
+  return "unknown";
+}
+
+function mapRegistryPermission(input: string): "allowed" | "restricted" | "unknown" {
+  if (input === "allowed") {
+    return "allowed";
+  }
+
+  if (input === "prohibited" || input === "not-allowed" || input === "restricted") {
+    return "restricted";
+  }
+
+  return "unknown";
 }
 
 export function validateTurkeyAdm3SourceCatalog(input: unknown): {
@@ -499,6 +938,7 @@ export async function createTurkeyAdm3SourceLockExtension(
 ): Promise<{ extension: TurkeyAdm3SourceLockExtension; issues: TerritoryCountryBuildIssue[] }> {
   const catalog = await readTurkeyAdm3SourceCatalog({
     ...(options.catalogPath ? { catalogPath: options.catalogPath } : {}),
+    ...(options.registryPath ? { registryPath: options.registryPath } : {}),
     cwd: options.cwd
   });
   const requestedProvinceCodes = normalizeProvinceCodes(options.provinceCodes);
@@ -537,7 +977,7 @@ export async function createTurkeyAdm3SourceLockExtension(
       const artifact = await options.acquireSource(
         {
           provider: entry.providerId,
-          sourceUrl: entry.sourcePath ?? entry.downloadUrl ?? entry.sourceUrl,
+          sourceUrl: resolveAdm3AcquireUrl(entry),
           ...(entry.expectedSha256 ? { expectedSha256: entry.expectedSha256 } : {}),
           ...(entry.sourceVersion ? { sourceVersion: entry.sourceVersion } : {})
         },
@@ -573,6 +1013,20 @@ export async function createTurkeyAdm3SourceLockExtension(
       }
 
       const sourceFeatureCount = await countProvinceSourceFeatures(entry, artifact.localPath);
+
+      if (
+        entry.expectedFeatureCount !== undefined &&
+        sourceFeatureCount !== entry.expectedFeatureCount
+      ) {
+        issues.push(
+          createIssue(
+            "TR_ADM3_SOURCE_FEATURE_COUNT_MISMATCH",
+            `Province ${provinceCode} source feature count mismatch: expected ${entry.expectedFeatureCount}, received ${sourceFeatureCount}.`,
+            { severity: "warning" }
+          )
+        );
+      }
+
       provinces[provinceCode] = {
         ...createProvinceLock(entry),
         status: "available",
@@ -827,6 +1281,8 @@ export async function loadTurkeyAdm3ParsedFeatures(
   const features: TurkeyAdm3ParsedFeature[] = [];
   const sourceDates: Record<string, string> = {};
   const provinceStatuses: Record<string, TurkeyAdm3ProvinceBuildStatus> = {};
+  const importSources: TurkeyAdm3ImportReport["sources"] = [];
+  const unresolvedRecords: TurkeyAdm3UnresolvedReport["records"] = [];
 
   for (const province of Object.values(options.extension.provinces).sort((left, right) =>
     left.provinceCode.localeCompare(right.provinceCode)
@@ -842,6 +1298,16 @@ export async function loadTurkeyAdm3ParsedFeatures(
           { severity }
         )
       );
+      importSources.push(createUnavailableImportReportSource(province));
+      unresolvedRecords.push(
+        ...createUnresolvedRecords(
+          province,
+          province.issues ?? [],
+          province.status === "license-blocked"
+            ? { fallbackCode: "TR_ADM3_SOURCE_LICENSE_BLOCK" }
+            : {}
+        )
+      );
       continue;
     }
 
@@ -852,6 +1318,8 @@ export async function loadTurkeyAdm3ParsedFeatures(
       );
       issues.push(issue);
       provinceStatuses[province.provinceCode] = "build-failed";
+      importSources.push(createUnavailableImportReportSource(province, "build-failed"));
+      unresolvedRecords.push(...createUnresolvedRecords(province, [issue]));
       continue;
     }
 
@@ -864,17 +1332,8 @@ export async function loadTurkeyAdm3ParsedFeatures(
       );
       issues.push(issue);
       provinceStatuses[province.provinceCode] = "source-unavailable";
-      continue;
-    }
-
-    if (province.crs && !isSupportedLonLatCrs(province.crs)) {
-      issues.push(
-        createIssue(
-          "TR_ADM3_CRS_UNSUPPORTED",
-          `Province ${province.provinceCode} source declares ${province.crs}; only EPSG:4326/CRS84 lon-lat sources are accepted without an explicit reprojection adapter.`
-        )
-      );
-      provinceStatuses[province.provinceCode] = "build-failed";
+      importSources.push(createUnavailableImportReportSource(province, "source-unavailable"));
+      unresolvedRecords.push(...createUnresolvedRecords(province, [issue]));
       continue;
     }
 
@@ -905,13 +1364,15 @@ export async function loadTurkeyAdm3ParsedFeatures(
         provinceStatuses[province.provinceCode] = options.allowPartial
           ? "byte-size-failed"
           : "build-failed";
+        importSources.push(createUnavailableImportReportSource(province, "byte-size-failed"));
         continue;
       }
 
-      const sourceText = await readFile(artifact.localPath, "utf8");
-      const parsed = parseTurkeyAdm3ProvinceSource(province, sourceText);
+      const sourceBytes = await readFile(artifact.localPath);
+      const parsed = parseTurkeyAdm3ProvinceSource(province, sourceBytes);
       features.push(...parsed.features);
       issues.push(...parsed.issues);
+      unresolvedRecords.push(...createUnresolvedRecords(province, parsed.issues));
       provinceStatuses[province.provinceCode] = parsed.issues.some(
         (issue) => issue.severity === "error"
       )
@@ -919,6 +1380,13 @@ export async function loadTurkeyAdm3ParsedFeatures(
         : parsed.issues.length > 0
           ? "built-with-warnings"
           : "built";
+      importSources.push(
+        createParsedImportReportSource({
+          province,
+          status: provinceStatuses[province.provinceCode] ?? "build-failed",
+          parsed
+        })
+      );
 
       if (province.sourceDate) {
         sourceDates[province.provinceCode] = province.sourceDate;
@@ -935,6 +1403,7 @@ export async function loadTurkeyAdm3ParsedFeatures(
         )
       );
       provinceStatuses[province.provinceCode] = "parse-failed";
+      importSources.push(createUnavailableImportReportSource(province, "parse-failed"));
     }
   }
 
@@ -958,14 +1427,256 @@ export async function loadTurkeyAdm3ParsedFeatures(
       generatedAt: options.buildDate,
       extension: options.extension,
       provinceStatuses
+    }),
+    importReport: createTurkeyAdm3ImportReport({
+      generatedAt: options.buildDate,
+      extension: options.extension,
+      sources: importSources
+    }),
+    unresolvedReport: createTurkeyAdm3UnresolvedReport({
+      generatedAt: options.buildDate,
+      records: unresolvedRecords
     })
   };
 }
 
+export function createTurkeyAdm3ImportReport(input: {
+  generatedAt: string;
+  extension: TurkeyAdm3SourceLockExtension;
+  sources: TurkeyAdm3ImportReport["sources"];
+}): TurkeyAdm3ImportReport {
+  const sources = input.sources.sort((left, right) =>
+    left.provinceCode.localeCompare(right.provinceCode)
+  );
+
+  return {
+    schemaVersion: TURKEY_ADM3_IMPORT_REPORT_SCHEMA_VERSION,
+    country: "TR",
+    level: "ADM3",
+    generatedAt: input.generatedAt,
+    importerVersion: TURKEY_ADM3_IMPORTER_VERSION,
+    summary: {
+      requestedProvinceCount: input.extension.requestedProvinceCodes.length,
+      sourceCount: sources.length,
+      featureCount: sources.reduce((sum, source) => sum + (source.sourceFeatureCount ?? 0), 0),
+      parsedCount: sources.reduce((sum, source) => sum + source.parsedCount, 0),
+      acceptedCount: sources.reduce((sum, source) => sum + source.acceptedCount, 0),
+      rejectedCount: sources.reduce((sum, source) => sum + source.rejectedCount, 0),
+      unresolvedCount: sources.reduce((sum, source) => sum + source.unresolvedCount, 0),
+      duplicateIdCount: sources.reduce((sum, source) => sum + source.duplicateIds.length, 0),
+      duplicateNameCount: sources.reduce((sum, source) => sum + source.duplicateNames.length, 0)
+    },
+    sources
+  };
+}
+
+export function createTurkeyAdm3UnresolvedReport(input: {
+  generatedAt: string;
+  records: TurkeyAdm3UnresolvedReport["records"];
+}): TurkeyAdm3UnresolvedReport {
+  const records = input.records.sort(
+    (left, right) =>
+      (left.provinceCode ?? "").localeCompare(right.provinceCode ?? "") ||
+      left.code.localeCompare(right.code) ||
+      (left.featureId ?? "").localeCompare(right.featureId ?? "") ||
+      left.message.localeCompare(right.message)
+  );
+
+  return {
+    schemaVersion: TURKEY_ADM3_UNRESOLVED_REPORT_SCHEMA_VERSION,
+    country: "TR",
+    level: "ADM3",
+    generatedAt: input.generatedAt,
+    summary: {
+      unresolvedCount: records.length,
+      unknownDistrictCount: countRecords(records, [
+        "TR_ADM3_PARENT_MAPPING_MISSING",
+        "TR_ADM3_PARENT_MISSING",
+        "PARENT_UNRESOLVED"
+      ]),
+      ambiguousParentCount: countRecords(records, ["PARENT_AMBIGUOUS", "TR_ADM3_PARENT_AMBIGUOUS"]),
+      missingSourceIdCount: countRecords(records, ["TR_ADM3_SOURCE_ID_FINGERPRINTED"]),
+      missingRequiredFieldCount: countRecords(records, [
+        "TR_ADM3_REQUIRED_FIELD_MISSING",
+        "TR_ADM3_SOURCE_SCHEMA_MISMATCH"
+      ]),
+      unsupportedGeometryCount: countRecords(records, [
+        "TR_ADM3_UNSUPPORTED_GEOMETRY",
+        "TR_ADM3_GEOMETRY_INVALID",
+        "GEOMETRY_REPAIR_REJECTED"
+      ]),
+      unknownCrsCount: countRecords(records, [
+        "TR_ADM3_CRS_UNKNOWN",
+        "TR_ADM3_CRS_UNSUPPORTED",
+        "TR_ADM3_CRS_CONFLICT"
+      ]),
+      licenseBlockCount: countRecords(records, [
+        "TR_ADM3_SOURCE_LICENSE_BLOCK",
+        "TR_ADM3_SOURCE_LICENSE_PENDING",
+        "TR_ADM3_SOURCE_LICENSE_RESTRICTED",
+        "TR_ADM3_SOURCE_LICENSE_UNKNOWN",
+        "TR_ADM3_SOURCE_REDISTRIBUTION_RESTRICTED",
+        "TR_ADM3_SOURCE_NOT_APPROVED_FOR_PRODUCTION"
+      ])
+    },
+    records
+  };
+}
+
+function createParsedImportReportSource(input: {
+  province: TurkeyAdm3ProvinceSourceLock;
+  status: TurkeyAdm3ProvinceBuildStatus;
+  parsed: ReturnType<typeof parseTurkeyAdm3ProvinceSource>;
+}): TurkeyAdm3ImportReport["sources"][number] {
+  const features = input.parsed.features;
+  const report = input.parsed.report;
+
+  return {
+    provinceCode: input.province.provinceCode,
+    provinceName: input.province.provinceName,
+    ...(input.province.providerId ? { providerId: input.province.providerId } : {}),
+    ...(input.province.providerName ? { providerName: input.province.providerName } : {}),
+    ...(input.province.sourceId ? { sourceId: input.province.sourceId } : {}),
+    ...(input.province.registryEntryId ? { registryEntryId: input.province.registryEntryId } : {}),
+    status: input.status,
+    ...(input.province.adapter ? { adapterId: input.province.adapter.id } : {}),
+    ...(input.province.format ? { format: input.province.format } : {}),
+    ...(input.province.format
+      ? { transportType: normalizeTransportLabel(input.province.format) }
+      : {}),
+    ...(input.province.sourceUrl ? { sourceUrl: input.province.sourceUrl } : {}),
+    ...(input.province.sha256 ? { sha256: input.province.sha256 } : {}),
+    ...(input.province.sizeBytes !== undefined ? { sizeBytes: input.province.sizeBytes } : {}),
+    ...(input.province.sourceFeatureCount !== undefined
+      ? { sourceFeatureCount: input.province.sourceFeatureCount }
+      : {}),
+    parsedCount: report?.rawFeatureCount ?? features.length,
+    acceptedCount: features.length,
+    rejectedCount: report?.rejectedFeatureCount ?? 0,
+    unresolvedCount: report?.unresolvedFeatureCount ?? 0,
+    duplicateIds: report?.duplicateStableSourceIds ?? [],
+    duplicateNames: report?.duplicateNames ?? [],
+    geometryTypeDistribution: report?.geometryTypeDistribution ?? countGeometryTypes(features),
+    ...(report?.crsHandling ? { crsHandling: report.crsHandling } : {}),
+    parentMatching: {
+      mappedParentCount: features.filter((feature) => feature.parentAdm2Id).length,
+      rawParentCount: features.filter((feature) => feature.parentSourceId).length,
+      missingParentCount: features.filter((feature) => !feature.parentSourceId).length
+    }
+  };
+}
+
+function createUnavailableImportReportSource(
+  province: TurkeyAdm3ProvinceSourceLock,
+  status: TurkeyAdm3ProvinceBuildStatus = province.status
+): TurkeyAdm3ImportReport["sources"][number] {
+  return {
+    provinceCode: province.provinceCode,
+    provinceName: province.provinceName,
+    ...(province.providerId ? { providerId: province.providerId } : {}),
+    ...(province.providerName ? { providerName: province.providerName } : {}),
+    ...(province.sourceId ? { sourceId: province.sourceId } : {}),
+    ...(province.registryEntryId ? { registryEntryId: province.registryEntryId } : {}),
+    status,
+    ...(province.adapter ? { adapterId: province.adapter.id } : {}),
+    ...(province.format ? { format: province.format } : {}),
+    ...(province.format ? { transportType: normalizeTransportLabel(province.format) } : {}),
+    ...(province.sourceUrl ? { sourceUrl: province.sourceUrl } : {}),
+    ...(province.sha256 ? { sha256: province.sha256 } : {}),
+    ...(province.sizeBytes !== undefined ? { sizeBytes: province.sizeBytes } : {}),
+    ...(province.sourceFeatureCount !== undefined
+      ? { sourceFeatureCount: province.sourceFeatureCount }
+      : {}),
+    parsedCount: 0,
+    acceptedCount: 0,
+    rejectedCount: 0,
+    unresolvedCount: province.issues?.length ?? 0,
+    duplicateIds: [],
+    duplicateNames: [],
+    geometryTypeDistribution: {},
+    parentMatching: {
+      mappedParentCount: 0,
+      rawParentCount: 0,
+      missingParentCount: 0
+    }
+  };
+}
+
+function createUnresolvedRecords(
+  province: TurkeyAdm3ProvinceSourceLock,
+  issues: readonly TerritoryCountryBuildIssue[],
+  options: { fallbackCode?: string } = {}
+): TurkeyAdm3UnresolvedReport["records"] {
+  const relevantIssues =
+    issues.length > 0
+      ? issues
+      : options.fallbackCode
+        ? [
+            createIssue(
+              options.fallbackCode,
+              province.unavailableReason ??
+                `Province ${province.provinceCode} ADM3 source is blocked.`
+            )
+          ]
+        : [];
+
+  return relevantIssues
+    .filter((issue) => isUnresolvedIssueCode(issue.code) || Boolean(options.fallbackCode))
+    .map((issue) => ({
+      provinceCode: province.provinceCode,
+      ...(province.providerId ? { providerId: province.providerId } : {}),
+      ...(issue.zoneId ? { featureId: issue.zoneId } : {}),
+      code: options.fallbackCode ?? issue.code,
+      severity: issue.severity,
+      message: issue.message
+    }));
+}
+
+function isUnresolvedIssueCode(code: string): boolean {
+  return (
+    code.includes("PARENT") ||
+    code.includes("SOURCE_ID") ||
+    code.includes("REQUIRED_FIELD") ||
+    code.includes("SCHEMA") ||
+    code.includes("GEOMETRY") ||
+    code.includes("CRS") ||
+    code.includes("LICENSE") ||
+    code.includes("REDISTRIBUTION") ||
+    code.includes("APPROVED_FOR_PRODUCTION")
+  );
+}
+
+function countRecords(
+  records: readonly TurkeyAdm3UnresolvedReport["records"][number][],
+  codes: readonly string[]
+): number {
+  return records.filter((record) => codes.includes(record.code)).length;
+}
+
+function countGeometryTypes(features: readonly TurkeyAdm3ParsedFeature[]): Record<string, number> {
+  const counts = new Map<string, number>();
+
+  for (const feature of features) {
+    counts.set(feature.geometry.type, (counts.get(feature.geometry.type) ?? 0) + 1);
+  }
+
+  return Object.fromEntries(
+    [...counts.entries()].sort(([left], [right]) => left.localeCompare(right))
+  );
+}
+
+function normalizeTransportLabel(format: string): string {
+  return normalizeTurkeyAdm3SourceFormat(format) ?? format;
+}
+
 export function parseTurkeyAdm3ProvinceSource(
   province: TurkeyAdm3ProvinceSourceLock,
-  sourceText: string
-): { features: TurkeyAdm3ParsedFeature[]; issues: TerritoryCountryBuildIssue[] } {
+  sourceInput: string | Uint8Array
+): {
+  features: TurkeyAdm3ParsedFeature[];
+  issues: TerritoryCountryBuildIssue[];
+  report?: TurkeyAdm3AdapterParseReport;
+} {
   if (
     !province.adapter ||
     !province.providerId ||
@@ -983,156 +1694,61 @@ export function parseTurkeyAdm3ProvinceSource(
     };
   }
 
-  const adapter = province.adapter;
   const providerId = province.providerId;
-
-  if (adapter.id === "kml-description-table") {
-    const parsed = parseTurkeyGaziantepAdm3Kml(sourceText);
-    return {
-      features: parsed
-        .map((feature): TurkeyAdm3ParsedFeature => {
-          const parentAdm2Id = adapter.parentMappings[feature.sourceDistrictId];
-          const stableCode = createTurkeyAdm3StableKey({
-            provinceCode: province.provinceCode,
-            parentKey: parentAdm2Id ?? feature.sourceDistrictId,
-            sourceId: feature.neighbourhoodCode,
-            name: feature.neighbourhoodName
-          });
-
-          return {
-            provinceCode: province.provinceCode,
-            provinceName: province.provinceName,
-            providerId,
-            ...(parentAdm2Id ? { parentAdm2Id } : {}),
-            sourceId: feature.neighbourhoodCode,
-            stableCode,
-            parentSourceId: parentAdm2Id ?? feature.sourceDistrictId,
-            name: normalizeTurkeyAdm3DisplayName(feature.neighbourhoodName),
-            localType: adapter.defaultLocalType,
-            geometry: feature.geometry,
-            rawProperties: createAdm3RawProperties({
-              province,
-              sourceId: feature.neighbourhoodCode,
-              sourceObjectId: feature.sourceObjectId,
-              sourceParentId: feature.sourceDistrictId,
-              ...(parentAdm2Id ? { parentAdm2Id } : {}),
-              name: feature.neighbourhoodName,
-              semanticType: adapter.defaultSemanticType,
-              localType: adapter.defaultLocalType,
-              geometry: feature.geometry
-            }),
-            rawFeatureId: feature.sourceObjectId
-          };
-        })
-        .sort(compareAdm3Features),
-      issues: []
-    };
-  }
-
-  const input = JSON.parse(sourceText) as unknown;
-
-  if (!isRecord(input) || input.type !== "FeatureCollection" || !Array.isArray(input.features)) {
-    return {
-      features: [],
-      issues: [
-        createIssue(
-          "TR_ADM3_SOURCE_FORMAT_UNSUPPORTED",
-          `Province ${province.provinceCode} ADM3 source must be GeoJSON FeatureCollection.`
-        )
-      ]
-    };
-  }
-
-  const issues: TerritoryCountryBuildIssue[] = [];
-  const features = input.features.filter(isRecord).flatMap((feature, index) => {
-    const properties = isRecord(feature.properties) ? feature.properties : {};
-    const name = readStringPropertyPath(properties, adapter.nameProperty);
-    const sourceId = readStringPropertyPath(properties, adapter.sourceIdProperty);
-    const rawParent = readStringPropertyPath(properties, adapter.parentProperty);
-    const parentAdm2Id = rawParent ? resolveTurkeyAdm3ParentMapping(adapter, rawParent) : undefined;
-    const geometry = readGeometry(feature.geometry);
-    const rawSemanticType = adapter.semanticTypeProperty
-      ? readStringPropertyPath(properties, adapter.semanticTypeProperty)
-      : undefined;
-    const semanticType = normalizeAdm3SemanticType(
-      rawSemanticType ?? adapter.defaultSemanticType ?? "neighbourhood"
-    );
-    const localType =
-      (adapter.localTypeProperty
-        ? readStringPropertyPath(properties, adapter.localTypeProperty)
-        : undefined) ??
-      adapter.defaultLocalType ??
-      "Mahalle";
-
-    if (!name || !sourceId || !rawParent || !geometry) {
-      issues.push(
-        createIssue(
-          "TR_ADM3_SOURCE_FEATURE_INVALID",
-          `Province ${province.provinceCode} feature ${index} is missing name, source id, parent, or polygon geometry.`,
-          { severity: "warning" }
-        )
-      );
-      return [];
-    }
-
-    if (!semanticType || !ALLOWED_ADM3_SEMANTIC_TYPES.has(semanticType)) {
-      issues.push(
-        createIssue(
-          "TR_ADM3_SEMANTIC_BLOCKED",
-          `Province ${province.provinceCode} feature ${sourceId} declares unsupported ADM3 semantic type '${rawSemanticType ?? "unknown"}'.`
-        )
-      );
-      return [];
-    }
-
-    if (!parentAdm2Id && adapter.parentMappings) {
-      issues.push(
-        createIssue(
-          "TR_ADM3_PARENT_MAPPING_MISSING",
-          `Province ${province.provinceCode} feature ${sourceId} has unmapped parent '${rawParent}'.`
-        )
-      );
-    }
-
-    const stableCode = createTurkeyAdm3StableKey({
-      provinceCode: province.provinceCode,
-      parentKey: parentAdm2Id ?? rawParent,
-      sourceId,
-      name
-    });
-
-    const rawFeatureId = readFeatureId(feature);
-    const parsedFeature: TurkeyAdm3ParsedFeature = {
+  const parsed = parseTurkeyAdm3ProviderSource(
+    {
       provinceCode: province.provinceCode,
       provinceName: province.provinceName,
       providerId,
-      ...(parentAdm2Id ? { parentAdm2Id } : {}),
-      sourceId,
+      ...(province.crs ? { crs: province.crs } : {}),
+      ...(province.format ? { format: province.format } : {}),
+      adapter: province.adapter
+    },
+    sourceInput
+  );
+  const features = parsed.features.map((feature): TurkeyAdm3ParsedFeature => {
+    const parentKey = feature.parentAdm2Id ?? feature.sourceParentId ?? "unresolved-parent";
+    const stableCode = createTurkeyAdm3StableKey({
+      provinceCode: province.provinceCode,
+      parentKey,
+      sourceId: feature.sourceId,
+      name: feature.name
+    });
+
+    return {
+      provinceCode: province.provinceCode,
+      provinceName: province.provinceName,
+      providerId,
+      ...(feature.parentAdm2Id ? { parentAdm2Id: feature.parentAdm2Id } : {}),
+      sourceId: feature.sourceId,
       stableCode,
-      parentSourceId: parentAdm2Id ?? rawParent,
-      name: normalizeTurkeyAdm3DisplayName(name),
-      localType,
-      geometry,
+      ...((feature.parentAdm2Id ?? feature.sourceParentId)
+        ? { parentSourceId: feature.parentAdm2Id ?? feature.sourceParentId }
+        : {}),
+      name: normalizeTurkeyAdm3DisplayName(feature.name),
+      localType: feature.localType,
+      geometry: feature.geometry,
       rawProperties: createAdm3RawProperties({
         province,
-        sourceId,
-        sourceObjectId: rawFeatureId ?? sourceId,
-        sourceParentId: rawParent,
-        ...(parentAdm2Id ? { parentAdm2Id } : {}),
-        name,
-        semanticType,
-        localType,
-        geometry
+        sourceId: feature.sourceId,
+        sourceObjectId: feature.sourceObjectId,
+        ...(feature.sourceParentId ? { sourceParentId: feature.sourceParentId } : {}),
+        ...(feature.parentAdm2Id ? { parentAdm2Id: feature.parentAdm2Id } : {}),
+        name: feature.name,
+        semanticType: feature.semanticType,
+        localType: feature.localType,
+        geometry: feature.geometry,
+        originalGeometryHash: feature.originalGeometryHash,
+        effectiveGeometryHash: feature.effectiveGeometryHash
       }),
-      ...(rawFeatureId ? { rawFeatureId } : {})
+      ...(feature.rawFeatureId ? { rawFeatureId: feature.rawFeatureId } : {})
     };
-
-    return [parsedFeature];
   });
 
   return {
     features: features.sort(compareAdm3Features),
-    issues: issues.sort(compareIssues)
+    issues: parsed.issues.sort(compareIssues),
+    report: parsed.report
   };
 }
 
@@ -1422,6 +2038,20 @@ export function createTurkeyAdm3ProvenanceReport(input: {
         ...(province.sourceFeatureCount !== undefined
           ? { sourceFeatureCount: province.sourceFeatureCount }
           : {}),
+        ...(province.registryEntryId ? { registryEntryId: province.registryEntryId } : {}),
+        ...(province.productionEligible !== undefined
+          ? { productionEligible: province.productionEligible }
+          : {}),
+        ...(province.sourceRegistryStatus
+          ? { sourceRegistryStatus: province.sourceRegistryStatus }
+          : {}),
+        ...(province.sourceLifecycle ? { sourceLifecycle: province.sourceLifecycle } : {}),
+        ...(province.sourceAccessType ? { sourceAccessType: province.sourceAccessType } : {}),
+        ...(province.evidenceUrls ? { evidenceUrls: province.evidenceUrls } : {}),
+        ...(province.authorityType ? { authorityType: province.authorityType } : {}),
+        ...(province.datasetIdentifier ? { datasetIdentifier: province.datasetIdentifier } : {}),
+        ...(province.importerVersion ? { importerVersion: province.importerVersion } : {}),
+        ...(province.adapter ? { adapterId: province.adapter.id } : {}),
         status: input.provinceStatuses?.[province.provinceCode] ?? province.status
       }))
   };
@@ -1517,11 +2147,15 @@ function createBlockedProvinceLock(
   entry: TurkeyAdm3ProvinceCatalogEntry,
   issues: TerritoryCountryBuildIssue[]
 ): TurkeyAdm3ProvinceSourceLock {
+  const gateBlocked = issues.some((issue) =>
+    ["LICENSE", "REDISTRIBUTION", "APPROVED_FOR_PRODUCTION", "ACCESS_NOT_PUBLIC"].some((token) =>
+      issue.code.includes(token)
+    )
+  );
+
   return {
     ...createProvinceLock(entry),
-    status: issues.some((issue) => issue.code.includes("LICENSE"))
-      ? "license-blocked"
-      : "source-unavailable",
+    status: gateBlocked ? "license-blocked" : "source-unavailable",
     unavailableReason: issues.map((issue) => issue.message).join("; "),
     issues
   };
@@ -1552,8 +2186,54 @@ function createProvinceLock(entry: TurkeyAdm3ProvinceCatalogEntry): TurkeyAdm3Pr
     ...(entry.modificationStatus ? { modificationStatus: entry.modificationStatus } : {}),
     crs: entry.crs,
     format: entry.format,
-    adapter: entry.adapter
+    adapter: entry.adapter,
+    ...(entry.registryEntryId ? { registryEntryId: entry.registryEntryId } : {}),
+    ...(entry.productionEligible !== undefined
+      ? { productionEligible: entry.productionEligible }
+      : {}),
+    ...(entry.sourceRegistryStatus ? { sourceRegistryStatus: entry.sourceRegistryStatus } : {}),
+    ...(entry.sourceLifecycle ? { sourceLifecycle: entry.sourceLifecycle } : {}),
+    ...(entry.sourceAccessType ? { sourceAccessType: entry.sourceAccessType } : {}),
+    ...(entry.evidenceUrls ? { evidenceUrls: [...entry.evidenceUrls].sort() } : {}),
+    ...(entry.authorityType ? { authorityType: entry.authorityType } : {}),
+    ...(entry.datasetIdentifier ? { datasetIdentifier: entry.datasetIdentifier } : {}),
+    importerVersion: TURKEY_ADM3_IMPORTER_VERSION
   };
+}
+
+function resolveAdm3AcquireUrl(entry: TurkeyAdm3ProvinceCatalogEntry): string {
+  if (entry.sourcePath) {
+    return entry.sourcePath;
+  }
+
+  const sourceUrl = entry.downloadUrl ?? entry.sourceUrl;
+
+  if (entry.adapter.id === "arcgis-rest-json") {
+    return createArcGisQueryUrl(sourceUrl);
+  }
+
+  return sourceUrl;
+}
+
+function createArcGisQueryUrl(input: string): string {
+  if (!/^https?:\/\//i.test(input)) {
+    return input;
+  }
+
+  const url = new URL(input);
+
+  if (/\/query$/i.test(url.pathname) || url.searchParams.get("f") === "json") {
+    return url.href;
+  }
+
+  url.pathname = `${url.pathname.replace(/\/$/, "")}/query`;
+  url.searchParams.set("where", "1=1");
+  url.searchParams.set("outFields", "*");
+  url.searchParams.set("returnGeometry", "true");
+  url.searchParams.set("f", "json");
+  url.searchParams.set("outSR", "4326");
+
+  return url.href;
 }
 
 function validateCatalogEntry(provinceCode: string, input: unknown): TerritoryCountryBuildIssue[] {
@@ -1570,8 +2250,14 @@ function validateCatalogEntry(provinceCode: string, input: unknown): TerritoryCo
 
   const entry = input as Partial<TurkeyAdm3ProvinceCatalogEntry>;
   const normalizedProvinceCode = normalizeProvinceCode(provinceCode);
+  const gateIssues = evaluateProductionGate(entry, provinceCode);
+  issues.push(...gateIssues);
 
-  for (const field of [
+  if (gateIssues.some((issue) => issue.severity === "error")) {
+    return issues.sort(compareIssues);
+  }
+
+  const requiredFields = [
     "provinceCode",
     "provinceName",
     "providerId",
@@ -1585,7 +2271,9 @@ function validateCatalogEntry(provinceCode: string, input: unknown): TerritoryCo
     "crs",
     "format",
     "adapter"
-  ] as const) {
+  ] as const;
+
+  for (const field of requiredFields) {
     if (entry[field] === undefined || entry[field] === "") {
       issues.push(
         createIssue(
@@ -1626,20 +2314,108 @@ function validateCatalogEntry(provinceCode: string, input: unknown): TerritoryCo
     );
   }
 
-  if (!isSupportedLonLatCrs(entry.crs)) {
+  if (!isSupportedTurkeyAdm3Crs(entry.crs)) {
     issues.push(
       createIssue(
         "TR_ADM3_CRS_UNSUPPORTED",
-        `Turkey ADM3 catalog entry ${provinceCode} must declare EPSG:4326 or OGC:CRS84 until a reprojection adapter is added.`
+        `Turkey ADM3 catalog entry ${provinceCode} must declare EPSG:4326, OGC:CRS84, or a supported explicit reprojection CRS.`
       )
     );
   }
 
-  if (!isRecord(entry.adapter) || !isSupportedAdapter(entry.adapter.id)) {
+  if (!isSupportedTurkeyAdm3SourceFormat(entry.format)) {
+    issues.push(
+      createIssue(
+        "TR_ADM3_SOURCE_FORMAT_UNSUPPORTED",
+        `Turkey ADM3 catalog entry ${provinceCode} uses unsupported source format '${String(
+          entry.format
+        )}'.`
+      )
+    );
+  }
+
+  if (!isRecord(entry.adapter) || !isSupportedTurkeyAdm3Adapter(entry.adapter.id)) {
     issues.push(
       createIssue(
         "TR_ADM3_ADAPTER_UNSUPPORTED",
         `Turkey ADM3 catalog entry ${provinceCode} uses an unsupported provider adapter.`
+      )
+    );
+  }
+
+  return issues.sort(compareIssues);
+}
+
+function evaluateProductionGate(
+  entry: Partial<TurkeyAdm3ProvinceCatalogEntry>,
+  provinceCode: string
+): TerritoryCountryBuildIssue[] {
+  const issues: TerritoryCountryBuildIssue[] = [];
+  const licenseState =
+    entry.licenseState ?? licenseStateFromRedistributionStatus(entry.redistributionStatus);
+
+  if (entry.productionEligible === false) {
+    issues.push(
+      createIssue(
+        "TR_ADM3_SOURCE_NOT_APPROVED_FOR_PRODUCTION",
+        `Turkey ADM3 catalog entry ${provinceCode} is not marked production-eligible in the source registry.`
+      )
+    );
+  }
+
+  if (entry.sourceLifecycle && entry.sourceLifecycle !== "approved") {
+    issues.push(
+      createIssue(
+        "TR_ADM3_SOURCE_NOT_APPROVED_FOR_PRODUCTION",
+        `Turkey ADM3 catalog entry ${provinceCode} lifecycle is '${entry.sourceLifecycle}', not approved.`
+      )
+    );
+  }
+
+  if (
+    entry.boundarySourceClass &&
+    entry.boundarySourceClass !== "official-local" &&
+    entry.boundarySourceClass !== "official-national"
+  ) {
+    issues.push(
+      createIssue(
+        "TR_ADM3_SOURCE_NOT_APPROVED_FOR_PRODUCTION",
+        `Turkey ADM3 catalog entry ${provinceCode} boundarySourceClass is '${entry.boundarySourceClass}', not official.`
+      )
+    );
+  }
+
+  if (licenseState !== "approved") {
+    issues.push(
+      createIssue(
+        licenseState === "pending"
+          ? "TR_ADM3_SOURCE_LICENSE_PENDING"
+          : licenseState === "restricted"
+            ? "TR_ADM3_SOURCE_LICENSE_RESTRICTED"
+            : "TR_ADM3_SOURCE_LICENSE_UNKNOWN",
+        `Turkey ADM3 catalog entry ${provinceCode} license state is '${licenseState}'.`
+      )
+    );
+  }
+
+  if (entry.redistributionStatus && entry.redistributionStatus !== "allowed") {
+    issues.push(
+      createIssue(
+        "TR_ADM3_SOURCE_REDISTRIBUTION_RESTRICTED",
+        `Turkey ADM3 catalog entry ${provinceCode} redistributionStatus is '${entry.redistributionStatus}'.`
+      )
+    );
+  }
+
+  if (
+    entry.sourceAccessType &&
+    entry.sourceAccessType !== "public-download" &&
+    entry.sourceAccessType !== "public-api"
+  ) {
+    issues.push(
+      createIssue(
+        "TR_ADM3_SOURCE_ACCESS_NOT_PUBLIC",
+        `Turkey ADM3 catalog entry ${provinceCode} access type is '${entry.sourceAccessType}'.`
       )
     );
   }
@@ -1717,74 +2493,40 @@ function createTurkeyV2Adm3SourceIdentity(input: TurkeyV2Adm3StableIdInput): str
   return slugifyTerritoryIdPart(realSourceIdentity);
 }
 
-function isSupportedLonLatCrs(input: unknown): boolean {
-  if (typeof input !== "string") {
-    return false;
-  }
-
-  const normalized = input.trim().toUpperCase().replace(/\s+/g, "");
-
-  return (
-    normalized === "EPSG:4326" ||
-    normalized === "OGC:CRS84" ||
-    normalized === "CRS84" ||
-    (normalized.includes("OGC:CRS84") && normalized.includes("EPSG:4326"))
-  );
-}
-
-function resolveTurkeyAdm3ParentMapping(
-  adapter: TurkeyAdm3ProviderAdapterConfig,
-  rawParent: string
-): string | undefined {
-  if (!("parentMappings" in adapter) || !adapter.parentMappings) {
-    return undefined;
-  }
-
-  const direct = adapter.parentMappings[rawParent];
-
-  if (direct) {
-    return direct;
-  }
-
-  const normalizedRaw = normalizeTurkeyAdm3ParentKey(rawParent);
-  const normalized = Object.entries(adapter.parentMappings).find(
-    ([key]) => normalizeTurkeyAdm3ParentKey(key) === normalizedRaw
-  );
-
-  return normalized?.[1];
-}
-
-function normalizeTurkeyAdm3ParentKey(input: string): string {
-  return input.trim().normalize("NFKC").toLocaleLowerCase("tr-TR").replace(/\s+/g, " ");
-}
-
 async function countProvinceSourceFeatures(
   entry: TurkeyAdm3ProvinceCatalogEntry,
   localPath: string
 ): Promise<number> {
-  const sourceText = await readFile(localPath, "utf8");
+  const sourceBytes = await readFile(localPath);
+  const parsed = parseTurkeyAdm3ProviderSource(
+    {
+      provinceCode: entry.provinceCode,
+      provinceName: entry.provinceName,
+      providerId: entry.providerId,
+      crs: entry.crs,
+      format: entry.format,
+      adapter: entry.adapter
+    },
+    sourceBytes
+  );
 
-  if (entry.adapter.id === "kml-description-table") {
-    return parseTurkeyGaziantepAdm3Kml(sourceText).length;
-  }
-
-  const input = JSON.parse(sourceText) as unknown;
-
-  return isRecord(input) && Array.isArray(input.features) ? input.features.length : 0;
+  return parsed.report.rawFeatureCount;
 }
 
 function createAdm3RawProperties(input: {
   province: TurkeyAdm3ProvinceSourceLock;
   sourceId: string;
   sourceObjectId: string;
-  sourceParentId: string;
+  sourceParentId?: string;
   parentAdm2Id?: string;
   name: string;
   semanticType: TerritorySemanticAdminType;
   localType: string;
   geometry: TerritoryGeometry;
+  originalGeometryHash?: string;
+  effectiveGeometryHash?: string;
 }): Record<string, unknown> {
-  const geometryHash = hashGeometryIgnoringRingOrder(input.geometry);
+  const geometryHash = input.effectiveGeometryHash ?? hashGeometryIgnoringRingOrder(input.geometry);
 
   return {
     territorykit: {
@@ -1795,7 +2537,7 @@ function createAdm3RawProperties(input: {
       sourceId: input.sourceId,
       sourceObjectId: input.sourceObjectId,
       sourceNativeId: input.sourceId,
-      sourceParentId: input.sourceParentId,
+      ...(input.sourceParentId ? { sourceParentId: input.sourceParentId } : {}),
       parentAdm2Id: input.parentAdm2Id,
       semanticType: input.semanticType,
       localType: input.localType,
@@ -1815,8 +2557,20 @@ function createAdm3RawProperties(input: {
         input.province.licenseState ??
         licenseStateFromRedistributionStatus(input.province.redistributionStatus),
       geometryHash,
+      ...(input.originalGeometryHash ? { originalGeometryHash: input.originalGeometryHash } : {}),
+      effectiveGeometryHash: geometryHash,
       license: input.province.license,
-      attribution: input.province.attribution
+      attribution: input.province.attribution,
+      ...(input.province.registryEntryId
+        ? { registryEntryId: input.province.registryEntryId }
+        : {}),
+      ...(input.province.datasetIdentifier
+        ? { sourceDatasetId: input.province.datasetIdentifier }
+        : {}),
+      ...(input.province.importerVersion
+        ? { importerVersion: input.province.importerVersion }
+        : {}),
+      ...(input.province.evidenceUrls ? { evidenceUrls: input.province.evidenceUrls } : {})
     },
     sourceId: input.sourceId,
     parentSourceId: input.parentAdm2Id ?? input.sourceParentId,
@@ -1968,41 +2722,6 @@ function bboxesIntersect(left: readonly number[], right: readonly number[]): boo
     (left[3] ?? 0) < (right[1] ?? 0) ||
     (right[3] ?? 0) < (left[1] ?? 0)
   );
-}
-
-function readGeometry(input: unknown): TerritoryGeometry | undefined {
-  if (!isRecord(input) || (input.type !== "Polygon" && input.type !== "MultiPolygon")) {
-    return undefined;
-  }
-
-  return input as unknown as TerritoryGeometry;
-}
-
-function readFeatureId(feature: Record<string, unknown>): string | undefined {
-  const id = feature.id;
-  return typeof id === "string" || typeof id === "number" ? String(id) : undefined;
-}
-
-function normalizeAdm3SemanticType(input: string): TerritorySemanticAdminType | undefined {
-  const normalized = input.trim().toLowerCase().replace(/_/g, "-");
-
-  if (ALLOWED_ADM3_SEMANTIC_TYPES.has(normalized as TerritorySemanticAdminType)) {
-    return normalized as TerritorySemanticAdminType;
-  }
-
-  if (normalized === "mahalle") {
-    return "neighbourhood";
-  }
-
-  if (normalized === "koy" || normalized === "köy") {
-    return "village";
-  }
-
-  return undefined;
-}
-
-function isSupportedAdapter(input: unknown): input is TurkeyAdm3ProviderAdapterId {
-  return input === "geojson-property-map" || input === "kml-description-table";
 }
 
 function groupZonesByProvince(zones: readonly BuiltCountryZone[]): Map<string, BuiltCountryZone[]> {

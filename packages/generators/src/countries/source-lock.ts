@@ -126,6 +126,7 @@ export async function createTerritoryCountrySourceLock(
   const turkeyAdm3Extension = useTurkeyAdm3ProvinceCatalog
     ? await createTurkeyAdm3SourceLockExtension({
         ...(options.adm3CatalogPath ? { catalogPath: options.adm3CatalogPath } : {}),
+        ...(options.adm3RegistryPath ? { registryPath: options.adm3RegistryPath } : {}),
         provinceCodes: adm3ProvinceCodes ?? [],
         generatedAt: resolvedAt,
         cwd: options.cwd ?? process.cwd(),
