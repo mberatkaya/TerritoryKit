@@ -202,6 +202,8 @@ export interface TurkeyOsmBarrierExtractionOptions {
   pbfPath: string;
   sourceLock: TurkeyOsmSnapshotSourceLock;
   maxPrimitiveBlocks?: number;
+  adm2Zones?: readonly TerritoryZone[];
+  spatialPaddingDegrees?: number;
 }
 
 export interface TurkeyOsmAdm2BarrierArtifact {
@@ -397,14 +399,102 @@ interface ParsedPbfInventory {
   relationMembers: Map<number, OsmWay>;
   relations: PendingRelation[];
   localitySeeds: TurkeySmartFallbackLocalitySeed[];
-  neededNodeIds: Set<number>;
+  neededNodeIds: NumberLookupSet;
   primitiveBlockCount: number;
+  passes: number;
+}
+
+interface SpatialExtractionFilter {
+  bboxes: readonly TerritoryBBox[];
+}
+
+interface SpatialCandidateNodes {
+  nodeIds: NumberLookupSet;
+  localitySeeds: TurkeySmartFallbackLocalitySeed[];
+}
+
+interface NumberLookupSet {
+  readonly size: number;
+  add(value: number): void;
+  has(value: number): boolean;
+}
+
+interface OsmNodeLookup {
+  readonly size: number;
+  get(id: number): OsmNode | undefined;
+}
+
+class ShardedNumberLookupSet implements NumberLookupSet {
+  private readonly buckets: Array<Set<number>>;
+  private count = 0;
+
+  constructor(bucketCount = OSM_LOOKUP_BUCKET_COUNT) {
+    this.buckets = Array.from({ length: bucketCount }, () => new Set<number>());
+  }
+
+  get size(): number {
+    return this.count;
+  }
+
+  add(value: number): void {
+    const bucket = this.bucketFor(value);
+
+    if (!bucket.has(value)) {
+      bucket.add(value);
+      this.count += 1;
+    }
+  }
+
+  has(value: number): boolean {
+    return this.bucketFor(value).has(value);
+  }
+
+  private bucketFor(value: number): Set<number> {
+    const index = Math.abs(value) % this.buckets.length;
+    return this.buckets[index]!;
+  }
+}
+
+class ShardedOsmNodeLookup implements OsmNodeLookup {
+  private readonly buckets: Array<Map<number, OsmNode>>;
+  private count = 0;
+
+  constructor(bucketCount = OSM_LOOKUP_BUCKET_COUNT) {
+    this.buckets = Array.from({ length: bucketCount }, () => new Map<number, OsmNode>());
+  }
+
+  get size(): number {
+    return this.count;
+  }
+
+  set(node: OsmNode): void {
+    const bucket = this.bucketFor(node.id);
+
+    if (!bucket.has(node.id)) {
+      this.count += 1;
+    }
+
+    bucket.set(node.id, node);
+  }
+
+  get(id: number): OsmNode | undefined {
+    return this.bucketFor(id).get(id);
+  }
+
+  private bucketFor(value: number): Map<number, OsmNode> {
+    const index = Math.abs(value) % this.buckets.length;
+    return this.buckets[index]!;
+  }
 }
 
 const textDecoder = new TextDecoder();
 const CLIPPER = {
   intersection: polygonClipping.intersection
 };
+const OSM_LOOKUP_BUCKET_COUNT = 256;
+const TURKEY_OSM_SPATIAL_FILTER_PADDING_DEGREES = 0.03;
+const TURKEY_OSM_EXTRACTION_FALLBACK_BATCH_SIZE = 16;
+const TURKEY_OSM_SPATIAL_EXTRACTION_MIN_BYTES = 50_000_000;
 
 const ROAD_TAGS = [
   "motorway",
@@ -571,7 +661,15 @@ export async function extractTurkeyOsmBarriersFromPbf(
       options.maxPrimitiveBlocks !== undefined
         ? { maxPrimitiveBlocks: options.maxPrimitiveBlocks }
         : {};
-    const inventory = await collectTurkeyOsmBarrierInventory(options.pbfPath, parserOptions);
+    const spatialFilter = createSpatialExtractionFilter(
+      options.adm2Zones ?? [],
+      options.spatialPaddingDegrees ?? TURKEY_OSM_SPATIAL_FILTER_PADDING_DEGREES
+    );
+    const inventory = await collectTurkeyOsmBarrierInventory(
+      options.pbfPath,
+      parserOptions,
+      spatialFilter
+    );
     const nodes = await collectNeededNodes(options.pbfPath, inventory.neededNodeIds, parserOptions);
     const collections = createEmptyBarrierCollections();
 
@@ -628,7 +726,7 @@ export async function extractTurkeyOsmBarriersFromPbf(
       sourceLock: options.sourceLock,
       parser: {
         package: "@osmix/pbf",
-        passes: 2,
+        passes: inventory.passes + (inventory.neededNodeIds.size > 0 ? 1 : 0),
         parsedPrimitiveBlocks: inventory.primitiveBlockCount,
         relevantWayCount: inventory.ways.length,
         relationCount: inventory.relations.length,
@@ -695,35 +793,27 @@ export async function buildTurkeyOsmBarrierArtifacts(
   }
 
   const rawPbfSizeBytes = (await stat(options.snapshotPath)).size;
-  const normalized = await extractTurkeyOsmBarriersFromPbf({
-    pbfPath: options.snapshotPath,
-    sourceLock: options.sourceLock,
-    ...(options.maxPrimitiveBlocks !== undefined
-      ? { maxPrimitiveBlocks: options.maxPrimitiveBlocks }
-      : {})
-  });
   const artifacts: TurkeyOsmBarrierBuildResult["artifacts"] = [];
   const issues: TurkeyOsmBarrierIssue[] = [];
   const concurrency = Math.max(1, Math.floor(options.concurrency ?? 2));
   const mode = options.mode ?? "strict";
-  let nextIndex = 0;
+  const useSpatialExtraction = rawPbfSizeBytes >= TURKEY_OSM_SPATIAL_EXTRACTION_MIN_BYTES;
 
   await mkdir(outputRoot, { recursive: true });
 
-  async function worker(): Promise<void> {
-    while (nextIndex < selectedAdm2.length) {
-      const index = nextIndex;
-      nextIndex += 1;
-      const adm2 = selectedAdm2[index];
+  for (const batch of createOsmExtractionBatches(selectedAdm2)) {
+    const pendingAdm2: TerritoryZone[] = [];
 
-      if (!adm2) {
+    for (const adm2 of batch) {
+      if (options.force) {
+        pendingAdm2.push(adm2);
         continue;
       }
 
       try {
         const existing = await readReusableArtifact(adm2, outputRoot, options.sourceLock);
 
-        if (existing && !options.force) {
+        if (existing) {
           artifacts.push({
             adm2Id: adm2.id,
             outputPath: artifactDirectory(outputRoot, adm2.id),
@@ -735,38 +825,73 @@ export async function buildTurkeyOsmBarrierArtifacts(
           continue;
         }
 
-        const artifact = buildAdm2BarrierArtifact({
-          adm2,
-          normalized,
-          generatedAt: options.generatedAt ?? new Date(0).toISOString()
-        });
-        const target = artifactDirectory(outputRoot, adm2.id);
-        await writeAdm2BarrierArtifact(target, artifact);
-        artifacts.push({
-          adm2Id: adm2.id,
-          outputPath: target,
-          artifactChecksum: artifact.manifest.artifactChecksum,
-          qualityStatus: artifact.quality.status,
-          sizeBytes: await directorySizeBytes(target),
-          skipped: false
-        });
-      } catch (error) {
-        const issue: TurkeyOsmBarrierIssue = {
-          code: "OSM_BARRIER_ADM2_PROCESSING_FAILED",
-          severity: "error",
-          message: error instanceof Error ? error.message : String(error),
-          adm2Id: adm2.id
-        };
-        issues.push(issue);
+        pendingAdm2.push(adm2);
+      } catch {
+        pendingAdm2.push(adm2);
+      }
+    }
 
-        if (mode === "strict") {
-          throw new TurkeyOsmBarrierPipelineError(issue.code, issue.message, { issue });
+    if (pendingAdm2.length === 0) {
+      continue;
+    }
+
+    const normalized = await extractTurkeyOsmBarriersFromPbf({
+      pbfPath: options.snapshotPath,
+      sourceLock: options.sourceLock,
+      ...(useSpatialExtraction ? { adm2Zones: pendingAdm2 } : {}),
+      ...(options.maxPrimitiveBlocks !== undefined
+        ? { maxPrimitiveBlocks: options.maxPrimitiveBlocks }
+        : {})
+    });
+    let nextIndex = 0;
+
+    async function worker(): Promise<void> {
+      while (nextIndex < pendingAdm2.length) {
+        const index = nextIndex;
+        nextIndex += 1;
+        const adm2 = pendingAdm2[index];
+
+        if (!adm2) {
+          continue;
+        }
+
+        try {
+          const artifact = buildAdm2BarrierArtifact({
+            adm2,
+            normalized,
+            generatedAt: options.generatedAt ?? new Date(0).toISOString()
+          });
+          const target = artifactDirectory(outputRoot, adm2.id);
+          await writeAdm2BarrierArtifact(target, artifact);
+          artifacts.push({
+            adm2Id: adm2.id,
+            outputPath: target,
+            artifactChecksum: artifact.manifest.artifactChecksum,
+            qualityStatus: artifact.quality.status,
+            sizeBytes: await directorySizeBytes(target),
+            skipped: false
+          });
+        } catch (error) {
+          const issue: TurkeyOsmBarrierIssue = {
+            code: "OSM_BARRIER_ADM2_PROCESSING_FAILED",
+            severity: "error",
+            message: error instanceof Error ? error.message : String(error),
+            adm2Id: adm2.id
+          };
+          issues.push(issue);
+
+          if (mode === "strict") {
+            throw new TurkeyOsmBarrierPipelineError(issue.code, issue.message, { issue });
+          }
         }
       }
     }
+
+    await Promise.all(
+      Array.from({ length: Math.min(concurrency, pendingAdm2.length) }, () => worker())
+    );
   }
 
-  await Promise.all(Array.from({ length: concurrency }, () => worker()));
   artifacts.sort((left, right) => left.adm2Id.localeCompare(right.adm2Id));
   issues.sort(compareIssues);
   const processedAdm2Count = artifacts.filter((artifact) => !artifact.skipped).length;
@@ -1175,34 +1300,99 @@ async function readPbfHeader(path: string): Promise<OsmPbfHeaderBlock> {
   return header;
 }
 
-async function collectTurkeyOsmBarrierInventory(
+function createSpatialExtractionFilter(
+  adm2Zones: readonly TerritoryZone[],
+  paddingDegrees: number
+): SpatialExtractionFilter | undefined {
+  if (adm2Zones.length === 0) {
+    return undefined;
+  }
+
+  return {
+    bboxes: adm2Zones
+      .map((zone) => expandBbox(computeGeometryBBox(zone.geometry), paddingDegrees))
+      .sort(compareBboxes)
+  };
+}
+
+async function collectSpatialCandidateNodes(
   pbfPath: string,
+  spatialFilter: SpatialExtractionFilter,
   options: { maxPrimitiveBlocks?: number }
-): Promise<ParsedPbfInventory> {
+): Promise<SpatialCandidateNodes> {
   const stream = Readable.toWeb(createReadStream(pbfPath)) as ReadableStream<Uint8Array>;
   const { blocks } = await readOsmPbf(stream);
-  const ways: PendingWay[] = [];
-  const relations: PendingRelation[] = [];
-  const relationWayIds = new Set<number>();
-  const relationMembers = new Map<number, OsmWay>();
+  const nodeIds = new ShardedNumberLookupSet();
   const localitySeeds: TurkeySmartFallbackLocalitySeed[] = [];
-  const neededNodeIds = new Set<number>();
   let primitiveBlockCount = 0;
 
   for await (const block of blocks) {
     for (const group of block.primitivegroup) {
       for (const node of readGroupNodes(block, group)) {
+        if (!spatialFilterContainsPoint(spatialFilter, node.coordinate)) {
+          continue;
+        }
+
+        nodeIds.add(node.id);
         const seed = localitySeedFromNode(node);
 
         if (seed) {
           localitySeeds.push(seed);
         }
       }
+    }
+
+    primitiveBlockCount += 1;
+
+    if (
+      options.maxPrimitiveBlocks !== undefined &&
+      primitiveBlockCount >= options.maxPrimitiveBlocks
+    ) {
+      break;
+    }
+  }
+
+  return { nodeIds, localitySeeds: dedupeLocalitySeeds(localitySeeds) };
+}
+
+async function collectTurkeyOsmBarrierInventory(
+  pbfPath: string,
+  options: { maxPrimitiveBlocks?: number },
+  spatialFilter?: SpatialExtractionFilter
+): Promise<ParsedPbfInventory> {
+  const spatialCandidates = spatialFilter
+    ? await collectSpatialCandidateNodes(pbfPath, spatialFilter, options)
+    : undefined;
+  const stream = Readable.toWeb(createReadStream(pbfPath)) as ReadableStream<Uint8Array>;
+  const { blocks } = await readOsmPbf(stream);
+  const ways: PendingWay[] = [];
+  const relations: PendingRelation[] = [];
+  const relationWayIds = new ShardedNumberLookupSet();
+  const relationMembers = new Map<number, OsmWay>();
+  const localitySeeds: TurkeySmartFallbackLocalitySeed[] = [];
+  const neededNodeIds = new ShardedNumberLookupSet();
+  let primitiveBlockCount = 0;
+  let passes = spatialCandidates ? 2 : 1;
+
+  for await (const block of blocks) {
+    for (const group of block.primitivegroup) {
+      if (!spatialCandidates) {
+        for (const node of readGroupNodes(block, group)) {
+          const seed = localitySeedFromNode(node);
+
+          if (seed) {
+            localitySeeds.push(seed);
+          }
+        }
+      }
 
       for (const way of readGroupWays(block, group)) {
         const classification = classifyBarrierTags(way.tags, "way");
 
-        if (!classification) {
+        if (
+          !classification ||
+          (spatialCandidates && !way.refs.some((ref) => spatialCandidates.nodeIds.has(ref)))
+        ) {
           continue;
         }
 
@@ -1247,14 +1437,41 @@ async function collectTurkeyOsmBarrierInventory(
   }
 
   if (relationWayIds.size > 0) {
-    const relationWayInventory = await collectRelationMemberWays(pbfPath, relationWayIds, options);
+    const relationWayInventory = await collectRelationMemberWays(
+      pbfPath,
+      relationWayIds,
+      options,
+      spatialCandidates?.nodeIds
+    );
+    const retainedRelationWayIds = new Set<number>();
+    passes += 1;
 
     for (const way of relationWayInventory) {
+      if (
+        spatialCandidates &&
+        !way.refs.some((ref) => spatialCandidates.nodeIds.has(ref) || neededNodeIds.has(ref))
+      ) {
+        continue;
+      }
+
       relationMembers.set(way.id, way);
+      retainedRelationWayIds.add(way.id);
 
       for (const ref of way.refs) {
         neededNodeIds.add(ref);
       }
+    }
+
+    if (spatialCandidates) {
+      relations.splice(
+        0,
+        relations.length,
+        ...relations.filter((relation) =>
+          relation.members.some(
+            (member) => member.type === "way" && retainedRelationWayIds.has(member.ref)
+          )
+        )
+      );
     }
   }
 
@@ -1262,16 +1479,20 @@ async function collectTurkeyOsmBarrierInventory(
     ways,
     relationMembers,
     relations,
-    localitySeeds: dedupeLocalitySeeds(localitySeeds),
+    localitySeeds: dedupeLocalitySeeds(
+      spatialCandidates ? spatialCandidates.localitySeeds : localitySeeds
+    ),
     neededNodeIds,
-    primitiveBlockCount
+    primitiveBlockCount,
+    passes
   };
 }
 
 async function collectRelationMemberWays(
   pbfPath: string,
-  wantedWayIds: ReadonlySet<number>,
-  options: { maxPrimitiveBlocks?: number }
+  wantedWayIds: NumberLookupSet,
+  options: { maxPrimitiveBlocks?: number },
+  candidateNodeIds?: NumberLookupSet
 ): Promise<OsmWay[]> {
   const stream = Readable.toWeb(createReadStream(pbfPath)) as ReadableStream<Uint8Array>;
   const { blocks } = await readOsmPbf(stream);
@@ -1281,7 +1502,10 @@ async function collectRelationMemberWays(
   for await (const block of blocks) {
     for (const group of block.primitivegroup) {
       for (const way of readGroupWays(block, group)) {
-        if (wantedWayIds.has(way.id)) {
+        if (
+          wantedWayIds.has(way.id) &&
+          (!candidateNodeIds || way.refs.some((ref) => candidateNodeIds.has(ref)))
+        ) {
           ways.push(way);
         }
       }
@@ -1302,12 +1526,12 @@ async function collectRelationMemberWays(
 
 async function collectNeededNodes(
   pbfPath: string,
-  neededNodeIds: ReadonlySet<number>,
+  neededNodeIds: NumberLookupSet,
   options: { maxPrimitiveBlocks?: number }
-): Promise<Map<number, OsmNode>> {
+): Promise<OsmNodeLookup> {
   const stream = Readable.toWeb(createReadStream(pbfPath)) as ReadableStream<Uint8Array>;
   const { blocks } = await readOsmPbf(stream);
-  const nodes = new Map<number, OsmNode>();
+  const nodes = new ShardedOsmNodeLookup();
   let primitiveBlockCount = 0;
 
   if (neededNodeIds.size === 0) {
@@ -1318,7 +1542,7 @@ async function collectNeededNodes(
     for (const group of block.primitivegroup) {
       for (const node of readGroupNodes(block, group)) {
         if (neededNodeIds.has(node.id)) {
-          nodes.set(node.id, node);
+          nodes.set(node);
         }
       }
     }
@@ -1566,7 +1790,7 @@ function classifyBarrierTags(
   return undefined;
 }
 
-function wayGeometry(way: PendingWay, nodes: ReadonlyMap<number, OsmNode>): Geometry | undefined {
+function wayGeometry(way: PendingWay, nodes: OsmNodeLookup): Geometry | undefined {
   const coordinates = refsToCoordinates(way.refs, nodes);
 
   if (coordinates.length < 2) {
@@ -1589,7 +1813,7 @@ function wayGeometry(way: PendingWay, nodes: ReadonlyMap<number, OsmNode>): Geom
 function relationGeometry(
   relation: PendingRelation,
   ways: ReadonlyMap<number, OsmWay>,
-  nodes: ReadonlyMap<number, OsmNode>
+  nodes: OsmNodeLookup
 ): Geometry | undefined {
   if (relation.classification.geometryKind !== "polygon") {
     return undefined;
@@ -1619,7 +1843,7 @@ function relationGeometry(
   return { type: "MultiPolygon", coordinates: rings.map((ring) => [ring]) };
 }
 
-function refsToCoordinates(refs: readonly number[], nodes: ReadonlyMap<number, OsmNode>): LngLat[] {
+function refsToCoordinates(refs: readonly number[], nodes: OsmNodeLookup): LngLat[] {
   const coordinates: LngLat[] = [];
 
   for (const ref of refs) {
@@ -2206,6 +2430,54 @@ function selectAdm2Zones(
   return options.maxDistricts !== undefined ? selected.slice(0, options.maxDistricts) : selected;
 }
 
+function createOsmExtractionBatches(adm2Zones: readonly TerritoryZone[]): TerritoryZone[][] {
+  const batchesByProvince = new Map<string, TerritoryZone[]>();
+  const fallbackZones: TerritoryZone[] = [];
+
+  for (const zone of adm2Zones) {
+    const provinceCode = readAdm2ProvinceCode(zone);
+
+    if (!provinceCode) {
+      fallbackZones.push(zone);
+      continue;
+    }
+
+    batchesByProvince.set(provinceCode, [...(batchesByProvince.get(provinceCode) ?? []), zone]);
+  }
+
+  const provinceBatches = [...batchesByProvince.entries()]
+    .sort(([left], [right]) => left.localeCompare(right))
+    .map(([, zones]) => zones.sort(compareAdm2Zones));
+  const fallbackBatches = chunk(
+    fallbackZones.sort(compareAdm2Zones),
+    TURKEY_OSM_EXTRACTION_FALLBACK_BATCH_SIZE
+  );
+
+  return [...provinceBatches, ...fallbackBatches];
+}
+
+function readAdm2ProvinceCode(zone: TerritoryZone): string | undefined {
+  const properties = isRecord(zone.properties) ? zone.properties : undefined;
+  const territory = properties && isRecord(properties.territory) ? properties.territory : undefined;
+  const value = territory?.provinceCode;
+
+  return typeof value === "string" && value.trim() ? value.trim() : undefined;
+}
+
+function compareAdm2Zones(left: TerritoryZone, right: TerritoryZone): number {
+  return left.id.localeCompare(right.id);
+}
+
+function chunk<T>(values: readonly T[], size: number): T[][] {
+  const chunks: T[][] = [];
+
+  for (let index = 0; index < values.length; index += size) {
+    chunks.push(values.slice(index, index + size));
+  }
+
+  return chunks;
+}
+
 function artifactDirectory(outputRoot: string, adm2Id: string): string {
   return join(outputRoot, "ADM2", safePathPart(adm2Id));
 }
@@ -2596,6 +2868,26 @@ function collectCoordinates(geometry: Geometry): LngLat[] {
 
 function bboxesIntersect(left: TerritoryBBox, right: TerritoryBBox): boolean {
   return left[0] <= right[2] && left[2] >= right[0] && left[1] <= right[3] && left[3] >= right[1];
+}
+
+function spatialFilterContainsPoint(filter: SpatialExtractionFilter, point: LngLat): boolean {
+  return filter.bboxes.some(
+    (bbox) =>
+      point[0] >= bbox[0] && point[0] <= bbox[2] && point[1] >= bbox[1] && point[1] <= bbox[3]
+  );
+}
+
+function expandBbox(bbox: TerritoryBBox, paddingDegrees: number): TerritoryBBox {
+  return [
+    roundCoordinate(bbox[0] - paddingDegrees),
+    roundCoordinate(bbox[1] - paddingDegrees),
+    roundCoordinate(bbox[2] + paddingDegrees),
+    roundCoordinate(bbox[3] + paddingDegrees)
+  ];
+}
+
+function compareBboxes(left: TerritoryBBox, right: TerritoryBBox): number {
+  return left[0] - right[0] || left[1] - right[1] || left[2] - right[2] || left[3] - right[3];
 }
 
 function compareFeatures(left: Feature, right: Feature): number {

@@ -129,8 +129,11 @@ If the cached file hash differs from the lock, the CLI returns
 
 ## Barrier Classification
 
-The extractor uses `@osmix/pbf` and multi-pass streaming over the cached country PBF. It keeps
-relevant way/relation metadata and referenced node ids, then resolves only needed coordinates.
+The extractor uses `@osmix/pbf` and multi-pass streaming over the cached country PBF. Small
+fixtures can still use the global extraction path. Real country snapshots use an ADM2 bbox
+prefilter and province-sized batches so the portable Node.js pipeline does not materialize the full
+national OSM node graph in memory. Each batch keeps relevant way/relation metadata touching the
+selected ADM2 window, then resolves only needed coordinates.
 
 Barrier layers:
 
@@ -241,14 +244,16 @@ inputs, and legacy-required districts.
 
 ## Resume And Failure Modes
 
-Barrier builds are resumable. An existing ADM2 artifact is reused when both match:
+Barrier builds are resumable. An existing ADM2 artifact is reused before the PBF is parsed when
+both match:
 
 - `sourceSnapshotChecksum`
 - `algorithmVersion`
 
-Use `--force` to rebuild. The default mode is strict, so the first serious ADM2 processing error
-fails the command. `--best-effort` records `OSM_BARRIER_ADM2_PROCESSING_FAILED` and continues with
-other districts.
+Use `--force` to rebuild. Full nationwide builds are processed in deterministic province-oriented
+batches, with `--concurrency` controlling ADM2 artifact writes inside each batch. The default mode is
+strict, so the first serious ADM2 processing error fails the command. `--best-effort` records
+`OSM_BARRIER_ADM2_PROCESSING_FAILED` and continues with other districts.
 
 ## Troubleshooting
 

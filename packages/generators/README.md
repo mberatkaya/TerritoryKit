@@ -169,8 +169,9 @@ const generated = createTurkeyOsmSmartFallbackGeneratedOptions(artifact);
 The pipeline uses the Geofabrik Turkey OpenStreetMap `.osm.pbf` country extract as the default
 provider, locks cached snapshots by SHA-256, extracts road/rail/water/park/landuse barriers and
 locality seeds, clips artifacts to ADM2 geometry, and keeps raw PBF files under `.territory/cache`.
-It feeds the existing smart fallback engine and does not promote OSM place nodes or smart-derived
-output to official administrative boundaries.
+Real-sized PBF builds use ADM2 spatial prefiltering and deterministic province-oriented batches to
+keep memory bounded. The output feeds the existing smart fallback engine and does not promote OSM
+place nodes or smart-derived output to official administrative boundaries.
 
 ## Source Adapters
 
