@@ -250,6 +250,34 @@ export {
   extractTurkeyAdm3OsmPbf
 } from "./turkey-adm3-osm.js";
 export {
+  TURKEY_OSM_BARRIER_ALGORITHM_VERSION,
+  TURKEY_OSM_BARRIER_ARTIFACT_SCHEMA_VERSION,
+  TURKEY_OSM_BARRIER_ATTRIBUTION,
+  TURKEY_OSM_BARRIER_DEFAULT_CACHE_ROOT,
+  TURKEY_OSM_BARRIER_DEFAULT_OUTPUT_ROOT,
+  TURKEY_OSM_BARRIER_DOWNLOAD_URL,
+  TURKEY_OSM_BARRIER_LICENSE,
+  TURKEY_OSM_BARRIER_PROVIDER_ID,
+  TURKEY_OSM_BARRIER_PROVIDER_NAME,
+  TURKEY_OSM_BARRIER_QUALITY_SCHEMA_VERSION,
+  TURKEY_OSM_BARRIER_SNAPSHOT_SOURCE_LOCK_SCHEMA_VERSION,
+  TURKEY_OSM_BARRIER_SOURCE_URL,
+  TURKEY_OSM_SMART_COVERAGE_SCHEMA_VERSION,
+  TurkeyOsmBarrierPipelineError,
+  acquireTurkeyOsmSnapshot,
+  buildTurkeyOsmBarrierArtifacts,
+  createGeofabrikOsmSnapshotProvider,
+  createTurkeyGeofabrikSnapshotDescriptor,
+  createTurkeyOsmBarrierBuildPlan,
+  createTurkeyOsmSmartCoverageReport,
+  createTurkeyOsmSmartFallbackGeneratedOptions,
+  extractTurkeyOsmBarriersFromPbf,
+  parseTurkeyOsmSnapshotSourceLock,
+  readAdm2ZonesFromDataset,
+  readTurkeyOsmAdm2BarrierArtifact,
+  verifyTurkeyOsmSnapshot
+} from "./turkey-osm-barriers.js";
+export {
   TURKEY_V2_HYBRID_ATTRIBUTION_SCHEMA_VERSION,
   TURKEY_V2_HYBRID_BATCH_SCHEMA_VERSION,
   TURKEY_V2_HYBRID_COVERAGE_SCHEMA_VERSION,
@@ -398,6 +426,32 @@ export type {
   TurkeyAdm3OsmParentConfidence,
   TurkeyAdm3OsmSemanticType
 } from "./turkey-adm3-osm.js";
+export type {
+  OsmSnapshotArtifact,
+  OsmSnapshotDescriptor,
+  OsmSnapshotProvider,
+  TurkeyOsmAdm2BarrierArtifact,
+  TurkeyOsmBarrierBuildMode,
+  TurkeyOsmBarrierBuildOptions,
+  TurkeyOsmBarrierBuildPlan,
+  TurkeyOsmBarrierBuildResult,
+  TurkeyOsmBarrierExtractionOptions,
+  TurkeyOsmBarrierFeatureProperties,
+  TurkeyOsmBarrierIssue,
+  TurkeyOsmBarrierIssueCode,
+  TurkeyOsmBarrierIssueSeverity,
+  TurkeyOsmBarrierLayer,
+  TurkeyOsmBarrierManifest,
+  TurkeyOsmBarrierQualityReport,
+  TurkeyOsmNormalizedBarriers,
+  TurkeyOsmSmartCoverageOptions,
+  TurkeyOsmSmartCoverageReport,
+  TurkeyOsmSnapshotAcquireOptions,
+  TurkeyOsmSnapshotDownloadOptions,
+  TurkeyOsmSnapshotSourceLock,
+  TurkeyOsmSnapshotVerifyOptions,
+  TurkeyOsmSnapshotVerifyResult
+} from "./turkey-osm-barriers.js";
 export type {
   TurkeyV2HybridAttributionManifest,
   TurkeyV2HybridBatchBuildOptions,

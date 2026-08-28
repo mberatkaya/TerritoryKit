@@ -44,6 +44,22 @@ roads, rivers, railways, coastlines, forests, and parks can become split candida
 driveways, parking aisles, paths, and other weak tags are ignored or scored too low to publish a
 multi-territory result by themselves.
 
+Production Turkey builds can now get those provider-neutral inputs from the OSM barrier snapshot
+pipeline instead of hand-authored fixtures:
+
+```text
+Geofabrik Turkey PBF
+  -> SHA-256 source lock
+  -> deterministic road/rail/water/park/landuse extraction
+  -> ADM2 clipping
+  -> reusable barrier artifact
+  -> smart fallback input
+```
+
+See [Turkey OSM barrier snapshots](./turkey-osm-barrier-snapshots.md). This snapshot pipeline is
+the production path for OSM-derived barriers; live Overpass remains a development/debugging tool,
+not a production build dependency.
+
 ## Profiles
 
 Profiles tune target zone density and quality expectations:
@@ -107,3 +123,5 @@ algorithm change can coexist with existing generated-zone IDs.
 If OSM-derived barriers are used, output metadata keeps ODbL attribution. If non-OSM provider
 snapshots are supplied, pass `--source-provider`, `--source-dataset-id`, `--source-url`,
 `--license`, and `--attribution` so provenance and redistribution policy remain auditable.
+When OSM barrier artifacts are used, smart provenance links the generated geometry hash back to the
+barrier artifact checksum, OSM snapshot checksum, provider URL, and ODbL attribution.

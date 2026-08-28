@@ -41,9 +41,12 @@ adapter.attach(map);
 ADM3 and deeper sources prefer MVT when available and may fall back to GeoJSON for small fixtures.
 Do not load nationwide neighbourhood geometry as one browser GeoJSON by default.
 
-Partial lower-admin artifacts can be scoped with `parentId`. For example, Turkey ADM3 is currently
-available for Gaziantep ADM2 parents only; an uncovered parent falls back to ADM2 with
-`fallbackReason: "requested-level-unavailable-for-area"` when deepest-available fallback is enabled.
+Partial lower-admin artifacts can be scoped with `parentId`. The legacy Turkey ADM3 partial
+artifact is available for Gaziantep ADM2 parents only; an uncovered parent falls back to ADM2 with
+`fallbackReason: "requested-level-unavailable-for-area"` when deepest-available fallback is
+enabled. The Turkey V2 national playable dataset is a separate external artifact path for
+nationwide ADM3 gameplay coverage. OSM barrier snapshots are build-time generator inputs and should
+not be shipped to browser renderers.
 
 ## License
 

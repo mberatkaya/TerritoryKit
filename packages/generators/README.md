@@ -59,6 +59,10 @@ const realAdjacency = await buildTerritoryAdjacency(dataset, {
 - `inferBBoxAdjacencyConnections(zones, options)` returns adjacency connection objects.
 - `buildTurkeyGameZones(options)` and `buildTurkeyGameZonesWithAdjacency(options)` build Turkey V2
   generated game zones with `urban`, `suburban`, `rural`, `auto`, and `custom` profiles.
+- `acquireTurkeyOsmSnapshot`, `verifyTurkeyOsmSnapshot`,
+  `extractTurkeyOsmBarriersFromPbf`, `buildTurkeyOsmBarrierArtifacts`, and
+  `createTurkeyOsmSmartFallbackGeneratedOptions` provide the Turkey OSM barrier snapshot pipeline
+  for source-locked, offline-rebuildable smart fallback input.
 
 ## World Countries ADM0
 
@@ -128,6 +132,45 @@ const result = await buildTurkeyGameZonesWithAdjacency({
 
 The V2 algorithm version is `tr-adm3-game-zone-v2`. Generated game zones are deterministic
 `generated-zone` ADM3 records, not official mahalle or köy polygons.
+
+## Turkey OSM Barrier Snapshots
+
+```ts
+import {
+  buildTurkeyOsmBarrierArtifacts,
+  createTurkeyOsmSmartFallbackGeneratedOptions,
+  readTurkeyOsmAdm2BarrierArtifact,
+  verifyTurkeyOsmSnapshot
+} from "@territory-kit/generators/turkey-adm3";
+
+const verified = await verifyTurkeyOsmSnapshot({
+  sourceLockPath: ".territory/cache/osm/TR/<snapshot-id>/source-lock.json"
+});
+
+if (!verified.ok) {
+  throw new Error("OSM snapshot checksum mismatch");
+}
+
+await buildTurkeyOsmBarrierArtifacts({
+  snapshotPath: verified.snapshotPath,
+  sourceLock: verified.sourceLock,
+  adm2Zones,
+  outputRoot: ".territory/build/TR/OSM-barriers",
+  concurrency: 2
+});
+
+const artifact = await readTurkeyOsmAdm2BarrierArtifact(
+  ".territory/build/TR/OSM-barriers",
+  "tr:adm2:example"
+);
+const generated = createTurkeyOsmSmartFallbackGeneratedOptions(artifact);
+```
+
+The pipeline uses the Geofabrik Turkey OpenStreetMap `.osm.pbf` country extract as the default
+provider, locks cached snapshots by SHA-256, extracts road/rail/water/park/landuse barriers and
+locality seeds, clips artifacts to ADM2 geometry, and keeps raw PBF files under `.territory/cache`.
+It feeds the existing smart fallback engine and does not promote OSM place nodes or smart-derived
+output to official administrative boundaries.
 
 ## Source Adapters
 

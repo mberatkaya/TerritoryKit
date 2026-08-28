@@ -6,11 +6,16 @@ real administrative polygons where they are available.
 The source priority is fixed:
 
 ```text
-official > osm > generated
+official ADM3
+  -> OSM administrative ADM3
+  -> OSM barrier snapshot input
+  -> smart-derived generated fallback
+  -> legacy generated fallback
 ```
 
-This reusable single-district and batch pipeline is the merge engine used by the Sprint 4
-81-province/973-district Turkey V2 national playable build.
+`sourceClass` remains `official`, `osm`, or `generated`; the OSM barrier snapshot is an input to
+smart fallback, not an ADM3 polygon source. This reusable single-district and batch pipeline is the
+merge engine used by the 81-province/973-district Turkey V2 national playable build.
 
 ## Public API
 
@@ -49,11 +54,16 @@ For each district:
 4. Official effective coverage is removed from OSM.
 5. Official plus effective OSM coverage becomes the real mask.
 6. Missing geometry is computed as `district - realMask`.
-7. `buildTurkeyGameZones` generates only that missing geometry.
-8. Final official, OSM, and generated zones are validated and used to build adjacency.
+7. If a verified OSM barrier artifact is available and eligible, it is adapted into smart fallback
+   input for that missing geometry.
+8. Smart-derived output is accepted only when its quality gates pass; otherwise legacy generated
+   zones fill the remaining geometry when fallback is enabled.
+9. Final official, OSM administrative, and generated zones are validated and used to build
+   adjacency.
 
 Generated zones never replace or cover real polygons. OSM zones never cover official effective
-geometry.
+geometry. OSM road, rail, water, park, landuse, and locality seed artifacts are not promoted to OSM
+administrative ADM3 zones.
 
 ## Source And Provider Classes
 
@@ -106,6 +116,8 @@ folders.
 The hybrid dataset manifest uses `license: "mixed"`. Per-zone provenance and attribution preserve
 the real source license. OSM polygons keep `ODbL-1.0` and OpenStreetMap attribution. Generated
 zones are marked as TerritoryKit-generated and do not inherit official or OSM data licenses.
+Smart-derived zones that use OSM barrier artifacts carry OSM snapshot attribution in provenance,
+but still remain generated, estimated, and non-administrative.
 
 ## Quality Gates
 

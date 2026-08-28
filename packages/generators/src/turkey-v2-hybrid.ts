@@ -393,6 +393,7 @@ export interface TurkeyV2ZoneMigrationPlan {
 export interface TurkeyV2HybridBatchSourceEntry {
   officialZones?: readonly TerritoryZone[];
   osmZones?: readonly TerritoryZone[];
+  generated?: TurkeyV2HybridGeneratedOptions;
 }
 
 export interface TurkeyV2HybridBatchBuildOptions {
@@ -527,7 +528,8 @@ export async function buildTurkeyV2HybridDistrict(
     issues.push({
       code: "TR_V2_HYBRID_SOURCE_PRIORITY_UNSUPPORTED",
       severity: "error",
-      message: "Turkey V2 hybrid builds require official > osm > generated source priority.",
+      message:
+        "Turkey V2 hybrid builds require official, OSM administrative, then generated fallback source priority.",
       parentId: options.district.id
     });
   }
@@ -1025,7 +1027,8 @@ export async function buildTurkeyV2HybridBatch(
         districtCode: codes.districtCode,
         officialZones: sourceEntry?.officialZones ?? [],
         osmZones: sourceEntry?.osmZones ?? [],
-        generated: options.generatedDefaults ?? { enabled: true, profile: "auto" },
+        generated: sourceEntry?.generated ??
+          options.generatedDefaults ?? { enabled: true, profile: "auto" },
         buildDate: options.buildDate,
         datasetId: `${datasetId}-${district.id.replace(/[^a-zA-Z0-9_-]+/g, "-")}`,
         ...(options.minimumEffectiveAreaKm2 !== undefined
