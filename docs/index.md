@@ -102,6 +102,7 @@ package boundaries required for MapLibre, NestJS/PostGIS, generators, and CLI to
 - [Turkey ADM3 identity](./datasets/turkey-adm3-identity.md)
 - [Turkey ADM3 quality gates](./datasets/turkey-adm3-quality-gates.md)
 - [Turkey smart fallback](./datasets/turkey-smart-fallback.md)
+- [Turkey OSM barrier snapshots](./datasets/turkey-osm-barrier-snapshots.md)
 - [ADR 0013: Turkey ADM3 province-scoped ingestion](./adr/0013-turkey-adm3-ingestion.md)
 - [United States pilot dataset](./datasets/us.md)
 - [Germany pilot dataset](./datasets/de.md)

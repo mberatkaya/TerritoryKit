@@ -19,4 +19,10 @@ The national report aggregates district area, source area, generated area, final
 - Generated fallback coverage: 99.999305%
 - Final usable ADM3-like coverage: 99.999305%
 
-Those values come from the generated national build in `.territory/build/TR/ADM3`. Official municipal ingestion and OSM PBF extraction are still reported as `not-built`, so their provider records do not contribute spatial coverage.
+Those values come from the generated national build in `.territory/build/TR/ADM3`.
+In that checked-in report, official municipal ingestion and pre-Sprint-5 OSM PBF extraction are
+reported as `not-built`, so their provider records do not contribute spatial coverage.
+The report predates the Sprint 5 OSM barrier snapshot pipeline. New smart fallback
+builds can use source-locked OSM barrier artifacts, but national coverage reports still count them
+only after the corresponding barrier and smart-generated artifacts are built and supplied to the
+resolver. See [Turkey OSM barrier snapshots](./turkey-osm-barrier-snapshots.md).

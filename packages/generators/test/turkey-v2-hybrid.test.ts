@@ -436,6 +436,26 @@ describe("Turkey V2 hybrid coverage pipeline", () => {
     expect(result.coverage.generatedStrategy).toBe("smart");
     expect(result.coverage.algorithmVersion).toBe(TURKEY_SMART_FALLBACK_ALGORITHM_VERSION);
     expect(result.smartFallbackResult?.quality.ok).toBe(true);
+    expect(result.quality.smartAttempt).toMatchObject({
+      attempted: true,
+      accepted: true,
+      selectedFallback: "smart",
+      status: "success",
+      errorCodes: [],
+      metrics: {
+        territoryCount: 4,
+        coveragePercent: 100,
+        meanBarrierAlignment: 1,
+        syntheticSplitCount: 0,
+        barrierSplitCount: expect.any(Number)
+      },
+      gates: {
+        geometryValid: true,
+        parentCoverage: true,
+        barrierAlignment: true
+      }
+    });
+    expect(result.quality.smartAttempt?.metrics.barrierSplitCount).toBeGreaterThan(0);
     expect(result.generatedResult).toBeUndefined();
     expect(result.effective.generated).toHaveLength(4);
     expect(
@@ -502,6 +522,17 @@ describe("Turkey V2 hybrid coverage pipeline", () => {
     expect(result.quality.ok).toBe(true);
     expect(result.coverage.generatedStrategy).toBe("legacy");
     expect(result.coverage.algorithmVersion).toBe(TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION);
+    expect(result.quality.smartAttempt).toMatchObject({
+      attempted: true,
+      accepted: false,
+      selectedFallback: "legacy",
+      status: "rejected",
+      errorCodes: expect.arrayContaining(["SMART_FALLBACK_INSUFFICIENT_BARRIERS"]),
+      metrics: {
+        syntheticSplitCount: 3,
+        barrierSplitCount: 0
+      }
+    });
     expect(
       result.effective.generated.every((zone) => {
         const territory = zone.properties.territory as Record<string, unknown>;
@@ -512,7 +543,16 @@ describe("Turkey V2 hybrid coverage pipeline", () => {
       expect.arrayContaining([
         expect.objectContaining({
           code: "TR_V2_HYBRID_LEGACY_FALLBACK_USED",
-          severity: "warning"
+          severity: "warning",
+          details: expect.objectContaining({
+            smartFallbackMetrics: expect.objectContaining({
+              barrierSplitCount: 0,
+              syntheticSplitCount: 3
+            }),
+            smartFallbackGates: expect.objectContaining({
+              inputSufficiency: false
+            })
+          })
         })
       ])
     );

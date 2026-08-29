@@ -9629,7 +9629,7 @@
     },
     {
       "boundarySourceClass": "smart-derived",
-      "description": "Future smart-derived fallback class; not emitted as a Sprint 2 source.",
+      "description": "Derived estimated fallback class emitted only by the smart fallback pipeline.",
       "priority": "P5",
       "productionDefault": false
     },

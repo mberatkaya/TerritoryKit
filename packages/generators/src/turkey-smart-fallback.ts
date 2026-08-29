@@ -47,9 +47,15 @@ export type TurkeySmartFallbackIssueCode =
   | "OFFICIAL_ADM3_UNAVAILABLE"
   | "OSM_ADMIN_BOUNDARY_UNAVAILABLE"
   | "SMART_FALLBACK_GENERATED"
+  | "SMART_FALLBACK_ALIGNMENT_TOO_LOW"
+  | "SMART_FALLBACK_COVERAGE_TOO_LOW"
+  | "SMART_FALLBACK_COORDINATE_ORDER_INVALID"
+  | "SMART_FALLBACK_GEOMETRY_INVALID"
   | "SMART_FALLBACK_LOW_QUALITY"
   | "SMART_FALLBACK_INVALID_TOPOLOGY"
   | "SMART_FALLBACK_INSUFFICIENT_BARRIERS"
+  | "SMART_FALLBACK_QUALITY_REJECTED"
+  | "SMART_FALLBACK_SPILL_TOO_HIGH"
   | "SMART_FALLBACK_SYNTHETIC_SPLIT_USED"
   | "SMART_FALLBACK_PARENT_GEOMETRY_INVALID"
   | "SMART_FALLBACK_UNSUPPORTED_PROFILE"
@@ -129,6 +135,7 @@ export interface TurkeySmartFallbackOptions {
   minMeanQualityScore?: number;
   minMeanBarrierAlignment?: number;
   requireBarrierForMultiTerritory?: boolean;
+  alignmentToleranceMeters?: number;
   snapToleranceDegrees?: number;
   barrierConfig?: Partial<TurkeySmartFallbackBarrierConfig>;
   sourceMetadata?: TurkeySmartFallbackSourceMetadata;
@@ -183,6 +190,7 @@ export interface TurkeySmartFallbackConfiguration {
   minMeanQualityScore: number;
   minMeanBarrierAlignment: number;
   requireBarrierForMultiTerritory: boolean;
+  alignmentToleranceMeters: number;
   snapToleranceDegrees: number;
   targetGeometryAreaKm2: number;
   profileDecision: {
@@ -201,9 +209,32 @@ export interface TurkeySmartFallbackZoneQuality {
   score: number;
   compactness: number;
   barrierAlignment: number;
+  realBarrierRatio: number;
+  syntheticBoundaryRatio: number;
+  barrierEvidence: number;
   sizeScore: number;
   seedConfidence?: number;
   topology: number;
+}
+
+export interface TurkeySmartFallbackInputDiagnostics {
+  adm2Id: string;
+  roadsRaw: number;
+  roadsNormalized: number;
+  majorRoadsRaw: number;
+  majorRoadsNormalized: number;
+  railRaw: number;
+  railNormalized: number;
+  waterRaw: number;
+  waterNormalized: number;
+  parksRaw: number;
+  parksNormalized: number;
+  landuseRaw: number;
+  landuseNormalized: number;
+  seedsRaw: number;
+  seedsNormalized: number;
+  parentEdgeBarrierCount: number;
+  internalBarrierCount: number;
 }
 
 export interface TurkeySmartFallbackManifest {
@@ -240,20 +271,51 @@ export interface TurkeySmartFallbackQualityReport {
   territoryCount: number;
   validGeometryCount: number;
   invalidGeometryCount: number;
+  parentAreaKm2: number;
+  smartUnionAreaKm2: number;
+  intersectionAreaKm2: number;
   coveragePercent: number;
   uncoveredAreaKm2: number;
+  uncoveredInsideParentKm2: number;
   overlapAreaKm2: number;
   overlapPercent: number;
   spillAreaKm2: number;
+  outsideSpillKm2: number;
   spillPercent: number;
   averageAreaKm2: number;
   minAreaKm2: number;
   maxAreaKm2: number;
   meanCompactness: number;
   meanBarrierAlignment: number;
+  meanZoneBarrierAlignment: number;
+  meanRealBarrierRatio: number;
+  meanSyntheticBoundaryRatio: number;
+  totalInternalBoundaryLengthKm: number;
+  barrierAlignedBoundaryLengthKm: number;
+  parentBoundaryLengthKm: number;
   seedCoverage: number;
   meanQualityScore: number;
   minQualityScore: number;
+  qualityDistribution: {
+    min: number;
+    p10: number;
+    median: number;
+    mean: number;
+    p90: number;
+    max: number;
+  };
+  inputDiagnostics: TurkeySmartFallbackInputDiagnostics;
+  coverageComputation: {
+    mode: "union" | "per-zone-fallback";
+    unionFailed: boolean;
+    topologyToleranceKm2: number;
+    rawSmartUnionAreaKm2: number;
+    rawIntersectionAreaKm2: number;
+    rawUncoveredInsideParentKm2: number;
+    rawOutsideSpillKm2: number;
+    rawOverlapAreaKm2: number;
+    failureReason?: string;
+  };
   lowestQualityTerritoryIds: string[];
   mergeCount: number;
   splitCount: number;
@@ -267,6 +329,14 @@ export interface TurkeySmartFallbackQualityReport {
   deterministicOutputHash: string;
   buildDurationMs: number;
   gates: {
+    geometryValid: boolean;
+    parentCoverage: boolean;
+    outsideSpill: boolean;
+    minimumArea: boolean;
+    maximumArea: boolean;
+    syntheticSplitLimit: boolean;
+    meanQuality: boolean;
+    inputSufficiency: boolean;
     coverage: boolean;
     invalidGeometry: boolean;
     overlap: boolean;
@@ -341,6 +411,7 @@ interface SplitCandidate {
   line: SplitLine;
   score: number;
   synthetic: boolean;
+  realBarrierSupportRatio: number;
 }
 
 interface BuildStats {
@@ -371,6 +442,12 @@ const EARTH_RADIUS_METERS = 6_371_008.8;
 const COORDINATE_EPSILON = 1e-9;
 const RING_AREA_EPSILON = 1e-9;
 const AREA_TOLERANCE_KM2 = 0.000001;
+const DEFAULT_ALIGNMENT_TOLERANCE_METERS = 50;
+const PARENT_EDGE_TOLERANCE_METERS = 5;
+const BARRIER_PARALLEL_SIN_TOLERANCE = 0.12;
+const PARENT_PARALLEL_SIN_TOLERANCE = 0.01;
+const BARRIER_MERGE_ENDPOINT_TOLERANCE_METERS = 15;
+const MAX_SPLIT_LINE_CANDIDATES_PER_PIECE = 256;
 const DEFAULT_BUILD_DATE = "1970-01-01T00:00:00.000Z";
 
 export const DEFAULT_TURKEY_SMART_FALLBACK_BARRIER_CONFIG: TurkeySmartFallbackBarrierConfig = {
@@ -514,7 +591,7 @@ export function resolveTurkeySmartFallbackConfiguration(input: TurkeySmartFallba
   const maxTerritories = input.options?.maxTerritories ?? defaults.maxTerritories;
   const inferredTargetCount = clampInteger(
     Math.ceil(parentAreaKm2 / Math.max(targetAreaKm2, AREA_TOLERANCE_KM2)),
-    Math.max(1, localitySeedCount),
+    1,
     maxTerritories
   );
   const targetTerritoryCount = input.options?.targetTerritoryCount ?? inferredTargetCount;
@@ -526,6 +603,17 @@ export function resolveTurkeySmartFallbackConfiguration(input: TurkeySmartFallba
       severity: "error",
       message: "Smart fallback requires a non-empty ADM2 parent Polygon or MultiPolygon.",
       parentId: input.parent.id
+    });
+  }
+
+  if (isLikelySwappedTurkeyGeometry(input.parent.geometry)) {
+    issues.push({
+      code: "SMART_FALLBACK_COORDINATE_ORDER_INVALID",
+      severity: "error",
+      message:
+        "Smart fallback parent geometry appears to use latitude,longitude order; Turkey inputs must be EPSG:4326 longitude,latitude.",
+      parentId: input.parent.id,
+      details: { bbox: computeGeometryBBox(input.parent.geometry) }
     });
   }
 
@@ -618,6 +706,11 @@ export function resolveTurkeySmartFallbackConfiguration(input: TurkeySmartFallba
       input.options?.minMeanBarrierAlignment ?? defaults.minMeanBarrierAlignment
     ),
     requireBarrierForMultiTerritory: input.options?.requireBarrierForMultiTerritory ?? true,
+    alignmentToleranceMeters: roundMetric(
+      input.options?.alignmentToleranceMeters ??
+        snapToleranceDegreesToMeters(input.options?.snapToleranceDegrees) ??
+        DEFAULT_ALIGNMENT_TOLERANCE_METERS
+    ),
     snapToleranceDegrees: input.options?.snapToleranceDegrees ?? 1e-8,
     targetGeometryAreaKm2: parentAreaKm2,
     profileDecision: {
@@ -701,7 +794,272 @@ export function normalizeTurkeySmartFallbackBarriers(
     }
   }
 
-  return barriers.sort(compareBarriers);
+  return consolidateConnectedBarriers(barriers).sort(compareBarriers);
+}
+
+function consolidateConnectedBarriers(
+  barriers: readonly TurkeySmartFallbackBarrier[]
+): TurkeySmartFallbackBarrier[] {
+  const groups = new Map<string, TurkeySmartFallbackBarrier[]>();
+
+  for (const barrier of barriers) {
+    const key = barrierConsolidationKey(barrier);
+
+    if (!key) {
+      groups.set(barrier.id, [barrier]);
+      continue;
+    }
+
+    const group = groups.get(key) ?? [];
+    group.push(barrier);
+    groups.set(key, group);
+  }
+
+  return [...groups.values()].flatMap((group) =>
+    group.length > 1 ? mergeBarrierGroup(group) : group
+  );
+}
+
+function barrierConsolidationKey(barrier: TurkeySmartFallbackBarrier): string | undefined {
+  if (
+    barrier.strength < 0.4 ||
+    !["road", "rail", "water"].includes(barrier.barrierClass) ||
+    barrier.coordinates.length < 2
+  ) {
+    return undefined;
+  }
+
+  const corridorName = firstTagValue(barrier.tags.name) ?? firstTagValue(barrier.tags.ref);
+
+  if (!corridorName) {
+    return undefined;
+  }
+
+  return [
+    barrier.sourceLayer,
+    barrier.barrierClass,
+    firstTagValue(barrier.tags.highway) ?? "",
+    firstTagValue(barrier.tags.railway) ?? "",
+    firstTagValue(barrier.tags.waterway) ?? firstTagValue(barrier.tags.water) ?? "",
+    corridorName.toLocaleLowerCase("tr"),
+    barrier.tags.bridge ?? "",
+    barrier.tags.tunnel ?? "",
+    barrier.tags.layer ?? "",
+    barrier.strengthClass,
+    barrier.strength
+  ].join("|");
+}
+
+function mergeBarrierGroup(
+  group: readonly TurkeySmartFallbackBarrier[]
+): TurkeySmartFallbackBarrier[] {
+  const remaining = [...group].sort(compareBarriers);
+  const merged: TurkeySmartFallbackBarrier[] = [];
+
+  while (remaining.length > 0) {
+    const first = remaining.shift()!;
+    let coordinates = [...first.coordinates];
+    const lineage = [first];
+    let changed = true;
+
+    while (changed) {
+      changed = false;
+
+      for (let index = 0; index < remaining.length; index += 1) {
+        const candidate = remaining[index]!;
+        const joined = joinBarrierCoordinates(coordinates, candidate.coordinates);
+
+        if (!joined) {
+          continue;
+        }
+
+        coordinates = joined;
+        lineage.push(candidate);
+        remaining.splice(index, 1);
+        changed = true;
+        break;
+      }
+    }
+
+    merged.push(createMergedBarrier(first, lineage, coordinates));
+  }
+
+  return merged;
+}
+
+function joinBarrierCoordinates(
+  left: readonly LngLat[],
+  right: readonly LngLat[]
+): LngLat[] | undefined {
+  const leftFirst = left[0];
+  const leftLast = left[left.length - 1];
+  const rightFirst = right[0];
+  const rightLast = right[right.length - 1];
+
+  if (!leftFirst || !leftLast || !rightFirst || !rightLast) {
+    return undefined;
+  }
+
+  if (pointsNearMeters(leftLast, rightFirst, BARRIER_MERGE_ENDPOINT_TOLERANCE_METERS)) {
+    return normalizeLineCoordinates([...left, ...right.slice(1)]);
+  }
+
+  if (pointsNearMeters(leftLast, rightLast, BARRIER_MERGE_ENDPOINT_TOLERANCE_METERS)) {
+    return normalizeLineCoordinates([...left, ...[...right].reverse().slice(1)]);
+  }
+
+  if (pointsNearMeters(leftFirst, rightLast, BARRIER_MERGE_ENDPOINT_TOLERANCE_METERS)) {
+    return normalizeLineCoordinates([...right, ...left.slice(1)]);
+  }
+
+  if (pointsNearMeters(leftFirst, rightFirst, BARRIER_MERGE_ENDPOINT_TOLERANCE_METERS)) {
+    return normalizeLineCoordinates([...right].reverse().concat(left.slice(1)));
+  }
+
+  return undefined;
+}
+
+function createMergedBarrier(
+  template: TurkeySmartFallbackBarrier,
+  lineage: readonly TurkeySmartFallbackBarrier[],
+  coordinates: readonly LngLat[]
+): TurkeySmartFallbackBarrier {
+  if (lineage.length === 1) {
+    return template;
+  }
+
+  const lineageIds = lineage.map((barrier) => barrier.id).sort();
+  const id = [
+    template.sourceLayer,
+    template.barrierClass,
+    "merged",
+    sha256Hex(serializeJsonStable(lineageIds)).slice(0, 16)
+  ].join(":");
+  const normalized = normalizeLineCoordinates(coordinates);
+
+  return {
+    ...template,
+    id,
+    coordinates: normalized,
+    lengthKm: roundMetric(lineLengthKm(normalized)),
+    sourceNativeId: `merged:${lineage.length}:${sha256Hex(serializeJsonStable(lineageIds)).slice(
+      0,
+      16
+    )}`,
+    tags: {
+      ...template.tags,
+      sourceBarrierIds: lineageIds.join(",")
+    }
+  };
+}
+
+function pointsNearMeters(left: LngLat, right: LngLat, toleranceMeters: number): boolean {
+  return haversineKm(left, right) * 1_000 <= toleranceMeters;
+}
+
+function filterInternalBarriers(input: {
+  barriers: readonly TurkeySmartFallbackBarrier[];
+  parentGeometry: ClippingMultiPolygon;
+  configuration: TurkeySmartFallbackConfiguration;
+}): { barriers: TurkeySmartFallbackBarrier[]; parentEdgeBarrierCount: number } {
+  const parent = clippingMultiPolygonToTerritoryGeometry(input.parentGeometry);
+
+  if (!parent) {
+    return { barriers: [...input.barriers].sort(compareBarriers), parentEdgeBarrierCount: 0 };
+  }
+
+  const parentSegments = geometrySegments(parent);
+  const barriers: TurkeySmartFallbackBarrier[] = [];
+  let parentEdgeBarrierCount = 0;
+
+  for (const barrier of input.barriers) {
+    if (isParentEdgeBarrier(barrier, parentSegments, input.configuration)) {
+      parentEdgeBarrierCount += 1;
+      continue;
+    }
+
+    barriers.push(barrier);
+  }
+
+  return { barriers: barriers.sort(compareBarriers), parentEdgeBarrierCount };
+}
+
+function isParentEdgeBarrier(
+  barrier: TurkeySmartFallbackBarrier,
+  parentSegments: readonly { a: LngLat; b: LngLat }[],
+  configuration: TurkeySmartFallbackConfiguration
+): boolean {
+  const segments = lineSegments(barrier.coordinates);
+  const lengthMeters = segments.reduce(
+    (total, segment) => total + haversineKm(segment.a, segment.b) * 1_000,
+    0
+  );
+
+  if (lengthMeters <= 0) {
+    return false;
+  }
+
+  const alignedMeters = segments.reduce(
+    (total, segment) =>
+      total +
+      segmentAlignedLengthMeters(segment, parentSegments, {
+        toleranceMeters: Math.min(
+          configuration.alignmentToleranceMeters,
+          PARENT_EDGE_TOLERANCE_METERS
+        ),
+        parallelSinTolerance: PARENT_PARALLEL_SIN_TOLERANCE
+      }),
+    0
+  );
+
+  return alignedMeters / lengthMeters >= 0.8;
+}
+
+function createInputDiagnostics(input: {
+  input: TurkeySmartFallbackInput;
+  normalizedBarriers: readonly TurkeySmartFallbackBarrier[];
+  generationBarriers: readonly TurkeySmartFallbackBarrier[];
+  normalizedSeeds: readonly TurkeySmartFallbackLocalitySeed[];
+  parentEdgeBarrierCount: number;
+}): TurkeySmartFallbackInputDiagnostics {
+  return {
+    adm2Id: input.input.parent.id,
+    roadsRaw: input.input.roads?.features.length ?? 0,
+    roadsNormalized: countBarriers(input.generationBarriers, "roads"),
+    majorRoadsRaw: countMajorRoadFeatures(input.input.roads),
+    majorRoadsNormalized: input.generationBarriers.filter(
+      (barrier) => barrier.sourceLayer === "roads" && barrier.strength >= 0.45
+    ).length,
+    railRaw: input.input.railways?.features.length ?? 0,
+    railNormalized: countBarriers(input.generationBarriers, "railways"),
+    waterRaw: input.input.water?.features.length ?? 0,
+    waterNormalized: countBarriers(input.generationBarriers, "water"),
+    parksRaw: input.input.parks?.features.length ?? 0,
+    parksNormalized: countBarriers(input.generationBarriers, "parks"),
+    landuseRaw: input.input.landuse?.features.length ?? 0,
+    landuseNormalized: countBarriers(input.generationBarriers, "landuse"),
+    seedsRaw: input.input.localitySeeds?.length ?? 0,
+    seedsNormalized: input.normalizedSeeds.length,
+    parentEdgeBarrierCount: input.parentEdgeBarrierCount,
+    internalBarrierCount: input.generationBarriers.length
+  };
+}
+
+function countBarriers(
+  barriers: readonly TurkeySmartFallbackBarrier[],
+  sourceLayer: TurkeySmartFallbackBarrierLayer
+): number {
+  return barriers.filter((barrier) => barrier.sourceLayer === sourceLayer).length;
+}
+
+function countMajorRoadFeatures(collection: FeatureCollection | undefined): number {
+  return (collection?.features ?? []).filter((feature) => {
+    const highway = feature.properties?.highway;
+    return (
+      typeof highway === "string" &&
+      (DEFAULT_TURKEY_SMART_FALLBACK_BARRIER_CONFIG.roadScores[highway] ?? 0) >= 0.45
+    );
+  }).length;
 }
 
 export function buildTurkeySmartFallback(
@@ -710,11 +1068,32 @@ export function buildTurkeySmartFallback(
   const startedAt = performance.now();
   const parentGeometry = toClippingMultiPolygon(input.parent.geometry);
   const barrierConfig = resolveBarrierConfig(input.options?.barrierConfig);
-  const barriers = normalizeTurkeySmartFallbackBarriers(input, barrierConfig);
+  const normalizedBarriers = normalizeTurkeySmartFallbackBarriers(input, barrierConfig);
   const resolution = resolveTurkeySmartFallbackConfiguration(input);
   const configuration = resolution.configuration;
+  const barrierFilter = filterInternalBarriers({
+    barriers: normalizedBarriers,
+    parentGeometry,
+    configuration
+  });
+  const barriers = barrierFilter.barriers;
   const issues: TurkeySmartFallbackIssue[] = [
     ...resolution.issues,
+    ...(barrierFilter.parentEdgeBarrierCount > 0
+      ? [
+          {
+            code: "SMART_FALLBACK_BARRIER_IGNORED" as const,
+            severity: "info" as const,
+            message:
+              "Smart fallback ignored barriers that were aligned with the ADM2 outer boundary.",
+            parentId: input.parent.id,
+            details: {
+              reason: "parent-edge",
+              ignoredBarrierCount: barrierFilter.parentEdgeBarrierCount
+            }
+          }
+        ]
+      : []),
     {
       code: "OFFICIAL_ADM3_UNAVAILABLE",
       severity: "info",
@@ -736,6 +1115,13 @@ export function buildTurkeySmartFallback(
     rejectionCount: 0
   };
   const seeds = normalizeLocalitySeeds(input.localitySeeds ?? [], parentGeometry);
+  const inputDiagnostics = createInputDiagnostics({
+    input,
+    normalizedBarriers,
+    generationBarriers: barriers,
+    normalizedSeeds: seeds,
+    parentEdgeBarrierCount: barrierFilter.parentEdgeBarrierCount
+  });
   let pieces: SmartPiece[] = [];
 
   if (resolution.ok && isNonEmptyClippingGeometry(parentGeometry)) {
@@ -782,6 +1168,7 @@ export function buildTurkeySmartFallback(
     barriers,
     seeds,
     configuration,
+    inputDiagnostics,
     stats,
     issues,
     buildDurationMs: Math.round(performance.now() - startedAt)
@@ -932,14 +1319,18 @@ function splitWithBarriers(
   issues: TurkeySmartFallbackIssue[]
 ): SmartPiece[] {
   let pieces = [...inputPieces].sort(comparePieces);
+  const splitLines = createCandidateSplitLines(
+    barriers,
+    configuration,
+    configuration.minBarrierStrength
+  );
 
   while (pieces.length < configuration.targetTerritoryCount) {
     const candidate = findBestBarrierSplit({
       pieces,
-      barriers,
+      splitLines,
       seeds,
-      configuration,
-      minimumStrength: configuration.minBarrierStrength
+      configuration
     });
 
     if (!candidate) {
@@ -980,6 +1371,11 @@ function splitOversizedPieces(
   issues: TurkeySmartFallbackIssue[]
 ): SmartPiece[] {
   let pieces = [...inputPieces].sort(comparePieces);
+  const splitLines = createCandidateSplitLines(
+    barriers,
+    configuration,
+    configuration.minBarrierStrength
+  );
 
   while (
     pieces.length < configuration.maxTerritories &&
@@ -990,10 +1386,9 @@ function splitOversizedPieces(
         pieces: pieces.filter(
           (piece) => piece.areaKm2 > configuration.maxAreaKm2 + AREA_TOLERANCE_KM2
         ),
-        barriers,
+        splitLines,
         seeds,
-        configuration,
-        minimumStrength: Math.max(0.1, configuration.minBarrierStrength * 0.5)
+        configuration
       }) ?? createSyntheticSplitCandidate(pieces, configuration);
 
     if (!candidate) {
@@ -1027,16 +1422,11 @@ function splitOversizedPieces(
 
 function findBestBarrierSplit(input: {
   pieces: readonly SmartPiece[];
-  barriers: readonly TurkeySmartFallbackBarrier[];
+  splitLines: readonly SplitLine[];
   seeds: readonly TurkeySmartFallbackLocalitySeed[];
   configuration: TurkeySmartFallbackConfiguration;
-  minimumStrength: number;
 }): SplitCandidate | undefined {
-  const lines = input.barriers
-    .filter((barrier) => barrier.strength >= input.minimumStrength)
-    .flatMap((barrier) => createSplitLines(barrier, input.configuration.minBarrierLengthKm))
-    .sort(compareSplitLines);
-  const candidates: SplitCandidate[] = [];
+  let best: SplitCandidate | undefined;
 
   for (const piece of [...input.pieces].sort((left, right) => right.areaKm2 - left.areaKm2)) {
     if (piece.areaKm2 < input.configuration.minAreaKm2 * 1.5) {
@@ -1044,12 +1434,19 @@ function findBestBarrierSplit(input: {
     }
 
     const pieceBbox = clippingBBox(piece.geometry);
+    let evaluatedTouchingLines = 0;
 
-    for (const line of lines) {
+    for (const line of input.splitLines) {
       const sourceBarrierId = line.barrier?.id ?? line.id;
 
       if (piece.barrierIds.includes(sourceBarrierId) || !lineTouchesBBox(line, pieceBbox)) {
         continue;
+      }
+
+      evaluatedTouchingLines += 1;
+
+      if (evaluatedTouchingLines > MAX_SPLIT_LINE_CANDIDATES_PER_PIECE) {
+        break;
       }
 
       const split = splitPieceByLine(piece, line, input.configuration);
@@ -1057,6 +1454,9 @@ function findBestBarrierSplit(input: {
         continue;
       }
 
+      const splitBoundaryKm = sharedBoundaryKmBetween(split.left.geometry, split.right.geometry);
+      const realBarrierSupportRatio =
+        splitBoundaryKm > 0 ? roundMetric(clamp01(line.lengthKm / splitBoundaryKm)) : 0;
       const leftSeeds = countSeedsInGeometry(input.seeds, split.left.geometry);
       const rightSeeds = countSeedsInGeometry(input.seeds, split.right.geometry);
       const seedSeparation =
@@ -1067,17 +1467,37 @@ function findBestBarrierSplit(input: {
           sizeFitness(split.right.areaKm2, input.configuration)) /
         2;
       const score =
-        line.barrier!.strength * 0.52 + balance * 0.25 + seedSeparation * 0.18 + targetFit * 0.05;
+        line.barrier!.strength * 0.36 +
+        realBarrierSupportRatio * 0.34 +
+        balance * 0.15 +
+        seedSeparation * 0.1 +
+        targetFit * 0.05;
 
-      candidates.push({
+      const candidate = {
         ...split,
         score: roundMetric(score),
-        synthetic: false
-      });
+        synthetic: false,
+        realBarrierSupportRatio
+      } satisfies SplitCandidate;
+
+      if (!best || compareSplitCandidates(candidate, best) < 0) {
+        best = candidate;
+      }
     }
   }
 
-  return candidates.sort(compareSplitCandidates)[0];
+  return best;
+}
+
+function createCandidateSplitLines(
+  barriers: readonly TurkeySmartFallbackBarrier[],
+  configuration: TurkeySmartFallbackConfiguration,
+  minimumStrength: number
+): SplitLine[] {
+  return barriers
+    .filter((barrier) => barrier.strength >= minimumStrength)
+    .flatMap((barrier) => createSplitLines(barrier, configuration.minBarrierLengthKm))
+    .sort(compareSplitLines);
 }
 
 function createSyntheticSplitCandidate(
@@ -1112,14 +1532,14 @@ function createSyntheticSplitCandidate(
   };
   const split = splitPieceByLine(piece, line, configuration);
 
-  return split ? { ...split, score: 0, synthetic: true } : undefined;
+  return split ? { ...split, score: 0, synthetic: true, realBarrierSupportRatio: 0 } : undefined;
 }
 
 function splitPieceByLine(
   piece: SmartPiece,
   line: SplitLine,
   configuration: TurkeySmartFallbackConfiguration
-): Omit<SplitCandidate, "score" | "synthetic"> | undefined {
+): Omit<SplitCandidate, "score" | "synthetic" | "realBarrierSupportRatio"> | undefined {
   const bbox = clippingBBox(piece.geometry);
   const [positiveClip, negativeClip] = halfPlaneClips(bbox, line);
   const leftGeometry = intersectClippingGeometries(piece.geometry, positiveClip);
@@ -1166,6 +1586,15 @@ function mergeSmallPieces(
   while (pieces.length > 1) {
     const fragment = pieces
       .filter((piece) => piece.areaKm2 < configuration.minAreaKm2)
+      .concat(
+        pieces.length > configuration.targetTerritoryCount
+          ? pieces.filter(
+              (piece) =>
+                piece.areaKm2 >= configuration.minAreaKm2 &&
+                piece.areaKm2 < configuration.targetAreaKm2 * 0.5
+            )
+          : []
+      )
       .sort((left, right) => left.areaKm2 - right.areaKm2 || left.key.localeCompare(right.key))[0];
 
     if (!fragment) {
@@ -1178,6 +1607,10 @@ function mergeSmallPieces(
         const sharedBoundaryKm = sharedBoundaryKmBetween(fragment.geometry, piece.geometry);
         const distanceKm = centroidDistanceKm(fragment.geometry, piece.geometry);
         const combinedAreaKm2 = fragment.areaKm2 + piece.areaKm2;
+        const oversizePenalty =
+          combinedAreaKm2 > configuration.maxAreaKm2
+            ? (combinedAreaKm2 - configuration.maxAreaKm2) * 1_000
+            : 0;
         return {
           piece,
           sharedBoundaryKm,
@@ -1186,7 +1619,8 @@ function mergeSmallPieces(
           score:
             sharedBoundaryKm * 100 -
             distanceKm -
-            Math.abs(combinedAreaKm2 - configuration.targetAreaKm2)
+            Math.abs(combinedAreaKm2 - configuration.targetAreaKm2) -
+            oversizePenalty
         };
       })
       .sort(
@@ -1254,7 +1688,7 @@ function createZoneCandidates(input: {
         input.barriers,
         {
           minAlignmentStrength: input.configuration.minAlignmentStrength,
-          snapToleranceDegrees: input.configuration.snapToleranceDegrees
+          alignmentToleranceMeters: input.configuration.alignmentToleranceMeters
         }
       );
       const compactnessValue = compactness(geometry);
@@ -1264,6 +1698,8 @@ function createZoneCandidates(input: {
       const quality = createZoneQuality({
         compactness: compactnessValue,
         barrierAlignment,
+        barrierEvidence:
+          piece.barrierIds.length > 0 || input.configuration.targetTerritoryCount <= 1 ? 1 : 0,
         sizeScore,
         ...(seedConfidence !== undefined ? { seedConfidence } : {}),
         topology
@@ -1451,6 +1887,7 @@ function inspectSmartFallbackQuality(input: {
   barriers: readonly TurkeySmartFallbackBarrier[];
   seeds: readonly TurkeySmartFallbackLocalitySeed[];
   configuration: TurkeySmartFallbackConfiguration;
+  inputDiagnostics: TurkeySmartFallbackInputDiagnostics;
   stats: BuildStats;
   issues: readonly TurkeySmartFallbackIssue[];
   buildDurationMs: number;
@@ -1476,25 +1913,38 @@ function inspectSmartFallbackQuality(input: {
   const invalidGeometryCount = geometryValidation.issues.filter(
     (issue) => issue.severity === "error"
   ).length;
-  const zoneGeometry = unionClippingGeometries(
-    input.zones.map((zone) => toClippingMultiPolygon(zone.geometry))
+  const zoneGeometries = input.zones.map((zone) => toClippingMultiPolygon(zone.geometry));
+  const rawOverlapAreaKm2 = collectOverlapArea(input.zones);
+  const coverageAreas = computeCoverageAreas({
+    parentGeometry: input.parentGeometry,
+    zoneGeometries,
+    overlapAreaKm2: rawOverlapAreaKm2
+  });
+  const parentAreaKm2 = coverageAreas.parentAreaKm2;
+  const topologyToleranceKm2 = topologyNoiseToleranceKm2(parentAreaKm2);
+  const uncoveredAreaKm2 = normalizeTopologyNoiseAreaKm2(
+    coverageAreas.uncoveredInsideParentKm2,
+    topologyToleranceKm2
   );
-  const coveredParentAreaKm2 = clippingAreaKm2(
-    intersectClippingGeometries(input.parentGeometry, zoneGeometry)
+  const spillAreaKm2 = normalizeTopologyNoiseAreaKm2(
+    coverageAreas.outsideSpillKm2,
+    topologyToleranceKm2
   );
-  const parentAreaKm2 = clippingAreaKm2(input.parentGeometry);
-  const uncoveredAreaKm2 = clippingAreaKm2(
-    differenceClippingGeometries(input.parentGeometry, zoneGeometry)
-  );
-  const spillAreaKm2 = clippingAreaKm2(
-    differenceClippingGeometries(zoneGeometry, input.parentGeometry)
-  );
-  const overlapAreaKm2 = collectOverlapArea(input.zones);
+  const overlapAreaKm2 = normalizeTopologyNoiseAreaKm2(rawOverlapAreaKm2, topologyToleranceKm2);
+  const coveredParentAreaKm2 =
+    uncoveredAreaKm2 === 0 ? parentAreaKm2 : coverageAreas.intersectionAreaKm2;
+  const smartUnionAreaKm2 = roundAreaKm2(coveredParentAreaKm2 + spillAreaKm2);
   const areas = input.candidates.map((candidate) => candidate.areaKm2);
   const compactnessValues = input.candidates.map((candidate) => candidate.quality.compactness);
   const barrierAlignmentValues = input.candidates.map(
     (candidate) => candidate.quality.barrierAlignment
   );
+  const boundaryAlignment = computeBoundaryAlignmentSummary({
+    zones: input.zones,
+    parentGeometry: input.parentGeometry,
+    barriers: input.barriers,
+    configuration: input.configuration
+  });
   const qualityScores = input.candidates.map((candidate) => candidate.quality.score);
   const assignedSeedIds = new Set(input.candidates.flatMap((candidate) => candidate.seedIds));
   const seedCoverage =
@@ -1509,13 +1959,27 @@ function inspectSmartFallbackQuality(input: {
     (barrier) => barrier.strengthClass === "weak"
   ).length;
   const meanQualityScore = meanMetric(qualityScores);
-  const meanBarrierAlignment = meanMetric(barrierAlignmentValues);
+  const meanZoneBarrierAlignment = meanMetric(barrierAlignmentValues);
+  const meanBarrierAlignment = boundaryAlignment.realBarrierRatio;
+  const qualityDistribution = metricDistribution(qualityScores);
   const coveragePercent = percentage(coveredParentAreaKm2, parentAreaKm2);
   const barrierSufficient =
     input.configuration.targetTerritoryCount <= 1 ||
     !input.configuration.requireBarrierForMultiTerritory ||
     input.stats.barrierSplitCount > 0;
   const gates = {
+    geometryValid: invalidGeometryCount === 0,
+    parentCoverage: coveragePercent >= input.configuration.minCoveragePercent,
+    outsideSpill: spillAreaKm2 <= input.configuration.spillToleranceKm2,
+    minimumArea: input.candidates.every(
+      (candidate) => candidate.areaKm2 + AREA_TOLERANCE_KM2 >= input.configuration.minAreaKm2
+    ),
+    maximumArea: input.candidates.every(
+      (candidate) => candidate.areaKm2 <= input.configuration.maxAreaKm2 + AREA_TOLERANCE_KM2
+    ),
+    syntheticSplitLimit: input.stats.syntheticSplitCount <= input.configuration.maxSyntheticSplits,
+    meanQuality: meanQualityScore >= input.configuration.minMeanQualityScore,
+    inputSufficiency: barrierSufficient,
     coverage: coveragePercent >= input.configuration.minCoveragePercent,
     invalidGeometry: invalidGeometryCount === 0,
     overlap: overlapAreaKm2 <= input.configuration.overlapToleranceKm2,
@@ -1529,27 +1993,74 @@ function inspectSmartFallbackQuality(input: {
   };
   const qualityIssues = [...input.issues];
 
-  if (!gates.coverage) {
+  if (!gates.parentCoverage) {
     qualityIssues.push({
-      code: "SMART_FALLBACK_LOW_QUALITY",
+      code: "SMART_FALLBACK_COVERAGE_TOO_LOW",
       severity: "error",
       message: "Smart fallback coverage is below the configured quality gate.",
       parentId: input.parent.id,
-      details: { coveragePercent, minCoveragePercent: input.configuration.minCoveragePercent }
+      details: {
+        coveragePercent,
+        minCoveragePercent: input.configuration.minCoveragePercent,
+        uncoveredInsideParentKm2: uncoveredAreaKm2
+      }
     });
   }
 
-  if (!gates.invalidGeometry || !gates.overlap || !gates.spill) {
+  if (!gates.geometryValid || !gates.overlap) {
     qualityIssues.push({
-      code: "SMART_FALLBACK_INVALID_TOPOLOGY",
+      code: "SMART_FALLBACK_GEOMETRY_INVALID",
       severity: "error",
       message: "Smart fallback topology failed validation.",
       parentId: input.parent.id,
-      details: { invalidGeometryCount, overlapAreaKm2, spillAreaKm2 }
+      details: { invalidGeometryCount, overlapAreaKm2 }
     });
   }
 
-  if (!gates.barrierSufficiency) {
+  if (!gates.outsideSpill) {
+    qualityIssues.push({
+      code: "SMART_FALLBACK_SPILL_TOO_HIGH",
+      severity: "error",
+      message: "Smart fallback produced territory area outside the ADM2 parent.",
+      parentId: input.parent.id,
+      details: {
+        outsideSpillKm2: spillAreaKm2,
+        spillToleranceKm2: input.configuration.spillToleranceKm2
+      }
+    });
+  }
+
+  if (!gates.minimumArea) {
+    qualityIssues.push({
+      code: "SMART_FALLBACK_QUALITY_REJECTED",
+      severity: "error",
+      message: "Smart fallback produced territories below the configured minimum area gate.",
+      parentId: input.parent.id,
+      details: {
+        failedGate: "minimumArea",
+        minAreaKm2: input.configuration.minAreaKm2,
+        smallestAreaKm2: min(areas)
+      }
+    });
+  }
+
+  if (!gates.maximumArea) {
+    qualityIssues.push({
+      code: "SMART_FALLBACK_QUALITY_REJECTED",
+      severity: "error",
+      message: "Smart fallback produced territories above the configured maximum area gate.",
+      parentId: input.parent.id,
+      details: {
+        failedGate: "maximumArea",
+        maxAreaKm2: input.configuration.maxAreaKm2,
+        largestAreaKm2: max(areas),
+        targetTerritoryCount: input.configuration.targetTerritoryCount,
+        maxTerritories: input.configuration.maxTerritories
+      }
+    });
+  }
+
+  if (!gates.inputSufficiency) {
     qualityIssues.push({
       code: "SMART_FALLBACK_INSUFFICIENT_BARRIERS",
       severity: "error",
@@ -1559,22 +2070,34 @@ function inspectSmartFallbackQuality(input: {
     });
   }
 
-  if (!gates.qualityScore || !gates.barrierAlignment) {
+  if (!gates.meanQuality) {
     qualityIssues.push({
-      code: "SMART_FALLBACK_LOW_QUALITY",
+      code: "SMART_FALLBACK_QUALITY_REJECTED",
       severity: "error",
       message: "Smart fallback derived geography quality score is below the configured gate.",
       parentId: input.parent.id,
       details: {
         meanQualityScore,
-        minMeanQualityScore: input.configuration.minMeanQualityScore,
-        meanBarrierAlignment,
-        minMeanBarrierAlignment: input.configuration.minMeanBarrierAlignment
+        minMeanQualityScore: input.configuration.minMeanQualityScore
       }
     });
   }
 
-  if (!gates.syntheticLimit) {
+  if (!gates.barrierAlignment) {
+    qualityIssues.push({
+      code: "SMART_FALLBACK_ALIGNMENT_TOO_LOW",
+      severity: "error",
+      message: "Smart fallback internal boundaries are not aligned with enough real barriers.",
+      parentId: input.parent.id,
+      details: {
+        meanBarrierAlignment,
+        minMeanBarrierAlignment: input.configuration.minMeanBarrierAlignment,
+        alignmentToleranceMeters: input.configuration.alignmentToleranceMeters
+      }
+    });
+  }
+
+  if (!gates.syntheticSplitLimit) {
     qualityIssues.push({
       code: "SMART_FALLBACK_SYNTHETIC_SPLIT_USED",
       severity: "error",
@@ -1628,20 +2151,44 @@ function inspectSmartFallbackQuality(input: {
     territoryCount: input.zones.length,
     validGeometryCount: Math.max(0, input.zones.length - invalidGeometryCount),
     invalidGeometryCount,
+    parentAreaKm2,
+    smartUnionAreaKm2,
+    intersectionAreaKm2: coveredParentAreaKm2,
     coveragePercent,
     uncoveredAreaKm2,
+    uncoveredInsideParentKm2: uncoveredAreaKm2,
     overlapAreaKm2,
     overlapPercent: percentage(overlapAreaKm2, parentAreaKm2),
     spillAreaKm2,
+    outsideSpillKm2: spillAreaKm2,
     spillPercent: percentage(spillAreaKm2, parentAreaKm2),
     averageAreaKm2: mean(areas),
     minAreaKm2: min(areas),
     maxAreaKm2: max(areas),
     meanCompactness: meanMetric(compactnessValues),
     meanBarrierAlignment,
+    meanZoneBarrierAlignment,
+    meanRealBarrierRatio: boundaryAlignment.realBarrierRatio,
+    meanSyntheticBoundaryRatio: boundaryAlignment.syntheticBoundaryRatio,
+    totalInternalBoundaryLengthKm: boundaryAlignment.totalInternalBoundaryLengthKm,
+    barrierAlignedBoundaryLengthKm: boundaryAlignment.barrierAlignedBoundaryLengthKm,
+    parentBoundaryLengthKm: boundaryAlignment.parentBoundaryLengthKm,
     seedCoverage,
     meanQualityScore,
     minQualityScore: minMetric(qualityScores),
+    qualityDistribution,
+    inputDiagnostics: input.inputDiagnostics,
+    coverageComputation: {
+      mode: coverageAreas.mode,
+      unionFailed: coverageAreas.mode === "per-zone-fallback",
+      topologyToleranceKm2,
+      rawSmartUnionAreaKm2: coverageAreas.smartUnionAreaKm2,
+      rawIntersectionAreaKm2: coverageAreas.intersectionAreaKm2,
+      rawUncoveredInsideParentKm2: coverageAreas.uncoveredInsideParentKm2,
+      rawOutsideSpillKm2: coverageAreas.outsideSpillKm2,
+      rawOverlapAreaKm2,
+      ...(coverageAreas.failureReason ? { failureReason: coverageAreas.failureReason } : {})
+    },
     lowestQualityTerritoryIds,
     mergeCount: input.stats.mergeCount,
     splitCount: input.stats.splitCount,
@@ -1943,22 +2490,27 @@ function replacePiece(pieces: readonly SmartPiece[], candidate: SplitCandidate):
 function createZoneQuality(input: {
   compactness: number;
   barrierAlignment: number;
+  barrierEvidence: number;
   sizeScore: number;
   seedConfidence?: number;
   topology: number;
 }): TurkeySmartFallbackZoneQuality {
   const seedComponent = input.seedConfidence ?? 0.75;
   const score =
-    input.barrierAlignment * 0.36 +
-    input.compactness * 0.22 +
-    input.sizeScore * 0.22 +
-    seedComponent * 0.1 +
-    input.topology * 0.1;
+    input.barrierAlignment * 0.25 +
+    input.barrierEvidence * 0.2 +
+    input.compactness * 0.17 +
+    input.sizeScore * 0.17 +
+    seedComponent * 0.08 +
+    input.topology * 0.13;
 
   return {
     score: roundMetric(clamp01(score)),
     compactness: roundMetric(input.compactness),
     barrierAlignment: roundMetric(input.barrierAlignment),
+    realBarrierRatio: roundMetric(input.barrierAlignment),
+    syntheticBoundaryRatio: roundMetric(clamp01(1 - input.barrierAlignment)),
+    barrierEvidence: roundMetric(input.barrierEvidence),
     sizeScore: roundMetric(input.sizeScore),
     ...(input.seedConfidence !== undefined
       ? { seedConfidence: roundMetric(input.seedConfidence) }
@@ -1971,7 +2523,7 @@ function computeBarrierAlignment(
   geometry: TerritoryGeometry,
   parentGeometry: ClippingMultiPolygon,
   barriers: readonly TurkeySmartFallbackBarrier[],
-  options: { minAlignmentStrength: number; snapToleranceDegrees: number }
+  options: { minAlignmentStrength: number; alignmentToleranceMeters: number }
 ): number {
   const parent = clippingMultiPolygonToTerritoryGeometry(parentGeometry);
   const parentSegments = parent ? geometrySegments(parent) : [];
@@ -1986,15 +2538,23 @@ function computeBarrierAlignment(
   for (const segment of geometrySegments(geometry)) {
     const lengthKm = haversineKm(segment.a, segment.b);
 
-    if (lengthKm <= 0 || isAlignedWithAny(segment, parentSegments, options.snapToleranceDegrees)) {
+    if (
+      lengthKm <= 0 ||
+      segmentAlignedLengthMeters(segment, parentSegments, {
+        toleranceMeters: PARENT_EDGE_TOLERANCE_METERS,
+        parallelSinTolerance: PARENT_PARALLEL_SIN_TOLERANCE
+      }) >=
+        lengthKm * 1_000 * 0.6
+    ) {
       continue;
     }
 
     totalKm += lengthKm;
-
-    if (isAlignedWithAny(segment, barrierSegments, options.snapToleranceDegrees)) {
-      alignedKm += lengthKm;
-    }
+    alignedKm +=
+      segmentAlignedLengthMeters(segment, barrierSegments, {
+        toleranceMeters: options.alignmentToleranceMeters,
+        parallelSinTolerance: BARRIER_PARALLEL_SIN_TOLERANCE
+      }) / 1_000;
   }
 
   if (totalKm <= 0) {
@@ -2004,65 +2564,214 @@ function computeBarrierAlignment(
   return roundMetric(clamp01(alignedKm / totalKm));
 }
 
-function isAlignedWithAny(
+function computeBoundaryAlignmentSummary(input: {
+  zones: readonly TerritoryZone[];
+  parentGeometry: ClippingMultiPolygon;
+  barriers: readonly TurkeySmartFallbackBarrier[];
+  configuration: TurkeySmartFallbackConfiguration;
+}): {
+  realBarrierRatio: number;
+  syntheticBoundaryRatio: number;
+  totalInternalBoundaryLengthKm: number;
+  barrierAlignedBoundaryLengthKm: number;
+  parentBoundaryLengthKm: number;
+} {
+  const parent = clippingMultiPolygonToTerritoryGeometry(input.parentGeometry);
+  const parentSegments = parent ? geometrySegments(parent) : [];
+  const barrierSegments = input.barriers
+    .filter((barrier) => barrier.strength >= input.configuration.minAlignmentStrength)
+    .flatMap((barrier) =>
+      lineSegments(barrier.coordinates).map((segment) => ({ ...segment, barrier }))
+    );
+  let internalBoundaryMeters = 0;
+  let barrierAlignedMeters = 0;
+  let parentBoundaryMeters = 0;
+
+  for (const zone of input.zones) {
+    for (const segment of geometrySegments(zone.geometry)) {
+      const lengthMeters = haversineKm(segment.a, segment.b) * 1_000;
+
+      if (lengthMeters <= 0) {
+        continue;
+      }
+
+      const parentAlignedMeters = segmentAlignedLengthMeters(segment, parentSegments, {
+        toleranceMeters: PARENT_EDGE_TOLERANCE_METERS,
+        parallelSinTolerance: PARENT_PARALLEL_SIN_TOLERANCE
+      });
+
+      if (parentAlignedMeters >= lengthMeters * 0.6) {
+        parentBoundaryMeters += lengthMeters;
+        continue;
+      }
+
+      internalBoundaryMeters += lengthMeters;
+      barrierAlignedMeters += segmentAlignedLengthMeters(segment, barrierSegments, {
+        toleranceMeters: input.configuration.alignmentToleranceMeters,
+        parallelSinTolerance: BARRIER_PARALLEL_SIN_TOLERANCE
+      });
+    }
+  }
+
+  const uniqueInternalBoundaryKm = internalBoundaryMeters / 2 / 1_000;
+  const uniqueBarrierAlignedKm = barrierAlignedMeters / 2 / 1_000;
+  const ratio =
+    uniqueInternalBoundaryKm > 0 ? clamp01(uniqueBarrierAlignedKm / uniqueInternalBoundaryKm) : 0;
+
+  return {
+    realBarrierRatio: roundMetric(ratio),
+    syntheticBoundaryRatio: roundMetric(clamp01(1 - ratio)),
+    totalInternalBoundaryLengthKm: roundMetric(uniqueInternalBoundaryKm),
+    barrierAlignedBoundaryLengthKm: roundMetric(uniqueBarrierAlignedKm),
+    parentBoundaryLengthKm: roundMetric(parentBoundaryMeters / 1_000)
+  };
+}
+
+function segmentAlignedLengthMeters(
   segment: { a: LngLat; b: LngLat },
   candidates: readonly { a: LngLat; b: LngLat }[],
-  tolerance: number
-): boolean {
-  return candidates.some((candidate) => segmentOverlapRatio(segment, candidate, tolerance) >= 0.6);
+  options: { toleranceMeters: number; parallelSinTolerance: number }
+): number {
+  const latitude = (segment.a[1] + segment.b[1]) / 2;
+  const origin = projectLngLatToMeters(segment.a, latitude);
+  const end = projectLngLatToMeters(segment.b, latitude);
+  const dx = end[0] - origin[0];
+  const dy = end[1] - origin[1];
+  const lengthMeters = Math.hypot(dx, dy);
+
+  if (lengthMeters <= 0) {
+    return 0;
+  }
+
+  const intervals: Array<[number, number]> = [];
+
+  for (const candidate of candidates) {
+    if (!segmentBBoxesOverlapWithinMeters(segment, candidate, latitude, options.toleranceMeters)) {
+      continue;
+    }
+
+    const candidateStart = projectLngLatToMeters(candidate.a, latitude);
+    const candidateEnd = projectLngLatToMeters(candidate.b, latitude);
+    const candidateDx = candidateEnd[0] - candidateStart[0];
+    const candidateDy = candidateEnd[1] - candidateStart[1];
+    const candidateLengthMeters = Math.hypot(candidateDx, candidateDy);
+
+    if (candidateLengthMeters <= 0) {
+      continue;
+    }
+
+    const parallel =
+      Math.abs(cross(dx, dy, candidateDx, candidateDy)) / (lengthMeters * candidateLengthMeters);
+
+    if (parallel > options.parallelSinTolerance) {
+      continue;
+    }
+
+    const distanceStart = pointToProjectedLineDistanceMeters(candidateStart, origin, dx, dy);
+    const distanceEnd = pointToProjectedLineDistanceMeters(candidateEnd, origin, dx, dy);
+    const distanceMid = pointToProjectedLineDistanceMeters(
+      [(candidateStart[0] + candidateEnd[0]) / 2, (candidateStart[1] + candidateEnd[1]) / 2],
+      origin,
+      dx,
+      dy
+    );
+
+    if (Math.min(Math.max(distanceStart, distanceEnd), distanceMid) > options.toleranceMeters) {
+      continue;
+    }
+
+    const start = projectDistanceOnSegment(candidateStart, origin, dx, dy, lengthMeters);
+    const endDistance = projectDistanceOnSegment(candidateEnd, origin, dx, dy, lengthMeters);
+    const intervalStart = Math.max(0, Math.min(start, endDistance));
+    const intervalEnd = Math.min(lengthMeters, Math.max(start, endDistance));
+
+    if (intervalEnd - intervalStart > COORDINATE_EPSILON) {
+      intervals.push([intervalStart, intervalEnd]);
+    }
+  }
+
+  return mergeIntervalLengthMeters(intervals, options.toleranceMeters);
 }
 
-function segmentOverlapRatio(
+function segmentBBoxesOverlapWithinMeters(
   left: { a: LngLat; b: LngLat },
   right: { a: LngLat; b: LngLat },
-  tolerance: number
-): number {
-  const leftDx = left.b[0] - left.a[0];
-  const leftDy = left.b[1] - left.a[1];
-  const rightDx = right.b[0] - right.a[0];
-  const rightDy = right.b[1] - right.a[1];
-  const leftLength = Math.hypot(leftDx, leftDy);
-  const rightLength = Math.hypot(rightDx, rightDy);
+  latitude: number,
+  toleranceMeters: number
+): boolean {
+  const longitudeTolerance = toleranceMeters / (kilometersPerLongitudeDegree(latitude) * 1_000);
+  const latitudeTolerance = toleranceMeters / 111_320;
+  const leftWest = Math.min(left.a[0], left.b[0]) - longitudeTolerance;
+  const leftEast = Math.max(left.a[0], left.b[0]) + longitudeTolerance;
+  const leftSouth = Math.min(left.a[1], left.b[1]) - latitudeTolerance;
+  const leftNorth = Math.max(left.a[1], left.b[1]) + latitudeTolerance;
+  const rightWest = Math.min(right.a[0], right.b[0]);
+  const rightEast = Math.max(right.a[0], right.b[0]);
+  const rightSouth = Math.min(right.a[1], right.b[1]);
+  const rightNorth = Math.max(right.a[1], right.b[1]);
 
-  if (leftLength <= 0 || rightLength <= 0) {
-    return 0;
-  }
-
-  const parallel = Math.abs(cross(leftDx, leftDy, rightDx, rightDy)) / (leftLength * rightLength);
-  if (parallel > 0.001) {
-    return 0;
-  }
-
-  const distanceA = pointToLineDistanceDegrees(left.a, right);
-  const distanceB = pointToLineDistanceDegrees(left.b, right);
-
-  if (Math.max(distanceA, distanceB) > tolerance) {
-    return 0;
-  }
-
-  const useX = Math.abs(leftDx) >= Math.abs(leftDy);
-  const leftValues = useX ? [left.a[0], left.b[0]] : [left.a[1], left.b[1]];
-  const rightValues = useX ? [right.a[0], right.b[0]] : [right.a[1], right.b[1]];
-  const leftMin = Math.min(...leftValues);
-  const leftMax = Math.max(...leftValues);
-  const rightMin = Math.min(...rightValues);
-  const rightMax = Math.max(...rightValues);
-  const overlap = Math.max(0, Math.min(leftMax, rightMax) - Math.max(leftMin, rightMin));
-  const leftSpan = Math.max(COORDINATE_EPSILON, leftMax - leftMin);
-
-  return overlap / leftSpan;
+  return (
+    leftWest <= rightEast &&
+    leftEast >= rightWest &&
+    leftSouth <= rightNorth &&
+    leftNorth >= rightSouth
+  );
 }
 
-function pointToLineDistanceDegrees(point: LngLat, line: { a: LngLat; b: LngLat }): number {
-  const dx = line.b[0] - line.a[0];
-  const dy = line.b[1] - line.a[1];
+function projectLngLatToMeters(point: LngLat, latitude: number): [number, number] {
+  return [point[0] * kilometersPerLongitudeDegree(latitude) * 1_000, point[1] * 111_320];
+}
+
+function pointToProjectedLineDistanceMeters(
+  point: [number, number],
+  origin: [number, number],
+  dx: number,
+  dy: number
+): number {
   const length = Math.hypot(dx, dy);
 
   if (length <= 0) {
-    return Math.hypot(point[0] - line.a[0], point[1] - line.a[1]);
+    return Math.hypot(point[0] - origin[0], point[1] - origin[1]);
   }
 
-  return Math.abs(cross(dx, dy, point[0] - line.a[0], point[1] - line.a[1])) / length;
+  return Math.abs(cross(dx, dy, point[0] - origin[0], point[1] - origin[1])) / length;
+}
+
+function projectDistanceOnSegment(
+  point: [number, number],
+  origin: [number, number],
+  dx: number,
+  dy: number,
+  lengthMeters: number
+): number {
+  return ((point[0] - origin[0]) * dx + (point[1] - origin[1]) * dy) / lengthMeters;
+}
+
+function mergeIntervalLengthMeters(
+  intervals: Array<[number, number]>,
+  mergeToleranceMeters: number
+): number {
+  if (intervals.length === 0) {
+    return 0;
+  }
+
+  const sorted = intervals.sort((left, right) => left[0] - right[0] || left[1] - right[1]);
+  let total = 0;
+  let [start, end] = sorted[0]!;
+
+  for (const [nextStart, nextEnd] of sorted.slice(1)) {
+    if (nextStart <= end + mergeToleranceMeters) {
+      end = Math.max(end, nextEnd);
+      continue;
+    }
+
+    total += end - start;
+    start = nextStart;
+    end = nextEnd;
+  }
+
+  total += end - start;
+  return total;
 }
 
 function sizeFitness(areaKm2: number, configuration: TurkeySmartFallbackConfiguration): number {
@@ -2101,7 +2810,7 @@ function normalizeLocalitySeeds(
   seeds: readonly TurkeySmartFallbackLocalitySeed[],
   parentGeometry: ClippingMultiPolygon
 ): TurkeySmartFallbackLocalitySeed[] {
-  return seeds
+  const normalized = seeds
     .filter(
       (seed) =>
         seed.name.trim().length > 0 &&
@@ -2116,6 +2825,33 @@ function normalizeLocalitySeeds(
       confidence: clamp01(seed.confidence ?? 0.8)
     }))
     .sort(compareSeeds);
+
+  const deduped: TurkeySmartFallbackLocalitySeed[] = [];
+
+  for (const seed of normalized) {
+    const duplicateIndex = deduped.findIndex(
+      (candidate) =>
+        normalizeSeedName(candidate.name) === normalizeSeedName(seed.name) &&
+        (candidate.type ?? "unknown") === (seed.type ?? "unknown") &&
+        haversineKm(candidate.coordinate, seed.coordinate) <= 0.05
+    );
+
+    if (duplicateIndex === -1) {
+      deduped.push(seed);
+      continue;
+    }
+
+    const duplicate = deduped[duplicateIndex]!;
+    if ((seed.confidence ?? 0) > (duplicate.confidence ?? 0)) {
+      deduped[duplicateIndex] = seed;
+    }
+  }
+
+  return deduped.sort(compareSeeds);
+}
+
+function normalizeSeedName(input: string): string {
+  return input.trim().toLocaleLowerCase("tr").replace(/\s+/g, " ");
 }
 
 function selectProfile(input: {
@@ -2133,19 +2869,64 @@ function selectProfile(input: {
     };
   }
 
-  if (input.roadDensityKmPerKm2 >= 12 || input.localitySeedCount >= 20) {
-    return { selectedProfile: "dense-urban", reasons: ["road-density>=12-or-seeds>=20"] };
+  if (
+    input.parentAreaKm2 <= 75 &&
+    (input.roadDensityKmPerKm2 >= 12 || input.localitySeedCount >= 20)
+  ) {
+    return {
+      selectedProfile: "dense-urban",
+      reasons: ["area<=75-and-road-density>=12-or-seeds>=20"]
+    };
   }
 
-  if (input.roadDensityKmPerKm2 >= 5 || input.parentAreaKm2 <= 75) {
-    return { selectedProfile: "urban", reasons: ["road-density>=5-or-area<=75"] };
+  if (
+    input.parentAreaKm2 <= 150 &&
+    (input.roadDensityKmPerKm2 >= 5 || input.localitySeedCount >= 8 || input.parentAreaKm2 <= 75)
+  ) {
+    return {
+      selectedProfile: "urban",
+      reasons: ["area<=150-and-road-density>=5-or-seeds>=8-or-area<=75"]
+    };
   }
 
-  if (input.parentAreaKm2 <= 450 || input.strongBarrierCount + input.mediumBarrierCount >= 5) {
-    return { selectedProfile: "suburban", reasons: ["area<=450-or-barriers>=5"] };
+  if (
+    input.parentAreaKm2 <= 450 ||
+    input.roadDensityKmPerKm2 >= 1.5 ||
+    (input.parentAreaKm2 <= 1_000 && input.strongBarrierCount + input.mediumBarrierCount >= 5)
+  ) {
+    return {
+      selectedProfile: "suburban",
+      reasons: ["area<=450-or-road-density>=1.5-or-area<=1000-and-barriers>=5"]
+    };
   }
 
   return { selectedProfile: "rural", reasons: ["area>450"] };
+}
+
+function isLikelySwappedTurkeyGeometry(geometry: TerritoryGeometry): boolean {
+  const [west, south, east, north] = computeGeometryBBox(geometry);
+  const longitudeLooksLikeTurkeyLatitude = west >= 35 && east <= 43;
+  const latitudeLooksLikeTurkeyLongitude = south >= 25 && north <= 45;
+  const longitudeLooksLikeTurkeyLongitude = west >= 25 && east <= 45;
+  const latitudeLooksLikeTurkeyLatitude = south >= 35 && north <= 43;
+
+  return (
+    longitudeLooksLikeTurkeyLatitude &&
+    latitudeLooksLikeTurkeyLongitude &&
+    !(longitudeLooksLikeTurkeyLongitude && latitudeLooksLikeTurkeyLatitude)
+  );
+}
+
+function snapToleranceDegreesToMeters(value: number | undefined): number | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  if (!Number.isFinite(value) || value <= 0) {
+    return undefined;
+  }
+
+  return roundMetric(value * 111_320);
 }
 
 function resolveBarrierConfig(
@@ -2412,37 +3193,6 @@ function intersectClippingGeometries(
   }
 }
 
-function differenceClippingGeometries(
-  subject: ClippingMultiPolygon,
-  ...clips: readonly ClippingMultiPolygon[]
-): ClippingMultiPolygon {
-  const nonEmptyClips = clips.filter(isNonEmptyClippingGeometry);
-
-  if (!isNonEmptyClippingGeometry(subject)) {
-    return [];
-  }
-
-  if (nonEmptyClips.length === 0) {
-    return canonicalizeClippingGeometry(subject);
-  }
-
-  try {
-    return canonicalizeClippingGeometry(CLIPPER.difference(subject, ...nonEmptyClips));
-  } catch {
-    let result = subject;
-
-    for (const clip of nonEmptyClips) {
-      try {
-        result = CLIPPER.difference(result, clip);
-      } catch {
-        continue;
-      }
-    }
-
-    return canonicalizeClippingGeometry(result);
-  }
-}
-
 function clippingAreaKm2(geometry: ClippingMultiPolygon): number {
   return roundAreaKm2(
     geometry.reduce((total, polygon) => total + Math.max(0, polygonAreaM2(polygon)), 0) / 1_000_000
@@ -2539,6 +3289,204 @@ function collectOverlapArea(zones: readonly TerritoryZone[]): number {
   return roundAreaKm2(overlapAreaKm2);
 }
 
+function topologyNoiseToleranceKm2(parentAreaKm2: number): number {
+  return roundAreaKm2(Math.max(AREA_TOLERANCE_KM2, Math.min(0.0001, parentAreaKm2 * 0.000002)));
+}
+
+function normalizeTopologyNoiseAreaKm2(value: number, toleranceKm2: number): number {
+  return value <= toleranceKm2 ? 0 : value;
+}
+
+function computeCoverageAreas(input: {
+  parentGeometry: ClippingMultiPolygon;
+  zoneGeometries: readonly ClippingMultiPolygon[];
+  overlapAreaKm2: number;
+}): {
+  parentAreaKm2: number;
+  smartUnionAreaKm2: number;
+  intersectionAreaKm2: number;
+  uncoveredInsideParentKm2: number;
+  outsideSpillKm2: number;
+  mode: "union" | "per-zone-fallback";
+  failureReason?: string;
+} {
+  const parentAreaKm2 = clippingAreaKm2(input.parentGeometry);
+  const unionAttempt = tryUnionClippingGeometries(input.zoneGeometries);
+
+  if (unionAttempt.ok) {
+    const intersection = tryIntersectClippingGeometries(
+      input.parentGeometry,
+      unionAttempt.geometry
+    );
+    const uncovered = tryDifferenceClippingGeometries(input.parentGeometry, unionAttempt.geometry);
+    const spill = tryDifferenceClippingGeometries(unionAttempt.geometry, input.parentGeometry);
+
+    if (intersection.ok && uncovered.ok && spill.ok) {
+      const intersectionAreaKm2 = clippingAreaKm2(intersection.geometry);
+      const outsideSpillKm2 = clippingAreaKm2(spill.geometry);
+
+      return {
+        parentAreaKm2,
+        smartUnionAreaKm2: roundAreaKm2(intersectionAreaKm2 + outsideSpillKm2),
+        intersectionAreaKm2,
+        uncoveredInsideParentKm2: clippingAreaKm2(uncovered.geometry),
+        outsideSpillKm2,
+        mode: "union"
+      };
+    }
+
+    const failureReason = [
+      intersection.ok ? undefined : `intersection:${intersection.failureReason}`,
+      uncovered.ok ? undefined : `uncovered:${uncovered.failureReason}`,
+      spill.ok ? undefined : `spill:${spill.failureReason}`
+    ]
+      .filter(Boolean)
+      .join(";");
+
+    return computePerZoneCoverageAreas({
+      parentGeometry: input.parentGeometry,
+      zoneGeometries: input.zoneGeometries,
+      overlapAreaKm2: input.overlapAreaKm2,
+      parentAreaKm2,
+      failureReason
+    });
+  }
+
+  return computePerZoneCoverageAreas({
+    parentGeometry: input.parentGeometry,
+    zoneGeometries: input.zoneGeometries,
+    overlapAreaKm2: input.overlapAreaKm2,
+    parentAreaKm2,
+    failureReason: `union:${unionAttempt.failureReason}`
+  });
+}
+
+function computePerZoneCoverageAreas(input: {
+  parentGeometry: ClippingMultiPolygon;
+  zoneGeometries: readonly ClippingMultiPolygon[];
+  overlapAreaKm2: number;
+  parentAreaKm2: number;
+  failureReason?: string;
+}): {
+  parentAreaKm2: number;
+  smartUnionAreaKm2: number;
+  intersectionAreaKm2: number;
+  uncoveredInsideParentKm2: number;
+  outsideSpillKm2: number;
+  mode: "per-zone-fallback";
+  failureReason?: string;
+} {
+  let intersectionAreaKm2 = 0;
+  let outsideSpillKm2 = 0;
+
+  for (const geometry of input.zoneGeometries) {
+    const zoneAreaKm2 = clippingAreaKm2(geometry);
+    const intersection = tryIntersectClippingGeometries(input.parentGeometry, geometry);
+    const clippedAreaKm2 = intersection.ok ? clippingAreaKm2(intersection.geometry) : 0;
+    const spill = tryDifferenceClippingGeometries(geometry, input.parentGeometry);
+
+    intersectionAreaKm2 += clippedAreaKm2;
+    outsideSpillKm2 += spill.ok
+      ? clippingAreaKm2(spill.geometry)
+      : Math.max(0, zoneAreaKm2 - clippedAreaKm2);
+  }
+
+  const effectiveIntersectionAreaKm2 = roundAreaKm2(
+    clampNumber(
+      intersectionAreaKm2 - input.overlapAreaKm2,
+      0,
+      Math.max(input.parentAreaKm2, intersectionAreaKm2)
+    )
+  );
+  const normalizedIntersectionAreaKm2 = roundAreaKm2(
+    Math.min(input.parentAreaKm2, effectiveIntersectionAreaKm2)
+  );
+  const normalizedOutsideSpillKm2 = roundAreaKm2(Math.max(0, outsideSpillKm2));
+
+  return {
+    parentAreaKm2: input.parentAreaKm2,
+    smartUnionAreaKm2: roundAreaKm2(normalizedIntersectionAreaKm2 + normalizedOutsideSpillKm2),
+    intersectionAreaKm2: normalizedIntersectionAreaKm2,
+    uncoveredInsideParentKm2: roundAreaKm2(
+      Math.max(0, input.parentAreaKm2 - normalizedIntersectionAreaKm2)
+    ),
+    outsideSpillKm2: normalizedOutsideSpillKm2,
+    mode: "per-zone-fallback",
+    ...(input.failureReason ? { failureReason: input.failureReason } : {})
+  };
+}
+
+function tryUnionClippingGeometries(
+  geometries: readonly ClippingMultiPolygon[]
+): { ok: true; geometry: ClippingMultiPolygon } | { ok: false; failureReason: string } {
+  const nonEmpty = geometries.filter(isNonEmptyClippingGeometry);
+
+  if (nonEmpty.length === 0) {
+    return { ok: true, geometry: [] };
+  }
+
+  if (nonEmpty.length === 1) {
+    return { ok: true, geometry: canonicalizeClippingGeometry(nonEmpty[0]!) };
+  }
+
+  try {
+    return {
+      ok: true,
+      geometry: canonicalizeClippingGeometry(CLIPPER.union(nonEmpty[0]!, ...nonEmpty.slice(1)))
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      failureReason: error instanceof Error ? error.message : String(error)
+    };
+  }
+}
+
+function tryIntersectClippingGeometries(
+  left: ClippingMultiPolygon,
+  right: ClippingMultiPolygon
+): { ok: true; geometry: ClippingMultiPolygon } | { ok: false; failureReason: string } {
+  if (!isNonEmptyClippingGeometry(left) || !isNonEmptyClippingGeometry(right)) {
+    return { ok: true, geometry: [] };
+  }
+
+  try {
+    return { ok: true, geometry: canonicalizeClippingGeometry(CLIPPER.intersection(left, right)) };
+  } catch (error) {
+    return {
+      ok: false,
+      failureReason: error instanceof Error ? error.message : String(error)
+    };
+  }
+}
+
+function tryDifferenceClippingGeometries(
+  subject: ClippingMultiPolygon,
+  ...clips: readonly ClippingMultiPolygon[]
+): { ok: true; geometry: ClippingMultiPolygon } | { ok: false; failureReason: string } {
+  const nonEmptyClips = clips.filter(isNonEmptyClippingGeometry);
+
+  if (!isNonEmptyClippingGeometry(subject)) {
+    return { ok: true, geometry: [] };
+  }
+
+  if (nonEmptyClips.length === 0) {
+    return { ok: true, geometry: canonicalizeClippingGeometry(subject) };
+  }
+
+  try {
+    return {
+      ok: true,
+      geometry: canonicalizeClippingGeometry(CLIPPER.difference(subject, ...nonEmptyClips))
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      failureReason: error instanceof Error ? error.message : String(error)
+    };
+  }
+}
+
 function pointInClippingGeometry(point: LngLat, geometry: ClippingMultiPolygon): boolean {
   const territoryGeometry = clippingMultiPolygonToTerritoryGeometry(geometry);
   return territoryGeometry ? pointInGeometry(point, territoryGeometry) : false;
@@ -2602,6 +3550,18 @@ function pointOnSegment(point: LngLat, a: LngLat, b: LngLat): boolean {
   return distance <= COORDINATE_EPSILON && withinX && withinY;
 }
 
+function pointToLineDistanceDegrees(point: LngLat, line: { a: LngLat; b: LngLat }): number {
+  const dx = line.b[0] - line.a[0];
+  const dy = line.b[1] - line.a[1];
+  const length = Math.hypot(dx, dy);
+
+  if (length <= 0) {
+    return Math.hypot(point[0] - line.a[0], point[1] - line.a[1]);
+  }
+
+  return Math.abs(cross(dx, dy, point[0] - line.a[0], point[1] - line.a[1])) / length;
+}
+
 function countSeedsInGeometry(
   seeds: readonly TurkeySmartFallbackLocalitySeed[],
   geometry: ClippingMultiPolygon
@@ -2658,9 +3618,11 @@ function sharedBoundaryKmBetween(left: ClippingMultiPolygon, right: ClippingMult
   const rightSegments = geometrySegments(rightGeometry);
 
   for (const segment of geometrySegments(leftGeometry)) {
-    if (isAlignedWithAny(segment, rightSegments, 1e-8)) {
-      total += haversineKm(segment.a, segment.b);
-    }
+    total +=
+      segmentAlignedLengthMeters(segment, rightSegments, {
+        toleranceMeters: PARENT_EDGE_TOLERANCE_METERS,
+        parallelSinTolerance: PARENT_PARALLEL_SIN_TOLERANCE
+      }) / 1_000;
   }
 
   return roundMetric(total);
@@ -2969,7 +3931,7 @@ function normalizeRadians(radians: number): number {
 }
 
 function roundCoordinate(value: number): number {
-  return Number(value.toFixed(12));
+  return Number(value.toFixed(7));
 }
 
 function roundAreaKm2(value: number): number {
@@ -2985,6 +3947,10 @@ function clamp01(value: number): number {
 }
 
 function clampInteger(value: number, minValue: number, maxValue: number): number {
+  return Math.max(minValue, Math.min(maxValue, value));
+}
+
+function clampNumber(value: number, minValue: number, maxValue: number): number {
   return Math.max(minValue, Math.min(maxValue, value));
 }
 
@@ -3016,4 +3982,41 @@ function meanMetric(values: readonly number[]): number {
 
 function minMetric(values: readonly number[]): number {
   return values.length === 0 ? 0 : roundMetric(Math.min(...values));
+}
+
+function metricDistribution(values: readonly number[]): {
+  min: number;
+  p10: number;
+  median: number;
+  mean: number;
+  p90: number;
+  max: number;
+} {
+  if (values.length === 0) {
+    return { min: 0, p10: 0, median: 0, mean: 0, p90: 0, max: 0 };
+  }
+
+  const sorted = [...values].sort((left, right) => left - right);
+
+  return {
+    min: roundMetric(sorted[0]!),
+    p10: percentile(sorted, 0.1),
+    median: percentile(sorted, 0.5),
+    mean: meanMetric(sorted),
+    p90: percentile(sorted, 0.9),
+    max: roundMetric(sorted[sorted.length - 1]!)
+  };
+}
+
+function percentile(sortedValues: readonly number[], fraction: number): number {
+  if (sortedValues.length === 0) {
+    return 0;
+  }
+
+  const index = Math.min(
+    sortedValues.length - 1,
+    Math.max(0, Math.floor((sortedValues.length - 1) * fraction))
+  );
+
+  return roundMetric(sortedValues[index]!);
 }
