@@ -129,6 +129,8 @@ describe("Turkey OSM barrier snapshot pipeline", () => {
       });
       const artifact = await readTurkeyOsmAdm2BarrierArtifact(outputRoot, adm2.id);
       const roadGeometry = artifact.roads.features[0]?.geometry;
+      const waterGeometry = artifact.water.features[0]?.geometry;
+      const railGeometry = artifact.railways.features[0]?.geometry;
 
       expect(first).toMatchObject({
         ok: true,
@@ -144,6 +146,20 @@ describe("Turkey OSM barrier snapshot pipeline", () => {
         coordinates: [
           [0, 0.5],
           [1, 0.5]
+        ]
+      });
+      expect(waterGeometry).toMatchObject({
+        type: "LineString",
+        coordinates: [
+          [0.5, 0],
+          [0.5, 1]
+        ]
+      });
+      expect(railGeometry).toMatchObject({
+        type: "LineString",
+        coordinates: [
+          [0.75, 0],
+          [0.75, 1]
         ]
       });
     } finally {

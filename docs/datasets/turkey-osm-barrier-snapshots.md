@@ -190,6 +190,10 @@ Polygon barriers are intersected with the ADM2 geometry before serialization. Fe
 property order, coordinate rounding, stable IDs, and artifact hashes are deterministic for the same
 snapshot and code version.
 
+Sprint 5.1 verified deterministic Fatih extraction by comparing the original real Fatih artifact
+with a rerun from the locked Geofabrik snapshot. Both produced artifact checksum
+`ee5e51ada406a7202fea7933cbd35de6554428567ce4ec1cc5772a0ed7d5864f`.
+
 ## Quality And Eligibility
 
 `quality.json` includes:
@@ -241,6 +245,25 @@ territory tr osm smart coverage \
 The report counts ADM2 totals, official coverage, OSM administrative coverage, smart-eligible
 barrier artifacts, smart-generated results when supplied, smart quality rejections, insufficient
 inputs, and legacy-required districts.
+
+## Sprint 5.1 Calibration
+
+The Sprint 5.1 real-pilot matrix used the locked Geofabrik Turkey PBF snapshot
+`5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc`, dated
+`2026-08-27T20:21:06.000Z`.
+
+| ADM2   | Class                        | Barrier status | Hybrid fallback | Smart result                        |
+| ------ | ---------------------------- | -------------- | --------------- | ----------------------------------- |
+| Fatih  | dense urban regression       | eligible       | smart           | accepted, 47 zones                  |
+| Gebze  | suburban metropolitan stress | eligible       | legacy          | rejected, maximum-area gate         |
+| Kangal | rural sparse stress          | eligible       | legacy          | rejected, sparse alignment/topology |
+| Bodrum | coastal stress               | eligible       | legacy          | rejected, maximum-area/alignment    |
+
+The four-pilot barrier extraction processed 4 ADM2 artifacts in `543550 ms`, with max resident set
+size `1198473216` bytes and all four artifacts eligible. The pilot artifacts intentionally report
+`parks=0` and `landuse=0` where the source snapshot did not yield clipped features for the selected
+districts; smart fallback treats those as optional soft barriers and keeps the counts visible in
+`inputDiagnostics`.
 
 ## Resume And Failure Modes
 

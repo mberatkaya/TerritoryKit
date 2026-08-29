@@ -106,6 +106,7 @@ territory tr osm verify --source-lock .territory/cache/osm/TR/<snapshot-id>/sour
 territory tr osm barriers build --adm2 .territory/build/TR/V2-national/levels/ADM2/dataset.json --source-lock .territory/cache/osm/TR/<snapshot-id>/source-lock.json --offline --output .territory/build/TR/OSM-barriers --concurrency 2
 territory tr osm barriers inspect --barriers .territory/build/TR/OSM-barriers --adm2 tr:adm2:example
 territory tr osm smart coverage --adm2 .territory/build/TR/V2-national/levels/ADM2/dataset.json --barriers .territory/build/TR/OSM-barriers --output reports/tr-adm3/osm-smart-coverage.json
+territory tr adm3 hybrid build --district .territory/build/TR/V2-national/levels/ADM2/dataset.json --district-id tr:adm2:example --osm-barrier-artifact .territory/build/TR/OSM-barriers/ADM2/tr_adm2_example --output .territory/build/TR/ADM3-smart-example --force
 territory geometry simplify ./dist/tr/levels/ADM2/dataset.json --strategy topology-safe --detail high,medium,low --output ./dist/tr/levels/ADM2/simplified --report ./dist/tr/levels/ADM2/simplification-report.json
 territory registry build --input ./dist --output ./dist/registry.json --base-url https://cdn.example.test/datasets/
 territory dataset install territory-kit-tr --registry ./dist/registry.json --levels ADM0,ADM1 --load-adjacency
@@ -138,6 +139,10 @@ gameplay coverage with `boundaryKind: "estimated"`, `boundarySourceClass: "smart
 OSM snapshots and offline rebuilds instead of live Overpass queries. See
 [docs/datasets/turkey-smart-fallback.md](./docs/datasets/turkey-smart-fallback.md) and
 [docs/datasets/turkey-osm-barrier-snapshots.md](./docs/datasets/turkey-osm-barrier-snapshots.md).
+Sprint 5.1 calibrates that path against a real locked Fatih artifact: smart fallback now selects
+47 smart-derived zones for Fatih with `coverage=99.999548`, `outsideSpill=0`,
+`meanBarrierAlignment=0.266414`, and `meanQuality=0.622904`. Hybrid quality reports expose
+`smartAttempt` so accepted smart output and smart-to-legacy fallback decisions are auditable.
 Turkey V2 defines the additive data contract for mixing official, OSM, and generated ADM3 game
 zones without presenting generated zones as official mahalle/koy records. The stable national
 builder applies official, OSM administrative, smart-derived, then legacy fallback priority, emits

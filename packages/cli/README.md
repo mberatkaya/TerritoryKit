@@ -38,6 +38,7 @@ territory tr osm verify --source-lock .territory/cache/osm/TR/<snapshot-id>/sour
 territory tr osm barriers build --adm2 .territory/build/TR/V2-national/levels/ADM2/dataset.json --source-lock .territory/cache/osm/TR/<snapshot-id>/source-lock.json --offline --output .territory/build/TR/OSM-barriers --concurrency 2
 territory tr osm barriers inspect --barriers .territory/build/TR/OSM-barriers --adm2 tr:adm2:example
 territory tr osm smart coverage --adm2 .territory/build/TR/V2-national/levels/ADM2/dataset.json --barriers .territory/build/TR/OSM-barriers --output reports/tr-adm3/osm-smart-coverage.json
+territory tr adm3 hybrid build --district .territory/build/TR/V2-national/levels/ADM2/dataset.json --district-id tr:adm2:example --osm-barrier-artifact .territory/build/TR/OSM-barriers/ADM2/tr_adm2_example --output .territory/build/TR/ADM3-smart-example --force
 territory registry publish --artifact-root ./dist/tr/artifact --registry-output ./dist/registry --dataset territory-kit-tr --version 1.0.0 --base-url https://datasets.example.com/tr/1.0.0/ --artifact-prefix tr/1.0.0 --dry-run
 territory registry verify --registry https://datasets.example.com/registry.json --dataset territory-kit-tr --version 1.0.0
 ```
@@ -84,6 +85,10 @@ territory registry verify --registry https://datasets.example.com/registry.json 
   barrier artifacts. Production smart fallback uses a cached `.osm.pbf` source lock, SHA-256
   verification, deterministic road/rail/water/park/landuse extraction, locality seeds, and offline
   rebuilds instead of live Overpass calls.
+- `territory tr adm3 hybrid build --osm-barrier-artifact <dir>` runs a single-district hybrid
+  decision with an eligible ADM2 barrier artifact. District summaries include `selectedFallback`;
+  quality reports include `smartAttempt` with smart acceptance, gate failures, real-barrier
+  alignment metrics, raw input diagnostics, and raw topology coverage areas.
 - `territory registry publish` prepares provider-neutral hosted registry bundles with immutable
   version artifacts, inventory metadata, and rollback manifests.
 - `territory registry verify` validates a hosted registry and checks artifact SHA-256 and byte

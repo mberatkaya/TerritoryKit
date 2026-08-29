@@ -8,7 +8,8 @@ import {
   buildTurkeySmartFallback,
   buildTurkeySmartFallbackWithAdjacency,
   createTurkeySmartFallbackDataset,
-  normalizeTurkeySmartFallbackBarriers
+  normalizeTurkeySmartFallbackBarriers,
+  resolveTurkeySmartFallbackConfiguration
 } from "../src/turkey-adm3.js";
 
 describe("Turkey ADM3 smart fallback boundary engine", () => {
@@ -86,6 +87,141 @@ describe("Turkey ADM3 smart fallback boundary engine", () => {
     expect(barriers.some((barrier) => barrier.sourceNativeId === "service")).toBe(false);
   });
 
+  it("merges connected same-name OSM way fragments before scoring alignment", () => {
+    const parent = districtZone("barrier-merge", rectangle(0, 0, 1, 1));
+    const barriers = normalizeTurkeySmartFallbackBarriers({
+      parent,
+      provinceCode: "01",
+      districtCode: "barrier-merge",
+      profile: "custom",
+      roads: lineCollection([
+        lineFeature(
+          "segment-a",
+          [
+            [0.5, 0],
+            [0.5, 0.5]
+          ],
+          { highway: "primary", name: "Millet Caddesi", source: "openstreetmap" }
+        ),
+        lineFeature(
+          "segment-b",
+          [
+            [0.5, 0.5],
+            [0.5, 1]
+          ],
+          { highway: "primary", name: "Millet Caddesi", source: "openstreetmap" }
+        )
+      ])
+    });
+
+    expect(barriers).toHaveLength(1);
+    expect(barriers[0]).toMatchObject({
+      sourceNativeId: expect.stringMatching(/^merged:2:/),
+      barrierClass: "road",
+      strengthClass: "strong",
+      coordinates: [
+        [0.5, 0],
+        [0.5, 0.5],
+        [0.5, 1]
+      ]
+    });
+  });
+
+  it("rejects Turkey-shaped latitude-longitude parent geometries", () => {
+    const parent = districtZone("swapped-coordinate-order", rectangle(40, 28, 41, 29));
+    const result = buildTurkeySmartFallback({
+      parent,
+      provinceCode: "01",
+      districtCode: "swapped-coordinate-order",
+      profile: "custom",
+      roads: lineCollection([
+        lineFeature(
+          "primary",
+          [
+            [40.5, 28],
+            [40.5, 29]
+          ],
+          { highway: "primary", source: "openstreetmap" }
+        )
+      ]),
+      options: twoZoneOptions()
+    });
+
+    expect(result.quality.ok).toBe(false);
+    expect(result.status).toBe("rejected");
+    expect(result.zones).toHaveLength(0);
+    expect(result.reasonCodes).toContain("SMART_FALLBACK_COORDINATE_ORDER_INVALID");
+  });
+
+  it("does not infer dense-urban profile for large districts from seed count alone", () => {
+    const parent = districtZone("large-rural-seeds", rectangle(36, 39, 36.25, 39.25));
+    const seeds = Array.from({ length: 40 }, (_, index) => ({
+      name: `Seed ${index + 1}`,
+      coordinate: [36.02 + (index % 8) * 0.025, 39.02 + Math.floor(index / 8) * 0.04] as LngLat
+    }));
+    const resolution = resolveTurkeySmartFallbackConfiguration({
+      parent,
+      provinceCode: "01",
+      districtCode: "large-rural-seeds",
+      profile: "auto",
+      localitySeeds: seeds,
+      roads: lineCollection([
+        lineFeature(
+          "primary",
+          [
+            [36, 39.125],
+            [36.25, 39.125]
+          ],
+          { highway: "primary", source: "openstreetmap" }
+        )
+      ])
+    });
+
+    expect(resolution.configuration.selectedProfile).toBe("rural");
+    expect(resolution.configuration.targetTerritoryCount).toBeLessThan(100);
+  });
+
+  it("ignores ADM2 outer-edge barriers and reports smart input diagnostics", () => {
+    const parent = districtZone("parent-edge-diagnostics", rectangle(0, 0, 1, 1));
+    const result = buildTurkeySmartFallback({
+      parent,
+      provinceCode: "01",
+      districtCode: "parent-edge-diagnostics",
+      profile: "custom",
+      roads: lineCollection([
+        lineFeature(
+          "outer-edge",
+          [
+            [0, 0],
+            [1, 0]
+          ],
+          { highway: "primary", source: "openstreetmap" }
+        ),
+        lineFeature(
+          "internal",
+          [
+            [0.5, 0],
+            [0.5, 1]
+          ],
+          { highway: "primary", source: "openstreetmap" }
+        )
+      ]),
+      options: twoZoneOptions()
+    });
+
+    expect(result.quality.ok).toBe(true);
+    expect(result.quality.inputDiagnostics).toMatchObject({
+      roadsRaw: 2,
+      roadsNormalized: 1,
+      majorRoadsRaw: 2,
+      majorRoadsNormalized: 1,
+      parentEdgeBarrierCount: 1,
+      internalBarrierCount: 1
+    });
+    expect(result.quality.meanBarrierAlignment).toBe(1);
+    expect(result.reasonCodes).toContain("SMART_FALLBACK_BARRIER_IGNORED");
+  });
+
   it("generates TR V2-compatible derived territories on an urban road grid", async () => {
     const parent = districtZone("smart-grid", rectangle(0, 0, 1, 1));
     const result = await buildTurkeySmartFallbackWithAdjacency({
@@ -131,6 +267,22 @@ describe("Turkey ADM3 smart fallback boundary engine", () => {
     expect(result.zones).toHaveLength(4);
     expect(result.quality.coveragePercent).toBe(100);
     expect(result.quality.meanBarrierAlignment).toBe(1);
+    expect(result.quality.meanRealBarrierRatio).toBe(1);
+    expect(result.quality.meanSyntheticBoundaryRatio).toBe(0);
+    expect(result.quality.coverageComputation).toMatchObject({
+      mode: "union",
+      unionFailed: false,
+      rawOverlapAreaKm2: 0,
+      rawOutsideSpillKm2: 0,
+      rawUncoveredInsideParentKm2: 0
+    });
+    expect(result.quality.coverageComputation.topologyToleranceKm2).toBeGreaterThan(0);
+    expect(result.quality.inputDiagnostics).toMatchObject({
+      roadsRaw: 2,
+      roadsNormalized: 2,
+      seedsRaw: 4,
+      seedsNormalized: 4
+    });
     expect(result.adjacency?.edges).toHaveLength(4);
     expect(validation.ok).toBe(true);
     expect(result.zones.map((zone) => zone.bbox)).toEqual([

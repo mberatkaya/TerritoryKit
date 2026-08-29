@@ -57,3 +57,6 @@ Geofabrik/OpenStreetMap `.osm.pbf` snapshots stay in `.territory/cache`, normali
 ADM2 barrier artifacts stay in local or hosted artifact storage, and this package remains a thin
 resolver descriptor. Smart-derived ADM3 output produced from those barriers is still generated,
 estimated, non-administrative gameplay coverage, not official mahalle or koy geometry.
+Sprint 5.1 adds smart fallback calibration diagnostics to those external artifacts; hybrid quality
+reports can expose `smartAttempt` so clients can audit whether a district used accepted smart
+geometry or legacy generated fallback after a smart rejection.

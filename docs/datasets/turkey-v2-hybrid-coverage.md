@@ -111,6 +111,19 @@ The district result includes:
 The batch result also writes `batch-summary.json`, `failed-districts.json`, and per-district report
 folders.
 
+When a district attempts smart fallback, `quality-report.json` includes `smartAttempt`:
+
+- `accepted` and `selectedFallback` show whether smart output was published or legacy generated
+  fallback was selected.
+- `metrics` mirrors the smart quality report: coverage, spill, overlap, quality distribution,
+  real-barrier alignment, split/merge counts, and barrier counts.
+- `gates`, `errorCodes`, and `reasonCodes` make rejection causes machine-readable.
+- `inputDiagnostics` and `coverageComputation` expose raw OSM layer counts and raw topology areas
+  used by the smart fallback gate decision.
+
+District build summaries also include `selectedFallback`; batch summaries include smart-attempt,
+smart-accepted, and smart-to-legacy fallback counts.
+
 ## Licensing
 
 The hybrid dataset manifest uses `license: "mixed"`. Per-zone provenance and attribution preserve

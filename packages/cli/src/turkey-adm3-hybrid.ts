@@ -178,6 +178,15 @@ export async function runTurkeyAdm3HybridBuild(args: string[]): Promise<number> 
         failedDistrictCount: result.coverage.failedDistrictCount,
         finalCoveragePercent: result.coverage.finalCoveragePercent,
         deterministicHash: result.deterministicHash,
+        smartAttemptedDistrictCount: result.districts.filter(
+          (districtResult) => districtResult.quality.smartAttempt
+        ).length,
+        smartAcceptedDistrictCount: result.districts.filter(
+          (districtResult) => districtResult.quality.smartAttempt?.accepted
+        ).length,
+        smartLegacyFallbackDistrictCount: result.districts.filter(
+          (districtResult) => districtResult.quality.smartAttempt?.selectedFallback === "legacy"
+        ).length,
         qualityOk: result.quality.ok,
         durationMs: Math.round(performance.now() - startedAt)
       };
@@ -248,6 +257,9 @@ export async function runTurkeyAdm3HybridBuild(args: string[]): Promise<number> 
       finalCoveragePercent: result.coverage.finalCoveragePercent,
       remainingGapAreaKm2: result.coverage.remainingGapAreaKm2,
       deterministicHash: result.deterministicHash,
+      selectedFallback:
+        result.quality.smartAttempt?.selectedFallback ?? result.coverage.generatedStrategy,
+      ...(result.quality.smartAttempt ? { smartAttempt: result.quality.smartAttempt } : {}),
       qualityOk: result.quality.ok,
       trV2ValidationOk: result.quality.strictValidation.ok,
       durationMs: Math.round(performance.now() - startedAt)
