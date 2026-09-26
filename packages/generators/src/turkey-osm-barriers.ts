@@ -48,7 +48,7 @@ export const TURKEY_OSM_BARRIER_QUALITY_SCHEMA_VERSION =
   "territorykit-tr-osm-barrier-quality@1" as const;
 export const TURKEY_OSM_SMART_COVERAGE_SCHEMA_VERSION =
   "territorykit-tr-osm-smart-coverage@1" as const;
-export const TURKEY_OSM_BARRIER_ALGORITHM_VERSION = "tr-osm-barriers-v1" as const;
+export const TURKEY_OSM_BARRIER_ALGORITHM_VERSION = "tr-osm-barriers-v1.1" as const;
 export const TURKEY_OSM_BARRIER_PROVIDER_ID = "geofabrik-osm-extracts" as const;
 export const TURKEY_OSM_BARRIER_PROVIDER_NAME = "Geofabrik OpenStreetMap extracts" as const;
 export const TURKEY_OSM_BARRIER_SOURCE_URL = "https://download.geofabrik.de/europe/turkey.html";
@@ -71,7 +71,12 @@ export type TurkeyOsmBarrierIssueCode =
   | "OSM_SNAPSHOT_SOURCE_UNSUPPORTED"
   | "OSM_BARRIER_ARTIFACT_INVALID"
   | "OSM_BARRIER_INPUT_INSUFFICIENT"
-  | "OSM_BARRIER_ADM2_PROCESSING_FAILED";
+  | "OSM_BARRIER_ADM2_PROCESSING_FAILED"
+  | "OSM_MULTIPOLYGON_INCOMPLETE_INNER"
+  | "OSM_MULTIPOLYGON_INCOMPLETE_OUTER"
+  | "OSM_MULTIPOLYGON_NESTED_RELATION_UNSUPPORTED"
+  | "OSM_MULTIPOLYGON_ORPHAN_INNER"
+  | "OSM_MULTIPOLYGON_UNSUPPORTED_RELATION_TYPE";
 
 export interface TurkeyOsmBarrierIssue {
   code: TurkeyOsmBarrierIssueCode;
@@ -192,6 +197,8 @@ export interface TurkeyOsmNormalizedBarriers {
     parsedPrimitiveBlocks: number;
     relevantWayCount: number;
     relationCount: number;
+    relationIssueCount: number;
+    relationIssues: TurkeyOsmBarrierIssue[];
     neededNodeCount: number;
     resolvedNodeCount: number;
   };
@@ -424,6 +431,23 @@ interface OsmNodeLookup {
   get(id: number): OsmNode | undefined;
 }
 
+interface RelationRingFragment {
+  role: "outer" | "inner";
+  wayId: number;
+  refs: number[];
+}
+
+interface StitchedRelationRing {
+  role: "outer" | "inner";
+  ring: LngLat[];
+  memberWayIds: number[];
+}
+
+interface RelationGeometryResult {
+  geometry?: Geometry;
+  issues: TurkeyOsmBarrierIssue[];
+}
+
 class ShardedNumberLookupSet implements NumberLookupSet {
   private readonly buckets: Array<Set<number>>;
   private count = 0;
@@ -488,9 +512,8 @@ class ShardedOsmNodeLookup implements OsmNodeLookup {
 }
 
 const textDecoder = new TextDecoder();
-const CLIPPER = {
-  intersection: polygonClipping.intersection
-};
+const CLIPPER =
+  (polygonClipping as unknown as { default?: typeof polygonClipping }).default ?? polygonClipping;
 const OSM_LOOKUP_BUCKET_COUNT = 256;
 const TURKEY_OSM_SPATIAL_FILTER_PADDING_DEGREES = 0.03;
 const TURKEY_OSM_EXTRACTION_FALLBACK_BATCH_SIZE = 16;
@@ -672,6 +695,7 @@ export async function extractTurkeyOsmBarriersFromPbf(
     );
     const nodes = await collectNeededNodes(options.pbfPath, inventory.neededNodeIds, parserOptions);
     const collections = createEmptyBarrierCollections();
+    const relationIssues: TurkeyOsmBarrierIssue[] = [];
 
     for (const way of inventory.ways.sort(comparePendingWays)) {
       const geometry = wayGeometry(way, nodes);
@@ -690,9 +714,10 @@ export async function extractTurkeyOsmBarriersFromPbf(
     }
 
     for (const relation of inventory.relations.sort(comparePendingRelations)) {
-      const geometry = relationGeometry(relation, inventory.relationMembers, nodes);
+      const relationResult = relationGeometry(relation, inventory.relationMembers, nodes);
+      relationIssues.push(...relationResult.issues);
 
-      if (!geometry) {
+      if (!relationResult.geometry) {
         continue;
       }
 
@@ -701,12 +726,13 @@ export async function extractTurkeyOsmBarriersFromPbf(
         osmId: relation.id,
         tags: relation.tags,
         classification: relation.classification,
-        geometry
+        geometry: relationResult.geometry
       });
     }
 
     const normalized = normalizeBarrierCollections(collections);
     const localitySeeds = inventory.localitySeeds.sort(compareLocalitySeeds);
+    const sortedRelationIssues = relationIssues.sort(compareIssues);
     const contentHash = sha256Hex(
       serializeJsonStable({
         roads: normalized.roads,
@@ -714,6 +740,7 @@ export async function extractTurkeyOsmBarriersFromPbf(
         water: normalized.water,
         landuse: normalized.landuse,
         parks: normalized.parks,
+        relationIssues: sortedRelationIssues,
         localitySeeds,
         sourceSnapshotChecksum: options.sourceLock.sha256,
         algorithmVersion: TURKEY_OSM_BARRIER_ALGORITHM_VERSION
@@ -730,6 +757,8 @@ export async function extractTurkeyOsmBarriersFromPbf(
         parsedPrimitiveBlocks: inventory.primitiveBlockCount,
         relevantWayCount: inventory.ways.length,
         relationCount: inventory.relations.length,
+        relationIssueCount: sortedRelationIssues.length,
+        relationIssues: sortedRelationIssues,
         neededNodeCount: inventory.neededNodeIds.size,
         resolvedNodeCount: nodes.size
       },
@@ -843,6 +872,7 @@ export async function buildTurkeyOsmBarrierArtifacts(
         ? { maxPrimitiveBlocks: options.maxPrimitiveBlocks }
         : {})
     });
+    issues.push(...normalized.parser.relationIssues);
     let nextIndex = 0;
 
     async function worker(): Promise<void> {
@@ -1463,15 +1493,39 @@ async function collectTurkeyOsmBarrierInventory(
     }
 
     if (spatialCandidates) {
-      relations.splice(
-        0,
-        relations.length,
-        ...relations.filter((relation) =>
-          relation.members.some(
-            (member) => member.type === "way" && retainedRelationWayIds.has(member.ref)
-          )
+      const retainedRelations = relations.filter((relation) =>
+        relation.members.some(
+          (member) => member.type === "way" && retainedRelationWayIds.has(member.ref)
         )
       );
+      const completeRelationWayIds = new ShardedNumberLookupSet();
+
+      for (const relation of retainedRelations) {
+        for (const member of relation.members) {
+          if (member.type === "way") {
+            completeRelationWayIds.add(member.ref);
+          }
+        }
+      }
+
+      relationMembers.clear();
+      if (completeRelationWayIds.size > 0) {
+        passes += 1;
+
+        for (const way of await collectRelationMemberWays(
+          pbfPath,
+          completeRelationWayIds,
+          options
+        )) {
+          relationMembers.set(way.id, way);
+
+          for (const ref of way.refs) {
+            neededNodeIds.add(ref);
+          }
+        }
+      }
+
+      relations.splice(0, relations.length, ...retainedRelations);
     }
   }
 
@@ -1814,33 +1868,367 @@ function relationGeometry(
   relation: PendingRelation,
   ways: ReadonlyMap<number, OsmWay>,
   nodes: OsmNodeLookup
-): Geometry | undefined {
+): RelationGeometryResult {
+  const issues: TurkeyOsmBarrierIssue[] = [];
+
   if (relation.classification.geometryKind !== "polygon") {
-    return undefined;
+    return { issues };
   }
 
-  const rings = relation.members
-    .filter((member) => member.type === "way" && (member.role === "outer" || member.role === ""))
-    .flatMap((member) => {
-      const way = ways.get(member.ref);
+  if (!isSupportedMultipolygonRelation(relation)) {
+    issues.push(
+      createRelationIssue(relation, "OSM_MULTIPOLYGON_UNSUPPORTED_RELATION_TYPE", "warning", {
+        message:
+          "OSM polygon relation has barrier tags but is not a supported multipolygon/boundary relation.",
+        details: { type: relation.tags.type ?? "" }
+      })
+    );
+    return { issues };
+  }
 
-      if (!way) {
-        return [];
+  for (const member of relation.members) {
+    if (member.type === "relation") {
+      issues.push(
+        createRelationIssue(relation, "OSM_MULTIPOLYGON_NESTED_RELATION_UNSUPPORTED", "warning", {
+          message:
+            "Nested OSM relation members are currently unsupported for barrier multipolygon assembly.",
+          details: { memberRelationId: member.ref, role: member.role }
+        })
+      );
+    }
+  }
+
+  const outerFragments = collectRelationRingFragments(relation, ways, "outer", issues);
+  const innerFragments = collectRelationRingFragments(relation, ways, "inner", issues);
+  const outerRings = stitchRelationRings(relation, outerFragments, nodes, issues);
+  const innerRings = stitchRelationRings(relation, innerFragments, nodes, issues);
+
+  if (outerRings.length === 0) {
+    issues.push(
+      createRelationIssue(relation, "OSM_MULTIPOLYGON_INCOMPLETE_OUTER", "warning", {
+        message: "OSM multipolygon relation did not produce any valid closed outer rings.",
+        details: { outerMemberWayCount: outerFragments.length }
+      })
+    );
+    return { issues };
+  }
+
+  if (issues.some((issue) => issue.code !== "OSM_MULTIPOLYGON_ORPHAN_INNER")) {
+    return { issues };
+  }
+
+  const polygons = outerRings
+    .map((outer) => ({
+      outer,
+      holes: [] as StitchedRelationRing[],
+      area: Math.abs(signedRingArea(outer.ring))
+    }))
+    .sort(
+      (left, right) => left.area - right.area || compareLines(left.outer.ring, right.outer.ring)
+    );
+
+  for (const inner of innerRings.sort((left, right) => compareLines(left.ring, right.ring))) {
+    const representativePoint = ringRepresentativePoint(inner.ring);
+    const target = polygons.find((polygon) => ringContainsRing(polygon.outer.ring, inner.ring));
+
+    if (!target) {
+      issues.push(
+        createRelationIssue(relation, "OSM_MULTIPOLYGON_ORPHAN_INNER", "warning", {
+          message: "OSM multipolygon inner ring could not be assigned to any outer ring.",
+          details: {
+            memberWayIds: inner.memberWayIds,
+            representativePoint
+          }
+        })
+      );
+      continue;
+    }
+
+    target.holes.push(inner);
+  }
+
+  const geometry = clippingMultiPolygonToGeoJsonGeometry(
+    polygons
+      .sort((left, right) => compareLines(left.outer.ring, right.outer.ring))
+      .map((polygon) => [
+        polygon.outer.ring,
+        ...polygon.holes
+          .sort((left, right) => compareLines(left.ring, right.ring))
+          .map((hole) => hole.ring)
+      ])
+  );
+
+  return geometry ? { geometry, issues } : { issues };
+}
+
+function isSupportedMultipolygonRelation(relation: PendingRelation): boolean {
+  return relation.tags.type === "multipolygon" || relation.tags.type === "boundary";
+}
+
+function collectRelationRingFragments(
+  relation: PendingRelation,
+  ways: ReadonlyMap<number, OsmWay>,
+  role: "outer" | "inner",
+  issues: TurkeyOsmBarrierIssue[]
+): RelationRingFragment[] {
+  const fragments: RelationRingFragment[] = [];
+
+  for (const member of relation.members) {
+    if (member.type !== "way" || normalizeRelationMemberRole(member.role) !== role) {
+      continue;
+    }
+
+    const way = ways.get(member.ref);
+
+    if (!way || way.refs.length < 2) {
+      issues.push(
+        createRelationIssue(
+          relation,
+          role === "outer"
+            ? "OSM_MULTIPOLYGON_INCOMPLETE_OUTER"
+            : "OSM_MULTIPOLYGON_INCOMPLETE_INNER",
+          "warning",
+          {
+            message: `OSM multipolygon ${role} member way is missing or too short.`,
+            details: { memberWayId: member.ref, role }
+          }
+        )
+      );
+      continue;
+    }
+
+    fragments.push({ role, wayId: way.id, refs: way.refs });
+  }
+
+  return fragments.sort(compareRelationRingFragments);
+}
+
+function normalizeRelationMemberRole(role: string): "outer" | "inner" | undefined {
+  if (role === "" || role === "outer") {
+    return "outer";
+  }
+
+  if (role === "inner") {
+    return "inner";
+  }
+
+  return undefined;
+}
+
+function stitchRelationRings(
+  relation: PendingRelation,
+  fragments: readonly RelationRingFragment[],
+  nodes: OsmNodeLookup,
+  issues: TurkeyOsmBarrierIssue[]
+): StitchedRelationRing[] {
+  const remaining = [...fragments].sort(compareRelationRingFragments);
+  const rings: StitchedRelationRing[] = [];
+
+  while (remaining.length > 0) {
+    const first = remaining.shift()!;
+    let refs = [...first.refs];
+    const memberWayIds = [first.wayId];
+
+    while (!pathIsClosed(refs, nodes)) {
+      const match = findNextRelationFragment(refs, remaining, nodes);
+
+      if (!match) {
+        break;
       }
 
-      const ring = normalizeRing(refsToCoordinates(way.refs, nodes));
-      return ring.length >= 4 && ringHasArea(ring) ? [ring] : [];
-    });
+      const [fragment] = remaining.splice(match.index, 1);
 
-  if (rings.length === 0) {
+      if (!fragment) {
+        break;
+      }
+
+      refs = [...refs, ...match.refsToAppend];
+      memberWayIds.push(fragment.wayId);
+    }
+
+    if (!pathIsClosed(refs, nodes)) {
+      issues.push(
+        createRelationIssue(
+          relation,
+          first.role === "outer"
+            ? "OSM_MULTIPOLYGON_INCOMPLETE_OUTER"
+            : "OSM_MULTIPOLYGON_INCOMPLETE_INNER",
+          "warning",
+          {
+            message: `OSM multipolygon ${first.role} fragments could not be stitched into a closed ring.`,
+            details: { memberWayIds: memberWayIds.sort((left, right) => left - right) }
+          }
+        )
+      );
+      continue;
+    }
+
+    const ring = normalizeRing(refsToCoordinates(refs, nodes));
+
+    if (ring.length < 4 || !ringHasArea(ring)) {
+      issues.push(
+        createRelationIssue(
+          relation,
+          first.role === "outer"
+            ? "OSM_MULTIPOLYGON_INCOMPLETE_OUTER"
+            : "OSM_MULTIPOLYGON_INCOMPLETE_INNER",
+          "warning",
+          {
+            message: `OSM multipolygon ${first.role} ring is missing node coordinates or has zero area.`,
+            details: { memberWayIds: memberWayIds.sort((left, right) => left - right) }
+          }
+        )
+      );
+      continue;
+    }
+
+    rings.push({
+      role: first.role,
+      ring: canonicalizeRing(ring, first.role === "inner"),
+      memberWayIds: memberWayIds.sort((left, right) => left - right)
+    });
+  }
+
+  return rings.sort((left, right) => compareLines(left.ring, right.ring));
+}
+
+function findNextRelationFragment(
+  refs: readonly number[],
+  remaining: readonly RelationRingFragment[],
+  nodes: OsmNodeLookup
+): { index: number; refsToAppend: number[]; sortKey: string } | undefined {
+  const end = refs[refs.length - 1];
+  const matches: Array<{ index: number; refsToAppend: number[]; sortKey: string }> = [];
+
+  if (end === undefined) {
     return undefined;
   }
 
-  if (rings.length === 1) {
-    return { type: "Polygon", coordinates: [rings[0]!] };
+  for (let index = 0; index < remaining.length; index += 1) {
+    const fragment = remaining[index];
+
+    if (!fragment) {
+      continue;
+    }
+
+    const start = fragment.refs[0];
+    const last = fragment.refs[fragment.refs.length - 1];
+
+    if (start !== undefined && endpointsMatch(end, start, nodes)) {
+      matches.push({
+        index,
+        refsToAppend: fragment.refs.slice(1),
+        sortKey: `0:${relationFragmentSortKey(fragment)}`
+      });
+    }
+
+    if (last !== undefined && endpointsMatch(end, last, nodes)) {
+      matches.push({
+        index,
+        refsToAppend: [...fragment.refs].reverse().slice(1),
+        sortKey: `1:${relationFragmentSortKey(fragment)}`
+      });
+    }
   }
 
-  return { type: "MultiPolygon", coordinates: rings.map((ring) => [ring]) };
+  return matches.sort((left, right) => left.sortKey.localeCompare(right.sortKey))[0];
+}
+
+function pathIsClosed(refs: readonly number[], nodes: OsmNodeLookup): boolean {
+  const first = refs[0];
+  const last = refs[refs.length - 1];
+  return first !== undefined && last !== undefined && endpointsMatch(first, last, nodes);
+}
+
+function endpointsMatch(leftRef: number, rightRef: number, _nodes: OsmNodeLookup): boolean {
+  if (leftRef === rightRef) {
+    return true;
+  }
+
+  // PBF ways retain node identity: equal coordinates do not make distinct nodes connected.
+  return false;
+}
+
+function ringRepresentativePoint(ring: readonly LngLat[]): LngLat {
+  const open = ring.slice(0, -1);
+  let twiceArea = 0;
+  let centroidX = 0;
+  let centroidY = 0;
+
+  for (let index = 0; index < open.length; index += 1) {
+    const current = open[index];
+    const next = open[(index + 1) % open.length];
+
+    if (!current || !next) {
+      continue;
+    }
+
+    const crossProduct = current[0] * next[1] - next[0] * current[1];
+    twiceArea += crossProduct;
+    centroidX += (current[0] + next[0]) * crossProduct;
+    centroidY += (current[1] + next[1]) * crossProduct;
+  }
+
+  if (Math.abs(twiceArea) > 1e-14) {
+    return [
+      roundCoordinate(centroidX / (3 * twiceArea)),
+      roundCoordinate(centroidY / (3 * twiceArea))
+    ];
+  }
+
+  const fallback = open[0] ?? ring[0] ?? [0, 0];
+  return [roundCoordinate(fallback[0]), roundCoordinate(fallback[1])];
+}
+
+function ringContainsRing(outer: readonly LngLat[], inner: readonly LngLat[]): boolean {
+  const [outerMinLng, outerMinLat, outerMaxLng, outerMaxLat] = coordinatesBBox(outer);
+  const [innerMinLng, innerMinLat, innerMaxLng, innerMaxLat] = coordinatesBBox(inner);
+
+  if (
+    innerMinLng < outerMinLng ||
+    innerMaxLng > outerMaxLng ||
+    innerMinLat < outerMinLat ||
+    innerMaxLat > outerMaxLat
+  ) {
+    return false;
+  }
+
+  try {
+    // Checking vertices alone misses edges crossing a concave outer boundary.
+    return CLIPPER.difference([[...inner]], [[...outer]]).length === 0;
+  } catch {
+    return false;
+  }
+}
+
+function createRelationIssue(
+  relation: PendingRelation,
+  code: TurkeyOsmBarrierIssueCode,
+  severity: TurkeyOsmBarrierIssueSeverity,
+  input: { message: string; details?: Record<string, unknown> }
+): TurkeyOsmBarrierIssue {
+  return {
+    code,
+    severity,
+    message: input.message,
+    details: {
+      relationId: relation.id,
+      sourceNativeId: `osm:relation:${relation.id}`,
+      layer: relation.classification.layer,
+      ...(input.details ?? {})
+    }
+  };
+}
+
+function compareRelationRingFragments(
+  left: RelationRingFragment,
+  right: RelationRingFragment
+): number {
+  return relationFragmentSortKey(left).localeCompare(relationFragmentSortKey(right));
+}
+
+function relationFragmentSortKey(fragment: RelationRingFragment): string {
+  return `${fragment.role}:${fragment.wayId}:${fragment.refs.join(",")}`;
 }
 
 function refsToCoordinates(refs: readonly number[], nodes: OsmNodeLookup): LngLat[] {
@@ -1916,6 +2304,13 @@ function buildAdm2BarrierArtifact(input: {
     parks,
     localitySeeds
   });
+  quality.issues.push(
+    ...input.normalized.parser.relationIssues.map((issue) => ({
+      ...issue,
+      adm2Id: input.adm2.id
+    }))
+  );
+  quality.issues.sort(compareIssues);
   const hashes = {
     roads: sha256Hex(serializeJsonStable(roads)),
     railways: sha256Hex(serializeJsonStable(railways)),
@@ -2835,7 +3230,14 @@ function geometryBBox(geometry: Geometry | null): TerritoryBBox {
     return [0, 0, 0, 0];
   }
 
-  const coordinates = collectCoordinates(geometry);
+  return coordinatesBBox(collectCoordinates(geometry));
+}
+
+function coordinatesBBox(coordinates: readonly LngLat[]): TerritoryBBox {
+  if (coordinates.length === 0) {
+    return [0, 0, 0, 0];
+  }
+
   const lngs = coordinates.map((point) => point[0]);
   const lats = coordinates.map((point) => point[1]);
 
@@ -2938,7 +3340,8 @@ function compareIssues(left: TurkeyOsmBarrierIssue, right: TurkeyOsmBarrierIssue
   return (
     left.code.localeCompare(right.code) ||
     (left.adm2Id ?? "").localeCompare(right.adm2Id ?? "") ||
-    left.message.localeCompare(right.message)
+    left.message.localeCompare(right.message) ||
+    serializeJsonStable(left.details ?? {}).localeCompare(serializeJsonStable(right.details ?? {}))
   );
 }
 

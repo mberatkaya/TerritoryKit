@@ -148,6 +148,35 @@ Barrier layers:
 
 OSM place nodes are seeds only. They are not promoted to ADM3 administrative polygons.
 
+The built Node ESM pipeline resolves the polygon-clipping CommonJS default export before
+intersection and hole-containment checks. `pnpm turkey:osm:multipolygon:smoke` verifies native ESM
+relation extraction, ADM2 clipping, and hole preservation without network access; both `verify`
+and the release readiness checks run it after building.
+
+## Multipolygon Relations
+
+Polygon-classified `type=multipolygon` and `type=boundary` relations use the same assembler for
+parks, landuse, and water. Outer and inner member ways are stitched separately by OSM node ID;
+reversed fragments are reversed when their end matches the current path. Already closed ways
+remain rings. Stable way ordering, canonical ring orientation/start points, and sorted components
+make geometry independent of relation member order. Distinct node IDs at identical coordinates
+are not treated as connected.
+
+Each inner ring is assigned to the smallest containing outer, checking the whole ring with polygon
+difference so edges cannot cross a concave outer boundary. Disconnected outers produce separate
+MultiPolygon components. Holes and `osm:relation:<id>` source lineage survive ADM2 clipping.
+Spatial extraction first selects touching member ways, then resolves all member ways and needed
+nodes for retained relations, including fragments beyond the selected district window.
+
+Incomplete outer or inner rings, missing coordinates, and nested relation members reject the
+whole relation geometry with an `OSM_MULTIPOLYGON_*` warning. Recursive nested relations are
+currently unsupported. Orphan inner rings are omitted with `OSM_MULTIPOLYGON_ORPHAN_INNER`;
+they are never silently dropped. Unrelated relation types are not promoted to polygons. Parser
+`relationIssues`/`relationIssueCount`, build issues, and artifact quality issues retain the warnings
+and source relation IDs. Artifact warnings describe the extraction batch and may include relations
+outside an individual district. The `tr-osm-barriers-v1.1` algorithm version invalidates older cached
+artifacts so an offline rebuild uses the complete assembler.
+
 ## ADM2 Extraction
 
 Build barrier artifacts from a verified snapshot and a real ADM2 parent dataset:
@@ -260,10 +289,11 @@ The Sprint 5.1 real-pilot matrix used the locked Geofabrik Turkey PBF snapshot
 | Bodrum | coastal stress               | eligible       | legacy          | rejected, maximum-area/alignment    |
 
 The four-pilot barrier extraction processed 4 ADM2 artifacts in `543550 ms`, with max resident set
-size `1198473216` bytes and all four artifacts eligible. The pilot artifacts intentionally report
-`parks=0` and `landuse=0` where the source snapshot did not yield clipped features for the selected
-districts; smart fallback treats those as optional soft barriers and keeps the counts visible in
-`inputDiagnostics`.
+size `1198473216` bytes and all four artifacts eligible. The pre-hardening artifacts reported `parks=0` and `landuse=0`; those counts alone did not
+establish source absence because fragmented relation assembly was incomplete and native ESM
+polygon clipping used an incompatible export. Final hardening
+rebuilds use the complete assembler. Parks and landuse remain optional soft barriers, with counts
+visible in `inputDiagnostics`.
 
 ## Resume And Failure Modes
 

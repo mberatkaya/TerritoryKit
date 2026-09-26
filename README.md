@@ -139,9 +139,9 @@ gameplay coverage with `boundaryKind: "estimated"`, `boundarySourceClass: "smart
 OSM snapshots and offline rebuilds instead of live Overpass queries. See
 [docs/datasets/turkey-smart-fallback.md](./docs/datasets/turkey-smart-fallback.md) and
 [docs/datasets/turkey-osm-barrier-snapshots.md](./docs/datasets/turkey-osm-barrier-snapshots.md).
-Sprint 5.1 calibrates that path against a real locked Fatih artifact: smart fallback now selects
-47 smart-derived zones for Fatih with `coverage=99.999548`, `outsideSpill=0`,
-`meanBarrierAlignment=0.266414`, and `meanQuality=0.622904`. Hybrid quality reports expose
+Sprint 5.1 final hardening verifies that path against a real locked Fatih artifact: smart fallback selects
+47 smart-derived zones for Fatih with `coverage=99.999505`, `outsideSpill=0`,
+`meanBarrierAlignment=0.286977`, and `meanQuality=0.625907`. Hybrid quality reports expose
 `smartAttempt` so accepted smart output and smart-to-legacy fallback decisions are auditable.
 Turkey V2 defines the additive data contract for mixing official, OSM, and generated ADM3 game
 zones without presenting generated zones as official mahalle/koy records. The stable national

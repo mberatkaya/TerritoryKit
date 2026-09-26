@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { osmBlockToPbfBlobBytes } from "@osmix/pbf";
 import type { TerritoryGeometry, TerritoryZone } from "@territory-kit/dataset";
+import type { MultiPolygon, Polygon } from "geojson";
 import { describe, expect, it } from "vitest";
 import {
   TURKEY_OSM_BARRIER_ALGORITHM_VERSION,
@@ -60,6 +61,150 @@ describe("Turkey OSM barrier snapshot pipeline", () => {
         })
       ]);
       expect(normalized.parser.neededNodeCount).toBeGreaterThan(0);
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it("assembles multipolygon relation outers, reversed fragments, holes, and disconnected rings", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-tr-osm-multipolygon-"));
+
+    try {
+      const pbfPath = join(tempDir, "multipolygon.osm.pbf");
+      await writeFile(pbfPath, await createMultipolygonFixturePbf());
+      const sourceLock = await sourceLockForFixture(pbfPath);
+      const normalized = await extractTurkeyOsmBarriersFromPbf({ pbfPath, sourceLock });
+      const parkGeometry = normalized.parks.features.find(
+        (feature) => feature.id === "osm:relation:300"
+      )?.geometry as Polygon | undefined;
+      const landuseGeometry = normalized.landuse.features.find(
+        (feature) => feature.id === "osm:relation:301"
+      )?.geometry as Polygon | undefined;
+      const waterGeometry = normalized.water.features.find(
+        (feature) => feature.id === "osm:relation:302"
+      )?.geometry as MultiPolygon | undefined;
+
+      expect(normalized.parks.features.map((feature) => feature.id)).toEqual(["osm:relation:300"]);
+      expect(normalized.landuse.features.map((feature) => feature.id)).toEqual([
+        "osm:relation:301"
+      ]);
+      expect(normalized.water.features.map((feature) => feature.id)).toEqual(["osm:relation:302"]);
+      expect(parkGeometry).toMatchObject({ type: "Polygon" });
+      expect(parkGeometry?.coordinates).toHaveLength(1);
+      expect(landuseGeometry).toMatchObject({ type: "Polygon" });
+      expect(landuseGeometry?.coordinates).toHaveLength(3);
+      expect(waterGeometry).toMatchObject({ type: "MultiPolygon" });
+      expect(waterGeometry?.coordinates).toHaveLength(2);
+      expect(waterGeometry?.coordinates.map((polygon) => polygon.length).sort()).toEqual([1, 2]);
+      expect(parkGeometry?.coordinates[0]).toEqual([
+        [0, 0],
+        [1, 0],
+        [1, 1],
+        [0, 1],
+        [0, 0]
+      ]);
+      expect(normalized.parks.features[0]?.properties).toMatchObject({
+        "@id": "osm:relation:300",
+        osm_type: "relation",
+        barrierLayer: "parks"
+      });
+      expect(normalized.parser.relationCount).toBe(3);
+      expect(normalized.parser.relationIssueCount).toBe(0);
+      expect(normalized.parser.relationIssues).toEqual([]);
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it("keeps multipolygon relation assembly deterministic across member ordering", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-tr-osm-multipolygon-determinism-"));
+
+    try {
+      const firstPbfPath = join(tempDir, "first.osm.pbf");
+      const secondPbfPath = join(tempDir, "second.osm.pbf");
+      await writeFile(
+        firstPbfPath,
+        await createMultipolygonFixturePbf({ parkMemberOrder: [203, 201, 202] })
+      );
+      await writeFile(
+        secondPbfPath,
+        await createMultipolygonFixturePbf({ parkMemberOrder: [202, 203, 201] })
+      );
+      const first = await extractTurkeyOsmBarriersFromPbf({
+        pbfPath: firstPbfPath,
+        sourceLock: await sourceLockForFixture(firstPbfPath)
+      });
+      const second = await extractTurkeyOsmBarriersFromPbf({
+        pbfPath: secondPbfPath,
+        sourceLock: await sourceLockForFixture(secondPbfPath)
+      });
+
+      expect(second.parks.features[0]?.geometry).toEqual(first.parks.features[0]?.geometry);
+      expect(sha256Hex(JSON.stringify(second.parks.features[0]?.geometry))).toBe(
+        sha256Hex(JSON.stringify(first.parks.features[0]?.geometry))
+      );
+      expect(second.landuse.features[0]?.geometry).toEqual(first.landuse.features[0]?.geometry);
+      expect(second.water.features[0]?.geometry).toEqual(first.water.features[0]?.geometry);
+      expect(second.parser.relationIssues).toEqual(first.parser.relationIssues);
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it("resolves all members of a spatially retained relation before clipping", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-tr-osm-multipolygon-spatial-"));
+    try {
+      const pbfPath = join(tempDir, "spatial.osm.pbf");
+      await writeFile(pbfPath, await createMultipolygonFixturePbf());
+      const normalized = await extractTurkeyOsmBarriersFromPbf({
+        pbfPath,
+        sourceLock: await sourceLockForFixture(pbfPath),
+        adm2Zones: [zone("spatial", "Spatial", square(2.1, 0.1, 2.3, 0.3))]
+      });
+      expect(normalized.landuse.features[0]?.geometry).toMatchObject({ type: "Polygon" });
+      expect((normalized.landuse.features[0]?.geometry as Polygon).coordinates).toHaveLength(3);
+      expect(normalized.parser.relationIssues).toEqual([]);
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it("reports incomplete, orphan, nested, and unsupported multipolygon relation diagnostics", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-tr-osm-multipolygon-diagnostics-"));
+
+    try {
+      const pbfPath = join(tempDir, "diagnostics.osm.pbf");
+      await writeFile(pbfPath, await createMultipolygonDiagnosticsFixturePbf());
+      const sourceLock = await sourceLockForFixture(pbfPath);
+      const normalized = await extractTurkeyOsmBarriersFromPbf({ pbfPath, sourceLock });
+      const issueCodes = normalized.parser.relationIssues.map((issue) => issue.code);
+      const orphanIssue = normalized.parser.relationIssues.find(
+        (issue) => issue.code === "OSM_MULTIPOLYGON_ORPHAN_INNER"
+      );
+      const landuseGeometry = normalized.landuse.features.find(
+        (feature) => feature.id === "osm:relation:501"
+      )?.geometry as Polygon | undefined;
+
+      expect(issueCodes).toEqual(
+        expect.arrayContaining([
+          "OSM_MULTIPOLYGON_INCOMPLETE_OUTER",
+          "OSM_MULTIPOLYGON_INCOMPLETE_INNER",
+          "OSM_MULTIPOLYGON_ORPHAN_INNER",
+          "OSM_MULTIPOLYGON_NESTED_RELATION_UNSUPPORTED",
+          "OSM_MULTIPOLYGON_UNSUPPORTED_RELATION_TYPE"
+        ])
+      );
+      expect(normalized.parks.features).toEqual([]);
+      expect(normalized.landuse.features.map((feature) => feature.id)).toEqual([
+        "osm:relation:501"
+      ]);
+      expect(landuseGeometry?.coordinates).toHaveLength(1);
+      expect(normalized.water.features).toEqual([]);
+      expect(orphanIssue?.details).toMatchObject({
+        relationId: 501,
+        sourceNativeId: "osm:relation:501",
+        layer: "landuse"
+      });
     } finally {
       await rm(tempDir, { recursive: true, force: true });
     }
@@ -362,6 +507,282 @@ function node(id: number, lng: number, lat: number, keys: number[] = [], vals: n
     keys,
     vals
   };
+}
+
+interface FixtureRelationMember {
+  ref: number;
+  type: "way" | "relation";
+  roleSid: number;
+}
+
+const multipolygonStringIds = {
+  type: 1,
+  multipolygon: 2,
+  leisure: 3,
+  park: 4,
+  landuse: 5,
+  forest: 6,
+  natural: 7,
+  water: 8,
+  outer: 9,
+  inner: 10,
+  name: 11,
+  relationPark: 12,
+  relationLanduse: 13,
+  relationWater: 14,
+  route: 15,
+  bus: 16
+} as const;
+
+async function createMultipolygonFixturePbf(
+  options: { parkMemberOrder?: readonly number[] } = {}
+): Promise<Uint8Array> {
+  const s = multipolygonStringIds;
+  const header = await osmBlockToPbfBlobBytes({
+    bbox: { left: -1, right: 8, top: 2, bottom: -1 },
+    required_features: ["OsmSchema-V0.6"],
+    optional_features: [],
+    writingprogram: "territory-kit-test",
+    source: "territory-kit multipolygon fixture",
+    osmosis_replication_timestamp: 1787727735
+  });
+  const primitive = await osmBlockToPbfBlobBytes({
+    stringtable: multipolygonStringTable(),
+    primitivegroup: [
+      {
+        nodes: [
+          node(1000, 0, 0),
+          node(1001, 1, 0),
+          node(1002, 1, 1),
+          node(1003, 0, 1),
+          node(1100, 2, 0),
+          node(1101, 3, 0),
+          node(1102, 3, 1),
+          node(1103, 2, 1),
+          node(1110, 2.2, 0.2),
+          node(1111, 2.4, 0.2),
+          node(1112, 2.4, 0.4),
+          node(1113, 2.2, 0.4),
+          node(1120, 2.6, 0.2),
+          node(1121, 2.8, 0.2),
+          node(1122, 2.8, 0.4),
+          node(1123, 2.6, 0.4),
+          node(1200, 4, 0),
+          node(1201, 5, 0),
+          node(1202, 5, 1),
+          node(1203, 4, 1),
+          node(1210, 6, 0),
+          node(1211, 7, 0),
+          node(1212, 7, 1),
+          node(1213, 6, 1),
+          node(1220, 4.2, 0.2),
+          node(1221, 4.4, 0.2),
+          node(1222, 4.4, 0.4),
+          node(1223, 4.2, 0.4)
+        ],
+        ways: [
+          way(201, [1000, 1001]),
+          way(202, [1003, 1002, 1001]),
+          way(203, [1003, 1000]),
+          way(211, [1100, 1101, 1102, 1103, 1100]),
+          way(212, [1110, 1111]),
+          way(213, [1113, 1112, 1111]),
+          way(214, [1113, 1110]),
+          way(215, [1120, 1121, 1122, 1123, 1120]),
+          way(221, [1200, 1201, 1202, 1203, 1200]),
+          way(222, [1210, 1211, 1212, 1213, 1210]),
+          way(223, [1220, 1221, 1222, 1223, 1220])
+        ],
+        relations: [
+          relation(
+            300,
+            [s.type, s.leisure, s.name],
+            [s.multipolygon, s.park, s.relationPark],
+            relationWayMembers(options.parkMemberOrder ?? [203, 201, 202], s.outer)
+          ),
+          relation(
+            301,
+            [s.type, s.landuse, s.name],
+            [s.multipolygon, s.forest, s.relationLanduse],
+            [
+              ...relationWayMembers([211], s.outer),
+              ...relationWayMembers([212, 213, 214], s.inner),
+              ...relationWayMembers([215], s.inner)
+            ]
+          ),
+          relation(
+            302,
+            [s.type, s.natural, s.name],
+            [s.multipolygon, s.water, s.relationWater],
+            [
+              ...relationWayMembers([221], s.outer),
+              ...relationWayMembers([222], s.outer),
+              ...relationWayMembers([223], s.inner)
+            ]
+          )
+        ]
+      }
+    ]
+  });
+  const output = new Uint8Array(header.length + primitive.length);
+  output.set(header, 0);
+  output.set(primitive, header.length);
+  return output;
+}
+
+async function createMultipolygonDiagnosticsFixturePbf(): Promise<Uint8Array> {
+  const s = multipolygonStringIds;
+  const header = await osmBlockToPbfBlobBytes({
+    bbox: { left: -1, right: 6, top: 3, bottom: -1 },
+    required_features: ["OsmSchema-V0.6"],
+    optional_features: [],
+    writingprogram: "territory-kit-test",
+    source: "territory-kit multipolygon diagnostics fixture",
+    osmosis_replication_timestamp: 1787727735
+  });
+  const primitive = await osmBlockToPbfBlobBytes({
+    stringtable: multipolygonStringTable(),
+    primitivegroup: [
+      {
+        nodes: [
+          node(2000, 0, 0),
+          node(2001, 1, 0),
+          node(2002, 1, 1),
+          node(2003, 0, 1),
+          node(2010, 3, 0),
+          node(2011, 4, 0),
+          node(2012, 4, 1),
+          node(2013, 3, 1),
+          node(2014, 0, 0)
+        ],
+        ways: [
+          way(401, [2000, 2001, 2002, 2003, 2000]),
+          way(402, [2010, 2011, 2012, 2013, 2010]),
+          way(403, [2000, 2001, 2002]),
+          way(404, [2000, 2001, 2002, 9999, 2000]),
+          way(405, [2000, 2001, 2002, 2003, 2014])
+        ],
+        relations: [
+          relation(
+            500,
+            [s.type, s.leisure, s.name],
+            [s.multipolygon, s.park, s.relationPark],
+            [...relationWayMembers([403], s.outer)]
+          ),
+          relation(
+            501,
+            [s.type, s.landuse, s.name],
+            [s.multipolygon, s.forest, s.relationLanduse],
+            [...relationWayMembers([401], s.outer), ...relationWayMembers([402], s.inner)]
+          ),
+          relation(
+            502,
+            [s.type, s.natural, s.name],
+            [s.multipolygon, s.water, s.relationWater],
+            [
+              ...relationWayMembers([401], s.outer),
+              { ref: 999, type: "relation", roleSid: s.inner }
+            ]
+          ),
+          relation(
+            503,
+            [s.type, s.natural, s.name],
+            [s.route, s.water, s.relationWater],
+            [...relationWayMembers([401], s.outer)]
+          ),
+          relation(
+            504,
+            [s.type, s.leisure],
+            [s.multipolygon, s.park],
+            relationWayMembers([401, 403], s.outer)
+          ),
+          relation(
+            505,
+            [s.type, s.leisure],
+            [s.multipolygon, s.park],
+            [...relationWayMembers([401], s.outer), ...relationWayMembers([403], s.inner)]
+          ),
+          relation(
+            506,
+            [s.type, s.leisure],
+            [s.multipolygon, s.park],
+            relationWayMembers([404], s.outer)
+          ),
+          relation(
+            507,
+            [s.type, s.leisure],
+            [s.multipolygon, s.park],
+            relationWayMembers([405], s.outer)
+          )
+        ]
+      }
+    ]
+  });
+  const output = new Uint8Array(header.length + primitive.length);
+  output.set(header, 0);
+  output.set(primitive, header.length);
+  return output;
+}
+
+function multipolygonStringTable(): Uint8Array[] {
+  return [
+    "",
+    "type",
+    "multipolygon",
+    "leisure",
+    "park",
+    "landuse",
+    "forest",
+    "natural",
+    "water",
+    "outer",
+    "inner",
+    "name",
+    "Relation Park",
+    "Relation Forest",
+    "Relation Water",
+    "route",
+    "bus"
+  ].map((value) => encoder.encode(value));
+}
+
+function way(id: number, refs: readonly number[], keys: number[] = [], vals: number[] = []) {
+  return {
+    id,
+    keys,
+    vals,
+    refs: deltaEncode(refs)
+  };
+}
+
+function relation(
+  id: number,
+  keys: number[],
+  vals: number[],
+  members: readonly FixtureRelationMember[]
+) {
+  return {
+    id,
+    keys,
+    vals,
+    roles_sid: members.map((member) => member.roleSid),
+    memids: deltaEncode(members.map((member) => member.ref)),
+    types: members.map((member) => (member.type === "way" ? 1 : 2))
+  };
+}
+
+function relationWayMembers(wayIds: readonly number[], roleSid: number): FixtureRelationMember[] {
+  return wayIds.map((ref) => ({ ref, type: "way", roleSid }));
+}
+
+function deltaEncode(values: readonly number[]): number[] {
+  let previous = 0;
+
+  return values.map((value) => {
+    const delta = value - previous;
+    previous = value;
+    return delta;
+  });
 }
 
 function zone(id: string, name: string, geometry: TerritoryGeometry): TerritoryZone {

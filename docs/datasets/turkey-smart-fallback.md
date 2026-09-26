@@ -108,6 +108,15 @@ or empty barrier network from silently becoming a publishable grid.
   `totalInternalBoundaryLengthKm`, and `barrierAlignedBoundaryLengthKm` explain how much of the
   generated internal boundary is supported by real barriers.
 
+Public `coveragePercent` is normalized to `[0, 100]` after the existing topology-noise
+normalization. Quality gates and CLI reports use this public value. The unclamped intersection /
+parent area percentage remains in `coverageComputation.rawCoveragePercent`, alongside raw areas.
+For example, a raw `100.000247` percent is reported publicly as `100`. Public
+`uncoveredInsideParentKm2`, `outsideSpillKm2`, and `overlapAreaKm2` remain nonnegative; raw topology
+values remain available for auditing. This does not change gate thresholds, score weights, or the
+50 m alignment tolerance. Hybrid `quality.smartAttempt.coverageComputation` preserves this evidence
+even when smart output is rejected and legacy fallback is selected.
+
 Rejected smart attempts now emit explicit issue codes for each failing gate, including
 `SMART_FALLBACK_ALIGNMENT_TOO_LOW`, `SMART_FALLBACK_COVERAGE_TOO_LOW`,
 `SMART_FALLBACK_SPILL_TOO_HIGH`, `SMART_FALLBACK_GEOMETRY_INVALID`,
@@ -120,6 +129,14 @@ snapshot `5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc`
 calibration, Fatih produces 47 smart-derived zones with `coverage=99.999548`,
 `outsideSpill=0`, `overlap=0`, `meanBarrierAlignment=0.266414`, and `meanQuality=0.622904`
 without lowering quality thresholds.
+
+Final multipolygon hardening also corrected native Node ESM polygon clipping. Rebuilding Fatih
+from the same locked snapshot restores 140 parks, 39 landuse polygons, and 60 water features
+(previously 0, 0, and 45). Smart remains accepted with 47 territories, `coveragePercent=99.999505`,
+`outsideSpillKm2=0`, `uncoveredInsideParentKm2=0.000121`, `meanBarrierAlignment=0.286977`,
+`meanQualityScore=0.625907`, and zero synthetic splits. Raw coverage is `99.999505`; raw spill
+`0.000009 km2` and overlap `0.000015 km2` remain in diagnostics while public areas normalize this
+sub-tolerance noise to zero. Thresholds and source semantics are unchanged.
 
 ## CLI
 

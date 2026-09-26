@@ -309,6 +309,7 @@ export interface TurkeySmartFallbackQualityReport {
     mode: "union" | "per-zone-fallback";
     unionFailed: boolean;
     topologyToleranceKm2: number;
+    rawCoveragePercent: number;
     rawSmartUnionAreaKm2: number;
     rawIntersectionAreaKm2: number;
     rawUncoveredInsideParentKm2: number;
@@ -1931,8 +1932,11 @@ function inspectSmartFallbackQuality(input: {
     topologyToleranceKm2
   );
   const overlapAreaKm2 = normalizeTopologyNoiseAreaKm2(rawOverlapAreaKm2, topologyToleranceKm2);
+  const rawCoveredParentAreaKm2 = coverageAreas.intersectionAreaKm2;
   const coveredParentAreaKm2 =
-    uncoveredAreaKm2 === 0 ? parentAreaKm2 : coverageAreas.intersectionAreaKm2;
+    uncoveredAreaKm2 === 0
+      ? parentAreaKm2
+      : roundAreaKm2(clampNumber(rawCoveredParentAreaKm2, 0, parentAreaKm2));
   const smartUnionAreaKm2 = roundAreaKm2(coveredParentAreaKm2 + spillAreaKm2);
   const areas = input.candidates.map((candidate) => candidate.areaKm2);
   const compactnessValues = input.candidates.map((candidate) => candidate.quality.compactness);
@@ -1962,7 +1966,10 @@ function inspectSmartFallbackQuality(input: {
   const meanZoneBarrierAlignment = meanMetric(barrierAlignmentValues);
   const meanBarrierAlignment = boundaryAlignment.realBarrierRatio;
   const qualityDistribution = metricDistribution(qualityScores);
-  const coveragePercent = percentage(coveredParentAreaKm2, parentAreaKm2);
+  const rawCoveragePercent = percentage(rawCoveredParentAreaKm2, parentAreaKm2);
+  const coveragePercent = normalizeTurkeySmartFallbackCoveragePercent(
+    percentage(coveredParentAreaKm2, parentAreaKm2)
+  );
   const barrierSufficient =
     input.configuration.targetTerritoryCount <= 1 ||
     !input.configuration.requireBarrierForMultiTerritory ||
@@ -2182,6 +2189,7 @@ function inspectSmartFallbackQuality(input: {
       mode: coverageAreas.mode,
       unionFailed: coverageAreas.mode === "per-zone-fallback",
       topologyToleranceKm2,
+      rawCoveragePercent,
       rawSmartUnionAreaKm2: coverageAreas.smartUnionAreaKm2,
       rawIntersectionAreaKm2: coverageAreas.intersectionAreaKm2,
       rawUncoveredInsideParentKm2: coverageAreas.uncoveredInsideParentKm2,
@@ -3956,6 +3964,10 @@ function clampNumber(value: number, minValue: number, maxValue: number): number 
 
 function percentage(value: number, total: number): number {
   return total <= 0 ? 0 : roundMetric((value / total) * 100);
+}
+
+export function normalizeTurkeySmartFallbackCoveragePercent(value: number): number {
+  return roundMetric(clampNumber(value, 0, 100));
 }
 
 function sum(values: readonly number[]): number {

@@ -8,6 +8,7 @@ const steps = [
   ["Typecheck", "pnpm", ["typecheck"]],
   ["Tests", "pnpm", ["test"]],
   ["Build", "pnpm", ["build"]],
+  ["OSM multipolygon runtime", "pnpm", ["turkey:osm:multipolygon:smoke"]],
   ["Bundle size", "pnpm", ["bundle:size"]],
   ["Geometry fixtures", "pnpm", ["geometry:validate:fixtures"]],
   ["Country smoke", "pnpm", ["country:smoke"]],

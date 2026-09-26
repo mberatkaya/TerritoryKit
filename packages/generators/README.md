@@ -181,6 +181,12 @@ areas, global real-barrier alignment ratios, synthetic-boundary ratios, and expl
 codes for failing gates. Hybrid builds expose the same evidence under `quality.smartAttempt`, so
 callers can distinguish accepted smart output from a smart rejection that selected legacy fallback.
 
+Polygon relations assemble fragmented outer ways, inner holes, and disconnected MultiPolygon
+components by stable OSM node identity. Nested relations are rejected with diagnostics. Public
+smart `coveragePercent` stays within 0–100; `coverageComputation.rawCoveragePercent` preserves
+unclamped topology evidence. See the [snapshot pipeline](../../docs/datasets/turkey-osm-barrier-snapshots.md)
+and [smart fallback diagnostics](../../docs/datasets/turkey-smart-fallback.md).
+
 ## Source Adapters
 
 ```ts

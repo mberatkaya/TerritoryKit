@@ -11,6 +11,7 @@ import {
   normalizeTurkeySmartFallbackBarriers,
   resolveTurkeySmartFallbackConfiguration
 } from "../src/turkey-adm3.js";
+import { normalizeTurkeySmartFallbackCoveragePercent } from "../src/turkey-smart-fallback.js";
 
 describe("Turkey ADM3 smart fallback boundary engine", () => {
   it("normalizes provider-neutral barriers with road hierarchy weighting", () => {
@@ -272,6 +273,7 @@ describe("Turkey ADM3 smart fallback boundary engine", () => {
     expect(result.quality.coverageComputation).toMatchObject({
       mode: "union",
       unionFailed: false,
+      rawCoveragePercent: 100,
       rawOverlapAreaKm2: 0,
       rawOutsideSpillKm2: 0,
       rawUncoveredInsideParentKm2: 0
@@ -309,6 +311,64 @@ describe("Turkey ADM3 smart fallback boundary engine", () => {
       expect(smartFallback.administrative).toBe(false);
       expect(smartFallback.authoritative).toBe(false);
     }
+  });
+
+  it("normalizes public coverage percentages without hiding raw topology overshoot", () => {
+    expect(normalizeTurkeySmartFallbackCoveragePercent(0)).toBe(0);
+    expect(normalizeTurkeySmartFallbackCoveragePercent(76.123456)).toBe(76.123456);
+    expect(normalizeTurkeySmartFallbackCoveragePercent(100)).toBe(100);
+    expect(normalizeTurkeySmartFallbackCoveragePercent(100.000247)).toBe(100);
+    expect(normalizeTurkeySmartFallbackCoveragePercent(-0.000247)).toBe(0);
+  });
+
+  it("retains a real clipping overshoot in diagnostics while reporting public coverage of 100", () => {
+    const parent = districtZone("coverage-overshoot", {
+      type: "Polygon",
+      coordinates: [
+        [
+          [28, 40],
+          [28.01, 40.001],
+          [28.008, 40.01],
+          [28, 40.01],
+          [28, 40]
+        ]
+      ]
+    });
+    const result = buildTurkeySmartFallback({
+      parent,
+      provinceCode: "34",
+      districtCode: "coverage-overshoot",
+      profile: "custom",
+      roads: lineCollection([
+        lineFeature(
+          "road",
+          [
+            [28, 40.005],
+            [28.01, 40.005]
+          ],
+          { highway: "primary" }
+        )
+      ]),
+      options: {
+        targetTerritoryCount: 4,
+        targetAreaKm2: 4000,
+        minAreaKm2: 0.0001,
+        maxAreaKm2: 20000,
+        minMeanQualityScore: 0,
+        minMeanBarrierAlignment: 0,
+        minCoveragePercent: 0,
+        maxSyntheticSplits: 8,
+        requireBarrierForMultiTerritory: false
+      }
+    });
+    expect(result.quality.coverageComputation.rawCoveragePercent).toBeGreaterThan(100);
+    expect(result.quality.coverageComputation.rawIntersectionAreaKm2).toBeGreaterThan(
+      result.quality.parentAreaKm2
+    );
+    expect(result.quality.coveragePercent).toBe(100);
+    expect(result.quality.uncoveredInsideParentKm2).toBeGreaterThanOrEqual(0);
+    expect(result.quality.outsideSpillKm2).toBeGreaterThanOrEqual(0);
+    expect(result.quality.overlapAreaKm2).toBeGreaterThanOrEqual(0);
   });
 
   it("uses river corridors as strong physical split barriers", () => {
