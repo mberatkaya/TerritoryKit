@@ -21,8 +21,7 @@ import { buildTerritoryRenderArtifacts } from "./render-artifacts.js";
 import type { TerritoryRenderBuildResult } from "./render-artifacts.js";
 import {
   TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
-  buildTurkeyV2HybridBatch,
-  createTurkeyV2ZoneMigrationPlan
+  buildTurkeyV2HybridBatch
 } from "./turkey-adm3.js";
 import {
   TURKEY_V2_NATIONAL_EXPECTED_COUNTS,
@@ -38,6 +37,7 @@ import type {
   TurkeyV2HybridBatchBuildResult,
   TurkeyV2HybridBatchSourceEntry,
   TurkeyV2HybridDistrictBuildResult,
+  TurkeyV2HybridDistrictBuildOptions,
   TurkeyV2HybridDistributionPolicyManifest,
   TurkeyV2HybridGeneratedOptions,
   TurkeyV2HybridLicenseManifest,
@@ -123,6 +123,8 @@ export interface TurkeyV2NationalSourceLock {
     largeGeometryInNpmPackage: false;
     registryCdnOfflineModel: true;
   };
+  productionFallbackPolicy?: { legacyGridAllowed: boolean; organicFallbackEnabled: boolean };
+  osmBarrierSnapshotChecksum?: string;
   contentHash: string;
 }
 
@@ -191,7 +193,7 @@ export interface TurkeyV2NationalOsmSourceLock {
 }
 
 export interface TurkeyV2NationalGeneratedSourceLock {
-  algorithmVersion: typeof TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION;
+  algorithmVersion: string;
   seed: string;
   profilePolicy: "auto";
   generatorConfigHash: string;
@@ -211,7 +213,17 @@ export interface TurkeyV2NationalBuildOptions {
   adm0Adm2Dataset: TerritoryDataset;
   officialSources?: TurkeyV2NationalSourceCatalog;
   osmSources?: TurkeyV2NationalSourceCatalog;
+  migrationBaselineZones?: readonly TerritoryZone[];
   generatedDefaults?: TurkeyV2HybridGeneratedOptions;
+  allowLegacyGridEmergency?: boolean;
+  loadGeneratedOptions?: (district: TerritoryZone) => Promise<TurkeyV2HybridGeneratedOptions>;
+  onDistrictComplete?: (
+    result: TurkeyV2HybridDistrictBuildResult,
+    options: TurkeyV2HybridDistrictBuildOptions
+  ) => Promise<void>;
+  restoreDistrictResult?: (
+    options: TurkeyV2HybridDistrictBuildOptions
+  ) => Promise<TurkeyV2HybridDistrictBuildResult | undefined>;
   districtOverrides?: Readonly<Record<string, TurkeyV2DistrictBuildOverride>>;
   sourceLock: TurkeyV2NationalSourceLock;
   buildDate: string;
@@ -288,7 +300,7 @@ export interface TurkeyV2NationalCoverageReport {
   generatedOnlyDistricts: string[];
   hybridDistricts: string[];
   profileDistribution: Record<string, number>;
-  algorithmVersion: typeof TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION;
+  algorithmVersion: string;
   sourceStatus: {
     official: TurkeyV2NationalSourceStatus;
     osm: TurkeyV2NationalSourceStatus;
@@ -599,10 +611,17 @@ export async function buildTurkeyV2NationalDataset(
   const datasetId = options.datasetId ?? TURKEY_V2_NATIONAL_DATASET_ID;
   const buildDate = options.buildDate;
   const datasetVersion = options.datasetVersion;
-  const generatedDefaults = options.generatedDefaults ?? {
+  const generatedDefaults: TurkeyV2HybridGeneratedOptions = {
     enabled: true,
     profile: "auto",
-    seed: options.sourceLock.generated.seed
+    seed: options.sourceLock.generated.seed,
+    ...options.generatedDefaults,
+    strategy: options.allowLegacyGridEmergency
+      ? (options.generatedDefaults?.strategy ?? "legacy")
+      : "smart",
+    legacyGridAllowed: options.allowLegacyGridEmergency === true,
+    organicFallback: true,
+    fallbackToLegacyOnSmartFailure: options.allowLegacyGridEmergency === true
   };
   const hierarchy = normalizeTurkeyAdmHierarchy(options.adm0Adm2Dataset, datasetId);
   const selectedAdm2 = hierarchy.adm2.slice(0, options.districtLimit ?? undefined);
@@ -611,11 +630,29 @@ export async function buildTurkeyV2NationalDataset(
   const sourcesByDistrict = createSourcesByDistrict(selectedAdm2, officialZones, osmZones);
   const hybridBatch = await buildTurkeyV2HybridBatch({
     districts: selectedAdm2,
+    releaseDistrictInputs: true,
+    ...(options.migrationBaselineZones
+      ? { migrationBaselineZones: options.migrationBaselineZones }
+      : {}),
     sourcesByDistrict,
     generatedDefaults,
+    ...(options.loadGeneratedOptions
+      ? {
+          loadGeneratedOptions: async (district: TerritoryZone) => ({
+            ...(await options.loadGeneratedOptions!(district)),
+            legacyGridAllowed: options.allowLegacyGridEmergency === true,
+            organicFallback: true,
+            fallbackToLegacyOnSmartFailure: options.allowLegacyGridEmergency === true
+          })
+        }
+      : {}),
+    ...(options.onDistrictComplete ? { onDistrictComplete: options.onDistrictComplete } : {}),
+    ...(options.restoreDistrictResult
+      ? { restoreDistrictResult: options.restoreDistrictResult }
+      : {}),
     buildDate,
     continueOnError: true,
-    fallbackToGeneratedOnQualityFailure: true,
+    fallbackToGeneratedOnQualityFailure: false,
     datasetId: `${datasetId}-adm3`
   });
   const adm3Zones = hybridBatch.districts
@@ -717,6 +754,7 @@ export async function buildTurkeyV2NationalDataset(
     buildDate,
     deterministicHash,
     sourceLockHash: options.sourceLock.contentHash,
+    generatedAlgorithmVersion: options.sourceLock.generated.algorithmVersion,
     hierarchy,
     adm2ById,
     districts: hybridBatch.districts,
@@ -736,11 +774,11 @@ export async function buildTurkeyV2NationalDataset(
   const attribution = createNationalAttribution(buildDate, hybridBatch);
   const licenses = createNationalLicenses(attribution);
   const distributionPolicy = createNationalDistributionPolicy(hybridBatch);
-  const migration = createTurkeyV2ZoneMigrationPlan({
+  const migration: TurkeyV2ZoneMigrationPlan = {
+    schemaVersion: "territorykit-tr-v2-hybrid-migration@1",
     buildDate,
-    oldZones: [],
-    newZones: adm3Zones
-  });
+    records: hybridBatch.districts.flatMap((d) => d.migration.records)
+  };
   const renderArtifacts = artifactOptions.render
     ? buildTerritoryRenderArtifacts({
         dataset: levels.ADM3,
@@ -1166,6 +1204,7 @@ function createNationalCoverage(input: {
   buildDate: string;
   deterministicHash: string;
   sourceLockHash: string;
+  generatedAlgorithmVersion: string;
   hierarchy: NormalizedHierarchy;
   adm2ById: ReadonlyMap<string, TerritoryZone>;
   districts: readonly TurkeyV2HybridDistrictBuildResult[];
@@ -1297,7 +1336,7 @@ function createNationalCoverage(input: {
       .map((district) => district.coverage.districtId)
       .sort(),
     profileDistribution,
-    algorithmVersion: TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
+    algorithmVersion: input.generatedAlgorithmVersion,
     sourceStatus: input.sourceStatus,
     provinces: provinceCoverage,
     districts: districtCoverages.sort((left, right) =>
@@ -1705,6 +1744,8 @@ function createNationalQuality(input: {
       input.buildMode === "partial" ||
       (input.coverage.districtCount === input.coverage.successfulDistrictCount &&
         input.coverage.failedDistrictCount === 0),
+    districtQuality: input.hybridBatch.districts.every((d) => d.quality.ok),
+    requestedDistrictFailures: input.coverage.failedDistrictCount === 0,
     everyDistrictHasAdm3: input.coverage.districts.every((district) => district.zoneCount > 0),
     everyDistrictCoverage: input.coverage.districtsBelow9999.length === 0,
     nationalCoverage: input.coverage.finalCoveragePercent >= 99.99,
@@ -1720,6 +1761,24 @@ function createNationalQuality(input: {
     missingProvenance: missingProvenanceCount === 0,
     missingAttributionLicense: missingAttributionLicenseCount === 0,
     generatedMetadata: generatedMetadataErrorCount === 0,
+    noProductionLegacyGrid:
+      input.buildMode === "partial" ||
+      input.dataset.zones
+        .filter((z) => z.level === 3 && readZoneSourceClass(z) === "generated")
+        .every(
+          (z) =>
+            territoryMetadata(z).boundarySourceClass === "smart-derived" &&
+            territoryMetadata(z).providerId !== "territory-kit-generated" &&
+            String(territoryMetadata(z).algorithmVersion).startsWith("smart-derived")
+        ),
+    smartSemantics: input.dataset.zones
+      .filter((z) => territoryMetadata(z).boundarySourceClass === "smart-derived")
+      .every(
+        (z) =>
+          territoryMetadata(z).administrative === false &&
+          territoryMetadata(z).authoritative === false &&
+          territoryMetadata(z).boundaryKind === "estimated"
+      ),
     strictTrV2Validation: strictValidation.ok,
     adjacencyIntegrity: input.adjacencyIssueCount === 0,
     registryArtifactChecksum: input.artifactIntegrity.ok

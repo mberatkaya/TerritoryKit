@@ -220,6 +220,7 @@ describe("Turkey ADM3 smart fallback boundary engine", () => {
       internalBarrierCount: 1
     });
     expect(result.quality.meanBarrierAlignment).toBe(1);
+    expect(result.quality.axisAlignedInternalBoundaryRatio).toBe(0);
     expect(result.reasonCodes).toContain("SMART_FALLBACK_BARRIER_IGNORED");
   });
 

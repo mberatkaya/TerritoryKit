@@ -16,6 +16,7 @@ export {
   TURKEY_SMART_FALLBACK_QUALITY_SCHEMA_VERSION,
   buildTurkeySmartFallback,
   buildTurkeySmartFallbackWithAdjacency,
+  buildTurkeyOrganicSmartFallbackWithAdjacency,
   createTurkeySmartFallbackDataset,
   normalizeTurkeySmartFallbackBarriers,
   resolveTurkeySmartFallbackConfiguration
@@ -272,3 +273,5 @@ export type {
   TurkeyV2NationalValidationIssue,
   TurkeyV2NationalValidationResult
 } from "./turkey-v2-national-validation.js";
+
+export { createDatasetGeometryHash } from "./sources/utils.js";

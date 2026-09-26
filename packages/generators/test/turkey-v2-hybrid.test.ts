@@ -80,7 +80,10 @@ describe("Turkey V2 hybrid coverage pipeline", () => {
   });
 
   it("does not generate zones when real coverage fills the district", async () => {
-    const district = districtZone("real-only", rectangle(0, 0, 1, 1));
+    const district = {
+      ...districtZone("real-only", rectangle(0, 0, 1, 1)),
+      parentId: "tr:adm1:external-parent"
+    };
     const official = realZone({
       id: "tr:adm3:official-full",
       sourceClass: "official",
@@ -99,6 +102,8 @@ describe("Turkey V2 hybrid coverage pipeline", () => {
     });
 
     expect(result.quality.ok).toBe(true);
+    expect(result.dataset.zones.find((z) => z.level === 2)?.parentId).toBeUndefined();
+    expect(district.parentId).toBe("tr:adm1:external-parent");
     expect(result.coverage.generatedEffectiveCount).toBe(0);
     expect(result.coverage.missingBeforeGeneratedAreaKm2).toBe(0);
     expect(result.coverage.finalCoveragePercent).toBe(100);
@@ -480,7 +485,7 @@ describe("Turkey V2 hybrid coverage pipeline", () => {
     );
   });
 
-  it("falls back to legacy generated zones when smart fallback is rejected", async () => {
+  it("allows explicit emergency legacy fallback when smart is rejected", async () => {
     const district = districtZone("smart-rejected-legacy", rectangle(0, 0, 1, 1));
     const result = await buildTurkeyV2HybridDistrict({
       district,
@@ -489,6 +494,9 @@ describe("Turkey V2 hybrid coverage pipeline", () => {
       generated: {
         enabled: true,
         strategy: "smart",
+        organicFallback: false,
+        legacyGridAllowed: true,
+        fallbackToLegacyOnSmartFailure: true,
         profile: "custom",
         targetZoneCount: 4,
         targetAreaKm2: 3000,
