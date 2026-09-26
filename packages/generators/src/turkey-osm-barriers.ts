@@ -1,3 +1,5 @@
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { createHash } from "node:crypto";
 import { createReadStream, createWriteStream } from "node:fs";
 import { mkdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
@@ -48,7 +50,7 @@ export const TURKEY_OSM_BARRIER_QUALITY_SCHEMA_VERSION =
   "territorykit-tr-osm-barrier-quality@1" as const;
 export const TURKEY_OSM_SMART_COVERAGE_SCHEMA_VERSION =
   "territorykit-tr-osm-smart-coverage@1" as const;
-export const TURKEY_OSM_BARRIER_ALGORITHM_VERSION = "tr-osm-barriers-v1.1" as const;
+export const TURKEY_OSM_BARRIER_ALGORITHM_VERSION = "tr-osm-barriers-v1.2" as const;
 export const TURKEY_OSM_BARRIER_PROVIDER_ID = "geofabrik-osm-extracts" as const;
 export const TURKEY_OSM_BARRIER_PROVIDER_NAME = "Geofabrik OpenStreetMap extracts" as const;
 export const TURKEY_OSM_BARRIER_SOURCE_URL = "https://download.geofabrik.de/europe/turkey.html";
@@ -245,6 +247,8 @@ export interface TurkeyOsmBarrierManifest {
   hashes: Record<TurkeyOsmBarrierLayer | "localitySeeds" | "quality", string>;
   artifactChecksum: string;
   sourceSnapshotChecksum: string;
+  parentGeometryHash?: string;
+  configurationHash?: string;
 }
 
 export interface TurkeyOsmBarrierQualityReport {
@@ -278,6 +282,7 @@ export interface TurkeyOsmBarrierBuildOptions {
   concurrency?: number;
   mode?: TurkeyOsmBarrierBuildMode;
   maxPrimitiveBlocks?: number;
+  osmiumExecutable?: string;
 }
 
 export interface TurkeyOsmBarrierBuildPlan {
@@ -776,7 +781,8 @@ export async function extractTurkeyOsmBarriersFromPbf(
 
     throw new TurkeyOsmBarrierPipelineError(
       "OSM_SNAPSHOT_PARSE_FAILED",
-      error instanceof Error ? error.message : String(error)
+      error instanceof Error ? error.message : String(error),
+      { causeStack: error instanceof Error ? error.stack : undefined }
     );
   }
 }
@@ -822,6 +828,22 @@ export async function buildTurkeyOsmBarrierArtifacts(
   }
 
   const rawPbfSizeBytes = (await stat(options.snapshotPath)).size;
+  const execFileAsync = promisify(execFile);
+  const nativeVersion = options.osmiumExecutable
+    ? (await execFileAsync(options.osmiumExecutable, ["--version"])).stdout.split("\n")[0]
+    : "portable";
+  const configurationHash = sha256Hex(
+    serializeJsonStable({
+      tags: barrierConfigurationHash(),
+      nativeVersion,
+      ...(options.maxPrimitiveBlocks !== undefined
+        ? { maxPrimitiveBlocks: options.maxPrimitiveBlocks }
+        : {}),
+      ...(options.generatedAt !== undefined ? { generatedAt: options.generatedAt } : {}),
+      ...(options.adm2Ids ? { adm2Ids: [...options.adm2Ids].sort() } : {}),
+      ...(options.maxDistricts !== undefined ? { maxDistricts: options.maxDistricts } : {})
+    })
+  );
   const artifacts: TurkeyOsmBarrierBuildResult["artifacts"] = [];
   const issues: TurkeyOsmBarrierIssue[] = [];
   const concurrency = Math.max(1, Math.floor(options.concurrency ?? 2));
@@ -840,7 +862,12 @@ export async function buildTurkeyOsmBarrierArtifacts(
       }
 
       try {
-        const existing = await readReusableArtifact(adm2, outputRoot, options.sourceLock);
+        const existing = await readReusableArtifact(
+          adm2,
+          outputRoot,
+          options.sourceLock,
+          configurationHash
+        );
 
         if (existing) {
           artifacts.push({
@@ -864,10 +891,61 @@ export async function buildTurkeyOsmBarrierArtifacts(
       continue;
     }
 
+    let batchPbfPath = options.snapshotPath;
+    if (options.osmiumExecutable) {
+      const boxes = batch.map((z) =>
+        expandBbox(computeGeometryBBox(z.geometry), TURKEY_OSM_SPATIAL_FILTER_PADDING_DEGREES)
+      );
+      const bbox = [
+        Math.min(...boxes.map((b) => b[0])),
+        Math.min(...boxes.map((b) => b[1])),
+        Math.max(...boxes.map((b) => b[2])),
+        Math.max(...boxes.map((b) => b[3]))
+      ];
+      const batchHash = sha256Hex(
+        serializeJsonStable({ bbox, source: options.sourceLock.sha256, configurationHash })
+      );
+      const nativeRoot = join(outputRoot, ".province-snapshots");
+      await mkdir(nativeRoot, { recursive: true });
+      batchPbfPath = join(nativeRoot, `${batchHash}.osm.pbf`);
+      let reusable = false;
+      try {
+        const lock = await readJsonFile(`${batchPbfPath}.json`);
+        reusable = isRecord(lock) && lock.sha256 === (await sha256File(batchPbfPath));
+      } catch {
+        /* Missing/incomplete derivative is rebuilt. */
+      }
+      if (!reusable) {
+        const temporary = `${batchPbfPath}.pending.osm.pbf`;
+        await execFileAsync(options.osmiumExecutable, [
+          "extract",
+          options.snapshotPath,
+          "--bbox",
+          bbox.join(","),
+          "--strategy",
+          "smart",
+          "-S",
+          "types=multipolygon,boundary",
+          "-S",
+          "tags=highway,railway,waterway,natural,water,landuse,leisure",
+          "--output",
+          temporary,
+          "--overwrite"
+        ]);
+        await rename(temporary, batchPbfPath);
+        await writeJsonFile(`${batchPbfPath}.json`, {
+          sourceSnapshotChecksum: options.sourceLock.sha256,
+          configurationHash,
+          bbox,
+          sha256: await sha256File(batchPbfPath),
+          nativeVersion
+        });
+      }
+    }
     const normalized = await extractTurkeyOsmBarriersFromPbf({
-      pbfPath: options.snapshotPath,
+      pbfPath: batchPbfPath,
       sourceLock: options.sourceLock,
-      ...(useSpatialExtraction ? { adm2Zones: pendingAdm2 } : {}),
+      ...(useSpatialExtraction ? { adm2Zones: batch } : {}),
       ...(options.maxPrimitiveBlocks !== undefined
         ? { maxPrimitiveBlocks: options.maxPrimitiveBlocks }
         : {})
@@ -889,6 +967,7 @@ export async function buildTurkeyOsmBarrierArtifacts(
           const artifact = buildAdm2BarrierArtifact({
             adm2,
             normalized,
+            configurationHash,
             generatedAt: options.generatedAt ?? new Date(0).toISOString()
           });
           const target = artifactDirectory(outputRoot, adm2.id);
@@ -920,6 +999,13 @@ export async function buildTurkeyOsmBarrierArtifacts(
     await Promise.all(
       Array.from({ length: Math.min(concurrency, pendingAdm2.length) }, () => worker())
     );
+    await writeJsonFile(join(outputRoot, "checkpoint.json"), {
+      sourceSnapshotChecksum: options.sourceLock.sha256,
+      algorithmVersion: TURKEY_OSM_BARRIER_ALGORITHM_VERSION,
+      completed: artifacts.slice().sort((a, b) => a.adm2Id.localeCompare(b.adm2Id)),
+      durationMs: Math.round(performance.now() - startedAt),
+      peakRssBytes: process.resourceUsage().maxRSS * 1024
+    });
   }
 
   artifacts.sort((left, right) => left.adm2Id.localeCompare(right.adm2Id));
@@ -1031,7 +1117,7 @@ export function createTurkeyOsmSmartFallbackGeneratedOptions(
   return {
     enabled: true,
     strategy: "smart",
-    fallbackToLegacyOnSmartFailure: options.fallbackToLegacyOnSmartFailure ?? true,
+    fallbackToLegacyOnSmartFailure: options.fallbackToLegacyOnSmartFailure ?? false,
     smartFallback: {
       roads: artifact.roads,
       railways: artifact.railways,
@@ -1051,6 +1137,7 @@ export function createTurkeyOsmSmartFallbackGeneratedOptions(
           sourceUrl: artifact.manifest.source.sourceUrl,
           sourceSnapshotId: artifact.manifest.source.snapshotSha256.slice(0, 16),
           sourceSnapshotChecksum: artifact.manifest.source.snapshotSha256,
+          barrierArtifactChecksum: artifact.manifest.artifactChecksum,
           license: artifact.manifest.source.license,
           attribution: artifact.manifest.source.attribution
         }
@@ -1078,7 +1165,7 @@ export async function readTurkeyOsmAdm2BarrierArtifact(
       readJsonFile(join(directory, "locality-seeds.json"))
     ]);
 
-  return {
+  const artifact = {
     manifest: parseTurkeyOsmBarrierManifest(manifest),
     quality: parseTurkeyOsmBarrierQuality(quality),
     roads: parseFeatureCollection(roads),
@@ -1088,6 +1175,43 @@ export async function readTurkeyOsmAdm2BarrierArtifact(
     parks: parseFeatureCollection(parks),
     localitySeeds: parseLocalitySeeds(localitySeeds)
   };
+  for (const layer of [
+    "roads",
+    "railways",
+    "water",
+    "landuse",
+    "parks",
+    "localitySeeds",
+    "quality"
+  ] as const) {
+    if (artifact.manifest.hashes[layer] !== sha256Hex(serializeJsonStable(artifact[layer]))) {
+      throw new TurkeyOsmBarrierPipelineError(
+        "OSM_BARRIER_ARTIFACT_INVALID",
+        `Artifact layer checksum mismatch: ${layer}`
+      );
+    }
+  }
+  const { artifactChecksum, ...identity } = artifact.manifest;
+  if (
+    artifactChecksum !==
+    sha256Hex(
+      serializeJsonStable({
+        manifest: identity,
+        roads: artifact.roads,
+        railways: artifact.railways,
+        water: artifact.water,
+        landuse: artifact.landuse,
+        parks: artifact.parks,
+        localitySeeds: artifact.localitySeeds
+      })
+    )
+  ) {
+    throw new TurkeyOsmBarrierPipelineError(
+      "OSM_BARRIER_ARTIFACT_INVALID",
+      "Barrier manifest checksum mismatch."
+    );
+  }
+  return artifact;
 }
 
 export function createTurkeyOsmSmartCoverageReport(
@@ -2286,6 +2410,7 @@ function buildAdm2BarrierArtifact(input: {
   adm2: TerritoryZone;
   normalized: TurkeyOsmNormalizedBarriers;
   generatedAt: string;
+  configurationHash: string;
 }): TurkeyOsmAdm2BarrierArtifact {
   const roads = clipFeatureCollectionToAdm2(input.normalized.roads, input.adm2);
   const railways = clipFeatureCollectionToAdm2(input.normalized.railways, input.adm2);
@@ -2346,7 +2471,9 @@ function buildAdm2BarrierArtifact(input: {
       localitySeeds: localitySeeds.length
     },
     hashes,
-    sourceSnapshotChecksum: input.normalized.sourceLock.sha256
+    sourceSnapshotChecksum: input.normalized.sourceLock.sha256,
+    parentGeometryHash: sha256Hex(serializeJsonStable(input.adm2.geometry)),
+    configurationHash: input.configurationHash
   };
   const artifactChecksum = sha256Hex(
     serializeJsonStable({
@@ -2421,14 +2548,14 @@ function clipGeometryToAdm2(
 ): Geometry | undefined {
   if (geometry.type === "LineString") {
     return clippedLinesToGeometry(
-      clipLinePathToGeometry(geometry.coordinates as LngLat[], adm2Geometry)
+      clipTurkeyOsmLinePathToGeometry(geometry.coordinates as LngLat[], adm2Geometry)
     );
   }
 
   if (geometry.type === "MultiLineString") {
     return clippedLinesToGeometry(
       (geometry.coordinates as LngLat[][]).flatMap((path) =>
-        clipLinePathToGeometry(path, adm2Geometry)
+        clipTurkeyOsmLinePathToGeometry(path, adm2Geometry)
       )
     );
   }
@@ -2444,7 +2571,10 @@ function clipGeometryToAdm2(
   return undefined;
 }
 
-function clipLinePathToGeometry(path: readonly LngLat[], geometry: TerritoryGeometry): LngLat[][] {
+export function clipTurkeyOsmLinePathToGeometry(
+  path: readonly LngLat[],
+  geometry: TerritoryGeometry
+): LngLat[][] {
   const normalized = normalizeLineCoordinates(path);
   const output: LngLat[][] = [];
   let current: LngLat[] = [];
@@ -2663,30 +2793,51 @@ async function writeAdm2BarrierArtifact(
   target: string,
   artifact: TurkeyOsmAdm2BarrierArtifact
 ): Promise<void> {
-  await mkdir(target, { recursive: true });
+  const temporary = `${target}.pending`;
+  await rm(temporary, { recursive: true, force: true });
+  await mkdir(temporary, { recursive: true });
   await Promise.all([
-    writeJsonFile(join(target, "manifest.json"), artifact.manifest),
-    writeJsonFile(join(target, "quality.json"), artifact.quality),
-    writeJsonFile(join(target, "roads.geojson"), artifact.roads),
-    writeJsonFile(join(target, "railways.geojson"), artifact.railways),
-    writeJsonFile(join(target, "water.geojson"), artifact.water),
-    writeJsonFile(join(target, "landuse.geojson"), artifact.landuse),
-    writeJsonFile(join(target, "parks.geojson"), artifact.parks),
-    writeJsonFile(join(target, "locality-seeds.json"), artifact.localitySeeds)
+    writeJsonFile(join(temporary, "manifest.json"), artifact.manifest),
+    writeJsonFile(join(temporary, "quality.json"), artifact.quality),
+    writeJsonFile(join(temporary, "roads.geojson"), artifact.roads),
+    writeJsonFile(join(temporary, "railways.geojson"), artifact.railways),
+    writeJsonFile(join(temporary, "water.geojson"), artifact.water),
+    writeJsonFile(join(temporary, "landuse.geojson"), artifact.landuse),
+    writeJsonFile(join(temporary, "parks.geojson"), artifact.parks),
+    writeJsonFile(join(temporary, "locality-seeds.json"), artifact.localitySeeds)
   ]);
+  await rm(target, { recursive: true, force: true });
+  await rename(temporary, target);
+}
+
+function barrierConfigurationHash(): string {
+  return sha256Hex(
+    serializeJsonStable({
+      ROAD_TAGS,
+      RAILWAY_TAGS,
+      WATERWAY_TAGS,
+      WATER_TAGS,
+      LANDUSE_TAGS,
+      LEISURE_TAGS,
+      PLACE_TAGS
+    })
+  );
 }
 
 async function readReusableArtifact(
   adm2: TerritoryZone,
   outputRoot: string,
-  sourceLock: TurkeyOsmSnapshotSourceLock
+  sourceLock: TurkeyOsmSnapshotSourceLock,
+  configurationHash: string
 ): Promise<TurkeyOsmAdm2BarrierArtifact | undefined> {
   try {
     const artifact = await readTurkeyOsmAdm2BarrierArtifact(outputRoot, adm2.id);
     const reusable =
       artifact.manifest.algorithmVersion === TURKEY_OSM_BARRIER_ALGORITHM_VERSION &&
       artifact.manifest.sourceSnapshotChecksum === sourceLock.sha256 &&
-      artifact.manifest.adm2Id === adm2.id;
+      artifact.manifest.adm2Id === adm2.id &&
+      artifact.manifest.parentGeometryHash === sha256Hex(serializeJsonStable(adm2.geometry)) &&
+      artifact.manifest.configurationHash === configurationHash;
 
     return reusable ? artifact : undefined;
   } catch {
@@ -3238,10 +3389,14 @@ function coordinatesBBox(coordinates: readonly LngLat[]): TerritoryBBox {
     return [0, 0, 0, 0];
   }
 
-  const lngs = coordinates.map((point) => point[0]);
-  const lats = coordinates.map((point) => point[1]);
-
-  return [Math.min(...lngs), Math.min(...lats), Math.max(...lngs), Math.max(...lats)];
+  const bbox: TerritoryBBox = [Infinity, Infinity, -Infinity, -Infinity];
+  for (const point of coordinates) {
+    bbox[0] = Math.min(bbox[0], point[0]);
+    bbox[1] = Math.min(bbox[1], point[1]);
+    bbox[2] = Math.max(bbox[2], point[0]);
+    bbox[3] = Math.max(bbox[3], point[1]);
+  }
+  return bbox;
 }
 
 function collectCoordinates(geometry: Geometry): LngLat[] {
