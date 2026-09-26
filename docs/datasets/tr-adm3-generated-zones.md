@@ -11,7 +11,10 @@ deterministic, derived from ADM2 geometry plus generator configuration, and labe
 Generated zones are game coverage units. They must not be displayed as official mahalle or köy
 records, and they do not share official or OSM license terms.
 
-Legacy fallback algorithm version: `tr-adm3-generated-zone-v1`.
+Legacy fallback algorithm version: `tr-adm3-generated-zone-v1`. Legacy generated zones are the
+last-resort fallback when official ADM3, OSM administrative ADM3, and smart-derived generation are
+unavailable or rejected. They do not use OSM barrier alignment and should not be described as
+smart-derived output.
 
 Sprint 2 adds the KapRota-oriented V2 game-zone generator:
 
@@ -37,6 +40,11 @@ Sprint 4 adds the Smart Fallback Boundary Engine:
 - CLI generation through `territory tr adm3 generate --strategy smart`
 
 See `docs/datasets/turkey-smart-fallback.md`.
+Sprint 5 adds a separate OSM barrier snapshot pipeline that can feed the smart fallback engine with
+real roads, railways, water, parks, landuse, and locality seeds. See
+`docs/datasets/turkey-osm-barrier-snapshots.md`. If the OSM barrier input is insufficient or smart
+quality gates reject the result, the resolver falls back to the legacy generated-zone path with an
+explicit reason code.
 
 The generated fill uses real ADM2 Polygon/MultiPolygon geometry and clips grid cells to missing
 district geometry. Current measured generated coverage is 99.999305%. Real/generated clipping and

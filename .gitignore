@@ -20,3 +20,4 @@ datasets/**/.cache/
 .territory/experimental/
 datasets/quarantine/
 reports/tr-v2-national-smoke/
+*.osm.pbf

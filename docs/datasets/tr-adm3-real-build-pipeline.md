@@ -21,11 +21,15 @@ Source priority is:
 ```text
 official
 runtime
-osm
-generated
+osm administrative
+osm barrier snapshot -> smart-derived generated
+legacy generated
 ```
 
-Runtime sources stay disabled unless `--allow-runtime` is provided. Official, runtime, and OSM geometry is counted only when an artifact is actually supplied to the build. Provider availability alone is not coverage.
+Runtime sources stay disabled unless `--allow-runtime` is provided. Official, runtime, and OSM
+administrative geometry is counted only when an artifact is actually supplied to the build. OSM
+barrier snapshots are separate smart fallback inputs and become generated estimated coverage only
+after smart quality gates pass. Provider availability alone is not coverage.
 
 Useful commands:
 
@@ -38,7 +42,7 @@ Current local production run status, generated on 2026-08-07:
 
 - Official source artifact: loaded from `.territory/build/TR/ADM3/official/levels/ADM3/dataset.json`
 - Official municipal polygons in final artifact: 3,338
-- OSM PBF artifact: requested but not built (`sourceStatus.osm = "not-built"`)
+- OSM PBF administrative artifact: requested but not built (`sourceStatus.osm = "not-built"`)
 - Generated fallback polygons in final artifact: 14,201
 - Final zones: 17,539
 - Final measured coverage: 99.985715%
@@ -55,3 +59,5 @@ The 2026-08-07 output is an evidence artifact, not a production approval. The la
 coverage blockers are Gaziantep, Kayseri, Ordu, and Aksaray; see
 `.territory/build/TR/ADM3/build-summary.json`, `.territory/build/TR/ADM3/coverage.json`, and
 `.territory/build/TR/ADM3/geometry-quality.json` for the machine-readable blocker state.
+For the newer source-locked OSM barrier snapshot supply used by smart fallback, see
+[Turkey OSM barrier snapshots](./turkey-osm-barrier-snapshots.md).

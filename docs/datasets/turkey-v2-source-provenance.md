@@ -6,9 +6,10 @@ Turkey V2 ADM3 zones declare `sourceClass`:
 2. `osm`
 3. `generated`
 
-Priority is `official > osm > generated`. The hybrid builder applies that priority for
-representative district and batch artifacts. Final national 81-province publication remains a
-future build/release step.
+Resolver priority is official ADM3, then OSM administrative ADM3, then smart-derived generated
+fallback fed by eligible OSM barrier artifacts, then legacy generated fallback. Final zone
+`sourceClass` still remains `official`, `osm`, or `generated`; road, rail, water, landuse, park,
+and locality seed artifacts are input evidence for smart generation, not OSM ADM3 polygons.
 
 `sourceClass` is the final zone semantics and must be `official`, `osm`, or `generated`.
 `providerClass` is separate and can describe access policy such as `runtime` or `experimental`.
@@ -79,6 +80,8 @@ Required strict metadata:
 ## Generated
 
 Generated records are TerritoryKit game zones used where no reviewed real ADM3 polygon exists.
+Smart-derived generated records may use OSM barrier artifacts as input evidence, but they remain
+estimated generated zones and do not become OSM administrative boundaries.
 
 Required strict metadata:
 

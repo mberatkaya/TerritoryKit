@@ -29,7 +29,9 @@ not part of the Turkey V2 production hierarchy in this contract.
 - `osm`
 - `generated`
 
-Priority is `official > osm > generated`. `sourceClass` describes the final zone semantics;
+Resolver priority is official ADM3, then OSM administrative ADM3, then eligible OSM barrier
+snapshot input for smart-derived generated fallback, then legacy generated fallback.
+`sourceClass` describes final zone semantics and remains `official`, `osm`, or `generated`;
 `providerClass` can separately describe access policy such as `runtime` or `experimental`. The
 hybrid coverage pipeline implements deterministic representative merge and clipping, while final
 national playable artifacts are produced by the Turkey V2 national build.
@@ -142,7 +144,10 @@ The Sprint 4 national build uses HDX/OCHA COD-AB for ADM0-ADM2, then applies the
 priority per district:
 
 ```text
-official > osm > generated
+official ADM3
+  -> OSM administrative ADM3
+  -> OSM barrier snapshot smart-derived fallback
+  -> legacy generated fallback
 ```
 
 The generated fallback is a playable territorial layer, not an official neighbourhood/village

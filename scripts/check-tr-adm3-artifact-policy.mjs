@@ -2,10 +2,13 @@
 import { createHash } from "node:crypto";
 import { readdir, readFile, stat } from "node:fs/promises";
 import { join, resolve } from "node:path";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const ARTIFACT_ROOT = resolve(ROOT, "datasets/generated/countries/TR/levels/ADM3");
 const POLICY_PATH = join(ARTIFACT_ROOT, "artifact-policy.json");
+const execFileAsync = promisify(execFile);
 
 const policy = JSON.parse(await readFile(POLICY_PATH, "utf8"));
 const files = await listFiles(ARTIFACT_ROOT);
@@ -22,6 +25,11 @@ const entries = await Promise.all(
 );
 const failures = [];
 const totalSizeBytes = entries.reduce((sum, entry) => sum + entry.sizeBytes, 0);
+const trackedPbfFiles = await listTrackedOsmPbfFiles();
+
+for (const path of trackedPbfFiles) {
+  failures.push(`Raw OSM PBF snapshot must not be tracked in Git: ${path}.`);
+}
 
 if (totalSizeBytes > policy.maxTotalSizeBytes) {
   failures.push(
@@ -114,4 +122,18 @@ function findDuplicateHashes(entries) {
     .filter(([, paths]) => paths.length > 1)
     .map(([sha256, paths]) => ({ sha256, paths: paths.sort() }))
     .sort((left, right) => left.sha256.localeCompare(right.sha256));
+}
+
+async function listTrackedOsmPbfFiles() {
+  try {
+    const { stdout } = await execFileAsync("git", ["ls-files", "*.osm.pbf"], { cwd: ROOT });
+    return stdout
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .sort();
+  } catch {
+    failures.push("Unable to inspect tracked files for raw OSM PBF snapshots.");
+    return [];
+  }
 }

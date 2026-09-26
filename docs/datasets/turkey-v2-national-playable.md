@@ -12,7 +12,10 @@ ADM0-ADM2 hierarchy from HDX/OCHA COD-AB and fills ADM3 gameplay coverage nation
 Turkey V2 hybrid priority:
 
 ```text
-official > osm > generated
+official ADM3
+  -> OSM administrative ADM3
+  -> OSM barrier snapshot smart-derived fallback
+  -> legacy generated fallback
 ```
 
 Generated fallback zones are playable game zones only. They are never official mahalle, koy, or
@@ -29,7 +32,9 @@ administrative records.
 
 The local build uses reviewed official ADM3 artifacts when they are present at
 `.territory/build/TR/ADM3/official/levels/ADM3/dataset.json`. OSM is reported as `not-built` unless
-an OSM artifact is provided with `--osm-artifact`.
+an OSM administrative artifact is provided with `--osm-artifact`. OSM barrier snapshots are a
+separate smart fallback input produced by `territory tr osm barriers build`; they do not create OSM
+administrative polygons.
 
 ## ADM3 Availability Status
 
@@ -71,6 +76,10 @@ The rebuilt artifact uses official ADM3 geometry only where reviewed local artif
 OSM is `not-built` in this snapshot. All remaining ADM3 playable coverage is deterministic generated
 fallback and remains marked as generated, non-official `generated-zone` geometry. This is not a claim
 that all official Turkish mahalle or koy boundaries are included.
+
+Sprint 5 adds the source-locked OSM barrier snapshot pipeline for future publish-ready smart
+fallback rebuilds. The 2026-08-22 stable verification snapshot above predates that barrier supply,
+so its generated coverage is not evidence of real OSM barrier extraction.
 
 Strict `territory tr v2 national validate --publish-ready` passes against the publish-ready output.
 The quality report has `quality.ok = true`, `quality.buildMode = "publish-ready"`, empty

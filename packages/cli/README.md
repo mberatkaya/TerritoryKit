@@ -32,6 +32,13 @@ territory country source lock TR --levels ADM0,ADM1,ADM2,ADM3 --adm3-provinces 2
 territory country build TR --source-lock ./dist/tr/sources.lock.json --output ./dist/tr --build-adjacency --build-query-artifacts --build-render-artifacts --build-binary-index --strict --allow-partial
 territory country validate ./dist/tr --strict
 territory tr adm3 generate --dataset ./adm2-dataset.json --district-id tr:adm2:example --profile auto --seed kaprota-v2 --output ./dist/tr-game-zones
+territory tr osm acquire --dry-run
+territory tr osm acquire --cache .territory/cache
+territory tr osm verify --source-lock .territory/cache/osm/TR/<snapshot-id>/source-lock.json
+territory tr osm barriers build --adm2 .territory/build/TR/V2-national/levels/ADM2/dataset.json --source-lock .territory/cache/osm/TR/<snapshot-id>/source-lock.json --offline --output .territory/build/TR/OSM-barriers --concurrency 2
+territory tr osm barriers inspect --barriers .territory/build/TR/OSM-barriers --adm2 tr:adm2:example
+territory tr osm smart coverage --adm2 .territory/build/TR/V2-national/levels/ADM2/dataset.json --barriers .territory/build/TR/OSM-barriers --output reports/tr-adm3/osm-smart-coverage.json
+territory tr adm3 hybrid build --district .territory/build/TR/V2-national/levels/ADM2/dataset.json --district-id tr:adm2:example --osm-barrier-artifact .territory/build/TR/OSM-barriers/ADM2/tr_adm2_example --output .territory/build/TR/ADM3-smart-example --force
 territory registry publish --artifact-root ./dist/tr/artifact --registry-output ./dist/registry --dataset territory-kit-tr --version 1.0.0 --base-url https://datasets.example.com/tr/1.0.0/ --artifact-prefix tr/1.0.0 --dry-run
 territory registry verify --registry https://datasets.example.com/registry.json --dataset territory-kit-tr --version 1.0.0
 ```
@@ -74,6 +81,14 @@ territory registry verify --registry https://datasets.example.com/registry.json 
 - `territory tr adm3 generate` builds deterministic Turkey V2 generated game-zone artifacts for one
   ADM2 district, including dataset, GeoJSON, coverage, quality, adjacency, configuration, summary,
   and checksum files.
+- `territory tr osm acquire|verify|barriers|smart` manages Turkey OSM country snapshots and ADM2
+  barrier artifacts. Production smart fallback uses a cached `.osm.pbf` source lock, SHA-256
+  verification, deterministic road/rail/water/park/landuse extraction, locality seeds, and offline
+  rebuilds instead of live Overpass calls.
+- `territory tr adm3 hybrid build --osm-barrier-artifact <dir>` runs a single-district hybrid
+  decision with an eligible ADM2 barrier artifact. District summaries include `selectedFallback`;
+  quality reports include `smartAttempt` with smart acceptance, gate failures, real-barrier
+  alignment metrics, raw input diagnostics, and raw topology coverage areas.
 - `territory registry publish` prepares provider-neutral hosted registry bundles with immutable
   version artifacts, inventory metadata, and rollback manifests.
 - `territory registry verify` validates a hosted registry and checks artifact SHA-256 and byte

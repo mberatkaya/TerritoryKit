@@ -41,5 +41,8 @@ public-API accessible, geometry-available, and `productionEligible: true`.
 adapter config, and parent mappings are not fully represented in the registry. Passing
 `--adm3-registry` and `--adm3-catalog` together lets the source lock take legal/source status from
 the registry and technical lock details from the catalog. Discovered, restricted, service-only,
-review-required, OSM, generated, or otherwise non-approved sources remain blocked and are reported
-as unavailable province coverage.
+review-required, OSM administrative, generated, or otherwise non-approved polygon sources remain
+blocked and are reported as unavailable province coverage.
+
+Sprint 5 OSM barrier snapshots are separate build-time inputs for smart-derived fallback. They do
+not promote OSM administrative polygons and do not make smart-derived output official ADM3 geometry.

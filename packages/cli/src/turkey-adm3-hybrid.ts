@@ -5,11 +5,14 @@ import { performance } from "node:perf_hooks";
 import type { TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
 import {
   buildTurkeyV2HybridBatch,
-  buildTurkeyV2HybridDistrict
+  buildTurkeyV2HybridDistrict,
+  createTurkeyOsmSmartFallbackGeneratedOptions,
+  readTurkeyOsmAdm2BarrierArtifact
 } from "@territory-kit/generators/turkey-adm3";
 import type {
   TurkeyGameZoneFragmentStrategy,
-  TurkeyGameZoneProfile
+  TurkeyGameZoneProfile,
+  TurkeyV2HybridGeneratedOptions
 } from "@territory-kit/generators/turkey-adm3";
 
 interface CliIssue {
@@ -29,7 +32,7 @@ export async function runTurkeyAdm3Hybrid(args: string[]): Promise<number> {
       data: {
         commands: ["build"],
         usage:
-          "territory tr adm3 hybrid build --district <adm2.json> --official <adm3.json> --osm <adm3.json> --output <dir>"
+          "territory tr adm3 hybrid build --district <adm2.json> --official <adm3.json> --osm <adm3.json> [--osm-barriers <dir>] --output <dir>"
       }
     });
     return 0;
@@ -55,6 +58,8 @@ export async function runTurkeyAdm3HybridBuild(args: string[]): Promise<number> 
   const outputRoot = getFlag(flags, "output");
   const officialPath = getFlag(flags, "official") ?? getFlag(flags, "official-artifact");
   const osmPath = getFlag(flags, "osm") ?? getFlag(flags, "osm-artifact");
+  const osmBarrierRoot = getFlag(flags, "osm-barriers") ?? getFlag(flags, "osm-barrier-root");
+  const osmBarrierArtifact = getFlag(flags, "osm-barrier-artifact");
   const migrationBaselinePath = getFlag(flags, "migration-baseline");
   const districtId = getFlag(flags, "district-id") ?? getFlag(flags, "zone-id");
   const buildDate = getFlag(flags, "build-date") ?? "1970-01-01T00:00:00.000Z";
@@ -109,7 +114,7 @@ export async function runTurkeyAdm3HybridBuild(args: string[]): Promise<number> 
   }
 
   try {
-    const generated = {
+    const generated: TurkeyV2HybridGeneratedOptions = {
       enabled: generatedEnabled,
       profile,
       ...(seed ? { seed } : {}),
@@ -132,15 +137,25 @@ export async function runTurkeyAdm3HybridBuild(args: string[]): Promise<number> 
     );
 
     if (batch) {
-      const sourcesByDistrict = Object.fromEntries(
-        selectedDistricts.map((district) => [
-          district.id,
-          {
-            officialZones: officialByParent.get(district.id) ?? [],
-            osmZones: osmByParent.get(district.id) ?? []
-          }
-        ])
+      const sourcesByDistrictEntries = await Promise.all(
+        selectedDistricts.map(
+          async (district) =>
+            [
+              district.id,
+              {
+                officialZones: officialByParent.get(district.id) ?? [],
+                osmZones: osmByParent.get(district.id) ?? [],
+                generated: await resolveOsmBarrierGeneratedOptions({
+                  district,
+                  generated,
+                  ...(osmBarrierRoot ? { osmBarrierRoot } : {}),
+                  ...(osmBarrierArtifact ? { osmBarrierArtifact } : {})
+                })
+              }
+            ] as const
+        )
       );
+      const sourcesByDistrict = Object.fromEntries(sourcesByDistrictEntries);
       const result = await buildTurkeyV2HybridBatch({
         districts: selectedDistricts,
         sourcesByDistrict,
@@ -163,6 +178,15 @@ export async function runTurkeyAdm3HybridBuild(args: string[]): Promise<number> 
         failedDistrictCount: result.coverage.failedDistrictCount,
         finalCoveragePercent: result.coverage.finalCoveragePercent,
         deterministicHash: result.deterministicHash,
+        smartAttemptedDistrictCount: result.districts.filter(
+          (districtResult) => districtResult.quality.smartAttempt
+        ).length,
+        smartAcceptedDistrictCount: result.districts.filter(
+          (districtResult) => districtResult.quality.smartAttempt?.accepted
+        ).length,
+        smartLegacyFallbackDistrictCount: result.districts.filter(
+          (districtResult) => districtResult.quality.smartAttempt?.selectedFallback === "legacy"
+        ).length,
         qualityOk: result.quality.ok,
         durationMs: Math.round(performance.now() - startedAt)
       };
@@ -198,13 +222,19 @@ export async function runTurkeyAdm3HybridBuild(args: string[]): Promise<number> 
     }
 
     const { provinceCode, districtCode } = resolveTurkeyAdm3GenerateCodes(district, flags);
+    const resolvedGenerated = await resolveOsmBarrierGeneratedOptions({
+      district,
+      generated,
+      ...(osmBarrierRoot ? { osmBarrierRoot } : {}),
+      ...(osmBarrierArtifact ? { osmBarrierArtifact } : {})
+    });
     const result = await buildTurkeyV2HybridDistrict({
       district,
       provinceCode,
       districtCode,
       officialZones: officialByParent.get(district.id) ?? [],
       osmZones: osmByParent.get(district.id) ?? [],
-      generated,
+      generated: resolvedGenerated,
       buildDate,
       migrationBaselineZones: migrationBaselineByParent.get(district.id) ?? [],
       ...(minimumEffectiveAreaKm2 !== undefined ? { minimumEffectiveAreaKm2 } : {}),
@@ -227,6 +257,9 @@ export async function runTurkeyAdm3HybridBuild(args: string[]): Promise<number> 
       finalCoveragePercent: result.coverage.finalCoveragePercent,
       remainingGapAreaKm2: result.coverage.remainingGapAreaKm2,
       deterministicHash: result.deterministicHash,
+      selectedFallback:
+        result.quality.smartAttempt?.selectedFallback ?? result.coverage.generatedStrategy,
+      ...(result.quality.smartAttempt ? { smartAttempt: result.quality.smartAttempt } : {}),
       qualityOk: result.quality.ok,
       trV2ValidationOk: result.quality.strictValidation.ok,
       durationMs: Math.round(performance.now() - startedAt)
@@ -743,6 +776,57 @@ function readOptionalPositiveIntegerFlag(
   }
 
   return parsed;
+}
+
+async function resolveOsmBarrierGeneratedOptions(input: {
+  district: TerritoryZone;
+  generated: TurkeyV2HybridGeneratedOptions;
+  osmBarrierRoot?: string;
+  osmBarrierArtifact?: string;
+}): Promise<TurkeyV2HybridGeneratedOptions> {
+  if (!input.generated.enabled || (!input.osmBarrierRoot && !input.osmBarrierArtifact)) {
+    return input.generated;
+  }
+
+  try {
+    const artifact = input.osmBarrierArtifact
+      ? await readTurkeyOsmAdm2BarrierArtifact(input.osmBarrierArtifact)
+      : await readTurkeyOsmAdm2BarrierArtifact(input.osmBarrierRoot!, input.district.id);
+
+    if (artifact.manifest.adm2Id !== input.district.id || artifact.quality.status !== "eligible") {
+      return input.generated;
+    }
+
+    const osmGenerated = createTurkeyOsmSmartFallbackGeneratedOptions(artifact, {
+      fallbackToLegacyOnSmartFailure: input.generated.fallbackToLegacyOnSmartFailure ?? true
+    });
+    const osmSmartFallback = osmGenerated.smartFallback;
+
+    if (!osmSmartFallback) {
+      return input.generated;
+    }
+
+    return {
+      ...input.generated,
+      strategy: "smart",
+      fallbackToLegacyOnSmartFailure:
+        input.generated.fallbackToLegacyOnSmartFailure ??
+        osmGenerated.fallbackToLegacyOnSmartFailure ??
+        true,
+      smartFallback: {
+        ...osmSmartFallback,
+        ...(input.generated.smartFallback?.profile
+          ? { profile: input.generated.smartFallback.profile }
+          : {}),
+        options: {
+          ...(osmSmartFallback.options ?? {}),
+          ...(input.generated.smartFallback?.options ?? {})
+        }
+      }
+    };
+  } catch {
+    return input.generated;
+  }
 }
 
 async function readJson(filePath: string): Promise<unknown> {

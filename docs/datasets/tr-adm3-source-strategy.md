@@ -11,7 +11,7 @@ TerritoryKit models Turkey ADM3 as source discovery first. This registry does no
 | P2       | official-local     | Municipal official GIS/API/WFS source that needs adapter, access, or license review.   |
 | P3       | official-local     | Other official government source or authority export.                                  |
 | P4       | osm-administrative | OSM administrative polygon fallback candidate; never authoritative for Turkey ADM3.    |
-| P5       | smart-derived      | Future derived fallback class; not emitted by Sprint 2.                                |
+| P5       | smart-derived      | Derived estimated fallback class emitted only by the smart fallback pipeline.          |
 | P6       | synthetic-test     | Synthetic test/gameplay class; not emitted by Sprint 2.                                |
 
 ## National Sources

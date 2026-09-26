@@ -155,7 +155,7 @@ const SOURCE_PRIORITY = [
   },
   {
     boundarySourceClass: "smart-derived",
-    description: "Future smart-derived fallback class; not emitted as a Sprint 2 source.",
+    description: "Derived estimated fallback class emitted only by the smart fallback pipeline.",
     priority: "P5",
     productionDefault: false
   },
@@ -792,7 +792,7 @@ TerritoryKit models Turkey ADM3 as source discovery first. This registry does no
 | P2 | official-local | Municipal official GIS/API/WFS source that needs adapter, access, or license review. |
 | P3 | official-local | Other official government source or authority export. |
 | P4 | osm-administrative | OSM administrative polygon fallback candidate; never authoritative for Turkey ADM3. |
-| P5 | smart-derived | Future derived fallback class; not emitted by Sprint 2. |
+| P5 | smart-derived | Derived estimated fallback class emitted only by the smart fallback pipeline. |
 | P6 | synthetic-test | Synthetic test/gameplay class; not emitted by Sprint 2. |
 
 ## National Sources
@@ -847,7 +847,20 @@ Do not add checksums for sources that have not been downloaded through an approv
 
 ## Production Safety
 
-The source registry is discovery infrastructure. It does not change \`datasets/sources/TR/adm3-catalog.json\`, does not download new polygon files, and does not add discovered provinces to the production Turkey V2 build.
+The source registry is the production eligibility source of truth for the generic Turkey ADM3
+importer. A source is allowed into source-lock creation only when it is official-local or
+official-national, lifecycle-approved, license-approved, redistribution-allowed, public-download or
+public-API accessible, geometry-available, and \`productionEligible: true\`.
+
+\`datasets/sources/TR/adm3-catalog.json\` remains a technical sidecar while checksums, fixture paths,
+adapter config, and parent mappings are not fully represented in the registry. Passing
+\`--adm3-registry\` and \`--adm3-catalog\` together lets the source lock take legal/source status from
+the registry and technical lock details from the catalog. Discovered, restricted, service-only,
+review-required, OSM administrative, generated, or otherwise non-approved polygon sources remain
+blocked and are reported as unavailable province coverage.
+
+Sprint 5 OSM barrier snapshots are separate build-time inputs for smart-derived fallback. They do
+not promote OSM administrative polygons and do not make smart-derived output official ADM3 geometry.
 `;
 }
 

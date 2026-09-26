@@ -26,6 +26,12 @@ territory country build TR --source-lock ./dist/tr/sources.lock.json --levels AD
 territory country validate ./dist/tr --strict
 territory country inspect ./dist/tr
 territory tr adm3 hybrid build --district ./adm2.json --official ./official-adm3.json --osm ./osm-adm3.json --profile auto --seed kaprota-v2 --output ./dist/tr-v2-hybrid
+territory tr osm acquire --dry-run
+territory tr osm acquire --cache .territory/cache
+territory tr osm verify --source-lock .territory/cache/osm/TR/<snapshot-id>/source-lock.json
+territory tr osm barriers build --adm2 .territory/build/TR/V2-national/levels/ADM2/dataset.json --source-lock .territory/cache/osm/TR/<snapshot-id>/source-lock.json --offline --output .territory/build/TR/OSM-barriers --concurrency 2
+territory tr osm barriers inspect --barriers .territory/build/TR/OSM-barriers --adm2 tr:adm2:example
+territory tr osm smart coverage --adm2 .territory/build/TR/V2-national/levels/ADM2/dataset.json --barriers .territory/build/TR/OSM-barriers --output reports/tr-adm3/osm-smart-coverage.json
 territory tr v2 national plan
 territory tr v2 national build --output .territory/build/TR/V2-national --reports-output reports/tr-v2-national --force
 territory tr v2 national validate --output .territory/build/TR/V2-national
@@ -101,13 +107,25 @@ build emits province coverage, import, unresolved-feature, repair, quality gate,
 provenance reports.
 
 `territory tr adm3 hybrid build` builds a Turkey V2 district or batch artifact with fixed
-`official > osm > generated` priority. It accepts `--district`, `--district-id`, `--official`,
+`official > OSM administrative > smart-derived generated > legacy generated` priority. OSM barrier
+artifacts produced by `territory tr osm barriers build` are adapted into smart fallback inputs
+without becoming administrative polygons. It accepts `--district`, `--district-id`, `--official`,
 `--osm`, `--generated`/`--no-generated`, generator profile and area overrides, tolerance flags,
 `--allow-experimental`, `--migration-baseline`, `--batch`, `--continue-on-error`, `--build-date`,
 `--output`, and `--force`. The command writes dataset, GeoJSON, coverage, quality, provenance,
 attribution, licenses, distribution policy, rejection, migration, adjacency, configuration,
 source-lock summary, and checksum artifacts. `territory tr adm3 build --hybrid` routes to the same
 implementation.
+
+`territory tr osm` manages the production OSM barrier snapshot supply for Turkey smart fallback.
+`acquire` resolves the Geofabrik Turkey `.osm.pbf` country extract, downloads it into
+`.territory/cache`, computes SHA-256, and writes `source-lock.json`. `verify` checks the cached PBF
+against the lock and fails with `OSM_SNAPSHOT_CHECKSUM_MISMATCH` on drift. `barriers build` parses
+the verified snapshot, extracts roads, railways, water, parks, landuse, and locality seeds, clips
+them to ADM2 geometry, writes deterministic ADM2 artifacts, supports `--dry-run`, `--offline`,
+`--concurrency`, `--best-effort`, and resume-by-checksum. `barriers inspect` prints one ADM2
+manifest/quality pair, and `smart coverage` rolls barrier eligibility into a national fallback
+report.
 
 `territory tr v2 national` builds the Turkey V2 national playable dataset. `plan` reports the
 canonical ADM0-ADM2 scope and available official/OSM/generated sources, `build` writes local

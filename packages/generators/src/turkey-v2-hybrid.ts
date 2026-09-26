@@ -39,7 +39,9 @@ import type {
   TurkeySmartFallbackBuildResult,
   TurkeySmartFallbackLocalitySeed,
   TurkeySmartFallbackOptions,
-  TurkeySmartFallbackProfile
+  TurkeySmartFallbackProfile,
+  TurkeySmartFallbackQualityReport,
+  TurkeySmartFallbackStatus
 } from "./turkey-smart-fallback.js";
 import {
   createDatasetGeometryHash,
@@ -257,7 +259,50 @@ export interface TurkeyV2HybridQualityReport {
     ok: boolean;
     issues: TerritoryValidationIssue[];
   };
+  smartAttempt?: TurkeyV2HybridSmartAttemptReport;
   issues: TurkeyV2HybridIssue[];
+}
+
+export interface TurkeyV2HybridSmartAttemptReport {
+  attempted: true;
+  accepted: boolean;
+  selectedFallback: "smart" | "legacy" | "none";
+  status: TurkeySmartFallbackStatus;
+  profile: TurkeySmartFallbackProfile;
+  selectedProfile: string;
+  deterministicHash: string;
+  reasonCodes: string[];
+  errorCodes: string[];
+  warningCodes: string[];
+  metrics: TurkeyV2HybridSmartAttemptMetrics;
+  gates: TurkeySmartFallbackQualityReport["gates"];
+  inputDiagnostics: TurkeySmartFallbackQualityReport["inputDiagnostics"];
+  coverageComputation: TurkeySmartFallbackQualityReport["coverageComputation"];
+}
+
+export interface TurkeyV2HybridSmartAttemptMetrics {
+  territoryCount: number;
+  coveragePercent: number;
+  uncoveredInsideParentKm2: number;
+  outsideSpillKm2: number;
+  overlapAreaKm2: number;
+  meanQualityScore: number;
+  minQualityScore: number;
+  meanBarrierAlignment: number;
+  meanZoneBarrierAlignment: number;
+  meanRealBarrierRatio: number;
+  meanSyntheticBoundaryRatio: number;
+  totalInternalBoundaryLengthKm: number;
+  barrierAlignedBoundaryLengthKm: number;
+  syntheticSplitCount: number;
+  barrierSplitCount: number;
+  splitCount: number;
+  mergeCount: number;
+  barrierCount: number;
+  strongBarrierCount: number;
+  mediumBarrierCount: number;
+  weakBarrierCount: number;
+  qualityDistribution: TurkeySmartFallbackQualityReport["qualityDistribution"];
 }
 
 export interface TurkeyV2HybridProvenanceItem {
@@ -393,6 +438,7 @@ export interface TurkeyV2ZoneMigrationPlan {
 export interface TurkeyV2HybridBatchSourceEntry {
   officialZones?: readonly TerritoryZone[];
   osmZones?: readonly TerritoryZone[];
+  generated?: TurkeyV2HybridGeneratedOptions;
 }
 
 export interface TurkeyV2HybridBatchBuildOptions {
@@ -527,7 +573,8 @@ export async function buildTurkeyV2HybridDistrict(
     issues.push({
       code: "TR_V2_HYBRID_SOURCE_PRIORITY_UNSUPPORTED",
       severity: "error",
-      message: "Turkey V2 hybrid builds require official > osm > generated source priority.",
+      message:
+        "Turkey V2 hybrid builds require official, OSM administrative, then generated fallback source priority.",
       parentId: options.district.id
     });
   }
@@ -635,7 +682,10 @@ export async function buildTurkeyV2HybridDistrict(
           parentId: options.district.id,
           details: {
             smartFallbackStatus: smartFallbackResult.status,
-            smartFallbackHash: smartFallbackResult.deterministicHash
+            smartFallbackHash: smartFallbackResult.deterministicHash,
+            reasonCodes: smartFallbackResult.reasonCodes,
+            smartFallbackMetrics: createSmartAttemptMetrics(smartFallbackResult.quality),
+            smartFallbackGates: smartFallbackResult.quality.gates
           }
         });
         generatedResult = buildLegacyGeneratedResult({
@@ -987,6 +1037,70 @@ function toLegacyGameZoneProfile(
   return "auto";
 }
 
+function createSmartAttemptReport(input: {
+  smartFallbackResult?: TurkeySmartFallbackBuildResult;
+  generatedResult?: TurkeyGameZoneBuildResult;
+}): TurkeyV2HybridSmartAttemptReport | undefined {
+  const result = input.smartFallbackResult;
+
+  if (!result) {
+    return undefined;
+  }
+
+  const errorCodes = sortedUnique(
+    result.quality.issues.filter((issue) => issue.severity === "error").map((issue) => issue.code)
+  );
+  const warningCodes = sortedUnique(
+    result.quality.issues.filter((issue) => issue.severity === "warning").map((issue) => issue.code)
+  );
+
+  return {
+    attempted: true,
+    accepted: result.quality.ok,
+    selectedFallback: result.quality.ok ? "smart" : input.generatedResult ? "legacy" : "none",
+    status: result.status,
+    profile: result.configuration.profile,
+    selectedProfile: result.selectedProfile,
+    deterministicHash: result.deterministicHash,
+    reasonCodes: result.reasonCodes,
+    errorCodes,
+    warningCodes,
+    metrics: createSmartAttemptMetrics(result.quality),
+    gates: result.quality.gates,
+    inputDiagnostics: result.quality.inputDiagnostics,
+    coverageComputation: result.quality.coverageComputation
+  };
+}
+
+function createSmartAttemptMetrics(
+  quality: TurkeySmartFallbackQualityReport
+): TurkeyV2HybridSmartAttemptMetrics {
+  return {
+    territoryCount: quality.territoryCount,
+    coveragePercent: quality.coveragePercent,
+    uncoveredInsideParentKm2: quality.uncoveredInsideParentKm2,
+    outsideSpillKm2: quality.outsideSpillKm2,
+    overlapAreaKm2: quality.overlapAreaKm2,
+    meanQualityScore: quality.meanQualityScore,
+    minQualityScore: quality.minQualityScore,
+    meanBarrierAlignment: quality.meanBarrierAlignment,
+    meanZoneBarrierAlignment: quality.meanZoneBarrierAlignment,
+    meanRealBarrierRatio: quality.meanRealBarrierRatio,
+    meanSyntheticBoundaryRatio: quality.meanSyntheticBoundaryRatio,
+    totalInternalBoundaryLengthKm: quality.totalInternalBoundaryLengthKm,
+    barrierAlignedBoundaryLengthKm: quality.barrierAlignedBoundaryLengthKm,
+    syntheticSplitCount: quality.syntheticSplitCount,
+    barrierSplitCount: quality.barrierSplitCount,
+    splitCount: quality.splitCount,
+    mergeCount: quality.mergeCount,
+    barrierCount: quality.barrierCount,
+    strongBarrierCount: quality.strongBarrierCount,
+    mediumBarrierCount: quality.mediumBarrierCount,
+    weakBarrierCount: quality.weakBarrierCount,
+    qualityDistribution: quality.qualityDistribution
+  };
+}
+
 function mapSmartFallbackIssues(
   issues: readonly TurkeySmartFallbackBuildResult["issues"][number][],
   severityOverride?: TurkeyV2HybridIssueSeverity
@@ -1025,7 +1139,8 @@ export async function buildTurkeyV2HybridBatch(
         districtCode: codes.districtCode,
         officialZones: sourceEntry?.officialZones ?? [],
         osmZones: sourceEntry?.osmZones ?? [],
-        generated: options.generatedDefaults ?? { enabled: true, profile: "auto" },
+        generated: sourceEntry?.generated ??
+          options.generatedDefaults ?? { enabled: true, profile: "auto" },
         buildDate: options.buildDate,
         datasetId: `${datasetId}-${district.id.replace(/[^a-zA-Z0-9_-]+/g, "-")}`,
         ...(options.minimumEffectiveAreaKm2 !== undefined
@@ -2101,6 +2216,10 @@ function createQualityReport(input: {
       ...(issue.parentId ? { parentId: issue.parentId } : {})
     }))
   ];
+  const smartAttempt = createSmartAttemptReport({
+    ...(input.smartFallbackResult ? { smartFallbackResult: input.smartFallbackResult } : {}),
+    ...(input.generatedResult ? { generatedResult: input.generatedResult } : {})
+  });
 
   return {
     schemaVersion: TURKEY_V2_HYBRID_QUALITY_SCHEMA_VERSION,
@@ -2113,6 +2232,7 @@ function createQualityReport(input: {
       ok: input.trV2Validation.ok,
       issues: input.trV2Validation.issues
     },
+    ...(smartAttempt ? { smartAttempt } : {}),
     issues: sortIssues(qualityIssues)
   };
 }
