@@ -1,15 +1,21 @@
+import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile, rename } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { computeTerritoryAreaM2 } from "@territory-kit/dataset";
 import type { TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
 import {
   TURKEY_V2_NATIONAL_EXPECTED_COUNTS,
+  TURKEY_SMART_FALLBACK_ALGORITHM_VERSION,
   TURKEY_V2_NATIONAL_DATASET_ID,
-  TURKEY_V2_NATIONAL_DATASET_VERSION,
   buildTurkeyV2NationalDataset,
   createTurkeyV2NationalArtifactPayloads,
+  createDatasetGeometryHash,
   createTurkeyV2NationalSourceLock,
+  createTurkeyOsmSmartFallbackGeneratedOptions,
+  readTurkeyOsmAdm2BarrierArtifact,
+  verifyTurkeyOsmSnapshot,
   validateTurkeyV2NationalArtifactIntegrity,
   validateTurkeyV2NationalCompleteness
 } from "@territory-kit/generators/turkey-adm3";
@@ -18,6 +24,8 @@ import type {
   TurkeyV2NationalBuildResult,
   TurkeyV2NationalOutputMode,
   TurkeyV2NationalRealProviderLock,
+  TurkeyV2HybridDistrictBuildResult,
+  TurkeyV2HybridDistrictBuildOptions,
   TurkeyV2NationalSourceStatus
 } from "@territory-kit/generators/turkey-adm3";
 
@@ -37,9 +45,11 @@ const DEFAULT_NATIONAL_SOURCE = workspacePath("datasets/sources/TR/national.json
 const DEFAULT_OFFICIAL_ARTIFACT = workspacePath(
   ".territory/build/TR/ADM3/official/levels/ADM3/dataset.json"
 );
-const DEFAULT_OUTPUT = workspacePath(".territory/build/TR/V2-national");
-const DEFAULT_REPORTS_OUTPUT = workspacePath("reports/tr-v2-national");
-const DEFAULT_BUILD_DATE = "2026-08-22T00:00:00.000Z";
+const DEFAULT_OUTPUT = workspacePath(".territory/sprint-6/candidate");
+const DEFAULT_REPORTS_OUTPUT = workspacePath("reports/tr-v2-smart-candidate");
+const DEFAULT_BUILD_DATE = "2026-09-27T00:00:00.000Z";
+const DEFAULT_SMART_CANDIDATE_VERSION = "2.1.0-rc.1";
+const DISTRICT_CHECKPOINT_SCHEMA = "territorykit-tr-smart-district-checkpoint@3";
 
 export async function runTurkeyV2(args: string[]): Promise<number> {
   const [subcommand] = args;
@@ -123,7 +133,7 @@ async function runPlan(args: string[]): Promise<number> {
     data: {
       schemaVersion: "territorykit-tr-v2-national-plan@1",
       datasetId: TURKEY_V2_NATIONAL_DATASET_ID,
-      datasetVersion: getFlag(flags, "dataset-version") ?? TURKEY_V2_NATIONAL_DATASET_VERSION,
+      datasetVersion: getFlag(flags, "dataset-version") ?? DEFAULT_SMART_CANDIDATE_VERSION,
       adm0Count: counts.ADM0,
       adm1Count: counts.ADM1,
       adm2Count: counts.ADM2,
@@ -131,6 +141,12 @@ async function runPlan(args: string[]): Promise<number> {
       officialStatus: officialPath ? "artifact-loaded" : "not-built",
       osmStatus: osmPath && existsSync(resolve(osmPath)) ? "artifact-loaded" : "not-built",
       generatedStatus: flags.has("no-generated") ? "disabled" : "built",
+      barrierArtifactRoot: getFlag(flags, "osm-barriers") ?? null,
+      osmSourceLock: getFlag(flags, "osm-source-lock") ?? null,
+      legacyGridAllowed: flags.has("allow-legacy-grid-emergency"),
+      organicFallbackEnabled: true,
+      expectedProvinceBatches: counts.ADM1,
+      resumeEnabled: !flags.has("no-resume"),
       buildDate: getFlag(flags, "build-date") ?? DEFAULT_BUILD_DATE,
       sourceLockHash: createSourceLockForCli({
         source,
@@ -168,7 +184,7 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
     return 2;
   }
   const buildDate = getFlag(flags, "build-date") ?? DEFAULT_BUILD_DATE;
-  const datasetVersion = getFlag(flags, "dataset-version") ?? TURKEY_V2_NATIONAL_DATASET_VERSION;
+  const datasetVersion = getFlag(flags, "dataset-version") ?? DEFAULT_SMART_CANDIDATE_VERSION;
   const admDataset = await readDataset(
     getFlag(flags, "adm0-adm2-dataset") ?? DEFAULT_ADM0_ADM2_DATASET
   );
@@ -205,6 +221,75 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
     officialProviders: createOfficialProviderLocks(officialZones),
     generatedSeed: seed
   });
+  const barrierRoot = getFlag(flags, "osm-barriers");
+  const osmSourceLockPath = getFlag(flags, "osm-source-lock");
+  const allowLegacyGridEmergency = flags.has("allow-legacy-grid-emergency");
+  if (
+    !flags.has("no-generated") &&
+    !allowLegacyGridEmergency &&
+    (!barrierRoot || !osmSourceLockPath)
+  ) {
+    printJson({
+      ok: false,
+      command: `tr v2 national ${mode}`,
+      issues: [
+        issue(
+          "Smart production builds require --osm-barriers and --osm-source-lock; legacy is developer emergency only.",
+          undefined,
+          { code: "PRODUCTION_LEGACY_GRID_FORBIDDEN" }
+        )
+      ]
+    });
+    return 2;
+  }
+  let snapshotChecksum = "";
+  if (osmSourceLockPath) {
+    const verification = await verifyTurkeyOsmSnapshot({ sourceLockPath: osmSourceLockPath });
+    if (!verification.ok) {
+      printJson({ ok: false, issues: verification.issues });
+      return 1;
+    }
+    const lock = JSON.parse(await readFile(osmSourceLockPath, "utf8"));
+    snapshotChecksum = lock.sha256;
+  }
+  Object.assign(sourceLock, {
+    productionFallbackPolicy: {
+      legacyGridAllowed: allowLegacyGridEmergency,
+      organicFallbackEnabled: true
+    },
+    osmBarrierSnapshotChecksum: snapshotChecksum
+  });
+  sourceLock.generated.algorithmVersion = allowLegacyGridEmergency
+    ? sourceLock.generated.algorithmVersion
+    : TURKEY_SMART_FALLBACK_ALGORITHM_VERSION;
+  sourceLock.generated.generatorConfigHash = stableHash({
+    organicAlgorithm: "organic-locality-v1",
+    organicNetworkRefinementDepth: 3,
+    clippingRetryPrecisionDecimals: 12,
+    maxTerritoriesLarge: 32,
+    maxTerritoriesCompact: 128,
+    largeParentAreaM2: 100_000_000,
+    axisAlignedUnsupportedGate: 0.15,
+    legacyGridAllowed: allowLegacyGridEmergency
+  });
+  const lockIdentity = { ...sourceLock };
+  delete (lockIdentity as Partial<typeof sourceLock>).contentHash;
+  sourceLock.contentHash = `sha256:${stableHash(lockIdentity)}`;
+  const districtTimings: Array<{ adm2Id: string; durationMs: number; resumed: boolean }> = [];
+  const districtStarts = new Map<string, number>();
+  const resumedDistricts = new Set<string>();
+  const checkpointRoot = join(outputRoot, "districts");
+  const checkpointPath = (id: string) =>
+    join(checkpointRoot, `${id.replace(/[^a-zA-Z0-9_-]/g, "_")}.json`);
+  const checkpointKey = (options: TurkeyV2HybridDistrictBuildOptions) =>
+    stableHash({
+      options,
+      snapshotChecksum,
+      datasetVersion,
+      checkpointSchema: DISTRICT_CHECKPOINT_SCHEMA,
+      sourceLockHash: sourceLock.contentHash,
+      algorithm: TURKEY_SMART_FALLBACK_ALGORITHM_VERSION
+    });
   const districtLimit = readPositiveIntegerFlag(flags, "max-districts");
   const result = await buildTurkeyV2NationalDataset({
     adm0Adm2Dataset: admDataset,
@@ -220,6 +305,68 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
     outputMode: mode,
     continueOnError: flags.has("continue-on-error") && mode !== "publish-ready",
     ...(districtLimit ? { districtLimit } : {}),
+    allowLegacyGridEmergency,
+    ...(getFlag(flags, "migration-baseline")
+      ? { migrationBaselineZones: await readAdm3Zones(getFlag(flags, "migration-baseline")) }
+      : {}),
+    ...(barrierRoot
+      ? {
+          loadGeneratedOptions: async (district: TerritoryZone) => {
+            districtStarts.set(district.id, Date.now());
+            const artifact = await readTurkeyOsmAdm2BarrierArtifact(barrierRoot, district.id);
+            if (
+              artifact.manifest.sourceSnapshotChecksum !== snapshotChecksum ||
+              artifact.manifest.parentGeometryHash !== stableHash(district.geometry)
+            ) {
+              throw new Error(`OSM_BARRIER_LINEAGE_MISMATCH: ${district.id}`);
+            }
+            const areaM2 = computeTerritoryAreaM2(district.geometry);
+            return createTurkeyOsmSmartFallbackGeneratedOptions(artifact, {
+              smartFallbackOptions: {
+                maxTerritories: areaM2 > 100_000_000 ? 32 : 128
+              }
+            });
+          }
+        }
+      : {}),
+    restoreDistrictResult: async (options: TurkeyV2HybridDistrictBuildOptions) => {
+      if (flags.has("no-resume")) return undefined;
+      try {
+        const stored = JSON.parse(await readFile(checkpointPath(options.district.id), "utf8"));
+        if (
+          stored.schemaVersion !== DISTRICT_CHECKPOINT_SCHEMA ||
+          stored.key !== checkpointKey(options) ||
+          stableHash(stored.result) !== stored.resultHash
+        )
+          return undefined;
+        resumedDistricts.add(options.district.id);
+        return stored.result as TurkeyV2HybridDistrictBuildResult;
+      } catch {
+        return undefined;
+      }
+    },
+    onDistrictComplete: async (
+      result: TurkeyV2HybridDistrictBuildResult,
+      options: TurkeyV2HybridDistrictBuildOptions
+    ) => {
+      districtTimings.push({
+        adm2Id: result.district.id,
+        durationMs: Date.now() - (districtStarts.get(result.district.id) ?? Date.now()),
+        resumed: resumedDistricts.has(result.district.id)
+      });
+      await mkdir(checkpointRoot, { recursive: true });
+      const target = checkpointPath(result.district.id);
+      await writeFile(
+        `${target}.pending`,
+        JSON.stringify({
+          schemaVersion: DISTRICT_CHECKPOINT_SCHEMA,
+          key: checkpointKey(options),
+          resultHash: stableHash(result),
+          result
+        })
+      );
+      await rename(`${target}.pending`, target);
+    },
     generatedDefaults: {
       enabled: !flags.has("no-generated"),
       profile: "auto",
@@ -239,7 +386,111 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
     includeRender: !flags.has("no-render") && !flags.has("no-mvt")
   });
   await writeNationalReports(reportsRoot, result, flags.has("force"));
+  const times = districtTimings.map((d) => d.durationMs).sort((a, b) => a - b);
+  await writeJson(
+    join(reportsRoot, "performance.json"),
+    {
+      durationMs: Date.now() - startedAt,
+      peakRssBytes: process.resourceUsage().maxRSS * 1024,
+      p50Adm2Ms: times[Math.floor(times.length * 0.5)] ?? 0,
+      p95Adm2Ms: times[Math.floor(times.length * 0.95)] ?? 0,
+      slowestAdm2: districtTimings.slice().sort((a, b) => b.durationMs - a.durationMs)[0],
+      districtTimings
+    },
+    true
+  );
+  const smartManifest = createSmartCoverageManifest(result);
+  await writeJson(join(reportsRoot, "smart-coverage.json"), smartManifest, true);
+  await writeJson(join(outputRoot, "smart-coverage.json"), smartManifest, true);
+  await writeJson(
+    join(reportsRoot, "official-source-backlog.json"),
+    smartManifest.districts
+      .filter(
+        (d) => d.selectedSourceTier === "organic-smart" || d.selectedSourceTier === "unavailable"
+      )
+      .sort(
+        (a, b) =>
+          Number(a.selectedSourceTier !== "unavailable") -
+            Number(b.selectedSourceTier !== "unavailable") || a.adm2Id.localeCompare(b.adm2Id)
+      ),
+    true
+  );
+  const shardFiles: Record<string, { sha256: string; sizeBytes: number }> = {};
+  const writeShard = async (path: string, payload: unknown) => {
+    const content = `${JSON.stringify(payload, null, 2)}\n`;
+    await writeText(join(outputRoot, path), content, true);
+    shardFiles[path] = {
+      sha256: createHash("sha256").update(content).digest("hex"),
+      sizeBytes: Buffer.byteLength(content)
+    };
+  };
+  for (const province of smartManifest.provinces) {
+    await writeJson(
+      join(reportsRoot, "provinces", `${province.provinceCode}.json`),
+      province,
+      true
+    );
+    const districts = result.districts.filter(
+      (d) => d.coverage.provinceCode === province.provinceCode
+    );
+    const parent = result.dataset.zones.find(
+      (z) =>
+        z.level === 1 &&
+        (z.properties.territory as Record<string, unknown>)?.provinceCode === province.provinceCode
+    );
+    if (!parent) throw new Error(`Province parent missing: ${province.provinceCode}`);
+    const scopedParent = {
+      ...parent,
+      properties: {
+        ...parent.properties,
+        territory: { ...(parent.properties.territory as Record<string, unknown>) }
+      }
+    };
+    delete scopedParent.parentId;
+    delete scopedParent.properties.territory.parentId;
+    const districtIds = new Set(districts.map((d) => d.district.id));
+    scopedParent.childIds = [...districtIds].sort();
+    const zones = [
+      scopedParent,
+      ...result.dataset.zones.filter(
+        (z) => districtIds.has(z.id) || (z.level === 3 && districtIds.has(z.parentId ?? ""))
+      )
+    ].sort((a, b) => a.id.localeCompare(b.id));
+    await writeShard(`provinces/${province.provinceCode}/dataset.json`, {
+      manifest: {
+        ...result.dataset.manifest,
+        adminLevels: ["ADM1", "ADM2", "ADM3"],
+        geometryHash: createDatasetGeometryHash({ zones }),
+        name: `Turkey ${province.province} Smart candidate`
+      },
+      zones
+    });
+    for (const district of districts) {
+      await writeShard(
+        `districts/${district.district.id.replace(/[^a-zA-Z0-9_-]/g, "_")}/dataset.json`,
+        {
+          ...district.dataset,
+          manifest: {
+            ...district.dataset.manifest,
+            datasetVersion,
+            name: `Turkey ${district.district.name ?? district.district.id} Smart candidate`
+          }
+        }
+      );
+    }
+  }
 
+  const shardIdentity = {
+    schemaVersion: "territorykit-tr-smart-shards@1",
+    datasetVersion,
+    sourceLockHash: sourceLock.contentHash,
+    files: shardFiles
+  };
+  await writeJson(
+    join(outputRoot, "shards.json"),
+    { ...shardIdentity, contentHash: stableHash(shardIdentity) },
+    true
+  );
   const summary = {
     ...createCliSummary(result),
     outputRoot,
@@ -261,7 +512,7 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
       : failureGates.map((gate) => issue(`Quality gate failed: ${gate}`, undefined, { code: gate }))
   });
 
-  return commandOk ? 0 : mode === "publish-ready" ? 1 : 0;
+  return commandOk ? 0 : 1;
 }
 
 async function runValidate(args: string[]): Promise<number> {
@@ -350,6 +601,126 @@ async function runValidate(args: string[]): Promise<number> {
     issues.push(...completeness.errors.map(validationIssueToCliIssue));
   }
 
+  if (strictPublishReady) {
+    if (isRecord(sourceLock)) {
+      const identity = { ...sourceLock };
+      delete identity.contentHash;
+      if (sourceLock.contentHash !== `sha256:${stableHash(identity)}`) {
+        issues.push(
+          issue("Source lock identity is invalid.", "source-lock.json", {
+            code: "SOURCE_LOCK_IDENTITY_INVALID"
+          })
+        );
+      }
+    }
+    const smartCoverage = await readJsonForValidation(outputRoot, "smart-coverage.json", issues);
+    if (isRecord(smartCoverage)) {
+      const identity = { ...smartCoverage };
+      delete identity.contentHash;
+      if (smartCoverage.contentHash !== stableHash(identity)) {
+        issues.push(
+          issue("Smart coverage identity is invalid.", "smart-coverage.json", {
+            code: "SMART_COVERAGE_IDENTITY_INVALID"
+          })
+        );
+      }
+      if (
+        !isRecord(smartCoverage.totals) ||
+        smartCoverage.totals.adm2Total !== 973 ||
+        smartCoverage.totals.adm2Failed !== 0 ||
+        smartCoverage.totals.legacyProductionDistricts !== 0 ||
+        smartCoverage.totals.gridThresholdViolations !== 0
+      ) {
+        issues.push(
+          issue(
+            "Smart coverage does not meet national production requirements.",
+            "smart-coverage.json",
+            {
+              code: "SMART_NATIONAL_COVERAGE_INCOMPLETE"
+            }
+          )
+        );
+      }
+    }
+    const shards = await readJsonForValidation(outputRoot, "shards.json", issues);
+    if (isRecord(shards) && isRecord(shards.files)) {
+      const identity = { ...shards };
+      delete identity.contentHash;
+      const paths = Object.keys(shards.files);
+      if (
+        shards.contentHash !== stableHash(identity) ||
+        shards.sourceLockHash !== (isRecord(sourceLock) ? sourceLock.contentHash : undefined) ||
+        paths.filter((p) => p.startsWith("provinces/")).length !== 81 ||
+        paths.filter((p) => p.startsWith("districts/")).length !== 973
+      ) {
+        issues.push(
+          issue("Shard manifest identity or completeness is invalid.", "shards.json", {
+            code: "SMART_SHARD_MANIFEST_INVALID"
+          })
+        );
+      }
+      for (const path of paths) {
+        const entry = shards.files[path];
+        if (
+          !/^(provinces\/[0-9]{2}|districts\/[a-zA-Z0-9_-]+)\/dataset\.json$/.test(path) ||
+          !isRecord(entry)
+        ) {
+          issues.push(issue("Invalid shard path or entry.", path, { code: "SMART_SHARD_INVALID" }));
+          continue;
+        }
+        try {
+          const bytes = await readFile(join(outputRoot, path));
+          const shard = JSON.parse(bytes.toString("utf8")) as TerritoryDataset;
+          if (
+            entry.sha256 !== createHash("sha256").update(bytes).digest("hex") ||
+            entry.sizeBytes !== bytes.length ||
+            shard.manifest.geometryHash !== createDatasetGeometryHash(shard)
+          ) {
+            issues.push(
+              issue("Shard checksum or geometry hash mismatch.", path, {
+                code: "SMART_SHARD_INTEGRITY_INVALID"
+              })
+            );
+          }
+        } catch {
+          issues.push(issue("Shard is missing or invalid.", path, { code: "SMART_SHARD_INVALID" }));
+        }
+      }
+    } else {
+      issues.push(
+        issue("Shard manifest is missing or invalid.", "shards.json", {
+          code: "SMART_SHARD_MANIFEST_INVALID"
+        })
+      );
+    }
+    const dataset = await readDataset(join(outputRoot, "dataset.json"));
+    for (const zone of dataset.zones.filter((z) => z.level === 3)) {
+      const t = isRecord(zone.properties.territory) ? zone.properties.territory : {};
+      if (t.generated === true && !String(t.algorithmVersion).startsWith("smart-derived")) {
+        issues.push(
+          issue(`Legacy generated zone ${zone.id} cannot be publish-ready.`, undefined, {
+            code: "PRODUCTION_LEGACY_GRID_FORBIDDEN"
+          })
+        );
+      }
+      if (
+        t.boundarySourceClass === "smart-derived" &&
+        (t.administrative !== false ||
+          t.authoritative !== false ||
+          t.boundaryKind !== "estimated" ||
+          !t.sourceSnapshotChecksum ||
+          !t.barrierArtifactChecksum ||
+          !t.attribution)
+      ) {
+        issues.push(
+          issue(`Invalid Smart semantics or lineage for ${zone.id}.`, undefined, {
+            code: "SMART_PROVENANCE_INVALID"
+          })
+        );
+      }
+    }
+  }
+
   if (isRecord(coverage) && isRecord(sourceLock)) {
     const sourceLockHash =
       typeof sourceLock.contentHash === "string" ? sourceLock.contentHash : undefined;
@@ -428,6 +799,7 @@ async function runBenchmark(args: string[]): Promise<number> {
     const startedAt = Date.now();
     const code = await runBuild(
       [
+        ...args,
         "--output",
         scenarioOutput,
         "--reports-output",
@@ -440,12 +812,13 @@ async function runBenchmark(args: string[]): Promise<number> {
       ],
       "build"
     );
+    if (code !== 0) return code;
     const summary = await readJson(join(scenarioOutput, "build-summary.json"));
     results.push({
       districtLimit,
       code,
       durationMs: Date.now() - startedAt,
-      peakRssBytes: process.memoryUsage().rss,
+      peakRssBytes: process.resourceUsage().maxRSS * 1024,
       summary
     });
   }
@@ -458,6 +831,191 @@ async function runBenchmark(args: string[]): Promise<number> {
   await writeJson(join(reportsRoot, "benchmark.json"), report, true);
   printJson({ ok: true, command: "tr v2 national benchmark", data: report });
   return 0;
+}
+
+function createSmartCoverageManifest(result: TurkeyV2NationalBuildResult) {
+  const districts = result.levels.ADM2.zones.map((parent) => {
+    const t = isRecord(parent.properties.territory) ? parent.properties.territory : {};
+    const c = result.coverage.districts.find((c) => c.districtId === parent.id) ?? {
+      districtId: parent.id,
+      provinceCode: String(t.provinceCode),
+      provinceName: "",
+      districtName: parent.name ?? parent.id,
+      zoneCount: 0,
+      finalCoveragePercent: 0
+    };
+    const d = result.districts.find((d) => d.district.id === c.districtId);
+    const q = d?.smartFallbackResult?.quality;
+    const organic = d?.smartFallbackResult?.configuration.organic === true;
+    const legacy = d?.generatedResult !== undefined;
+    const generatedCount = d?.effective.generated.length ?? 0;
+    const officialCount = d?.effective.official.length ?? 0;
+    const osmCount = d?.effective.osm.length ?? 0;
+    const tier = legacy
+      ? "legacy"
+      : generatedCount > 0
+        ? organic
+          ? "organic-smart"
+          : "standard-smart"
+        : officialCount > 0
+          ? "official"
+          : osmCount > 0
+            ? "osm-administrative"
+            : "unavailable";
+    return {
+      adm2Id: c.districtId,
+      failureReason: result.failures.find((f) => f.districtId === c.districtId)?.message ?? null,
+      provinceCode: c.provinceCode,
+      province: c.provinceName,
+      district: c.districtName,
+      selectedSourceTier: tier,
+      boundaryKind: !d ? "unavailable" : generatedCount ? "estimated" : "administrative",
+      sourceClass: generatedCount ? "smart-derived" : tier,
+      confidence: !d
+        ? "unavailable"
+        : organic ||
+            d.effective.generated.some(
+              (z) => (z.properties.territory as Record<string, unknown>)?.confidence === "low"
+            )
+          ? "low"
+          : String(
+              (d.effective.zones[0]?.properties.territory as Record<string, unknown>)?.confidence ??
+                "unavailable"
+            ),
+      qualityAccepted: d?.quality.ok === true,
+      zoneCount: c.zoneCount,
+      coverage: c.finalCoveragePercent,
+      spill: q?.outsideSpillKm2 ?? 0,
+      overlap: q?.overlapAreaKm2 ?? 0,
+      barrierAlignment: q?.meanBarrierAlignment ?? null,
+      realBarrierRatio: q?.meanRealBarrierRatio ?? null,
+      syntheticBoundaryRatio: q?.meanSyntheticBoundaryRatio ?? null,
+      axisAlignedInternalBoundaryRatio: q?.axisAlignedInternalBoundaryRatio ?? null,
+      quality: q?.meanQualityScore ?? null,
+      qualityGates: q?.gates ?? d?.quality.gates ?? {},
+      reasonCodes: [...new Set(d?.issues.map((i) => i.code) ?? ["DISTRICT_BUILD_FAILED"])].sort(),
+      zones: {
+        official: officialCount,
+        osmAdministrative: osmCount,
+        standardSmart: organic ? 0 : generatedCount,
+        organicSmart: organic ? generatedCount : 0
+      },
+      areaKm2: {
+        parent: computeTerritoryAreaM2(parent.geometry) / 1_000_000,
+        official: d?.coverage.officialEffectiveAreaKm2 ?? 0,
+        osmAdministrative: d?.coverage.osmEffectiveAreaKm2 ?? 0,
+        standardSmart: organic ? 0 : (d?.coverage.generatedEffectiveAreaKm2 ?? 0),
+        organicSmart: organic ? (d?.coverage.generatedEffectiveAreaKm2 ?? 0) : 0
+      },
+      barrierArtifactChecksum:
+        d?.effective.generated[0]?.properties.territory &&
+        (d.effective.generated[0].properties.territory as Record<string, unknown>)
+          .barrierArtifactChecksum
+    };
+  });
+  const totals = {
+    adm2ExpectedNational: 973,
+    adm2Total: districts.length,
+    adm2Attempted: result.districts.length + result.failures.length,
+    adm2Successful: districts.filter(
+      (d) => d.qualityAccepted && d.zoneCount > 0 && d.coverage >= 99.99
+    ).length,
+    adm2Failed: districts.filter(
+      (d) => !d.qualityAccepted || d.zoneCount === 0 || d.coverage < 99.99
+    ).length,
+    officialDistricts: districts.filter((d) => d.selectedSourceTier === "official").length,
+    officialContributingDistricts: districts.filter((d) => d.zones.official > 0).length,
+    osmAdministrativeDistricts: districts.filter(
+      (d) => d.selectedSourceTier === "osm-administrative"
+    ).length,
+    osmAdministrativeContributingDistricts: districts.filter((d) => d.zones.osmAdministrative > 0)
+      .length,
+    standardSmartDistricts: districts.filter((d) => d.selectedSourceTier === "standard-smart")
+      .length,
+    organicSmartDistricts: districts.filter((d) => d.selectedSourceTier === "organic-smart").length,
+    legacyProductionDistricts: districts.filter((d) => d.selectedSourceTier === "legacy").length,
+    unavailableDistricts: districts.filter((d) => d.zoneCount === 0).length,
+    gridThresholdViolations: districts.filter(
+      (d) => (d.axisAlignedInternalBoundaryRatio ?? 0) > 0.15
+    ).length
+  };
+  const keys = ["official", "osmAdministrative", "standardSmart", "organicSmart"] as const;
+  const zoneTotals = Object.fromEntries(
+    keys.map((k) => [k, districts.reduce((n, d) => n + d.zones[k], 0)])
+  );
+  const parentArea = districts.reduce((n, d) => n + d.areaKm2.parent, 0);
+  const areaCoveragePercent = Object.fromEntries(
+    keys.map((k) => [
+      k,
+      parentArea ? (districts.reduce((n, d) => n + d.areaKm2[k], 0) / parentArea) * 100 : 0
+    ])
+  );
+  const provinces = result.levels.ADM1.zones.map((parent) => {
+    const t = isRecord(parent.properties.territory) ? parent.properties.territory : {};
+    const p = { provinceCode: String(t.provinceCode), provinceName: parent.name ?? parent.id };
+    const rows = districts.filter((d) => d.provinceCode === p.provinceCode);
+    const qualities = rows.filter((d) => d.quality !== null);
+    const reasons: Record<string, number> = {};
+    rows.forEach((d) =>
+      d.reasonCodes.forEach((code) => {
+        reasons[code] = (reasons[code] ?? 0) + 1;
+      })
+    );
+    return {
+      provinceCode: p.provinceCode,
+      province: p.provinceName,
+      adm2Count: rows.length,
+      officialCount: rows.filter((d) => d.selectedSourceTier === "official").length,
+      officialContributingCount: rows.filter((d) => d.zones.official > 0).length,
+      osmAdministrativeCount: rows.filter((d) => d.selectedSourceTier === "osm-administrative")
+        .length,
+      osmAdministrativeContributingCount: rows.filter((d) => d.zones.osmAdministrative > 0).length,
+      standardSmartCount: rows.filter((d) => d.selectedSourceTier === "standard-smart").length,
+      organicSmartCount: rows.filter((d) => d.selectedSourceTier === "organic-smart").length,
+      failedCount: rows.filter((d) => !d.qualityAccepted || d.zoneCount === 0 || d.coverage < 99.99)
+        .length,
+      coveragePercent: rows.length ? rows.reduce((n, d) => n + d.coverage, 0) / rows.length : 0,
+      meanSmartQuality: qualities.length
+        ? qualities.reduce((n, d) => n + (d.quality ?? 0), 0) / qualities.length
+        : null,
+      lowConfidenceCount: rows.filter((d) => d.confidence === "low").length,
+      reasonCodeDistribution: reasons
+    };
+  });
+  const identity = {
+    schemaVersion: "territorykit-tr-national-smart-coverage@1",
+    sourceLockHash: result.sourceLock.contentHash,
+    productionFallbackPolicy: {
+      legacyGridAllowed: result.sourceLock.productionFallbackPolicy?.legacyGridAllowed ?? false,
+      organicFallbackEnabled: true
+    },
+    totals,
+    zoneTotals,
+    areaCoveragePercent,
+    uncoveredPercent: Math.max(
+      0,
+      100 - Object.values(areaCoveragePercent).reduce((n, v) => n + v, 0)
+    ),
+    districts,
+    provinces
+  };
+  return { ...identity, contentHash: stableHash(identity) };
+}
+
+function stableHash(value: unknown): string {
+  return createHash("sha256")
+    .update(`${JSON.stringify(JSON.parse(stableSerialize(value)), null, 2)}\n`)
+    .digest("hex");
+}
+function stableSerialize(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(stableSerialize).join(",")}]`;
+  if (isRecord(value))
+    return `{${Object.keys(value)
+      .sort()
+      .filter((k) => value[k] !== undefined)
+      .map((k) => `${JSON.stringify(k)}:${stableSerialize(value[k])}`)
+      .join(",")}}`;
+  return JSON.stringify(value) ?? "null";
 }
 
 async function writeNationalArtifacts(
@@ -963,6 +1521,12 @@ Commands:
   publish-ready  Build with publish-ready quality gates
   validate       Validate a previously built artifact directory
   benchmark      Run bounded 10/100-district national benchmarks
+
+Smart input:
+  --osm-barriers <root> --osm-source-lock <source-lock.json>
+  --migration-baseline <old-national-dataset.json>
+  --no-resume
+  --allow-legacy-grid-emergency (developer-only; never publish-ready)
 
 Common flags:
   --adm0-adm2-dataset <dataset.json>

@@ -9,6 +9,7 @@ import type {
   TerritoryZone
 } from "@territory-kit/dataset";
 import { describe, expect, it, vi } from "vitest";
+import { validateTurkeyV2Dataset } from "@territory-kit/dataset/turkey-v2";
 import { runCli } from "../src/index.js";
 
 describe("territory cli Turkey V2 national build", () => {
@@ -43,8 +44,8 @@ describe("territory cli Turkey V2 national build", () => {
           command: "tr v2 national plan",
           data: {
             datasetId: "territory-kit-tr-v2-playable",
-            datasetVersion: "2.0.0",
-            buildDate: "2026-08-22T00:00:00.000Z",
+            datasetVersion: "2.1.0-rc.1",
+            buildDate: "2026-09-27T00:00:00.000Z",
             adm1Count: 81,
             adm2Count: 1,
             canonicalAdm2SourceCount: 973,
@@ -75,6 +76,7 @@ describe("territory cli Turkey V2 national build", () => {
         "v2",
         "national",
         "build",
+        "--allow-legacy-grid-emergency",
         "--adm0-adm2-dataset",
         datasetPath,
         "--source-metadata",
@@ -118,6 +120,24 @@ describe("territory cli Turkey V2 national build", () => {
         "territorykit-tr-v2-national-checksums@1"
       );
       await expect(access(join(outputPath, "render", "manifest.json"))).rejects.toThrow();
+      const shards = JSON.parse(await readFile(join(outputPath, "shards.json"), "utf8"));
+      const shardPaths = Object.keys(shards.files);
+      expect(shardPaths.filter((p) => p.startsWith("provinces/"))).toHaveLength(81);
+      expect(shardPaths.filter((p) => p.startsWith("districts/"))).toHaveLength(1);
+      const districtPath = shardPaths.find((p) => p.startsWith("districts/"))!;
+      const districtShard = JSON.parse(await readFile(join(outputPath, districtPath), "utf8"));
+      expect(validateTurkeyV2Dataset(districtShard).ok).toBe(true);
+      expect(districtShard.manifest.datasetVersion).toBe("2.1.0-rc.1");
+      const populatedProvince = await Promise.all(
+        shardPaths
+          .filter((p) => p.startsWith("provinces/"))
+          .map(async (p) => JSON.parse(await readFile(join(outputPath, p), "utf8")))
+      );
+      const provinceShard = populatedProvince.find((p) =>
+        p.zones.some((z: TerritoryZone) => z.level === 3)
+      );
+      expect(validateTurkeyV2Dataset(provinceShard).issues).toEqual([]);
+      expect(provinceShard.zones.some((z: TerritoryZone) => z.level === 1)).toBe(true);
 
       const validate = await captureCli([
         "tr",
@@ -208,7 +228,7 @@ describe("territory cli Turkey V2 national build", () => {
         issues: [
           expect.objectContaining({
             code: "BUILD_DATE_REQUIRED",
-            expected: "2026-08-22T00:00:00.000Z",
+            expected: "2026-09-27T00:00:00.000Z",
             actual: "missing"
           })
         ]
