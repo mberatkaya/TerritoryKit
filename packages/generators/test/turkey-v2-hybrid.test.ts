@@ -237,6 +237,48 @@ describe("Turkey V2 hybrid coverage pipeline", () => {
     ]);
   });
 
+  it("records complete merge and ambiguous many-to-many overlap components", () => {
+    const make = (id: string, geometry: TerritoryZone["geometry"]) =>
+      realZone({
+        id,
+        sourceClass: "generated",
+        sourceNativeId: id,
+        name: id,
+        geometry
+      });
+    const oldZones = [
+      make("old-a", rectangle(0, 0, 0.5, 1)),
+      make("old-b", rectangle(0.5, 0, 1, 1))
+    ];
+    const merged = createTurkeyV2ZoneMigrationPlan({
+      buildDate: "2026-09-27T00:00:00.000Z",
+      oldZones,
+      newZones: [make("new-full", rectangle(0, 0, 1, 1))]
+    });
+    expect(merged.records).toHaveLength(1);
+    expect(merged.records[0]).toMatchObject({
+      changeType: "merged",
+      mappingCardinality: "many-to-one",
+      oldZoneIds: ["old-a", "old-b"],
+      manualReviewRequired: true
+    });
+    expect(merged.records[0]?.intersectionOverUnion).toBeCloseTo(1, 3);
+    const crossed = createTurkeyV2ZoneMigrationPlan({
+      buildDate: "2026-09-27T00:00:00.000Z",
+      oldZones,
+      newZones: [make("new-a", rectangle(0, 0, 1, 0.5)), make("new-b", rectangle(0, 0.5, 1, 1))]
+    });
+    expect(crossed.records).toHaveLength(1);
+    expect(crossed.records[0]).toMatchObject({
+      mappingCardinality: "many-to-many",
+      oldZoneIds: ["old-a", "old-b"],
+      newZoneIds: ["new-a", "new-b"],
+      manualReviewRequired: true
+    });
+    expect(crossed.records[0]?.overlapPairs).toHaveLength(4);
+    expect(crossed.records[0]?.intersectionOverUnion).toBeCloseTo(1, 3);
+  });
+
   it("builds deterministic batch results independent of district order", async () => {
     const firstDistrict = districtZone("batch-a", rectangle(0, 0, 1, 1));
     const secondDistrict = districtZone("batch-b", rectangle(2, 0, 3, 1));

@@ -776,6 +776,7 @@ export async function buildTurkeyV2NationalDataset(
   const distributionPolicy = createNationalDistributionPolicy(hybridBatch);
   const migration: TurkeyV2ZoneMigrationPlan = {
     schemaVersion: "territorykit-tr-v2-hybrid-migration@1",
+    algorithmVersion: "overlap-components-v2",
     buildDate,
     records: hybridBatch.districts.flatMap((d) => d.migration.records)
   };

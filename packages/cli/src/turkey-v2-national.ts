@@ -49,7 +49,7 @@ const DEFAULT_OUTPUT = workspacePath(".territory/sprint-6/candidate");
 const DEFAULT_REPORTS_OUTPUT = workspacePath("reports/tr-v2-smart-candidate");
 const DEFAULT_BUILD_DATE = "2026-09-27T00:00:00.000Z";
 const DEFAULT_SMART_CANDIDATE_VERSION = "2.1.0-rc.1";
-const DISTRICT_CHECKPOINT_SCHEMA = "territorykit-tr-smart-district-checkpoint@3";
+const DISTRICT_CHECKPOINT_SCHEMA = "territorykit-tr-smart-district-checkpoint@4";
 
 export async function runTurkeyV2(args: string[]): Promise<number> {
   const [subcommand] = args;
@@ -266,6 +266,7 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
     organicAlgorithm: "organic-locality-v1",
     organicNetworkRefinementDepth: 3,
     clippingRetryPrecisionDecimals: 12,
+    migrationAlgorithm: "overlap-components-v2",
     maxTerritoriesLarge: 32,
     maxTerritoriesCompact: 128,
     largeParentAreaM2: 100_000_000,
@@ -626,7 +627,7 @@ async function runValidate(args: string[]): Promise<number> {
       }
       if (
         !isRecord(smartCoverage.totals) ||
-        smartCoverage.totals.adm2Total !== 973 ||
+        smartCoverage.totals.adm2Total !== TURKEY_V2_NATIONAL_EXPECTED_COUNTS.ADM2 ||
         smartCoverage.totals.adm2Failed !== 0 ||
         smartCoverage.totals.legacyProductionDistricts !== 0 ||
         smartCoverage.totals.gridThresholdViolations !== 0
@@ -650,8 +651,10 @@ async function runValidate(args: string[]): Promise<number> {
       if (
         shards.contentHash !== stableHash(identity) ||
         shards.sourceLockHash !== (isRecord(sourceLock) ? sourceLock.contentHash : undefined) ||
-        paths.filter((p) => p.startsWith("provinces/")).length !== 81 ||
-        paths.filter((p) => p.startsWith("districts/")).length !== 973
+        paths.filter((p) => p.startsWith("provinces/")).length !==
+          TURKEY_V2_NATIONAL_EXPECTED_COUNTS.ADM1 ||
+        paths.filter((p) => p.startsWith("districts/")).length !==
+          TURKEY_V2_NATIONAL_EXPECTED_COUNTS.ADM2
       ) {
         issues.push(
           issue("Shard manifest identity or completeness is invalid.", "shards.json", {
@@ -914,7 +917,7 @@ function createSmartCoverageManifest(result: TurkeyV2NationalBuildResult) {
     };
   });
   const totals = {
-    adm2ExpectedNational: 973,
+    adm2ExpectedNational: result.sourceLock.adm0Adm2.levels.ADM2.actualFeatureCount,
     adm2Total: districts.length,
     adm2Attempted: result.districts.length + result.failures.length,
     adm2Successful: districts.filter(
@@ -1534,8 +1537,8 @@ Common flags:
   --osm-artifact <dataset.json>
   --output <dir>
   --reports-output <dir>
-  --dataset-version 2.0.0
-  --build-date 2026-08-22T00:00:00.000Z
+  --dataset-version 2.1.0-rc.1
+  --build-date 2026-09-27T00:00:00.000Z
   --max-districts <n>
   --force
 `);

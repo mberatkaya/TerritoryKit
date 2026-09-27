@@ -434,10 +434,25 @@ export interface TurkeyV2ZoneMigrationRecord {
   confidence: number;
   manualReviewRequired: boolean;
   reason: string;
+  mappingCardinality?:
+    "one-to-one" | "one-to-many" | "many-to-one" | "many-to-many" | "added" | "removed";
+  oldAlgorithmVersions?: string[];
+  newAlgorithmVersions?: string[];
+  oldSourceTiers?: string[];
+  newSourceTiers?: string[];
+  overlapPairs?: Array<{
+    oldZoneId: string;
+    newZoneId: string;
+    intersectionAreaKm2: number;
+    oldOverlapPercent: number;
+    newOverlapPercent: number;
+    intersectionOverUnion: number;
+  }>;
 }
 
 export interface TurkeyV2ZoneMigrationPlan {
   schemaVersion: typeof TURKEY_V2_HYBRID_MIGRATION_SCHEMA_VERSION;
+  algorithmVersion?: string;
   buildDate: string;
   records: TurkeyV2ZoneMigrationRecord[];
 }
@@ -1367,62 +1382,65 @@ export function createTurkeyV2ZoneMigrationPlan(input: {
     }
   }
 
-  for (const oldZone of oldZones.filter((zone) => !matchedOld.has(zone.id))) {
-    const overlappingNew = newZones
-      .filter((zone) => !matchedNew.has(zone.id))
-      .map((zone) => ({ zone, evidence: overlapEvidence(oldZone, [zone]) }))
-      .filter((entry) => entry.evidence.intersectionAreaKm2 > AREA_TOLERANCE_KM2)
-      .sort(
-        (left, right) =>
-          right.evidence.intersectionAreaKm2 - left.evidence.intersectionAreaKm2 ||
-          left.zone.id.localeCompare(right.zone.id)
-      );
-
-    if (overlappingNew.length > 1) {
-      const zones = overlappingNew.map((entry) => entry.zone);
-      zones.forEach((zone) => matchedNew.add(zone.id));
-      records.push(migrationRecord("split", [oldZone], zones, overlapEvidence(oldZone, zones)));
-      matchedOld.add(oldZone.id);
-      continue;
+  const remainingOld = oldZones.filter((z) => !matchedOld.has(z.id));
+  const remainingNew = newZones.filter((z) => !matchedNew.has(z.id));
+  const pairs: NonNullable<TurkeyV2ZoneMigrationRecord["overlapPairs"]> = [];
+  for (const old of remainingOld)
+    for (const next of remainingNew) {
+      const evidence = overlapEvidence(old, [next]);
+      if (evidence.intersectionAreaKm2 <= AREA_TOLERANCE_KM2) continue;
+      pairs.push({
+        oldZoneId: old.id,
+        newZoneId: next.id,
+        ...evidence,
+        intersectionOverUnion: overlapIoU(evidence)
+      });
     }
-
-    const best = overlappingNew[0];
-
-    if (best) {
-      const oldSourceClass = readSourceClass(oldZone);
-      const newSourceClass = readSourceClass(best.zone);
-      matchedOld.add(oldZone.id);
-      matchedNew.add(best.zone.id);
-      records.push(
-        migrationRecord(
-          oldSourceClass !== newSourceClass ? "source-replaced" : "geometry-changed",
-          [oldZone],
-          [best.zone],
-          best.evidence
-        )
-      );
+  for (const old of remainingOld) {
+    if (matchedOld.has(old.id) || !pairs.some((p) => p.oldZoneId === old.id)) continue;
+    const oldIds = new Set([old.id]),
+      newIds = new Set<string>();
+    let expanded = true;
+    while (expanded) {
+      expanded = false;
+      for (const pair of pairs) {
+        if (!oldIds.has(pair.oldZoneId) && !newIds.has(pair.newZoneId)) continue;
+        if (!oldIds.has(pair.oldZoneId)) {
+          oldIds.add(pair.oldZoneId);
+          expanded = true;
+        }
+        if (!newIds.has(pair.newZoneId)) {
+          newIds.add(pair.newZoneId);
+          expanded = true;
+        }
+      }
     }
-  }
-
-  for (const newZone of newZones.filter((zone) => !matchedNew.has(zone.id))) {
-    const overlappingOld = oldZones
-      .filter((zone) => !matchedOld.has(zone.id))
-      .map((zone) => ({ zone, evidence: overlapEvidence(zone, [newZone]) }))
-      .filter((entry) => entry.evidence.intersectionAreaKm2 > AREA_TOLERANCE_KM2)
-      .sort(
-        (left, right) =>
-          right.evidence.intersectionAreaKm2 - left.evidence.intersectionAreaKm2 ||
-          left.zone.id.localeCompare(right.zone.id)
-      );
-
-    if (overlappingOld.length > 1) {
-      const oldMatched = overlappingOld.map((entry) => entry.zone);
-      oldMatched.forEach((zone) => matchedOld.add(zone.id));
-      matchedNew.add(newZone.id);
-      records.push(
-        migrationRecord("merged", oldMatched, [newZone], overlapEvidence(newZone, oldMatched))
-      );
+    const oldGroup = remainingOld.filter((z) => oldIds.has(z.id));
+    const newGroup = remainingNew.filter((z) => newIds.has(z.id));
+    oldGroup.forEach((z) => matchedOld.add(z.id));
+    newGroup.forEach((z) => matchedNew.add(z.id));
+    const oldGeometry = clippingMultiPolygonToTerritoryGeometry(
+      unionTerritoryGeometries(oldGroup.map((z) => z.geometry))
+    );
+    if (!oldGeometry) throw new Error("MIGRATION_OLD_UNION_INVALID");
+    const evidence = overlapEvidence({ ...oldGroup[0]!, geometry: oldGeometry }, newGroup);
+    const type: TurkeyV2HybridMigrationChangeType =
+      oldGroup.length === 1 && newGroup.length > 1
+        ? "split"
+        : oldGroup.length > 1 && newGroup.length === 1
+          ? "merged"
+          : readSourceClass(oldGroup[0]!) !== readSourceClass(newGroup[0]!) ||
+              migrationSourceTier(oldGroup[0]!) !== migrationSourceTier(newGroup[0]!)
+            ? "source-replaced"
+            : "geometry-changed";
+    const record = migrationRecord(type, oldGroup, newGroup, evidence);
+    record.overlapPairs = pairs.filter((p) => oldIds.has(p.oldZoneId) && newIds.has(p.newZoneId));
+    if (oldGroup.length > 1 && newGroup.length > 1) {
+      record.manualReviewRequired = true;
+      record.reason =
+        "Ambiguous many-to-many repartition; review pairwise overlap evidence before migrating gameplay state.";
     }
+    records.push(record);
   }
 
   for (const oldZone of oldZones.filter((zone) => !matchedOld.has(zone.id))) {
@@ -1435,6 +1453,7 @@ export function createTurkeyV2ZoneMigrationPlan(input: {
 
   return {
     schemaVersion: TURKEY_V2_HYBRID_MIGRATION_SCHEMA_VERSION,
+    algorithmVersion: "overlap-components-v2",
     buildDate: input.buildDate,
     records: records.sort(compareMigrationRecords)
   };
@@ -3096,16 +3115,51 @@ function migrationRecord(
     intersectionAreaKm2: evidence.intersectionAreaKm2,
     oldOverlapPercent: evidence.oldOverlapPercent,
     newOverlapPercent: evidence.newOverlapPercent,
-    intersectionOverUnion:
-      evidence.oldOverlapPercent > 0 && evidence.newOverlapPercent > 0
-        ? 1 / (100 / evidence.oldOverlapPercent + 100 / evidence.newOverlapPercent - 1)
-        : 0,
+    intersectionOverUnion: overlapIoU(evidence),
+    mappingCardinality:
+      oldZones.length === 0
+        ? "added"
+        : newZones.length === 0
+          ? "removed"
+          : oldZones.length === 1
+            ? newZones.length === 1
+              ? "one-to-one"
+              : "one-to-many"
+            : newZones.length === 1
+              ? "many-to-one"
+              : "many-to-many",
+    oldAlgorithmVersions: sortedUnique(
+      oldZones.map((z) => readString(territoryMetadata(z).algorithmVersion) ?? "not-generated")
+    ),
+    newAlgorithmVersions: sortedUnique(
+      newZones.map((z) => readString(territoryMetadata(z).algorithmVersion) ?? "not-generated")
+    ),
+    oldSourceTiers: sortedUnique(oldZones.map(migrationSourceTier)),
+    newSourceTiers: sortedUnique(newZones.map(migrationSourceTier)),
     confidence: Math.min(evidence.oldOverlapPercent, evidence.newOverlapPercent),
     manualReviewRequired:
       changeType !== "preserved" ||
       Math.min(evidence.oldOverlapPercent, evidence.newOverlapPercent) < 95,
     reason: migrationReason(changeType, sourceClassBefore, sourceClassAfter)
   };
+}
+
+function overlapIoU(evidence: { oldOverlapPercent: number; newOverlapPercent: number }): number {
+  return evidence.oldOverlapPercent > 0 && evidence.newOverlapPercent > 0
+    ? Math.min(
+        1,
+        Math.max(0, 1 / (100 / evidence.oldOverlapPercent + 100 / evidence.newOverlapPercent - 1))
+      )
+    : 0;
+}
+
+function migrationSourceTier(zone: TerritoryZone): string {
+  const t = territoryMetadata(zone),
+    algorithm = readString(t.algorithmVersion) ?? "";
+  if (algorithm.startsWith("smart-derived"))
+    return t.smartFallbackMode === "organic" ? "organic-smart" : "standard-smart";
+  if (algorithm.startsWith("tr-adm3-game-zone")) return "legacy-generated";
+  return readString(t.boundarySourceClass) ?? readSourceClass(zone);
 }
 
 function migrationReason(
