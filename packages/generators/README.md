@@ -179,7 +179,9 @@ place nodes or smart-derived output to official administrative boundaries.
 Smart fallback quality reports include raw input diagnostics, raw and normalized topology coverage
 areas, global real-barrier alignment ratios, synthetic-boundary ratios, and explicit rejection
 codes for failing gates. Hybrid builds expose the same evidence under `quality.smartAttempt`, so
-callers can distinguish accepted smart output from a smart rejection that selected legacy fallback.
+callers can distinguish standard Smart, organic low-confidence Smart, and explicit rejection.
+National production forbids legacy grids; `buildTurkeyGameZones` remains available for historical
+reproduction, fixtures, and explicit emergency tooling.
 
 Polygon relations assemble fragmented outer ways, inner holes, and disconnected MultiPolygon
 components by stable OSM node identity. Nested relations are rejected with diagnostics. Public

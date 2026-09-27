@@ -47,7 +47,7 @@ const handle = await loadTurkeyV2NationalDataset({
 target dataset version is `2.0.0`. It still does not embed large geometry in this package; use
 artifacts from `territory tr v2 national publish-ready` or a hosted registry.
 
-The 2026-08-22 stable publish-ready rebuild verifies 1 ADM0, 81 ADM1 provinces, 973 ADM2
+The historical 2026-08-22 stable publish-ready rebuild verifies 1 ADM0, 81 ADM1 provinces, 973 ADM2
 districts, and nationwide ADM3 playable coverage through the external artifact resolver. Generated
 ADM3 fallback remains explicitly non-official; `@territory-kit/data-tr` exposes resolver metadata,
 not the large national geometry payload.
@@ -59,4 +59,6 @@ resolver descriptor. Smart-derived ADM3 output produced from those barriers is s
 estimated, non-administrative gameplay coverage, not official mahalle or koy geometry.
 Sprint 5.1 adds smart fallback calibration diagnostics to those external artifacts; hybrid quality
 reports can expose `smartAttempt` so clients can audit whether a district used accepted smart
-geometry or legacy generated fallback after a smart rejection.
+geometry or explicit rejection. Sprint 6 adds organic low-confidence Smart and disables legacy
+grid selection in normal national production. The historical `2.0.0` descriptor remains unchanged;
+the `2.1.0-rc.1` candidate requires an explicit registry version and migration review.

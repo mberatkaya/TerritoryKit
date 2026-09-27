@@ -10,7 +10,7 @@ official ADM3
   -> OSM administrative ADM3
   -> OSM barrier snapshot input
   -> smart-derived generated fallback
-  -> legacy generated fallback
+  -> organic low-confidence smart-derived fallback
 ```
 
 `sourceClass` remains `official`, `osm`, or `generated`; the OSM barrier snapshot is an input to
@@ -33,6 +33,9 @@ const result = await buildTurkeyV2HybridDistrict({
   osmZones,
   generated: {
     enabled: true,
+    strategy: "smart",
+    legacyGridAllowed: false,
+    smartFallback: { roads, railways, water, localitySeeds },
     profile: "auto",
     seed: "kaprota-v2"
   },
@@ -56,8 +59,8 @@ For each district:
 6. Missing geometry is computed as `district - realMask`.
 7. If a verified OSM barrier artifact is available and eligible, it is adapted into smart fallback
    input for that missing geometry.
-8. Smart-derived output is accepted only when its quality gates pass; otherwise legacy generated
-   zones fill the remaining geometry when fallback is enabled.
+8. Standard Smart must pass quality gates. Rejection attempts organic low-confidence Smart.
+   Unsafe organic output returns explicit failure; normal national production never selects legacy.
 9. Final official, OSM administrative, and generated zones are validated and used to build
    adjacency.
 
@@ -113,8 +116,8 @@ folders.
 
 When a district attempts smart fallback, `quality-report.json` includes `smartAttempt`:
 
-- `accepted` and `selectedFallback` show whether smart output was published or legacy generated
-  fallback was selected.
+- `accepted` and `selectedFallback` show whether standard Smart, organic Smart, or explicit failure was selected.
+  The `legacy` decision is available only with the developer emergency option.
 - `metrics` mirrors the smart quality report: coverage, spill, overlap, quality distribution,
   real-barrier alignment, split/merge counts, and barrier counts.
 - `gates`, `errorCodes`, and `reasonCodes` make rejection causes machine-readable.
@@ -122,7 +125,8 @@ When a district attempts smart fallback, `quality-report.json` includes `smartAt
   used by the smart fallback gate decision.
 
 District build summaries also include `selectedFallback`; batch summaries include smart-attempt,
-smart-accepted, and smart-to-legacy fallback counts.
+smart-accepted, and compatibility smart-to-legacy fallback counts. The latter must remain zero
+in normal production. National Smart manifests separate standard and organic decisions.
 
 ## Licensing
 
@@ -183,3 +187,7 @@ official-only, generated-only, official+generated, official+OSM+generated, compl
 10-district batch, and 100-district batch scenarios. These are deterministic fixtures, not a final
 national source build. Use `pnpm turkey:v2:national:benchmark` for the national CLI benchmark and
 see [Turkey V2 national playable dataset](./turkey-v2-national-playable.md) for full-build reports.
+
+`quality.smartAttempt.selectedFallback` distinguishes `smart`, `organic-smart`, `legacy`, and
+`none`. Standard rejection diagnostics are retained in the `SMART_STANDARD_QUALITY_REJECTED`
+issue. Legacy requires explicit emergency options and cannot pass national publish-ready gates.

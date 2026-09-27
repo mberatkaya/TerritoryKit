@@ -93,3 +93,18 @@ The Sprint 3 hybrid builder emits `territorykit-tr-v2-hybrid-migration@1` record
 Each record carries old/new zone IDs, source classes, parent IDs, intersection area, old/new
 overlap percentages, confidence, manual-review status, and a reason. The plan is evidence only; it
 does not transfer KapRota ownership, scores, or route history.
+
+## Sprint 6 National Candidate
+
+The historical `2.0.0` national dataset is preserved. The next candidate is `2.1.0-rc.1`: it adds
+a compatible source resolver and sharded artifacts while changing generated geometry and IDs.
+Consumers must explicitly opt into the candidate and inspect `--migration-baseline <old dataset>`.
+The existing migration planner runs within each district and reports old/new IDs, intersection
+area, old/new overlap shares, intersection-over-union, splits, merges, removals, additions, and
+manual-review flags. It does not transfer game state automatically.
+
+Sprint 6 uses `overlap-components-v2`. Actual old/new intersection pairs form connected
+bipartite components, so a merge retains every old ID and many-to-many changes retain every
+participating ID. Records include per-pair shares and IoU, mapping cardinality, and old/new
+algorithm versions and source tiers. Many-to-many components always require manual review;
+they are not represented as independent one-to-one transfers.

@@ -1,5 +1,10 @@
 # TerritoryKit
 
+[npm Profile: mberat](https://www.npmjs.com/~mberat) ·
+[Core](https://www.npmjs.com/package/@territory-kit/core) ·
+[CLI](https://www.npmjs.com/package/@territory-kit/cli) ·
+[Generators](https://www.npmjs.com/package/@territory-kit/generators)
+
 TerritoryKit is a TypeScript-first geospatial SDK for hierarchical, irregular polygon
 territories. It aims for an H3-like developer experience while keeping the core engine
 independent from map renderers, backend frameworks, and game-specific state.
@@ -11,7 +16,7 @@ the fixed core family are versioned at `2.1.0` after the Changesets Version Pack
 workspace stays private and its `0.0.0-private` version is tooling metadata, not a public product
 version.
 
-The Turkey V2 national playable dataset contract is
+The historical Turkey V2 national playable dataset contract is
 `territory-kit-tr-v2-playable@2.0.0`. It provides 1 ADM0 country, 81 ADM1 provinces, 973 ADM2
 districts, and nationwide playable ADM3 coverage through resolver-managed external artifacts.
 
@@ -132,8 +137,9 @@ administrative boundaries. ADM4 remains source-model blocked. See
 ADM3 pilot in
 [docs/datasets/turkey-neighbourhoods.md](./docs/datasets/turkey-neighbourhoods.md).
 The Turkey ADM3 resolver priority is official ADM3, then OSM administrative ADM3, then a locked
-real OSM barrier snapshot feeding smart-derived fallback, then legacy generated fallback when
-barrier input or smart quality gates fail. Smart-derived results remain non-official estimated
+real OSM barrier snapshot feeding standard Smart, then organic low-confidence Smart.
+Legacy axis-aligned generation is disabled in normal national production. Unsafe Smart output
+returns an explicit failure. Smart-derived results remain non-official estimated
 gameplay coverage with `boundaryKind: "estimated"`, `boundarySourceClass: "smart-derived"`,
 `administrative: false`, and `authoritative: false`. Production smart builds use checksum-locked
 OSM snapshots and offline rebuilds instead of live Overpass queries. See
@@ -142,10 +148,14 @@ OSM snapshots and offline rebuilds instead of live Overpass queries. See
 Sprint 5.1 final hardening verifies that path against a real locked Fatih artifact: smart fallback selects
 47 smart-derived zones for Fatih with `coverage=99.999505`, `outsideSpill=0`,
 `meanBarrierAlignment=0.286977`, and `meanQuality=0.625907`. Hybrid quality reports expose
-`smartAttempt` so accepted smart output and smart-to-legacy fallback decisions are auditable.
+`smartAttempt` so accepted Smart output and explicit rejection decisions are auditable.
+Sprint 6 validates a separate `2.1.0-rc.1` nationwide Smart candidate: 973/973 districts,
+34,253 ADM3 zones, zero production legacy grids, and verified province/district shards. The
+historical `2.0.0` artifact is retained; this candidate is not an npm publication or automatic upgrade.
+See [Sprint 6 nationwide Smart coverage](./docs/datasets/turkey-sprint-6-nationwide.md).
 Turkey V2 defines the additive data contract for mixing official, OSM, and generated ADM3 game
 zones without presenting generated zones as official mahalle/koy records. The stable national
-builder applies official, OSM administrative, smart-derived, then legacy fallback priority, emits
+builder applies official, OSM administrative, standard Smart, then organic Smart priority, emits
 registry/checksum/source-lock evidence, and keeps the national geometry external to npm packages.
 See
 [docs/datasets/turkey-v2-data-contract.md](./docs/datasets/turkey-v2-data-contract.md),

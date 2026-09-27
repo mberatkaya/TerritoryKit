@@ -130,3 +130,5 @@ pnpm add @territory-kit/core @territory-kit/dataset
 The core engine has no dependency on renderers, backend frameworks, or game-specific state.
 Dynamic ownership, faction, and score data should be layered through adapters, runtime
 coordination, or application state.
+
+- [Sprint 6 nationwide Smart candidate](./datasets/turkey-sprint-6-nationwide.md)

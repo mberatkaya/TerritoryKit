@@ -3,11 +3,11 @@
 Turkey V2 national playable artifacts are built by:
 
 ```bash
-pnpm turkey:v2:national:publish-ready
+pnpm turkey:v2:national:publish-ready -- --osm-barriers <artifact-root> --osm-source-lock <source-lock.json>
 pnpm turkey:v2:national:validate:publish-ready
 ```
 
-The stable build target is `territory-kit-tr-v2-playable@2.0.0`. It keeps the canonical Turkey
+The Sprint 6 build target is `territory-kit-tr-v2-playable@2.1.0-rc.1`. It keeps the canonical Turkey
 ADM0-ADM2 hierarchy from HDX/OCHA COD-AB and fills ADM3 gameplay coverage nationwide with the
 Turkey V2 hybrid priority:
 
@@ -15,7 +15,7 @@ Turkey V2 hybrid priority:
 official ADM3
   -> OSM administrative ADM3
   -> OSM barrier snapshot smart-derived fallback
-  -> legacy generated fallback
+  -> organic low-confidence Smart or explicit failure
 ```
 
 Generated fallback zones are playable game zones only. They are never official mahalle, koy, or
@@ -53,7 +53,7 @@ Reason codes are deterministic: `official-source-approved`,
 `no-adm3-zones-built`, and `quality-gate-failed`. Missing official ADM3 data is represented as
 `estimated` or `unavailable` coverage, never as fake official neighbourhood geometry.
 
-## Stable 2.0.0 Verification Snapshot
+## Historical Stable 2.0.0 Verification Snapshot
 
 The 2026-08-22 publish-ready rebuild verified the full stable national contract with:
 
@@ -99,22 +99,24 @@ publish separate ADM3 simplification tiers.
 territory tr v2 national plan
 
 territory tr v2 national build \
-  --output .territory/build/TR/V2-national \
-  --reports-output reports/tr-v2-national \
+  --output .territory/sprint-6/candidate \
+  --reports-output reports/tr-v2-smart-candidate \
+  --osm-barriers .territory/sprint-6/barriers \
+  --osm-source-lock .territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json \
   --force
 
 territory tr v2 national publish-ready \
-  --dataset-version 2.0.0 \
-  --build-date 2026-08-22T00:00:00.000Z \
-  --output .territory/build/TR/V2-national \
-  --reports-output reports/tr-v2-national \
+  --dataset-version 2.1.0-rc.1 \
+  --build-date 2026-09-27T00:00:00.000Z \
+  --output .territory/sprint-6/candidate \
+  --reports-output reports/tr-v2-smart-candidate \
+  --osm-barriers .territory/sprint-6/barriers \
+  --osm-source-lock .territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json \
+  --migration-baseline .territory/build/TR/V2-national/levels/ADM3/dataset.json \
   --force
 
 territory tr v2 national validate \
-  --output .territory/build/TR/V2-national
-
-territory tr v2 national validate \
-  --output .territory/build/TR/V2-national \
+  --output .territory/sprint-6/candidate \
   --publish-ready
 ```
 
@@ -221,3 +223,11 @@ Common validation issue codes include `MISSING_ARTIFACT`, `EMPTY_ARTIFACT`, `MIS
 `UNEXPECTED_MANDATORY_ARTIFACT_OMISSION`, `NATIONAL_ADM1_COUNT_MISMATCH`,
 `NATIONAL_ADM2_COUNT_MISMATCH`, `NATIONAL_SOURCE_LOCK_ACTUAL_COUNT_MISMATCH`, and
 `NATIONAL_PARTIAL_BUILD`.
+
+## Sprint 6 Candidate
+
+The separate `2.1.0-rc.1` candidate consumes a verified `--osm-barriers` root and
+`--osm-source-lock`. Normal production disables legacy generation. Safe district checkpoints,
+province datasets, district reports, tier-specific area/zone totals, and an official-source backlog
+are emitted without placing national geometry in npm.
+See [Sprint 6 nationwide evidence](./turkey-sprint-6-nationwide.md).

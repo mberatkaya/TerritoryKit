@@ -37,6 +37,7 @@ territory tr osm acquire --cache .territory/cache
 territory tr osm verify --source-lock .territory/cache/osm/TR/<snapshot-id>/source-lock.json
 territory tr osm barriers build --adm2 .territory/build/TR/V2-national/levels/ADM2/dataset.json --source-lock .territory/cache/osm/TR/<snapshot-id>/source-lock.json --offline --output .territory/build/TR/OSM-barriers --concurrency 2
 territory tr osm barriers inspect --barriers .territory/build/TR/OSM-barriers --adm2 tr:adm2:example
+territory tr v2 national plan --osm-barriers .territory/build/TR/OSM-barriers --osm-source-lock .territory/cache/osm/TR/<snapshot-id>/source-lock.json
 territory tr osm smart coverage --adm2 .territory/build/TR/V2-national/levels/ADM2/dataset.json --barriers .territory/build/TR/OSM-barriers --output reports/tr-adm3/osm-smart-coverage.json
 territory tr adm3 hybrid build --district .territory/build/TR/V2-national/levels/ADM2/dataset.json --district-id tr:adm2:example --osm-barrier-artifact .territory/build/TR/OSM-barriers/ADM2/tr_adm2_example --output .territory/build/TR/ADM3-smart-example --force
 territory registry publish --artifact-root ./dist/tr/artifact --registry-output ./dist/registry --dataset territory-kit-tr --version 1.0.0 --base-url https://datasets.example.com/tr/1.0.0/ --artifact-prefix tr/1.0.0 --dry-run
@@ -96,6 +97,11 @@ territory registry verify --registry https://datasets.example.com/registry.json 
 
 Dataset build options include `--detail`, `--source-version`, `--source-url`, `--source-sha256`,
 `--build-date`, `--strict`, and `--force`.
+
+Normal `tr v2 national build|publish-ready` requires `--osm-barriers` and
+`--osm-source-lock`. It selects approved official, verified OSM administrative, standard Smart,
+then organic low-confidence Smart. `--allow-legacy-grid-emergency` is developer-only; such output
+cannot pass publish-ready validation. District checkpoints resume only when all input hashes match.
 
 The package also exports `runCli(argv)` for tests and embedded command runners.
 

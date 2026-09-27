@@ -13,7 +13,7 @@ Published smart fallback zones are labeled:
 - `administrative: false`
 - `official: false`
 - `generated: true`
-- `algorithmVersion: "smart-derived-v1"`
+- `algorithmVersion: "smart-derived-v1.1"`
 
 ## Source Priority
 
@@ -21,8 +21,11 @@ Turkey V2 keeps the same resolver order:
 
 1. reviewed official ADM3 polygons
 2. OSM administrative ADM3 polygons, where explicitly built and license-approved
-3. smart-derived generated fallback
-4. legacy generated-zone fallback when smart quality gates reject the result
+3. standard smart-derived generated fallback
+4. organic low-confidence Smart when standard quality gates reject the result
+
+Unsafe organic output returns an explicit failure. Legacy generation requires an explicit
+developer emergency option and cannot pass normal national publish-ready validation.
 
 Lower-priority geometry is clipped by higher-priority geometry. Smart fallback is only allowed to
 fill the remaining missing ADM2 area.
@@ -115,7 +118,7 @@ For example, a raw `100.000247` percent is reported publicly as `100`. Public
 `uncoveredInsideParentKm2`, `outsideSpillKm2`, and `overlapAreaKm2` remain nonnegative; raw topology
 values remain available for auditing. This does not change gate thresholds, score weights, or the
 50 m alignment tolerance. Hybrid `quality.smartAttempt.coverageComputation` preserves this evidence
-even when smart output is rejected and legacy fallback is selected.
+when standard Smart rejects and the organic stage is evaluated.
 
 Rejected smart attempts now emit explicit issue codes for each failing gate, including
 `SMART_FALLBACK_ALIGNMENT_TOO_LOW`, `SMART_FALLBACK_COVERAGE_TOO_LOW`,
@@ -172,3 +175,38 @@ snapshots are supplied, pass `--source-provider`, `--source-dataset-id`, `--sour
 `--license`, and `--attribution` so provenance and redistribution policy remain auditable.
 When OSM barrier artifacts are used, smart provenance links the generated geometry hash back to the
 barrier artifact checksum, OSM snapshot checksum, provider URL, and ODbL attribution.
+
+## Sprint 6 Organic Profile And Grid Gate
+
+Normal national production selects approved official-national, approved official-local, verified
+OSM administrative, standard Smart, then organic low-confidence Smart. Legacy axis-aligned grids
+are disabled. Historical legacy generators remain available for fixtures and explicit developer
+emergency builds.
+
+Organic Smart uses a bounded farthest-point sample of validated locality seeds and real road/rail/
+water/landuse network vertices, with locality input first. It constructs Voronoi cells in a local
+equirectangular metric and clips each cell once to the true missing parent geometry. No lat/lon
+grid or recursive rectangle subdivision is used. Geometry, coverage, overlap, spill, area, and
+finite-coordinate validation remain hard gates. Organic certainty thresholds are separate from
+standard Smart: minimum mean score 0.25, no minimum barrier alignment, maximum cell area at least
+one quarter of the missing parent area, and at most 64 cells. Sparse real inputs or invalid cells
+produce explicit rejection. This coarse gameplay mode does not identify real mahalle records.
+
+`axisAlignedInternalBoundaryRatio` is a length ratio in `[0,1]`. It measures unsupported internal
+segments at least 100 m long whose angle is within one degree of latitude/longitude axes. Parent
+edges are excluded. Support from real non-ignored barriers (including weak local roads) is
+subtracted using the existing 50 m alignment tolerance. A ratio above 0.15 rejects either Smart
+mode. Real north/south or east/west roads are not counted as synthetic grids.
+
+The existing confidence values are `authoritative`, `high`, `medium`, and `low`. Approved official
+geometry uses authoritative confidence; reviewed OSM administrative geometry uses high confidence.
+Standard Smart remains medium or low according to its existing quality score. Organic Smart is
+always `low`, `gameplayOnly: true`, `administrative: false`, `authoritative: false`, and estimated.
+
+See [nationwide candidate evidence](./turkey-sprint-6-nationwide.md).
+
+An organic maximum-area rejection can retry with existing geographic boundary vertices and
+real network coordinates clipped to the gap. These remain low-confidence gameplay guidance.
+The retry retains the original area and topology gates, and never uses recursive generated
+Voronoi vertices as source points. Exact self-crossings introduced by decimal snapping are
+regularized with polygon self-union before the same hard checks run.
