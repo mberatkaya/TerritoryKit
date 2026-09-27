@@ -780,6 +780,7 @@ export async function buildTurkeyV2HybridDistrict(
       districtGeometry,
       realMask,
       zones: candidateGeneratedZones,
+      prevalidatedPartition: smartFallbackResult?.quality.ok === true,
       minimumEffectiveAreaKm2,
       buildDate,
       configurationHash
@@ -1652,6 +1653,7 @@ function buildEffectiveRealZones(input: {
 }
 
 function buildEffectiveGeneratedZones(input: {
+  prevalidatedPartition?: boolean;
   district: TerritoryZone;
   provinceCode: string;
   districtCode: string;
@@ -1667,11 +1669,15 @@ function buildEffectiveGeneratedZones(input: {
   let sliverAreaKm2 = 0;
 
   for (const zone of sortZones(input.zones)) {
-    const clipped = intersectClippingGeometries(
-      input.districtGeometry,
-      toClippingMultiPolygon(zone.geometry)
-    );
-    const effective = differenceClippingGeometries(clipped, input.realMask, localMask);
+    const clipped = input.prevalidatedPartition
+      ? []
+      : intersectClippingGeometries(input.districtGeometry, toClippingMultiPolygon(zone.geometry));
+    // Accepted Smart cells already partition the real-source gap. Re-cutting their
+    // shared boundaries against a growing union introduces numerical sweep failures.
+    // Hybrid topology gates independently validate the final real + generated set.
+    const effective = input.prevalidatedPartition
+      ? toClippingMultiPolygon(zone.geometry)
+      : differenceClippingGeometries(clipped, input.realMask, localMask);
     const areaKm2 = clippingAreaKm2(effective);
 
     if (areaKm2 <= 0) {
@@ -1683,7 +1689,9 @@ function buildEffectiveGeneratedZones(input: {
       continue;
     }
 
-    const geometry = clippingMultiPolygonToTerritoryGeometry(effective);
+    const geometry = input.prevalidatedPartition
+      ? zone.geometry
+      : clippingMultiPolygonToTerritoryGeometry(effective);
 
     if (!geometry) {
       continue;
@@ -1701,7 +1709,7 @@ function buildEffectiveGeneratedZones(input: {
         configurationHash: input.configurationHash
       })
     );
-    localMask = unionClippingGeometries([localMask, effective]);
+    if (!input.prevalidatedPartition) localMask = unionClippingGeometries([localMask, effective]);
   }
 
   return { zones: zones.sort(compareZones), sliverAreaKm2 };
@@ -3273,7 +3281,28 @@ function unionClippingGeometries(
   try {
     return canonicalizeClippingGeometry(CLIPPER.union(nonEmpty[0]!, ...nonEmpty.slice(1)));
   } catch {
-    return canonicalizeClippingGeometry(nonEmpty.flatMap((geometry) => geometry));
+    try {
+      return canonicalizeClippingGeometry(
+        CLIPPER.union(
+          ...(nonEmpty.map((geometry) => retryClippingPrecision(geometry)) as [
+            ClippingMultiPolygon,
+            ...ClippingMultiPolygon[]
+          ])
+        )
+      );
+    } catch {
+      let merged = nonEmpty[0]!;
+      for (const geometry of nonEmpty.slice(1)) {
+        try {
+          merged = canonicalizeClippingGeometry(CLIPPER.union(merged, geometry));
+        } catch {
+          merged = canonicalizeClippingGeometry(
+            CLIPPER.union(retryClippingPrecision(merged), retryClippingPrecision(geometry))
+          );
+        }
+      }
+      return merged;
+    }
   }
 }
 
@@ -3308,26 +3337,37 @@ function differenceClippingGeometries(
 
   try {
     return canonicalizeClippingGeometry(CLIPPER.difference(subject, ...nonEmptyClips));
-  } catch {
-    try {
-      return canonicalizeClippingGeometry(
-        CLIPPER.difference(
-          retryClippingPrecision(subject),
-          ...nonEmptyClips.map(retryClippingPrecision)
-        )
-      );
-    } catch (error) {
-      throw new Error("HYBRID_DIFFERENCE_FAILED: deterministic precision retry failed.", {
-        cause: error
-      });
+  } catch (initialError) {
+    for (const decimals of [12, 10, 9, 8]) {
+      try {
+        return canonicalizeClippingGeometry(
+          CLIPPER.difference(
+            retryClippingPrecision(subject, decimals),
+            ...nonEmptyClips.map((clip) => retryClippingPrecision(clip, decimals))
+          )
+        );
+      } catch {
+        // Try the next fixed precision; hard geometry gates still apply.
+      }
     }
+    throw new Error("HYBRID_DIFFERENCE_FAILED: deterministic precision retries failed.", {
+      cause: initialError
+    });
   }
 }
 
-function retryClippingPrecision(geometry: ClippingMultiPolygon): ClippingMultiPolygon {
+function retryClippingPrecision(
+  geometry: ClippingMultiPolygon,
+  decimals = 12
+): ClippingMultiPolygon {
   return geometry.map((polygon) =>
     polygon.map((ring) =>
-      ring.map((point) => [Number(point[0].toFixed(12)), Number(point[1].toFixed(12))])
+      normalizeRing(
+        ring.map((point) => [
+          Number(point[0].toFixed(decimals)),
+          Number(point[1].toFixed(decimals))
+        ])
+      )
     )
   );
 }

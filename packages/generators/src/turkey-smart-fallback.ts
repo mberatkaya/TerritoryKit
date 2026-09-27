@@ -6,6 +6,7 @@ import {
   computeGeometryBBox,
   computeGeometryCenter,
   geometryToPolygons,
+  hasRingSelfIntersection,
   validateGeometryDataset
 } from "@territory-kit/dataset";
 import type {
@@ -59,6 +60,7 @@ export type TurkeySmartFallbackIssueCode =
   | "SMART_FALLBACK_GRID_LIKENESS_REJECTED"
   | "SMART_FALLBACK_CAPACITY_INSUFFICIENT"
   | "ORGANIC_FALLBACK_INPUT_INSUFFICIENT"
+  | "ORGANIC_GEOGRAPHIC_REFINEMENT_USED"
   | "SMART_FALLBACK_QUALITY_REJECTED"
   | "SMART_FALLBACK_SPILL_TOO_HIGH"
   | "SMART_FALLBACK_SYNTHETIC_SPLIT_USED"
@@ -124,6 +126,7 @@ export interface TurkeySmartFallbackSourceMetadata {
 
 export interface TurkeySmartFallbackOptions {
   organic?: boolean;
+  organicGeographicRefinement?: boolean;
   algorithmVersion?: string;
   seed?: string;
   targetTerritoryCount?: number;
@@ -177,6 +180,7 @@ export interface TurkeySmartFallbackBarrier {
 
 export interface TurkeySmartFallbackConfiguration {
   organic: boolean;
+  organicGeographicRefinement?: boolean;
   schemaVersion: typeof TURKEY_SMART_FALLBACK_CONFIGURATION_SCHEMA_VERSION;
   profile: TurkeySmartFallbackProfile;
   selectedProfile: ResolvedTurkeySmartFallbackProfile;
@@ -697,6 +701,7 @@ export function resolveTurkeySmartFallbackConfiguration(input: TurkeySmartFallba
     selectedProfile: profileDecision.selectedProfile,
     algorithmVersion: TURKEY_SMART_FALLBACK_ALGORITHM_VERSION,
     organic: input.options?.organic ?? false,
+    ...(input.options?.organicGeographicRefinement ? { organicGeographicRefinement: true } : {}),
     seed,
     targetAreaKm2: roundAreaKm2(targetAreaKm2),
     minAreaKm2: roundAreaKm2(minAreaKm2),
@@ -1091,6 +1096,16 @@ export function buildTurkeySmartFallback(
   const barriers = barrierFilter.barriers;
   const issues: TurkeySmartFallbackIssue[] = [
     ...resolution.issues,
+    ...(configuration.organicGeographicRefinement
+      ? [
+          {
+            code: "ORGANIC_GEOGRAPHIC_REFINEMENT_USED" as const,
+            severity: "info" as const,
+            message:
+              "Organic refinement used clipped real OSM network points and existing geographic boundary vertices as low-confidence guidance."
+          }
+        ]
+      : []),
     ...(barrierFilter.parentEdgeBarrierCount > 0
       ? [
           {
@@ -1241,7 +1256,7 @@ export async function buildTurkeyOrganicSmartFallbackWithAdjacency(
   input: TurkeySmartFallbackInput
 ): Promise<TurkeySmartFallbackBuildResult> {
   const standard = resolveTurkeySmartFallbackConfiguration(input).configuration;
-  return buildTurkeySmartFallbackWithAdjacency({
+  const organicInput: TurkeySmartFallbackInput = {
     ...input,
     options: {
       ...input.options,
@@ -1255,6 +1270,15 @@ export async function buildTurkeyOrganicSmartFallbackWithAdjacency(
       minMeanBarrierAlignment: 0,
       requireBarrierForMultiTerritory: false,
       maxSyntheticSplits: 0
+    }
+  };
+  const result = await buildTurkeySmartFallbackWithAdjacency(organicInput);
+  if (result.quality.ok || result.quality.gates.maximumArea) return result;
+  return buildTurkeySmartFallbackWithAdjacency({
+    ...organicInput,
+    options: {
+      ...organicInput.options,
+      organicGeographicRefinement: true
     }
   });
 }
@@ -1283,13 +1307,16 @@ function partitionOrganicLocalities(
   barriers: readonly TurkeySmartFallbackBarrier[],
   config: TurkeySmartFallbackConfiguration,
   issues: TurkeySmartFallbackIssue[],
-  depth = 0
+  depth = 0,
+  geographicVertices: readonly LngLat[] = parent.flatMap((polygon) =>
+    polygon.flatMap((ring) => ring)
+  )
 ): SmartPiece[] {
   const parentGeometry = clippingMultiPolygonToTerritoryGeometry(parent);
   if (!parentGeometry) return [];
   seeds = seeds.filter((s) => pointInClippingGeometry(s.coordinate, parent));
   const clippedNetworkPoints =
-    depth > 0
+    depth > 0 || config.organicGeographicRefinement
       ? barriers
           .filter(
             (b) =>
@@ -1311,6 +1338,7 @@ function partitionOrganicLocalities(
   const unique = new Map<string, LngLat>();
   const coordinates = [
     ...clippedNetworkPoints,
+    ...(config.organicGeographicRefinement ? geographicVertices : []),
     ...seeds.map((s) => s.coordinate),
     ...barriers.filter((b) => b.strength > 0).flatMap((b) => b.coordinates)
   ];
@@ -1410,7 +1438,8 @@ function partitionOrganicLocalities(
           maxTerritories: Math.min(remaining + 1, 8)
         },
         [],
-        depth + 1
+        depth + 1,
+        geographicVertices
       );
       if (refined.length < 2 || refined.length > remaining + 1) return [piece];
       remaining -= refined.length - 1;
@@ -1891,6 +1920,21 @@ function mergeSmallPieces(
   return pieces;
 }
 
+/** Regularize only output affected by precision snapping; validation gates rerun. */
+export function regularizeTurkeySmartFallbackGeometry(
+  geometry: TerritoryGeometry
+): TerritoryGeometry {
+  const hasCrossing = (value: TerritoryGeometry) =>
+    geometryToPolygons(value).some((polygon) => polygon.some(hasRingSelfIntersection));
+  if (!hasCrossing(geometry)) return geometry;
+  const repaired = clippingMultiPolygonToTerritoryGeometry(
+    CLIPPER.union(geometryToPolygons(geometry) as ClippingMultiPolygon)
+  );
+  if (!repaired || hasCrossing(repaired))
+    throw new Error("SMART_FALLBACK_PRECISION_REGULARIZATION_FAILED");
+  return repaired;
+}
+
 function createZoneCandidates(input: {
   pieces: readonly SmartPiece[];
   parent: TerritoryZone;
@@ -1901,7 +1945,8 @@ function createZoneCandidates(input: {
 }): ZoneCandidate[] {
   return input.pieces
     .flatMap((piece): ZoneCandidate[] => {
-      const geometry = clippingMultiPolygonToTerritoryGeometry(piece.geometry);
+      const rawGeometry = clippingMultiPolygonToTerritoryGeometry(piece.geometry);
+      const geometry = rawGeometry ? regularizeTurkeySmartFallbackGeometry(rawGeometry) : undefined;
 
       if (!geometry) {
         return [];

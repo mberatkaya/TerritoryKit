@@ -49,7 +49,7 @@ describe("organic smart production fallback", () => {
     expect(result.quality.splitCount).toBe(0);
     expect(result.zones).toHaveLength(0);
   });
-  it("rejects a disconnected gap when bounded real-network refinement still exceeds area limits", async () => {
+  it("rejects unsupported axis alignment even when geographic refinement resolves an oversized disconnected gap", async () => {
     const geometry: TerritoryGeometry = {
       type: "MultiPolygon",
       coordinates: [
@@ -111,7 +111,9 @@ describe("organic smart production fallback", () => {
     });
     expect(result.status).toBe("rejected");
     expect(result.quality.territoryCount).toBeGreaterThan(2);
-    expect(result.quality.gates.maximumArea).toBe(false);
+    expect(result.quality.gates.maximumArea).toBe(true);
+    expect(result.quality.gates.gridLikeness).toBe(false);
+    expect(result.reasonCodes).toContain("ORGANIC_GEOGRAPHIC_REFINEMENT_USED");
     expect(result.quality.outsideSpillKm2).toBe(0);
     expect(result.quality.overlapAreaKm2).toBe(0);
     expect(result.quality.syntheticSplitCount).toBe(0);
@@ -120,6 +122,7 @@ describe("organic smart production fallback", () => {
     const a = await buildTurkeyOrganicSmartFallbackWithAdjacency(input);
     const b = await buildTurkeyOrganicSmartFallbackWithAdjacency(input);
     expect(a.quality.ok).toBe(true);
+    expect(a.configuration.organicGeographicRefinement).toBeUndefined();
     expect(a.deterministicHash).toBe(b.deterministicHash);
     expect(a.quality.coveragePercent).toBeGreaterThanOrEqual(99.99);
     expect(a.quality.outsideSpillKm2).toBe(0);

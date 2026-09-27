@@ -2049,12 +2049,12 @@ function createCoreNationalArtifactFiles(input: {
   levels: TurkeyV2NationalBuildResult["levels"];
   adjacency?: TerritoryAdjacencyArtifact;
   renderArtifacts?: TerritoryRenderBuildResult;
-}): Map<string, string | Uint8Array> {
-  const files = new Map<string, string | Uint8Array>([
-    ["dataset.json", serializeJsonArtifact(input.dataset)],
+}): Map<string, unknown> {
+  const files = new Map<string, unknown>([
+    ["dataset.json", input.dataset],
     [
       "manifest.json",
-      serializeJsonArtifact({
+      {
         ...input.dataset.manifest,
         coverage: {
           provinceCount: input.coverage.provinceCount,
@@ -2064,33 +2064,30 @@ function createCoreNationalArtifactFiles(input: {
         },
         deterministicHash: input.deterministicHash,
         sourceLockHash: input.coverage.sourceLockHash
-      })
+      }
     ],
-    ["source-lock.json", serializeJsonArtifact(input.sourceLock)],
-    ["coverage.json", serializeJsonArtifact(input.coverage)],
-    ["hierarchy-report.json", serializeJsonArtifact(input.hierarchy)],
-    ["provenance.json", serializeJsonArtifact(input.provenance)],
-    ["attribution.json", serializeJsonArtifact(input.attribution)],
+    ["source-lock.json", input.sourceLock],
+    ["coverage.json", input.coverage],
+    ["hierarchy-report.json", input.hierarchy],
+    ["provenance.json", input.provenance],
+    ["attribution.json", input.attribution],
     [
       "attribution.txt",
       input.attribution.text.endsWith("\n") ? input.attribution.text : `${input.attribution.text}\n`
     ],
-    ["licenses.json", serializeJsonArtifact(input.licenses)],
-    ["distribution-policy.json", serializeJsonArtifact(input.distributionPolicy)],
-    ["migration-plan.json", serializeJsonArtifact(input.migration)],
-    ["levels/ADM0/dataset.json", serializeJsonArtifact(input.levels.ADM0)],
-    ["levels/ADM1/dataset.json", serializeJsonArtifact(input.levels.ADM1)],
-    ["levels/ADM2/dataset.json", serializeJsonArtifact(input.levels.ADM2)],
-    ["levels/ADM3/dataset.json", serializeJsonArtifact(input.levels.ADM3)],
-    [
-      "levels/ADM3/full.geojson",
-      serializeJsonArtifact(territoryDatasetToFeatureCollection(input.levels.ADM3))
-    ],
-    ["query/query-artifact.json", serializeJsonArtifact(createNationalQueryArtifact(input.dataset))]
+    ["licenses.json", input.licenses],
+    ["distribution-policy.json", input.distributionPolicy],
+    ["migration-plan.json", input.migration],
+    ["levels/ADM0/dataset.json", input.levels.ADM0],
+    ["levels/ADM1/dataset.json", input.levels.ADM1],
+    ["levels/ADM2/dataset.json", input.levels.ADM2],
+    ["levels/ADM3/dataset.json", input.levels.ADM3],
+    ["levels/ADM3/full.geojson", territoryDatasetToFeatureCollection(input.levels.ADM3)],
+    ["query/query-artifact.json", createNationalQueryArtifact(input.dataset)]
   ]);
 
   if (input.adjacency) {
-    files.set("levels/ADM3/adjacency/adjacency.json", serializeJsonArtifact(input.adjacency));
+    files.set("levels/ADM3/adjacency/adjacency.json", input.adjacency);
   }
 
   if (input.renderArtifacts) {
@@ -2104,24 +2101,24 @@ function createCoreNationalArtifactFiles(input: {
   return files;
 }
 
-function createChecksums(
-  files: ReadonlyMap<string, string | Uint8Array>
-): TurkeyV2NationalChecksums {
+function createChecksums(files: ReadonlyMap<string, unknown>): TurkeyV2NationalChecksums {
   return {
     schemaVersion: "territorykit-tr-v2-national-checksums@1",
     files: Object.fromEntries(
       [...files.entries()]
-        .map(
-          ([path, payload]) =>
-            [
-              path,
-              {
-                sha256: sha256Hex(payload),
-                byteSize:
-                  typeof payload === "string" ? Buffer.byteLength(payload) : payload.byteLength
-              }
-            ] as const
-        )
+        .map(([path, payload]) => {
+          const bytes =
+            typeof payload === "string" || payload instanceof Uint8Array
+              ? payload
+              : serializeJsonArtifact(payload);
+          return [
+            path,
+            {
+              sha256: sha256Hex(bytes),
+              byteSize: typeof bytes === "string" ? Buffer.byteLength(bytes) : bytes.byteLength
+            }
+          ] as const;
+        })
         .sort(([left], [right]) => left.localeCompare(right))
     )
   };

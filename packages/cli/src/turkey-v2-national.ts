@@ -265,7 +265,12 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
   sourceLock.generated.generatorConfigHash = stableHash({
     organicAlgorithm: "organic-locality-v1",
     organicNetworkRefinementDepth: 3,
-    clippingRetryPrecisionDecimals: 12,
+    organicGeographicRefinement:
+      "real-network-and-existing-boundary-vertices-after-maximum-area-rejection",
+    clippingRetryPrecisionDecimals: [12, 10, 9, 8],
+    preservePrevalidatedSmartPartition: true,
+    hybridUnionRetry: "twelve-decimal-then-sequential",
+    smartBoundaryPrecisionRegularization: "self-union-on-exact-self-intersection",
     migrationAlgorithm: "overlap-components-v2",
     maxTerritoriesLarge: 32,
     maxTerritoriesCompact: 128,
@@ -349,6 +354,7 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
           stored.generationDurationMs >= 0
         )
           originalGenerationDurations.set(options.district.id, stored.generationDurationMs);
+        internCheckpointGeometry(stored.result);
         return stored.result as TurkeyV2HybridDistrictBuildResult;
       } catch {
         return undefined;
@@ -1046,6 +1052,28 @@ export function createSmartCoverageManifest(result: TurkeyV2NationalBuildResult)
     provinces
   };
   return { ...identity, contentHash: stableHash(identity) };
+}
+
+// JSON checkpoints repeat the same geometry across candidates, effective zones and
+// datasets. Restore shared geometry without changing any serialized values.
+function internCheckpointGeometry(value: unknown): void {
+  const geometries = new Map<string, unknown>();
+  const visit = (node: unknown): void => {
+    if (Array.isArray(node)) {
+      for (const item of node) visit(item);
+      return;
+    }
+    if (!isRecord(node)) return;
+    for (const key of Object.keys(node)) {
+      if (key === "geometry" && isRecord(node[key])) {
+        const hash = createHash("sha256").update(JSON.stringify(node[key])).digest("hex");
+        const existing = geometries.get(hash);
+        if (existing) node[key] = existing;
+        else geometries.set(hash, node[key]);
+      } else visit(node[key]);
+    }
+  };
+  visit(value);
 }
 
 function stableHash(value: unknown): string {

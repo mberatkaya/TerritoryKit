@@ -25,7 +25,12 @@ export function createDatasetGeometryHash(dataset: Pick<TerritoryDataset, "zones
     }))
     .sort((left, right) => left.id.localeCompare(right.id));
 
-  return sha256Hex(JSON.stringify(stableGeometryPayload));
+  const hash = createHash("sha256").update("[");
+  for (let i = 0; i < stableGeometryPayload.length; i++) {
+    if (i > 0) hash.update(",");
+    hash.update(JSON.stringify(stableGeometryPayload[i]));
+  }
+  return hash.update("]").digest("hex");
 }
 
 export function readPropertyPath(input: Record<string, unknown>, path: string): unknown {
