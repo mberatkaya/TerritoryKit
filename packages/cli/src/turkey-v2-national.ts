@@ -265,6 +265,13 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
   sourceLock.generated.generatorConfigHash = stableHash({
     organicAlgorithm: "organic-locality-v1",
     organicNetworkRefinementDepth: 3,
+    organicBarrierRouting: "shared-junction-and-corridor-graph-v4",
+    organicCoarseTargetCounts: { roadDensityBelow3: 16, other: 32, realismRetries: [16, 8] },
+    organicRoutingCorridorMeters: [400, 2000, 5000],
+    organicRoutingMaximumChordShare: 0.4,
+    organicStraightChainMinimumMeters: 100,
+    organicStraightChainMaximumHeadingDegrees: 3,
+    organicRealismMaximumStraightRatio: { roadDensityBelow3: 0.95, other: 0.8 },
     organicGeographicRefinement:
       "real-network-and-existing-boundary-vertices-after-maximum-area-rejection",
     clippingRetryPrecisionDecimals: [12, 10, 9, 8],
@@ -680,7 +687,8 @@ async function runValidate(args: string[]): Promise<number> {
         smartCoverage.totals.adm2Total !== TURKEY_V2_NATIONAL_EXPECTED_COUNTS.ADM2 ||
         smartCoverage.totals.adm2Failed !== 0 ||
         smartCoverage.totals.legacyProductionDistricts !== 0 ||
-        smartCoverage.totals.gridThresholdViolations !== 0
+        smartCoverage.totals.gridThresholdViolations !== 0 ||
+        smartCoverage.totals.unsupportedStraightThresholdViolations !== 0
       ) {
         issues.push(
           issue(
@@ -952,6 +960,9 @@ export function createSmartCoverageManifest(result: TurkeyV2NationalBuildResult)
       realBarrierRatio: q?.meanRealBarrierRatio ?? null,
       syntheticBoundaryRatio: q?.meanSyntheticBoundaryRatio ?? null,
       axisAlignedInternalBoundaryRatio: q?.axisAlignedInternalBoundaryRatio ?? null,
+      longUnsupportedStraightBoundaryRatio: q?.longUnsupportedStraightBoundaryRatio ?? null,
+      barrierFollowingInternalBoundaryRatio: q?.barrierFollowingInternalBoundaryRatio ?? null,
+      totalInternalBoundaryLengthKm: q?.totalInternalBoundaryLengthKm ?? null,
       quality: q?.meanQualityScore ?? null,
       qualityGates: { ...(q?.gates ?? {}), ...(d?.quality.gates ?? {}) },
       smartQualityGates: q?.gates ?? {},
@@ -1008,6 +1019,11 @@ export function createSmartCoverageManifest(result: TurkeyV2NationalBuildResult)
     unavailableDistricts: districts.filter((d) => d.zoneCount === 0).length,
     gridThresholdViolations: districts.filter(
       (d) => (d.axisAlignedInternalBoundaryRatio ?? 0) > 0.15
+    ).length,
+    unsupportedStraightThresholdViolations: districts.filter(
+      (d) =>
+        "geographicRealism" in d.smartQualityGates &&
+        d.smartQualityGates.geographicRealism === false
     ).length
   };
   const keys = ["official", "osmAdministrative", "standardSmart", "organicSmart"] as const;
@@ -1070,7 +1086,82 @@ export function createSmartCoverageManifest(result: TurkeyV2NationalBuildResult)
     districts,
     provinces
   };
-  return { ...identity, contentHash: stableHash(identity) };
+  const metricKeys = [
+    "realBarrierRatio",
+    "syntheticBoundaryRatio",
+    "longUnsupportedStraightBoundaryRatio",
+    "axisAlignedInternalBoundaryRatio",
+    "barrierFollowingInternalBoundaryRatio"
+  ] as const;
+  const geographicQuality = Object.fromEntries(
+    ["standard-smart", "organic-smart"].map((tier) => {
+      const rows = districts.filter((d) => d.selectedSourceTier === tier);
+      return [
+        tier,
+        Object.fromEntries(
+          metricKeys.map((metric) => {
+            const values = rows
+              .map((d) => d[metric])
+              .filter((n): n is number => typeof n === "number" && Number.isFinite(n))
+              .sort((a, b) => a - b);
+            const quantile = (p: number) => {
+              if (!values.length) return null;
+              const index = (values.length - 1) * p,
+                lo = Math.floor(index),
+                hi = Math.ceil(index);
+              return Number((values[lo]! + (values[hi]! - values[lo]!) * (index - lo)).toFixed(6));
+            };
+            return [
+              metric,
+              {
+                count: values.length,
+                min: quantile(0),
+                p10: quantile(0.1),
+                median: quantile(0.5),
+                p90: quantile(0.9),
+                max: quantile(1)
+              }
+            ];
+          })
+        )
+      ];
+    })
+  );
+  const eligible = districts.filter((d) => (d.totalInternalBoundaryLengthKm ?? 0) > 0);
+  const worstDistricts = Object.fromEntries(
+    [
+      ["realBarrierRatio", false],
+      ["syntheticBoundaryRatio", true],
+      ["longUnsupportedStraightBoundaryRatio", true],
+      ["quality", false]
+    ].map(([metric, descending]) => {
+      const field = metric as
+        | "realBarrierRatio"
+        | "syntheticBoundaryRatio"
+        | "longUnsupportedStraightBoundaryRatio"
+        | "quality";
+      return [
+        field,
+        [...eligible]
+          .sort(
+            (a, b) =>
+              ((a[field] ?? 0) - (b[field] ?? 0)) * (descending ? -1 : 1) ||
+              a.adm2Id.localeCompare(b.adm2Id)
+          )
+          .slice(0, 20)
+          .map((d) => ({
+            adm2Id: d.adm2Id,
+            district: d.district,
+            province: d.province,
+            tier: d.selectedSourceTier,
+            metric: d[field],
+            qualityAccepted: d.qualityAccepted
+          }))
+      ];
+    })
+  );
+  const report = { ...identity, geographicQuality, worstDistricts };
+  return { ...report, contentHash: stableHash(report) };
 }
 
 // JSON checkpoints repeat the same geometry across candidates, effective zones and

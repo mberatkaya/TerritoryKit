@@ -5,6 +5,7 @@ import { createReadStream, createWriteStream } from "node:fs";
 import { mkdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import { basename, dirname, join } from "node:path";
 import { performance } from "node:perf_hooks";
+import FlatbushDefault from "flatbush";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import {
@@ -50,7 +51,7 @@ export const TURKEY_OSM_BARRIER_QUALITY_SCHEMA_VERSION =
   "territorykit-tr-osm-barrier-quality@1" as const;
 export const TURKEY_OSM_SMART_COVERAGE_SCHEMA_VERSION =
   "territorykit-tr-osm-smart-coverage@1" as const;
-export const TURKEY_OSM_BARRIER_ALGORITHM_VERSION = "tr-osm-barriers-v1.2" as const;
+export const TURKEY_OSM_BARRIER_ALGORITHM_VERSION = "tr-osm-barriers-v1.3" as const;
 export const TURKEY_OSM_BARRIER_PROVIDER_ID = "geofabrik-osm-extracts" as const;
 export const TURKEY_OSM_BARRIER_PROVIDER_NAME = "Geofabrik OpenStreetMap extracts" as const;
 export const TURKEY_OSM_BARRIER_SOURCE_URL = "https://download.geofabrik.de/europe/turkey.html";
@@ -2635,16 +2636,52 @@ function clipSegmentToGeometry(
     const startPoint = interpolate(a, b, start);
     const endPoint = interpolate(a, b, end);
 
-    if (
-      geometryContainsPoint(geometry, mid) &&
-      geometryContainsPoint(geometry, startPoint) &&
-      geometryContainsPoint(geometry, endPoint)
-    ) {
+    // Intersections delimit constant-membership intervals. Hole-boundary
+    // endpoints belong to the clipped line even though they are excluded from
+    // polygon interior containment; testing them discards valid mask corridors.
+    if (geometryContainsPoint(geometry, mid)) {
       pieces.push([startPoint, endPoint]);
     }
   }
 
   return pieces;
+}
+
+const LineClipFlatbush =
+  typeof FlatbushDefault === "function"
+    ? FlatbushDefault
+    : (FlatbushDefault as unknown as { default: typeof FlatbushDefault }).default;
+type LineClipSegment = { a: LngLat; b: LngLat };
+const lineClipContexts = new WeakMap<
+  TerritoryGeometry,
+  {
+    bbox: TerritoryBBox;
+    segments: LineClipSegment[];
+    index: InstanceType<typeof FlatbushDefault>;
+  }
+>();
+/** Immutable parent geometries are reused throughout district clipping. Indexes
+ * only eliminate bbox-disjoint candidates; intersection predicates stay exact. */
+function lineClipContext(geometry: TerritoryGeometry) {
+  let context = lineClipContexts.get(geometry);
+  if (!context) {
+    const segments = geometryToPolygons(geometry).flatMap((p) =>
+      p.flatMap((r) => r.slice(1).map((b, i) => ({ a: r[i]!, b })))
+    );
+    const index = new LineClipFlatbush(Math.max(1, segments.length));
+    if (!segments.length) index.add(0, 0, 0, 0);
+    for (const s of segments)
+      index.add(
+        Math.min(s.a[0], s.b[0]),
+        Math.min(s.a[1], s.b[1]),
+        Math.max(s.a[0], s.b[0]),
+        Math.max(s.a[1], s.b[1])
+      );
+    index.finish();
+    context = { bbox: computeGeometryBBox(geometry), segments, index };
+    lineClipContexts.set(geometry, context);
+  }
+  return context;
 }
 
 function segmentIntersectionParameters(
@@ -2654,23 +2691,19 @@ function segmentIntersectionParameters(
 ): number[] {
   const parameters: number[] = [];
 
-  for (const polygon of geometryToPolygons(geometry)) {
-    for (const ring of polygon) {
-      for (let index = 1; index < ring.length; index += 1) {
-        const c = ring[index - 1];
-        const d = ring[index];
-
-        if (!c || !d) {
-          continue;
-        }
-
-        const t = segmentIntersectionParameter(a, b, c, d);
-
-        if (t !== undefined) {
-          parameters.push(t);
-        }
-      }
-    }
+  const context = lineClipContext(geometry);
+  for (const id of context.index
+    .search(
+      Math.min(a[0], b[0]) - 1e-8,
+      Math.min(a[1], b[1]) - 1e-8,
+      Math.max(a[0], b[0]) + 1e-8,
+      Math.max(a[1], b[1]) + 1e-8
+    )
+    .sort((a, b) => a - b)) {
+    const segment = context.segments[id];
+    if (!segment) continue;
+    const t = segmentIntersectionParameter(a, b, segment.a, segment.b);
+    if (t !== undefined) parameters.push(t);
   }
 
   return parameters;
@@ -3180,7 +3213,7 @@ function lineLengthKm(coordinates: readonly LngLat[]): number {
 }
 
 function geometryContainsPoint(geometry: TerritoryGeometry, point: LngLat): boolean {
-  const bbox = computeGeometryBBox(geometry);
+  const bbox = lineClipContext(geometry).bbox;
 
   if (point[0] < bbox[0] || point[0] > bbox[2] || point[1] < bbox[1] || point[1] > bbox[3]) {
     return false;
@@ -3232,6 +3265,9 @@ function ringContainsPoint(ring: readonly LngLat[], point: LngLat): boolean {
 }
 
 function pointOnSegment(point: LngLat, a: LngLat, b: LngLat): boolean {
+  if (a[0] === b[0] && a[1] === b[1]) {
+    return Math.hypot(point[0] - a[0], point[1] - a[1]) <= 1e-10;
+  }
   const crossProduct = cross(b[0] - a[0], b[1] - a[1], point[0] - a[0], point[1] - a[1]);
 
   if (Math.abs(crossProduct) > 1e-10) {

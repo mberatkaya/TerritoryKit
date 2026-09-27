@@ -300,6 +300,8 @@ export interface TurkeyV2HybridSmartAttemptMetrics {
   totalInternalBoundaryLengthKm: number;
   barrierAlignedBoundaryLengthKm: number;
   axisAlignedInternalBoundaryRatio: number;
+  longUnsupportedStraightBoundaryRatio: number;
+  barrierFollowingInternalBoundaryRatio: number;
   syntheticSplitCount: number;
   barrierSplitCount: number;
   splitCount: number;
@@ -1161,6 +1163,8 @@ function createSmartAttemptMetrics(
     totalInternalBoundaryLengthKm: quality.totalInternalBoundaryLengthKm,
     barrierAlignedBoundaryLengthKm: quality.barrierAlignedBoundaryLengthKm,
     axisAlignedInternalBoundaryRatio: quality.axisAlignedInternalBoundaryRatio,
+    longUnsupportedStraightBoundaryRatio: quality.longUnsupportedStraightBoundaryRatio,
+    barrierFollowingInternalBoundaryRatio: quality.barrierFollowingInternalBoundaryRatio,
     syntheticSplitCount: quality.syntheticSplitCount,
     barrierSplitCount: quality.barrierSplitCount,
     splitCount: quality.splitCount,
