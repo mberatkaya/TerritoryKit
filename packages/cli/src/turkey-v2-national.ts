@@ -438,12 +438,22 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
     join(reportsRoot, "official-source-backlog.json"),
     smartManifest.districts
       .filter(
-        (d) => d.selectedSourceTier === "organic-smart" || d.selectedSourceTier === "unavailable"
+        (d) =>
+          d.selectedSourceTier === "organic-smart" ||
+          d.selectedSourceTier === "unavailable" ||
+          d.reasonCodes.some((code) => code.includes("LICENSE"))
       )
       .sort(
         (a, b) =>
           Number(a.selectedSourceTier !== "unavailable") -
-            Number(b.selectedSourceTier !== "unavailable") || a.adm2Id.localeCompare(b.adm2Id)
+            Number(b.selectedSourceTier !== "unavailable") ||
+          Number(!a.reasonCodes.some((code) => code.includes("LICENSE"))) -
+            Number(!b.reasonCodes.some((code) => code.includes("LICENSE"))) ||
+          Number(!a.reasonCodes.some((code) => code.includes("INSUFFICIENT_BARRIERS"))) -
+            Number(!b.reasonCodes.some((code) => code.includes("INSUFFICIENT_BARRIERS"))) ||
+          (a.quality ?? Infinity) - (b.quality ?? Infinity) ||
+          (b.axisAlignedInternalBoundaryRatio ?? 0) - (a.axisAlignedInternalBoundaryRatio ?? 0) ||
+          a.adm2Id.localeCompare(b.adm2Id)
       ),
     true
   );
