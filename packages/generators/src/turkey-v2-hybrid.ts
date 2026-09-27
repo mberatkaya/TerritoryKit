@@ -1190,7 +1190,15 @@ export async function buildTurkeyV2HybridBatch(
   options: TurkeyV2HybridBatchBuildOptions
 ): Promise<TurkeyV2HybridBatchBuildResult> {
   const datasetId = options.datasetId ?? "tr-adm3-v2-hybrid-batch";
-  const districts = sortZones(options.districts);
+  const districts = sortZones(options.districts).sort((left, right) => {
+    const a = readDistrictCodes(left),
+      b = readDistrictCodes(right);
+    return (
+      a.provinceCode.localeCompare(b.provinceCode) ||
+      a.districtCode.localeCompare(b.districtCode) ||
+      left.id.localeCompare(right.id)
+    );
+  });
   const duplicateDistrictIds = findDuplicates(districts.map((district) => district.id));
 
   if (duplicateDistrictIds.length > 0) {

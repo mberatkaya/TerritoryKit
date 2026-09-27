@@ -624,7 +624,18 @@ export async function buildTurkeyV2NationalDataset(
     fallbackToLegacyOnSmartFailure: options.allowLegacyGridEmergency === true
   };
   const hierarchy = normalizeTurkeyAdmHierarchy(options.adm0Adm2Dataset, datasetId);
-  const selectedAdm2 = hierarchy.adm2.slice(0, options.districtLimit ?? undefined);
+  const selectedAdm2 = hierarchy.adm2
+    .slice()
+    .sort((left, right) => {
+      const a = isRecord(left.properties.territory) ? left.properties.territory : {};
+      const b = isRecord(right.properties.territory) ? right.properties.territory : {};
+      return (
+        String(a.provinceCode).localeCompare(String(b.provinceCode)) ||
+        String(a.districtCode).localeCompare(String(b.districtCode)) ||
+        left.id.localeCompare(right.id)
+      );
+    })
+    .slice(0, options.districtLimit ?? undefined);
   const officialZones = normalizeAdm3SourceZones(options.officialSources?.zones ?? [], datasetId);
   const osmZones = normalizeAdm3SourceZones(options.osmSources?.zones ?? [], datasetId);
   const sourcesByDistrict = createSourcesByDistrict(selectedAdm2, officialZones, osmZones);
