@@ -1546,12 +1546,15 @@ function splitWithBarriers(
     configuration.minBarrierStrength
   );
 
+  const splitCache = new WeakMap<SmartPiece, SplitCandidate | null>();
+
   while (pieces.length < configuration.targetTerritoryCount) {
     const candidate = findBestBarrierSplit({
       pieces,
       splitLines,
       seeds,
-      configuration
+      configuration,
+      splitCache
     });
 
     if (!candidate) {
@@ -1598,6 +1601,8 @@ function splitOversizedPieces(
     configuration.minBarrierStrength
   );
 
+  const splitCache = new WeakMap<SmartPiece, SplitCandidate | null>();
+
   while (
     pieces.length < configuration.maxTerritories &&
     pieces.some((piece) => piece.areaKm2 > configuration.maxAreaKm2 + AREA_TOLERANCE_KM2)
@@ -1609,7 +1614,8 @@ function splitOversizedPieces(
         ),
         splitLines,
         seeds,
-        configuration
+        configuration,
+        splitCache
       }) ?? createSyntheticSplitCandidate(pieces, configuration);
 
     if (!candidate) {
@@ -1646,6 +1652,7 @@ function findBestBarrierSplit(input: {
   splitLines: readonly SplitLine[];
   seeds: readonly TurkeySmartFallbackLocalitySeed[];
   configuration: TurkeySmartFallbackConfiguration;
+  splitCache: WeakMap<SmartPiece, SplitCandidate | null>;
 }): SplitCandidate | undefined {
   let best: SplitCandidate | undefined;
 
@@ -1654,6 +1661,14 @@ function findBestBarrierSplit(input: {
       continue;
     }
 
+    // Pieces are replaced, never mutated; candidates depend only on this piece and
+    // the fixed lines, seeds and configuration of this split pass.
+    if (input.splitCache.has(piece)) {
+      const cached = input.splitCache.get(piece);
+      if (cached && (!best || compareSplitCandidates(cached, best) < 0)) best = cached;
+      continue;
+    }
+    let pieceBest: SplitCandidate | undefined;
     const pieceBbox = clippingBBox(piece.geometry);
     let evaluatedTouchingLines = 0;
 
@@ -1701,10 +1716,12 @@ function findBestBarrierSplit(input: {
         realBarrierSupportRatio
       } satisfies SplitCandidate;
 
-      if (!best || compareSplitCandidates(candidate, best) < 0) {
-        best = candidate;
+      if (!pieceBest || compareSplitCandidates(candidate, pieceBest) < 0) {
+        pieceBest = candidate;
       }
     }
+    input.splitCache.set(piece, pieceBest ?? null);
+    if (pieceBest && (!best || compareSplitCandidates(pieceBest, best) < 0)) best = pieceBest;
   }
 
   return best;
@@ -4009,9 +4026,16 @@ function splitBalanceScore(leftAreaKm2: number, rightAreaKm2: number): number {
   return roundMetric(clamp01(1 - Math.abs(leftAreaKm2 - rightAreaKm2) / total));
 }
 
+const clippingBboxes = new WeakMap<ClippingMultiPolygon, TerritoryBBox>();
 function clippingBBox(geometry: ClippingMultiPolygon): TerritoryBBox {
+  const cached = clippingBboxes.get(geometry);
+  if (cached) return cached;
   const territoryGeometry = clippingMultiPolygonToTerritoryGeometry(geometry);
-  return territoryGeometry ? computeGeometryBBox(territoryGeometry) : [0, 0, 0, 0];
+  const bbox: TerritoryBBox = territoryGeometry
+    ? computeGeometryBBox(territoryGeometry)
+    : [0, 0, 0, 0];
+  clippingBboxes.set(geometry, bbox);
+  return bbox;
 }
 
 function bboxToRect(bbox: TerritoryBBox): {

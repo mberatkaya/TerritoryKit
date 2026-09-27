@@ -279,6 +279,7 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
   const districtTimings: Array<{ adm2Id: string; durationMs: number; resumed: boolean }> = [];
   const districtStarts = new Map<string, number>();
   const resumedDistricts = new Set<string>();
+  const originalGenerationDurations = new Map<string, number>();
   const checkpointRoot = join(outputRoot, "districts");
   const checkpointPath = (id: string) =>
     join(checkpointRoot, `${id.replace(/[^a-zA-Z0-9_-]/g, "_")}.json`);
@@ -341,6 +342,12 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
         )
           return undefined;
         resumedDistricts.add(options.district.id);
+        if (
+          typeof stored.generationDurationMs === "number" &&
+          Number.isFinite(stored.generationDurationMs) &&
+          stored.generationDurationMs >= 0
+        )
+          originalGenerationDurations.set(options.district.id, stored.generationDurationMs);
         return stored.result as TurkeyV2HybridDistrictBuildResult;
       } catch {
         return undefined;
@@ -350,17 +357,21 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
       result: TurkeyV2HybridDistrictBuildResult,
       options: TurkeyV2HybridDistrictBuildOptions
     ) => {
-      districtTimings.push({
-        adm2Id: result.district.id,
-        durationMs: Date.now() - (districtStarts.get(result.district.id) ?? Date.now()),
-        resumed: resumedDistricts.has(result.district.id)
-      });
+      const durationMs = Date.now() - (districtStarts.get(result.district.id) ?? Date.now());
+      const resumed = resumedDistricts.has(result.district.id);
+      districtTimings.push({ adm2Id: result.district.id, durationMs, resumed });
+      const generationDurationMs = resumed
+        ? originalGenerationDurations.get(result.district.id)
+        : durationMs;
+      if (generationDurationMs !== undefined)
+        originalGenerationDurations.set(result.district.id, generationDurationMs);
       await mkdir(checkpointRoot, { recursive: true });
       const target = checkpointPath(result.district.id);
       await writeFile(
         `${target}.pending`,
         JSON.stringify({
           schemaVersion: DISTRICT_CHECKPOINT_SCHEMA,
+          generationDurationMs,
           key: checkpointKey(options),
           resultHash: stableHash(result),
           result
@@ -393,6 +404,19 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
     {
       durationMs: Date.now() - startedAt,
       peakRssBytes: process.resourceUsage().maxRSS * 1024,
+      resumedAdm2Count: districtTimings.filter((d) => d.resumed).length,
+      newlyBuiltAdm2Count: districtTimings.filter((d) => !d.resumed).length,
+      measuredGenerationAdm2Count: originalGenerationDurations.size,
+      generationTimingScope:
+        "Original generation durations when recorded; absent measurements from older checkpoints are not inferred.",
+      p50RecordedGenerationMs:
+        [...originalGenerationDurations.values()].sort((a, b) => a - b)[
+          Math.floor(originalGenerationDurations.size * 0.5)
+        ] ?? null,
+      p95RecordedGenerationMs:
+        [...originalGenerationDurations.values()].sort((a, b) => a - b)[
+          Math.floor(originalGenerationDurations.size * 0.95)
+        ] ?? null,
       p50Adm2Ms: times[Math.floor(times.length * 0.5)] ?? 0,
       p95Adm2Ms: times[Math.floor(times.length * 0.95)] ?? 0,
       slowestAdm2: districtTimings.slice().sort((a, b) => b.durationMs - a.durationMs)[0],
