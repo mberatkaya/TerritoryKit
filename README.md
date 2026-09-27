@@ -149,9 +149,16 @@ Sprint 5.1 final hardening verifies that path against a real locked Fatih artifa
 47 smart-derived zones for Fatih with `coverage=99.999505`, `outsideSpill=0`,
 `meanBarrierAlignment=0.286977`, and `meanQuality=0.625907`. Hybrid quality reports expose
 `smartAttempt` so accepted Smart output and explicit rejection decisions are auditable.
-Sprint 6 validates a separate `2.1.0-rc.1` nationwide Smart candidate: 973/973 districts,
+The accepted Sprint 6 `2.1.0-rc.1` baseline contains: 973/973 districts,
 34,253 ADM3 zones, zero production legacy grids, and verified province/district shards. The
 historical `2.0.0` artifact is retained; this candidate is not an npm publication or automatic upgrade.
+Organic Smart geographic calibration treats Voronoi cells as coarse ownership, then routes shared
+boundaries along real OSM road, rail and water corridors under unchanged topology gates. These
+remain geography-aware estimated gameplay boundaries. Quality reports measure barrier-following
+length and long unsupported straight chains at every angle.
+
+The recalibrated `2.1.0-rc.2` candidate has a separate artifact identity and requires an
+explicit version selection and migration review.
 See [Sprint 6 nationwide Smart coverage](./docs/datasets/turkey-sprint-6-nationwide.md).
 Turkey V2 defines the additive data contract for mixing official, OSM, and generated ADM3 game
 zones without presenting generated zones as official mahalle/koy records. The stable national
@@ -274,3 +281,7 @@ actions after workflow verification.
 - [NestJS and PostGIS](./docs/nestjs-postgis.md)
 - [Release readiness](./docs/release-readiness.md)
 - [Master sprint checklist](./docs/sprint-checklist.md)
+
+The current `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
+24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
+See [the complete calibration evidence](reports/baselines/sprint-6-geographic-calibration.json).

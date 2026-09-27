@@ -1,5 +1,9 @@
 # Sprint 6 Nationwide Smart Candidate
 
+The tables below document the accepted `2.1.0-rc.1` baseline. Final geographic calibration targets
+`2.1.0-rc.2`, with shared barrier routing in `smart-derived-v1.2`. Its measured outcomes are recorded
+separately after a real national rebuild; baseline metrics are not recalibration results.
+
 Sprint 6 prepares `territory-kit-tr-v2-playable@2.1.0-rc.1`. The historical `2.0.0` national
 artifact is retained. This candidate is not an npm publication or an automatic consumer upgrade.
 
@@ -26,7 +30,7 @@ pnpm --filter @territory-kit/cli build
 node packages/cli/dist/index.mjs tr osm barriers build \
   --adm2 .territory/build/TR/V2-national/levels/ADM2/dataset.json \
   --source-lock .territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json \
-  --output .territory/sprint-6/barriers --concurrency 2 --offline \
+  --output .territory/sprint-6/calibration/barriers --concurrency 2 --offline \
   --osmium-executable osmium
 pnpm turkey:v2:national:publish-ready
 pnpm turkey:v2:national:validate:publish-ready
@@ -163,3 +167,96 @@ records: 2,094 preserved, 991 source-replaced, 13 split and one merged. There ar
 components and 1,005 records requiring manual review. Pairwise intersection areas, old/new shares,
 IoU, algorithm versions and source classes are retained; this is evidence for an explicit migration,
 not an automatic persisted-state upgrade.
+
+## Final Geographic Calibration
+
+The separate `2.1.0-rc.2` candidate is **DO NOT MERGE**. All 81 provinces and 973
+ADM2 were attempted, but only 949 districts pass final acceptance: 24 fail and seven have no
+ADM3 output. Standard Smart contributes nine districts and Organic Smart 940; 59 districts
+have approved official contributions and none have verified OSM administrative contributions.
+Production legacy remains zero. There are 22 unsupported-straight violations and three axis
+violations, with the axis failures included among the 22. National coverage is 99.522542%.
+
+Gölköy and Sarıoğlan fail with `SMART_FALLBACK_PRECISION_REGULARIZATION_FAILED`. Their missing
+district results omit 58 approved polygons compared with rc.1. All retained official geometries
+are identical, including Şahinbey's 183 approved polygons, but global official completeness is
+not preserved in this candidate. These exceptions and the 22 failed missing-region partitions
+must be resolved before replacing the accepted artifact. No acceptance gate was relaxed.
+
+The pipeline is coarse Voronoi ownership → real barrier graph routing → atomic shared-edge
+replacement → topology validation. Voronoi alone is not evidence of real-barrier adherence.
+See [the routing and measurement contract](./turkey-smart-fallback.md#final-geographic-calibration).
+The [checked-in calibration evidence](../../reports/baselines/sprint-6-geographic-calibration.json)
+contains all 973 outcomes, failed-gap input diagnostics, worst-20 rankings, before/after pilots,
+source identities, migration, performance, validation failures and determinism evidence.
+The accepted rc.1 tables and evidence above remain historical baseline results.
+
+### Geographic distributions
+
+These are per-district ratios for the selected Standard/Organic tiers (9 and 940 districts).
+Rejected partitions remain in the separate complete outcome/backlog lists. No-internal-seam
+cases remain in distributions but are excluded from worst-boundary rankings.
+
+| Tier           | Metric                                | Min      | P10      | Median   | P90      | Max      |
+| -------------- | ------------------------------------- | -------- | -------- | -------- | -------- | -------- |
+| standard-smart | realBarrierRatio                      | 0.200552 | 0.23521  | 0.311919 | 0.598412 | 0.874358 |
+| standard-smart | syntheticBoundaryRatio                | 0.125642 | 0.401588 | 0.688081 | 0.76479  | 0.799448 |
+| standard-smart | longUnsupportedStraightBoundaryRatio  | 0        | 0        | 0.616186 | 0.705482 | 0.755925 |
+| standard-smart | axisAlignedInternalBoundaryRatio      | 0        | 0        | 0.009697 | 0.041604 | 0.043746 |
+| standard-smart | barrierFollowingInternalBoundaryRatio | 0.237952 | 0.286695 | 0.381068 | 0.598412 | 0.874358 |
+| organic-smart  | realBarrierRatio                      | 0        | 0.090883 | 0.210083 | 0.340137 | 0.521606 |
+| organic-smart  | syntheticBoundaryRatio                | 0.478394 | 0.659863 | 0.789917 | 0.909117 | 1        |
+| organic-smart  | longUnsupportedStraightBoundaryRatio  | 0        | 0.585016 | 0.748098 | 0.886272 | 0.948714 |
+| organic-smart  | axisAlignedInternalBoundaryRatio      | 0        | 0        | 0.00154  | 0.048114 | 0.137166 |
+| organic-smart  | barrierFollowingInternalBoundaryRatio | 0        | 0.102118 | 0.241766 | 0.395282 | 0.776637 |
+
+### Pilots, delivery and determinism
+
+All eight parent/OSM/territory comparison maps were manually inspected. Strong support improves
+from 0.026 to 0.267 in Gebze, 0.001 to 0.179 in Kangal and 0.013 to 0.253 in Bodrum. Fatih
+stays Standard with 47 zones and improves from 0.289 to 0.301. Adalar remains detached across
+the sea. Şahinbey's approved polygons are unchanged; only its true missing region differs.
+Every pilot has 100% coverage, zero spill and zero overlap. Substantial unsupported rural and
+sparse-gap seams remain visible; these maps do not establish nationwide product acceptance.
+
+Eight independently regenerated pilots match the national candidate exactly. The complete
+repeat preserves source-lock, geometry, tier decisions, coverage totals and shard identities.
+All 18,832 delivery tiles match byte checksums. Of 18,855 core artifact checksums, 18,854 match;
+the sole difference is the documented MVT policy report's `levels[].durationMs` field. MVT
+validation reports zero corrupt tiles, no missing zooms, 40,278,259 bytes total and a maximum
+112,535-byte tile, within the existing size policy. Valid tiles do not make this incomplete
+candidate publish-ready; both normal and publish-ready national validation fail.
+
+### Migration and performance
+
+Historical 2.0.0 → rc.2 evidence contains 3597 overlap-component records:
+2064 preserved, 953 source-replaced,
+570 removed, 9 split and 1 merged.
+There are 952 many-to-many components, 1533
+manual-review records and 99327 pairwise intersections. IoU and old/new
+area shares are retained. Removal records include failed output, so this evidence must not be
+applied as an automatic gameplay-state migration.
+
+The cold run built 971 district results and recorded two exceptions, with zero resume. Its
+observed wall time was 14,285.34 seconds, including a long inactive interval across a user
+interruption; CPU time was 3,464.19 seconds. This wall measurement is not a controlled algorithm
+benchmark. Peak RSS was 7,289,356,288 bytes; recorded generation P50/P95 were 1,782/14,060 ms.
+The repeat took 493.82 seconds, resumed 949 accepted districts, rebuilt 22 rejected results and
+reproduced two exceptions; peak RSS was 7,659,061,248 bytes. Candidate files including checkpoints
+total 3,046,167,666 bytes. The bounded 10/100 cold scenarios took 77,755/352,828 ms, with RSS
+1,565,491,200/2,063,253,504 bytes. The 10-district scenario passes; the 100-district scenario
+fails because Çelikhan is unavailable. Routing adds graph/path/Boolean work; benchmark time
+increases while recorded peak RSS remains below the rc.1 benchmark.
+
+Recalibration commands explicitly use rc.2 and write under `.territory/sprint-6/calibration/`.
+The same locked Geofabrik snapshot is used. Extraction `tr-osm-barriers-v1.3` corrects closed-ring
+containment and hole-boundary line clipping; changed artifacts were rebuilt while native source
+extracts were reused. An exact-cohort fresh Fatih extraction matches all hashes. No PBF, caches,
+checkpoints, raster previews or multi-GB artifacts are committed. No npm/CDN publication,
+automatic gameplay-state migration or PR merge occurs.
+
+A bounded follow-up experiment enabled the existing geographic seed refinement for the 24 rejected
+ADM2 IDs without changing any gate. It accepted 8 cases, but remaining ruler/axis failures
+and Sarıoğlan’s precision exception still block nationwide acceptance. This experiment was not
+promoted to the frozen routing-v8 candidate; its per-district results are recorded separately in
+the calibration evidence.

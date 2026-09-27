@@ -105,6 +105,15 @@ cannot pass publish-ready validation. District checkpoints resume only when all 
 
 The package also exports `runCli(argv)` for tests and embedded command runners.
 
+Organic Smart geographic calibration treats Voronoi cells as coarse ownership, then routes shared
+boundaries along real OSM road, rail and water corridors under unchanged topology gates. These
+remain geography-aware estimated gameplay boundaries. Quality reports measure barrier-following
+length and long unsupported straight chains at every angle.
+
 ## License
 
 Apache-2.0
+
+The current `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
+24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
+See [the complete calibration evidence](../../reports/baselines/sprint-6-geographic-calibration.json).

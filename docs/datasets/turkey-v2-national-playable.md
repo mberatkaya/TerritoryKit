@@ -231,3 +231,20 @@ The separate `2.1.0-rc.1` candidate consumes a verified `--osm-barriers` root an
 province datasets, district reports, tier-specific area/zone totals, and an official-source backlog
 are emitted without placing national geometry in npm.
 See [Sprint 6 nationwide evidence](./turkey-sprint-6-nationwide.md).
+
+## Final Geographic Calibration
+
+Organic `smart-derived-v1.2` follows coarse Voronoi ownership with a deterministic barrier graph,
+shared-junction anchoring, shared-edge routing and strict partition validation. Voronoi alone is
+not counted as real barrier adherence. Strong-barrier alignment retains its existing semantics;
+all-real-barrier following and unsupported straight chains are reported separately. Official
+polygons remain unchanged and generation fills only their true missing region. See
+[the routing design and realism gates](./turkey-smart-fallback.md#final-geographic-calibration).
+
+The recalibrated candidate uses `2.1.0-rc.2` to keep the earlier `2.1.0-rc.1` artifact identity
+immutable. Historical `2.0.0` and its gameplay state remain unchanged; migration is review evidence
+with intersection areas, old/new shares, IoU, splits, merges and many-to-many components.
+
+The current `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
+24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
+The accepted historical artifact remains unchanged. See [national calibration outcomes](./turkey-sprint-6-nationwide.md#final-geographic-calibration).

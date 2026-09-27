@@ -13,7 +13,7 @@ Published smart fallback zones are labeled:
 - `administrative: false`
 - `official: false`
 - `generated: true`
-- `algorithmVersion: "smart-derived-v1.1"`
+- `algorithmVersion: "smart-derived-v1.2"`
 
 ## Source Priority
 
@@ -192,6 +192,68 @@ standard Smart: minimum mean score 0.25, no minimum barrier alignment, maximum c
 one quarter of the missing parent area, and at most 64 cells. Sparse real inputs or invalid cells
 produce explicit rejection. This coarse gameplay mode does not identify real mahalle records.
 
+## Final Geographic Calibration
+
+`smart-derived-v1.2` treats Voronoi as a **coarse ownership partition**. It then routes shared
+boundaries along real OSM corridors and validates the resulting partition. Voronoi alone is not
+evidence of real-barrier adherence. Standard Smart retains its existing geometry selection.
+
+Small connected missing-region components are kept whole when the existing area limits allow
+it. For multipart gaps, ownership uses the largest coarse overlap share and respects the
+maximum territory area and count; detached parts remain detached, with no invented connector.
+This avoids dividing already bounded geographic fragments merely to meet a coarse cell target.
+The component optimization is discarded if either unsupported-axis or unsupported-straight
+ratio would increase. Components that cannot be safely regularized at delivery precision retain
+their existing subdivision. Routed replacements also pass this precision safety check.
+
+Organic starts with a target of 16 coarse cells below 3 km/km² road density and 32 otherwise,
+subject to the existing target-area minimum. Realism rejection can retry 16 and then 8 targets
+without relaxing maximum area, the 64-cell cap, topology or realism gates. Oversized cells still
+receive bounded geographic subdivision. This avoids inventing unnecessary seams in sparse networks.
+
+The stage indexes normalized segments per ADM2. Interior junctions shared by three or more cells
+can move once to a nearby real network junction; all incident owners change atomically. Boundary,
+coastline and official-mask junctions remain fixed. Each unsupported shared edge searches a local
+graph of actual road, rail and water vertices, with projected endpoint anchors. Graph connections
+respect available `layer`, `bridge` and `tunnel` tags; geometric crossings alone do not create
+connections. Existing normalized strengths weight physical length, weakness and departure from
+the coarse edge. Tie ordering is stable. Weak local streets have a higher cost than strong barriers.
+
+Search width is capped at 40% of chord length and at 400 m, 2 km or 5 km for road density at least
+15, at least 3, or below 3 km/km², respectively. Junction movement also stays within 40% of the
+shortest incident edge. Density and locality signals use the actual missing geometry, not the
+whole district when official polygons mask it. The routing graph excludes coastline as an internal
+separator. A full route may be at most 1.8 times the chord and contain at most 40% connector length.
+When no complete graph route exists, monotone portions of actual nearby paths can replace only
+the portions they span. Local-road fragments need at least 250 m of real path and connectors at
+most 20% of that length; stronger fragments need at least 100 m and connectors at most 50%.
+
+Both owners receive the same path. A replacement is committed only when polygon Boolean
+operations prove that their union is unchanged, they do not overlap, and rings do not cross.
+Topology failure retains the original edge. Final coverage, geometry, area, overlap and spill gates
+remain in force. No arbitrary curvature is added to make unsupported geometry appear organic.
+
+The existing `meanRealBarrierRatio` / `meanBarrierAlignment` retain their strength-qualified
+semantics (`minAlignmentStrength`, default 0.45). `meanSyntheticBoundaryRatio` remains their
+complement. The new `barrierFollowingInternalBoundaryRatio` uses the same proximity, heading
+compatibility and interval-overlap calculation for **all non-ignored real barriers**, including
+weak residential roads. These measures are reported separately; proximity alone never supplies
+alignment, and the existing 50 m tolerance is unchanged.
+
+`longUnsupportedStraightBoundaryRatio` measures unsupported chains at any angle. Consecutive
+segments within three degrees of the initial heading form a chain; chains at least 100 m long
+contribute unsupported length. Real overlap from all non-ignored barriers is subtracted. Parent
+edges break chains and remain excluded. Densifying a diagonal ruler does not evade the metric.
+The Organic `geographicRealism` gate rejects ratios above 0.8, or above 0.95 when actual road
+density is below 3 km/km². The independent 0.15 unsupported-axis gate is retained. Sparse inputs
+can still fail explicitly; estimated coverage is never silently replaced with a production grid.
+
+Barrier extraction `tr-osm-barriers-v1.3` fixes degenerate closing-ring containment and keeps
+valid line endpoints on official-mask hole boundaries. This extraction change requires rebuilding
+affected artifacts from the original locked snapshot; cached source extracts remain reusable.
+Pure routing changes do not otherwise invalidate extraction. Smart algorithm and configuration
+identities invalidate previous generated district checkpoints.
+
 `axisAlignedInternalBoundaryRatio` is a length ratio in `[0,1]`. It measures unsupported internal
 segments at least 100 m long whose angle is within one degree of latitude/longitude axes. Parent
 edges are excluded. Support from real non-ignored barriers (including weak local roads) is
@@ -210,3 +272,7 @@ real network coordinates clipped to the gap. These remain low-confidence gamepla
 The retry retains the original area and topology gates, and never uses recursive generated
 Voronoi vertices as source points. Exact self-crossings introduced by decimal snapping are
 regularized with polygon self-union before the same hard checks run.
+
+The current `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
+24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
+The accepted historical artifact remains unchanged. See [national calibration outcomes](./turkey-sprint-6-nationwide.md#final-geographic-calibration).

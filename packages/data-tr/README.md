@@ -62,3 +62,12 @@ reports can expose `smartAttempt` so clients can audit whether a district used a
 geometry or explicit rejection. Sprint 6 adds organic low-confidence Smart and disables legacy
 grid selection in normal national production. The historical `2.0.0` descriptor remains unchanged;
 the `2.1.0-rc.1` candidate requires an explicit registry version and migration review.
+
+Organic Smart geographic calibration treats Voronoi cells as coarse ownership, then routes shared
+boundaries along real OSM road, rail and water corridors under unchanged topology gates. These
+remain geography-aware estimated gameplay boundaries. Quality reports measure barrier-following
+length and long unsupported straight chains at every angle.
+
+The current `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
+24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
+See [the complete calibration evidence](../../reports/baselines/sprint-6-geographic-calibration.json).

@@ -40,3 +40,17 @@ release lists `mberat` as publisher and maintainer. Sixteen latest releases are 
 The [machine-readable registry audit](../../reports/baselines/sprint-6-npm-audit.json) records
 each package and its direct registry endpoint. All 19 repository manifests already contain
 repository, homepage, bugs, and license fields.
+
+## Final Geographic Calibration Audit
+
+All 21 first-party READMEs were reviewed again for scope and claims. The same four changed; the
+other 17 remain accurate. The matrix above remains the full inventory. New text describes coarse
+Voronoi ownership, shared real-barrier routing, estimated gameplay semantics and angle-independent
+unsupported-straight diagnostics. The accepted rc.1 baseline is labeled separately from rc.2.
+The root npm publisher/profile and core, CLI and generators links are retained. No package version
+was changed and nothing was published.
+
+The rc.2 acceptance status is explicit in all four updated READMEs: 949/973 accepted, 24
+failed, seven unavailable and 58 approved polygons omitted by two precision exceptions.
+The [calibration report](../../reports/baselines/sprint-6-geographic-calibration.json) records
+these blockers; the README audit does not assert that the candidate is publish-ready.
