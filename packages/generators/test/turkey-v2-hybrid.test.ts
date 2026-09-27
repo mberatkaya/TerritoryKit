@@ -21,6 +21,41 @@ import {
 const ROOT = resolve(__dirname, "../../..");
 
 describe("Turkey V2 hybrid coverage pipeline", () => {
+  it("preserves approved national provenance and takes its overlap before local official sources", async () => {
+    const district = districtZone("priority", rectangle(0, 0, 1, 1));
+    const national = realZone({
+      id: "z-national",
+      sourceClass: "official",
+      sourceNativeId: "national",
+      name: "National",
+      geometry: rectangle(0, 0, 0.6, 1)
+    });
+    (national.properties.territory as Record<string, unknown>).boundarySourceClass =
+      "official-national";
+    const local = realZone({
+      id: "a-local",
+      sourceClass: "official",
+      sourceNativeId: "local",
+      name: "Local",
+      geometry: rectangle(0.3, 0, 1, 1)
+    });
+    const result = await buildTurkeyV2HybridDistrict({
+      district,
+      provinceCode: "01",
+      districtCode: "priority",
+      officialZones: [local, national],
+      generated: { enabled: false },
+      buildDate: "2026-09-27T00:00:00.000Z"
+    });
+    expect(result.quality.ok).toBe(true);
+    const effectiveNational = result.effective.official.find((z) => z.id === national.id)!;
+    const effectiveLocal = result.effective.official.find((z) => z.id === local.id)!;
+    expect(effectiveNational.bbox[2]).toBe(0.6);
+    expect(effectiveLocal.bbox[0]).toBe(0.6);
+    expect(
+      (effectiveNational.properties.territory as Record<string, unknown>).boundarySourceClass
+    ).toBe("official-national");
+  });
   it("applies official > OSM > generated priority and keeps real provenance", async () => {
     const district = districtZone("priority", rectangle(0, 0, 1, 1));
     const official = realZone({

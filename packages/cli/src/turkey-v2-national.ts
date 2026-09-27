@@ -291,6 +291,15 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
   const checkpointKey = (options: TurkeyV2HybridDistrictBuildOptions) =>
     stableHash({
       options,
+      officialNationalPriorityPolicy: options.officialZones?.some((zone) => {
+        const t = isRecord(zone.properties.territory) ? zone.properties.territory : {};
+        return (
+          (t.boundarySourceClass ??
+            (isRecord(t.source) ? t.source.boundarySourceClass : undefined)) === "official-national"
+        );
+      })
+        ? "national-before-local-v1"
+        : undefined,
       snapshotChecksum,
       datasetVersion,
       checkpointSchema: DISTRICT_CHECKPOINT_SCHEMA,

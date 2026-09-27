@@ -1491,7 +1491,18 @@ function buildEffectiveRealZones(input: {
   const sourceIdentities = new Set<string>();
   const geometryHashes = new Set<string>();
 
-  for (const zone of sortZones(input.zones)) {
+  const ordered = sortZones(input.zones).sort((left, right) => {
+    if (input.sourceClass !== "official") return 0;
+    const rank = (zone: TerritoryZone) =>
+      Number(
+        readBoundarySourceClass(
+          isRecord(zone.properties.territory) ? zone.properties.territory : {},
+          "official"
+        ) !== "official-national"
+      );
+    return rank(left) - rank(right);
+  });
+  for (const zone of ordered) {
     const metadata = readCandidateMetadata(zone, input.sourceClass);
     const originalGeometry = toClippingMultiPolygon(zone.geometry);
     const candidateAreaKm2 = clippingAreaKm2(originalGeometry);
@@ -1826,7 +1837,11 @@ function createEffectiveRealZone(input: {
       : sha256Hex(
           serializeJsonStable(clippingMultiPolygonToTerritoryGeometry(input.originalGeometry))
         );
-  const boundarySourceClass = boundarySourceClassForReal(input.sourceClass);
+  const boundarySourceClass =
+    input.sourceClass === "official" &&
+    readBoundarySourceClass(territory, "official") === "official-national"
+      ? "official-national"
+      : boundarySourceClassForReal(input.sourceClass);
   const licenseState = licenseStateFromPolicy(input.metadata);
   const confidence = confidenceForRealSource(input.sourceClass, licenseState);
   const sourceSnapshotChecksum =
