@@ -337,6 +337,7 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
         const stored = JSON.parse(await readFile(checkpointPath(options.district.id), "utf8"));
         if (
           stored.schemaVersion !== DISTRICT_CHECKPOINT_SCHEMA ||
+          stored.result?.quality?.ok !== true ||
           stored.key !== checkpointKey(options) ||
           stableHash(stored.result) !== stored.resultHash
         )
@@ -860,7 +861,7 @@ async function runBenchmark(args: string[]): Promise<number> {
   return 0;
 }
 
-function createSmartCoverageManifest(result: TurkeyV2NationalBuildResult) {
+export function createSmartCoverageManifest(result: TurkeyV2NationalBuildResult) {
   const districts = result.levels.ADM2.zones.map((parent) => {
     const t = isRecord(parent.properties.territory) ? parent.properties.territory : {};
     const c = result.coverage.districts.find((c) => c.districtId === parent.id) ?? {
@@ -889,9 +890,17 @@ function createSmartCoverageManifest(result: TurkeyV2NationalBuildResult) {
           : osmCount > 0
             ? "osm-administrative"
             : "unavailable";
+    const rejectedHybridGates = Object.entries(d?.quality.gates ?? {})
+      .filter(([, accepted]) => !accepted)
+      .map(([gate]) => gate)
+      .sort();
     return {
       adm2Id: c.districtId,
-      failureReason: result.failures.find((f) => f.districtId === c.districtId)?.message ?? null,
+      failureReason:
+        result.failures.find((f) => f.districtId === c.districtId)?.message ??
+        (rejectedHybridGates.length
+          ? `HYBRID_QUALITY_REJECTED: ${rejectedHybridGates.join(", ")}`
+          : null),
       provinceCode: c.provinceCode,
       province: c.provinceName,
       district: c.districtName,
@@ -919,8 +928,18 @@ function createSmartCoverageManifest(result: TurkeyV2NationalBuildResult) {
       syntheticBoundaryRatio: q?.meanSyntheticBoundaryRatio ?? null,
       axisAlignedInternalBoundaryRatio: q?.axisAlignedInternalBoundaryRatio ?? null,
       quality: q?.meanQualityScore ?? null,
-      qualityGates: q?.gates ?? d?.quality.gates ?? {},
-      reasonCodes: [...new Set(d?.issues.map((i) => i.code) ?? ["DISTRICT_BUILD_FAILED"])].sort(),
+      qualityGates: { ...(q?.gates ?? {}), ...(d?.quality.gates ?? {}) },
+      smartQualityGates: q?.gates ?? {},
+      hybridQualityGates: d?.quality.gates ?? {},
+      reasonCodes: [
+        ...new Set([
+          ...(d?.issues.map((i) => i.code) ?? ["DISTRICT_BUILD_FAILED"]),
+          ...rejectedHybridGates.map(
+            (gate) =>
+              `HYBRID_QUALITY_${gate.replace(/([a-z])([A-Z])/g, "$1_$2").toUpperCase()}_REJECTED`
+          )
+        ])
+      ].sort(),
       zones: {
         official: officialCount,
         osmAdministrative: osmCount,

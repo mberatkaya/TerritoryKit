@@ -11,8 +11,61 @@ import type {
 import { describe, expect, it, vi } from "vitest";
 import { validateTurkeyV2Dataset } from "@territory-kit/dataset/turkey-v2";
 import { runCli } from "../src/index.js";
+import { createSmartCoverageManifest } from "../src/turkey-v2-national.js";
+import type { TurkeyV2NationalBuildResult } from "@territory-kit/generators/turkey-adm3";
 
 describe("territory cli Turkey V2 national build", () => {
+  it("exposes rejected hybrid gates even when the Smart stage accepted its geometry", () => {
+    const district = nationalFixture().zones.find((z) => z.level === 2)!;
+    const generated = { ...district, level: 3, parentId: district.id };
+    const result = {
+      levels: { ADM1: { zones: [] }, ADM2: { zones: [district] } },
+      coverage: {
+        districts: [
+          {
+            districtId: district.id,
+            provinceCode: "01",
+            provinceName: "Adana",
+            districtName: "Test",
+            zoneCount: 1,
+            finalCoveragePercent: 100
+          }
+        ]
+      },
+      districts: [
+        {
+          district,
+          effective: { generated: [generated], official: [], osm: [], zones: [generated] },
+          quality: { ok: false, gates: { coverage: true, effectiveSiblingOverlap: false } },
+          issues: [],
+          coverage: { generatedEffectiveAreaKm2: 1 },
+          smartFallbackResult: {
+            configuration: { organic: true },
+            quality: { gates: { coverage: true, overlap: true } }
+          }
+        }
+      ],
+      failures: [],
+      sourceLock: {
+        contentHash: "sha256:test",
+        adm0Adm2: { levels: { ADM2: { actualFeatureCount: 973 } } }
+      }
+    } as unknown as TurkeyV2NationalBuildResult;
+    const report = createSmartCoverageManifest(result);
+    expect(report.totals.adm2Successful).toBe(0);
+    expect(report.totals.adm2Failed).toBe(1);
+    expect(report.districts[0]).toMatchObject({
+      qualityAccepted: false,
+      qualityGates: { effectiveSiblingOverlap: false },
+      smartQualityGates: { overlap: true },
+      hybridQualityGates: { effectiveSiblingOverlap: false }
+    });
+    expect(report.districts[0]?.failureReason).toContain("effectiveSiblingOverlap");
+    expect(report.districts[0]?.reasonCodes).toContain(
+      "HYBRID_QUALITY_EFFECTIVE_SIBLING_OVERLAP_REJECTED"
+    );
+  });
+
   it("plans the canonical national ADM0-ADM2 scope", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-v2-plan-"));
     const datasetPath = join(tempDir, "adm0-adm2.json");

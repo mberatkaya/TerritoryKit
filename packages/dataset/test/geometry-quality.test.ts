@@ -63,6 +63,39 @@ describe("validateGeometryDataset", () => {
     expect(hashTerritoryGeometry(dataset.zones[1]!.geometry)).toBe(hashBeforeValidation);
   });
 
+  it("allows siblings to share hole boundaries while still rejecting interior overlap", () => {
+    const dataset = validDataset();
+    const left = square("left", 1, 0, 0, 4, 4, { parentId: "root" });
+    left.geometry = {
+      type: "Polygon",
+      coordinates: [
+        [
+          [0, 0],
+          [4, 0],
+          [4, 4],
+          [0, 4],
+          [0, 0]
+        ],
+        [
+          [1, 1],
+          [1, 3],
+          [3, 3],
+          [3, 1],
+          [1, 1]
+        ]
+      ]
+    };
+    dataset.zones[1] = left;
+    dataset.zones[2] = square("right", 1, 1, 1, 3, 3, { parentId: "root" });
+    const overlapIssues = () =>
+      validateGeometryDataset(dataset, {
+        checks: { siblingOverlaps: true }
+      }).issues.filter((issue) => issue.code === "SIBLING_GEOMETRY_OVERLAP");
+    expect(overlapIssues()).toEqual([]);
+    dataset.zones[2] = square("right", 1, 0.5, 1, 3, 3, { parentId: "root" });
+    expect(overlapIssues()).toHaveLength(1);
+  });
+
   it("does not report GEOS-valid endpoint-only survey spikes as self-intersections", () => {
     const dataset = validDataset();
     dataset.zones[1] = {

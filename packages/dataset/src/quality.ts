@@ -1639,7 +1639,10 @@ function ringHasStrictPointInPolygon(
       return false;
     }
 
-    return classifyPointInRing(point, shell, epsilon) === "inside";
+    return (
+      classifyPointInRing(point, shell, epsilon) === "inside" &&
+      polygon.slice(1).every((hole) => classifyPointInRing(point, hole, epsilon) === "outside")
+    );
   });
 }
 
