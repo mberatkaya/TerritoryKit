@@ -329,7 +329,7 @@ describe("territory cli Turkey ADM3 full coverage", () => {
           data: {
             strategy: "smart",
             selectedProfile: "custom",
-            algorithmVersion: "smart-derived-v1.1",
+            algorithmVersion: "smart-derived-v1.2",
             producedZoneCount: 4,
             trV2ValidationOk: true
           }

@@ -49,7 +49,7 @@ describe("organic smart production fallback", () => {
     expect(result.quality.splitCount).toBe(0);
     expect(result.zones).toHaveLength(0);
   });
-  it("rejects unsupported axis alignment even when geographic refinement resolves an oversized disconnected gap", async () => {
+  it("rejects unsupported axis alignment in a disconnected parent despite valid area and topology", async () => {
     const geometry: TerritoryGeometry = {
       type: "MultiPolygon",
       coordinates: [
@@ -113,15 +113,16 @@ describe("organic smart production fallback", () => {
     expect(result.quality.territoryCount).toBeGreaterThan(2);
     expect(result.quality.gates.maximumArea).toBe(true);
     expect(result.quality.gates.gridLikeness).toBe(false);
-    expect(result.reasonCodes).toContain("ORGANIC_GEOGRAPHIC_REFINEMENT_USED");
+    expect(result.reasonCodes).toContain("SMART_FALLBACK_GRID_LIKENESS_REJECTED");
     expect(result.quality.outsideSpillKm2).toBe(0);
     expect(result.quality.overlapAreaKm2).toBe(0);
     expect(result.quality.syntheticSplitCount).toBe(0);
   });
-  it("partitions real locality points deterministically with hard geometry gates", async () => {
+  it("rejects unsupported locality-only rulers while retaining deterministic valid coverage", async () => {
     const a = await buildTurkeyOrganicSmartFallbackWithAdjacency(input);
     const b = await buildTurkeyOrganicSmartFallbackWithAdjacency(input);
-    expect(a.quality.ok).toBe(true);
+    expect(a.quality.ok).toBe(false);
+    expect(a.reasonCodes).toContain("SMART_FALLBACK_GEOGRAPHIC_REALISM_REJECTED");
     expect(a.configuration.organicGeographicRefinement).toBeUndefined();
     expect(a.deterministicHash).toBe(b.deterministicHash);
     expect(a.quality.coveragePercent).toBeGreaterThanOrEqual(99.99);
@@ -142,7 +143,7 @@ describe("organic smart production fallback", () => {
       })
     ).toBe(true);
   });
-  it("selects organic after standard rejects and never invokes production legacy", async () => {
+  it("rejects unsupported organic after standard rejects and never invokes production legacy", async () => {
     expect(buildTurkeySmartFallback(input).quality.ok).toBe(false);
     const result = await buildTurkeyV2HybridDistrict({
       district: parent,
@@ -156,7 +157,10 @@ describe("organic smart production fallback", () => {
         smartFallback: { localitySeeds: seeds, options: input.options }
       }
     });
-    expect(result.quality.smartAttempt?.selectedFallback).toBe("organic-smart");
+    expect(result.quality.smartAttempt?.selectedFallback).toBe("none");
+    expect(result.smartFallbackResult?.reasonCodes).toContain(
+      "SMART_FALLBACK_GEOGRAPHIC_REALISM_REJECTED"
+    );
     expect(result.generatedResult).toBeUndefined();
     expect(result.issues.some((i) => i.code === "SMART_STANDARD_QUALITY_REJECTED")).toBe(true);
   });
