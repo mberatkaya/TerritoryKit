@@ -1209,6 +1209,26 @@ export function buildTurkeySmartFallback(
     ];
     if (configuration.organic) {
       pieces = partitionOrganicLocalities(parentGeometry, seeds, barriers, configuration, issues);
+      const wholeComponents = retainWholeOrganicComponents(pieces, parentGeometry, configuration);
+      if (parentGeometry.length > 1 && wholeComponents !== pieces) {
+        const summarize = (parts: SmartPiece[]) =>
+          inspectTurkeySmartBoundaryAlignment({
+            zones: parts.map((piece) => ({
+              ...input.parent,
+              geometry: clippingMultiPolygonToTerritoryGeometry(piece.geometry)!
+            })),
+            parentGeometry,
+            barriers,
+            configuration
+          });
+        const before = summarize(pieces);
+        const after = summarize(wholeComponents);
+        if (
+          after.axisAlignedInternalBoundaryRatio <= before.axisAlignedInternalBoundaryRatio &&
+          after.longUnsupportedStraightBoundaryRatio <= before.longUnsupportedStraightBoundaryRatio
+        )
+          pieces = wholeComponents;
+      }
     } else {
       pieces = splitWithBarriers(pieces, barriers, seeds, configuration, stats, issues);
       pieces = splitOversizedPieces(pieces, barriers, seeds, configuration, stats, issues);
@@ -1229,6 +1249,13 @@ export function buildTurkeySmartFallback(
           }),
         (geometry) => {
           const area = clippingAreaKm2(geometry);
+          try {
+            regularizeTurkeySmartFallbackGeometry(
+              clippingMultiPolygonToTerritoryGeometry(geometry)!
+            );
+          } catch {
+            return false;
+          }
           return (
             area + AREA_TOLERANCE_KM2 >= configuration.minAreaKm2 &&
             area <= configuration.maxAreaKm2 + AREA_TOLERANCE_KM2
@@ -1384,6 +1411,22 @@ function partitionOrganicLocalities(
 ): SmartPiece[] {
   const parentGeometry = clippingMultiPolygonToTerritoryGeometry(parent);
   if (!parentGeometry) return [];
+  const area = clippingAreaKm2(parent);
+  if (
+    parent.length === 1 &&
+    area <= config.targetAreaKm2 + AREA_TOLERANCE_KM2 &&
+    area <= config.maxAreaKm2 + AREA_TOLERANCE_KM2
+  ) {
+    return [
+      {
+        geometry: parent,
+        key: "organic-whole-component",
+        areaKm2: area,
+        barrierIds: [],
+        syntheticSplitCount: 0
+      }
+    ];
+  }
   seeds = seeds.filter((s) => pointInClippingGeometry(s.coordinate, parent));
   const clippedNetworkPoints =
     depth > 0 || config.organicGeographicRefinement
@@ -1517,6 +1560,102 @@ function partitionOrganicLocalities(
     });
   }
   return pieces;
+}
+
+/** Coarse ownership must not cut small islands or already fragmented official
+ * gaps unnecessarily. Keep each eligible parent component whole, assigning it
+ * by its largest coarse ownership share. Detached geometry remains detached;
+ * no connector is introduced between components. */
+function retainWholeOrganicComponents(
+  input: SmartPiece[],
+  parent: ClippingMultiPolygon,
+  config: TurkeySmartFallbackConfiguration
+): SmartPiece[] {
+  if (parent.length < 2 || !input.length) return input;
+  const components = parent.map((polygon) => ({
+    polygon,
+    geometry: [polygon] as ClippingMultiPolygon,
+    area: clippingAreaKm2([polygon]),
+    bbox: clippingBBox([polygon])
+  }));
+  const eligible = components.map((c) => {
+    if (c.area <= 0 || c.area > config.maxAreaKm2 + AREA_TOLERANCE_KM2) return false;
+    // An intact mask component can contain a near-touching ring that cannot be
+    // safely regularized at delivery precision. Keep its existing subdivision.
+    try {
+      regularizeTurkeySmartFallbackGeometry(clippingMultiPolygonToTerritoryGeometry(c.geometry)!);
+      return true;
+    } catch {
+      return false;
+    }
+  });
+  if (!eligible.some(Boolean)) return input;
+  const index = new Flatbush(parent.length);
+  for (const c of components) index.add(...c.bbox);
+  index.finish();
+  const parts = components.map(
+    () => [] as Array<{ owner: number; polygon: ClippingPolygon; area: number }>
+  );
+  const pieces = input.map((piece) => ({
+    ...piece,
+    geometry: [] as ClippingMultiPolygon,
+    areaKm2: 0
+  }));
+  for (const [owner, piece] of input.entries())
+    for (const polygon of piece.geometry) {
+      const geometry = clippingMultiPolygonToTerritoryGeometry([polygon]);
+      const point = geometry ? computeGeometryRepresentativePoint(geometry) : undefined;
+      const component = point
+        ? index
+            .search(point[0], point[1], point[0], point[1])
+            .sort((a, b) => a - b)
+            .find((i) => pointInClippingGeometry(point, components[i]!.geometry))
+        : undefined;
+      if (component !== undefined && eligible[component]) {
+        parts[component]!.push({ owner, polygon, area: clippingAreaKm2([polygon]) });
+      } else pieces[owner]!.geometry.push(polygon);
+    }
+  for (const piece of pieces) piece.areaKm2 = clippingAreaKm2(piece.geometry);
+  for (const [i, c] of components.entries()) {
+    const removed = parts[i]!;
+    if (!removed.length) continue;
+    const shares = new Map<number, number>();
+    for (const part of removed) shares.set(part.owner, (shares.get(part.owner) ?? 0) + part.area);
+    // If numerical membership was ambiguous, preserve the original partition.
+    if (
+      Math.abs(sum([...shares.values()]) - c.area) >
+      Math.max(AREA_TOLERANCE_KM2 * (removed.length + 1), c.area * 1e-6)
+    ) {
+      for (const part of removed) pieces[part.owner]!.geometry.push(part.polygon);
+      for (const owner of shares.keys())
+        pieces[owner]!.areaKm2 = clippingAreaKm2(pieces[owner]!.geometry);
+      continue;
+    }
+    const owners = [...pieces.keys()].sort(
+      (a, b) =>
+        (shares.get(b) ?? 0) - (shares.get(a) ?? 0) || pieces[a]!.key.localeCompare(pieces[b]!.key)
+    );
+    const owner = owners.find(
+      (owner) => pieces[owner]!.areaKm2 + c.area <= config.maxAreaKm2 + AREA_TOLERANCE_KM2
+    );
+    if (owner !== undefined) {
+      pieces[owner]!.geometry.push(c.polygon);
+      pieces[owner]!.areaKm2 = clippingAreaKm2(pieces[owner]!.geometry);
+    } else if (pieces.length < config.maxTerritories) {
+      pieces.push({
+        geometry: c.geometry,
+        key: `organic-whole-component:${i}`,
+        areaKm2: c.area,
+        barrierIds: [],
+        syntheticSplitCount: 0
+      });
+    } else {
+      for (const part of removed) pieces[part.owner]!.geometry.push(part.polygon);
+      for (const owner of shares.keys())
+        pieces[owner]!.areaKm2 = clippingAreaKm2(pieces[owner]!.geometry);
+    }
+  }
+  return pieces.filter((piece) => isNonEmptyClippingGeometry(piece.geometry));
 }
 
 export async function buildTurkeySmartFallbackWithAdjacency(

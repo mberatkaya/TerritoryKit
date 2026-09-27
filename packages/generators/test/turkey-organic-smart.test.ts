@@ -39,6 +39,91 @@ const input = {
 };
 
 describe("organic smart production fallback", () => {
+  it("keeps small disconnected geographic components whole without invented shared seams", async () => {
+    const geometry: TerritoryGeometry = {
+      type: "MultiPolygon",
+      coordinates: [
+        [
+          [
+            [29, 40],
+            [29.01, 40],
+            [29.01, 40.01],
+            [29, 40.01],
+            [29, 40]
+          ]
+        ],
+        [
+          [
+            [29.02, 40],
+            [29.03, 40],
+            [29.03, 40.01],
+            [29.02, 40.01],
+            [29.02, 40]
+          ]
+        ]
+      ]
+    };
+    const result = await buildTurkeyOrganicSmartFallbackWithAdjacency({
+      ...input,
+      parent: { ...parent, geometry, bbox: computeGeometryBBox(geometry) },
+      localitySeeds: [
+        { name: "A", coordinate: [29.003, 40.003] },
+        { name: "B", coordinate: [29.027, 40.007] }
+      ],
+      roads: {
+        type: "FeatureCollection",
+        features: [
+          {
+            type: "Feature",
+            properties: { highway: "primary" },
+            geometry: {
+              type: "LineString",
+              coordinates: [
+                [29, 40.005],
+                [29.03, 40.005]
+              ]
+            }
+          }
+        ]
+      },
+      options: { targetAreaKm2: 0.2, minAreaKm2: 0.01, maxAreaKm2: 1.1, minFragmentAreaKm2: 0.001 }
+    });
+    expect(result.quality.ok).toBe(true);
+    expect(result.zones).toHaveLength(2);
+    expect(result.quality.longUnsupportedStraightBoundaryRatio).toBe(0);
+    expect(result.quality.overlapAreaKm2).toBe(0);
+    expect(result.quality.spillAreaKm2).toBe(0);
+    for (const zone of result.zones) {
+      expect(zone.geometry.type).toBe("Polygon");
+      if (zone.geometry.type === "Polygon") expect(zone.geometry.coordinates[0]).toHaveLength(5);
+    }
+  });
+  it("keeps a small single missing region whole and explicitly estimated", async () => {
+    const result = await buildTurkeyOrganicSmartFallbackWithAdjacency({
+      ...input,
+      parent: createSquareZone({
+        id: "small-gap",
+        datasetId: "organic-test",
+        level: 2,
+        west: 29,
+        south: 40,
+        east: 29.01,
+        north: 40.01
+      }),
+      localitySeeds: [],
+      options: { targetAreaKm2: 2, minAreaKm2: 0.01, maxAreaKm2: 2.1, minFragmentAreaKm2: 0.001 }
+    });
+    expect(result.quality.ok).toBe(true);
+    expect(result.zones).toHaveLength(1);
+    expect(result.quality.longUnsupportedStraightBoundaryRatio).toBe(0);
+    expect(result.zones[0]!.properties.territory).toMatchObject({
+      administrative: false,
+      authoritative: false,
+      boundaryKind: "estimated",
+      confidence: "low",
+      gameplayOnly: true
+    });
+  });
   it("rejects mathematically insufficient standard capacity before splitting", () => {
     const result = buildTurkeySmartFallback({
       ...input,

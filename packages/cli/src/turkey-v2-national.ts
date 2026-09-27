@@ -265,7 +265,8 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
   sourceLock.generated.generatorConfigHash = stableHash({
     organicAlgorithm: "organic-locality-v1",
     organicNetworkRefinementDepth: 3,
-    organicBarrierRouting: "shared-junction-and-corridor-graph-v4",
+    organicBarrierRouting: "shared-junction-and-corridor-graph-v8",
+    organicParentComponents: "whole-when-area-allows-majority-coarse-ownership-no-ruler-regression",
     organicCoarseTargetCounts: { roadDensityBelow3: 16, other: 32, realismRetries: [16, 8] },
     organicRoutingCorridorMeters: [400, 2000, 5000],
     organicRoutingMaximumChordShare: 0.4,
