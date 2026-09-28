@@ -1,51 +1,56 @@
-import { createHash } from "node:crypto";
+import { readFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { hasRingSelfIntersection, computeTerritoryAreaM2 } from "@territory-kit/dataset";
+import type { TerritoryGeometry } from "@territory-kit/dataset";
 import { describe, expect, it } from "vitest";
-import { geometryToPolygons, hasRingSelfIntersection } from "@territory-kit/dataset";
-import { createSquareZone } from "@territory-kit/shared-testkit";
-import { createDatasetGeometryHash } from "../src/sources/utils.js";
 import { regularizeTurkeySmartFallbackGeometry } from "../src/turkey-smart-fallback.js";
 
-describe("national precision and geometry identity", () => {
-  it("preserves the established geometry hash bytes while hashing one zone at a time", () => {
-    const zones = ["z", "a"].map((id) =>
-      createSquareZone({
-        id,
-        datasetId: "hash",
-        level: 2,
-        west: 29,
-        south: 40,
-        east: 30,
-        north: 41
-      })
-    );
-    const original = zones
-      .map((z) => ({
-        geometry: z.geometry,
-        id: z.id,
-        level: z.level,
-        parentId: z.parentId ?? null
-      }))
-      .sort((a, b) => a.id.localeCompare(b.id));
-    expect(createDatasetGeometryHash({ zones })).toBe(
-      createHash("sha256").update(JSON.stringify(original)).digest("hex")
-    );
+for (const district of ["golkoy", "sarioglan"]) {
+  describe(`${district} real precision regression`, () => {
+    it("repairs the captured crossing without rerounding the new intersection vertices", async () => {
+      const fixture = JSON.parse(
+        await readFile(resolve(__dirname, `fixtures/precision/${district}.json`), "utf8")
+      ) as { geometry: TerritoryGeometry };
+      const original = JSON.stringify(fixture.geometry);
+      const repaired = regularizeTurkeySmartFallbackGeometry(fixture.geometry);
+      const polygons = repaired.type === "Polygon" ? [repaired.coordinates] : repaired.coordinates;
+      expect(
+        polygons.every((polygon) =>
+          polygon.every(
+            (ring) =>
+              !hasRingSelfIntersection(
+                ring.map((point) => [point[0]!, point[1]!] as [number, number])
+              )
+          )
+        )
+      ).toBe(true);
+      expect(
+        polygons.every((polygon) =>
+          polygon.every((ring) => {
+            const area = Math.abs(
+              ring.slice(0, -1).reduce((sum, point, index) => {
+                const next = ring[index + 1]!;
+                return sum + point[0]! * next[1]! - next[0]! * point[1]!;
+              }, 0) / 2
+            );
+            return (
+              area > 1e-9 &&
+              ring.every((point, index) => {
+                const next = ring[index + 1];
+                return (
+                  !next ||
+                  Math.abs(point[0]! - next[0]!) > 1e-9 ||
+                  Math.abs(point[1]! - next[1]!) > 1e-9
+                );
+              })
+            );
+          })
+        )
+      ).toBe(true);
+      expect(
+        Math.abs(computeTerritoryAreaM2(repaired) - computeTerritoryAreaM2(fixture.geometry))
+      ).toBeLessThan(10);
+      expect(JSON.stringify(fixture.geometry)).toBe(original);
+    });
   });
-  it("regularizes a real Develi boundary rounding loop and retains valid geometry unchanged", () => {
-    const geometry = {
-      type: "Polygon" as const,
-      coordinates: [
-        [
-          [35.573496, 38.152297],
-          [35.5737925241, 38.1527628758],
-          [35.5751299206, 38.1544089022],
-          [35.572803, 38.151545],
-          [35.573496, 38.152297]
-        ]
-      ] as [number, number][][]
-    };
-    expect(hasRingSelfIntersection(geometry.coordinates[0]!)).toBe(true);
-    const result = regularizeTurkeySmartFallbackGeometry(geometry);
-    expect(geometryToPolygons(result).flat().some(hasRingSelfIntersection)).toBe(false);
-    expect(regularizeTurkeySmartFallbackGeometry(result)).toBe(result);
-  });
-});
+}

@@ -29,7 +29,7 @@ import { computeGeometryRepresentativePoint } from "./geometry-repair.js";
 import { createTurkeyV2Adm3TerritoryId } from "./turkey-adm3-ingestion.js";
 import { isRecord, serializeJsonStable, sha256Hex } from "./sources/utils.js";
 
-export const TURKEY_SMART_FALLBACK_ALGORITHM_VERSION = "smart-derived-v1.2" as const;
+export const TURKEY_SMART_FALLBACK_ALGORITHM_VERSION = "smart-derived-v1.3" as const;
 export const TURKEY_SMART_FALLBACK_CONFIGURATION_SCHEMA_VERSION =
   "territorykit-tr-smart-fallback-config@1" as const;
 export const TURKEY_SMART_FALLBACK_MANIFEST_SCHEMA_VERSION =
@@ -310,6 +310,13 @@ export interface TurkeySmartFallbackQualityReport {
   axisAlignedInternalBoundaryRatio: number;
   longUnsupportedStraightBoundaryRatio: number;
   barrierFollowingInternalBoundaryRatio: number;
+  precisionRecovery: { zoneId: string; path: "exact-self-union" }[];
+  availableBarrierOpportunityRatio: number;
+  barrierRoutingUtilization: number;
+  longestUnsupportedStraightChainMeters: number;
+  unsupportedStraightChainCountAbove100m: number;
+  unsupportedStraightChainCountAbove250m: number;
+  unsupportedStraightChainCountAbove500m: number;
   seedCoverage: number;
   meanQualityScore: number;
   minQualityScore: number;
@@ -443,6 +450,7 @@ interface BuildStats {
 }
 
 interface ZoneCandidate {
+  precisionRecovered: boolean;
   geometry: TerritoryGeometry;
   key: string;
   localKey: string;
@@ -1359,12 +1367,13 @@ export async function buildTurkeyOrganicSmartFallbackWithAdjacency(
   // urban network. Try coarser ownership when ruler rejection persists, retaining
   // all area, topology, routing and realism thresholds on every attempt.
   if (!result.quality.gates.geographicRealism) {
-    for (const count of [16, 8].filter((count) => count < initialCount)) {
+    for (const count of [16, 8, 4, 2].filter((count) => count < initialCount)) {
       const retry = await buildTurkeySmartFallbackWithAdjacency({
         ...organicInput,
         options: {
           ...organicInput.options,
-          targetAreaKm2: Math.max(standard.targetAreaKm2, standard.targetGeometryAreaKm2 / count)
+          targetAreaKm2: Math.max(standard.targetAreaKm2, standard.targetGeometryAreaKm2 / count),
+          maxAreaKm2: Math.max(standard.maxAreaKm2, standard.targetGeometryAreaKm2 / count)
         }
       });
       if (retry.quality.ok) return retry;
@@ -2129,17 +2138,62 @@ function mergeSmallPieces(
   return pieces;
 }
 
-/** Regularize only output affected by precision snapping; validation gates rerun. */
+/** Self-union repairs snapped micro-loops. Never round its new intersection
+ * vertices again: doing so can recreate the very crossing that union removed.
+ * Only generated working geometry reaches this function. */
 export function regularizeTurkeySmartFallbackGeometry(
   geometry: TerritoryGeometry
 ): TerritoryGeometry {
   const hasCrossing = (value: TerritoryGeometry) =>
     geometryToPolygons(value).some((polygon) => polygon.some(hasRingSelfIntersection));
   if (!hasCrossing(geometry)) return geometry;
-  const repaired = clippingMultiPolygonToTerritoryGeometry(
-    CLIPPER.union(geometryToPolygons(geometry) as ClippingMultiPolygon)
+  const unioned = CLIPPER.union(geometryToPolygons(geometry) as ClippingMultiPolygon);
+  // Polygon clipping may emit a sub-validator-area triangle beside an exact
+  // intersection. Deduplicate only those near-identical generated vertices and
+  // drop zero-area rings; the bounded area check below catches any real loss.
+  const cleanRing = (ring: readonly LngLat[]): LngLat[] => {
+    const points: LngLat[] = [];
+    for (const point of ring.slice(0, -1)) {
+      const last = points[points.length - 1];
+      if (!last || Math.abs(last[0] - point[0]) > 1e-9 || Math.abs(last[1] - point[1]) > 1e-9)
+        points.push([point[0], point[1]]);
+    }
+    if (
+      points.length > 1 &&
+      Math.abs(points[0]![0] - points.at(-1)![0]) <= 1e-9 &&
+      Math.abs(points[0]![1] - points.at(-1)![1]) <= 1e-9
+    )
+      points.pop();
+    if (points.length < 3) return [];
+    points.push([...points[0]!]);
+    return Math.abs(signedRingArea(points)) <= 1e-9 ? [] : points;
+  };
+  const polygons = unioned.flatMap((polygon): ClippingPolygon[] => {
+    const shell = cleanRing(polygon[0]! as LngLat[]);
+    if (!shell.length) return [];
+    return [
+      [
+        shell,
+        ...polygon
+          .slice(1)
+          .map((ring) => cleanRing(ring as LngLat[]))
+          .filter((ring) => ring.length > 0)
+      ]
+    ];
+  });
+  const repaired: TerritoryGeometry =
+    polygons.length === 1
+      ? { type: "Polygon", coordinates: polygons[0]! as LngLat[][] }
+      : { type: "MultiPolygon", coordinates: polygons as LngLat[][][] };
+  const areaChangeKm2 = Math.abs(
+    clippingAreaKm2(polygons) -
+      clippingAreaKm2(geometryToPolygons(geometry) as ClippingMultiPolygon)
   );
-  if (!repaired || hasCrossing(repaired))
+  const areaToleranceKm2 = Math.min(
+    0.00001,
+    clippingAreaKm2(geometryToPolygons(geometry) as ClippingMultiPolygon) * 0.00001
+  );
+  if (!polygons.length || hasCrossing(repaired) || areaChangeKm2 > areaToleranceKm2)
     throw new Error("SMART_FALLBACK_PRECISION_REGULARIZATION_FAILED");
   return repaired;
 }
@@ -2200,6 +2254,7 @@ function createZoneCandidates(input: {
       return [
         {
           geometry,
+          precisionRecovered: geometry !== rawGeometry,
           key: piece.key,
           localKey,
           geometryHash,
@@ -2478,10 +2533,12 @@ function inspectSmartFallbackQuality(input: {
     input.stats.barrierSplitCount > 0;
   const gates = {
     geographicRealism:
-      !input.configuration.organic ||
-      boundaryAlignment.longUnsupportedStraightBoundaryRatio <= 0.8 ||
-      (input.configuration.profileDecision.signals.roadDensityKmPerKm2 < 3 &&
-        boundaryAlignment.longUnsupportedStraightBoundaryRatio <= 0.95),
+      // The corridor router itself permits at most 40% connector length. The
+      // same budget bounds unsupported ruler chains in either Smart profile.
+      boundaryAlignment.longUnsupportedStraightBoundaryRatio <=
+        (input.configuration.organic ? 0.4 : 0.8) &&
+      boundaryAlignment.barrierFollowingInternalBoundaryRatio + 0.4 >=
+        boundaryAlignment.availableBarrierOpportunityRatio,
     gridLikeness: boundaryAlignment.axisAlignedInternalBoundaryRatio <= 0.15,
     geometryValid: invalidGeometryCount === 0,
     parentCoverage: coveragePercent >= input.configuration.minCoveragePercent,
@@ -2511,7 +2568,8 @@ function inspectSmartFallbackQuality(input: {
     qualityIssues.push({
       code: "SMART_FALLBACK_GEOGRAPHIC_REALISM_REJECTED",
       severity: "error",
-      message: "Organic output retains excessive long unsupported straight internal boundaries."
+      message:
+        "Smart output exceeds the routed connector budget or ignores available real corridors."
     });
   }
   if (!gates.gridLikeness) {
@@ -2705,6 +2763,20 @@ function inspectSmartFallbackQuality(input: {
     axisAlignedInternalBoundaryRatio: boundaryAlignment.axisAlignedInternalBoundaryRatio,
     longUnsupportedStraightBoundaryRatio: boundaryAlignment.longUnsupportedStraightBoundaryRatio,
     barrierFollowingInternalBoundaryRatio: boundaryAlignment.barrierFollowingInternalBoundaryRatio,
+    availableBarrierOpportunityRatio: boundaryAlignment.availableBarrierOpportunityRatio,
+    barrierRoutingUtilization: boundaryAlignment.barrierRoutingUtilization,
+    longestUnsupportedStraightChainMeters: boundaryAlignment.longestUnsupportedStraightChainMeters,
+    unsupportedStraightChainCountAbove100m:
+      boundaryAlignment.unsupportedStraightChainCountAbove100m,
+    unsupportedStraightChainCountAbove250m:
+      boundaryAlignment.unsupportedStraightChainCountAbove250m,
+    unsupportedStraightChainCountAbove500m:
+      boundaryAlignment.unsupportedStraightChainCountAbove500m,
+    precisionRecovery: input.candidates.flatMap((candidate, index) =>
+      candidate.precisionRecovered
+        ? [{ zoneId: input.zones[index]!.id, path: "exact-self-union" as const }]
+        : []
+    ),
     seedCoverage,
     meanQualityScore,
     minQualityScore: minMetric(qualityScores),
@@ -3111,6 +3183,12 @@ export function inspectTurkeySmartBoundaryAlignment(input: {
   axisAlignedInternalBoundaryRatio: number;
   longUnsupportedStraightBoundaryRatio: number;
   barrierFollowingInternalBoundaryRatio: number;
+  availableBarrierOpportunityRatio: number;
+  barrierRoutingUtilization: number;
+  longestUnsupportedStraightChainMeters: number;
+  unsupportedStraightChainCountAbove100m: number;
+  unsupportedStraightChainCountAbove250m: number;
+  unsupportedStraightChainCountAbove500m: number;
 } {
   const parent = clippingMultiPolygonToTerritoryGeometry(input.parentGeometry);
   const parentSegments = parent ? geometrySegments(parent) : [];
@@ -3128,6 +3206,17 @@ export function inspectTurkeySmartBoundaryAlignment(input: {
   let unsupportedAxisMeters = 0;
   let unsupportedStraightMeters = 0;
   let allBarrierAlignedMeters = 0;
+  let availableOpportunityMeters = 0;
+  let longestUnsupportedStraightChainMeters = 0;
+  let unsupportedStraightChainCountAbove100m = 0;
+  let unsupportedStraightChainCountAbove250m = 0;
+  let unsupportedStraightChainCountAbove500m = 0;
+  const corridorToleranceMeters =
+    input.configuration.profileDecision.signals.roadDensityKmPerKm2 >= 15
+      ? 400
+      : input.configuration.profileDecision.signals.roadDensityKmPerKm2 >= 3
+        ? 2_000
+        : 5_000;
 
   for (const zone of input.zones) {
     for (const segment of geometrySegments(zone.geometry)) {
@@ -3153,6 +3242,10 @@ export function inspectTurkeySmartBoundaryAlignment(input: {
         parallelSinTolerance: BARRIER_PARALLEL_SIN_TOLERANCE
       });
       barrierAlignedMeters += supportedMeters;
+      availableOpportunityMeters += segmentAlignedLengthMeters(segment, allRealSegments, {
+        toleranceMeters: Math.min(corridorToleranceMeters, lengthMeters * 0.4),
+        parallelSinTolerance: BARRIER_PARALLEL_SIN_TOLERANCE
+      });
       allBarrierAlignedMeters += segmentAlignedLengthMeters(segment, allRealSegments, {
         toleranceMeters: input.configuration.alignmentToleranceMeters,
         parallelSinTolerance: BARRIER_PARALLEL_SIN_TOLERANCE
@@ -3172,7 +3265,7 @@ export function inspectTurkeySmartBoundaryAlignment(input: {
     }
     for (const polygon of geometryToPolygons(zone.geometry))
       for (const ring of polygon) {
-        unsupportedStraightMeters += measureLongUnsupportedStraightBoundaryMeters(
+        const chainReport = inspectUnsupportedStraightChains(
           lineSegments(ring).map((segment) => {
             const meters = haversineKm(segment.a, segment.b) * 1000;
             const parent =
@@ -3192,6 +3285,14 @@ export function inspectTurkeySmartBoundaryAlignment(input: {
             };
           })
         );
+        unsupportedStraightMeters += chainReport.totalUnsupportedMeters;
+        longestUnsupportedStraightChainMeters = Math.max(
+          longestUnsupportedStraightChainMeters,
+          chainReport.longestMeters
+        );
+        unsupportedStraightChainCountAbove100m += chainReport.above100m;
+        unsupportedStraightChainCountAbove250m += chainReport.above250m;
+        unsupportedStraightChainCountAbove500m += chainReport.above500m;
       }
   }
 
@@ -3201,6 +3302,18 @@ export function inspectTurkeySmartBoundaryAlignment(input: {
     uniqueInternalBoundaryKm > 0 ? clamp01(uniqueBarrierAlignedKm / uniqueInternalBoundaryKm) : 0;
 
   return {
+    availableBarrierOpportunityRatio: roundMetric(
+      internalBoundaryMeters > 0 ? clamp01(availableOpportunityMeters / internalBoundaryMeters) : 0
+    ),
+    barrierRoutingUtilization: roundMetric(
+      availableOpportunityMeters > 0
+        ? allBarrierAlignedMeters / Math.max(availableOpportunityMeters, allBarrierAlignedMeters)
+        : 0
+    ),
+    longestUnsupportedStraightChainMeters: roundMetric(longestUnsupportedStraightChainMeters),
+    unsupportedStraightChainCountAbove100m,
+    unsupportedStraightChainCountAbove250m,
+    unsupportedStraightChainCountAbove500m,
     realBarrierRatio: roundMetric(ratio),
     syntheticBoundaryRatio: roundMetric(clamp01(1 - ratio)),
     totalInternalBoundaryLengthKm: roundMetric(uniqueInternalBoundaryKm),
@@ -3230,12 +3343,40 @@ export function measureLongUnsupportedStraightBoundaryMeters(
     parent: boolean;
   }[]
 ): number {
+  return inspectUnsupportedStraightChains(segments).totalUnsupportedMeters;
+}
+
+function inspectUnsupportedStraightChains(
+  segments: readonly {
+    a: LngLat;
+    b: LngLat;
+    meters: number;
+    supportedMeters: number;
+    parent: boolean;
+  }[]
+): {
+  totalUnsupportedMeters: number;
+  longestMeters: number;
+  above100m: number;
+  above250m: number;
+  above500m: number;
+} {
   let total = 0,
+    longestMeters = 0,
+    above100m = 0,
+    above250m = 0,
+    above500m = 0,
     chainLength = 0,
     unsupported = 0,
     heading: number | undefined;
   const flush = () => {
-    if (chainLength >= 100) total += unsupported;
+    if (chainLength >= 100 && unsupported > 0) {
+      total += unsupported;
+      longestMeters = Math.max(longestMeters, chainLength);
+      above100m++;
+      if (chainLength >= 250) above250m++;
+      if (chainLength >= 500) above500m++;
+    }
     chainLength = 0;
     unsupported = 0;
     heading = undefined;
@@ -3260,7 +3401,7 @@ export function measureLongUnsupportedStraightBoundaryMeters(
     unsupported += Math.max(0, segment.meters - segment.supportedMeters);
   }
   flush();
-  return total;
+  return { totalUnsupportedMeters: total, longestMeters, above100m, above250m, above500m };
 }
 
 type AlignmentSegment = { a: LngLat; b: LngLat };

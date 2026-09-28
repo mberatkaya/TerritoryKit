@@ -252,6 +252,12 @@ describe("Organic shared barrier routing", () => {
       });
     expect(inspect(cells(), [barrier([a, b])]).realBarrierRatio).toBeGreaterThan(0.99);
     expect(inspect(cells(), [barrier([a, b])]).longUnsupportedStraightBoundaryRatio).toBe(0);
+    expect(inspect(cells(), [barrier([a, b])]).availableBarrierOpportunityRatio).toBeGreaterThan(0);
+    expect(inspect(cells(), [barrier([a, b])]).barrierRoutingUtilization).toBeGreaterThan(0.99);
+    const unsupported = inspect(cells(), []);
+    expect(unsupported.longUnsupportedStraightBoundaryRatio).toBeGreaterThan(0.9);
+    expect(unsupported.longestUnsupportedStraightChainMeters).toBeGreaterThan(500);
+    expect(unsupported.unsupportedStraightChainCountAbove500m).toBeGreaterThan(0);
     const curve = barrier([a, [29.001, 40.005], [29.0005, 40.012], b]);
     const after = inspect(routeOrganicSharedBoundaries(cells(), [curve], 2), [curve]);
     expect(after.realBarrierRatio).toBeGreaterThan(0.99);

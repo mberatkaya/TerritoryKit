@@ -20,6 +20,88 @@ import {
 
 const ROOT = resolve(__dirname, "../../..");
 
+describe("Istanbul ADM2 source cohort", () => {
+  it("enumerates 39 unique canonical parents from the repository ADM2 dataset", async () => {
+    const source = JSON.parse(
+      await readFile(resolve(ROOT, "datasets/generated/countries/TR/dataset.json"), "utf8")
+    ) as { zones: TerritoryZone[] };
+    const province = source.zones.find((zone) => zone.level === 1 && zone.name === "İstanbul");
+    expect(province).toBeDefined();
+    const districts = source.zones.filter(
+      (zone) => zone.level === 2 && zone.parentId === province!.id
+    );
+    expect(districts).toHaveLength(39);
+    expect(new Set(districts.map((zone) => zone.id)).size).toBe(districts.length);
+    expect(districts.every((zone) => zone.parentId === province!.id)).toBe(true);
+    const report = JSON.parse(
+      await readFile(resolve(ROOT, "reports/baselines/sprint-6-istanbul-39.json"), "utf8")
+    ) as { results: { districtId: string }[] };
+    expect(report.results).toHaveLength(districts.length);
+    expect(report.results.map((row) => row.districtId).sort()).toEqual(
+      districts.map((zone) => zone.id).sort()
+    );
+  });
+});
+
+describe("approved source preservation", () => {
+  it("keeps approved zones when barrier artifact loading fails in a batch", async () => {
+    const district = districtZone("priority", rectangle(0, 0, 1, 1));
+    const official = realZone({
+      id: "approved-on-input-failure",
+      sourceClass: "official",
+      sourceNativeId: "approved-on-input-failure",
+      name: "Approved",
+      geometry: rectangle(0, 0, 0.4, 1)
+    });
+    const result = await buildTurkeyV2HybridBatch({
+      districts: [district],
+      sourcesByDistrict: { [district.id]: { officialZones: [official], osmZones: [] } },
+      loadGeneratedOptions: async () => {
+        throw new Error("fixture barrier failure");
+      },
+      continueOnError: true,
+      buildDate: "2026-09-28T00:00:00.000Z"
+    });
+    expect(result.districts).toHaveLength(1);
+    expect(result.districts[0]!.effective.official.map((zone) => zone.id)).toContain(official.id);
+    expect(result.districts[0]!.quality.gates.approvedSourcePreservation).toBe(true);
+    expect(result.districts[0]!.quality.ok).toBe(false);
+    expect(result.districts[0]!.issues.map((issue) => issue.code)).toContain(
+      "TR_V2_HYBRID_GENERATION_INPUT_FAILED"
+    );
+  });
+  it("retains official geometry and reports uncovered gap when Smart generation fails", async () => {
+    const district = districtZone("priority", rectangle(0, 0, 1, 1));
+    const official = realZone({
+      id: "approved-on-generation-failure",
+      sourceClass: "official",
+      sourceNativeId: "approved-on-generation-failure",
+      name: "Approved",
+      geometry: rectangle(0, 0, 0.4, 1)
+    });
+    const original = JSON.stringify(official.geometry);
+    const result = await buildTurkeyV2HybridDistrict({
+      district,
+      provinceCode: "01",
+      districtCode: "priority",
+      officialZones: [official],
+      generated: {
+        enabled: true,
+        strategy: "smart",
+        organicFallback: false,
+        smartFallback: {
+          options: { algorithmVersion: "invalid" as typeof TURKEY_SMART_FALLBACK_ALGORITHM_VERSION }
+        }
+      }
+    });
+    expect(result.effective.official.map((zone) => zone.id)).toContain(official.id);
+    expect(JSON.stringify(result.effective.official[0]!.geometry)).toBe(original);
+    expect(result.quality.gates.approvedSourcePreservation).toBe(true);
+    expect(result.coverage.finalCoveragePercent).toBeLessThan(99.99);
+    expect(result.quality.ok).toBe(false);
+  });
+});
+
 describe("Turkey V2 hybrid coverage pipeline", () => {
   it("preserves approved national provenance and takes its overlap before local official sources", async () => {
     const district = districtZone("priority", rectangle(0, 0, 1, 1));

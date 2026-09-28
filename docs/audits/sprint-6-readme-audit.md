@@ -54,3 +54,11 @@ The rc.2 acceptance status is explicit in all four updated READMEs: 949/973 acce
 failed, seven unavailable and 58 approved polygons omitted by two precision exceptions.
 The [calibration report](../../reports/baselines/sprint-6-geographic-calibration.json) records
 these blockers; the README audit does not assert that the candidate is publish-ready.
+
+## Final acceptance re-audit
+
+All 21 first-party READMEs were reviewed again for stale claims after the `rc.3` candidate.
+Four changed (root, CLI, generators, data-tr) to distinguish the historical `rc.2`
+figures from the new acceptance attempt; 17 remain accurate for their package/example
+scope. The root npm profile, core, CLI, and generators links remain direct. No npm
+package was published by this review.

@@ -229,7 +229,10 @@ describe("organic smart production fallback", () => {
     ).toBe(true);
   });
   it("rejects unsupported organic after standard rejects and never invokes production legacy", async () => {
-    expect(buildTurkeySmartFallback(input).quality.ok).toBe(false);
+    const standard = buildTurkeySmartFallback(input);
+    expect(standard.quality.ok).toBe(false);
+    expect(standard.quality.gates.geographicRealism).toBe(false);
+    expect(standard.reasonCodes).toContain("SMART_FALLBACK_GEOGRAPHIC_REALISM_REJECTED");
     const result = await buildTurkeyV2HybridDistrict({
       district: parent,
       provinceCode: "34",

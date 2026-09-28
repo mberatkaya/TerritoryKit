@@ -1756,6 +1756,9 @@ function createNationalQuality(input: {
       input.buildMode === "partial" ||
       (input.coverage.districtCount === input.coverage.successfulDistrictCount &&
         input.coverage.failedDistrictCount === 0),
+    approvedSourcePreservation: input.hybridBatch.districts.every(
+      (d) => d.quality.gates.approvedSourcePreservation === true
+    ),
     districtQuality: input.hybridBatch.districts.every((d) => d.quality.ok),
     requestedDistrictFailures: input.coverage.failedDistrictCount === 0,
     everyDistrictHasAdm3: input.coverage.districts.every((district) => district.zoneCount > 0),

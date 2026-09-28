@@ -285,3 +285,28 @@ actions after workflow verification.
 The current `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
 24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
 See [the complete calibration evidence](reports/baselines/sprint-6-geographic-calibration.json).
+
+## Sprint 6 final acceptance candidate
+
+`2.1.0-rc.3` uses `smart-derived-v1.3` for generated geometry. Approved official and verified
+OSM administrative polygons remain independent of generated-gap success; a generation exception
+retains accepted real-source zones and reports the uncovered gap. Exact self-union intersection
+coordinates repair the captured Gölköy and Sarıoğlan precision loops without rewriting approved
+source polygons. Source preservation is a publish-ready gate.
+
+Both Standard and Organic Smart now report geographic realism, nearby usable corridor
+opportunity, routing utilization, and unsupported straight-chain lengths. Organic output uses the router's existing 40% connector budget as a hard unsupported-straight
+ceiling. Standard output retains its established 0.8 ceiling while also comparing actual
+barrier use with local corridor opportunity. Generated zones remain estimated
+playable territory, never official mahalle records.
+
+The complete repository-source Istanbul cohort has 39 ADM2 districts. The source names Adalar
+“Prince Islands”; this is a naming mismatch, not an extra or missing district. The
+[Istanbul acceptance report](reports/baselines/sprint-6-istanbul-39.json) records each
+district's build and QA status. All 39 maps were reviewed: 11 pass, five pass with
+low-confidence limitations, and 23 fail (including four machine-accepted outputs with visible
+ruler seams). Istanbul blocks the full rc.3 national publish-ready run, so this candidate is
+**DO NOT MERGE**. See the [24-district retest](reports/baselines/sprint-6-final-recovery.json)
+(8 accepted, 16 rejected) and [national rc.3 status](reports/baselines/sprint-6-final-national.json).
+The bounded rc.3 five-district national smoke also fails the district quality and coverage gates.
+The historical rc.1 and rc.2 evidence above is retained separately.
