@@ -36,8 +36,21 @@ import type {
 } from "./turkey-game-zones.js";
 import {
   buildTurkeySmartFallbackWithAdjacency,
-  buildTurkeyOrganicSmartFallbackWithAdjacency
+  buildTurkeyOrganicSmartFallbackWithAdjacency,
+  buildTurkeyNetworkFirstSmartFallbackWithAdjacency,
+  resolveTurkeySmartFallbackConfiguration
 } from "./turkey-smart-fallback.js";
+
+function smartCandidateRank(result: TurkeySmartFallbackBuildResult): number {
+  const q = result.quality;
+  const districtScaleMeters = Math.max(1, Math.sqrt(q.parentAreaKm2) * 1000);
+  return (
+    Math.min(1, q.barrierFollowingInternalBoundaryRatio) * 3 -
+    q.meanSyntheticBoundaryRatio * 2 -
+    (q.longestUnsupportedStraightChainMeters / districtScaleMeters) * 3 +
+    q.meanQualityScore
+  );
+}
 import type {
   TurkeySmartFallbackBuildResult,
   TurkeySmartFallbackLocalitySeed,
@@ -278,7 +291,7 @@ export interface TurkeyV2HybridQualityReport {
 export interface TurkeyV2HybridSmartAttemptReport {
   attempted: true;
   accepted: boolean;
-  selectedFallback: "smart" | "organic-smart" | "legacy" | "none";
+  selectedFallback: "smart" | "organic-smart" | "network-first" | "legacy" | "none";
   status: TurkeySmartFallbackStatus;
   profile: TurkeySmartFallbackProfile;
   selectedProfile: string;
@@ -739,35 +752,84 @@ export async function buildTurkeyV2HybridDistrict(
             throw error;
           standardPrecisionFailure = error.message;
         }
-        if (
-          (!smartFallbackResult || !smartFallbackResult.quality.ok) &&
-          (generatedOptions.organicFallback ?? true)
-        ) {
-          issues.push({
-            code: "SMART_STANDARD_QUALITY_REJECTED",
-            severity: "warning",
-            message: "Standard Smart rejected; attempting organic low-confidence coverage.",
-            details: {
-              ...(smartFallbackResult
+        const comparedCandidates: Array<{
+          mode: "standard" | "organic" | "network-first";
+          result: TurkeySmartFallbackBuildResult;
+        }> = [];
+        const standardCandidate = smartFallbackResult;
+        if (smartFallbackResult)
+          comparedCandidates.push({ mode: "standard", result: smartFallbackResult });
+        const signals =
+          resolveTurkeySmartFallbackConfiguration(smartInput).configuration.profileDecision.signals;
+        if (signals.roadDensityKmPerKm2 >= 1 || signals.strongBarrierCount >= 20) {
+          try {
+            const networkResult =
+              await buildTurkeyNetworkFirstSmartFallbackWithAdjacency(smartInput);
+            comparedCandidates.push({ mode: "network-first", result: networkResult });
+            if (
+              networkResult.quality.ok &&
+              (!smartFallbackResult?.quality.ok ||
+                smartCandidateRank(networkResult) > smartCandidateRank(smartFallbackResult))
+            )
+              smartFallbackResult = networkResult;
+          } catch (error) {
+            issues.push({
+              code: "SMART_NETWORK_CANDIDATE_REJECTED",
+              severity: "warning",
+              message: "Network-first candidate could not be constructed.",
+              details: { reason: error instanceof Error ? error.message : String(error) }
+            });
+          }
+        }
+        if (generatedOptions.organicFallback ?? true) {
+          if (!standardCandidate?.quality.ok)
+            issues.push({
+              code: "SMART_STANDARD_QUALITY_REJECTED",
+              severity: "warning",
+              message: "Standard Smart rejected; comparing geographic alternatives.",
+              details: standardCandidate
                 ? {
-                    quality: smartFallbackResult.quality,
-                    reasonCodes: smartFallbackResult.reasonCodes
+                    quality: standardCandidate.quality,
+                    reasonCodes: standardCandidate.reasonCodes
                   }
-                : { reason: standardPrecisionFailure })
-            }
-          });
-          smartFallbackResult = await buildTurkeyOrganicSmartFallbackWithAdjacency(smartInput);
-          issues.push({
-            code: smartFallbackResult.quality.ok
-              ? "ORGANIC_SMART_ACCEPTED"
-              : "ORGANIC_SMART_REJECTED",
-            severity: smartFallbackResult.quality.ok ? "info" : "warning",
-            message: "Organic smart quality decision.",
-            details: { reasonCodes: smartFallbackResult.reasonCodes }
-          });
+                : { reason: standardPrecisionFailure }
+            });
+          try {
+            const organicResult = await buildTurkeyOrganicSmartFallbackWithAdjacency(smartInput);
+            comparedCandidates.push({ mode: "organic", result: organicResult });
+            issues.push({
+              code: organicResult.quality.ok ? "ORGANIC_SMART_ACCEPTED" : "ORGANIC_SMART_REJECTED",
+              severity: organicResult.quality.ok ? "info" : "warning",
+              message: "Organic smart candidate quality decision.",
+              details: { reasonCodes: organicResult.reasonCodes }
+            });
+            if (
+              organicResult.quality.ok &&
+              (!smartFallbackResult?.quality.ok ||
+                smartCandidateRank(organicResult) > smartCandidateRank(smartFallbackResult))
+            )
+              smartFallbackResult = organicResult;
+            else if (!smartFallbackResult?.quality.ok) smartFallbackResult = organicResult;
+          } catch (error) {
+            issues.push({
+              code: "ORGANIC_SMART_REJECTED",
+              severity: "warning",
+              message: "Organic smart candidate could not be constructed.",
+              details: { reason: error instanceof Error ? error.message : String(error) }
+            });
+          }
         }
 
         if (!smartFallbackResult) throw new Error(standardPrecisionFailure);
+        smartFallbackResult.candidateComparisons = comparedCandidates.map(({ mode, result }) => ({
+          mode,
+          accepted: result.quality.ok,
+          coveragePercent: result.quality.coveragePercent,
+          followingRatio: result.quality.barrierFollowingInternalBoundaryRatio,
+          syntheticRatio: result.quality.meanSyntheticBoundaryRatio,
+          longestUnsupportedMeters: result.quality.longestUnsupportedStraightChainMeters,
+          deterministicHash: result.deterministicHash
+        }));
 
         if (smartFallbackResult.quality.ok) {
           issues.push(...mapSmartFallbackIssues(smartFallbackResult.issues));
@@ -1188,9 +1250,11 @@ function createSmartAttemptReport(input: {
     attempted: true,
     accepted: result.quality.ok,
     selectedFallback: result.quality.ok
-      ? result.configuration.organic
-        ? "organic-smart"
-        : "smart"
+      ? result.configuration.networkFirst
+        ? "network-first"
+        : result.configuration.organic
+          ? "organic-smart"
+          : "smart"
       : input.generatedResult
         ? "legacy"
         : "none",
@@ -3294,7 +3358,11 @@ function migrationSourceTier(zone: TerritoryZone): string {
   const t = territoryMetadata(zone),
     algorithm = readString(t.algorithmVersion) ?? "";
   if (algorithm.startsWith("smart-derived"))
-    return t.smartFallbackMode === "organic" ? "organic-smart" : "standard-smart";
+    return t.smartFallbackMode === "network-first"
+      ? "network-first"
+      : t.smartFallbackMode === "organic"
+        ? "organic-smart"
+        : "standard-smart";
   if (algorithm.startsWith("tr-adm3-game-zone")) return "legacy-generated";
   return readString(t.boundarySourceClass) ?? readSourceClass(zone);
 }

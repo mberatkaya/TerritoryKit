@@ -75,16 +75,23 @@ for (const [index, district] of selectedDistricts.entries()) {
     verifiedOsmAdministrativePolygonCount: 0,
     algorithmVersion: TURKEY_SMART_FALLBACK_ALGORITHM_VERSION,
     sourceTier: result?.smartFallbackResult
-      ? result.smartFallbackResult.configuration.organic
-        ? "organic-smart"
-        : "standard-smart"
+      ? result.smartFallbackResult.configuration.networkFirst
+        ? "network-first"
+        : result.smartFallbackResult.configuration.organic
+          ? "organic-smart"
+          : "standard-smart"
       : result?.effective.official.length
         ? "official"
         : null,
     standardSmartZoneCount: result?.smartFallbackResult?.configuration?.organic
       ? 0
       : (result?.effective.generated.length ?? 0),
-    organicSmartZoneCount: result?.smartFallbackResult?.configuration?.organic
+    organicSmartZoneCount:
+      result?.smartFallbackResult?.configuration?.organic &&
+      !result?.smartFallbackResult?.configuration?.networkFirst
+        ? (result?.effective.generated.length ?? 0)
+        : 0,
+    networkFirstZoneCount: result?.smartFallbackResult?.configuration?.networkFirst
       ? (result?.effective.generated.length ?? 0)
       : 0,
     zoneCount: result?.effective.zones.length ?? 0,
@@ -108,6 +115,19 @@ for (const [index, district] of selectedDistricts.entries()) {
     axisAlignedInternalBoundaryRatio: quality?.axisAlignedInternalBoundaryRatio ?? null,
     longUnsupportedStraightBoundaryRatio: quality?.longUnsupportedStraightBoundaryRatio ?? null,
     longestUnsupportedStraightChainMeters: quality?.longestUnsupportedStraightChainMeters ?? null,
+    longestUnsupportedStraightNormalized: quality
+      ? quality.longestUnsupportedStraightNormalized
+      : null,
+    networkFaceCountRaw: quality?.networkFaceCountRaw ?? null,
+    networkFaceCountAfterFiltering: quality?.networkFaceCountAfterFiltering ?? null,
+    networkFaceCoveragePercent: quality?.networkFaceCoveragePercent ?? null,
+    networkDerivedTerritoryCount: quality?.networkDerivedTerritoryCount ?? null,
+    networkBoundaryUsageRatio: quality?.networkBoundaryUsageRatio ?? null,
+    residualAreaPercent: quality?.residualAreaPercent ?? null,
+    residualOrganicTerritoryCount: quality?.residualOrganicTerritoryCount ?? null,
+    strongBarrierEdgeRetentionRatio: quality?.strongBarrierEdgeRetentionRatio ?? null,
+    weakBarrierMergeCount: quality?.weakBarrierMergeCount ?? null,
+    candidateComparisons: result?.smartFallbackResult?.candidateComparisons ?? [],
     meanQuality: quality?.meanQualityScore ?? null,
     confidence: result?.smartFallbackResult?.configuration?.organic ? "low" : "standard",
     reasonCodes: result?.issues.map((i) => i.code) ?? [],

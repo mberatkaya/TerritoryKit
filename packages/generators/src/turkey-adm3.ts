@@ -17,6 +17,7 @@ export {
   buildTurkeySmartFallback,
   buildTurkeySmartFallbackWithAdjacency,
   buildTurkeyOrganicSmartFallbackWithAdjacency,
+  buildTurkeyNetworkFirstSmartFallbackWithAdjacency,
   createTurkeySmartFallbackDataset,
   normalizeTurkeySmartFallbackBarriers,
   inspectTurkeySmartBoundaryAlignment,
