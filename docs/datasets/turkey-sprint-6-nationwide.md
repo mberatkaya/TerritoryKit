@@ -277,7 +277,7 @@ playable territory, never official mahalle records.
 
 The complete repository-source Istanbul cohort has 39 ADM2 districts. The source names Adalar
 “Prince Islands”; this is a naming mismatch, not an extra or missing district. The
-[Istanbul acceptance report](../../reports/baselines/sprint-6-istanbul-39.json) records each
+[rc.3 Istanbul acceptance report](../../reports/baselines/sprint-6-istanbul-39-rc3.json) records each
 district's build and QA status. All 39 maps were reviewed: 11 pass, five pass with
 low-confidence limitations, and 23 fail (including four machine-accepted outputs with visible
 ruler seams). Istanbul blocks the full rc.3 national publish-ready run, so this candidate is
@@ -285,3 +285,13 @@ ruler seams). Istanbul blocks the full rc.3 national publish-ready run, so this 
 (8 accepted, 16 rejected) and [national rc.3 status](../../reports/baselines/sprint-6-final-national.json).
 The bounded rc.3 five-district national smoke also fails the district quality and coverage gates.
 The historical rc.1 and rc.2 evidence above is retained separately.
+
+An [rc.4 Istanbul machine preflight](../../reports/baselines/sprint-6-istanbul-39.json)
+processed the same 39 ADM2 districts after adding bounded piecewise routing and a scale-aware
+longest-seam gate. It accepted 17 and rejected 22; Avcılar no longer throws during generation,
+but its Organic candidate fails geographic realism. Bayrampaşa selects a different Organic
+candidate, while Kartal, Sancaktepe, and Sultanbeyli are machine rejected. No rc.4 manual map
+review is recorded, so these machine results are not visual acceptance. The national rc.4
+build, migration, and MVT remain blocked by Istanbul. Two complete rc.4 runs matched all 39
+geometry hashes, tiers, zone counts, coverage values, and machine decisions. Wall times were
+244.062 s and 244.634 s; sampled peak in-process RSS was 1.65 GiB and 1.68 GiB.

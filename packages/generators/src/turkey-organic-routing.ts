@@ -70,8 +70,8 @@ export function routeOrganicSharedBoundaries<T extends Piece>(
       networkVertices.set(k, v);
     }
   const network = [...networkVertices.values()].filter((v) => v.degree >= 3 && v.strength >= 0.15);
-  if (network.length) {
-    const junctionIndex = new Flatbush(network.length);
+  const junctionIndex = network.length ? new Flatbush(network.length) : undefined;
+  if (junctionIndex) {
     for (const v of network) junctionIndex.add(v.p[0], v.p[1], v.p[0], v.p[1]);
     junctionIndex.finish();
     for (const [, v] of [...vertices].sort(([a], [b]) => a.localeCompare(b))) {
@@ -152,8 +152,21 @@ export function routeOrganicSharedBoundaries<T extends Piece>(
       )
       .sort((a, b) => a - b)
       .map((i) => segments[i]!);
+    const localJunctions = junctionIndex
+      ? junctionIndex
+          .search(
+            Math.min(a[0], b[0]) - dx,
+            Math.min(a[1], b[1]) - dy,
+            Math.max(a[0], b[0]) + dx,
+            Math.max(a[1], b[1]) + dy
+          )
+          .map((i) => network[i]!)
+      : [];
     const route =
       findOrganicBarrierRoute(a, b, candidates, corridor) ??
+      (chord >= 1_000
+        ? findPiecewiseBarrierRoute(a, b, candidates, localJunctions, corridor)
+        : undefined) ??
       findPartialBarrierRoute(a, b, candidates, corridor);
     if (!route || route.path.length < 3) continue;
     if (
@@ -184,6 +197,82 @@ export function routeOrganicSharedBoundaries<T extends Piece>(
       ].sort();
   }
   return pieces;
+}
+
+/** Break a long chord at nearby real network junctions. Each interval uses its
+ * own local graph search, so disconnected roads, water and rail can each guide
+ * a part of one shared boundary. Unrouted intervals stay measured as synthetic.
+ * The caller commits the complete path to both owners in one topology transaction. */
+function findPiecewiseBarrierRoute(
+  a: LngLat,
+  b: LngLat,
+  segments: readonly Segment[],
+  junctions: readonly { p: LngLat; strength: number; degree: number }[],
+  corridor: number
+) {
+  const cos = Math.cos((((a[1] + b[1]) / 2) * Math.PI) / 180),
+    chord = length(a, b, cos);
+  const vx = (b[0] - a[0]) * cos,
+    vy = b[1] - a[1],
+    vv = vx * vx + vy * vy;
+  if (vv <= 0) return;
+  const project = (p: LngLat) => ((p[0] - a[0]) * cos * vx + (p[1] - a[1]) * vy) / vv;
+  const point = (t: number): LngLat => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+  const anchors = junctions
+    .map((j) => ({ ...j, t: project(j.p) }))
+    .filter(
+      (j) =>
+        j.t > 250 / chord &&
+        j.t < 1 - 250 / chord &&
+        length(j.p, point(j.t), cos) <= Math.min(corridor * 0.5, 300)
+    )
+    .sort(
+      (x, y) =>
+        y.strength - x.strength ||
+        y.degree - x.degree ||
+        x.t - y.t ||
+        key(x.p).localeCompare(key(y.p))
+    );
+  const chosen: typeof anchors = [];
+  for (const anchor of anchors) {
+    if (chosen.length >= 7) break;
+    if (chosen.every((other) => Math.abs(anchor.t - other.t) * chord >= 250)) chosen.push(anchor);
+  }
+  if (!chosen.length) return;
+  const points = [a, ...chosen.sort((x, y) => x.t - y.t).map((j) => point(j.t)), b];
+  const path: LngLat[] = [a];
+  const ids = new Set<string>();
+  let supported = 0,
+    connector = 0,
+    routed = 0;
+  for (let i = 1; i < points.length; i++) {
+    const start = points[i - 1]!,
+      end = points[i]!,
+      span = length(start, end, cos);
+    const local = segments.filter(
+      (s) =>
+        Math.min(project(s.a), project(s.b)) <= project(end) + corridor / chord &&
+        Math.max(project(s.a), project(s.b)) >= project(start) - corridor / chord
+    );
+    const route = findOrganicBarrierRoute(start, end, local, Math.min(corridor, span * 0.4));
+    if (route) {
+      path.push(...route.path.slice(1));
+      route.barrierIds.forEach((id) => ids.add(id));
+      supported += route.supportedMeters;
+      connector += route.connectorMeters;
+      routed++;
+    } else {
+      path.push(end);
+      connector += span;
+    }
+  }
+  if (routed < 2 || supported < chord * 0.5 || connector > chord * 0.4) return;
+  return {
+    path,
+    barrierIds: [...ids].sort(),
+    supportedMeters: supported,
+    connectorMeters: connector
+  };
 }
 
 /** Disconnected real corridors can guide only the portions they actually span.

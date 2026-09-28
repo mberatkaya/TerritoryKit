@@ -22,12 +22,17 @@ const districts = source.zones
   .sort((a, b) => a.name.localeCompare(b.name, "tr"));
 if (districts.length !== 39 || new Set(districts.map((z) => z.id)).size !== districts.length)
   throw Error(`Unexpected Istanbul canonical cohort: ${districts.length}`);
-const root = ".territory/sprint-6/final/istanbul-qa";
+const root = process.env.ISTANBUL_QA_ARTIFACT_ROOT ?? ".territory/sprint-6/final/istanbul-qa";
+const reportPath = process.env.ISTANBUL_QA_REPORT ?? "reports/baselines/sprint-6-istanbul-39.json";
+const selectedDistricts = process.env.ISTANBUL_QA_DISTRICT
+  ? districts.filter((district) => district.name === process.env.ISTANBUL_QA_DISTRICT)
+  : districts;
+if (!selectedDistricts.length) throw Error("Requested Istanbul district is not canonical ADM2");
 await fs.mkdir(root, { recursive: true });
 const results = [];
 const started = performance.now();
 let peakRssBytes = process.memoryUsage().rss;
-for (const [index, district] of districts.entries()) {
+for (const [index, district] of selectedDistricts.entries()) {
   const slug = district.name
     .toLocaleLowerCase("tr")
     .normalize("NFD")
@@ -111,6 +116,9 @@ for (const [index, district] of districts.entries()) {
     qualityAccepted: result?.quality.ok ?? false,
     approvedSourcePreservation: result?.quality.gates.approvedSourcePreservation ?? false,
     error: error ?? null,
+    generationFailureReason:
+      result?.issues.find((issue) => issue.code === "TR_V2_HYBRID_GENERATION_FAILED")?.details
+        ?.reason ?? null,
     durationMs,
     visualQA: "NOT REVIEWED"
   };
@@ -132,7 +140,7 @@ for (const [index, district] of districts.entries()) {
     await fs.writeFile(path.join(root, `${slug}-map.json`), JSON.stringify(map));
   }
   console.log(
-    `${index + 1}/39 ${district.name}: ${result?.quality.ok ? "PASS" : "FAIL"} ${durationMs}ms`
+    `${index + 1}/${selectedDistricts.length} ${district.name}: ${result?.quality.ok ? "PASS" : "FAIL"} ${durationMs}ms`
   );
   await fs.writeFile(
     path.join(root, "progress.json"),
@@ -153,7 +161,4 @@ const report = {
   peakRssBytes,
   results
 };
-await fs.writeFile(
-  "reports/baselines/sprint-6-istanbul-39.json",
-  JSON.stringify(report, null, 2) + "\n"
-);
+await fs.writeFile(reportPath, JSON.stringify(report, null, 2) + "\n");

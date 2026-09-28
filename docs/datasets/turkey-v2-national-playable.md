@@ -265,7 +265,7 @@ playable territory, never official mahalle records.
 
 The complete repository-source Istanbul cohort has 39 ADM2 districts. The source names Adalar
 “Prince Islands”; this is a naming mismatch, not an extra or missing district. The
-[Istanbul acceptance report](../../reports/baselines/sprint-6-istanbul-39.json) records each
+[Istanbul acceptance report](../../reports/baselines/sprint-6-istanbul-39-rc3.json) records each
 district's build and QA status. All 39 maps were reviewed: 11 pass, five pass with
 low-confidence limitations, and 23 fail (including four machine-accepted outputs with visible
 ruler seams). Istanbul blocks the full rc.3 national publish-ready run, so this candidate is

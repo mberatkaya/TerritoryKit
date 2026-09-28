@@ -11,6 +11,7 @@ import { clipTurkeyOsmLinePathToGeometry } from "../src/turkey-osm-barriers.js";
 import { createSquareZone } from "@territory-kit/shared-testkit";
 import {
   inspectTurkeySmartBoundaryAlignment,
+  passesTurkeySmartGeographicRealism,
   resolveTurkeySmartFallbackConfiguration
 } from "../src/turkey-smart-fallback.js";
 
@@ -149,6 +150,22 @@ describe("Organic shared barrier routing", () => {
       300
     );
     expect(route?.barrierIds).toEqual(["real", "river"]);
+  });
+  it("routes two disconnected local corridors through real junction anchors", () => {
+    const j1: LngLat = [29, 40.007];
+    const j2: LngLat = [29, 40.013];
+    const barriers = [
+      barrier([a, [29.0006, 40.003], j1], "road", "south-road"),
+      barrier([j1, [28.9998, 40.0075]], "road", "south-branch"),
+      barrier([j2, [29.0007, 40.017], b], "water", "north-water"),
+      barrier([j2, [28.9998, 40.0135]], "road", "north-branch")
+    ];
+    const routed = routeOrganicSharedBoundaries(cells(), barriers, 2);
+    expect(routed[0]!.geometry[0]![0]).toContainEqual([29.0006, 40.003]);
+    expect(routed[0]!.geometry[0]![0]).toContainEqual([29.0007, 40.017]);
+    expect(routed[0]!.barrierIds).toContain("south-road");
+    expect(routed[0]!.barrierIds).toContain("north-water");
+    expect(routed[1]!.geometry[0]![0]).toContainEqual([29.0007, 40.017]);
   });
   it("does not invent a connection at a bridge crossing", () => {
     const mid: LngLat = [29.001, 40.01];
@@ -304,6 +321,31 @@ describe("Organic shared barrier routing", () => {
   });
 });
 describe("unsupported straight chain metric", () => {
+  it("rejects one dominant missed corridor while allowing sparse geography", () => {
+    const metrics = {
+      longUnsupportedStraightBoundaryRatio: 0.36,
+      longestUnsupportedStraightChainMeters: 2_400,
+      availableBarrierOpportunityRatio: 0.9,
+      barrierRoutingUtilization: 0.65,
+      barrierFollowingInternalBoundaryRatio: 0.6
+    };
+    expect(passesTurkeySmartGeographicRealism(metrics, 60)).toBe(false);
+    expect(
+      passesTurkeySmartGeographicRealism(
+        { ...metrics, longUnsupportedStraightBoundaryRatio: 0.349 },
+        60
+      )
+    ).toBe(false);
+    expect(
+      passesTurkeySmartGeographicRealism({ ...metrics, availableBarrierOpportunityRatio: 0.2 }, 60)
+    ).toBe(true);
+    expect(
+      passesTurkeySmartGeographicRealism(
+        { ...metrics, longestUnsupportedStraightChainMeters: 800 },
+        60
+      )
+    ).toBe(true);
+  });
   const chain = (angle: number, support = 0) =>
     Array.from({ length: 10 }, (_, i) => ({
       a: [i * 0.0003 * Math.cos(angle), i * 0.0003 * Math.sin(angle)] as LngLat,

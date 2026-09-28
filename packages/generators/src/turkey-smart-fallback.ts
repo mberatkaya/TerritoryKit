@@ -29,7 +29,7 @@ import { computeGeometryRepresentativePoint } from "./geometry-repair.js";
 import { createTurkeyV2Adm3TerritoryId } from "./turkey-adm3-ingestion.js";
 import { isRecord, serializeJsonStable, sha256Hex } from "./sources/utils.js";
 
-export const TURKEY_SMART_FALLBACK_ALGORITHM_VERSION = "smart-derived-v1.3" as const;
+export const TURKEY_SMART_FALLBACK_ALGORITHM_VERSION = "smart-derived-v1.4" as const;
 export const TURKEY_SMART_FALLBACK_CONFIGURATION_SCHEMA_VERSION =
   "territorykit-tr-smart-fallback-config@1" as const;
 export const TURKEY_SMART_FALLBACK_MANIFEST_SCHEMA_VERSION =
@@ -2532,13 +2532,7 @@ function inspectSmartFallbackQuality(input: {
     !input.configuration.requireBarrierForMultiTerritory ||
     input.stats.barrierSplitCount > 0;
   const gates = {
-    geographicRealism:
-      // The corridor router itself permits at most 40% connector length. The
-      // same budget bounds unsupported ruler chains in either Smart profile.
-      boundaryAlignment.longUnsupportedStraightBoundaryRatio <=
-        (input.configuration.organic ? 0.4 : 0.8) &&
-      boundaryAlignment.barrierFollowingInternalBoundaryRatio + 0.4 >=
-        boundaryAlignment.availableBarrierOpportunityRatio,
+    geographicRealism: passesTurkeySmartGeographicRealism(boundaryAlignment, parentAreaKm2),
     gridLikeness: boundaryAlignment.axisAlignedInternalBoundaryRatio <= 0.15,
     geometryValid: invalidGeometryCount === 0,
     parentCoverage: coveragePercent >= input.configuration.minCoveragePercent,
@@ -3167,6 +3161,34 @@ function computeBarrierAlignment(
   }
 
   return roundMetric(clamp01(alignedKm / totalKm));
+}
+
+export function passesTurkeySmartGeographicRealism(
+  metrics: {
+    longUnsupportedStraightBoundaryRatio: number;
+    longestUnsupportedStraightChainMeters: number;
+    availableBarrierOpportunityRatio: number;
+    barrierRoutingUtilization: number;
+    barrierFollowingInternalBoundaryRatio: number;
+  },
+  parentAreaKm2: number
+): boolean {
+  const relativeChainLimitMeters = Math.min(
+    2_000,
+    Math.max(1_250, Math.sqrt(Math.max(0, parentAreaKm2)) * 250)
+  );
+  const missedAvailableCorridors =
+    metrics.availableBarrierOpportunityRatio >= 0.75 &&
+    metrics.barrierRoutingUtilization < 0.8 &&
+    ((metrics.longUnsupportedStraightBoundaryRatio >= 0.35 &&
+      metrics.longestUnsupportedStraightChainMeters > relativeChainLimitMeters) ||
+      metrics.longestUnsupportedStraightChainMeters > relativeChainLimitMeters * 1.15);
+  return (
+    metrics.longUnsupportedStraightBoundaryRatio <= 0.4 &&
+    metrics.barrierFollowingInternalBoundaryRatio + 0.4 >=
+      metrics.availableBarrierOpportunityRatio &&
+    !missedAvailableCorridors
+  );
 }
 
 export function inspectTurkeySmartBoundaryAlignment(input: {

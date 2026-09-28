@@ -725,15 +725,35 @@ export async function buildTurkeyV2HybridDistrict(
             : {}),
           options: createSmartFallbackOptions(generatedOptions)
         };
-        smartFallbackResult = await buildTurkeySmartFallbackWithAdjacency(smartInput);
-        if (!smartFallbackResult.quality.ok && (generatedOptions.organicFallback ?? true)) {
+        let standardPrecisionFailure: string | undefined;
+        try {
+          smartFallbackResult = await buildTurkeySmartFallbackWithAdjacency(smartInput);
+        } catch (error) {
+          // A precision failure in one Standard partition must not prevent the
+          // independent Organic partition from being attempted. Other errors
+          // still propagate to the district's explicit generation failure.
+          if (
+            !(error instanceof Error) ||
+            error.message !== "SMART_FALLBACK_PRECISION_REGULARIZATION_FAILED"
+          )
+            throw error;
+          standardPrecisionFailure = error.message;
+        }
+        if (
+          (!smartFallbackResult || !smartFallbackResult.quality.ok) &&
+          (generatedOptions.organicFallback ?? true)
+        ) {
           issues.push({
             code: "SMART_STANDARD_QUALITY_REJECTED",
             severity: "warning",
             message: "Standard Smart rejected; attempting organic low-confidence coverage.",
             details: {
-              quality: smartFallbackResult.quality,
-              reasonCodes: smartFallbackResult.reasonCodes
+              ...(smartFallbackResult
+                ? {
+                    quality: smartFallbackResult.quality,
+                    reasonCodes: smartFallbackResult.reasonCodes
+                  }
+                : { reason: standardPrecisionFailure })
             }
           });
           smartFallbackResult = await buildTurkeyOrganicSmartFallbackWithAdjacency(smartInput);
@@ -746,6 +766,8 @@ export async function buildTurkeyV2HybridDistrict(
             details: { reasonCodes: smartFallbackResult.reasonCodes }
           });
         }
+
+        if (!smartFallbackResult) throw new Error(standardPrecisionFailure);
 
         if (smartFallbackResult.quality.ok) {
           issues.push(...mapSmartFallbackIssues(smartFallbackResult.issues));

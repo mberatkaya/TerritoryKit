@@ -1,17 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-const root = ".territory/sprint-6/final/istanbul-qa";
-const old = JSON.parse(
-  await fs.readFile(".territory/sprint-6/calibration/candidate/levels/ADM3/dataset.json", "utf8")
-);
-const byParent = new Map();
-for (const z of old.zones ?? []) {
-  const parentId = z.parentId ?? z.properties?.territory?.parentId;
-  if (!parentId) continue;
-  const a = byParent.get(parentId) ?? [];
-  a.push(z.geometry);
-  byParent.set(parentId, a);
-}
+const root = process.env.ISTANBUL_QA_ARTIFACT_ROOT ?? ".territory/sprint-6/final/istanbul-qa";
+const previousRoot = ".territory/sprint-6/final/istanbul-qa";
 const files = (await fs.readdir(root)).filter((f) => f.endsWith("-map.json")).sort();
 const esc = (s) =>
   String(s).replace(
@@ -34,6 +24,7 @@ function lines(g) {
 }
 for (const file of files) {
   const m = JSON.parse(await fs.readFile(path.join(root, file), "utf8"));
+  const previous = JSON.parse(await fs.readFile(path.join(previousRoot, file), "utf8"));
   const districtId = JSON.parse(
     await fs.readFile(path.join(root, file.replace("-map.json", ".json")), "utf8")
   ).districtId;
@@ -95,8 +86,8 @@ for (const file of files) {
       .join("") ?? "";
   let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1140" height="620" viewBox="0 0 1140 620"><rect width="1140" height="620" fill="#f7f9f7"/><text x="20" y="29" font-family="sans-serif" font-size="19" font-weight="bold">${esc(m.district)} — Istanbul Sprint 6 QA</text>`;
   for (const [x, title, zones] of [
-    [0, "Before rc.2", byParent.get(districtId) ?? []],
-    [570, "Current candidate", m.zones]
+    [0, "Before rc.3", previous.zones],
+    [570, "Current rc.4 candidate", m.zones]
   ]) {
     svg += `<rect x="${x + 10}" y="40" width="550" height="545" fill="white" stroke="#bdc8c5"/><text x="${x + 20}" y="61" font-family="sans-serif" font-size="14">${title} · ${zones.length} generated zones</text>`;
     svg += drawGeo([m.parent], x, "#1d3641", 2, "#e5f1e6");
@@ -128,6 +119,6 @@ for (const file of files) {
 const names = files.map((f) => f.replace("-map.json", ""));
 await fs.writeFile(
   path.join(root, "index.html"),
-  `<!doctype html><meta charset="utf-8"><title>Istanbul 39 QA</title><style>body{font:16px system-ui;background:#f5f7f6;color:#213}main{max-width:1160px;margin:auto}article{margin:30px 0;padding:12px;background:white}img{width:100%}</style><main><h1>Istanbul 39 district QA</h1><p>rc.2 before and current generated candidate, with real geographic context. Failed candidates may show accepted real sources only.</p>${names.map((n) => `<article><h2>${esc(n)}</h2><img src="${n}.svg"></article>`).join("")}</main>`
+  `<!doctype html><meta charset="utf-8"><title>Istanbul 39 QA</title><style>body{font:16px system-ui;background:#f5f7f6;color:#213}main{max-width:1160px;margin:auto}article{margin:30px 0;padding:12px;background:white}img{width:100%}</style><main><h1>Istanbul 39 district QA</h1><p>rc.3 reviewed baseline and current rc.4 machine candidate, with real geographic context. Rejected candidates show no accepted generated zones.</p>${names.map((n) => `<article><h2>${esc(n)}</h2><img src="${n}.svg"></article>`).join("")}</main>`
 );
 console.log(`Rendered ${files.length} maps`);

@@ -265,14 +265,15 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
   sourceLock.generated.generatorConfigHash = stableHash({
     organicAlgorithm: "organic-locality-v1",
     organicNetworkRefinementDepth: 3,
-    organicBarrierRouting: "shared-junction-and-corridor-graph-v8",
+    organicBarrierRouting: "shared-junction-and-piecewise-corridor-graph-v9",
     organicParentComponents: "whole-when-area-allows-majority-coarse-ownership-no-ruler-regression",
     organicCoarseTargetCounts: { roadDensityBelow3: 16, other: 32, realismRetries: [16, 8] },
     organicRoutingCorridorMeters: [400, 2000, 5000],
     organicRoutingMaximumChordShare: 0.4,
     organicStraightChainMinimumMeters: 100,
     organicStraightChainMaximumHeadingDegrees: 3,
-    organicRealismMaximumStraightRatio: { roadDensityBelow3: 0.95, other: 0.8 },
+    organicRealismMaximumStraightRatio: 0.4,
+    organicRealismLongestChainScale: "sqrt-parent-km2-times-250-clamped-1250-2000",
     organicGeographicRefinement:
       "real-network-and-existing-boundary-vertices-after-maximum-area-rejection",
     clippingRetryPrecisionDecimals: [12, 10, 9, 8],
