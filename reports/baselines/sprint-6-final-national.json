@@ -59,7 +59,8 @@
     "retained": 58,
     "missing": 0,
     "changed": 0,
-    "report": "reports/baselines/sprint-6-final-official-preservation.json"
+    "report": "reports/baselines/sprint-6-final-official-preservation.json",
+    "otherSourceAlignmentIssue": "Oğuzeli: three raw official candidate polygons lie outside the canonical ADM2 and were rejected at source acceptance. Accepted 89/89 are retained; manual source review remains required."
   },
   "historicalRejectedRc2": {
     "adm2Expected": 973,

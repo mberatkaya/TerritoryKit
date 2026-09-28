@@ -62,6 +62,11 @@ for (const before of baseline.failedDistrictInputSignals) {
       : null,
     officialInputCount: officialZones.length,
     officialRetainedCount: result?.effective.official.length ?? 0,
+    approvedEffectiveInputCount: result?.quality.summary.approvedInputZoneCount ?? 0,
+    preAcceptanceOfficialRejections:
+      result?.rejections.rejections
+        .filter((rejection) => rejection.sourceClass === "official")
+        .map((rejection) => ({ zoneId: rejection.zoneId, reason: rejection.reason })) ?? [],
     approvedSourcePreservation: result?.quality.gates.approvedSourcePreservation ?? false,
     coveragePercent: result?.coverage.finalCoveragePercent ?? null,
     zoneCount: result?.effective.zones.length ?? 0,

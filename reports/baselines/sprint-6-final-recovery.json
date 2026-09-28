@@ -41,7 +41,9 @@
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 9191
+      "durationMs": 9191,
+      "approvedEffectiveInputCount": 40,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Keles",
@@ -86,7 +88,9 @@
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 6752
+      "durationMs": 6752,
+      "approvedEffectiveInputCount": 42,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Yavuzeli",
@@ -123,7 +127,9 @@
         "SMART_STANDARD_QUALITY_REJECTED",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 2373
+      "durationMs": 2373,
+      "approvedEffectiveInputCount": 44,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "İznik",
@@ -165,7 +171,9 @@
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 16762
+      "durationMs": 16762,
+      "approvedEffectiveInputCount": 46,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Kestel",
@@ -208,7 +216,9 @@
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 3258
+      "durationMs": 3258,
+      "approvedEffectiveInputCount": 37,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Çelebi",
@@ -243,7 +253,9 @@
         "ORGANIC_SMART_REJECTED",
         "SMART_STANDARD_QUALITY_REJECTED"
       ],
-      "durationMs": 1413
+      "durationMs": 1413,
+      "approvedEffectiveInputCount": 0,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Kabataş",
@@ -293,7 +305,9 @@
         "SMART_STANDARD_QUALITY_REJECTED",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 10326
+      "durationMs": 10326,
+      "approvedEffectiveInputCount": 18,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Yenişehir",
@@ -349,7 +363,9 @@
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 6114
+      "durationMs": 6114,
+      "approvedEffectiveInputCount": 71,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Nizip",
@@ -396,7 +412,9 @@
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 12390
+      "durationMs": 12390,
+      "approvedEffectiveInputCount": 111,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Nilüfer",
@@ -450,7 +468,9 @@
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 47435
+      "durationMs": 47435,
+      "approvedEffectiveInputCount": 70,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Gemlik",
@@ -491,7 +511,9 @@
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 9250
+      "durationMs": 9250,
+      "approvedEffectiveInputCount": 36,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "İslahiye",
@@ -530,7 +552,9 @@
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 22111
+      "durationMs": 22111,
+      "approvedEffectiveInputCount": 71,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Beytüşşebap",
@@ -565,7 +589,9 @@
         "ORGANIC_SMART_REJECTED",
         "SMART_STANDARD_QUALITY_REJECTED"
       ],
-      "durationMs": 1469
+      "durationMs": 1469,
+      "approvedEffectiveInputCount": 0,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Yenifakılı",
@@ -600,7 +626,9 @@
         "ORGANIC_SMART_REJECTED",
         "SMART_STANDARD_QUALITY_REJECTED"
       ],
-      "durationMs": 549
+      "durationMs": 549,
+      "approvedEffectiveInputCount": 0,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Otlukbeli",
@@ -635,7 +663,9 @@
         "ORGANIC_SMART_REJECTED",
         "SMART_STANDARD_QUALITY_REJECTED"
       ],
-      "durationMs": 459
+      "durationMs": 459,
+      "approvedEffectiveInputCount": 0,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Yeşilhisar",
@@ -681,7 +711,9 @@
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 37920
+      "durationMs": 37920,
+      "approvedEffectiveInputCount": 35,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Şehitkamil",
@@ -728,7 +760,9 @@
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 36861
+      "durationMs": 36861,
+      "approvedEffectiveInputCount": 149,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Gölköy",
@@ -782,7 +816,9 @@
         "SMART_STANDARD_QUALITY_REJECTED",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 28536
+      "durationMs": 28536,
+      "approvedEffectiveInputCount": 30,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Çelikhan",
@@ -817,7 +853,9 @@
         "ORGANIC_SMART_REJECTED",
         "SMART_STANDARD_QUALITY_REJECTED"
       ],
-      "durationMs": 1542
+      "durationMs": 1542,
+      "approvedEffectiveInputCount": 0,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Mudanya",
@@ -868,7 +906,9 @@
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 28284
+      "durationMs": 28284,
+      "approvedEffectiveInputCount": 47,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Oğuzeli",
@@ -907,7 +947,22 @@
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 6204
+      "durationMs": 6204,
+      "approvedEffectiveInputCount": 89,
+      "preAcceptanceOfficialRejections": [
+        {
+          "zoneId": "tr:adm3:tr-il-27-adm2-54988432b72028378604273-30464",
+          "reason": "outside-parent"
+        },
+        {
+          "zoneId": "tr:adm3:tr-il-27-adm2-54988432b72028378604273-30465",
+          "reason": "outside-parent"
+        },
+        {
+          "zoneId": "tr:adm3:tr-il-27-adm2-54988432b72028378604273-30466",
+          "reason": "outside-parent"
+        }
+      ]
     },
     {
       "district": "Mesudiye",
@@ -957,7 +1012,9 @@
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 20301
+      "durationMs": 20301,
+      "approvedEffectiveInputCount": 70,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Sarıoğlan",
@@ -1019,7 +1076,9 @@
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 17315
+      "durationMs": 17315,
+      "approvedEffectiveInputCount": 28,
+      "preAcceptanceOfficialRejections": []
     },
     {
       "district": "Araban",
@@ -1064,7 +1123,10 @@
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP",
         "TR_V2_HYBRID_SOURCE_INTERNAL_OVERLAP"
       ],
-      "durationMs": 2697
+      "durationMs": 2697,
+      "approvedEffectiveInputCount": 49,
+      "preAcceptanceOfficialRejections": []
     }
-  ]
+  ],
+  "sourceAcceptanceNote": "Oğuzeli has 92 raw official candidates; 3 are fully outside the canonical ADM2 and are explicitly rejected for manual source review before accepted-source preservation is evaluated. All 89 accepted official zones remain. This is a source alignment issue, not a Smart-generation loss."
 }
