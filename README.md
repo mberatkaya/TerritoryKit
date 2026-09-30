@@ -1,5 +1,19 @@
 # TerritoryKit
 
+## Sprint 6 final candidate: `2.1.0-rc.7`
+
+The publish-ready local candidate uses `smart-derived-v1.7`. All 39 Istanbul districts and all
+973 national districts have usable ADM3 output, with zero hard rejects and zero production legacy
+grids. National renderable coverage is 99.999979%; approved official polygons cover 4.997459% of
+area, and generated Smart output covers the remaining 95.002520%. The final ADM3 artifact has
+3,343 official and 17,049 generated zones; no verified OSM administrative source was present in
+this source lock. District Smart confidence is high 306, medium 36, low 631. Low confidence means
+estimated, non-administrative geography with recorded limitations; it does not turn a boundary
+into an official mahalle record. The [final nationwide report](./reports/baselines/sprint-6-national-rc7.json),
+[Istanbul QA](./reports/baselines/sprint-6-istanbul-39-rc7.json), and
+[official preservation audit](./reports/baselines/sprint-6-official-preservation-rc7.json)
+record the measured evidence. The historical `2.0.0` artifact and npm packages remain unchanged.
+
 [npm Profile: mberat](https://www.npmjs.com/~mberat) ·
 [Core](https://www.npmjs.com/package/@territory-kit/core) ·
 [CLI](https://www.npmjs.com/package/@territory-kit/cli) ·
@@ -282,11 +296,11 @@ actions after workflow verification.
 - [Release readiness](./docs/release-readiness.md)
 - [Master sprint checklist](./docs/sprint-checklist.md)
 
-The current `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
+The historical `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
 24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
 See [the complete calibration evidence](reports/baselines/sprint-6-geographic-calibration.json).
 
-## Sprint 6 final acceptance candidate
+## Historical Sprint 6 rc.3 evaluation
 
 `2.1.0-rc.3` uses `smart-derived-v1.3` for generated geometry. Approved official and verified
 OSM administrative polygons remain independent of generated-gap success; a generation exception

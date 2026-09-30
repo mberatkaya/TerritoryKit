@@ -1,5 +1,15 @@
 # @territory-kit/generators
 
+## Sprint 6 final candidate
+
+`smart-derived-v1.7` separates hard geometry, source, topology, grid, and coverage gates
+from geographic quality. A bounded synthetic closure can be a usable low-confidence
+estimated boundary when real routes were attempted or absent and the partition remains
+non-grid and non-degenerate. The `2.1.0-rc.7` national run has 973/973 usable districts,
+0 hard rejects, and Smart confidence high 306, medium 36, low 631. Approved official and
+verified OSM administrative geometry retain priority over Smart. See the
+[final national evidence](../../reports/baselines/sprint-6-national-rc7.json).
+
 Deterministic dataset generation and adjacency helpers for tests, examples, benchmarks, and local tooling.
 
 ## Installation
@@ -220,11 +230,11 @@ length and long unsupported straight chains at every angle.
 
 Apache-2.0
 
-The current `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
+The historical `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
 24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
 See [the complete calibration evidence](../../reports/baselines/sprint-6-geographic-calibration.json).
 
-## Sprint 6 final acceptance work
+## Historical Sprint 6 rc.3 evaluation
 
 The `2.1.0-rc.2` figures above are the preserved calibration baseline. The separate
 `2.1.0-rc.3` candidate uses `smart-derived-v1.3`, retains accepted official/OSM

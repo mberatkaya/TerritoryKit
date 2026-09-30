@@ -1,5 +1,35 @@
 # Sprint 6 Nationwide Smart Candidate
 
+## Final measured candidate: `2.1.0-rc.7`
+
+The final `smart-derived-v1.7` candidate completed 973/973 districts with zero hard rejects,
+zero unavailable districts, and zero production legacy grids. Istanbul completed 39/39;
+manual review found 33 PASS, six PASS LOW, zero FAIL. The former 24-failure cohort completed
+24/24. The 5/10/100 preflight and final national publish-ready build passed.
+
+| Measure                              |                               Result |
+| ------------------------------------ | -----------------------------------: |
+| Renderable national coverage         |                           99.999979% |
+| Official area coverage               |                            4.997459% |
+| OSM administrative area coverage     | 0% (no verified source in this lock) |
+| Smart generated area coverage        |                           95.002520% |
+| Official / generated ADM3 zones      |                       3,343 / 17,049 |
+| High / medium / low Smart districts  |                       306 / 36 / 631 |
+| MVT tiles / corrupt / largest        |           18,856 / 0 / 155,465 bytes |
+| Historical `2.0.0` migration records |   3,146; 1,052 require manual review |
+
+The hard gates reject invalid topology, meaningful overlap or gaps, source loss or precedence
+errors, production grid, island/water corruption, missing provenance, and degenerate partitions.
+Geographic realism and unsupported straight boundaries affect confidence and candidate ranking.
+The 577 reported realism warnings are quality evidence; all affected districts passed the hard
+gates. Generated boundaries remain estimated, non-administrative gameplay territories, and
+migration never automatically transfers ownership. See the [national results](../../reports/baselines/sprint-6-national-rc7.json),
+[official audit](../../reports/baselines/sprint-6-official-preservation-rc7.json),
+[migration summary](../../reports/baselines/sprint-6-migration-rc7.json), and
+[Istanbul report](../../reports/baselines/sprint-6-istanbul-39-rc7.json).
+
+The rc.1 through rc.4 results below are historical evaluations and do not describe this candidate.
+
 The tables below document the accepted `2.1.0-rc.1` baseline. Final geographic calibration targets
 `2.1.0-rc.2`, with shared barrier routing in `smart-derived-v1.2`. Its measured outcomes are recorded
 separately after a real national rebuild; baseline metrics are not recalibration results.
@@ -261,7 +291,7 @@ and Sarıoğlan’s precision exception still block nationwide acceptance. This 
 promoted to the frozen routing-v8 candidate; its per-district results are recorded separately in
 the calibration evidence.
 
-## Sprint 6 final acceptance candidate
+## Historical Sprint 6 rc.3 evaluation
 
 `2.1.0-rc.3` uses `smart-derived-v1.3` for generated geometry. Approved official and verified
 OSM administrative polygons remain independent of generated-gap success; a generation exception

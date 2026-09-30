@@ -1,5 +1,18 @@
 # Turkey V2 Hybrid Coverage Pipeline
 
+## Sprint 6 final measured coverage
+
+The `2.1.0-rc.7` national candidate selects approved official sources before verified OSM
+administrative polygons and Smart fallback. It retains all 3,343 approved official IDs,
+including 2,094 historical `2.0.0` official geometries unchanged. This source lock contains
+no verified OSM administrative ADM3 source. The 17,049 generated zones are estimated,
+non-administrative, and supply 95.002520% of area; official polygons supply 4.997459%.
+All 973 districts exceed 99.99% coverage, with national renderable coverage 99.999979%.
+Hard production gates and confidence-tier details are in [Smart fallback](./turkey-smart-fallback.md)
+and the [final report](../../reports/baselines/sprint-6-national-rc7.json).
+
+The rc.1 through rc.3 figures below are historical evaluations.
+
 Turkey V2 hybrid coverage builds one playable ADM3-like layer per ADM2 district while preserving
 real administrative polygons where they are available.
 
@@ -205,11 +218,11 @@ The recalibrated candidate uses `2.1.0-rc.2` to keep the earlier `2.1.0-rc.1` ar
 immutable. Historical `2.0.0` and its gameplay state remain unchanged; migration is review evidence
 with intersection areas, old/new shares, IoU, splits, merges and many-to-many components.
 
-The current `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
+The historical `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
 24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
 The accepted historical artifact remains unchanged. See [national calibration outcomes](./turkey-sprint-6-nationwide.md#final-geographic-calibration).
 
-## Sprint 6 final acceptance candidate
+## Historical Sprint 6 rc.3 evaluation
 
 `2.1.0-rc.3` uses `smart-derived-v1.3` for generated geometry. Approved official and verified
 OSM administrative polygons remain independent of generated-gap success; a generation exception

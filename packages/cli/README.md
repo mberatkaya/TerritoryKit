@@ -1,5 +1,15 @@
 # @territory-kit/cli
 
+## Sprint 6 final candidate
+
+`territory tr v2 national publish-ready` builds `2.1.0-rc.7` with `smart-derived-v1.7`.
+The measured national candidate is 973/973 usable districts, 0 hard rejects, 0 production
+legacy grids, and 99.999979% renderable coverage. `validate --publish-ready` checks the
+hard production gates, shard/checksum integrity, hierarchy, and MVT policy. Unsupported
+straight boundaries are reported as geographic realism warnings and lower Smart confidence;
+valid low-confidence output remains estimated and non-administrative. See the
+[final national evidence](../../reports/baselines/sprint-6-national-rc7.json).
+
 Command line tools for validating, importing, generating, indexing, and inspecting TerritoryKit datasets.
 
 ## Installation
@@ -114,11 +124,11 @@ length and long unsupported straight chains at every angle.
 
 Apache-2.0
 
-The current `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
+The historical `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
 24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
 See [the complete calibration evidence](../../reports/baselines/sprint-6-geographic-calibration.json).
 
-## Sprint 6 final acceptance work
+## Historical Sprint 6 rc.3 evaluation
 
 The `2.1.0-rc.2` figures above are the preserved calibration baseline. The separate
 `2.1.0-rc.3` candidate uses `smart-derived-v1.3`, retains accepted official/OSM

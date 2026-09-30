@@ -1,5 +1,14 @@
 # @territory-kit/data-tr
 
+## Sprint 6 final candidate
+
+The external `2.1.0-rc.7` ADM3 candidate is 973/973 usable districts at 99.999979%
+renderable coverage. Its 3,343 official and 17,049 generated ADM3 zones remain outside
+this npm package. Generated zones are estimated and non-administrative, with high 306,
+medium 36, and low 631 district confidence classifications. The historical `2.0.0`
+resolver remains immutable; consumers must select the candidate explicitly and review
+[migration evidence](../../reports/baselines/sprint-6-migration-rc7.json).
+
 Thin loader package for Turkey/Turkiye pilot country artifacts. The package does not embed dataset geometry; pass a resolver that reads artifacts produced by `territory country build`.
 
 ```ts
@@ -68,11 +77,11 @@ boundaries along real OSM road, rail and water corridors under unchanged topolog
 remain geography-aware estimated gameplay boundaries. Quality reports measure barrier-following
 length and long unsupported straight chains at every angle.
 
-The current `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
+The historical `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
 24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
 See [the complete calibration evidence](../../reports/baselines/sprint-6-geographic-calibration.json).
 
-## Sprint 6 final acceptance work
+## Historical Sprint 6 rc.3 evaluation
 
 The `2.1.0-rc.2` figures above are the preserved calibration baseline. The separate
 `2.1.0-rc.3` candidate uses `smart-derived-v1.3`, retains accepted official/OSM

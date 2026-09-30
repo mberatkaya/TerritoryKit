@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "territorykit-sprint-6-national-final-rc7@1",
+  "candidateVersion": "2.1.0-rc.7",
+  "algorithmVersion": "smart-derived-v1.7",
+  "adm0": 1,
+  "adm1": 81,
+  "adm2Expected": 973,
+  "adm2Attempted": 973,
+  "adm2Usable": 973,
+  "hardRejected": 0,
+  "unavailable": 0,
+  "adm3Zones": 20392,
+  "sourceClassZones": {
+    "official": 3343,
+    "osmAdministrative": 0,
+    "generated": 17049
+  },
+  "sourceTierZones": {
+    "official": 3343,
+    "osmAdministrative": 0,
+    "standardSmart": 16093,
+    "organicSmart": 956
+  },
+  "confidenceDistricts": {
+    "high": 306,
+    "low": 631,
+    "medium": 36
+  },
+  "coverage": {
+    "renderablePercent": 99.999979,
+    "officialPercent": 4.997459,
+    "osmAdministrativePercent": 0,
+    "generatedPercent": 95.00252,
+    "remainingGapAreaKm2": 0.165281,
+    "districtsBelow9999": 0
+  },
+  "quality": {
+    "ok": true,
+    "publishReady": true,
+    "hardGateFailures": [],
+    "summary": {
+      "adm0Count": 1,
+      "adm1Count": 81,
+      "adm2Count": 973,
+      "adm3Count": 20392,
+      "failedDistrictCount": 0,
+      "districtsBelow9999": 0,
+      "orphanCount": 0,
+      "hierarchyCycleCount": 0,
+      "duplicateStableIdCount": 0,
+      "invalidFinalGeometryCount": 0,
+      "emptyFinalGeometryCount": 0,
+      "effectiveSiblingOverlapCount": 0,
+      "realGeneratedOverlapCount": 0,
+      "parentContainmentErrorCount": 0,
+      "missingProvenanceCount": 0,
+      "missingAttributionLicenseCount": 0,
+      "generatedMetadataErrorCount": 0,
+      "strictTrV2ValidationErrorCount": 0,
+      "adjacencyIntegrityErrorCount": 0,
+      "registryArtifactChecksumErrors": 0,
+      "warningCount": 0
+    },
+    "legacyProductionDistricts": 0,
+    "gridThresholdViolations": 0,
+    "softGeographicRealismWarnings": 577
+  },
+  "deterministicHash": "9c6e455ff216172d1d4f1516a5b351241767b5db7dfb1d967e851a043a9893c0",
+  "geometryHash": "fb19b468c0555dd0e167d5937037b1609f610014d9231c80b4bc9834685dd8f3",
+  "sourceLockHash": "sha256:4cea41524fefc36670b21934840e932e8d3fcc075e46059f09dc839345b6a85c",
+  "mvt": {
+    "ok": true,
+    "candidateTileCount": 19219,
+    "corruptTileCount": 0,
+    "duplicateTileCount": 135246,
+    "emptyTileCount": 363,
+    "generatedTileCount": 18856,
+    "maximumFeaturesPerTile": 497,
+    "maximumTileBytes": 155465,
+    "skippedTileCount": 0,
+    "totalBytes": 71529102
+  },
+  "performance": {
+    "durationMs": 523858,
+    "peakRssBytes": 6102450176,
+    "resumedAdm2Count": 973,
+    "newlyBuiltAdm2Count": 0
+  },
+  "evidencePaths": [
+    ".territory/sprint-6/final/reports/coverage.json",
+    ".territory/sprint-6/final/reports/quality-report.json",
+    ".territory/sprint-6/final/reports/smart-coverage.json",
+    ".territory/sprint-6/final/candidate/render/mvt-policy-report.json"
+  ]
+}

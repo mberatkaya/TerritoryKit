@@ -1,5 +1,18 @@
 # Turkey V2 National Playable Dataset
 
+## Sprint 6 final publish-ready artifact
+
+The `2.1.0-rc.7` candidate uses `smart-derived-v1.7`: 1 ADM0, 81 provinces, 973/973 usable
+districts, and 20,392 ADM3 zones. National renderable coverage is 99.999979%, with zero hard
+rejects or legacy production grids. Its external artifacts contain checksummed national and
+ADM3 datasets, a query index, 1,054 province/district shards, migration evidence, adjacency,
+and 18,856 valid MVT tiles. The largest tile is 155,465 bytes; corruption count is zero.
+The `validate --publish-ready` command verifies hard gates and artifact integrity. Generated
+features carry source class, estimated status, confidence, generator version, source checksum,
+and geometry hash in delivery metadata. See [final national evidence](../../reports/baselines/sprint-6-national-rc7.json).
+
+The rc.1 through rc.3 sections below are historical evaluations.
+
 Turkey V2 national playable artifacts are built by:
 
 ```bash
@@ -7,7 +20,7 @@ pnpm turkey:v2:national:publish-ready -- --osm-barriers <artifact-root> --osm-so
 pnpm turkey:v2:national:validate:publish-ready
 ```
 
-The Sprint 6 build target is `territory-kit-tr-v2-playable@2.1.0-rc.1`. It keeps the canonical Turkey
+The historical Sprint 6 rc.1 target was `territory-kit-tr-v2-playable@2.1.0-rc.1`. It keeps the canonical Turkey
 ADM0-ADM2 hierarchy from HDX/OCHA COD-AB and fills ADM3 gameplay coverage nationwide with the
 Turkey V2 hybrid priority:
 
@@ -245,11 +258,11 @@ The recalibrated candidate uses `2.1.0-rc.2` to keep the earlier `2.1.0-rc.1` ar
 immutable. Historical `2.0.0` and its gameplay state remain unchanged; migration is review evidence
 with intersection areas, old/new shares, IoU, splits, merges and many-to-many components.
 
-The current `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
+The historical `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
 24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
 The accepted historical artifact remains unchanged. See [national calibration outcomes](./turkey-sprint-6-nationwide.md#final-geographic-calibration).
 
-## Sprint 6 final acceptance candidate
+## Historical Sprint 6 rc.3 evaluation
 
 `2.1.0-rc.3` uses `smart-derived-v1.3` for generated geometry. Approved official and verified
 OSM administrative polygons remain independent of generated-gap success; a generation exception

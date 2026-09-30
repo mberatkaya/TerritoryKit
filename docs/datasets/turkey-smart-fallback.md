@@ -4,6 +4,16 @@ The Turkey smart fallback boundary engine creates deterministic ADM3 playable zo
 reviewed official ADM3 polygon nor a usable OSM administrative ADM3 polygon is available for an
 ADM2 district. It is a derived fallback. It does not create official mahalle or köy records.
 
+The Sprint 6 final candidate uses `smart-derived-v1.7` in dataset candidate `2.1.0-rc.7`.
+Generated boundaries estimate playable geography; they do not claim to reproduce unknown legal
+mahalle decisions.
+
+The final national run accepted all 973 districts (high 306, medium 36, low 631), with zero
+hard rejects and zero production legacy grids. The 577 geographic-realism warnings lower
+confidence where long unsupported closures remain; they do not waive topology, grid,
+partition, provenance, or source-preservation gates. See the
+[measured national report](../../reports/baselines/sprint-6-national-rc7.json).
+
 Published smart fallback zones are labeled:
 
 - `sourceClass: "generated"`
@@ -13,16 +23,16 @@ Published smart fallback zones are labeled:
 - `administrative: false`
 - `official: false`
 - `generated: true`
-- `algorithmVersion: "smart-derived-v1.2"`
+- `algorithmVersion: "smart-derived-v1.7"`
 
 ## Source Priority
 
 Turkey V2 keeps the same resolver order:
 
-1. reviewed official ADM3 polygons
-2. OSM administrative ADM3 polygons, where explicitly built and license-approved
-3. standard smart-derived generated fallback
-4. organic low-confidence Smart when standard quality gates reject the result
+1. approved national official ADM3 polygons
+2. approved local official ADM3 polygons
+3. verified OSM administrative ADM3 polygons
+4. smart-derived generated fallback, with standard, network-first, and organic candidates
 
 Unsafe organic output returns an explicit failure. Legacy generation requires an explicit
 developer emergency option and cannot pass normal national publish-ready validation.
@@ -80,21 +90,47 @@ ADM2 parent area as well as density signals, so large rural districts with many 
 not accidentally become dense-urban builds. Custom builds can set target count, target area,
 min/max area, barrier strength, synthetic split limits, and quality gate thresholds.
 
-## Quality Gates
+## Acceptance: hard gates and confidence
 
-A smart fallback result is publishable only when all gates pass:
+`quality.ok` remains the backward-compatible usability decision. `quality.acceptanceStatus` makes
+the outcome explicit: `HARD_REJECT`, `USABLE_LOW_CONFIDENCE`, `USABLE_MEDIUM_CONFIDENCE`, or
+`USABLE_HIGH_CONFIDENCE`. Every usable Smart output is still estimated and non-administrative.
 
-- coverage of the missing ADM2 geometry
-- invalid geometry count
-- sibling overlap
-- spill outside the ADM2 parent
-- real barrier sufficiency for multi-territory results
-- mean quality score
-- mean barrier alignment
-- synthetic split limit
+Hard rejection covers invalid geometry, parent spill or incomplete coverage, sibling overlap,
+missing mandatory source metadata, legacy grid use, grid-like repeated unsupported rulers,
+degenerate partitions, unacceptable area or synthetic split bounds, and unattempted routing when
+nearby usable real corridors are evident. The hybrid resolver also protects approved official
+geometry and source precedence. Large districts with many locality signals reject a generated
+territory above 55% of the parent area.
 
-Synthetic splits are a last resort and default to a rejected result when used. This prevents a weak
-or empty barrier network from silently becoming a publishable grid.
+Grid detection checks meaningful connected pieces of a residual separately. It measures repeated
+unsupported directions so regular strips cannot hide inside a district whose approved official
+polygons leave many detached fragments. Varied barrier-guided directions do not become a grid
+merely because some straight connectors remain.
+
+Tiny detached fragments left by clipping around approved official geometry can fall below the
+preferred minimum area without making the candidate unusable. Their parent components must still
+pass topology, coverage, grid, and overall partition gates; this exception never relaxes the
+maximum area or giant-zone limit.
+
+After hard gates pass, geographic realism, barrier alignment, and mean quality determine the
+confidence tier. An unsupported connector can produce a usable low-confidence result when a real
+route was attempted or there is no usable real separator. The longest connector has explicit
+diagnostics for length, route attempt, route failure, and reason. A missing nearest-barrier distance
+is recorded as `null` rather than invented. Confidence and acceptance status are carried into the
+national coverage manifest; generated zone metadata carries confidence, source snapshot checksum,
+algorithm version, and geometry hash.
+Query and render artifacts also expose `sourceClass`, `boundarySourceClass`, `administrative`,
+`authoritative`, `boundaryKind`, `confidence`, `generatorVersion`, source checksum, and geometry
+hash as flat feature properties. Consumers can distinguish estimated Smart output in MVT tiles.
+
+An inland lake can dominate the exact area left by approved official polygons. When one locked
+OSM lake or reservoir polygon overlaps at least 85% of a residual of at least 20 km² and at most
+two locality seeds lie inside it, the engine keeps the water and detached shoreline components
+unsplit. It records the water source ID and measured overlap, marks the output low confidence,
+and still applies geometry, containment, coverage, overlap, and source-preservation gates. The
+usual large-territory partition rule applies to land residuals; this narrow water case avoids
+inventing straight playable boundaries across a lake.
 
 ## Diagnostics
 
@@ -273,30 +309,14 @@ The retry retains the original area and topology gates, and never uses recursive
 Voronoi vertices as source points. Exact self-crossings introduced by decimal snapping are
 regularized with polygon self-union before the same hard checks run.
 
-The current `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
+The historical `2.1.0-rc.2` calibration candidate was **not publish-ready**: 949/973 districts passed,
 24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
 The accepted historical artifact remains unchanged. See [national calibration outcomes](./turkey-sprint-6-nationwide.md#final-geographic-calibration).
 
-## Sprint 6 final acceptance candidate
+## Historical rc.3 evaluation
 
-`2.1.0-rc.3` uses `smart-derived-v1.3` for generated geometry. Approved official and verified
-OSM administrative polygons remain independent of generated-gap success; a generation exception
-retains accepted real-source zones and reports the uncovered gap. Exact self-union intersection
-coordinates repair the captured Gölköy and Sarıoğlan precision loops without rewriting approved
-source polygons. Source preservation is a publish-ready gate.
-
-Both Standard and Organic Smart now report geographic realism, nearby usable corridor
-opportunity, routing utilization, and unsupported straight-chain lengths. Organic output uses the router's existing 40% connector budget as a hard unsupported-straight
-ceiling. Standard output retains its established 0.8 ceiling while also comparing actual
-barrier use with local corridor opportunity. Generated zones remain estimated
-playable territory, never official mahalle records.
-
-The complete repository-source Istanbul cohort has 39 ADM2 districts. The source names Adalar
-“Prince Islands”; this is a naming mismatch, not an extra or missing district. The
-[Istanbul acceptance report](../../reports/baselines/sprint-6-istanbul-39-rc3.json) records each
-district's build and QA status. All 39 maps were reviewed: 11 pass, five pass with
-low-confidence limitations, and 23 fail (including four machine-accepted outputs with visible
-ruler seams). Istanbul blocks the full rc.3 national publish-ready run, so this candidate is
-**DO NOT MERGE**. See the [24-district retest](../../reports/baselines/sprint-6-final-recovery.json)
-(8 accepted, 16 rejected) and [national rc.3 status](../../reports/baselines/sprint-6-final-national.json).
-The historical rc.1 and rc.2 evidence above is retained separately.
+The [rc.3 Istanbul report](../../reports/baselines/sprint-6-istanbul-39-rc3.json) records an
+earlier strict realism policy that rejected justified synthetic connectors. Its results and the
+[rc.3 national status](../../reports/baselines/sprint-6-final-national.json) are historical. The
+current `smart-derived-v1.7` contract and measured closure are documented above and in the
+[Sprint 6 final candidate report](./turkey-sprint-6-nationwide.md).

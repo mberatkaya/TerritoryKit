@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "territorykit-sprint-6-readme-audit-rc7@1",
+  "reviewedCount": 21,
+  "changedCount": 4,
+  "unchangedCount": 17,
+  "changed": [
+    "README.md",
+    "packages/cli/README.md",
+    "packages/data-tr/README.md",
+    "packages/generators/README.md"
+  ],
+  "unchanged": [
+    "examples/react-native-maplibre/README.md",
+    "packages/adapter-core/README.md",
+    "packages/core/README.md",
+    "packages/data-de/README.md",
+    "packages/data-id/README.md",
+    "packages/data-jp/README.md",
+    "packages/data-us/README.md",
+    "packages/dataset/README.md",
+    "packages/game/README.md",
+    "packages/leaflet/README.md",
+    "packages/maplibre/README.md",
+    "packages/migration/README.md",
+    "packages/nestjs/README.md",
+    "packages/openlayers/README.md",
+    "packages/react-native/README.md",
+    "packages/registry/README.md",
+    "packages/runtime/README.md"
+  ],
+  "npmLinks": {
+    "https://www.npmjs.com/~mberat": true,
+    "https://www.npmjs.com/package/@territory-kit/core": true,
+    "https://www.npmjs.com/package/@territory-kit/cli": true,
+    "https://www.npmjs.com/package/@territory-kit/generators": true
+  },
+  "note": "All first-party README files were reviewed for Sprint 6 claims. Only the four READMEs with current Turkey V2 candidate guidance needed updates; historical rc sections are labeled as such."
+}

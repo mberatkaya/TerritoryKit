@@ -1,0 +1,525 @@
+{
+  "schemaVersion": "territorykit-sprint-6-historical-24-rc7@1",
+  "candidateVersion": "2.1.0-rc.7",
+  "algorithmVersion": "smart-derived-v1.7",
+  "generatedAt": "2026-09-30",
+  "attempted": 24,
+  "usable": 24,
+  "hardRejected": 0,
+  "confidence": {
+    "high": 0,
+    "medium": 0,
+    "low": 24
+  },
+  "golKoySarioglan": {
+    "approvedInput": 58,
+    "retained": 58,
+    "missing": 0
+  },
+  "districts": [
+    {
+      "district": "Kumru",
+      "districtId": "tr:adm2:54988432b1626041363194",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 40,
+      "officialRetainedCount": 40,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.999989,
+      "hardGateFailures": [],
+      "geometryHash": "e29fcc462e8a9249af50a906bf6cad245719fa3ca347dd155be34f541e2677c1",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 0,
+        "syntheticConnectorReason": "NO_USABLE_REAL_SEPARATOR",
+        "nearestUsableBarrierDistanceMeters": null,
+        "candidateRouteAttempted": false,
+        "routeFailureReason": null
+      }
+    },
+    {
+      "district": "Keles",
+      "districtId": "tr:adm2:54988432b18249389019037",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 42,
+      "officialRetainedCount": 42,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.999994,
+      "hardGateFailures": [],
+      "geometryHash": "e7b8ee239ac0700dc883e177286e4a7d8c7139abe1c2acc1db0dc65793ca4166",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 1268.118626,
+        "syntheticConnectorReason": "NO_SAFE_NETWORK_PATH",
+        "nearestUsableBarrierDistanceMeters": 15094.623647,
+        "candidateRouteAttempted": true,
+        "routeFailureReason": "NO_ROUTE"
+      }
+    },
+    {
+      "district": "Yavuzeli",
+      "districtId": "tr:adm2:54988432b19771634656837",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 44,
+      "officialRetainedCount": 44,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.999908,
+      "hardGateFailures": [],
+      "geometryHash": "22a7778075d0595ec96a3bf92997b5dbda139c3007f48c37ae7e1e5955216208",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 0,
+        "syntheticConnectorReason": "NO_USABLE_REAL_SEPARATOR",
+        "nearestUsableBarrierDistanceMeters": null,
+        "candidateRouteAttempted": false,
+        "routeFailureReason": null
+      }
+    },
+    {
+      "district": "İznik",
+      "districtId": "tr:adm2:54988432b21829167543516",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 46,
+      "officialRetainedCount": 46,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 100,
+      "hardGateFailures": [],
+      "geometryHash": "be92fcd46f4f3a7e2b2d82d2928c7cf6ef15b1511410979e03344ffaf528aac2",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 2626.971442,
+        "syntheticConnectorReason": "NO_SAFE_NETWORK_PATH",
+        "nearestUsableBarrierDistanceMeters": 4883.007516,
+        "candidateRouteAttempted": true,
+        "routeFailureReason": "NO_ROUTE"
+      }
+    },
+    {
+      "district": "Kestel",
+      "districtId": "tr:adm2:54988432b22653723739411",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 37,
+      "officialRetainedCount": 37,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.999517,
+      "hardGateFailures": [],
+      "geometryHash": "11b6d0b5fdab7a793405585f7e0e04e2f218c0f8055e5e0ab441a885a1a2e51e",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 0,
+        "syntheticConnectorReason": "NO_USABLE_REAL_SEPARATOR",
+        "nearestUsableBarrierDistanceMeters": null,
+        "candidateRouteAttempted": false,
+        "routeFailureReason": null
+      }
+    },
+    {
+      "district": "Çelebi",
+      "districtId": "tr:adm2:54988432b24535022405738",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 0,
+      "officialRetainedCount": 0,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.999978,
+      "hardGateFailures": [],
+      "geometryHash": "634e8f6494e93e786846cfde3194f2337e2a0230fa77595e3f1a6d8699274f76",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 2917.690676,
+        "syntheticConnectorReason": "NO_SAFE_NETWORK_PATH",
+        "nearestUsableBarrierDistanceMeters": 835.311865,
+        "candidateRouteAttempted": true,
+        "routeFailureReason": "NO_ROUTE"
+      }
+    },
+    {
+      "district": "Kabataş",
+      "districtId": "tr:adm2:54988432b26897526032895",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 18,
+      "officialRetainedCount": 18,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 100,
+      "hardGateFailures": [],
+      "geometryHash": "a618b1dd1273295bf5e3288e3e9f481418fb0729c27e1af2089c36eec00c8a14",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 0,
+        "syntheticConnectorReason": "NO_USABLE_REAL_SEPARATOR",
+        "nearestUsableBarrierDistanceMeters": null,
+        "candidateRouteAttempted": false,
+        "routeFailureReason": null
+      }
+    },
+    {
+      "district": "Yenişehir",
+      "districtId": "tr:adm2:54988432b28826403720694",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 71,
+      "officialRetainedCount": 71,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.999991,
+      "hardGateFailures": [],
+      "geometryHash": "d961872d7b06a5755caf5cf670cd8d793bb6a65b8b7961b51c79ecf1b8fb8460",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 0,
+        "syntheticConnectorReason": "NO_USABLE_REAL_SEPARATOR",
+        "nearestUsableBarrierDistanceMeters": null,
+        "candidateRouteAttempted": false,
+        "routeFailureReason": null
+      }
+    },
+    {
+      "district": "Nizip",
+      "districtId": "tr:adm2:54988432b32789090404224",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 111,
+      "officialRetainedCount": 111,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 100,
+      "hardGateFailures": [],
+      "geometryHash": "7f8659ba000d15757fc7481bd7d1fdecf7177decc72ed80631b939d864121a55",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 0,
+        "syntheticConnectorReason": "NO_USABLE_REAL_SEPARATOR",
+        "nearestUsableBarrierDistanceMeters": null,
+        "candidateRouteAttempted": false,
+        "routeFailureReason": null
+      }
+    },
+    {
+      "district": "Nilüfer",
+      "districtId": "tr:adm2:54988432b337940392373",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 70,
+      "officialRetainedCount": 70,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 100,
+      "hardGateFailures": [],
+      "geometryHash": "ec73d3a44648045fd68c91bfedb634599d432ac9ed0166386542c25d0abdc3a6",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 1344.868609,
+        "syntheticConnectorReason": "NO_SAFE_NETWORK_PATH",
+        "nearestUsableBarrierDistanceMeters": 709.524157,
+        "candidateRouteAttempted": true,
+        "routeFailureReason": "NO_ROUTE"
+      }
+    },
+    {
+      "district": "Gemlik",
+      "districtId": "tr:adm2:54988432b38576388688416",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 36,
+      "officialRetainedCount": 36,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.999997,
+      "hardGateFailures": [],
+      "geometryHash": "cb055c4d1f8a0c8989a96af955b503b364b5f13e203735e07cfd53f8393aad94",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 0,
+        "syntheticConnectorReason": "NO_USABLE_REAL_SEPARATOR",
+        "nearestUsableBarrierDistanceMeters": null,
+        "candidateRouteAttempted": false,
+        "routeFailureReason": null
+      }
+    },
+    {
+      "district": "İslahiye",
+      "districtId": "tr:adm2:54988432b41731057290221",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 71,
+      "officialRetainedCount": 71,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 100,
+      "hardGateFailures": [],
+      "geometryHash": "7bfb54dfb5e7c182d0bb2220a89f02d94856a6a538fed425110f513bbbff10be",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 0,
+        "syntheticConnectorReason": "NO_USABLE_REAL_SEPARATOR",
+        "nearestUsableBarrierDistanceMeters": null,
+        "candidateRouteAttempted": false,
+        "routeFailureReason": null
+      }
+    },
+    {
+      "district": "Beytüşşebap",
+      "districtId": "tr:adm2:54988432b49228485155322",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 0,
+      "officialRetainedCount": 0,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.999998,
+      "hardGateFailures": [],
+      "geometryHash": "9971f52ec6ab1f52b228d2619f08f659501a36417a90d7a015b7327e19da5ef2",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 28451.441034,
+        "syntheticConnectorReason": "NO_SAFE_NETWORK_PATH",
+        "nearestUsableBarrierDistanceMeters": 995.528146,
+        "candidateRouteAttempted": true,
+        "routeFailureReason": "NO_ROUTE"
+      }
+    },
+    {
+      "district": "Yenifakılı",
+      "districtId": "tr:adm2:54988432b49266888844596",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 0,
+      "officialRetainedCount": 0,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.999912,
+      "hardGateFailures": [],
+      "geometryHash": "9b1c41fef16033ad7266b0d77ef12634093c5366e34936888b4230b48e1dec9a",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 3408.784208,
+        "syntheticConnectorReason": "NO_SAFE_NETWORK_PATH",
+        "nearestUsableBarrierDistanceMeters": 1787.073185,
+        "candidateRouteAttempted": true,
+        "routeFailureReason": "NO_ROUTE"
+      }
+    },
+    {
+      "district": "Otlukbeli",
+      "districtId": "tr:adm2:54988432b55663903529384",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "organic-smart",
+      "officialInputCount": 0,
+      "officialRetainedCount": 0,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.999946,
+      "hardGateFailures": [],
+      "geometryHash": "c66776d25df16d5b1f569207fb4563e541c8f04d816498c7d9f849cd32dcce2b",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 10569.770703,
+        "syntheticConnectorReason": "NO_SAFE_NETWORK_PATH",
+        "nearestUsableBarrierDistanceMeters": 2992.675561,
+        "candidateRouteAttempted": true,
+        "routeFailureReason": "NO_ROUTE"
+      }
+    },
+    {
+      "district": "Yeşilhisar",
+      "districtId": "tr:adm2:54988432b59996123139029",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "organic-smart",
+      "officialInputCount": 35,
+      "officialRetainedCount": 35,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.999993,
+      "hardGateFailures": [],
+      "geometryHash": "fd402b6006ee90cc848438ba8140fde215f1cd5387ea27d99e1b79147d91906f",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 1408.147674,
+        "syntheticConnectorReason": "NO_SAFE_NETWORK_PATH",
+        "nearestUsableBarrierDistanceMeters": 2349.539165,
+        "candidateRouteAttempted": true,
+        "routeFailureReason": "NO_ROUTE"
+      }
+    },
+    {
+      "district": "Şehitkamil",
+      "districtId": "tr:adm2:54988432b61004264745956",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 149,
+      "officialRetainedCount": 149,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.999854,
+      "hardGateFailures": [],
+      "geometryHash": "8745d15ece547e4122d126d7e25ecb8727023da339d990aa325dfc41caaae53e",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 0,
+        "syntheticConnectorReason": "NO_USABLE_REAL_SEPARATOR",
+        "nearestUsableBarrierDistanceMeters": null,
+        "candidateRouteAttempted": false,
+        "routeFailureReason": null
+      }
+    },
+    {
+      "district": "Gölköy",
+      "districtId": "tr:adm2:54988432b66082429692342",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 30,
+      "officialRetainedCount": 30,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.99998,
+      "hardGateFailures": [],
+      "geometryHash": "c9b4f9a0fc296955eaa2d0f441012ef2d5f726c03b9d902022920839bae75ea6",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 0,
+        "syntheticConnectorReason": "NO_USABLE_REAL_SEPARATOR",
+        "nearestUsableBarrierDistanceMeters": null,
+        "candidateRouteAttempted": false,
+        "routeFailureReason": null
+      }
+    },
+    {
+      "district": "Çelikhan",
+      "districtId": "tr:adm2:54988432b67214587682111",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 0,
+      "officialRetainedCount": 0,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.999997,
+      "hardGateFailures": [],
+      "geometryHash": "f3fa8662533bcdbc46c408891b7eee7be7f5c68090d94a5955fda25131049abc",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 2514.030444,
+        "syntheticConnectorReason": "NO_SAFE_NETWORK_PATH",
+        "nearestUsableBarrierDistanceMeters": 177.553415,
+        "candidateRouteAttempted": true,
+        "routeFailureReason": "NO_ROUTE"
+      }
+    },
+    {
+      "district": "Mudanya",
+      "districtId": "tr:adm2:54988432b70813006049679",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 47,
+      "officialRetainedCount": 47,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.999969,
+      "hardGateFailures": [],
+      "geometryHash": "b13e2564859bd1f686221fa2300c5bb7e1ab3a5ec4bcede08d5a67f8bc37a052",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 253.986049,
+        "syntheticConnectorReason": "NO_USABLE_REAL_SEPARATOR",
+        "nearestUsableBarrierDistanceMeters": 100.0994,
+        "candidateRouteAttempted": false,
+        "routeFailureReason": null
+      }
+    },
+    {
+      "district": "Oğuzeli",
+      "districtId": "tr:adm2:54988432b72028378604273",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 92,
+      "officialRetainedCount": 89,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 100,
+      "hardGateFailures": [],
+      "geometryHash": "2beaa7fc2e4491afb6ef15c0e3133d6c42f960a7f1202982f2a2d5f5b4195729",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 0,
+        "syntheticConnectorReason": "NO_USABLE_REAL_SEPARATOR",
+        "nearestUsableBarrierDistanceMeters": null,
+        "candidateRouteAttempted": false,
+        "routeFailureReason": null
+      }
+    },
+    {
+      "district": "Mesudiye",
+      "districtId": "tr:adm2:54988432b78961906506617",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 70,
+      "officialRetainedCount": 70,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.999986,
+      "hardGateFailures": [],
+      "geometryHash": "bffc213d410624f571bb3fe5bdadfc02ee7a71ddbbde63b001b19f2878aef18f",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 0,
+        "syntheticConnectorReason": "NO_USABLE_REAL_SEPARATOR",
+        "nearestUsableBarrierDistanceMeters": null,
+        "candidateRouteAttempted": false,
+        "routeFailureReason": null
+      }
+    },
+    {
+      "district": "Sarıoğlan",
+      "districtId": "tr:adm2:54988432b85515105263219",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "standard-smart",
+      "officialInputCount": 28,
+      "officialRetainedCount": 28,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.999992,
+      "hardGateFailures": [],
+      "geometryHash": "7ff2225e2067c5ea3d3403aec8757a62bbde42a19a3ea60f96566118087d16c6",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 0,
+        "syntheticConnectorReason": "NO_USABLE_REAL_SEPARATOR",
+        "nearestUsableBarrierDistanceMeters": null,
+        "candidateRouteAttempted": false,
+        "routeFailureReason": null
+      }
+    },
+    {
+      "district": "Araban",
+      "districtId": "tr:adm2:54988432b99023740963316",
+      "accepted": true,
+      "acceptanceStatus": "USABLE_LOW_CONFIDENCE",
+      "confidence": "low",
+      "sourceTier": "network-first",
+      "officialInputCount": 49,
+      "officialRetainedCount": 49,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 100,
+      "hardGateFailures": [],
+      "geometryHash": "2228e907b1a1c9cf8d370f5f809168e885d79a6ced547dc467c0fb7d709a2c96",
+      "syntheticConnectorEvidence": {
+        "syntheticConnectorLengthMeters": 0,
+        "syntheticConnectorReason": "NO_USABLE_REAL_SEPARATOR",
+        "nearestUsableBarrierDistanceMeters": null,
+        "candidateRouteAttempted": false,
+        "routeFailureReason": null
+      }
+    }
+  ]
+}

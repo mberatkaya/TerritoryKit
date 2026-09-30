@@ -1,5 +1,15 @@
 # Turkey V2 Migration
 
+## Sprint 6 final `2.0.0` → `2.1.0-rc.7` review
+
+The `overlap-components-v2` migration has 3,146 connected overlap records: 2,094 preserved,
+1,009 source-replaced, 37 split, five merged, and one added. Mapping cardinality includes
+1,006 many-to-many groups, and 1,052 records require manual review. Twenty records change
+source class; none change parent. This is evidence for gameplay migration decisions, not an
+automatic ownership transfer. See the [final migration report](../../reports/baselines/sprint-6-migration-rc7.json).
+
+The rc.1 through rc.3 sections below are historical evaluations.
+
 Turkey V2 keeps `territory-schema@1` and adds an opt-in strict profile. Existing Turkey ADM0-ADM2
 artifacts and the Gaziantep ADM3 pilot remain legacy-readable; they are not rewritten automatically.
 
@@ -109,7 +119,7 @@ participating ID. Records include per-pair shares and IoU, mapping cardinality, 
 algorithm versions and source tiers. Many-to-many components always require manual review;
 they are not represented as independent one-to-one transfers.
 
-## Sprint 6 final acceptance candidate
+## Historical Sprint 6 rc.3 evaluation
 
 `2.1.0-rc.3` uses `smart-derived-v1.3` for generated geometry. Approved official and verified
 OSM administrative polygons remain independent of generated-gap success; a generation exception

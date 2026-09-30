@@ -1,0 +1,138 @@
+{
+  "schemaVersion": "territorykit-sprint-6-final-acceptance-rc7@1",
+  "candidateVersion": "2.1.0-rc.7",
+  "algorithmVersion": "smart-derived-v1.7",
+  "historicalFailureCohort24": {
+    "attempted": 24,
+    "usable": 24,
+    "hardRejected": 0
+  },
+  "preflight": {
+    "smoke5": "PASS",
+    "benchmarks": [
+      {
+        "districtLimit": 10,
+        "code": 0,
+        "qualityOk": true,
+        "failedDistrictCount": 0
+      },
+      {
+        "districtLimit": 100,
+        "code": 0,
+        "qualityOk": true,
+        "failedDistrictCount": 0
+      }
+    ]
+  },
+  "national": {
+    "expected": 973,
+    "attempted": 973,
+    "usable": 973,
+    "hardRejected": 0,
+    "unavailable": 0,
+    "renderableCoveragePercent": 99.999979,
+    "officialCoveragePercent": 4.997459,
+    "officialZones": 3343,
+    "osmAdministrativeZones": 0,
+    "generatedZones": 17049,
+    "confidenceDistricts": {
+      "high": 306,
+      "low": 631,
+      "medium": 36
+    },
+    "productionLegacyDistricts": 0,
+    "hardGateFailures": []
+  },
+  "officialPreservation": {
+    "approvedInput": 3343,
+    "retained": 3343,
+    "missing": 0,
+    "historicalOfficialExact": 2094,
+    "rawEffectiveGeometryNormalizations": 1901,
+    "documentedParentCorrections": 5
+  },
+  "determinism": {
+    "istanbul39Mismatches": 0,
+    "nationalGeometryHashMatches": true,
+    "nationalDeterministicHashMatches": true,
+    "allShardEntriesMatch": true,
+    "artifactChecksumCount": 18879,
+    "initialChecksumDifferences": ["render/mvt-policy-report.json"],
+    "resolution": "The sole varying file included measured MVT build duration; duration is now excluded from the published deterministic policy report. All other 18,878 checksums matched in the two full runs, and the final run retained them."
+  },
+  "migration": {
+    "records": 3146,
+    "manualReviewRequired": 1052,
+    "changeTypes": {
+      "source-replaced": 1009,
+      "merged": 5,
+      "preserved": 2094,
+      "split": 37,
+      "added": 1
+    }
+  },
+  "mvt": {
+    "ok": true,
+    "candidateTileCount": 19219,
+    "corruptTileCount": 0,
+    "duplicateTileCount": 135246,
+    "emptyTileCount": 363,
+    "generatedTileCount": 18856,
+    "maximumFeaturesPerTile": 497,
+    "maximumTileBytes": 155465,
+    "skippedTileCount": 0,
+    "totalBytes": 71529102
+  },
+  "deliveryMetadataLowConfidencePbfSample": {
+    "sourceClass": "generated",
+    "boundarySourceClass": "smart-derived",
+    "administrative": false,
+    "authoritative": false,
+    "boundaryKind": "estimated",
+    "confidence": "low",
+    "generatorVersion": "smart-derived-v1.7",
+    "sourceSnapshotChecksumPresent": true,
+    "geometryHashPresent": true
+  },
+  "readmeAudit": {
+    "reviewed": 21,
+    "changed": 4,
+    "unchanged": 17,
+    "npmLinksPresent": true
+  },
+  "publishReadyValidation": {
+    "ok": true,
+    "issues": 0
+  },
+  "limitations": [
+    "Smart-derived boundaries remain estimated, particularly in 631 low-confidence districts.",
+    "Five approved official source records required documented parent correction; two were clipped by corrected ADM2 containment.",
+    "No verified OSM administrative ADM3 source was present in this source lock.",
+    "Gameplay ownership migration requires human review for 1,052 connected overlap records."
+  ],
+  "evidence": [
+    "sprint-6-istanbul-39-rc7.json",
+    "sprint-6-historical-24-rc7.json",
+    "sprint-6-national-rc7.json",
+    "sprint-6-official-preservation-rc7.json",
+    "sprint-6-migration-rc7.json",
+    "sprint-6-readme-audit-rc7.json"
+  ],
+  "istanbul39": {
+    "processed": 39,
+    "usable": 39,
+    "hardRejected": 0,
+    "confidence": {
+      "high": 31,
+      "medium": 2,
+      "low": 6
+    },
+    "manualQA": {
+      "method": "39-zone contact sheet and six low-confidence road/water/rail overlays; inspect repeated grids, dominant zones, sea spill, cross-island bridges and remaining connector context",
+      "pass": 33,
+      "passLow": 6,
+      "fail": 0
+    },
+    "rerunMismatches": 0
+  }
+}

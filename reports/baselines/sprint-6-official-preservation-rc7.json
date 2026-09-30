@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "territorykit-sprint-6-official-preservation-final-rc7@1",
+  "approvedInputPolygonCount": 3343,
+  "finalRetainedPolygonCount": 3343,
+  "missingPolygonCount": 0,
+  "historical2_0OfficialCount": 2094,
+  "historicalOfficialRetainedExactGeometryCount": 2094,
+  "newOfficialPolygonCount": 1249,
+  "rawToEffectiveGeometryHashChanges": 1901,
+  "effectiveParentClippedCount": 1328,
+  "internalOverlapRemovalPositiveCount": 534,
+  "rawParentCorrections": [
+    {
+      "id": "tr:adm3:tr-il-27-adm2-54988432b72028378604273-30464",
+      "name": "İNÖNÜ",
+      "reportedParentId": "tr:adm2:54988432b72028378604273",
+      "reportedParentName": "Oğuzeli",
+      "correctedParentId": "tr:adm2:54988432b26387222249237",
+      "correctedParentName": "Şahinbey",
+      "rawAreaKm2": 1.2421822743048898,
+      "retainedAreaKm2": 1.2421822743050617,
+      "retainedShare": 1.0000000000001383,
+      "clippedAreaKm2": -1.7186252421197423e-13
+    },
+    {
+      "id": "tr:adm3:tr-il-27-adm2-54988432b72028378604273-30465",
+      "name": "ŞAHİNBEY",
+      "reportedParentId": "tr:adm2:54988432b72028378604273",
+      "reportedParentName": "Oğuzeli",
+      "correctedParentId": "tr:adm2:54988432b26387222249237",
+      "correctedParentName": "Şahinbey",
+      "rawAreaKm2": 11.536155487783807,
+      "retainedAreaKm2": 11.536155487784201,
+      "retainedShare": 1.0000000000000342,
+      "clippedAreaKm2": -3.943512183468556e-13
+    },
+    {
+      "id": "tr:adm3:tr-il-27-adm2-54988432b72028378604273-30466",
+      "name": "MİMAR SİNAN",
+      "reportedParentId": "tr:adm2:54988432b72028378604273",
+      "reportedParentName": "Oğuzeli",
+      "correctedParentId": "tr:adm2:54988432b26387222249237",
+      "correctedParentName": "Şahinbey",
+      "rawAreaKm2": 6.472828647345876,
+      "retainedAreaKm2": 6.472828647357627,
+      "retainedShare": 1.0000000000018154,
+      "clippedAreaKm2": -1.1750600492632657e-11
+    },
+    {
+      "id": "tr:adm3:tr-il-52-adm2-54988432b98751035289582-150891",
+      "name": "GÜMÜŞKÖY",
+      "reportedParentId": "tr:adm2:54988432b98751035289582",
+      "reportedParentName": "Altınordu",
+      "correctedParentId": "tr:adm2:54988432b3557290765638",
+      "correctedParentName": "Kabadüz",
+      "rawAreaKm2": 4.697297790413991,
+      "retainedAreaKm2": 4.606430045654262,
+      "retainedShare": 0.9806553152867661,
+      "clippedAreaKm2": 0.09086774475972881
+    },
+    {
+      "id": "tr:adm3:tr-il-52-adm2-54988432b98751035289582-150909",
+      "name": "KUYLU",
+      "reportedParentId": "tr:adm2:54988432b98751035289582",
+      "reportedParentName": "Altınordu",
+      "correctedParentId": "tr:adm2:54988432b3557290765638",
+      "correctedParentName": "Kabadüz",
+      "rawAreaKm2": 5.804776688317926,
+      "retainedAreaKm2": 5.759945516633233,
+      "retainedShare": 0.9922768481731752,
+      "clippedAreaKm2": 0.04483117168469253
+    }
+  ],
+  "rawParentCorrectionCount": 5,
+  "parentCorrectionContext": "Five approved source records carried an ADM2 assignment inconsistent with their coordinates. Three Gaziantep geometries were retained at full area after reassignment; two Ordu geometries were clipped by the corrected ADM2 parent (98.07% and 99.23% retained). All five IDs survive. Other raw-to-effective differences reflect the established source normalization, ADM2 containment, and same-source overlap resolution pipeline. The 2094 official geometries in historical 2.0.0 are bytewise-equivalent as parsed geometries in rc.7.",
+  "golKoySarioglan": {
+    "approvedInput": 58,
+    "retained": 58,
+    "missing": 0
+  },
+  "evidencePaths": [
+    ".territory/build/TR/ADM3/official/levels/ADM3/dataset.json",
+    ".territory/build/TR/V2-national/levels/ADM3/dataset.json",
+    ".territory/sprint-6/final/candidate/levels/ADM3/dataset.json",
+    ".territory/sprint-6/final/official-parent-corrections.json"
+  ]
+}
