@@ -55,4 +55,17 @@ describe("Turkey V2 delivery manifest", () => {
       })
     ).toThrow("mismatched");
   });
+  it("uses exact ADM2 IDs and rejects sanitized path collisions", () => {
+    const shardPath = "districts/tr_adm2_a/dataset.json";
+    const candidate = {
+      ...input,
+      shards: { ...input.shards, files: { [shardPath]: { sha256: "shard", sizeBytes: 20 } } }
+    };
+    expect(
+      createTurkeyV2DeliveryManifest({ ...candidate, adm2Ids: ["tr:adm2:a"] }).adm2Shards
+    ).toEqual({ "tr:adm2:a": shardPath });
+    expect(() =>
+      createTurkeyV2DeliveryManifest({ ...candidate, adm2Ids: ["tr:adm2:a", "tr_adm2_a"] })
+    ).toThrow("colliding");
+  });
 });

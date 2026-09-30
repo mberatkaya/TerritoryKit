@@ -304,6 +304,9 @@ export interface TerritoryRegistryClientOptions {
   verifyChecksums?: boolean;
   offline?: boolean;
   allowHttp?: boolean;
+  allowFile?: boolean;
+  allowPrivateNetwork?: boolean;
+  allowedOrigins?: readonly string[];
   timeoutMs?: number;
   maxArtifactBytes?: number;
   maxDecompressedBytes?: number;

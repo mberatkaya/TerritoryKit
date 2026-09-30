@@ -5,6 +5,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSy
 import { createRequire } from "node:module";
 import { join, relative } from "node:path";
 import { format as formatPrettier, resolveConfig } from "prettier";
+import YAML from "yaml";
 
 const root = process.cwd();
 const outputDir = join(root, "docs", "release-artifacts");
@@ -13,7 +14,7 @@ const publicPackages = readPublicPackages();
 
 mkdirSync(outputDir, { recursive: true });
 
-const audit = runJson("pnpm", ["audit", "--audit-level", "critical", "--json"]);
+const audit = runJson("pnpm", ["audit", "--prod", "--json"], { allowFailure: true });
 const fullAudit = runJson("pnpm", ["audit", "--json"], { allowFailure: true });
 const prodLicenseInventory = runJson("pnpm", ["licenses", "list", "--prod", "--json"]);
 const packageDryRun = runJson("node", ["scripts/package-dry-run.mjs"]);
@@ -55,7 +56,9 @@ const coverage = existsSync(join(root, "coverage", "coverage-summary.json"))
   : undefined;
 const licenseSummary = summarizeLicenses(prodLicenseInventory);
 const releaseDecisionInputs = {
-  criticalVulnerabilities: audit.metadata?.vulnerabilities?.critical ?? null,
+  criticalVulnerabilities: fullAudit.metadata?.vulnerabilities?.critical ?? null,
+  highProductionVulnerabilities: audit.metadata?.vulnerabilities?.high ?? null,
+  highAllVulnerabilities: fullAudit.metadata?.vulnerabilities?.high ?? null,
   publicPackageMetadataOk: packageMetadata.ok,
   packageDryRunOk: packageDryRun.ok,
   exportsOk: exports.ok,
@@ -64,12 +67,22 @@ const releaseDecisionInputs = {
   turkeyAdm3ChecksumOk: turkey.adm3.checksums.ok,
   turkeyV2StableNationalOk: turkeyV2.ok,
   turkeyBenchmarkOk: benchmarkComparison.ok,
-  changesetStatusOk
+  changesetStatusOk,
+  workflowSecurityOk: workflowSecurity.ok
 };
 const releaseGateOk =
   releaseDecisionInputs.criticalVulnerabilities === 0 &&
+  releaseDecisionInputs.highProductionVulnerabilities === 0 &&
+  releaseDecisionInputs.highAllVulnerabilities === 0 &&
   Object.entries(releaseDecisionInputs)
-    .filter(([key]) => key !== "criticalVulnerabilities")
+    .filter(
+      ([key]) =>
+        ![
+          "criticalVulnerabilities",
+          "highProductionVulnerabilities",
+          "highAllVulnerabilities"
+        ].includes(key)
+    )
     .every(([, value]) => value === true);
 
 const reportPath = join(outputDir, "production-hardening-report.json");
@@ -95,12 +108,17 @@ await writeJson(reportPath, {
     node: process.version,
     platform: process.platform,
     arch: process.arch,
-    packageManager: readJson("package.json").packageManager
+    packageManager: readJson("package.json").packageManager,
+    pnpmVersion: runText("pnpm", ["--version"]).stdout.trim(),
+    lockfileSha256: createHash("sha256")
+      .update(readFileSync(join(root, "pnpm-lock.yaml")))
+      .digest("hex")
   },
   releaseDecisionInputs,
   security: {
     audit,
     fullAudit,
+    exceptions: [],
     workflowSecurity
   },
   licenses: licenseSummary,
@@ -150,6 +168,8 @@ console.log(
     2
   )
 );
+
+process.exitCode = releaseGateOk ? 0 : 1;
 
 function readPublicPackages() {
   return readdirSync(join(root, "packages"), { withFileTypes: true })
@@ -326,29 +346,58 @@ function inspectWorkflowSecurity() {
     .sort()
     .map((entry) => {
       const content = readFileSync(join(workflowDir, entry), "utf8");
+      const document = YAML.parseDocument(content, { uniqueKeys: true });
+      const workflow = document.toJS();
+      const jobs = Object.entries(workflow.jobs ?? {}).map(([name, job]) => {
+        const steps = job.steps ?? [];
+        const uses = steps.filter((step) => typeof step.uses === "string").map((step) => step.uses);
+        const runBlocks = steps
+          .filter((step) => typeof step.run === "string")
+          .map((step) => step.run);
+        return {
+          name,
+          permissions: job.permissions ?? workflow.permissions ?? {},
+          environment: job.environment ?? null,
+          condition: job.if ?? null,
+          unpinnedActions: uses.filter((value) => !/@[a-f0-9]{40}$/.test(value)),
+          dispatchInterpolationInRun: runBlocks.some((value) => /\$\{\{\s*inputs\./.test(value)),
+          installWithoutIgnoreScripts: runBlocks.some(
+            (value) => /pnpm install/.test(value) && !/--ignore-scripts/.test(value)
+          ),
+          commandConstructionRisk: runBlocks.some((value) =>
+            /(?:eval\s|bash\s+-c|sh\s+-c)/.test(value)
+          ),
+          secretBearing: steps.some((step) => /secrets\./.test(JSON.stringify(step.env ?? {}))),
+          publishesNpm: runBlocks.some((value) => /pnpm release|npm publish/.test(value))
+        };
+      });
       return {
         file: `.github/workflows/${entry}`,
-        hasPermissionsBlock: /^\s*permissions:/m.test(content),
-        secrets: [
-          ...new Set([...content.matchAll(/secrets\.([A-Z0-9_]+)/g)].map((match) => match[1]))
-        ].sort(),
-        usesProvenance:
-          content.includes("NPM_CONFIG_PROVENANCE") || content.includes("id-token: write"),
-        workflowDispatchOnly:
-          content.includes("workflow_dispatch:") &&
-          !content.includes("pull_request:") &&
-          !content.includes("push:")
+        parseErrors: document.errors.map((error) => error.message),
+        dispatchInputs: Object.keys(workflow.on?.workflow_dispatch?.inputs ?? {}),
+        pullRequestTarget: Boolean(workflow.on?.pull_request_target),
+        jobs
       };
     });
-
   return {
     workflows,
+    ok: workflows.every(
+      (workflow) =>
+        workflow.parseErrors.length === 0 &&
+        !workflow.pullRequestTarget &&
+        workflow.jobs.every(
+          (job) =>
+            job.unpinnedActions.length === 0 &&
+            !job.dispatchInterpolationInRun &&
+            !job.installWithoutIgnoreScripts &&
+            !job.commandConstructionRisk
+        )
+    ),
     secretPolicy: {
       npmPublish:
-        "NPM_TOKEN is optional; release.yml prefers npm provenance/trusted publishing when configured.",
+        "Explicit dispatch and npm-production environment are required; only publish job has OIDC.",
       registryPublish:
-        "dataset-registry-publish.yml requires TERRITORY_REGISTRY_PUBLISH_ENABLED=true for non-dry-run activation.",
-      normalCi: "ci.yml uses no repository secrets and installs with --ignore-scripts."
+        "TERRITORY_REGISTRY_PUBLISH_ENABLED=true is required for non-dry-run activation."
     }
   };
 }

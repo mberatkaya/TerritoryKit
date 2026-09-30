@@ -6118,7 +6118,8 @@ function createCliRegistryClient(flags: Map<string, string | true>) {
     ...(cacheDir ? { cacheDir } : {}),
     ...(flags.has("offline") ? { offline: true } : {}),
     ...(flags.has("no-verify") ? { verifyChecksums: false } : {}),
-    ...(flags.has("allow-http") ? { allowHttp: true } : {})
+    ...(flags.has("allow-http") ? { allowHttp: true } : {}),
+    allowFile: flags.has("allow-file")
   });
 }
 

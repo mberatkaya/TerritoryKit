@@ -8,6 +8,19 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const registry = "https://registry.npmjs.org/";
 const dryRun = process.argv.includes("--dry-run");
 const publishTag = "latest";
+if (!dryRun) {
+  const eventPath = process.env.GITHUB_EVENT_PATH;
+  const event = eventPath ? JSON.parse(readFileSync(eventPath, "utf8")) : {};
+  if (
+    process.env.GITHUB_ACTIONS !== "true" ||
+    process.env.GITHUB_EVENT_NAME !== "workflow_dispatch" ||
+    process.env.GITHUB_REF !== "refs/heads/main" ||
+    event.inputs?.publish !== "true" ||
+    !process.env.GITHUB_WORKFLOW_REF?.includes("/.github/workflows/release.yml@refs/heads/main")
+  ) {
+    throw new Error("npm publication requires the approved release workflow dispatch on main.");
+  }
+}
 
 if (process.env.NODE_AUTH_TOKEN === "") {
   delete process.env.NODE_AUTH_TOKEN;
@@ -129,6 +142,16 @@ const packPackage = (pkg, packRoot) => {
     throw new Error(`Expected exactly one tarball for ${pkg.name}, found ${tarballs.length}`);
   }
 
+  const entries = execFileSync("tar", ["-tf", tarballs[0]], { encoding: "utf8" }).split("\n");
+  if (
+    entries.some(
+      (entry) =>
+        /(?:^|\/)(?:\.env(?:\.|$)|\.npmrc$|.*credentials.*|.*secret.*|.*private.*key.*)/i.test(
+          entry
+        ) || /(?:geojson|\.pbf|\.mvt)$/i.test(entry)
+    )
+  )
+    throw new Error(`Unsafe file in ${pkg.name} tarball.`);
   return tarballs[0];
 };
 

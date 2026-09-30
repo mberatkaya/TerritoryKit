@@ -8,6 +8,7 @@ export type TurkeyV2SourceChangeKind =
 export interface TurkeyV2SourceChange {
   sourceId: string;
   kind: TurkeyV2SourceChangeKind;
+  kinds: TurkeyV2SourceChangeKind[];
   changedFields: string[];
   provinceCode?: string;
 }
@@ -42,17 +43,30 @@ export function diffTurkeyV2SourceLocks(
       )
       .sort();
     if (!changedFields.length) continue;
-    const kind: TurkeyV2SourceChangeKind = !oldSource
-      ? "added"
+    const kinds: TurkeyV2SourceChangeKind[] = !oldSource
+      ? ["added"]
       : !newSource
-        ? "removed"
-        : changedFields.some((key) => /checksum|sha256|hash/i.test(key))
-          ? "checksum-changed"
-          : changedFields.some((key) => /version/i.test(key))
-            ? "version-changed"
-            : "metadata-changed";
+        ? ["removed"]
+        : [
+            ...(changedFields.some((key) => /checksum|sha256|hash/i.test(key))
+              ? ["checksum-changed" as const]
+              : []),
+            ...(changedFields.some((key) => /version/i.test(key))
+              ? ["version-changed" as const]
+              : []),
+            ...(changedFields.some((key) => !/checksum|sha256|hash|version/i.test(key))
+              ? ["metadata-changed" as const]
+              : [])
+          ];
+    const kind = kinds[0]!;
     const provinceCode = newSource?.provinceCode ?? oldSource?.provinceCode;
-    changes.push({ sourceId, kind, changedFields, ...(provinceCode ? { provinceCode } : {}) });
+    changes.push({
+      sourceId,
+      kind,
+      kinds,
+      changedFields,
+      ...(provinceCode ? { provinceCode } : {})
+    });
   }
   const affectedProvinceCodes = [
     ...new Set(changes.flatMap((change) => (change.provinceCode ? [change.provinceCode] : [])))
@@ -124,4 +138,65 @@ function sourceEntries(lock: TurkeyV2NationalSourceLock): Source[] {
       }
     }
   ];
+}
+
+/** Stage-two impact is derived from the existing migration plan after a candidate rebuild. */
+export function summarizeTurkeyV2PostRebuildImpact(input: {
+  migrationPlan: {
+    records: readonly {
+      changeType: string;
+      oldZoneIds: readonly string[];
+      newZoneIds: readonly string[];
+      parentBefore?: string;
+      parentAfter?: string;
+      sourceClassBefore?: string;
+      sourceClassAfter?: string;
+      intersectionOverUnion?: number;
+    }[];
+  };
+  previousQuality?: Record<string, unknown>;
+  candidateQuality?: Record<string, unknown>;
+}) {
+  const records = input.migrationPlan.records.filter(
+    (record) =>
+      record.changeType !== "preserved" ||
+      (record.intersectionOverUnion !== undefined && record.intersectionOverUnion < 1)
+  );
+  const sorted = (values: Iterable<string>) => [...new Set(values)].sort();
+  const affectedParentIds = sorted(
+    records.flatMap((record) =>
+      [record.parentBefore, record.parentAfter].filter((value): value is string => Boolean(value))
+    )
+  );
+  const affectedTerritoryIds = sorted(
+    records.flatMap((record) => [...record.oldZoneIds, ...record.newZoneIds])
+  );
+  const qualityKeys = sorted([
+    ...Object.keys(input.previousQuality ?? {}),
+    ...Object.keys(input.candidateQuality ?? {})
+  ]);
+  return {
+    schemaVersion: "territorykit-tr-v2-post-rebuild-impact@1" as const,
+    evidenceArtifact: "migration-plan.json",
+    qualityArtifact: "quality-report.json",
+    affectedAdm2Ids: affectedParentIds,
+    affectedParentIds,
+    affectedTerritoryIds,
+    geometryChangeCount: records.filter(
+      (record) =>
+        (typeof record.intersectionOverUnion === "number" && record.intersectionOverUnion < 1) ||
+        ["split", "merged", "added", "removed"].includes(record.changeType)
+    ).length,
+    sourceReplacementCount: records.filter(
+      (record) => record.sourceClassBefore !== record.sourceClassAfter
+    ).length,
+    replacementMapImplications: records.filter((record) =>
+      ["split", "merged", "removed", "source-replaced"].includes(record.changeType)
+    ).length,
+    qualityChangedFields: qualityKeys.filter(
+      (key) =>
+        JSON.stringify(input.previousQuality?.[key]) !==
+        JSON.stringify(input.candidateQuality?.[key])
+    )
+  };
 }

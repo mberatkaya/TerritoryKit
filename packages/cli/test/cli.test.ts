@@ -297,6 +297,7 @@ describe("territory cli", () => {
           "sample-cli",
           "--registry",
           registryPath,
+          "--allow-file",
           "--cache-dir",
           cacheDir,
           "--levels",

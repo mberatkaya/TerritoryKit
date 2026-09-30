@@ -401,10 +401,32 @@ function isSafeUrlValue(input: unknown): boolean {
   return isSafeRelativePath(value);
 }
 
+function hasControl(value: string): boolean {
+  return [...value].some(
+    (character) => character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127
+  );
+}
+
 function isSafeRelativePath(input: string): boolean {
   try {
-    const decoded = decodeURIComponent(input);
-    return !input.startsWith("/") && !input.includes("\\") && !decoded.split("/").includes("..");
+    if (
+      input.includes("\\") ||
+      hasControl(input) ||
+      input.startsWith("/") ||
+      input.startsWith("//")
+    )
+      return false;
+    let decoded = input;
+    for (let index = 0; index < 3; index++) {
+      const next = decodeURIComponent(decoded);
+      if (next === decoded) break;
+      decoded = next;
+    }
+    return (
+      !(decoded.includes("\\") || hasControl(decoded)) &&
+      !decoded.startsWith("/") &&
+      !decoded.split("/").some((part) => part === ".." || part === ".")
+    );
   } catch {
     return false;
   }

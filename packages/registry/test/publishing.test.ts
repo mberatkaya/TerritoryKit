@@ -8,6 +8,7 @@ import { createSampleTerritoryDataset } from "@territory-kit/shared-testkit";
 import { describe, expect, it } from "vitest";
 import {
   createLocalTerritoryRegistryPublishTarget,
+  createNodeRegistryTransport,
   createS3CompatibleTerritoryRegistryPublishTarget,
   publishTerritoryDatasetRegistry,
   verifyTerritoryRegistryPublication
@@ -130,6 +131,7 @@ describe("territory hosted registry publishing", () => {
         await expect(
           verifyTerritoryRegistryPublication({
             registryUrl: `${server.baseUrl}registry.json`,
+            transport: createNodeRegistryTransport({ allowPrivateNetwork: true }),
             datasetId: "territory-kit-tr",
             version: "1.0.0",
             verifyContentType: true,
@@ -144,6 +146,7 @@ describe("territory hosted registry publishing", () => {
         await writeFile(join(registryOutput, "tr", "1.0.0", "manifest.json"), "broken\n", "utf8");
         const broken = await verifyTerritoryRegistryPublication({
           registryUrl: `${server.baseUrl}registry.json`,
+          transport: createNodeRegistryTransport({ allowPrivateNetwork: true }),
           datasetId: "territory-kit-tr",
           version: "1.0.0"
         });

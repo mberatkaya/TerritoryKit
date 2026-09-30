@@ -17,6 +17,7 @@ import {
   createTurkeyV2NationalSourceLock,
   createTurkeyV2DeliveryManifest,
   diffTurkeyV2SourceLocks,
+  summarizeTurkeyV2PostRebuildImpact,
   createTurkeyOsmSmartFallbackGeneratedOptions,
   readTurkeyOsmAdm2BarrierArtifact,
   verifyTurkeyOsmSnapshot,
@@ -178,6 +179,39 @@ async function runSourceDiff(args: string[]): Promise<number> {
     previous as unknown as TurkeyV2NationalBuildResult["sourceLock"],
     candidate as unknown as TurkeyV2NationalBuildResult["sourceLock"]
   );
+  const migrationPath = getFlag(flags, "migration-plan");
+  if (migrationPath) {
+    const migrationPlan = await readJson(resolve(migrationPath));
+    if (!isRecord(migrationPlan) || !Array.isArray(migrationPlan.records)) {
+      printJson({
+        ok: false,
+        command: "tr v2 national source-diff",
+        issues: [issue("Invalid migration plan.")]
+      });
+      return 2;
+    }
+    const previousQuality = getFlag(flags, "previous-quality");
+    const candidateQuality = getFlag(flags, "candidate-quality");
+    const impact = summarizeTurkeyV2PostRebuildImpact({
+      migrationPlan: migrationPlan as Parameters<
+        typeof summarizeTurkeyV2PostRebuildImpact
+      >[0]["migrationPlan"],
+      ...(previousQuality
+        ? { previousQuality: (await readJson(resolve(previousQuality))) as Record<string, unknown> }
+        : {}),
+      ...(candidateQuality
+        ? {
+            candidateQuality: (await readJson(resolve(candidateQuality))) as Record<string, unknown>
+          }
+        : {})
+    });
+    printJson({
+      ok: true,
+      command: "tr v2 national source-diff",
+      data: { sourceLockDiff: report, postRebuildImpact: impact }
+    });
+    return 0;
+  }
   printJson({ ok: true, command: "tr v2 national source-diff", data: report });
   return 0;
 }
@@ -194,19 +228,24 @@ async function runDeliveryManifest(args: string[]): Promise<number> {
     return 2;
   }
   const read = (path: string) => readJson(join(resolve(root), path));
-  const [canonical, sourceLock, render, checksums, shards] = await Promise.all([
+  const [canonical, sourceLock, render, checksums, shards, adm2Dataset] = await Promise.all([
     read("manifest.json"),
     read("source-lock.json"),
     read("render/manifest.json"),
     read("checksums.json"),
-    read("shards.json")
+    read("shards.json"),
+    read("levels/ADM2/dataset.json")
   ]);
   const manifest = createTurkeyV2DeliveryManifest({
     canonical,
     sourceLock,
     render,
     checksums,
-    shards
+    shards,
+    adm2Ids:
+      isRecord(adm2Dataset) && Array.isArray(adm2Dataset.zones)
+        ? adm2Dataset.zones.map((zone: { id: string }) => zone.id)
+        : []
   } as Parameters<typeof createTurkeyV2DeliveryManifest>[0]);
   const output = getFlag(flags, "output");
   if (output) await writeJson(resolve(output), manifest, true);

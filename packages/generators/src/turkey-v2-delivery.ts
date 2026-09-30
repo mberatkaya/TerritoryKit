@@ -20,6 +20,7 @@ export interface TurkeyV2DeliveryManifest {
   };
   artifacts: Record<string, { path: string; sha256: string; byteSize: number }>;
   shards: Record<string, { sha256: string; byteSize: number }>;
+  adm2Shards?: Record<string, string>;
   cacheIdentity: string;
   contentHash: string;
 }
@@ -42,6 +43,7 @@ export function createTurkeyV2DeliveryManifest(input: {
     layers: readonly { minZoom: number; maxZoom: number }[];
   };
   checksums: { files: Record<string, Checksum> };
+  adm2Ids?: readonly string[];
   shards: {
     datasetVersion: string;
     sourceLockHash: string;
@@ -80,6 +82,15 @@ export function createTurkeyV2DeliveryManifest(input: {
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([path, entry]) => [path, { sha256: entry.sha256, byteSize: entry.sizeBytes }])
   );
+  const adm2Shards: Record<string, string> = {};
+  const usedPaths = new Set<string>();
+  for (const id of [...(input.adm2Ids ?? [])].sort()) {
+    const path = `districts/${id.replace(/[^a-zA-Z0-9_-]/g, "_")}/dataset.json`;
+    if (!orderedShards[path] || usedPaths.has(path))
+      throw new Error(`Missing or colliding ADM2 shard mapping: ${id}`);
+    adm2Shards[id] = path;
+    usedPaths.add(path);
+  }
   const body = {
     schemaVersion: "territorykit-tr-v2-delivery@1" as const,
     datasetId: canonical.datasetId,
@@ -100,6 +111,7 @@ export function createTurkeyV2DeliveryManifest(input: {
     },
     artifacts,
     shards: orderedShards,
+    ...(input.adm2Ids ? { adm2Shards } : {}),
     cacheIdentity: `${canonical.datasetVersion}:${canonical.geometryHash}:${checksumIndexHash}`
   };
   return { ...body, contentHash: sha256(JSON.stringify(body)) };

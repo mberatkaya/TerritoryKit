@@ -116,7 +116,11 @@ describe("territory dataset registry", () => {
       };
       await writeFile(registryPath, stableJson(registry), "utf8");
 
-      const client = createNodeTerritoryRegistryClient({ registryUrl: registryPath, cacheDir });
+      const client = createNodeTerritoryRegistryClient({
+        registryUrl: registryPath,
+        cacheDir,
+        allowFile: true
+      });
       const installed = await client.installDataset({ datasetId: "sample", levels: ["ADM0"] });
 
       expect(JSON.parse(await installed.readText("manifest.json"))).toMatchObject({
@@ -129,7 +133,8 @@ describe("territory dataset registry", () => {
       const offlineClient = createNodeTerritoryRegistryClient({
         registryUrl: registryPath,
         cacheDir,
-        offline: true
+        offline: true,
+        allowFile: true
       });
       const offlineInstalled = await offlineClient.installDataset({
         datasetId: "sample",
