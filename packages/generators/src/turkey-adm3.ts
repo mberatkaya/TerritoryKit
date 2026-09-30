@@ -121,6 +121,10 @@ export {
   validateTurkeyV2NationalCompleteness
 } from "./turkey-v2-national-validation.js";
 export { isLargeNationalJsonArtifact, serializeNationalJsonChunks } from "./national-json.js";
+export { diffTurkeyV2SourceLocks } from "./turkey-v2-source-diff.js";
+export type { TurkeyV2SourceChange, TurkeyV2SourceDiff } from "./turkey-v2-source-diff.js";
+export { createTurkeyV2DeliveryManifest } from "./turkey-v2-delivery.js";
+export type { TurkeyV2DeliveryManifest } from "./turkey-v2-delivery.js";
 export type {
   ResolvedTurkeyGameZoneConfiguration,
   ResolvedTurkeyGameZoneProfile,

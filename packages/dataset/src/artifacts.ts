@@ -56,6 +56,7 @@ export interface TerritoryRenderFeatureProperties extends Record<string, unknown
   adminLevel: TerritoryAdminLevel;
   name?: string;
   parentId?: string;
+  parentAdm2Id?: string;
   sourceAdminLevel?: TerritoryAdminLevel;
   semanticType?: string;
   localName?: string;
@@ -64,6 +65,7 @@ export interface TerritoryRenderFeatureProperties extends Record<string, unknown
   sourceProvider?: string;
   sourceAttribution?: string;
   sourceClass?: string;
+  sourceVersion?: string;
   boundarySourceClass?: string;
   administrative?: boolean;
   authoritative?: boolean;
@@ -124,6 +126,8 @@ export function createTerritoryRenderFeatureCollection(
         const adminLevel = zoneToAdminLevel(zone);
         const name = readZoneName(zone);
         const territory = readRecord(zone.properties.territory);
+        const parentId =
+          zone.parentId ?? (adminLevel === "ADM3" ? readString(territory?.parentId) : undefined);
         const source = readRecord(territory?.source);
         const sourceProvider = readString(source?.provider) ?? dataset.manifest.sourceProvider;
         const sourceAttribution = readString(source?.attribution) ?? dataset.manifest.attribution;
@@ -132,6 +136,8 @@ export function createTerritoryRenderFeatureCollection(
           ? zone.sourceAdminLevel
           : undefined;
         const sourceClass = readString(territory?.sourceClass) ?? readString(source?.sourceClass);
+        const sourceVersion =
+          readString(territory?.sourceVersion) ?? readString(source?.sourceVersion);
         const boundarySourceClass = readString(territory?.boundarySourceClass);
         const administrative = territory?.administrative;
         const authoritative = territory?.authoritative;
@@ -139,6 +145,7 @@ export function createTerritoryRenderFeatureCollection(
         const generatorVersion =
           readString(territory?.generatorVersion) ?? readString(territory?.algorithmVersion);
         const sourceSnapshotChecksum = readString(territory?.sourceSnapshotChecksum);
+        const boundaryKind = readString(territory?.boundaryKind);
         const geometryHash =
           readString(territory?.geometryHash) ?? readString(territory?.effectiveGeometryHash);
         const districtName = readString(zone.properties.districtName);
@@ -154,7 +161,8 @@ export function createTerritoryRenderFeatureCollection(
             datasetId: dataset.manifest.datasetId,
             datasetVersion: dataset.manifest.datasetVersion,
             ...(name ? { name } : {}),
-            ...(zone.parentId ? { parentId: zone.parentId } : {}),
+            ...(parentId ? { parentId } : {}),
+            ...(adminLevel === "ADM3" && parentId ? { parentAdm2Id: parentId } : {}),
             ...(sourceAdminLevel ? { sourceAdminLevel } : {}),
             ...(zone.semanticType ? { semanticType: zone.semanticType } : {}),
             ...(zone.localName ? { localName: zone.localName } : {}),
@@ -163,10 +171,15 @@ export function createTerritoryRenderFeatureCollection(
             ...(sourceProvider ? { sourceProvider } : {}),
             ...(sourceAttribution ? { sourceAttribution } : {}),
             ...(sourceClass ? { sourceClass } : {}),
+            ...(sourceVersion ? { sourceVersion } : {}),
             ...(boundarySourceClass ? { boundarySourceClass } : {}),
             ...(typeof administrative === "boolean" ? { administrative } : {}),
             ...(typeof authoritative === "boolean" ? { authoritative } : {}),
-            ...(sourceClass === "generated" ? { boundaryKind: "estimated" } : {}),
+            ...(boundaryKind
+              ? { boundaryKind }
+              : sourceClass === "generated"
+                ? { boundaryKind: "estimated" }
+                : {}),
             ...(confidence ? { confidence } : {}),
             ...(generatorVersion ? { generatorVersion } : {}),
             ...(sourceSnapshotChecksum ? { sourceSnapshotChecksum } : {}),

@@ -15,6 +15,8 @@ import {
   isLargeNationalJsonArtifact,
   serializeNationalJsonChunks,
   createTurkeyV2NationalSourceLock,
+  createTurkeyV2DeliveryManifest,
+  diffTurkeyV2SourceLocks,
   createTurkeyOsmSmartFallbackGeneratedOptions,
   readTurkeyOsmAdm2BarrierArtifact,
   verifyTurkeyOsmSnapshot,
@@ -104,12 +106,184 @@ export async function runTurkeyV2National(args: string[]): Promise<number> {
     return runBenchmark(rest);
   }
 
+  if (subcommand === "source-diff") {
+    return runSourceDiff(rest);
+  }
+
+  if (subcommand === "delivery-manifest") {
+    return runDeliveryManifest(rest);
+  }
+
+  if (subcommand === "inspect") {
+    return runInspect(rest);
+  }
+
   printJson({
     ok: false,
     command: "tr v2 national",
     issues: [issue(`Unsupported Turkey V2 national command '${subcommand}'.`)]
   });
   return 2;
+}
+
+async function runSourceDiff(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const previousPath = getFlag(flags, "previous-lock");
+  const candidatePath = getFlag(flags, "candidate-lock");
+  if (!previousPath || !candidatePath) {
+    printJson({
+      ok: false,
+      command: "tr v2 national source-diff",
+      issues: [issue("--previous-lock and --candidate-lock are required.")]
+    });
+    return 2;
+  }
+  const previous = await readJson(resolve(previousPath));
+  const candidate = await readJson(resolve(candidatePath));
+  if (
+    !isRecord(previous) ||
+    !isRecord(candidate) ||
+    !isRecord(previous.adm0Adm2) ||
+    !isRecord(candidate.adm0Adm2) ||
+    !isRecord(previous.officialAdm3) ||
+    !isRecord(candidate.officialAdm3) ||
+    !isRecord(previous.osm) ||
+    !isRecord(candidate.osm) ||
+    !isRecord(previous.generated) ||
+    !isRecord(candidate.generated)
+  ) {
+    printJson({
+      ok: false,
+      command: "tr v2 national source-diff",
+      issues: [issue("Both inputs must be Turkey V2 national source locks.")]
+    });
+    return 2;
+  }
+  for (const [label, lock] of [
+    ["previous", previous],
+    ["candidate", candidate]
+  ] as const) {
+    const identity = { ...lock };
+    delete identity.contentHash;
+    if (lock.contentHash !== `sha256:${stableHash(identity)}`) {
+      printJson({
+        ok: false,
+        command: "tr v2 national source-diff",
+        issues: [issue(`${label} source lock identity is invalid.`)]
+      });
+      return 2;
+    }
+  }
+  const report = diffTurkeyV2SourceLocks(
+    previous as unknown as TurkeyV2NationalBuildResult["sourceLock"],
+    candidate as unknown as TurkeyV2NationalBuildResult["sourceLock"]
+  );
+  printJson({ ok: true, command: "tr v2 national source-diff", data: report });
+  return 0;
+}
+
+async function runDeliveryManifest(args: string[]): Promise<number> {
+  const flags = parseFlags(args);
+  const root = getFlag(flags, "artifact-root");
+  if (!root) {
+    printJson({
+      ok: false,
+      command: "tr v2 national delivery-manifest",
+      issues: [issue("--artifact-root is required.")]
+    });
+    return 2;
+  }
+  const read = (path: string) => readJson(join(resolve(root), path));
+  const [canonical, sourceLock, render, checksums, shards] = await Promise.all([
+    read("manifest.json"),
+    read("source-lock.json"),
+    read("render/manifest.json"),
+    read("checksums.json"),
+    read("shards.json")
+  ]);
+  const manifest = createTurkeyV2DeliveryManifest({
+    canonical,
+    sourceLock,
+    render,
+    checksums,
+    shards
+  } as Parameters<typeof createTurkeyV2DeliveryManifest>[0]);
+  const output = getFlag(flags, "output");
+  if (output) await writeJson(resolve(output), manifest, true);
+  printJson({ ok: true, command: "tr v2 national delivery-manifest", data: manifest });
+  return 0;
+}
+
+async function runInspect(args: string[]): Promise<number> {
+  const root = getFlag(parseFlags(args), "artifact-root");
+  if (!root) {
+    printJson({
+      ok: false,
+      command: "tr v2 national inspect",
+      issues: [issue("--artifact-root is required.")]
+    });
+    return 2;
+  }
+  const read = (path: string) => readJson(join(resolve(root), path));
+  const [manifest, coverage, quality, render, shards, checksums, attribution] = await Promise.all([
+    read("manifest.json"),
+    read("coverage.json"),
+    read("quality-report.json"),
+    read("render/manifest.json"),
+    read("shards.json"),
+    read("checksums.json"),
+    read("attribution.json")
+  ]);
+  if (
+    !isRecord(manifest) ||
+    !isRecord(coverage) ||
+    !isRecord(quality) ||
+    !isRecord(render) ||
+    !isRecord(shards) ||
+    !isRecord(checksums) ||
+    !isRecord(attribution)
+  ) {
+    printJson({
+      ok: false,
+      command: "tr v2 national inspect",
+      issues: [issue("One or more required national metadata artifacts are invalid.")]
+    });
+    return 1;
+  }
+  const shardFiles = isRecord(shards.files) ? Object.keys(shards.files) : [];
+  const checksumFiles = isRecord(checksums.files) ? Object.keys(checksums.files) : [];
+  printJson({
+    ok: true,
+    command: "tr v2 national inspect",
+    data: {
+      datasetId: manifest.datasetId,
+      datasetVersion: manifest.datasetVersion,
+      canonicalGeometryHash: manifest.geometryHash,
+      sourceLockHash: manifest.sourceLockHash,
+      publishReady: quality.publishReady,
+      districtCount: coverage.districtCount,
+      provinceShardCount: shardFiles.filter((path) => path.startsWith("provinces/")).length,
+      districtShardCount: shardFiles.filter((path) => path.startsWith("districts/")).length,
+      tileCount: checksumFiles.filter((path) => /^render\/tiles\/\d+\/\d+\/\d+\.mvt$/.test(path))
+        .length,
+      renderPolicy: render.layers,
+      attributionGroupCount: Array.isArray(attribution.groups) ? attribution.groups.length : 0,
+      artifacts: [
+        "levels/ADM3/dataset.json",
+        "levels/ADM3/adjacency/adjacency.json",
+        "query/query-artifact.json",
+        "attribution.json",
+        "migration-plan.json"
+      ].map((path) => ({
+        path,
+        checksum:
+          isRecord(checksums.files) && isRecord(checksums.files[path])
+            ? checksums.files[path].sha256
+            : null
+      }))
+    }
+  });
+  return 0;
 }
 
 async function runPlan(args: string[]): Promise<number> {
@@ -1777,6 +1951,9 @@ Commands:
   publish-ready  Build with publish-ready quality gates
   validate       Validate a previously built artifact directory
   benchmark      Run bounded 10/100-district national benchmarks
+  source-diff    Compare pinned source locks without promoting data
+  delivery-manifest  Index checksummed shards and tiles for consumers
+  inspect        Summarize a national candidate without loading full geometry
 
 Smart input:
   --osm-barriers <root> --osm-source-lock <source-lock.json>
@@ -1795,5 +1972,8 @@ Common flags:
   --max-districts <n>
   --district-offset <n> (partial build starting after n sorted districts)
   --force
+  --previous-lock <source-lock.json> --candidate-lock <source-lock.json> (source-diff)
+  --artifact-root <dir> --output <delivery-manifest.json> (delivery-manifest)
+  --artifact-root <dir> (inspect)
 `);
 }
