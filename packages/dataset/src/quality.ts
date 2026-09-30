@@ -856,7 +856,11 @@ function validatePolygonHoles(
       });
     }
 
-    if (ringsIntersect(hole.ring, shell, context.epsilon, !context.allowHoleBoundaryTouch)) {
+    if (
+      context.allowHoleBoundaryTouch
+        ? ringsCrossOrOverlap(hole.ring, shell, context.epsilon)
+        : ringsIntersect(hole.ring, shell, context.epsilon, false)
+    ) {
       addIssue(context, {
         code: "HOLE_SHELL_INTERSECTION",
         severity: "error",
@@ -1639,7 +1643,10 @@ function ringHasStrictPointInPolygon(
       return false;
     }
 
-    return classifyPointInRing(point, shell, epsilon) === "inside";
+    return (
+      classifyPointInRing(point, shell, epsilon) === "inside" &&
+      polygon.slice(1).every((hole) => classifyPointInRing(point, hole, epsilon) === "outside")
+    );
   });
 }
 
@@ -1685,6 +1692,22 @@ function ringsIntersect(
             rightSegment.end,
             epsilon
           )
+  );
+}
+
+function ringsCrossOrOverlap(left: LngLat[], right: LngLat[], epsilon: number): boolean {
+  return someCandidateSegmentPair(
+    ringSegments(left),
+    ringSegments(right),
+    epsilon,
+    (leftSegment, rightSegment) =>
+      segmentsCrossOrOverlap(
+        leftSegment.start,
+        leftSegment.end,
+        rightSegment.start,
+        rightSegment.end,
+        epsilon
+      )
   );
 }
 

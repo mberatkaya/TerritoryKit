@@ -63,6 +63,15 @@ export interface TerritoryRenderFeatureProperties extends Record<string, unknown
   provinceName?: string;
   sourceProvider?: string;
   sourceAttribution?: string;
+  sourceClass?: string;
+  boundarySourceClass?: string;
+  administrative?: boolean;
+  authoritative?: boolean;
+  boundaryKind?: string;
+  confidence?: string;
+  generatorVersion?: string;
+  sourceSnapshotChecksum?: string;
+  geometryHash?: string;
   license?: string;
   datasetId: string;
   datasetVersion: string;
@@ -122,6 +131,16 @@ export function createTerritoryRenderFeatureCollection(
         const sourceAdminLevel = isTerritoryAdminLevel(zone.sourceAdminLevel)
           ? zone.sourceAdminLevel
           : undefined;
+        const sourceClass = readString(territory?.sourceClass) ?? readString(source?.sourceClass);
+        const boundarySourceClass = readString(territory?.boundarySourceClass);
+        const administrative = territory?.administrative;
+        const authoritative = territory?.authoritative;
+        const confidence = readString(territory?.confidence);
+        const generatorVersion =
+          readString(territory?.generatorVersion) ?? readString(territory?.algorithmVersion);
+        const sourceSnapshotChecksum = readString(territory?.sourceSnapshotChecksum);
+        const geometryHash =
+          readString(territory?.geometryHash) ?? readString(territory?.effectiveGeometryHash);
         const districtName = readString(zone.properties.districtName);
         const provinceName = readString(zone.properties.provinceName);
 
@@ -143,6 +162,15 @@ export function createTerritoryRenderFeatureCollection(
             ...(provinceName ? { provinceName } : {}),
             ...(sourceProvider ? { sourceProvider } : {}),
             ...(sourceAttribution ? { sourceAttribution } : {}),
+            ...(sourceClass ? { sourceClass } : {}),
+            ...(boundarySourceClass ? { boundarySourceClass } : {}),
+            ...(typeof administrative === "boolean" ? { administrative } : {}),
+            ...(typeof authoritative === "boolean" ? { authoritative } : {}),
+            ...(sourceClass === "generated" ? { boundaryKind: "estimated" } : {}),
+            ...(confidence ? { confidence } : {}),
+            ...(generatorVersion ? { generatorVersion } : {}),
+            ...(sourceSnapshotChecksum ? { sourceSnapshotChecksum } : {}),
+            ...(geometryHash ? { geometryHash } : {}),
             ...(license ? { license } : {})
           }
         };

@@ -20,7 +20,137 @@ import {
 
 const ROOT = resolve(__dirname, "../../..");
 
+describe("Istanbul ADM2 source cohort", () => {
+  it("enumerates 39 unique canonical parents from the repository ADM2 dataset", async () => {
+    const registry = JSON.parse(
+      await readFile(resolve(ROOT, "datasets/registry/tr-adm3-district-fallbacks.json"), "utf8")
+    ) as { districts: { districtId: string; provinceCode: string }[] };
+    const districts = registry.districts.filter((district) => district.provinceCode === "34");
+    expect(districts).toHaveLength(39);
+    expect(new Set(districts.map((district) => district.districtId)).size).toBe(39);
+    const report = JSON.parse(
+      await readFile(resolve(ROOT, "reports/baselines/sprint-6-istanbul-39.json"), "utf8")
+    ) as { results: { districtId: string }[] };
+    expect(report.results).toHaveLength(districts.length);
+    expect(report.results.map((row) => row.districtId).sort()).toEqual(
+      districts.map((district) => district.districtId).sort()
+    );
+    // The generated geometry dataset is available in local QA workspaces but
+    // deliberately not committed to CI. Check its parent relationship there.
+    const sourcePath = resolve(ROOT, "datasets/generated/countries/TR/dataset.json");
+    const sourceText = await readFile(sourcePath, "utf8").catch((error: unknown) => {
+      if ((error as NodeJS.ErrnoException).code === "ENOENT") return null;
+      throw error;
+    });
+    if (sourceText) {
+      const source = JSON.parse(sourceText) as { zones: TerritoryZone[] };
+      const province = source.zones.find((zone) => zone.level === 1 && zone.name === "İstanbul");
+      expect(province).toBeDefined();
+      const sourceDistricts = source.zones.filter(
+        (zone) => zone.level === 2 && zone.parentId === province!.id
+      );
+      expect(sourceDistricts.map((zone) => zone.id).sort()).toEqual(
+        districts.map((district) => district.districtId).sort()
+      );
+    }
+  });
+});
+
+describe("approved source preservation", () => {
+  it("keeps approved zones when barrier artifact loading fails in a batch", async () => {
+    const district = districtZone("priority", rectangle(0, 0, 1, 1));
+    const official = realZone({
+      id: "approved-on-input-failure",
+      sourceClass: "official",
+      sourceNativeId: "approved-on-input-failure",
+      name: "Approved",
+      geometry: rectangle(0, 0, 0.4, 1)
+    });
+    const result = await buildTurkeyV2HybridBatch({
+      districts: [district],
+      sourcesByDistrict: { [district.id]: { officialZones: [official], osmZones: [] } },
+      loadGeneratedOptions: async () => {
+        throw new Error("fixture barrier failure");
+      },
+      continueOnError: true,
+      buildDate: "2026-09-28T00:00:00.000Z"
+    });
+    expect(result.districts).toHaveLength(1);
+    expect(result.districts[0]!.effective.official.map((zone) => zone.id)).toContain(official.id);
+    expect(result.districts[0]!.quality.gates.approvedSourcePreservation).toBe(true);
+    expect(result.districts[0]!.quality.ok).toBe(false);
+    expect(result.districts[0]!.issues.map((issue) => issue.code)).toContain(
+      "TR_V2_HYBRID_GENERATION_INPUT_FAILED"
+    );
+  });
+  it("retains official geometry and reports uncovered gap when Smart generation fails", async () => {
+    const district = districtZone("priority", rectangle(0, 0, 1, 1));
+    const official = realZone({
+      id: "approved-on-generation-failure",
+      sourceClass: "official",
+      sourceNativeId: "approved-on-generation-failure",
+      name: "Approved",
+      geometry: rectangle(0, 0, 0.4, 1)
+    });
+    const original = JSON.stringify(official.geometry);
+    const result = await buildTurkeyV2HybridDistrict({
+      district,
+      provinceCode: "01",
+      districtCode: "priority",
+      officialZones: [official],
+      generated: {
+        enabled: true,
+        strategy: "smart",
+        organicFallback: false,
+        smartFallback: {
+          options: { algorithmVersion: "invalid" as typeof TURKEY_SMART_FALLBACK_ALGORITHM_VERSION }
+        }
+      }
+    });
+    expect(result.effective.official.map((zone) => zone.id)).toContain(official.id);
+    expect(JSON.stringify(result.effective.official[0]!.geometry)).toBe(original);
+    expect(result.quality.gates.approvedSourcePreservation).toBe(true);
+    expect(result.coverage.finalCoveragePercent).toBeLessThan(99.99);
+    expect(result.quality.ok).toBe(false);
+  });
+});
+
 describe("Turkey V2 hybrid coverage pipeline", () => {
+  it("preserves approved national provenance and takes its overlap before local official sources", async () => {
+    const district = districtZone("priority", rectangle(0, 0, 1, 1));
+    const national = realZone({
+      id: "z-national",
+      sourceClass: "official",
+      sourceNativeId: "national",
+      name: "National",
+      geometry: rectangle(0, 0, 0.6, 1)
+    });
+    (national.properties.territory as Record<string, unknown>).boundarySourceClass =
+      "official-national";
+    const local = realZone({
+      id: "a-local",
+      sourceClass: "official",
+      sourceNativeId: "local",
+      name: "Local",
+      geometry: rectangle(0.3, 0, 1, 1)
+    });
+    const result = await buildTurkeyV2HybridDistrict({
+      district,
+      provinceCode: "01",
+      districtCode: "priority",
+      officialZones: [local, national],
+      generated: { enabled: false },
+      buildDate: "2026-09-27T00:00:00.000Z"
+    });
+    expect(result.quality.ok).toBe(true);
+    const effectiveNational = result.effective.official.find((z) => z.id === national.id)!;
+    const effectiveLocal = result.effective.official.find((z) => z.id === local.id)!;
+    expect(effectiveNational.bbox[2]).toBe(0.6);
+    expect(effectiveLocal.bbox[0]).toBe(0.6);
+    expect(
+      (effectiveNational.properties.territory as Record<string, unknown>).boundarySourceClass
+    ).toBe("official-national");
+  });
   it("applies official > OSM > generated priority and keeps real provenance", async () => {
     const district = districtZone("priority", rectangle(0, 0, 1, 1));
     const official = realZone({
@@ -80,7 +210,10 @@ describe("Turkey V2 hybrid coverage pipeline", () => {
   });
 
   it("does not generate zones when real coverage fills the district", async () => {
-    const district = districtZone("real-only", rectangle(0, 0, 1, 1));
+    const district = {
+      ...districtZone("real-only", rectangle(0, 0, 1, 1)),
+      parentId: "tr:adm1:external-parent"
+    };
     const official = realZone({
       id: "tr:adm3:official-full",
       sourceClass: "official",
@@ -99,6 +232,8 @@ describe("Turkey V2 hybrid coverage pipeline", () => {
     });
 
     expect(result.quality.ok).toBe(true);
+    expect(result.dataset.zones.find((z) => z.level === 2)?.parentId).toBeUndefined();
+    expect(district.parentId).toBe("tr:adm1:external-parent");
     expect(result.coverage.generatedEffectiveCount).toBe(0);
     expect(result.coverage.missingBeforeGeneratedAreaKm2).toBe(0);
     expect(result.coverage.finalCoveragePercent).toBe(100);
@@ -230,6 +365,48 @@ describe("Turkey V2 hybrid coverage pipeline", () => {
         sourceClassAfter: "official"
       })
     ]);
+  });
+
+  it("records complete merge and ambiguous many-to-many overlap components", () => {
+    const make = (id: string, geometry: TerritoryZone["geometry"]) =>
+      realZone({
+        id,
+        sourceClass: "generated",
+        sourceNativeId: id,
+        name: id,
+        geometry
+      });
+    const oldZones = [
+      make("old-a", rectangle(0, 0, 0.5, 1)),
+      make("old-b", rectangle(0.5, 0, 1, 1))
+    ];
+    const merged = createTurkeyV2ZoneMigrationPlan({
+      buildDate: "2026-09-27T00:00:00.000Z",
+      oldZones,
+      newZones: [make("new-full", rectangle(0, 0, 1, 1))]
+    });
+    expect(merged.records).toHaveLength(1);
+    expect(merged.records[0]).toMatchObject({
+      changeType: "merged",
+      mappingCardinality: "many-to-one",
+      oldZoneIds: ["old-a", "old-b"],
+      manualReviewRequired: true
+    });
+    expect(merged.records[0]?.intersectionOverUnion).toBeCloseTo(1, 3);
+    const crossed = createTurkeyV2ZoneMigrationPlan({
+      buildDate: "2026-09-27T00:00:00.000Z",
+      oldZones,
+      newZones: [make("new-a", rectangle(0, 0, 1, 0.5)), make("new-b", rectangle(0, 0.5, 1, 1))]
+    });
+    expect(crossed.records).toHaveLength(1);
+    expect(crossed.records[0]).toMatchObject({
+      mappingCardinality: "many-to-many",
+      oldZoneIds: ["old-a", "old-b"],
+      newZoneIds: ["new-a", "new-b"],
+      manualReviewRequired: true
+    });
+    expect(crossed.records[0]?.overlapPairs).toHaveLength(4);
+    expect(crossed.records[0]?.intersectionOverUnion).toBeCloseTo(1, 3);
   });
 
   it("builds deterministic batch results independent of district order", async () => {
@@ -480,7 +657,7 @@ describe("Turkey V2 hybrid coverage pipeline", () => {
     );
   });
 
-  it("falls back to legacy generated zones when smart fallback is rejected", async () => {
+  it("allows explicit emergency legacy fallback when smart is rejected", async () => {
     const district = districtZone("smart-rejected-legacy", rectangle(0, 0, 1, 1));
     const result = await buildTurkeyV2HybridDistrict({
       district,
@@ -489,6 +666,9 @@ describe("Turkey V2 hybrid coverage pipeline", () => {
       generated: {
         enabled: true,
         strategy: "smart",
+        organicFallback: false,
+        legacyGridAllowed: true,
+        fallbackToLegacyOnSmartFailure: true,
         profile: "custom",
         targetZoneCount: 4,
         targetAreaKm2: 3000,

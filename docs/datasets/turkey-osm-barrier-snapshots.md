@@ -25,7 +25,7 @@ BARRIER EXTRACTION
 SMART FALLBACK
       |
       v
-LEGACY
+ORGANIC LOW-CONFIDENCE SMART
 ```
 
 Data lineage:
@@ -174,7 +174,7 @@ currently unsupported. Orphan inner rings are omitted with `OSM_MULTIPOLYGON_ORP
 they are never silently dropped. Unrelated relation types are not promoted to polygons. Parser
 `relationIssues`/`relationIssueCount`, build issues, and artifact quality issues retain the warnings
 and source relation IDs. Artifact warnings describe the extraction batch and may include relations
-outside an individual district. The `tr-osm-barriers-v1.1` algorithm version invalidates older cached
+outside an individual district. The `tr-osm-barriers-v1.2` algorithm version invalidates older cached
 artifacts so an offline rebuild uses the complete assembler.
 
 ## ADM2 Extraction
@@ -236,7 +236,7 @@ with a rerun from the locked Geofabrik snapshot. Both produced artifact checksum
 
 An ADM2 is smart-eligible when the barrier artifact has enough major barriers, or a usable
 combination of locality seeds and roads. Sparse inputs return `OSM_BARRIER_INPUT_INSUFFICIENT` and
-should route to legacy fallback instead of forcing weak smart geometry into production.
+requires the organic profile or explicit failure in normal national production.
 
 Inspect one district:
 
@@ -255,7 +255,7 @@ Turkey V2 hybrid resolver:
 official ADM3
   -> OSM administrative ADM3
   -> OSM barrier artifact as smart fallback input
-  -> legacy generated fallback
+  -> organic low-confidence Smart or explicit failure
 ```
 
 The adapter passes roads, railways, water, parks, landuse, locality seeds, ODbL attribution,
@@ -273,9 +273,11 @@ territory tr osm smart coverage \
 
 The report counts ADM2 totals, official coverage, OSM administrative coverage, smart-eligible
 barrier artifacts, smart-generated results when supplied, smart quality rejections, insufficient
-inputs, and legacy-required districts.
+inputs, and a historical `legacyRequired` compatibility counter. That counter describes input
+gaps; it is not permission to select legacy in Sprint 6 production. Use the national
+`smart-coverage.json` manifest for actual standard/organic decisions and zero-grid enforcement.
 
-## Sprint 5.1 Calibration
+## Historical Sprint 5.1 Calibration
 
 The Sprint 5.1 real-pilot matrix used the locked Geofabrik Turkey PBF snapshot
 `5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc`, dated
@@ -298,10 +300,13 @@ visible in `inputDiagnostics`.
 ## Resume And Failure Modes
 
 Barrier builds are resumable. An existing ADM2 artifact is reused before the PBF is parsed when
-both match:
+all match:
 
 - `sourceSnapshotChecksum`
 - `algorithmVersion`
+- parent geometry SHA-256
+- extraction configuration SHA-256
+- every layer checksum and the aggregate artifact checksum
 
 Use `--force` to rebuild. Full nationwide builds are processed in deterministic province-oriented
 batches, with `--concurrency` controlling ADM2 artifact writes inside each batch. The default mode is
@@ -318,7 +323,7 @@ strict, so the first serious ADM2 processing error fails the command. `--best-ef
 | `OSM_BARRIER_ARTIFACT_INVALID`   | A manifest, quality file, GeoJSON layer, or seed file is wrong. |
 | `OSM_BARRIER_INPUT_INSUFFICIENT` | The ADM2 barrier package is too sparse for smart generation.    |
 
-Production builds should fix the cache/source-lock mismatch or route to legacy fallback. They
+Production builds must fix the cache/source-lock mismatch or return explicit failure. They
 should not query live Overpass as a hidden recovery path.
 
 ## License
@@ -326,3 +331,7 @@ should not query live Overpass as a hidden recovery path.
 Barrier artifacts and smart-derived outputs that use OSM barriers carry OpenStreetMap attribution
 and ODbL metadata through the source-lock, barrier manifest, smart fallback source metadata, and
 hybrid provenance chain. Review ODbL obligations before distributing derived artifacts.
+
+Artifacts are written to a temporary directory and renamed after all layers complete. Province
+checkpoints are local, and resume parsing uses the full original province window so warning
+context and barrier checksums remain stable. See [Sprint 6](./turkey-sprint-6-nationwide.md).

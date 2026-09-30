@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "territorykit-sprint-6-migration-final-rc7@1",
+  "fromVersion": "2.0.0",
+  "toVersion": "2.1.0-rc.7",
+  "algorithmVersion": "overlap-components-v2",
+  "recordCount": 3146,
+  "changeTypes": {
+    "source-replaced": 1009,
+    "merged": 5,
+    "preserved": 2094,
+    "split": 37,
+    "added": 1
+  },
+  "mappingCardinality": {
+    "many-to-many": 1006,
+    "many-to-one": 5,
+    "one-to-one": 2097,
+    "one-to-many": 37,
+    "added": 1
+  },
+  "manualReviewRequired": 1052,
+  "parentChanges": 0,
+  "sourceClassChanges": 20,
+  "automaticGameplayOwnershipMigration": false,
+  "evidencePath": ".territory/sprint-6/final/candidate/migration-plan.json"
+}

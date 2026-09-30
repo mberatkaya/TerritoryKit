@@ -1,0 +1,178 @@
+{
+  "verifiedOn": "2026-09-27",
+  "publisherProfile": "https://www.npmjs.com/~mberat",
+  "publicPackageCount": 19,
+  "packages": [
+    {
+      "name": "@territory-kit/adapter-core",
+      "publishedVersion": "2.1.0",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/adapter-core/latest"
+    },
+    {
+      "name": "@territory-kit/cli",
+      "publishedVersion": "2.1.0",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/cli/latest"
+    },
+    {
+      "name": "@territory-kit/core",
+      "publishedVersion": "2.1.0",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/core/latest"
+    },
+    {
+      "name": "@territory-kit/data-de",
+      "publishedVersion": "2.1.0",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/data-de/latest"
+    },
+    {
+      "name": "@territory-kit/data-id",
+      "publishedVersion": "2.1.0",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/data-id/latest"
+    },
+    {
+      "name": "@territory-kit/data-jp",
+      "publishedVersion": "2.1.0",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/data-jp/latest"
+    },
+    {
+      "name": "@territory-kit/data-tr",
+      "publishedVersion": "2.1.0",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/data-tr/latest"
+    },
+    {
+      "name": "@territory-kit/data-us",
+      "publishedVersion": "2.1.0",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/data-us/latest"
+    },
+    {
+      "name": "@territory-kit/dataset",
+      "publishedVersion": "2.1.0",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/dataset/latest"
+    },
+    {
+      "name": "@territory-kit/game",
+      "publishedVersion": "2.1.0",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/game/latest"
+    },
+    {
+      "name": "@territory-kit/generators",
+      "publishedVersion": "2.1.0",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/generators/latest"
+    },
+    {
+      "name": "@territory-kit/leaflet",
+      "publishedVersion": "1.2.12",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/leaflet/latest"
+    },
+    {
+      "name": "@territory-kit/maplibre",
+      "publishedVersion": "2.1.0",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/maplibre/latest"
+    },
+    {
+      "name": "@territory-kit/migration",
+      "publishedVersion": "2.1.0",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/migration/latest"
+    },
+    {
+      "name": "@territory-kit/nestjs",
+      "publishedVersion": "2.1.0",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/nestjs/latest"
+    },
+    {
+      "name": "@territory-kit/openlayers",
+      "publishedVersion": "1.2.12",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/openlayers/latest"
+    },
+    {
+      "name": "@territory-kit/react-native",
+      "publishedVersion": "1.1.13",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/react-native/latest"
+    },
+    {
+      "name": "@territory-kit/registry",
+      "publishedVersion": "2.1.0",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/registry/latest"
+    },
+    {
+      "name": "@territory-kit/runtime",
+      "publishedVersion": "2.1.0",
+      "publisher": "mberat",
+      "maintainers": ["mberat"],
+      "profileVerified": true,
+      "metadataAudit": [],
+      "registryUrl": "https://registry.npmjs.org/@territory-kit/runtime/latest"
+    }
+  ]
+}

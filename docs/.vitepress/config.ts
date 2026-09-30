@@ -33,6 +33,7 @@ export default defineConfig({
       { text: "Country Loaders", link: "/country-loaders" },
       { text: "Turkey Administrative Model", link: "/datasets/turkey-administrative-model" },
       { text: "Turkey National Coverage", link: "/datasets/turkey-national-coverage" },
+      { text: "Sprint 6 Smart Candidate", link: "/datasets/turkey-sprint-6-nationwide" },
       { text: "Turkey Sources", link: "/datasets/turkey-sources" },
       { text: "Turkey ADM3 Source Strategy", link: "/datasets/tr-adm3-source-strategy" },
       { text: "Turkey ADM3 Source Registry", link: "/datasets/tr-adm3-source-registry" },

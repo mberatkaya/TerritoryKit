@@ -196,6 +196,7 @@ export {
   TURKEY_SMART_FALLBACK_QUALITY_SCHEMA_VERSION,
   buildTurkeySmartFallback,
   buildTurkeySmartFallbackWithAdjacency,
+  buildTurkeyNetworkFirstSmartFallbackWithAdjacency,
   createTurkeySmartFallbackDataset,
   normalizeTurkeySmartFallbackBarriers,
   resolveTurkeySmartFallbackConfiguration

@@ -1,5 +1,15 @@
 # Turkey V2 Migration
 
+## Sprint 6 final `2.0.0` → `2.1.0-rc.7` review
+
+The `overlap-components-v2` migration has 3,146 connected overlap records: 2,094 preserved,
+1,009 source-replaced, 37 split, five merged, and one added. Mapping cardinality includes
+1,006 many-to-many groups, and 1,052 records require manual review. Twenty records change
+source class; none change parent. This is evidence for gameplay migration decisions, not an
+automatic ownership transfer. See the [final migration report](../../reports/baselines/sprint-6-migration-rc7.json).
+
+The rc.1 through rc.3 sections below are historical evaluations.
+
 Turkey V2 keeps `territory-schema@1` and adds an opt-in strict profile. Existing Turkey ADM0-ADM2
 artifacts and the Gaziantep ADM3 pilot remain legacy-readable; they are not rewritten automatically.
 
@@ -93,3 +103,42 @@ The Sprint 3 hybrid builder emits `territorykit-tr-v2-hybrid-migration@1` record
 Each record carries old/new zone IDs, source classes, parent IDs, intersection area, old/new
 overlap percentages, confidence, manual-review status, and a reason. The plan is evidence only; it
 does not transfer KapRota ownership, scores, or route history.
+
+## Sprint 6 National Candidate
+
+The historical `2.0.0` national dataset is preserved. The next candidate is `2.1.0-rc.1`: it adds
+a compatible source resolver and sharded artifacts while changing generated geometry and IDs.
+Consumers must explicitly opt into the candidate and inspect `--migration-baseline <old dataset>`.
+The existing migration planner runs within each district and reports old/new IDs, intersection
+area, old/new overlap shares, intersection-over-union, splits, merges, removals, additions, and
+manual-review flags. It does not transfer game state automatically.
+
+Sprint 6 uses `overlap-components-v2`. Actual old/new intersection pairs form connected
+bipartite components, so a merge retains every old ID and many-to-many changes retain every
+participating ID. Records include per-pair shares and IoU, mapping cardinality, and old/new
+algorithm versions and source tiers. Many-to-many components always require manual review;
+they are not represented as independent one-to-one transfers.
+
+## Historical Sprint 6 rc.3 evaluation
+
+`2.1.0-rc.3` uses `smart-derived-v1.3` for generated geometry. Approved official and verified
+OSM administrative polygons remain independent of generated-gap success; a generation exception
+retains accepted real-source zones and reports the uncovered gap. Exact self-union intersection
+coordinates repair the captured Gölköy and Sarıoğlan precision loops without rewriting approved
+source polygons. Source preservation is a publish-ready gate.
+
+Both Standard and Organic Smart now report geographic realism, nearby usable corridor
+opportunity, routing utilization, and unsupported straight-chain lengths. Organic output uses the router's existing 40% connector budget as a hard unsupported-straight
+ceiling. Standard output retains its established 0.8 ceiling while also comparing actual
+barrier use with local corridor opportunity. Generated zones remain estimated
+playable territory, never official mahalle records.
+
+The complete repository-source Istanbul cohort has 39 ADM2 districts. The source names Adalar
+“Prince Islands”; this is a naming mismatch, not an extra or missing district. The
+[Istanbul acceptance report](../../reports/baselines/sprint-6-istanbul-39-rc3.json) records each
+district's build and QA status. All 39 maps were reviewed: 11 pass, five pass with
+low-confidence limitations, and 23 fail (including four machine-accepted outputs with visible
+ruler seams). Istanbul blocks the full rc.3 national publish-ready run, so this candidate is
+**DO NOT MERGE**. See the [24-district retest](../../reports/baselines/sprint-6-final-recovery.json)
+(8 accepted, 16 rejected) and [national rc.3 status](../../reports/baselines/sprint-6-final-national.json).
+The historical rc.1 and rc.2 evidence above is retained separately.

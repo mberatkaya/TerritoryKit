@@ -1,5 +1,18 @@
 # Turkey V2 Hybrid Coverage Pipeline
 
+## Sprint 6 final measured coverage
+
+The `2.1.0-rc.7` national candidate selects approved official sources before verified OSM
+administrative polygons and Smart fallback. It retains all 3,343 approved official IDs,
+including 2,094 historical `2.0.0` official geometries unchanged. This source lock contains
+no verified OSM administrative ADM3 source. The 17,049 generated zones are estimated,
+non-administrative, and supply 95.002520% of area; official polygons supply 4.997459%.
+All 973 districts exceed 99.99% coverage, with national renderable coverage 99.999979%.
+Hard production gates and confidence-tier details are in [Smart fallback](./turkey-smart-fallback.md)
+and the [final report](../../reports/baselines/sprint-6-national-rc7.json).
+
+The rc.1 through rc.3 figures below are historical evaluations.
+
 Turkey V2 hybrid coverage builds one playable ADM3-like layer per ADM2 district while preserving
 real administrative polygons where they are available.
 
@@ -10,7 +23,7 @@ official ADM3
   -> OSM administrative ADM3
   -> OSM barrier snapshot input
   -> smart-derived generated fallback
-  -> legacy generated fallback
+  -> organic low-confidence smart-derived fallback
 ```
 
 `sourceClass` remains `official`, `osm`, or `generated`; the OSM barrier snapshot is an input to
@@ -33,6 +46,9 @@ const result = await buildTurkeyV2HybridDistrict({
   osmZones,
   generated: {
     enabled: true,
+    strategy: "smart",
+    legacyGridAllowed: false,
+    smartFallback: { roads, railways, water, localitySeeds },
     profile: "auto",
     seed: "kaprota-v2"
   },
@@ -56,8 +72,8 @@ For each district:
 6. Missing geometry is computed as `district - realMask`.
 7. If a verified OSM barrier artifact is available and eligible, it is adapted into smart fallback
    input for that missing geometry.
-8. Smart-derived output is accepted only when its quality gates pass; otherwise legacy generated
-   zones fill the remaining geometry when fallback is enabled.
+8. Standard Smart must pass quality gates. Rejection attempts organic low-confidence Smart.
+   Unsafe organic output returns explicit failure; normal national production never selects legacy.
 9. Final official, OSM administrative, and generated zones are validated and used to build
    adjacency.
 
@@ -113,8 +129,8 @@ folders.
 
 When a district attempts smart fallback, `quality-report.json` includes `smartAttempt`:
 
-- `accepted` and `selectedFallback` show whether smart output was published or legacy generated
-  fallback was selected.
+- `accepted` and `selectedFallback` show whether standard Smart, organic Smart, or explicit failure was selected.
+  The `legacy` decision is available only with the developer emergency option.
 - `metrics` mirrors the smart quality report: coverage, spill, overlap, quality distribution,
   real-barrier alignment, split/merge counts, and barrier counts.
 - `gates`, `errorCodes`, and `reasonCodes` make rejection causes machine-readable.
@@ -122,7 +138,8 @@ When a district attempts smart fallback, `quality-report.json` includes `smartAt
   used by the smart fallback gate decision.
 
 District build summaries also include `selectedFallback`; batch summaries include smart-attempt,
-smart-accepted, and smart-to-legacy fallback counts.
+smart-accepted, and compatibility smart-to-legacy fallback counts. The latter must remain zero
+in normal production. National Smart manifests separate standard and organic decisions.
 
 ## Licensing
 
@@ -183,3 +200,48 @@ official-only, generated-only, official+generated, official+OSM+generated, compl
 10-district batch, and 100-district batch scenarios. These are deterministic fixtures, not a final
 national source build. Use `pnpm turkey:v2:national:benchmark` for the national CLI benchmark and
 see [Turkey V2 national playable dataset](./turkey-v2-national-playable.md) for full-build reports.
+
+`quality.smartAttempt.selectedFallback` distinguishes `smart`, `organic-smart`, `legacy`, and
+`none`. Standard rejection diagnostics are retained in the `SMART_STANDARD_QUALITY_REJECTED`
+issue. Legacy requires explicit emergency options and cannot pass national publish-ready gates.
+
+## Final Geographic Calibration
+
+Organic `smart-derived-v1.2` follows coarse Voronoi ownership with a deterministic barrier graph,
+shared-junction anchoring, shared-edge routing and strict partition validation. Voronoi alone is
+not counted as real barrier adherence. Strong-barrier alignment retains its existing semantics;
+all-real-barrier following and unsupported straight chains are reported separately. Official
+polygons remain unchanged and generation fills only their true missing region. See
+[the routing design and realism gates](./turkey-smart-fallback.md#final-geographic-calibration).
+
+The recalibrated candidate uses `2.1.0-rc.2` to keep the earlier `2.1.0-rc.1` artifact identity
+immutable. Historical `2.0.0` and its gameplay state remain unchanged; migration is review evidence
+with intersection areas, old/new shares, IoU, splits, merges and many-to-many components.
+
+The historical `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
+24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
+The accepted historical artifact remains unchanged. See [national calibration outcomes](./turkey-sprint-6-nationwide.md#final-geographic-calibration).
+
+## Historical Sprint 6 rc.3 evaluation
+
+`2.1.0-rc.3` uses `smart-derived-v1.3` for generated geometry. Approved official and verified
+OSM administrative polygons remain independent of generated-gap success; a generation exception
+retains accepted real-source zones and reports the uncovered gap. Exact self-union intersection
+coordinates repair the captured Gölköy and Sarıoğlan precision loops without rewriting approved
+source polygons. Source preservation is a publish-ready gate.
+
+Both Standard and Organic Smart now report geographic realism, nearby usable corridor
+opportunity, routing utilization, and unsupported straight-chain lengths. Organic output uses the router's existing 40% connector budget as a hard unsupported-straight
+ceiling. Standard output retains its established 0.8 ceiling while also comparing actual
+barrier use with local corridor opportunity. Generated zones remain estimated
+playable territory, never official mahalle records.
+
+The complete repository-source Istanbul cohort has 39 ADM2 districts. The source names Adalar
+“Prince Islands”; this is a naming mismatch, not an extra or missing district. The
+[Istanbul acceptance report](../../reports/baselines/sprint-6-istanbul-39-rc3.json) records each
+district's build and QA status. All 39 maps were reviewed: 11 pass, five pass with
+low-confidence limitations, and 23 fail (including four machine-accepted outputs with visible
+ruler seams). Istanbul blocks the full rc.3 national publish-ready run, so this candidate is
+**DO NOT MERGE**. See the [24-district retest](../../reports/baselines/sprint-6-final-recovery.json)
+(8 accepted, 16 rejected) and [national rc.3 status](../../reports/baselines/sprint-6-final-national.json).
+The historical rc.1 and rc.2 evidence above is retained separately.

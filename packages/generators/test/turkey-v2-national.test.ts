@@ -22,6 +22,8 @@ import {
   buildTurkeyV2NationalDataset,
   createTurkeyV2NationalArtifactPayloads,
   createTurkeyV2NationalSourceLock,
+  isLargeNationalJsonArtifact,
+  serializeNationalJsonChunks,
   validateTurkeyV2NationalArtifactIntegrity,
   validateTurkeyV2NationalCompleteness
 } from "../src/turkey-adm3.js";
@@ -46,6 +48,7 @@ describe("Turkey V2 national playable build", () => {
   describe("Build mode determination", () => {
     it("sets buildMode to 'partial' when districtLimit is provided", async () => {
       const result = await buildTurkeyV2NationalDataset({
+        allowLegacyGridEmergency: true,
         adm0Adm2Dataset: nationalFixture(),
         sourceLock: sourceLock(),
         buildDate: BUILD_DATE,
@@ -58,8 +61,38 @@ describe("Turkey V2 national playable build", () => {
       expect(result.quality.buildMode).toBe("partial");
     });
 
+    it("selects a non-overlapping sorted district range for checkpoint workers", async () => {
+      const result = await buildTurkeyV2NationalDataset({
+        allowLegacyGridEmergency: true,
+        adm0Adm2Dataset: nationalFixture(),
+        sourceLock: sourceLock(),
+        buildDate: BUILD_DATE,
+        datasetVersion: TURKEY_V2_NATIONAL_DATASET_VERSION,
+        generatedDefaults: generatedDefaults(),
+        buildArtifacts: { adjacency: false, render: false, mvt: false },
+        districtOffset: 1,
+        districtLimit: 1
+      });
+      const first = await buildTurkeyV2NationalDataset({
+        allowLegacyGridEmergency: true,
+        adm0Adm2Dataset: nationalFixture(),
+        sourceLock: sourceLock(),
+        buildDate: BUILD_DATE,
+        datasetVersion: TURKEY_V2_NATIONAL_DATASET_VERSION,
+        generatedDefaults: generatedDefaults(),
+        buildArtifacts: { adjacency: false, render: false, mvt: false },
+        districtLimit: 1
+      });
+      expect(result.coverage.districts).toHaveLength(1);
+      expect(result.coverage.districts[0]?.districtId).not.toBe(
+        first.coverage.districts[0]?.districtId
+      );
+      expect(result.quality.buildMode).toBe("partial");
+    });
+
     it("keeps normal generator builds in diagnostic partial mode", async () => {
       const result = await buildTurkeyV2NationalDataset({
+        allowLegacyGridEmergency: true,
         adm0Adm2Dataset: nationalFixture(),
         sourceLock: sourceLock(),
         buildDate: BUILD_DATE,
@@ -75,6 +108,7 @@ describe("Turkey V2 national playable build", () => {
 
     it("runs strict publish-ready gates only for uncapped publish-ready builds", async () => {
       const result = await buildTurkeyV2NationalDataset({
+        allowLegacyGridEmergency: true,
         adm0Adm2Dataset: nationalFixture(),
         sourceLock: sourceLock(),
         buildDate: BUILD_DATE,
@@ -85,7 +119,8 @@ describe("Turkey V2 national playable build", () => {
       });
 
       expect(result.quality.buildMode).toBe("publish-ready");
-      expect(result.quality.ok).toBe(true);
+      expect(result.quality.ok).toBe(false);
+      expect(result.quality.hardGateFailures).toContain("noProductionLegacyGrid");
       expect(result.quality.publishReady).toBe(false);
       expect(result.quality.publishReadyGateFailures).toContain("nationalCompleteness");
     });
@@ -94,6 +129,7 @@ describe("Turkey V2 national playable build", () => {
   describe("Constants usage in validation logic", () => {
     it("uses TURKEY_V2_ADM0_EXPECTED_COUNT in adm0Count gate validation", async () => {
       const result = await buildTurkeyV2NationalDataset({
+        allowLegacyGridEmergency: true,
         adm0Adm2Dataset: nationalFixture(),
         sourceLock: sourceLock(),
         buildDate: BUILD_DATE,
@@ -108,6 +144,7 @@ describe("Turkey V2 national playable build", () => {
 
     it("uses TURKEY_V2_ADM1_EXPECTED_COUNT in adm1Count gate validation", async () => {
       const result = await buildTurkeyV2NationalDataset({
+        allowLegacyGridEmergency: true,
         adm0Adm2Dataset: nationalFixture(),
         sourceLock: sourceLock(),
         buildDate: BUILD_DATE,
@@ -240,6 +277,7 @@ describe("Turkey V2 national playable build", () => {
 
   it("builds generated national fallback coverage without embedding render artifacts", async () => {
     const result = await buildTurkeyV2NationalDataset({
+      allowLegacyGridEmergency: true,
       adm0Adm2Dataset: nationalFixture(),
       sourceLock: sourceLock(),
       buildDate: BUILD_DATE,
@@ -334,6 +372,7 @@ describe("Turkey V2 national playable build", () => {
 
   it("derives registry prerelease metadata from dataset semver", async () => {
     const result = await buildTurkeyV2NationalDataset({
+      allowLegacyGridEmergency: true,
       adm0Adm2Dataset: nationalFixture(),
       sourceLock: sourceLock({ datasetVersion: "2.0.1-rc.1" }),
       buildDate: BUILD_DATE,
@@ -352,6 +391,7 @@ describe("Turkey V2 national playable build", () => {
   it("uses representative centers covered by concave national and generated geometries", async () => {
     const fixture = nationalFixture({ donutDistrict: true });
     const result = await buildTurkeyV2NationalDataset({
+      allowLegacyGridEmergency: true,
       adm0Adm2Dataset: fixture,
       sourceLock: sourceLock(),
       buildDate: BUILD_DATE,
@@ -402,6 +442,7 @@ describe("Turkey V2 national playable build", () => {
       north: 1
     });
     const result = await buildTurkeyV2NationalDataset({
+      allowLegacyGridEmergency: true,
       adm0Adm2Dataset: nationalFixture(),
       officialSources: { status: "artifact-loaded", zones: [official] },
       osmSources: { status: "artifact-loaded", zones: [osm] },
@@ -445,11 +486,43 @@ describe("Turkey V2 national playable build", () => {
     );
   });
 
+  it("reparents an approved polygon whose reported district has no intersection", async () => {
+    const official = realAdm3Zone({
+      id: "tr:adm3:reported-a-actually-b",
+      parentId: "tr:adm2:01-a",
+      sourceClass: "official",
+      west: 1.2,
+      south: 0.2,
+      east: 1.8,
+      north: 0.8
+    });
+    const result = await buildTurkeyV2NationalDataset({
+      allowLegacyGridEmergency: true,
+      adm0Adm2Dataset: nationalFixture(),
+      officialSources: { status: "artifact-loaded", zones: [official] },
+      sourceLock: sourceLock(),
+      buildDate: BUILD_DATE,
+      datasetVersion: TURKEY_V2_NATIONAL_DATASET_VERSION,
+      generatedDefaults: generatedDefaults(),
+      buildArtifacts: { adjacency: false, render: false, mvt: false },
+      districtLimit: 2
+    });
+    const retained = result.hybridBatch.districts
+      .find((district) => district.district.id === "tr:adm2:01-b")
+      ?.effective.official.find((zone) => zone.id === official.id);
+    expect(retained?.parentId).toBe("tr:adm2:01-b");
+    expect((retained?.properties.territory as Record<string, unknown>)?.reportedParentAdm2Id).toBe(
+      "tr:adm2:01-a"
+    );
+    expect(result.quality.ok).toBe(true);
+  });
+
   it("validates generated registry artifacts against the filesystem", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-generator-tr-v2-integrity-"));
 
     try {
       const result = await buildTurkeyV2NationalDataset({
+        allowLegacyGridEmergency: true,
         adm0Adm2Dataset: nationalFixture(),
         sourceLock: sourceLock(),
         buildDate: BUILD_DATE,
@@ -500,6 +573,7 @@ describe("Turkey V2 national playable build", () => {
 
   it("rejects duplicate, unsafe, missing-checksum, and zero-byte registry metadata", async () => {
     const result = await buildTurkeyV2NationalDataset({
+      allowLegacyGridEmergency: true,
       adm0Adm2Dataset: nationalFixture(),
       sourceLock: sourceLock(),
       buildDate: BUILD_DATE,
@@ -544,6 +618,7 @@ describe("Turkey V2 national playable build", () => {
 
   it("keeps national output deterministic when source district order changes", async () => {
     const first = await buildTurkeyV2NationalDataset({
+      allowLegacyGridEmergency: true,
       adm0Adm2Dataset: nationalFixture(),
       sourceLock: sourceLock(),
       buildDate: BUILD_DATE,
@@ -552,6 +627,7 @@ describe("Turkey V2 national playable build", () => {
       buildArtifacts: { adjacency: false }
     });
     const second = await buildTurkeyV2NationalDataset({
+      allowLegacyGridEmergency: true,
       adm0Adm2Dataset: nationalFixture({ reverseDistricts: true }),
       sourceLock: sourceLock(),
       buildDate: BUILD_DATE,
@@ -931,7 +1007,12 @@ async function writePayloads(
   payloads: ReturnType<typeof createTurkeyV2NationalArtifactPayloads>
 ): Promise<void> {
   for (const [path, payload] of payloads.json.entries()) {
-    await writeFixtureFile(join(root, path), `${JSON.stringify(payload, null, 2)}\n`);
+    await writeFixtureFile(
+      join(root, path),
+      isLargeNationalJsonArtifact(path)
+        ? [...serializeNationalJsonChunks(payload)].join("")
+        : `${JSON.stringify(payload, null, 2)}\n`
+    );
   }
   for (const [path, payload] of payloads.text.entries()) {
     await writeFixtureFile(join(root, path), payload.endsWith("\n") ? payload : `${payload}\n`);

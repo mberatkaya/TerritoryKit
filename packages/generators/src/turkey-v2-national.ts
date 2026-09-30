@@ -1,6 +1,7 @@
 import {
   TERRITORY_SCHEMA_VERSION,
   computeGeometryBBox,
+  computeTerritoryAreaM2,
   validateGeometryDataset
 } from "@territory-kit/dataset";
 import { validateTurkeyV2Dataset } from "@territory-kit/dataset/turkey-v2";
@@ -16,13 +17,17 @@ import type {
   TerritoryZone
 } from "@territory-kit/dataset";
 import { buildTerritoryAdjacency } from "./adjacency.js";
+import * as polygonClipping from "polygon-clipping";
+import type { MultiPolygon as ClippingMultiPolygon } from "polygon-clipping";
+
+const CLIPPER =
+  (polygonClipping as unknown as { default?: typeof polygonClipping }).default ?? polygonClipping;
 import { computeGeometryRepresentativePoint } from "./geometry-repair.js";
 import { buildTerritoryRenderArtifacts } from "./render-artifacts.js";
 import type { TerritoryRenderBuildResult } from "./render-artifacts.js";
 import {
   TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
-  buildTurkeyV2HybridBatch,
-  createTurkeyV2ZoneMigrationPlan
+  buildTurkeyV2HybridBatch
 } from "./turkey-adm3.js";
 import {
   TURKEY_V2_NATIONAL_EXPECTED_COUNTS,
@@ -38,6 +43,7 @@ import type {
   TurkeyV2HybridBatchBuildResult,
   TurkeyV2HybridBatchSourceEntry,
   TurkeyV2HybridDistrictBuildResult,
+  TurkeyV2HybridDistrictBuildOptions,
   TurkeyV2HybridDistributionPolicyManifest,
   TurkeyV2HybridGeneratedOptions,
   TurkeyV2HybridLicenseManifest,
@@ -50,6 +56,8 @@ import {
   serializeJsonStable,
   sha256Hex
 } from "./sources/utils.js";
+import { createHash } from "node:crypto";
+import { isLargeNationalJsonArtifact, serializeNationalJsonChunks } from "./national-json.js";
 
 export const TURKEY_V2_NATIONAL_DATASET_ID = "territory-kit-tr-v2-playable" as const;
 export const TURKEY_V2_NATIONAL_DATASET_VERSION = "2.0.0" as const;
@@ -123,6 +131,8 @@ export interface TurkeyV2NationalSourceLock {
     largeGeometryInNpmPackage: false;
     registryCdnOfflineModel: true;
   };
+  productionFallbackPolicy?: { legacyGridAllowed: boolean; organicFallbackEnabled: boolean };
+  osmBarrierSnapshotChecksum?: string;
   contentHash: string;
 }
 
@@ -191,7 +201,7 @@ export interface TurkeyV2NationalOsmSourceLock {
 }
 
 export interface TurkeyV2NationalGeneratedSourceLock {
-  algorithmVersion: typeof TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION;
+  algorithmVersion: string;
   seed: string;
   profilePolicy: "auto";
   generatorConfigHash: string;
@@ -211,7 +221,17 @@ export interface TurkeyV2NationalBuildOptions {
   adm0Adm2Dataset: TerritoryDataset;
   officialSources?: TurkeyV2NationalSourceCatalog;
   osmSources?: TurkeyV2NationalSourceCatalog;
+  migrationBaselineZones?: readonly TerritoryZone[];
   generatedDefaults?: TurkeyV2HybridGeneratedOptions;
+  allowLegacyGridEmergency?: boolean;
+  loadGeneratedOptions?: (district: TerritoryZone) => Promise<TurkeyV2HybridGeneratedOptions>;
+  onDistrictComplete?: (
+    result: TurkeyV2HybridDistrictBuildResult,
+    options: TurkeyV2HybridDistrictBuildOptions
+  ) => Promise<void>;
+  restoreDistrictResult?: (
+    options: TurkeyV2HybridDistrictBuildOptions
+  ) => Promise<TurkeyV2HybridDistrictBuildResult | undefined>;
   districtOverrides?: Readonly<Record<string, TurkeyV2DistrictBuildOverride>>;
   sourceLock: TurkeyV2NationalSourceLock;
   buildDate: string;
@@ -220,6 +240,7 @@ export interface TurkeyV2NationalBuildOptions {
   outputMode?: TurkeyV2NationalOutputMode;
   continueOnError?: boolean;
   districtLimit?: number;
+  districtOffset?: number;
   buildArtifacts?: {
     query?: boolean;
     render?: boolean;
@@ -288,7 +309,7 @@ export interface TurkeyV2NationalCoverageReport {
   generatedOnlyDistricts: string[];
   hybridDistricts: string[];
   profileDistribution: Record<string, number>;
-  algorithmVersion: typeof TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION;
+  algorithmVersion: string;
   sourceStatus: {
     official: TurkeyV2NationalSourceStatus;
     osm: TurkeyV2NationalSourceStatus;
@@ -599,23 +620,67 @@ export async function buildTurkeyV2NationalDataset(
   const datasetId = options.datasetId ?? TURKEY_V2_NATIONAL_DATASET_ID;
   const buildDate = options.buildDate;
   const datasetVersion = options.datasetVersion;
-  const generatedDefaults = options.generatedDefaults ?? {
+  const generatedDefaults: TurkeyV2HybridGeneratedOptions = {
     enabled: true,
     profile: "auto",
-    seed: options.sourceLock.generated.seed
+    seed: options.sourceLock.generated.seed,
+    ...options.generatedDefaults,
+    strategy: options.allowLegacyGridEmergency
+      ? (options.generatedDefaults?.strategy ?? "legacy")
+      : "smart",
+    legacyGridAllowed: options.allowLegacyGridEmergency === true,
+    organicFallback: true,
+    fallbackToLegacyOnSmartFailure: options.allowLegacyGridEmergency === true
   };
   const hierarchy = normalizeTurkeyAdmHierarchy(options.adm0Adm2Dataset, datasetId);
-  const selectedAdm2 = hierarchy.adm2.slice(0, options.districtLimit ?? undefined);
-  const officialZones = normalizeAdm3SourceZones(options.officialSources?.zones ?? [], datasetId);
+  const selectedAdm2 = hierarchy.adm2
+    .slice()
+    .sort((left, right) => {
+      const a = isRecord(left.properties.territory) ? left.properties.territory : {};
+      const b = isRecord(right.properties.territory) ? right.properties.territory : {};
+      return (
+        String(a.provinceCode).localeCompare(String(b.provinceCode)) ||
+        String(a.districtCode).localeCompare(String(b.districtCode)) ||
+        left.id.localeCompare(right.id)
+      );
+    })
+    .slice(
+      options.districtOffset ?? 0,
+      options.districtLimit !== undefined
+        ? (options.districtOffset ?? 0) + options.districtLimit
+        : undefined
+    );
+  const officialZones = reconcileOfficialParentAssignments(
+    normalizeAdm3SourceZones(options.officialSources?.zones ?? [], datasetId),
+    hierarchy.adm2
+  );
   const osmZones = normalizeAdm3SourceZones(options.osmSources?.zones ?? [], datasetId);
   const sourcesByDistrict = createSourcesByDistrict(selectedAdm2, officialZones, osmZones);
   const hybridBatch = await buildTurkeyV2HybridBatch({
     districts: selectedAdm2,
+    releaseDistrictInputs: true,
+    ...(options.migrationBaselineZones
+      ? { migrationBaselineZones: options.migrationBaselineZones }
+      : {}),
     sourcesByDistrict,
     generatedDefaults,
+    ...(options.loadGeneratedOptions
+      ? {
+          loadGeneratedOptions: async (district: TerritoryZone) => ({
+            ...(await options.loadGeneratedOptions!(district)),
+            legacyGridAllowed: options.allowLegacyGridEmergency === true,
+            organicFallback: true,
+            fallbackToLegacyOnSmartFailure: options.allowLegacyGridEmergency === true
+          })
+        }
+      : {}),
+    ...(options.onDistrictComplete ? { onDistrictComplete: options.onDistrictComplete } : {}),
+    ...(options.restoreDistrictResult
+      ? { restoreDistrictResult: options.restoreDistrictResult }
+      : {}),
     buildDate,
     continueOnError: true,
-    fallbackToGeneratedOnQualityFailure: true,
+    fallbackToGeneratedOnQualityFailure: false,
     datasetId: `${datasetId}-adm3`
   });
   const adm3Zones = hybridBatch.districts
@@ -717,6 +782,7 @@ export async function buildTurkeyV2NationalDataset(
     buildDate,
     deterministicHash,
     sourceLockHash: options.sourceLock.contentHash,
+    generatedAlgorithmVersion: options.sourceLock.generated.algorithmVersion,
     hierarchy,
     adm2ById,
     districts: hybridBatch.districts,
@@ -736,11 +802,12 @@ export async function buildTurkeyV2NationalDataset(
   const attribution = createNationalAttribution(buildDate, hybridBatch);
   const licenses = createNationalLicenses(attribution);
   const distributionPolicy = createNationalDistributionPolicy(hybridBatch);
-  const migration = createTurkeyV2ZoneMigrationPlan({
+  const migration: TurkeyV2ZoneMigrationPlan = {
+    schemaVersion: "territorykit-tr-v2-hybrid-migration@1",
+    algorithmVersion: "overlap-components-v2",
     buildDate,
-    oldZones: [],
-    newZones: adm3Zones
-  });
+    records: hybridBatch.districts.flatMap((d) => d.migration.records)
+  };
   const renderArtifacts = artifactOptions.render
     ? buildTerritoryRenderArtifacts({
         dataset: levels.ADM3,
@@ -749,7 +816,8 @@ export async function buildTurkeyV2NationalDataset(
         policies: [{ adminLevel: "ADM3", minZoom: 10, maxZoom: 12 }],
         minZoom: 10,
         maxZoom: 12,
-        buildDate
+        buildDate,
+        includeQueryFile: false
       })
     : undefined;
   const coreArtifactFiles = createCoreNationalArtifactFiles({
@@ -1054,6 +1122,70 @@ function clampCoordinate(value: number, minimum: number, maximum: number): numbe
   return Math.min(maximum, Math.max(minimum, value));
 }
 
+function reconcileOfficialParentAssignments(
+  zones: readonly TerritoryZone[],
+  districts: readonly TerritoryZone[]
+): TerritoryZone[] {
+  const parentsById = new Map(districts.map((district) => [district.id, district]));
+  const clippingGeometry = (geometry: TerritoryGeometry): ClippingMultiPolygon =>
+    (geometry.type === "Polygon"
+      ? [geometry.coordinates]
+      : geometry.coordinates) as ClippingMultiPolygon;
+  const intersection = (zone: TerritoryZone, parent: TerritoryZone): ClippingMultiPolygon =>
+    CLIPPER.intersection(clippingGeometry(zone.geometry), clippingGeometry(parent.geometry));
+  const areaKm2 = (geometry: ClippingMultiPolygon): number =>
+    geometry.length === 0
+      ? 0
+      : computeTerritoryAreaM2({ type: "MultiPolygon", coordinates: geometry }) / 1_000_000;
+
+  return zones.map((zone) => {
+    const reportedParent = zone.parentId ? parentsById.get(zone.parentId) : undefined;
+    if (!reportedParent || areaKm2(intersection(zone, reportedParent)) > 0.000001) return zone;
+    const sourceAreaKm2 = computeTerritoryAreaM2(zone.geometry) / 1_000_000;
+    if (sourceAreaKm2 <= 0) return zone;
+    const matches = districts
+      .filter(
+        (parent) =>
+          !(
+            zone.bbox[2] < parent.bbox[0] ||
+            zone.bbox[0] > parent.bbox[2] ||
+            zone.bbox[3] < parent.bbox[1] ||
+            zone.bbox[1] > parent.bbox[3]
+          )
+      )
+      .map((parent) => ({ parent, clipped: intersection(zone, parent) }))
+      .map((candidate) => ({ ...candidate, areaKm2: areaKm2(candidate.clipped) }))
+      .sort((a, b) => b.areaKm2 - a.areaKm2 || a.parent.id.localeCompare(b.parent.id));
+    const best = matches[0];
+    if (!best || best.areaKm2 / sourceAreaKm2 < 0.95) return zone;
+    const geometry = (
+      best.clipped.length === 1
+        ? { type: "Polygon", coordinates: best.clipped[0]! }
+        : { type: "MultiPolygon", coordinates: best.clipped }
+    ) as TerritoryGeometry;
+    const territory = isRecord(zone.properties.territory) ? zone.properties.territory : {};
+    return {
+      ...zone,
+      parentId: best.parent.id,
+      geometry,
+      bbox: computeGeometryBBox(geometry),
+      center: computeSafeGeometryCenter(geometry),
+      properties: {
+        ...zone.properties,
+        territory: {
+          ...territory,
+          parentId: best.parent.id,
+          parentAdm2Id: best.parent.id,
+          sourceParentId: best.parent.id,
+          reportedParentAdm2Id: reportedParent.id,
+          sourceParentCorrection: "geometry-overlap-majority",
+          sourceParentOverlapShare: Number((best.areaKm2 / sourceAreaKm2).toFixed(6))
+        }
+      }
+    };
+  });
+}
+
 function normalizeAdm3SourceZones(
   zones: readonly TerritoryZone[],
   datasetId: string
@@ -1166,6 +1298,7 @@ function createNationalCoverage(input: {
   buildDate: string;
   deterministicHash: string;
   sourceLockHash: string;
+  generatedAlgorithmVersion: string;
   hierarchy: NormalizedHierarchy;
   adm2ById: ReadonlyMap<string, TerritoryZone>;
   districts: readonly TurkeyV2HybridDistrictBuildResult[];
@@ -1297,7 +1430,7 @@ function createNationalCoverage(input: {
       .map((district) => district.coverage.districtId)
       .sort(),
     profileDistribution,
-    algorithmVersion: TURKEY_ADM3_GAME_ZONE_ALGORITHM_VERSION,
+    algorithmVersion: input.generatedAlgorithmVersion,
     sourceStatus: input.sourceStatus,
     provinces: provinceCoverage,
     districts: districtCoverages.sort((left, right) =>
@@ -1659,9 +1792,28 @@ function createNationalQuality(input: {
   const sourceClassByZoneId = new Map(
     input.dataset.zones.map((zone) => [zone.id, readZoneSourceClass(zone)] as const)
   );
-  const siblingOverlapIssues = adm3SiblingValidation.issues.filter(
-    (issue) => issue.code === "SIBLING_GEOMETRY_OVERLAP" && issue.severity === "error"
+  const adm3ById = new Map(
+    input.dataset.zones.filter((zone) => zone.level === 3).map((zone) => [zone.id, zone])
   );
+  const siblingOverlapIssues = adm3SiblingValidation.issues.filter((issue) => {
+    if (issue.code !== "SIBLING_GEOMETRY_OVERLAP" || issue.severity !== "error") return false;
+    const left = issue.zoneId && adm3ById.get(issue.zoneId);
+    const right = issue.otherZoneId && adm3ById.get(issue.otherZoneId);
+    if (!left || !right) return true;
+    const clippingGeometry = (geometry: TerritoryGeometry): ClippingMultiPolygon =>
+      (geometry.type === "Polygon"
+        ? [geometry.coordinates]
+        : geometry.coordinates) as ClippingMultiPolygon;
+    const overlap = CLIPPER.intersection(
+      clippingGeometry(left.geometry),
+      clippingGeometry(right.geometry)
+    );
+    return (
+      overlap.length > 0 &&
+      computeTerritoryAreaM2({ type: "MultiPolygon", coordinates: overlap } as TerritoryGeometry) >
+        1
+    );
+  });
   const realGeneratedOverlapCount = siblingOverlapIssues.filter((issue) => {
     const leftSourceClass = issue.zoneId ? sourceClassByZoneId.get(issue.zoneId) : undefined;
     const rightSourceClass = issue.otherZoneId
@@ -1705,6 +1857,11 @@ function createNationalQuality(input: {
       input.buildMode === "partial" ||
       (input.coverage.districtCount === input.coverage.successfulDistrictCount &&
         input.coverage.failedDistrictCount === 0),
+    approvedSourcePreservation: input.hybridBatch.districts.every(
+      (d) => d.quality.gates.approvedSourcePreservation === true
+    ),
+    districtQuality: input.hybridBatch.districts.every((d) => d.quality.ok),
+    requestedDistrictFailures: input.coverage.failedDistrictCount === 0,
     everyDistrictHasAdm3: input.coverage.districts.every((district) => district.zoneCount > 0),
     everyDistrictCoverage: input.coverage.districtsBelow9999.length === 0,
     nationalCoverage: input.coverage.finalCoveragePercent >= 99.99,
@@ -1720,6 +1877,24 @@ function createNationalQuality(input: {
     missingProvenance: missingProvenanceCount === 0,
     missingAttributionLicense: missingAttributionLicenseCount === 0,
     generatedMetadata: generatedMetadataErrorCount === 0,
+    noProductionLegacyGrid:
+      input.buildMode === "partial" ||
+      input.dataset.zones
+        .filter((z) => z.level === 3 && readZoneSourceClass(z) === "generated")
+        .every(
+          (z) =>
+            territoryMetadata(z).boundarySourceClass === "smart-derived" &&
+            territoryMetadata(z).providerId !== "territory-kit-generated" &&
+            String(territoryMetadata(z).algorithmVersion).startsWith("smart-derived")
+        ),
+    smartSemantics: input.dataset.zones
+      .filter((z) => territoryMetadata(z).boundarySourceClass === "smart-derived")
+      .every(
+        (z) =>
+          territoryMetadata(z).administrative === false &&
+          territoryMetadata(z).authoritative === false &&
+          territoryMetadata(z).boundaryKind === "estimated"
+      ),
     strictTrV2Validation: strictValidation.ok,
     adjacencyIntegrity: input.adjacencyIssueCount === 0,
     registryArtifactChecksum: input.artifactIntegrity.ok
@@ -1978,12 +2153,12 @@ function createCoreNationalArtifactFiles(input: {
   levels: TurkeyV2NationalBuildResult["levels"];
   adjacency?: TerritoryAdjacencyArtifact;
   renderArtifacts?: TerritoryRenderBuildResult;
-}): Map<string, string | Uint8Array> {
-  const files = new Map<string, string | Uint8Array>([
-    ["dataset.json", serializeJsonArtifact(input.dataset)],
+}): Map<string, unknown> {
+  const files = new Map<string, unknown>([
+    ["dataset.json", input.dataset],
     [
       "manifest.json",
-      serializeJsonArtifact({
+      {
         ...input.dataset.manifest,
         coverage: {
           provinceCount: input.coverage.provinceCount,
@@ -1993,33 +2168,30 @@ function createCoreNationalArtifactFiles(input: {
         },
         deterministicHash: input.deterministicHash,
         sourceLockHash: input.coverage.sourceLockHash
-      })
+      }
     ],
-    ["source-lock.json", serializeJsonArtifact(input.sourceLock)],
-    ["coverage.json", serializeJsonArtifact(input.coverage)],
-    ["hierarchy-report.json", serializeJsonArtifact(input.hierarchy)],
-    ["provenance.json", serializeJsonArtifact(input.provenance)],
-    ["attribution.json", serializeJsonArtifact(input.attribution)],
+    ["source-lock.json", input.sourceLock],
+    ["coverage.json", input.coverage],
+    ["hierarchy-report.json", input.hierarchy],
+    ["provenance.json", input.provenance],
+    ["attribution.json", input.attribution],
     [
       "attribution.txt",
       input.attribution.text.endsWith("\n") ? input.attribution.text : `${input.attribution.text}\n`
     ],
-    ["licenses.json", serializeJsonArtifact(input.licenses)],
-    ["distribution-policy.json", serializeJsonArtifact(input.distributionPolicy)],
-    ["migration-plan.json", serializeJsonArtifact(input.migration)],
-    ["levels/ADM0/dataset.json", serializeJsonArtifact(input.levels.ADM0)],
-    ["levels/ADM1/dataset.json", serializeJsonArtifact(input.levels.ADM1)],
-    ["levels/ADM2/dataset.json", serializeJsonArtifact(input.levels.ADM2)],
-    ["levels/ADM3/dataset.json", serializeJsonArtifact(input.levels.ADM3)],
-    [
-      "levels/ADM3/full.geojson",
-      serializeJsonArtifact(territoryDatasetToFeatureCollection(input.levels.ADM3))
-    ],
-    ["query/query-artifact.json", serializeJsonArtifact(createNationalQueryArtifact(input.dataset))]
+    ["licenses.json", input.licenses],
+    ["distribution-policy.json", input.distributionPolicy],
+    ["migration-plan.json", input.migration],
+    ["levels/ADM0/dataset.json", input.levels.ADM0],
+    ["levels/ADM1/dataset.json", input.levels.ADM1],
+    ["levels/ADM2/dataset.json", input.levels.ADM2],
+    ["levels/ADM3/dataset.json", input.levels.ADM3],
+    ["levels/ADM3/full.geojson", territoryDatasetToFeatureCollection(input.levels.ADM3)],
+    ["query/query-artifact.json", createNationalQueryArtifact(input.dataset)]
   ]);
 
   if (input.adjacency) {
-    files.set("levels/ADM3/adjacency/adjacency.json", serializeJsonArtifact(input.adjacency));
+    files.set("levels/ADM3/adjacency/adjacency.json", input.adjacency);
   }
 
   if (input.renderArtifacts) {
@@ -2033,24 +2205,33 @@ function createCoreNationalArtifactFiles(input: {
   return files;
 }
 
-function createChecksums(
-  files: ReadonlyMap<string, string | Uint8Array>
-): TurkeyV2NationalChecksums {
+function createChecksums(files: ReadonlyMap<string, unknown>): TurkeyV2NationalChecksums {
   return {
     schemaVersion: "territorykit-tr-v2-national-checksums@1",
     files: Object.fromEntries(
       [...files.entries()]
-        .map(
-          ([path, payload]) =>
-            [
-              path,
-              {
-                sha256: sha256Hex(payload),
-                byteSize:
-                  typeof payload === "string" ? Buffer.byteLength(payload) : payload.byteLength
-              }
-            ] as const
-        )
+        .map(([path, payload]) => {
+          if (isLargeNationalJsonArtifact(path)) {
+            const hash = createHash("sha256");
+            let byteSize = 0;
+            for (const chunk of serializeNationalJsonChunks(payload)) {
+              hash.update(chunk);
+              byteSize += Buffer.byteLength(chunk);
+            }
+            return [path, { sha256: hash.digest("hex"), byteSize }] as const;
+          }
+          const bytes =
+            typeof payload === "string" || payload instanceof Uint8Array
+              ? payload
+              : serializeJsonArtifact(payload);
+          return [
+            path,
+            {
+              sha256: sha256Hex(bytes),
+              byteSize: typeof bytes === "string" ? Buffer.byteLength(bytes) : bytes.byteLength
+            }
+          ] as const;
+        })
         .sort(([left], [right]) => left.localeCompare(right))
     )
   };

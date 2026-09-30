@@ -16,8 +16,11 @@ export {
   TURKEY_SMART_FALLBACK_QUALITY_SCHEMA_VERSION,
   buildTurkeySmartFallback,
   buildTurkeySmartFallbackWithAdjacency,
+  buildTurkeyOrganicSmartFallbackWithAdjacency,
+  buildTurkeyNetworkFirstSmartFallbackWithAdjacency,
   createTurkeySmartFallbackDataset,
   normalizeTurkeySmartFallbackBarriers,
+  inspectTurkeySmartBoundaryAlignment,
   resolveTurkeySmartFallbackConfiguration
 } from "./turkey-smart-fallback.js";
 export {
@@ -117,6 +120,7 @@ export {
   validateTurkeyV2NationalArtifactIntegrity,
   validateTurkeyV2NationalCompleteness
 } from "./turkey-v2-national-validation.js";
+export { isLargeNationalJsonArtifact, serializeNationalJsonChunks } from "./national-json.js";
 export type {
   ResolvedTurkeyGameZoneConfiguration,
   ResolvedTurkeyGameZoneProfile,
@@ -272,3 +276,5 @@ export type {
   TurkeyV2NationalValidationIssue,
   TurkeyV2NationalValidationResult
 } from "./turkey-v2-national-validation.js";
+
+export { createDatasetGeometryHash } from "./sources/utils.js";

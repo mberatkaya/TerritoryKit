@@ -1,13 +1,26 @@
 # Turkey V2 National Playable Dataset
 
+## Sprint 6 final publish-ready artifact
+
+The `2.1.0-rc.7` candidate uses `smart-derived-v1.7`: 1 ADM0, 81 provinces, 973/973 usable
+districts, and 20,392 ADM3 zones. National renderable coverage is 99.999979%, with zero hard
+rejects or legacy production grids. Its external artifacts contain checksummed national and
+ADM3 datasets, a query index, 1,054 province/district shards, migration evidence, adjacency,
+and 18,856 valid MVT tiles. The largest tile is 155,465 bytes; corruption count is zero.
+The `validate --publish-ready` command verifies hard gates and artifact integrity. Generated
+features carry source class, estimated status, confidence, generator version, source checksum,
+and geometry hash in delivery metadata. See [final national evidence](../../reports/baselines/sprint-6-national-rc7.json).
+
+The rc.1 through rc.3 sections below are historical evaluations.
+
 Turkey V2 national playable artifacts are built by:
 
 ```bash
-pnpm turkey:v2:national:publish-ready
+pnpm turkey:v2:national:publish-ready -- --osm-barriers <artifact-root> --osm-source-lock <source-lock.json>
 pnpm turkey:v2:national:validate:publish-ready
 ```
 
-The stable build target is `territory-kit-tr-v2-playable@2.0.0`. It keeps the canonical Turkey
+The historical Sprint 6 rc.1 target was `territory-kit-tr-v2-playable@2.1.0-rc.1`. It keeps the canonical Turkey
 ADM0-ADM2 hierarchy from HDX/OCHA COD-AB and fills ADM3 gameplay coverage nationwide with the
 Turkey V2 hybrid priority:
 
@@ -15,7 +28,7 @@ Turkey V2 hybrid priority:
 official ADM3
   -> OSM administrative ADM3
   -> OSM barrier snapshot smart-derived fallback
-  -> legacy generated fallback
+  -> organic low-confidence Smart or explicit failure
 ```
 
 Generated fallback zones are playable game zones only. They are never official mahalle, koy, or
@@ -53,7 +66,7 @@ Reason codes are deterministic: `official-source-approved`,
 `no-adm3-zones-built`, and `quality-gate-failed`. Missing official ADM3 data is represented as
 `estimated` or `unavailable` coverage, never as fake official neighbourhood geometry.
 
-## Stable 2.0.0 Verification Snapshot
+## Historical Stable 2.0.0 Verification Snapshot
 
 The 2026-08-22 publish-ready rebuild verified the full stable national contract with:
 
@@ -99,22 +112,24 @@ publish separate ADM3 simplification tiers.
 territory tr v2 national plan
 
 territory tr v2 national build \
-  --output .territory/build/TR/V2-national \
-  --reports-output reports/tr-v2-national \
+  --output .territory/sprint-6/candidate \
+  --reports-output reports/tr-v2-smart-candidate \
+  --osm-barriers .territory/sprint-6/barriers \
+  --osm-source-lock .territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json \
   --force
 
 territory tr v2 national publish-ready \
-  --dataset-version 2.0.0 \
-  --build-date 2026-08-22T00:00:00.000Z \
-  --output .territory/build/TR/V2-national \
-  --reports-output reports/tr-v2-national \
+  --dataset-version 2.1.0-rc.1 \
+  --build-date 2026-09-27T00:00:00.000Z \
+  --output .territory/sprint-6/candidate \
+  --reports-output reports/tr-v2-smart-candidate \
+  --osm-barriers .territory/sprint-6/barriers \
+  --osm-source-lock .territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json \
+  --migration-baseline .territory/build/TR/V2-national/levels/ADM3/dataset.json \
   --force
 
 territory tr v2 national validate \
-  --output .territory/build/TR/V2-national
-
-territory tr v2 national validate \
-  --output .territory/build/TR/V2-national \
+  --output .territory/sprint-6/candidate \
   --publish-ready
 ```
 
@@ -221,3 +236,52 @@ Common validation issue codes include `MISSING_ARTIFACT`, `EMPTY_ARTIFACT`, `MIS
 `UNEXPECTED_MANDATORY_ARTIFACT_OMISSION`, `NATIONAL_ADM1_COUNT_MISMATCH`,
 `NATIONAL_ADM2_COUNT_MISMATCH`, `NATIONAL_SOURCE_LOCK_ACTUAL_COUNT_MISMATCH`, and
 `NATIONAL_PARTIAL_BUILD`.
+
+## Sprint 6 Candidate
+
+The separate `2.1.0-rc.1` candidate consumes a verified `--osm-barriers` root and
+`--osm-source-lock`. Normal production disables legacy generation. Safe district checkpoints,
+province datasets, district reports, tier-specific area/zone totals, and an official-source backlog
+are emitted without placing national geometry in npm.
+See [Sprint 6 nationwide evidence](./turkey-sprint-6-nationwide.md).
+
+## Final Geographic Calibration
+
+Organic `smart-derived-v1.2` follows coarse Voronoi ownership with a deterministic barrier graph,
+shared-junction anchoring, shared-edge routing and strict partition validation. Voronoi alone is
+not counted as real barrier adherence. Strong-barrier alignment retains its existing semantics;
+all-real-barrier following and unsupported straight chains are reported separately. Official
+polygons remain unchanged and generation fills only their true missing region. See
+[the routing design and realism gates](./turkey-smart-fallback.md#final-geographic-calibration).
+
+The recalibrated candidate uses `2.1.0-rc.2` to keep the earlier `2.1.0-rc.1` artifact identity
+immutable. Historical `2.0.0` and its gameplay state remain unchanged; migration is review evidence
+with intersection areas, old/new shares, IoU, splits, merges and many-to-many components.
+
+The historical `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
+24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
+The accepted historical artifact remains unchanged. See [national calibration outcomes](./turkey-sprint-6-nationwide.md#final-geographic-calibration).
+
+## Historical Sprint 6 rc.3 evaluation
+
+`2.1.0-rc.3` uses `smart-derived-v1.3` for generated geometry. Approved official and verified
+OSM administrative polygons remain independent of generated-gap success; a generation exception
+retains accepted real-source zones and reports the uncovered gap. Exact self-union intersection
+coordinates repair the captured Gölköy and Sarıoğlan precision loops without rewriting approved
+source polygons. Source preservation is a publish-ready gate.
+
+Both Standard and Organic Smart now report geographic realism, nearby usable corridor
+opportunity, routing utilization, and unsupported straight-chain lengths. Organic output uses the router's existing 40% connector budget as a hard unsupported-straight
+ceiling. Standard output retains its established 0.8 ceiling while also comparing actual
+barrier use with local corridor opportunity. Generated zones remain estimated
+playable territory, never official mahalle records.
+
+The complete repository-source Istanbul cohort has 39 ADM2 districts. The source names Adalar
+“Prince Islands”; this is a naming mismatch, not an extra or missing district. The
+[Istanbul acceptance report](../../reports/baselines/sprint-6-istanbul-39-rc3.json) records each
+district's build and QA status. All 39 maps were reviewed: 11 pass, five pass with
+low-confidence limitations, and 23 fail (including four machine-accepted outputs with visible
+ruler seams). Istanbul blocks the full rc.3 national publish-ready run, so this candidate is
+**DO NOT MERGE**. See the [24-district retest](../../reports/baselines/sprint-6-final-recovery.json)
+(8 accepted, 16 rejected) and [national rc.3 status](../../reports/baselines/sprint-6-final-national.json).
+The historical rc.1 and rc.2 evidence above is retained separately.

@@ -34,7 +34,23 @@ import type {
   TurkeyGameZoneFragmentStrategy,
   TurkeyGameZoneProfile
 } from "./turkey-game-zones.js";
-import { buildTurkeySmartFallbackWithAdjacency } from "./turkey-smart-fallback.js";
+import {
+  buildTurkeySmartFallbackWithAdjacency,
+  buildTurkeyOrganicSmartFallbackWithAdjacency,
+  buildTurkeyNetworkFirstSmartFallbackWithAdjacency,
+  resolveTurkeySmartFallbackConfiguration
+} from "./turkey-smart-fallback.js";
+
+function smartCandidateRank(result: TurkeySmartFallbackBuildResult): number {
+  const q = result.quality;
+  const districtScaleMeters = Math.max(1, Math.sqrt(q.parentAreaKm2) * 1000);
+  return (
+    Math.min(1, q.barrierFollowingInternalBoundaryRatio) * 3 -
+    q.meanSyntheticBoundaryRatio * 2 -
+    (q.longestUnsupportedStraightChainMeters / districtScaleMeters) * 3 +
+    q.meanQualityScore
+  );
+}
 import type {
   TurkeySmartFallbackBuildResult,
   TurkeySmartFallbackLocalitySeed,
@@ -54,7 +70,7 @@ import type { FeatureCollection } from "geojson";
 export const TURKEY_V2_HYBRID_COVERAGE_SCHEMA_VERSION =
   "territorykit-tr-v2-hybrid-coverage@1" as const;
 export const TURKEY_V2_HYBRID_QUALITY_SCHEMA_VERSION =
-  "territorykit-tr-v2-hybrid-quality@1" as const;
+  "territorykit-tr-v2-hybrid-quality@2" as const;
 export const TURKEY_V2_HYBRID_PROVENANCE_SCHEMA_VERSION =
   "territorykit-tr-v2-hybrid-provenance@1" as const;
 export const TURKEY_V2_HYBRID_ATTRIBUTION_SCHEMA_VERSION =
@@ -117,6 +133,8 @@ export interface TurkeyV2HybridGeneratedOptions {
   minFragmentAreaKm2?: number;
   fragmentStrategy?: TurkeyGameZoneFragmentStrategy;
   fallbackToLegacyOnSmartFailure?: boolean;
+  organicFallback?: boolean;
+  legacyGridAllowed?: boolean;
   smartFallback?: {
     profile?: TurkeySmartFallbackProfile;
     roads?: FeatureCollection;
@@ -136,6 +154,7 @@ export interface TurkeyV2HybridDistrictBuildOptions {
   officialZones?: readonly TerritoryZone[];
   osmZones?: readonly TerritoryZone[];
   generated?: TurkeyV2HybridGeneratedOptions;
+  generationInputError?: string;
   sourcePriority?: readonly TurkeyV2HybridSourceClass[];
   minimumEffectiveAreaKm2?: number;
   overlapToleranceKm2?: number;
@@ -217,7 +236,12 @@ export interface TurkeyV2HybridQualityReport {
   ok: boolean;
   districtId: string;
   deterministicHash: string;
+  approvedSourcePreservation: boolean;
   summary: {
+    approvedInputZoneCount: number;
+    approvedRetainedZoneCount: number;
+    approvedMissingZoneCount: number;
+    approvedChangedZoneCount: number;
     invalidGeometryCount: number;
     emptyGeometryCount: number;
     duplicateStableIdCount: number;
@@ -243,6 +267,7 @@ export interface TurkeyV2HybridQualityReport {
     adjacencyIntegrityErrorCount: number;
   };
   gates: {
+    approvedSourcePreservation: boolean;
     coverage: boolean;
     effectiveSiblingOverlap: boolean;
     realGeneratedOverlap: boolean;
@@ -266,7 +291,7 @@ export interface TurkeyV2HybridQualityReport {
 export interface TurkeyV2HybridSmartAttemptReport {
   attempted: true;
   accepted: boolean;
-  selectedFallback: "smart" | "legacy" | "none";
+  selectedFallback: "smart" | "organic-smart" | "network-first" | "legacy" | "none";
   status: TurkeySmartFallbackStatus;
   profile: TurkeySmartFallbackProfile;
   selectedProfile: string;
@@ -294,6 +319,15 @@ export interface TurkeyV2HybridSmartAttemptMetrics {
   meanSyntheticBoundaryRatio: number;
   totalInternalBoundaryLengthKm: number;
   barrierAlignedBoundaryLengthKm: number;
+  axisAlignedInternalBoundaryRatio: number;
+  longUnsupportedStraightBoundaryRatio: number;
+  barrierFollowingInternalBoundaryRatio: number;
+  availableBarrierOpportunityRatio: number;
+  barrierRoutingUtilization: number;
+  longestUnsupportedStraightChainMeters: number;
+  unsupportedStraightChainCountAbove100m: number;
+  unsupportedStraightChainCountAbove250m: number;
+  unsupportedStraightChainCountAbove500m: number;
   syntheticSplitCount: number;
   barrierSplitCount: number;
   splitCount: number;
@@ -424,13 +458,29 @@ export interface TurkeyV2ZoneMigrationRecord {
   intersectionAreaKm2: number;
   oldOverlapPercent: number;
   newOverlapPercent: number;
+  intersectionOverUnion: number;
   confidence: number;
   manualReviewRequired: boolean;
   reason: string;
+  mappingCardinality?:
+    "one-to-one" | "one-to-many" | "many-to-one" | "many-to-many" | "added" | "removed";
+  oldAlgorithmVersions?: string[];
+  newAlgorithmVersions?: string[];
+  oldSourceTiers?: string[];
+  newSourceTiers?: string[];
+  overlapPairs?: Array<{
+    oldZoneId: string;
+    newZoneId: string;
+    intersectionAreaKm2: number;
+    oldOverlapPercent: number;
+    newOverlapPercent: number;
+    intersectionOverUnion: number;
+  }>;
 }
 
 export interface TurkeyV2ZoneMigrationPlan {
   schemaVersion: typeof TURKEY_V2_HYBRID_MIGRATION_SCHEMA_VERSION;
+  algorithmVersion?: string;
   buildDate: string;
   records: TurkeyV2ZoneMigrationRecord[];
 }
@@ -443,10 +493,20 @@ export interface TurkeyV2HybridBatchSourceEntry {
 
 export interface TurkeyV2HybridBatchBuildOptions {
   districts: readonly TerritoryZone[];
+  migrationBaselineZones?: readonly TerritoryZone[];
   sourcesByDistrict?:
     | ReadonlyMap<string, TurkeyV2HybridBatchSourceEntry>
     | Record<string, TurkeyV2HybridBatchSourceEntry>;
   generatedDefaults?: TurkeyV2HybridGeneratedOptions;
+  loadGeneratedOptions?: (district: TerritoryZone) => Promise<TurkeyV2HybridGeneratedOptions>;
+  onDistrictComplete?: (
+    result: TurkeyV2HybridDistrictBuildResult,
+    options: TurkeyV2HybridDistrictBuildOptions
+  ) => Promise<void>;
+  releaseDistrictInputs?: boolean;
+  restoreDistrictResult?: (
+    options: TurkeyV2HybridDistrictBuildOptions
+  ) => Promise<TurkeyV2HybridDistrictBuildResult | undefined>;
   buildDate: string;
   continueOnError?: boolean;
   fallbackToGeneratedOnQualityFailure?: boolean;
@@ -567,7 +627,17 @@ export async function buildTurkeyV2HybridDistrict(
   const overlapToleranceKm2 = options.overlapToleranceKm2 ?? AREA_TOLERANCE_KM2;
   const gapToleranceKm2 = options.gapToleranceKm2 ?? 0.0001;
   const parentOutsideToleranceKm2 = options.parentOutsideToleranceKm2 ?? AREA_TOLERANCE_KM2;
-  const issues: TurkeyV2HybridIssue[] = [];
+  const issues: TurkeyV2HybridIssue[] = options.generationInputError
+    ? [
+        {
+          code: "TR_V2_HYBRID_GENERATION_INPUT_FAILED",
+          severity: "error",
+          message: "Generated input loading failed; accepted real-source geometry is retained.",
+          parentId: options.district.id,
+          details: { reason: options.generationInputError }
+        }
+      ]
+    : [];
 
   if (sourcePriority.join(">") !== "official>osm>generated") {
     issues.push({
@@ -629,65 +699,193 @@ export async function buildTurkeyV2HybridDistrict(
     generationGeometry &&
     issues.every((issue) => issue.severity !== "error")
   ) {
-    const generationDistrict = {
-      ...options.district,
-      geometry: generationGeometry,
-      bbox: computeGeometryBBox(generationGeometry),
-      center: computeSafeGeometryCenter(generationGeometry)
-    };
-    const generatedStrategy = resolveGeneratedStrategy(generatedOptions);
-    let candidateGeneratedZones: TerritoryZone[] = [];
-    let configurationHash = "";
+    try {
+      const generationDistrict = {
+        ...options.district,
+        geometry: generationGeometry,
+        bbox: computeGeometryBBox(generationGeometry),
+        center: computeSafeGeometryCenter(generationGeometry)
+      };
+      const generatedStrategy = resolveGeneratedStrategy(generatedOptions);
+      let candidateGeneratedZones: TerritoryZone[] = [];
+      let configurationHash = "";
 
-    if (generatedStrategy === "smart") {
-      smartFallbackResult = await buildTurkeySmartFallbackWithAdjacency({
-        parent: generationDistrict,
-        provinceCode: options.provinceCode,
-        districtCode: options.districtCode,
-        profile: toSmartFallbackProfile(
-          generatedOptions.smartFallback?.profile ?? generatedOptions.profile ?? "auto"
-        ),
-        ...(generatedOptions.smartFallback?.roads
-          ? { roads: generatedOptions.smartFallback.roads }
-          : {}),
-        ...(generatedOptions.smartFallback?.railways
-          ? { railways: generatedOptions.smartFallback.railways }
-          : {}),
-        ...(generatedOptions.smartFallback?.water
-          ? { water: generatedOptions.smartFallback.water }
-          : {}),
-        ...(generatedOptions.smartFallback?.landuse
-          ? { landuse: generatedOptions.smartFallback.landuse }
-          : {}),
-        ...(generatedOptions.smartFallback?.parks
-          ? { parks: generatedOptions.smartFallback.parks }
-          : {}),
-        ...(generatedOptions.smartFallback?.localitySeeds
-          ? { localitySeeds: generatedOptions.smartFallback.localitySeeds }
-          : {}),
-        options: createSmartFallbackOptions(generatedOptions)
-      });
-
-      if (smartFallbackResult.quality.ok) {
-        issues.push(...mapSmartFallbackIssues(smartFallbackResult.issues));
-        candidateGeneratedZones = smartFallbackResult.zones;
-        configurationHash = smartFallbackResult.manifest.contentHash;
-      } else if (generatedOptions.fallbackToLegacyOnSmartFailure ?? true) {
-        issues.push(...mapSmartFallbackIssues(smartFallbackResult.issues, "warning"));
-        issues.push({
-          code: "TR_V2_HYBRID_LEGACY_FALLBACK_USED",
-          severity: "warning",
-          message:
-            "Smart fallback failed quality gates, so the district used the legacy generated-zone fallback.",
-          parentId: options.district.id,
-          details: {
-            smartFallbackStatus: smartFallbackResult.status,
-            smartFallbackHash: smartFallbackResult.deterministicHash,
-            reasonCodes: smartFallbackResult.reasonCodes,
-            smartFallbackMetrics: createSmartAttemptMetrics(smartFallbackResult.quality),
-            smartFallbackGates: smartFallbackResult.quality.gates
+      if (generatedStrategy === "smart") {
+        const smartInput = {
+          parent: generationDistrict,
+          provinceCode: options.provinceCode,
+          districtCode: options.districtCode,
+          profile: toSmartFallbackProfile(
+            generatedOptions.smartFallback?.profile ?? generatedOptions.profile ?? "auto"
+          ),
+          ...(generatedOptions.smartFallback?.roads
+            ? { roads: generatedOptions.smartFallback.roads }
+            : {}),
+          ...(generatedOptions.smartFallback?.railways
+            ? { railways: generatedOptions.smartFallback.railways }
+            : {}),
+          ...(generatedOptions.smartFallback?.water
+            ? { water: generatedOptions.smartFallback.water }
+            : {}),
+          ...(generatedOptions.smartFallback?.landuse
+            ? { landuse: generatedOptions.smartFallback.landuse }
+            : {}),
+          ...(generatedOptions.smartFallback?.parks
+            ? { parks: generatedOptions.smartFallback.parks }
+            : {}),
+          ...(generatedOptions.smartFallback?.localitySeeds
+            ? { localitySeeds: generatedOptions.smartFallback.localitySeeds }
+            : {}),
+          options: createSmartFallbackOptions(generatedOptions)
+        };
+        let standardPrecisionFailure: string | undefined;
+        try {
+          smartFallbackResult = await buildTurkeySmartFallbackWithAdjacency(smartInput);
+        } catch (error) {
+          // A precision failure in one Standard partition must not prevent the
+          // independent Organic partition from being attempted. Other errors
+          // still propagate to the district's explicit generation failure.
+          if (
+            !(error instanceof Error) ||
+            error.message !== "SMART_FALLBACK_PRECISION_REGULARIZATION_FAILED"
+          )
+            throw error;
+          standardPrecisionFailure = error.message;
+        }
+        const comparedCandidates: Array<{
+          mode: "standard" | "organic" | "network-first";
+          result: TurkeySmartFallbackBuildResult;
+        }> = [];
+        const standardCandidate = smartFallbackResult;
+        if (smartFallbackResult)
+          comparedCandidates.push({ mode: "standard", result: smartFallbackResult });
+        const signals =
+          resolveTurkeySmartFallbackConfiguration(smartInput).configuration.profileDecision.signals;
+        if (signals.roadDensityKmPerKm2 >= 1 || signals.strongBarrierCount >= 20) {
+          try {
+            const networkResult =
+              await buildTurkeyNetworkFirstSmartFallbackWithAdjacency(smartInput);
+            comparedCandidates.push({ mode: "network-first", result: networkResult });
+            if (
+              networkResult.quality.ok &&
+              (!smartFallbackResult?.quality.ok ||
+                smartCandidateRank(networkResult) > smartCandidateRank(smartFallbackResult))
+            )
+              smartFallbackResult = networkResult;
+          } catch (error) {
+            issues.push({
+              code: "SMART_NETWORK_CANDIDATE_REJECTED",
+              severity: "warning",
+              message: "Network-first candidate could not be constructed.",
+              details: { reason: error instanceof Error ? error.message : String(error) }
+            });
           }
-        });
+        }
+        if (generatedOptions.organicFallback ?? true) {
+          if (!standardCandidate?.quality.ok)
+            issues.push({
+              code: "SMART_STANDARD_QUALITY_REJECTED",
+              severity: "warning",
+              message: "Standard Smart rejected; comparing geographic alternatives.",
+              details: standardCandidate
+                ? {
+                    quality: standardCandidate.quality,
+                    reasonCodes: standardCandidate.reasonCodes
+                  }
+                : { reason: standardPrecisionFailure }
+            });
+          try {
+            const organicResult = await buildTurkeyOrganicSmartFallbackWithAdjacency(smartInput);
+            comparedCandidates.push({ mode: "organic", result: organicResult });
+            issues.push({
+              code: organicResult.quality.ok ? "ORGANIC_SMART_ACCEPTED" : "ORGANIC_SMART_REJECTED",
+              severity: organicResult.quality.ok ? "info" : "warning",
+              message: "Organic smart candidate quality decision.",
+              details: { reasonCodes: organicResult.reasonCodes }
+            });
+            if (
+              organicResult.quality.ok &&
+              (!smartFallbackResult?.quality.ok ||
+                smartCandidateRank(organicResult) > smartCandidateRank(smartFallbackResult))
+            )
+              smartFallbackResult = organicResult;
+            else if (!smartFallbackResult?.quality.ok) smartFallbackResult = organicResult;
+          } catch (error) {
+            issues.push({
+              code: "ORGANIC_SMART_REJECTED",
+              severity: "warning",
+              message: "Organic smart candidate could not be constructed.",
+              details: { reason: error instanceof Error ? error.message : String(error) }
+            });
+          }
+        }
+
+        if (!smartFallbackResult) throw new Error(standardPrecisionFailure);
+        smartFallbackResult.candidateComparisons = comparedCandidates.map(({ mode, result }) => ({
+          mode,
+          accepted: result.quality.ok,
+          coveragePercent: result.quality.coveragePercent,
+          territoryCount: result.quality.territoryCount,
+          largestTerritoryAreaShare: result.quality.largestTerritoryAreaShare,
+          minimumZoneAreaKm2: result.quality.minAreaKm2,
+          configuredMinimumAreaKm2: result.configuration.minAreaKm2,
+          effectivePartitionCount: result.quality.effectivePartitionCount,
+          minimumUsefulTerritoryCount: result.quality.minimumUsefulTerritoryCount,
+          partitionAdequacy: result.quality.gates.partitionAdequacy,
+          followingRatio: result.quality.barrierFollowingInternalBoundaryRatio,
+          syntheticRatio: result.quality.meanSyntheticBoundaryRatio,
+          axisAlignedInternalBoundaryRatio: result.quality.axisAlignedInternalBoundaryRatio,
+          longUnsupportedStraightBoundaryRatio: result.quality.longUnsupportedStraightBoundaryRatio,
+          unsupportedStraightChainCountAbove500m:
+            result.quality.unsupportedStraightChainCountAbove500m,
+          availableBarrierOpportunityRatio: result.quality.availableBarrierOpportunityRatio,
+          longestUnsupportedMeters: result.quality.longestUnsupportedStraightChainMeters,
+          deterministicHash: result.deterministicHash,
+          rejectionCodes: result.quality.ok ? [] : result.reasonCodes,
+          failedGates: Object.entries(result.quality.gates)
+            .filter(([, passed]) => !passed)
+            .map(([gate]) => gate),
+          geometryValidationErrors: result.quality.geometryValidationErrors,
+          ...(result.quality.networkConstruction
+            ? { networkConstruction: result.quality.networkConstruction }
+            : {})
+        }));
+
+        if (smartFallbackResult.quality.ok) {
+          issues.push(...mapSmartFallbackIssues(smartFallbackResult.issues));
+          candidateGeneratedZones = smartFallbackResult.zones;
+          configurationHash = smartFallbackResult.manifest.contentHash;
+        } else if (
+          (generatedOptions.fallbackToLegacyOnSmartFailure ?? false) &&
+          generatedOptions.legacyGridAllowed === true
+        ) {
+          issues.push(...mapSmartFallbackIssues(smartFallbackResult.issues, "warning"));
+          issues.push({
+            code: "TR_V2_HYBRID_LEGACY_FALLBACK_USED",
+            severity: "warning",
+            message:
+              "Smart fallback failed quality gates, so the district used the legacy generated-zone fallback.",
+            parentId: options.district.id,
+            details: {
+              smartFallbackStatus: smartFallbackResult.status,
+              smartFallbackHash: smartFallbackResult.deterministicHash,
+              reasonCodes: smartFallbackResult.reasonCodes,
+              smartFallbackMetrics: createSmartAttemptMetrics(smartFallbackResult.quality),
+              smartFallbackGates: smartFallbackResult.quality.gates
+            }
+          });
+          generatedResult = buildLegacyGeneratedResult({
+            district: generationDistrict,
+            provinceCode: options.provinceCode,
+            districtCode: options.districtCode,
+            options: generatedOptions
+          });
+          candidateGeneratedZones = generatedResult.zones;
+          configurationHash = sha256Hex(serializeJsonStable(generatedResult.configuration));
+        } else {
+          issues.push(...mapSmartFallbackIssues(smartFallbackResult.issues));
+        }
+      } else if (generatedOptions.legacyGridAllowed !== false) {
         generatedResult = buildLegacyGeneratedResult({
           district: generationDistrict,
           provinceCode: options.provinceCode,
@@ -697,63 +895,75 @@ export async function buildTurkeyV2HybridDistrict(
         candidateGeneratedZones = generatedResult.zones;
         configurationHash = sha256Hex(serializeJsonStable(generatedResult.configuration));
       } else {
-        issues.push(...mapSmartFallbackIssues(smartFallbackResult.issues));
+        issues.push({
+          code: "PRODUCTION_LEGACY_GRID_FORBIDDEN",
+          severity: "error",
+          message: "Legacy grid is forbidden in normal production.",
+          parentId: options.district.id
+        });
       }
-    } else {
-      generatedResult = buildLegacyGeneratedResult({
-        district: generationDistrict,
-        provinceCode: options.provinceCode,
-        districtCode: options.districtCode,
-        options: generatedOptions
-      });
-      candidateGeneratedZones = generatedResult.zones;
-      configurationHash = sha256Hex(serializeJsonStable(generatedResult.configuration));
-    }
 
-    const generatedOutput = buildEffectiveGeneratedZones({
-      district: options.district,
-      provinceCode: options.provinceCode,
-      districtCode: options.districtCode,
-      districtGeometry,
-      realMask,
-      zones: candidateGeneratedZones,
-      minimumEffectiveAreaKm2,
-      buildDate,
-      configurationHash
-    });
-    generatedEffective = generatedOutput.zones;
-    generatedSliverAreaKm2 = generatedOutput.sliverAreaKm2;
-
-    if (
-      candidateGeneratedZones.length > 0 &&
-      generatedEffective.length === 0 &&
-      missingBeforeGeneratedAreaKm2 >= minimumEffectiveAreaKm2
-    ) {
-      const fallbackZone = createSingleGeneratedFallbackZone({
+      const generatedOutput = buildEffectiveGeneratedZones({
         district: options.district,
         provinceCode: options.provinceCode,
         districtCode: options.districtCode,
-        geometry: generationGeometry,
+        districtGeometry,
+        realMask,
+        zones: candidateGeneratedZones,
+        prevalidatedPartition: smartFallbackResult?.quality.ok === true,
+        minimumEffectiveAreaKm2,
         buildDate,
-        seed: generatedOptions.seed ?? "kaprota-v2",
-        configurationHash: configurationHash || generatedOptions.seed || "kaprota-v2",
-        effectiveGeometry: missingGeometry
+        configurationHash
       });
+      generatedEffective = generatedOutput.zones;
+      generatedSliverAreaKm2 = generatedOutput.sliverAreaKm2;
 
-      generatedEffective = [fallbackZone];
+      if (
+        generatedOptions.legacyGridAllowed !== false &&
+        candidateGeneratedZones.length > 0 &&
+        generatedEffective.length === 0 &&
+        missingBeforeGeneratedAreaKm2 >= minimumEffectiveAreaKm2
+      ) {
+        const fallbackZone = createSingleGeneratedFallbackZone({
+          district: options.district,
+          provinceCode: options.provinceCode,
+          districtCode: options.districtCode,
+          geometry: generationGeometry,
+          buildDate,
+          seed: generatedOptions.seed ?? "kaprota-v2",
+          configurationHash: configurationHash || generatedOptions.seed || "kaprota-v2",
+          effectiveGeometry: missingGeometry
+        });
+
+        generatedEffective = [fallbackZone];
+        generatedResult = undefined;
+        smartFallbackResult = undefined;
+      } else if (generatedResult) {
+        issues.push(
+          ...generatedResult.issues.map((issue) => ({
+            code: `TR_V2_HYBRID_GENERATOR_${issue.code}`,
+            severity: issue.severity,
+            message: issue.message,
+            ...(issue.zoneId ? { zoneId: issue.zoneId } : {}),
+            ...(issue.parentId ? { parentId: issue.parentId } : {}),
+            ...(issue.details ? { details: issue.details } : {})
+          }))
+        );
+      }
+    } catch (error) {
+      generatedEffective = [];
       generatedResult = undefined;
       smartFallbackResult = undefined;
-    } else if (generatedResult) {
-      issues.push(
-        ...generatedResult.issues.map((issue) => ({
-          code: `TR_V2_HYBRID_GENERATOR_${issue.code}`,
-          severity: issue.severity,
-          message: issue.message,
-          ...(issue.zoneId ? { zoneId: issue.zoneId } : {}),
-          ...(issue.parentId ? { parentId: issue.parentId } : {}),
-          ...(issue.details ? { details: issue.details } : {})
-        }))
-      );
+      issues.push({
+        code: "TR_V2_HYBRID_GENERATION_FAILED",
+        severity: "error",
+        message: "Generated gap fill failed; accepted real-source geometry is retained.",
+        parentId: options.district.id,
+        details: {
+          reason: error instanceof Error ? error.message : String(error),
+          uncoveredGapAreaKm2: missingBeforeGeneratedAreaKm2
+        }
+      });
     }
   }
 
@@ -882,6 +1092,8 @@ export async function buildTurkeyV2HybridDistrict(
     officialSourceInternalOverlapCount: officialEffective.sourceInternalOverlapCount,
     osmSourceInternalOverlapCount: osmEffective.sourceInternalOverlapCount,
     realMask,
+    retainedRealZones: realZones,
+    approvedZones: officialEffective.zones,
     generatedZones: generatedEffective,
     overlapToleranceKm2,
     gapToleranceKm2,
@@ -1057,7 +1269,15 @@ function createSmartAttemptReport(input: {
   return {
     attempted: true,
     accepted: result.quality.ok,
-    selectedFallback: result.quality.ok ? "smart" : input.generatedResult ? "legacy" : "none",
+    selectedFallback: result.quality.ok
+      ? result.configuration.networkFirst
+        ? "network-first"
+        : result.configuration.organic
+          ? "organic-smart"
+          : "smart"
+      : input.generatedResult
+        ? "legacy"
+        : "none",
     status: result.status,
     profile: result.configuration.profile,
     selectedProfile: result.selectedProfile,
@@ -1089,6 +1309,15 @@ function createSmartAttemptMetrics(
     meanSyntheticBoundaryRatio: quality.meanSyntheticBoundaryRatio,
     totalInternalBoundaryLengthKm: quality.totalInternalBoundaryLengthKm,
     barrierAlignedBoundaryLengthKm: quality.barrierAlignedBoundaryLengthKm,
+    axisAlignedInternalBoundaryRatio: quality.axisAlignedInternalBoundaryRatio,
+    longUnsupportedStraightBoundaryRatio: quality.longUnsupportedStraightBoundaryRatio,
+    barrierFollowingInternalBoundaryRatio: quality.barrierFollowingInternalBoundaryRatio,
+    availableBarrierOpportunityRatio: quality.availableBarrierOpportunityRatio,
+    barrierRoutingUtilization: quality.barrierRoutingUtilization,
+    longestUnsupportedStraightChainMeters: quality.longestUnsupportedStraightChainMeters,
+    unsupportedStraightChainCountAbove100m: quality.unsupportedStraightChainCountAbove100m,
+    unsupportedStraightChainCountAbove250m: quality.unsupportedStraightChainCountAbove250m,
+    unsupportedStraightChainCountAbove500m: quality.unsupportedStraightChainCountAbove500m,
     syntheticSplitCount: quality.syntheticSplitCount,
     barrierSplitCount: quality.barrierSplitCount,
     splitCount: quality.splitCount,
@@ -1119,7 +1348,15 @@ export async function buildTurkeyV2HybridBatch(
   options: TurkeyV2HybridBatchBuildOptions
 ): Promise<TurkeyV2HybridBatchBuildResult> {
   const datasetId = options.datasetId ?? "tr-adm3-v2-hybrid-batch";
-  const districts = sortZones(options.districts);
+  const districts = sortZones(options.districts).sort((left, right) => {
+    const a = readDistrictCodes(left),
+      b = readDistrictCodes(right);
+    return (
+      a.provinceCode.localeCompare(b.provinceCode) ||
+      a.districtCode.localeCompare(b.districtCode) ||
+      left.id.localeCompare(right.id)
+    );
+  });
   const duplicateDistrictIds = findDuplicates(districts.map((district) => district.id));
 
   if (duplicateDistrictIds.length > 0) {
@@ -1133,14 +1370,27 @@ export async function buildTurkeyV2HybridBatch(
     try {
       const sourceEntry = readBatchSourceEntry(options.sourcesByDistrict, district.id);
       const codes = readDistrictCodes(district);
+      let generated = sourceEntry?.generated ??
+        options.generatedDefaults ?? { enabled: true, profile: "auto" as const };
+      let generationInputError: string | undefined;
+      if (options.loadGeneratedOptions) {
+        try {
+          generated = await options.loadGeneratedOptions(district);
+        } catch (error) {
+          generated = { enabled: false };
+          generationInputError = error instanceof Error ? error.message : String(error);
+        }
+      }
       const districtOptions = {
         district,
+        ...(generationInputError ? { generationInputError } : {}),
+        migrationBaselineZones:
+          options.migrationBaselineZones?.filter((z) => z.parentId === district.id) ?? [],
         provinceCode: codes.provinceCode,
         districtCode: codes.districtCode,
         officialZones: sourceEntry?.officialZones ?? [],
         osmZones: sourceEntry?.osmZones ?? [],
-        generated: sourceEntry?.generated ??
-          options.generatedDefaults ?? { enabled: true, profile: "auto" },
+        generated,
         buildDate: options.buildDate,
         datasetId: `${datasetId}-${district.id.replace(/[^a-zA-Z0-9_-]+/g, "-")}`,
         ...(options.minimumEffectiveAreaKm2 !== undefined
@@ -1159,12 +1409,16 @@ export async function buildTurkeyV2HybridBatch(
           ? { allowExperimental: options.allowExperimental }
           : {})
       };
-      let result = await buildTurkeyV2HybridDistrict(districtOptions);
+      let result =
+        (await options.restoreDistrictResult?.(districtOptions)) ??
+        (await buildTurkeyV2HybridDistrict(districtOptions));
 
       if (
         !result.quality.ok &&
         !isUsableGeneratedFallback(result) &&
         options.fallbackToGeneratedOnQualityFailure &&
+        result.effective.official.length === 0 &&
+        result.effective.osm.length === 0 &&
         (districtOptions.officialZones.length > 0 || districtOptions.osmZones.length > 0) &&
         (options.generatedDefaults?.enabled ?? true)
       ) {
@@ -1183,6 +1437,9 @@ export async function buildTurkeyV2HybridBatch(
         throw new Error(`Hybrid district build failed quality gates for ${district.id}.`);
       }
 
+      if (options.releaseDistrictInputs && result.smartFallbackResult)
+        result.smartFallbackResult.barriers = [];
+      if (options.onDistrictComplete) await options.onDistrictComplete(result, districtOptions);
       results.push(result);
     } catch (error) {
       failures.push({
@@ -1302,62 +1559,65 @@ export function createTurkeyV2ZoneMigrationPlan(input: {
     }
   }
 
-  for (const oldZone of oldZones.filter((zone) => !matchedOld.has(zone.id))) {
-    const overlappingNew = newZones
-      .filter((zone) => !matchedNew.has(zone.id))
-      .map((zone) => ({ zone, evidence: overlapEvidence(oldZone, [zone]) }))
-      .filter((entry) => entry.evidence.intersectionAreaKm2 > AREA_TOLERANCE_KM2)
-      .sort(
-        (left, right) =>
-          right.evidence.intersectionAreaKm2 - left.evidence.intersectionAreaKm2 ||
-          left.zone.id.localeCompare(right.zone.id)
-      );
-
-    if (overlappingNew.length > 1) {
-      const zones = overlappingNew.map((entry) => entry.zone);
-      zones.forEach((zone) => matchedNew.add(zone.id));
-      records.push(migrationRecord("split", [oldZone], zones, overlapEvidence(oldZone, zones)));
-      matchedOld.add(oldZone.id);
-      continue;
+  const remainingOld = oldZones.filter((z) => !matchedOld.has(z.id));
+  const remainingNew = newZones.filter((z) => !matchedNew.has(z.id));
+  const pairs: NonNullable<TurkeyV2ZoneMigrationRecord["overlapPairs"]> = [];
+  for (const old of remainingOld)
+    for (const next of remainingNew) {
+      const evidence = overlapEvidence(old, [next]);
+      if (evidence.intersectionAreaKm2 <= AREA_TOLERANCE_KM2) continue;
+      pairs.push({
+        oldZoneId: old.id,
+        newZoneId: next.id,
+        ...evidence,
+        intersectionOverUnion: overlapIoU(evidence)
+      });
     }
-
-    const best = overlappingNew[0];
-
-    if (best) {
-      const oldSourceClass = readSourceClass(oldZone);
-      const newSourceClass = readSourceClass(best.zone);
-      matchedOld.add(oldZone.id);
-      matchedNew.add(best.zone.id);
-      records.push(
-        migrationRecord(
-          oldSourceClass !== newSourceClass ? "source-replaced" : "geometry-changed",
-          [oldZone],
-          [best.zone],
-          best.evidence
-        )
-      );
+  for (const old of remainingOld) {
+    if (matchedOld.has(old.id) || !pairs.some((p) => p.oldZoneId === old.id)) continue;
+    const oldIds = new Set([old.id]),
+      newIds = new Set<string>();
+    let expanded = true;
+    while (expanded) {
+      expanded = false;
+      for (const pair of pairs) {
+        if (!oldIds.has(pair.oldZoneId) && !newIds.has(pair.newZoneId)) continue;
+        if (!oldIds.has(pair.oldZoneId)) {
+          oldIds.add(pair.oldZoneId);
+          expanded = true;
+        }
+        if (!newIds.has(pair.newZoneId)) {
+          newIds.add(pair.newZoneId);
+          expanded = true;
+        }
+      }
     }
-  }
-
-  for (const newZone of newZones.filter((zone) => !matchedNew.has(zone.id))) {
-    const overlappingOld = oldZones
-      .filter((zone) => !matchedOld.has(zone.id))
-      .map((zone) => ({ zone, evidence: overlapEvidence(zone, [newZone]) }))
-      .filter((entry) => entry.evidence.intersectionAreaKm2 > AREA_TOLERANCE_KM2)
-      .sort(
-        (left, right) =>
-          right.evidence.intersectionAreaKm2 - left.evidence.intersectionAreaKm2 ||
-          left.zone.id.localeCompare(right.zone.id)
-      );
-
-    if (overlappingOld.length > 1) {
-      const oldMatched = overlappingOld.map((entry) => entry.zone);
-      oldMatched.forEach((zone) => matchedOld.add(zone.id));
-      matchedNew.add(newZone.id);
-      records.push(
-        migrationRecord("merged", oldMatched, [newZone], overlapEvidence(newZone, oldMatched))
-      );
+    const oldGroup = remainingOld.filter((z) => oldIds.has(z.id));
+    const newGroup = remainingNew.filter((z) => newIds.has(z.id));
+    oldGroup.forEach((z) => matchedOld.add(z.id));
+    newGroup.forEach((z) => matchedNew.add(z.id));
+    const oldGeometry = clippingMultiPolygonToTerritoryGeometry(
+      unionTerritoryGeometries(oldGroup.map((z) => z.geometry))
+    );
+    if (!oldGeometry) throw new Error("MIGRATION_OLD_UNION_INVALID");
+    const evidence = overlapEvidence({ ...oldGroup[0]!, geometry: oldGeometry }, newGroup);
+    const type: TurkeyV2HybridMigrationChangeType =
+      oldGroup.length === 1 && newGroup.length > 1
+        ? "split"
+        : oldGroup.length > 1 && newGroup.length === 1
+          ? "merged"
+          : readSourceClass(oldGroup[0]!) !== readSourceClass(newGroup[0]!) ||
+              migrationSourceTier(oldGroup[0]!) !== migrationSourceTier(newGroup[0]!)
+            ? "source-replaced"
+            : "geometry-changed";
+    const record = migrationRecord(type, oldGroup, newGroup, evidence);
+    record.overlapPairs = pairs.filter((p) => oldIds.has(p.oldZoneId) && newIds.has(p.newZoneId));
+    if (oldGroup.length > 1 && newGroup.length > 1) {
+      record.manualReviewRequired = true;
+      record.reason =
+        "Ambiguous many-to-many repartition; review pairwise overlap evidence before migrating gameplay state.";
     }
+    records.push(record);
   }
 
   for (const oldZone of oldZones.filter((zone) => !matchedOld.has(zone.id))) {
@@ -1370,6 +1630,7 @@ export function createTurkeyV2ZoneMigrationPlan(input: {
 
   return {
     schemaVersion: TURKEY_V2_HYBRID_MIGRATION_SCHEMA_VERSION,
+    algorithmVersion: "overlap-components-v2",
     buildDate: input.buildDate,
     records: records.sort(compareMigrationRecords)
   };
@@ -1398,7 +1659,18 @@ function buildEffectiveRealZones(input: {
   const sourceIdentities = new Set<string>();
   const geometryHashes = new Set<string>();
 
-  for (const zone of sortZones(input.zones)) {
+  const ordered = sortZones(input.zones).sort((left, right) => {
+    if (input.sourceClass !== "official") return 0;
+    const rank = (zone: TerritoryZone) =>
+      Number(
+        readBoundarySourceClass(
+          isRecord(zone.properties.territory) ? zone.properties.territory : {},
+          "official"
+        ) !== "official-national"
+      );
+    return rank(left) - rank(right);
+  });
+  for (const zone of ordered) {
     const metadata = readCandidateMetadata(zone, input.sourceClass);
     const originalGeometry = toClippingMultiPolygon(zone.geometry);
     const candidateAreaKm2 = clippingAreaKm2(originalGeometry);
@@ -1560,6 +1832,7 @@ function buildEffectiveRealZones(input: {
 }
 
 function buildEffectiveGeneratedZones(input: {
+  prevalidatedPartition?: boolean;
   district: TerritoryZone;
   provinceCode: string;
   districtCode: string;
@@ -1575,11 +1848,15 @@ function buildEffectiveGeneratedZones(input: {
   let sliverAreaKm2 = 0;
 
   for (const zone of sortZones(input.zones)) {
-    const clipped = intersectClippingGeometries(
-      input.districtGeometry,
-      toClippingMultiPolygon(zone.geometry)
-    );
-    const effective = differenceClippingGeometries(clipped, input.realMask, localMask);
+    const clipped = input.prevalidatedPartition
+      ? []
+      : intersectClippingGeometries(input.districtGeometry, toClippingMultiPolygon(zone.geometry));
+    // Accepted Smart cells already partition the real-source gap. Re-cutting their
+    // shared boundaries against a growing union introduces numerical sweep failures.
+    // Hybrid topology gates independently validate the final real + generated set.
+    const effective = input.prevalidatedPartition
+      ? toClippingMultiPolygon(zone.geometry)
+      : differenceClippingGeometries(clipped, input.realMask, localMask);
     const areaKm2 = clippingAreaKm2(effective);
 
     if (areaKm2 <= 0) {
@@ -1591,7 +1868,9 @@ function buildEffectiveGeneratedZones(input: {
       continue;
     }
 
-    const geometry = clippingMultiPolygonToTerritoryGeometry(effective);
+    const geometry = input.prevalidatedPartition
+      ? zone.geometry
+      : clippingMultiPolygonToTerritoryGeometry(effective);
 
     if (!geometry) {
       continue;
@@ -1609,7 +1888,7 @@ function buildEffectiveGeneratedZones(input: {
         configurationHash: input.configurationHash
       })
     );
-    localMask = unionClippingGeometries([localMask, effective]);
+    if (!input.prevalidatedPartition) localMask = unionClippingGeometries([localMask, effective]);
   }
 
   return { zones: zones.sort(compareZones), sliverAreaKm2 };
@@ -1726,7 +2005,11 @@ function createEffectiveRealZone(input: {
       : sha256Hex(
           serializeJsonStable(clippingMultiPolygonToTerritoryGeometry(input.originalGeometry))
         );
-  const boundarySourceClass = boundarySourceClassForReal(input.sourceClass);
+  const boundarySourceClass =
+    input.sourceClass === "official" &&
+    readBoundarySourceClass(territory, "official") === "official-national"
+      ? "official-national"
+      : boundarySourceClassForReal(input.sourceClass);
   const licenseState = licenseStateFromPolicy(input.metadata);
   const confidence = confidenceForRealSource(input.sourceClass, licenseState);
   const sourceSnapshotChecksum =
@@ -1765,6 +2048,7 @@ function createEffectiveRealZone(input: {
         boundarySourceClass,
         confidence,
         administrative: input.sourceClass === "official",
+        authoritative: input.sourceClass === "official" && licenseState === "approved",
         providerClass: input.metadata.providerClass,
         providerId: input.metadata.providerId,
         providerName: input.metadata.providerName,
@@ -1917,6 +2201,8 @@ function createEffectiveGeneratedZone(input: {
         boundarySourceClass: "smart-derived",
         confidence,
         administrative: false,
+        authoritative: false,
+        legacyGridEmergency: !String(algorithmVersion).startsWith("smart-derived"),
         providerClass: "generated",
         providerId,
         providerName,
@@ -2081,6 +2367,8 @@ function createQualityReport(input: {
   officialSourceInternalOverlapCount: number;
   osmSourceInternalOverlapCount: number;
   realMask: ClippingMultiPolygon;
+  retainedRealZones: readonly TerritoryZone[];
+  approvedZones: readonly TerritoryZone[];
   generatedZones: readonly TerritoryZone[];
   overlapToleranceKm2: number;
   gapToleranceKm2: number;
@@ -2089,7 +2377,7 @@ function createQualityReport(input: {
   smartFallbackResult?: TurkeySmartFallbackBuildResult;
   deterministicHash: string;
 }): TurkeyV2HybridQualityReport {
-  const finalOverlaps = validateGeometryDataset(input.dataset, {
+  const siblingOverlapIssues = validateGeometryDataset(input.dataset, {
     checks: {
       coordinates: false,
       rings: false,
@@ -2103,7 +2391,23 @@ function createQualityReport(input: {
     }
   }).issues.filter(
     (issue) => issue.code === "SIBLING_GEOMETRY_OVERLAP" && issue.severity === "error"
-  ).length;
+  );
+  const zonesById = new Map(input.zones.map((zone) => [zone.id, zone]));
+  // The predicate can flag sub-metre precision slivers along a shared edge.
+  // Check the actual clipped intersection before treating one as an overlap.
+  const finalOverlaps = siblingOverlapIssues.filter((issue) => {
+    const left = issue.zoneId && zonesById.get(issue.zoneId);
+    const right = issue.otherZoneId && zonesById.get(issue.otherZoneId);
+    if (!left || !right) return true;
+    return (
+      clippingAreaKm2(
+        intersectClippingGeometries(
+          toClippingMultiPolygon(left.geometry),
+          toClippingMultiPolygon(right.geometry)
+        )
+      ) > Math.min(input.overlapToleranceKm2, 0.000001)
+    );
+  }).length;
   const parentContainmentErrors = computeParentContainmentErrors(
     input.district,
     input.zones,
@@ -2163,7 +2467,19 @@ function createQualityReport(input: {
   const sliverRejections = input.rejections.rejections.filter(
     (rejection) => rejection.reason === "below-minimum-effective-area"
   );
+  const finalById = new Map(input.zones.map((zone) => [zone.id, zone]));
+  const approvedMissingZoneCount = input.approvedZones.filter(
+    (source) => !finalById.has(source.id)
+  ).length;
+  const approvedChangedZoneCount = input.approvedZones.filter((source) => {
+    const retained = finalById.get(source.id);
+    return retained && geometryHash(retained.geometry) !== geometryHash(source.geometry);
+  }).length;
   const summary = {
+    approvedInputZoneCount: input.approvedZones.length,
+    approvedRetainedZoneCount: input.approvedZones.length - approvedMissingZoneCount,
+    approvedMissingZoneCount,
+    approvedChangedZoneCount,
     invalidGeometryCount,
     emptyGeometryCount,
     duplicateStableIdCount,
@@ -2194,6 +2510,13 @@ function createQualityReport(input: {
     adjacencyIntegrityErrorCount: input.adjacencyIssueCount
   };
   const gates = {
+    approvedSourcePreservation:
+      approvedMissingZoneCount === 0 &&
+      approvedChangedZoneCount === 0 &&
+      input.retainedRealZones.every((source) => {
+        const retained = finalById.get(source.id);
+        return retained && geometryHash(retained.geometry) === geometryHash(source.geometry);
+      }),
     coverage: input.coverage.finalCoveragePercent >= 99.99,
     effectiveSiblingOverlap: finalOverlaps === 0,
     realGeneratedOverlap: realGeneratedOverlapKm2 <= input.overlapToleranceKm2,
@@ -2226,6 +2549,7 @@ function createQualityReport(input: {
     ok: Object.values(gates).every(Boolean),
     districtId: input.district.id,
     deterministicHash: input.deterministicHash,
+    approvedSourcePreservation: gates.approvedSourcePreservation,
     summary,
     gates,
     strictValidation: {
@@ -2613,8 +2937,15 @@ function createHybridDistrictZone(input: {
     : {};
   const geometry = normalizeTerritoryGeometry(input.district.geometry);
 
+  // ADM2 is the root of a standalone district/batch export. National assembly
+  // retains the original canonical parents when it includes ADM0 and ADM1.
+  const scopedDistrict = { ...input.district };
+  delete scopedDistrict.parentId;
+  const scopedTerritory = { ...territory };
+  delete scopedTerritory.parentId;
+
   return {
-    ...input.district,
+    ...scopedDistrict,
     datasetId: input.datasetId,
     countryCode: "TR",
     level: 2,
@@ -2628,7 +2959,7 @@ function createHybridDistrictZone(input: {
     properties: {
       ...input.district.properties,
       territory: {
-        ...territory,
+        ...scopedTerritory,
         adminLevel: "ADM2",
         sourceAdminLevel: "ADM2",
         semanticType: "district",
@@ -2956,6 +3287,18 @@ function overlapEvidence(
     return emptyOverlapEvidence();
   }
 
+  const basisBBox = computeGeometryBBox(basis.geometry);
+  const intersectsBasis = others.some((zone) => {
+    const bbox = computeGeometryBBox(zone.geometry);
+    return (
+      basisBBox[0] <= bbox[2] &&
+      basisBBox[2] >= bbox[0] &&
+      basisBBox[1] <= bbox[3] &&
+      basisBBox[3] >= bbox[1]
+    );
+  });
+  if (!intersectsBasis) return emptyOverlapEvidence();
+
   const basisGeometry = toClippingMultiPolygon(basis.geometry);
   const otherGeometry = unionTerritoryGeometries(others.map((zone) => zone.geometry));
   const intersectionAreaKm2 = clippingAreaKm2(
@@ -3009,12 +3352,55 @@ function migrationRecord(
     intersectionAreaKm2: evidence.intersectionAreaKm2,
     oldOverlapPercent: evidence.oldOverlapPercent,
     newOverlapPercent: evidence.newOverlapPercent,
+    intersectionOverUnion: overlapIoU(evidence),
+    mappingCardinality:
+      oldZones.length === 0
+        ? "added"
+        : newZones.length === 0
+          ? "removed"
+          : oldZones.length === 1
+            ? newZones.length === 1
+              ? "one-to-one"
+              : "one-to-many"
+            : newZones.length === 1
+              ? "many-to-one"
+              : "many-to-many",
+    oldAlgorithmVersions: sortedUnique(
+      oldZones.map((z) => readString(territoryMetadata(z).algorithmVersion) ?? "not-generated")
+    ),
+    newAlgorithmVersions: sortedUnique(
+      newZones.map((z) => readString(territoryMetadata(z).algorithmVersion) ?? "not-generated")
+    ),
+    oldSourceTiers: sortedUnique(oldZones.map(migrationSourceTier)),
+    newSourceTiers: sortedUnique(newZones.map(migrationSourceTier)),
     confidence: Math.min(evidence.oldOverlapPercent, evidence.newOverlapPercent),
     manualReviewRequired:
       changeType !== "preserved" ||
       Math.min(evidence.oldOverlapPercent, evidence.newOverlapPercent) < 95,
     reason: migrationReason(changeType, sourceClassBefore, sourceClassAfter)
   };
+}
+
+function overlapIoU(evidence: { oldOverlapPercent: number; newOverlapPercent: number }): number {
+  return evidence.oldOverlapPercent > 0 && evidence.newOverlapPercent > 0
+    ? Math.min(
+        1,
+        Math.max(0, 1 / (100 / evidence.oldOverlapPercent + 100 / evidence.newOverlapPercent - 1))
+      )
+    : 0;
+}
+
+function migrationSourceTier(zone: TerritoryZone): string {
+  const t = territoryMetadata(zone),
+    algorithm = readString(t.algorithmVersion) ?? "";
+  if (algorithm.startsWith("smart-derived"))
+    return t.smartFallbackMode === "network-first"
+      ? "network-first"
+      : t.smartFallbackMode === "organic"
+        ? "organic-smart"
+        : "standard-smart";
+  if (algorithm.startsWith("tr-adm3-game-zone")) return "legacy-generated";
+  return readString(t.boundarySourceClass) ?? readSourceClass(zone);
 }
 
 function migrationReason(
@@ -3120,7 +3506,28 @@ function unionClippingGeometries(
   try {
     return canonicalizeClippingGeometry(CLIPPER.union(nonEmpty[0]!, ...nonEmpty.slice(1)));
   } catch {
-    return canonicalizeClippingGeometry(nonEmpty.flatMap((geometry) => geometry));
+    try {
+      return canonicalizeClippingGeometry(
+        CLIPPER.union(
+          ...(nonEmpty.map((geometry) => retryClippingPrecision(geometry)) as [
+            ClippingMultiPolygon,
+            ...ClippingMultiPolygon[]
+          ])
+        )
+      );
+    } catch {
+      let merged = nonEmpty[0]!;
+      for (const geometry of nonEmpty.slice(1)) {
+        try {
+          merged = canonicalizeClippingGeometry(CLIPPER.union(merged, geometry));
+        } catch {
+          merged = canonicalizeClippingGeometry(
+            CLIPPER.union(retryClippingPrecision(merged), retryClippingPrecision(geometry))
+          );
+        }
+      }
+      return merged;
+    }
   }
 }
 
@@ -3155,19 +3562,39 @@ function differenceClippingGeometries(
 
   try {
     return canonicalizeClippingGeometry(CLIPPER.difference(subject, ...nonEmptyClips));
-  } catch {
-    let result = subject;
-
-    for (const clip of nonEmptyClips) {
+  } catch (initialError) {
+    for (const decimals of [12, 10, 9, 8]) {
       try {
-        result = CLIPPER.difference(result, clip);
+        return canonicalizeClippingGeometry(
+          CLIPPER.difference(
+            retryClippingPrecision(subject, decimals),
+            ...nonEmptyClips.map((clip) => retryClippingPrecision(clip, decimals))
+          )
+        );
       } catch {
-        continue;
+        // Try the next fixed precision; hard geometry gates still apply.
       }
     }
-
-    return canonicalizeClippingGeometry(result);
+    throw new Error("HYBRID_DIFFERENCE_FAILED: deterministic precision retries failed.", {
+      cause: initialError
+    });
   }
+}
+
+function retryClippingPrecision(
+  geometry: ClippingMultiPolygon,
+  decimals = 12
+): ClippingMultiPolygon {
+  return geometry.map((polygon) =>
+    polygon.map((ring) =>
+      normalizeRing(
+        ring.map((point) => [
+          Number(point[0].toFixed(decimals)),
+          Number(point[1].toFixed(decimals))
+        ])
+      )
+    )
+  );
 }
 
 function clippingAreaKm2(geometry: ClippingMultiPolygon): number {
@@ -3189,6 +3616,10 @@ function polygonAreaM2(polygon: ClippingPolygon): number {
 }
 
 function ringAreaM2(ring: readonly LngLat[]): number {
+  const projectedArea = Math.abs(ringProjectedAreaM2(ring));
+  // Clipping can emit collinear rings. Spherical trapezoids otherwise assign
+  // phantom area when a long parent edge is subdivided by cell intersections.
+  if (projectedArea <= 1) return projectedArea;
   const geodesicArea = Math.abs(ringGeodesicAreaM2(ring));
   return geodesicArea > 1 ? geodesicArea : Math.abs(ringProjectedAreaM2(ring));
 }
@@ -3226,8 +3657,14 @@ function ringProjectedAreaM2(ring: readonly LngLat[]): number {
     }
 
     area +=
-      current[0] * metersPerDegreeLongitude * next[1] * metersPerDegreeLatitude -
-      next[0] * metersPerDegreeLongitude * current[1] * metersPerDegreeLatitude;
+      (current[0] - ring[0]![0]) *
+        metersPerDegreeLongitude *
+        (next[1] - ring[0]![1]) *
+        metersPerDegreeLatitude -
+      (next[0] - ring[0]![0]) *
+        metersPerDegreeLongitude *
+        (current[1] - ring[0]![1]) *
+        metersPerDegreeLatitude;
   }
 
   return area / 2;

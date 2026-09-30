@@ -1,5 +1,14 @@
 # @territory-kit/data-tr
 
+## Sprint 6 final candidate
+
+The external `2.1.0-rc.7` ADM3 candidate is 973/973 usable districts at 99.999979%
+renderable coverage. Its 3,343 official and 17,049 generated ADM3 zones remain outside
+this npm package. Generated zones are estimated and non-administrative, with high 306,
+medium 36, and low 631 district confidence classifications. The historical `2.0.0`
+resolver remains immutable; consumers must select the candidate explicitly and review
+[migration evidence](../../reports/baselines/sprint-6-migration-rc7.json).
+
 Thin loader package for Turkey/Turkiye pilot country artifacts. The package does not embed dataset geometry; pass a resolver that reads artifacts produced by `territory country build`.
 
 ```ts
@@ -47,7 +56,7 @@ const handle = await loadTurkeyV2NationalDataset({
 target dataset version is `2.0.0`. It still does not embed large geometry in this package; use
 artifacts from `territory tr v2 national publish-ready` or a hosted registry.
 
-The 2026-08-22 stable publish-ready rebuild verifies 1 ADM0, 81 ADM1 provinces, 973 ADM2
+The historical 2026-08-22 stable publish-ready rebuild verifies 1 ADM0, 81 ADM1 provinces, 973 ADM2
 districts, and nationwide ADM3 playable coverage through the external artifact resolver. Generated
 ADM3 fallback remains explicitly non-official; `@territory-kit/data-tr` exposes resolver metadata,
 not the large national geometry payload.
@@ -59,4 +68,23 @@ resolver descriptor. Smart-derived ADM3 output produced from those barriers is s
 estimated, non-administrative gameplay coverage, not official mahalle or koy geometry.
 Sprint 5.1 adds smart fallback calibration diagnostics to those external artifacts; hybrid quality
 reports can expose `smartAttempt` so clients can audit whether a district used accepted smart
-geometry or legacy generated fallback after a smart rejection.
+geometry or explicit rejection. Sprint 6 adds organic low-confidence Smart and disables legacy
+grid selection in normal national production. The historical `2.0.0` descriptor remains unchanged;
+the `2.1.0-rc.1` candidate requires an explicit registry version and migration review.
+
+Organic Smart geographic calibration treats Voronoi cells as coarse ownership, then routes shared
+boundaries along real OSM road, rail and water corridors under unchanged topology gates. These
+remain geography-aware estimated gameplay boundaries. Quality reports measure barrier-following
+length and long unsupported straight chains at every angle.
+
+The historical `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
+24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
+See [the complete calibration evidence](../../reports/baselines/sprint-6-geographic-calibration.json).
+
+## Historical Sprint 6 rc.3 evaluation
+
+The `2.1.0-rc.2` figures above are the preserved calibration baseline. The separate
+`2.1.0-rc.3` candidate uses `smart-derived-v1.3`, retains accepted official/OSM
+geometry when generated gap fill fails, and evaluates Standard and Organic realism.
+The 39-district Istanbul report and final national acceptance must pass before this
+candidate can be merged. Generated territories remain estimated gameplay boundaries.

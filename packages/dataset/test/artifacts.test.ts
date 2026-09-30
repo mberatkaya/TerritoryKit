@@ -43,6 +43,33 @@ describe("query and render artifacts", () => {
       expect.arrayContaining([expect.objectContaining({ code: "DATASET_CONTENT_HASH_MISMATCH" })])
     );
   });
+
+  it("carries estimated source and confidence evidence into render features", () => {
+    const dataset = createArtifactDataset();
+    const zone = dataset.zones[0]!;
+    zone.properties.territory = {
+      ...(zone.properties.territory as Record<string, unknown>),
+      sourceClass: "generated",
+      boundarySourceClass: "smart-derived",
+      administrative: false,
+      authoritative: false,
+      confidence: "low",
+      algorithmVersion: "smart-derived-v1.7",
+      sourceSnapshotChecksum: "sha256:source",
+      geometryHash: "sha256:geometry"
+    };
+    expect(createTerritoryRenderFeatureCollection(dataset).features[0]?.properties).toMatchObject({
+      sourceClass: "generated",
+      boundarySourceClass: "smart-derived",
+      administrative: false,
+      authoritative: false,
+      boundaryKind: "estimated",
+      confidence: "low",
+      generatorVersion: "smart-derived-v1.7",
+      sourceSnapshotChecksum: "sha256:source",
+      geometryHash: "sha256:geometry"
+    });
+  });
 });
 
 function createArtifactDataset(): TerritoryDataset {

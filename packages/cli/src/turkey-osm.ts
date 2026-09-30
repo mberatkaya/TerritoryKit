@@ -198,6 +198,9 @@ async function runTurkeyOsmBarriersBuild(args: string[]): Promise<number> {
   const result = await buildTurkeyOsmBarrierArtifacts({
     snapshotPath,
     sourceLock,
+    ...(getFlag(flags, "osmium-executable")
+      ? { osmiumExecutable: getFlag(flags, "osmium-executable")! }
+      : {}),
     adm2Zones,
     outputRoot,
     force,

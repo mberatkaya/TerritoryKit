@@ -312,6 +312,48 @@ describe("Turkey OSM barrier snapshot pipeline", () => {
     }
   });
 
+  it("resumes only intact artifacts with matching parent and extraction configuration", async () => {
+    const root = await mkdtemp(join(tmpdir(), "tr-barrier-resume-"));
+    try {
+      const snapshotPath = join(root, "fixture.osm.pbf");
+      await writeFile(snapshotPath, await createBarrierFixturePbf());
+      const sourceLock = await sourceLockForFixture(snapshotPath);
+      const parent = zone("tr:adm2:resume", "Resume", square(0, 0, 1, 1));
+      const options = {
+        snapshotPath,
+        sourceLock,
+        adm2Zones: [parent],
+        outputRoot: join(root, "barriers")
+      };
+      const first = await buildTurkeyOsmBarrierArtifacts(options);
+      const resumed = await buildTurkeyOsmBarrierArtifacts(options);
+      expect(resumed.skippedAdm2Count).toBe(1);
+      expect(resumed.artifacts[0]?.artifactChecksum).toBe(first.artifacts[0]?.artifactChecksum);
+      await writeFile(
+        join(first.artifacts[0]!.outputPath, "roads.geojson"),
+        JSON.stringify({ type: "FeatureCollection", features: [] })
+      );
+      const repaired = await buildTurkeyOsmBarrierArtifacts(options);
+      expect(repaired.processedAdm2Count).toBe(1);
+      expect(repaired.artifacts[0]?.artifactChecksum).toBe(first.artifacts[0]?.artifactChecksum);
+      const changedParent = await buildTurkeyOsmBarrierArtifacts({
+        ...options,
+        adm2Zones: [{ ...parent, geometry: square(0, 0, 0.8, 0.8) }]
+      });
+      expect(changedParent.processedAdm2Count).toBe(1);
+      expect(changedParent.artifacts[0]?.artifactChecksum).not.toBe(
+        first.artifacts[0]?.artifactChecksum
+      );
+      const changedConfig = await buildTurkeyOsmBarrierArtifacts({
+        ...options,
+        maxPrimitiveBlocks: 1
+      });
+      expect(changedConfig.processedAdm2Count).toBe(1);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  });
+
   it("reports insufficient rural input and keeps smart coverage accounting consistent", async () => {
     const sparseAdm2 = zone("tr:adm2:sparse", "Sparse", square(10, 10, 11, 11));
     const eligibleAdm2 = zone("tr:adm2:eligible", "Eligible", square(0, 0, 1, 1));

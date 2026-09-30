@@ -1,5 +1,15 @@
 # @territory-kit/cli
 
+## Sprint 6 final candidate
+
+`territory tr v2 national publish-ready` builds `2.1.0-rc.7` with `smart-derived-v1.7`.
+The measured national candidate is 973/973 usable districts, 0 hard rejects, 0 production
+legacy grids, and 99.999979% renderable coverage. `validate --publish-ready` checks the
+hard production gates, shard/checksum integrity, hierarchy, and MVT policy. Unsupported
+straight boundaries are reported as geographic realism warnings and lower Smart confidence;
+valid low-confidence output remains estimated and non-administrative. See the
+[final national evidence](../../reports/baselines/sprint-6-national-rc7.json).
+
 Command line tools for validating, importing, generating, indexing, and inspecting TerritoryKit datasets.
 
 ## Installation
@@ -37,6 +47,7 @@ territory tr osm acquire --cache .territory/cache
 territory tr osm verify --source-lock .territory/cache/osm/TR/<snapshot-id>/source-lock.json
 territory tr osm barriers build --adm2 .territory/build/TR/V2-national/levels/ADM2/dataset.json --source-lock .territory/cache/osm/TR/<snapshot-id>/source-lock.json --offline --output .territory/build/TR/OSM-barriers --concurrency 2
 territory tr osm barriers inspect --barriers .territory/build/TR/OSM-barriers --adm2 tr:adm2:example
+territory tr v2 national plan --osm-barriers .territory/build/TR/OSM-barriers --osm-source-lock .territory/cache/osm/TR/<snapshot-id>/source-lock.json
 territory tr osm smart coverage --adm2 .territory/build/TR/V2-national/levels/ADM2/dataset.json --barriers .territory/build/TR/OSM-barriers --output reports/tr-adm3/osm-smart-coverage.json
 territory tr adm3 hybrid build --district .territory/build/TR/V2-national/levels/ADM2/dataset.json --district-id tr:adm2:example --osm-barrier-artifact .territory/build/TR/OSM-barriers/ADM2/tr_adm2_example --output .territory/build/TR/ADM3-smart-example --force
 territory registry publish --artifact-root ./dist/tr/artifact --registry-output ./dist/registry --dataset territory-kit-tr --version 1.0.0 --base-url https://datasets.example.com/tr/1.0.0/ --artifact-prefix tr/1.0.0 --dry-run
@@ -97,8 +108,30 @@ territory registry verify --registry https://datasets.example.com/registry.json 
 Dataset build options include `--detail`, `--source-version`, `--source-url`, `--source-sha256`,
 `--build-date`, `--strict`, and `--force`.
 
+Normal `tr v2 national build|publish-ready` requires `--osm-barriers` and
+`--osm-source-lock`. It selects approved official, verified OSM administrative, standard Smart,
+then organic low-confidence Smart. `--allow-legacy-grid-emergency` is developer-only; such output
+cannot pass publish-ready validation. District checkpoints resume only when all input hashes match.
+
 The package also exports `runCli(argv)` for tests and embedded command runners.
+
+Organic Smart geographic calibration treats Voronoi cells as coarse ownership, then routes shared
+boundaries along real OSM road, rail and water corridors under unchanged topology gates. These
+remain geography-aware estimated gameplay boundaries. Quality reports measure barrier-following
+length and long unsupported straight chains at every angle.
 
 ## License
 
 Apache-2.0
+
+The historical `2.1.0-rc.2` calibration candidate is **not publish-ready**: 949/973 districts pass,
+24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
+See [the complete calibration evidence](../../reports/baselines/sprint-6-geographic-calibration.json).
+
+## Historical Sprint 6 rc.3 evaluation
+
+The `2.1.0-rc.2` figures above are the preserved calibration baseline. The separate
+`2.1.0-rc.3` candidate uses `smart-derived-v1.3`, retains accepted official/OSM
+geometry when generated gap fill fails, and evaluates Standard and Organic realism.
+The 39-district Istanbul report and final national acceptance must pass before this
+candidate can be merged. Generated territories remain estimated gameplay boundaries.

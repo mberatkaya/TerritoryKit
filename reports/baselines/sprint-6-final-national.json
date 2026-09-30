@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "territorykit-sprint-6-final-national-status@1",
+  "datasetVersion": "2.1.0-rc.3",
+  "algorithmVersion": "smart-derived-v1.3",
+  "sourceSnapshotId": "TR-5ec68ce5e0b2be55",
+  "barrierArtifactVersion": "tr-osm-barriers-v1.3",
+  "status": "BLOCKED_BEFORE_FULL_NATIONAL_BUILD",
+  "mergeRecommendation": "DO NOT MERGE",
+  "blocker": "Istanbul prerequisite is not green: 23/39 visual QA FAIL, including four machine-accepted ruler regressions.",
+  "requiredNationalTargets": {
+    "adm2Expected": 973,
+    "adm2Attempted": 973,
+    "adm2Completed": 973,
+    "adm2Failed": 0,
+    "adm2Unavailable": 0,
+    "productionLegacy": 0,
+    "approvedOfficialMissing": 0,
+    "minimumCoveragePercent": 99.99
+  },
+  "finalRc3National": {
+    "adm2Expected": 973,
+    "adm2Attempted": null,
+    "adm2Completed": null,
+    "adm2Failed": null,
+    "adm2Unavailable": null,
+    "coveragePercent": null,
+    "officialContributingDistricts": null,
+    "osmAdministrativeContributingDistricts": null,
+    "standardSmartDistricts": null,
+    "organicSmartDistricts": null,
+    "productionLegacyDistricts": null,
+    "geometryHash": null,
+    "shardsHash": null,
+    "mvtChecksumStatus": "NOT_RUN",
+    "publishReadyValidation": "NOT_RUN",
+    "migration": "NOT_RUN",
+    "determinism": "NOT_RUN",
+    "boundedFiveDistrictSmoke": "FAIL: 5 district build results, 0 accepted zone outputs; districtQuality/coverage/metadata/nationalCoverage gates reject"
+  },
+  "istanbulCohort": {
+    "districts": 39,
+    "machineAccepted": 20,
+    "machineFailed": 19,
+    "visualPass": 11,
+    "visualLowConfidence": 5,
+    "visualFail": 23,
+    "report": "reports/baselines/sprint-6-istanbul-39.json",
+    "determinism": "39/39 district geometry hashes, source tiers, counts, coverage and gate decisions match on independent rerun"
+  },
+  "previousFailureCohort": {
+    "attempted": 24,
+    "accepted": 8,
+    "failed": 16,
+    "report": "reports/baselines/sprint-6-final-recovery.json"
+  },
+  "localApprovedSourceVerification": {
+    "scope": "Two previously omitted precision districts; national rc.3 candidate has not been built.",
+    "approvedInput": 58,
+    "retained": 58,
+    "missing": 0,
+    "changed": 0,
+    "report": "reports/baselines/sprint-6-final-official-preservation.json",
+    "otherSourceAlignmentIssue": "Oğuzeli: three raw official candidate polygons lie outside the canonical ADM2 and were rejected at source acceptance. Accepted 89/89 are retained; manual source review remains required."
+  },
+  "historicalRejectedRc2": {
+    "adm2Expected": 973,
+    "adm2Attempted": 973,
+    "adm2Accepted": 949,
+    "adm2Failed": 24,
+    "adm2Unavailable": 7,
+    "coveragePercent": 99.522542,
+    "report": "reports/baselines/sprint-6-geographic-calibration.json"
+  },
+  "notes": [
+    "Historical rc.2 results are not rc.3 results.",
+    "No final 2.0.0 to rc.3 migration, national MVT validation, or national deterministic rerun is claimed.",
+    "The 24-district retest is independently enumerated and is not a substitute for 973-district publish-ready validation.",
+    "The five-district rc.3 smoke build exits 1 and rejects all five generated outputs under the hardened gate; this is not a full national result."
+  ]
+}

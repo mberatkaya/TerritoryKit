@@ -11,7 +11,207 @@ import {
   normalizeTurkeySmartFallbackBarriers,
   resolveTurkeySmartFallbackConfiguration
 } from "../src/turkey-adm3.js";
-import { normalizeTurkeySmartFallbackCoveragePercent } from "../src/turkey-smart-fallback.js";
+import {
+  assessTurkeySmartPartitionAdequacy,
+  inspectTurkeySmartBoundaryAlignment,
+  isTurkeyResidualSeamMergeEligible,
+  normalizeTurkeySmartFallbackCoveragePercent,
+  passesTurkeySmartGridLikeness
+} from "../src/turkey-smart-fallback.js";
+
+describe("unsupported seam diagnostics", () => {
+  it("keeps a source-verified inland lake residual unsplit and estimated", () => {
+    const parent = districtZone("lake-residual", rectangle(29, 40, 29.2, 40.2));
+    const water: FeatureCollection = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {
+            "@id": "osm:relation:lake",
+            natural: "water",
+            water: "lake",
+            source: "openstreetmap"
+          },
+          geometry: rectangle(29.005, 40.005, 29.195, 40.195)
+        }
+      ]
+    };
+    const input = {
+      parent,
+      provinceCode: "01",
+      districtCode: "lake-residual",
+      profile: "rural" as const,
+      water,
+      options: { organic: true, seed: "lake-residual-test" }
+    };
+    const first = buildTurkeySmartFallback(input);
+    const second = buildTurkeySmartFallback(input);
+
+    expect(first.quality.ok).toBe(true);
+    expect(first.quality.confidenceTier).toBe("low");
+    expect(first.quality.waterDominantResidual?.sourceId).toBe("osm:relation:lake");
+    expect(first.quality.waterDominantResidual?.waterOverlapPercent).toBeGreaterThan(85);
+    expect(first.zones).toHaveLength(1);
+    expect(first.zones[0]?.properties.territory).toMatchObject({
+      boundarySourceClass: "smart-derived",
+      administrative: false,
+      authoritative: false,
+      confidence: "low"
+    });
+    expect(second.deterministicHash).toBe(first.deterministicHash);
+  });
+
+  it("keeps a single residual connector distinct from a rotated ruler lattice", () => {
+    expect(
+      passesTurkeySmartGridLikeness(
+        {
+          axisAlignedInternalBoundaryRatio: 0,
+          longUnsupportedStraightBoundaryRatio: 0.7,
+          unsupportedStraightChainCountAbove500m: 12
+        },
+        500,
+        16
+      )
+    ).toBe(false);
+    expect(
+      passesTurkeySmartGridLikeness(
+        {
+          axisAlignedInternalBoundaryRatio: 0,
+          longUnsupportedStraightBoundaryRatio: 0.08,
+          unsupportedStraightChainCountAbove500m: 1
+        },
+        500,
+        16
+      )
+    ).toBe(true);
+    expect(
+      passesTurkeySmartGridLikeness(
+        {
+          axisAlignedInternalBoundaryRatio: 0.02,
+          longUnsupportedStraightBoundaryRatio: 0.95,
+          unsupportedStraightChainCountAbove500m: 20
+        },
+        180,
+        45,
+        66
+      )
+    ).toBe(true);
+    expect(
+      passesTurkeySmartGridLikeness(
+        {
+          axisAlignedInternalBoundaryRatio: 0.16,
+          longUnsupportedStraightBoundaryRatio: 0.95,
+          unsupportedStraightChainCountAbove500m: 20
+        },
+        180,
+        45,
+        66
+      )
+    ).toBe(false);
+    const nonAxisRulers = {
+      axisAlignedInternalBoundaryRatio: 0.02,
+      longUnsupportedStraightBoundaryRatio: 0.82,
+      unsupportedStraightChainCountAbove500m: 30
+    };
+    expect(
+      passesTurkeySmartGridLikeness(
+        { ...nonAxisRulers, dominantTwoUnsupportedDirectionRatio: 0.61 },
+        153,
+        20
+      )
+    ).toBe(false);
+    expect(
+      passesTurkeySmartGridLikeness(
+        { ...nonAxisRulers, dominantTwoUnsupportedDirectionRatio: 0.47 },
+        153,
+        20
+      )
+    ).toBe(true);
+  });
+  it("locates the actual straight chain and its owning zone", () => {
+    const parent = districtZone("seam-parent", rectangle(0, 0, 0.1, 0.1));
+    const configuration = resolveTurkeySmartFallbackConfiguration({
+      parent,
+      provinceCode: "01",
+      districtCode: "seam-parent",
+      profile: "auto"
+    }).configuration;
+    const west = districtZone("seam-west", rectangle(0, 0, 0.05, 0.1));
+    const east = districtZone("seam-east", rectangle(0.05, 0, 0.1, 0.1));
+    const alignment = inspectTurkeySmartBoundaryAlignment({
+      zones: [west, east],
+      parentGeometry: [[rectangleRing(0, 0, 0.1, 0.1)]],
+      barriers: [],
+      configuration
+    });
+    expect(alignment.longestUnsupportedStraightChainMeters).toBeGreaterThan(10_000);
+    expect(alignment.longestUnsupportedStraightChain?.ownerZoneId).toBe(west.id);
+    expect(alignment.longestUnsupportedStraightChain?.start[0]).toBe(0.05);
+    expect(alignment.longestUnsupportedStraightChain?.end[0]).toBe(0.05);
+  });
+
+  it("can remove a weak residual chord without erasing a strong barrier or oversized zone", () => {
+    const weakChord = {
+      lengthMeters: 3_100,
+      supportedMeters: 70,
+      protectedMeters: 0,
+      residualInvolved: true,
+      combinedAreaKm2: 16,
+      maxAreaKm2: 76
+    };
+    expect(isTurkeyResidualSeamMergeEligible(weakChord)).toBe(true);
+    expect(isTurkeyResidualSeamMergeEligible({ ...weakChord, protectedMeters: 10 })).toBe(false);
+    expect(isTurkeyResidualSeamMergeEligible({ ...weakChord, supportedMeters: 200 })).toBe(false);
+    expect(isTurkeyResidualSeamMergeEligible({ ...weakChord, combinedAreaKm2: 80 })).toBe(false);
+  });
+});
+
+describe("gameplay partition adequacy", () => {
+  it("rejects a giant rural zone padded with tiny enclaves", () => {
+    const result = assessTurkeySmartPartitionAdequacy({
+      parentAreaKm2: 1_000,
+      territoryAreasKm2: [900, 25, 25, 25, 25],
+      localitySeedCount: 40,
+      barrierCount: 120
+    });
+    expect(result.minimumUsefulTerritoryCount).toBe(5);
+    expect(result.largestTerritoryAreaShare).toBe(0.9);
+    expect(result.effectivePartitionCount).toBeLessThan(1.3);
+    expect(result.adequate).toBe(false);
+  });
+
+  it("accepts a useful rural partition while allowing a tiny island as one zone", () => {
+    expect(
+      assessTurkeySmartPartitionAdequacy({
+        parentAreaKm2: 800,
+        territoryAreasKm2: [400, 150, 100, 80, 70],
+        localitySeedCount: 30,
+        barrierCount: 80
+      }).adequate
+    ).toBe(true);
+    expect(
+      assessTurkeySmartPartitionAdequacy({
+        parentAreaKm2: 2,
+        territoryAreasKm2: [2],
+        localitySeedCount: 1,
+        barrierCount: 0
+      }).adequate
+    ).toBe(true);
+  });
+
+  it("rejects a dominant zone in a large district with many localities", () => {
+    const result = assessTurkeySmartPartitionAdequacy({
+      parentAreaKm2: 900,
+      territoryAreasKm2: [560, 85, 75, 65, 55, 40, 20],
+      localitySeedCount: 80,
+      barrierCount: 100
+    });
+    expect(result.minimumUsefulTerritoryCount).toBe(5);
+    expect(result.largestTerritoryAreaShare).toBeGreaterThan(0.6);
+    expect(result.adequate).toBe(false);
+  });
+});
 
 describe("Turkey ADM3 smart fallback boundary engine", () => {
   it("normalizes provider-neutral barriers with road hierarchy weighting", () => {
@@ -149,6 +349,7 @@ describe("Turkey ADM3 smart fallback boundary engine", () => {
     });
 
     expect(result.quality.ok).toBe(false);
+    expect(result.quality.acceptanceStatus).toBe("HARD_REJECT");
     expect(result.status).toBe("rejected");
     expect(result.zones).toHaveLength(0);
     expect(result.reasonCodes).toContain("SMART_FALLBACK_COORDINATE_ORDER_INVALID");
@@ -211,6 +412,7 @@ describe("Turkey ADM3 smart fallback boundary engine", () => {
     });
 
     expect(result.quality.ok).toBe(true);
+    expect(result.quality.acceptanceStatus).toMatch(/^USABLE_(HIGH|MEDIUM)_CONFIDENCE$/);
     expect(result.quality.inputDiagnostics).toMatchObject({
       roadsRaw: 2,
       roadsNormalized: 1,
@@ -220,6 +422,7 @@ describe("Turkey ADM3 smart fallback boundary engine", () => {
       internalBarrierCount: 1
     });
     expect(result.quality.meanBarrierAlignment).toBe(1);
+    expect(result.quality.axisAlignedInternalBoundaryRatio).toBe(0);
     expect(result.reasonCodes).toContain("SMART_FALLBACK_BARRIER_IGNORED");
   });
 
@@ -494,6 +697,7 @@ describe("Turkey ADM3 smart fallback boundary engine", () => {
     const codes = result.issues.map((issue) => issue.code);
 
     expect(result.quality.ok).toBe(false);
+    expect(result.quality.acceptanceStatus).toBe("HARD_REJECT");
     expect(result.status).toBe("rejected");
     expect(codes).toContain("SMART_FALLBACK_INSUFFICIENT_BARRIERS");
     expect(codes).toContain("SMART_FALLBACK_SYNTHETIC_SPLIT_USED");

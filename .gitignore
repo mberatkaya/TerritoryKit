@@ -21,3 +21,4 @@ datasets/**/.cache/
 datasets/quarantine/
 reports/tr-v2-national-smoke/
 *.osm.pbf
+reports/tr-v2-smart-candidate/

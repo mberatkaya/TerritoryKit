@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "territorykit-sprint-6-source-preservation@1",
+  "comparisonBaseline": ".territory/sprint-6/candidate/levels/ADM3/dataset.json",
+  "scope": "Two previously omitted precision districts; national rc.3 candidate has not been built.",
+  "approvedInputZoneCount": 58,
+  "retainedApprovedZoneCount": 58,
+  "missingApprovedZoneCount": 0,
+  "changedAgainstRc1Count": 0,
+  "districts": [
+    {
+      "district": "Gölköy",
+      "districtId": "tr:adm2:54988432b66082429692342",
+      "approvedInputZoneCount": 30,
+      "retainedApprovedZoneCount": 30,
+      "missingApprovedZoneCount": 0,
+      "changedAgainstRc1Count": 0,
+      "previousAcceptedMatchCount": 30,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.99999,
+      "qualityAccepted": true,
+      "geometryHash": "995068a195fe65a6774959d46ea2ac6820d30533a917442ba6b77adccef90a3e"
+    },
+    {
+      "district": "Sarıoğlan",
+      "districtId": "tr:adm2:54988432b85515105263219",
+      "approvedInputZoneCount": 28,
+      "retainedApprovedZoneCount": 28,
+      "missingApprovedZoneCount": 0,
+      "changedAgainstRc1Count": 0,
+      "previousAcceptedMatchCount": 28,
+      "approvedSourcePreservation": true,
+      "coveragePercent": 99.999991,
+      "qualityAccepted": true,
+      "geometryHash": "a2cbe75b0b8ad54699545a817de60abba0d0af82509ede47aa85de17b29d6d38"
+    }
+  ]
+}

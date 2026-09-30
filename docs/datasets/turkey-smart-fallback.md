@@ -4,6 +4,16 @@ The Turkey smart fallback boundary engine creates deterministic ADM3 playable zo
 reviewed official ADM3 polygon nor a usable OSM administrative ADM3 polygon is available for an
 ADM2 district. It is a derived fallback. It does not create official mahalle or köy records.
 
+The Sprint 6 final candidate uses `smart-derived-v1.7` in dataset candidate `2.1.0-rc.7`.
+Generated boundaries estimate playable geography; they do not claim to reproduce unknown legal
+mahalle decisions.
+
+The final national run accepted all 973 districts (high 306, medium 36, low 631), with zero
+hard rejects and zero production legacy grids. The 577 geographic-realism warnings lower
+confidence where long unsupported closures remain; they do not waive topology, grid,
+partition, provenance, or source-preservation gates. See the
+[measured national report](../../reports/baselines/sprint-6-national-rc7.json).
+
 Published smart fallback zones are labeled:
 
 - `sourceClass: "generated"`
@@ -13,16 +23,19 @@ Published smart fallback zones are labeled:
 - `administrative: false`
 - `official: false`
 - `generated: true`
-- `algorithmVersion: "smart-derived-v1"`
+- `algorithmVersion: "smart-derived-v1.7"`
 
 ## Source Priority
 
 Turkey V2 keeps the same resolver order:
 
-1. reviewed official ADM3 polygons
-2. OSM administrative ADM3 polygons, where explicitly built and license-approved
-3. smart-derived generated fallback
-4. legacy generated-zone fallback when smart quality gates reject the result
+1. approved national official ADM3 polygons
+2. approved local official ADM3 polygons
+3. verified OSM administrative ADM3 polygons
+4. smart-derived generated fallback, with standard, network-first, and organic candidates
+
+Unsafe organic output returns an explicit failure. Legacy generation requires an explicit
+developer emergency option and cannot pass normal national publish-ready validation.
 
 Lower-priority geometry is clipped by higher-priority geometry. Smart fallback is only allowed to
 fill the remaining missing ADM2 area.
@@ -77,21 +90,47 @@ ADM2 parent area as well as density signals, so large rural districts with many 
 not accidentally become dense-urban builds. Custom builds can set target count, target area,
 min/max area, barrier strength, synthetic split limits, and quality gate thresholds.
 
-## Quality Gates
+## Acceptance: hard gates and confidence
 
-A smart fallback result is publishable only when all gates pass:
+`quality.ok` remains the backward-compatible usability decision. `quality.acceptanceStatus` makes
+the outcome explicit: `HARD_REJECT`, `USABLE_LOW_CONFIDENCE`, `USABLE_MEDIUM_CONFIDENCE`, or
+`USABLE_HIGH_CONFIDENCE`. Every usable Smart output is still estimated and non-administrative.
 
-- coverage of the missing ADM2 geometry
-- invalid geometry count
-- sibling overlap
-- spill outside the ADM2 parent
-- real barrier sufficiency for multi-territory results
-- mean quality score
-- mean barrier alignment
-- synthetic split limit
+Hard rejection covers invalid geometry, parent spill or incomplete coverage, sibling overlap,
+missing mandatory source metadata, legacy grid use, grid-like repeated unsupported rulers,
+degenerate partitions, unacceptable area or synthetic split bounds, and unattempted routing when
+nearby usable real corridors are evident. The hybrid resolver also protects approved official
+geometry and source precedence. Large districts with many locality signals reject a generated
+territory above 55% of the parent area.
 
-Synthetic splits are a last resort and default to a rejected result when used. This prevents a weak
-or empty barrier network from silently becoming a publishable grid.
+Grid detection checks meaningful connected pieces of a residual separately. It measures repeated
+unsupported directions so regular strips cannot hide inside a district whose approved official
+polygons leave many detached fragments. Varied barrier-guided directions do not become a grid
+merely because some straight connectors remain.
+
+Tiny detached fragments left by clipping around approved official geometry can fall below the
+preferred minimum area without making the candidate unusable. Their parent components must still
+pass topology, coverage, grid, and overall partition gates; this exception never relaxes the
+maximum area or giant-zone limit.
+
+After hard gates pass, geographic realism, barrier alignment, and mean quality determine the
+confidence tier. An unsupported connector can produce a usable low-confidence result when a real
+route was attempted or there is no usable real separator. The longest connector has explicit
+diagnostics for length, route attempt, route failure, and reason. A missing nearest-barrier distance
+is recorded as `null` rather than invented. Confidence and acceptance status are carried into the
+national coverage manifest; generated zone metadata carries confidence, source snapshot checksum,
+algorithm version, and geometry hash.
+Query and render artifacts also expose `sourceClass`, `boundarySourceClass`, `administrative`,
+`authoritative`, `boundaryKind`, `confidence`, `generatorVersion`, source checksum, and geometry
+hash as flat feature properties. Consumers can distinguish estimated Smart output in MVT tiles.
+
+An inland lake can dominate the exact area left by approved official polygons. When one locked
+OSM lake or reservoir polygon overlaps at least 85% of a residual of at least 20 km² and at most
+two locality seeds lie inside it, the engine keeps the water and detached shoreline components
+unsplit. It records the water source ID and measured overlap, marks the output low confidence,
+and still applies geometry, containment, coverage, overlap, and source-preservation gates. The
+usual large-territory partition rule applies to land residuals; this narrow water case avoids
+inventing straight playable boundaries across a lake.
 
 ## Diagnostics
 
@@ -115,7 +154,7 @@ For example, a raw `100.000247` percent is reported publicly as `100`. Public
 `uncoveredInsideParentKm2`, `outsideSpillKm2`, and `overlapAreaKm2` remain nonnegative; raw topology
 values remain available for auditing. This does not change gate thresholds, score weights, or the
 50 m alignment tolerance. Hybrid `quality.smartAttempt.coverageComputation` preserves this evidence
-even when smart output is rejected and legacy fallback is selected.
+when standard Smart rejects and the organic stage is evaluated.
 
 Rejected smart attempts now emit explicit issue codes for each failing gate, including
 `SMART_FALLBACK_ALIGNMENT_TOO_LOW`, `SMART_FALLBACK_COVERAGE_TOO_LOW`,
@@ -172,3 +211,112 @@ snapshots are supplied, pass `--source-provider`, `--source-dataset-id`, `--sour
 `--license`, and `--attribution` so provenance and redistribution policy remain auditable.
 When OSM barrier artifacts are used, smart provenance links the generated geometry hash back to the
 barrier artifact checksum, OSM snapshot checksum, provider URL, and ODbL attribution.
+
+## Sprint 6 Organic Profile And Grid Gate
+
+Normal national production selects approved official-national, approved official-local, verified
+OSM administrative, standard Smart, then organic low-confidence Smart. Legacy axis-aligned grids
+are disabled. Historical legacy generators remain available for fixtures and explicit developer
+emergency builds.
+
+Organic Smart uses a bounded farthest-point sample of validated locality seeds and real road/rail/
+water/landuse network vertices, with locality input first. It constructs Voronoi cells in a local
+equirectangular metric and clips each cell once to the true missing parent geometry. No lat/lon
+grid or recursive rectangle subdivision is used. Geometry, coverage, overlap, spill, area, and
+finite-coordinate validation remain hard gates. Organic certainty thresholds are separate from
+standard Smart: minimum mean score 0.25, no minimum barrier alignment, maximum cell area at least
+one quarter of the missing parent area, and at most 64 cells. Sparse real inputs or invalid cells
+produce explicit rejection. This coarse gameplay mode does not identify real mahalle records.
+
+## Final Geographic Calibration
+
+`smart-derived-v1.2` treats Voronoi as a **coarse ownership partition**. It then routes shared
+boundaries along real OSM corridors and validates the resulting partition. Voronoi alone is not
+evidence of real-barrier adherence. Standard Smart retains its existing geometry selection.
+
+Small connected missing-region components are kept whole when the existing area limits allow
+it. For multipart gaps, ownership uses the largest coarse overlap share and respects the
+maximum territory area and count; detached parts remain detached, with no invented connector.
+This avoids dividing already bounded geographic fragments merely to meet a coarse cell target.
+The component optimization is discarded if either unsupported-axis or unsupported-straight
+ratio would increase. Components that cannot be safely regularized at delivery precision retain
+their existing subdivision. Routed replacements also pass this precision safety check.
+
+Organic starts with a target of 16 coarse cells below 3 km/km² road density and 32 otherwise,
+subject to the existing target-area minimum. Realism rejection can retry 16 and then 8 targets
+without relaxing maximum area, the 64-cell cap, topology or realism gates. Oversized cells still
+receive bounded geographic subdivision. This avoids inventing unnecessary seams in sparse networks.
+
+The stage indexes normalized segments per ADM2. Interior junctions shared by three or more cells
+can move once to a nearby real network junction; all incident owners change atomically. Boundary,
+coastline and official-mask junctions remain fixed. Each unsupported shared edge searches a local
+graph of actual road, rail and water vertices, with projected endpoint anchors. Graph connections
+respect available `layer`, `bridge` and `tunnel` tags; geometric crossings alone do not create
+connections. Existing normalized strengths weight physical length, weakness and departure from
+the coarse edge. Tie ordering is stable. Weak local streets have a higher cost than strong barriers.
+
+Search width is capped at 40% of chord length and at 400 m, 2 km or 5 km for road density at least
+15, at least 3, or below 3 km/km², respectively. Junction movement also stays within 40% of the
+shortest incident edge. Density and locality signals use the actual missing geometry, not the
+whole district when official polygons mask it. The routing graph excludes coastline as an internal
+separator. A full route may be at most 1.8 times the chord and contain at most 40% connector length.
+When no complete graph route exists, monotone portions of actual nearby paths can replace only
+the portions they span. Local-road fragments need at least 250 m of real path and connectors at
+most 20% of that length; stronger fragments need at least 100 m and connectors at most 50%.
+
+Both owners receive the same path. A replacement is committed only when polygon Boolean
+operations prove that their union is unchanged, they do not overlap, and rings do not cross.
+Topology failure retains the original edge. Final coverage, geometry, area, overlap and spill gates
+remain in force. No arbitrary curvature is added to make unsupported geometry appear organic.
+
+The existing `meanRealBarrierRatio` / `meanBarrierAlignment` retain their strength-qualified
+semantics (`minAlignmentStrength`, default 0.45). `meanSyntheticBoundaryRatio` remains their
+complement. The new `barrierFollowingInternalBoundaryRatio` uses the same proximity, heading
+compatibility and interval-overlap calculation for **all non-ignored real barriers**, including
+weak residential roads. These measures are reported separately; proximity alone never supplies
+alignment, and the existing 50 m tolerance is unchanged.
+
+`longUnsupportedStraightBoundaryRatio` measures unsupported chains at any angle. Consecutive
+segments within three degrees of the initial heading form a chain; chains at least 100 m long
+contribute unsupported length. Real overlap from all non-ignored barriers is subtracted. Parent
+edges break chains and remain excluded. Densifying a diagonal ruler does not evade the metric.
+The Organic `geographicRealism` gate rejects ratios above 0.8, or above 0.95 when actual road
+density is below 3 km/km². The independent 0.15 unsupported-axis gate is retained. Sparse inputs
+can still fail explicitly; estimated coverage is never silently replaced with a production grid.
+
+Barrier extraction `tr-osm-barriers-v1.3` fixes degenerate closing-ring containment and keeps
+valid line endpoints on official-mask hole boundaries. This extraction change requires rebuilding
+affected artifacts from the original locked snapshot; cached source extracts remain reusable.
+Pure routing changes do not otherwise invalidate extraction. Smart algorithm and configuration
+identities invalidate previous generated district checkpoints.
+
+`axisAlignedInternalBoundaryRatio` is a length ratio in `[0,1]`. It measures unsupported internal
+segments at least 100 m long whose angle is within one degree of latitude/longitude axes. Parent
+edges are excluded. Support from real non-ignored barriers (including weak local roads) is
+subtracted using the existing 50 m alignment tolerance. A ratio above 0.15 rejects either Smart
+mode. Real north/south or east/west roads are not counted as synthetic grids.
+
+The existing confidence values are `authoritative`, `high`, `medium`, and `low`. Approved official
+geometry uses authoritative confidence; reviewed OSM administrative geometry uses high confidence.
+Standard Smart remains medium or low according to its existing quality score. Organic Smart is
+always `low`, `gameplayOnly: true`, `administrative: false`, `authoritative: false`, and estimated.
+
+See [nationwide candidate evidence](./turkey-sprint-6-nationwide.md).
+
+An organic maximum-area rejection can retry with existing geographic boundary vertices and
+real network coordinates clipped to the gap. These remain low-confidence gameplay guidance.
+The retry retains the original area and topology gates, and never uses recursive generated
+Voronoi vertices as source points. Exact self-crossings introduced by decimal snapping are
+regularized with polygon self-union before the same hard checks run.
+
+The historical `2.1.0-rc.2` calibration candidate was **not publish-ready**: 949/973 districts passed,
+24 fail and seven are unavailable. Two precision exceptions omit 58 approved polygons.
+The accepted historical artifact remains unchanged. See [national calibration outcomes](./turkey-sprint-6-nationwide.md#final-geographic-calibration).
+
+## Historical rc.3 evaluation
+
+The [rc.3 Istanbul report](../../reports/baselines/sprint-6-istanbul-39-rc3.json) records an
+earlier strict realism policy that rejected justified synthetic connectors. Its results and the
+[rc.3 national status](../../reports/baselines/sprint-6-final-national.json) are historical. The
+current `smart-derived-v1.7` contract and measured closure are documented above and in the
+[Sprint 6 final candidate report](./turkey-sprint-6-nationwide.md).
