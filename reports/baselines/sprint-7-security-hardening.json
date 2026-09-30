@@ -1,0 +1,157 @@
+{
+  "schemaVersion": "territorykit-sprint-7-security-hardening@1",
+  "gitHead": "b189d95d1ae82ef310a872a1ce9d199fd9a1d1a0",
+  "baseMainSha": "316a76b0d43fc30884b3be3cdea61288e2384bd5",
+  "auditDate": "2026-09-30T20:54:37.570586+00:00",
+  "lockfileSha256": "03439078bf45b60391355b7fae94cec0fa36bf53f7c669d146860214e1402d3e",
+  "dependencyAudit": {
+    "production": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 2,
+      "critical": 0
+    },
+    "all": {
+      "info": 0,
+      "low": 0,
+      "moderate": 8,
+      "high": 13,
+      "critical": 0
+    },
+    "exceptions": [],
+    "decision": "FAIL"
+  },
+  "findings": [
+    {
+      "id": "TK-S7-001",
+      "severity": "critical",
+      "component": "workflow_dispatch",
+      "description": "Direct dispatch input interpolation into Bash could execute runner commands.",
+      "exploitPrecondition": "Malicious actor can trigger or influence workflow input.",
+      "remediation": "Move to environment variables, validate before use, use arrays.",
+      "testEvidence": "pnpm security:test",
+      "status": "fixed",
+      "residualRisk": "Validator covers current workflows; future edits need review",
+      "manualActionRequired": false
+    },
+    {
+      "id": "TK-S7-002",
+      "severity": "high",
+      "component": "release workflow",
+      "description": "Push to main previously could publish with OIDC.",
+      "exploitPrecondition": "Unintended main push after versioning.",
+      "remediation": "Explicit dispatch publish job with scoped OIDC and environment.",
+      "testEvidence": "release.yml inspection",
+      "status": "fixed",
+      "residualRisk": "Environment required-reviewer settings are unverified",
+      "manualActionRequired": true
+    },
+    {
+      "id": "TK-S7-003",
+      "severity": "high",
+      "component": "registry transport",
+      "description": "Remote registry could select file or private network destinations.",
+      "exploitPrecondition": "Compromised registry or artifact host.",
+      "remediation": "HTTPS default, file opt-in, same origin, private address and redirect checks.",
+      "testEvidence": "registry security tests",
+      "status": "partially-fixed",
+      "residualRisk": "DNS rebinding needs network egress enforcement",
+      "manualActionRequired": false
+    },
+    {
+      "id": "TK-S7-004",
+      "severity": "high",
+      "component": "artifact size",
+      "description": "HTTP could allocate unbounded body before size check.",
+      "exploitPrecondition": "Host sends oversized body.",
+      "remediation": "Streaming ceiling, file stat and decompression ceiling.",
+      "testEvidence": "registry security tests",
+      "status": "fixed",
+      "residualRisk": "Default 512 MiB bound is large; consumers should lower",
+      "manualActionRequired": false
+    },
+    {
+      "id": "TK-S7-005",
+      "severity": "high",
+      "component": "delivery manifest",
+      "description": "Manifest self-hash was not checked; shard size not checked before parse.",
+      "exploitPrecondition": "Tampered manifest or shard.",
+      "remediation": "Recompute self-hash, optional pin, byteSize before parse.",
+      "testEvidence": "runtime delivery tests",
+      "status": "fixed",
+      "residualRisk": "Checksum integrity is not publisher authentication; use a trusted pin or channel",
+      "manualActionRequired": false
+    },
+    {
+      "id": "TK-S7-006",
+      "severity": "high",
+      "component": "district semantics",
+      "description": "Checksum-valid shard could contradict administrative semantics.",
+      "exploitPrecondition": "Malicious or corrupt shard with matching checksum.",
+      "remediation": "Validate parent, boundary kind, confidence and source relationships.",
+      "testEvidence": "runtime delivery tests",
+      "status": "fixed",
+      "residualRisk": "Source policy still depends on trusted manifest",
+      "manualActionRequired": false
+    },
+    {
+      "id": "TK-S7-007",
+      "severity": "moderate",
+      "component": "source diff",
+      "description": "Multiple source changes collapsed to one kind.",
+      "exploitPrecondition": "Source checksum and metadata change together.",
+      "remediation": "Add deterministic kinds array.",
+      "testEvidence": "generator source-diff test",
+      "status": "fixed",
+      "residualRisk": "Exact geometry impacts require candidate rebuild",
+      "manualActionRequired": false
+    },
+    {
+      "id": "TK-S7-008",
+      "severity": "high",
+      "component": "dependencies",
+      "description": "High advisories remain in production and build tooling.",
+      "exploitPrecondition": "Vulnerable transitive dependency is exercised.",
+      "remediation": "Fail release hardening gate; evaluate compatible fixes.",
+      "testEvidence": "current pnpm audit",
+      "status": "open",
+      "residualRisk": "2 production high, 13 total high",
+      "manualActionRequired": true
+    },
+    {
+      "id": "TK-S7-009",
+      "severity": "high",
+      "component": "GitHub governance",
+      "description": "Main has no verified protection or ruleset.",
+      "exploitPrecondition": "Maintainer or compromised credential pushes directly.",
+      "remediation": "Enable required PR, checks, reviews and force-push protection.",
+      "testEvidence": "gh api rulesets and branch protection",
+      "status": "open",
+      "residualRisk": "Source control cannot enforce remote settings",
+      "manualActionRequired": true
+    }
+  ],
+  "secretScan": {
+    "tool": "gitleaks",
+    "scope": [
+      "git history",
+      "scripts",
+      ".github",
+      "packages/registry",
+      "packages/runtime",
+      "packages/generators",
+      "docs/datasets",
+      "reports/baselines"
+    ],
+    "findings": 0,
+    "redacted": true
+  },
+  "nationalResolverValidation": {
+    "candidateDatasetVersion": "2.1.0-rc.7",
+    "districtShards": 973,
+    "resolvedAdm3Features": 20392,
+    "manifestContentHash": "4c1d42a082a63f5170a63ce150a1e3c5abbe4486ec4dbf1ed3c43789088a31cb",
+    "result": "PASS"
+  }
+}

@@ -1,10 +1,10 @@
 {
   "schemaVersion": "territorykit-license-inventory@1",
-  "generatedAt": "2026-08-24T19:42:10.912Z",
+  "generatedAt": "2026-09-30T20:54:37.131Z",
   "scope": "pnpm licenses list --prod --json",
   "summary": {
     "licenseCount": 13,
-    "packageCount": 264,
+    "packageCount": 265,
     "unknown": [],
     "licenses": [
       {
@@ -25,7 +25,7 @@
         "packages": [
           {
             "name": "@maplibre/mlt",
-            "versions": ["1.1.12"],
+            "versions": ["1.3.0"],
             "license": "(MIT OR Apache-2.0)",
             "homepage": "https://github.com/maplibre/maplibre-tile-spec/#readme"
           },
@@ -176,7 +176,7 @@
         "packages": [
           {
             "name": "@mapbox/vector-tile",
-            "versions": ["2.0.5"],
+            "versions": ["3.0.0"],
             "license": "BSD-3-Clause",
             "homepage": "https://github.com/mapbox/vector-tile-js#readme"
           },
@@ -194,13 +194,13 @@
           },
           {
             "name": "maplibre-gl",
-            "versions": ["5.24.0"],
+            "versions": ["6.11.2"],
             "license": "BSD-3-Clause",
             "homepage": "https://maplibre.org/"
           },
           {
             "name": "pbf",
-            "versions": ["4.0.2", "5.1.2"],
+            "versions": ["5.1.2"],
             "license": "BSD-3-Clause",
             "homepage": "https://github.com/mapbox/pbf"
           },
@@ -244,7 +244,7 @@
       },
       {
         "license": "ISC",
-        "packageCount": 27,
+        "packageCount": 26,
         "packages": [
           {
             "name": "@isaacs/ttlcache",
@@ -259,12 +259,6 @@
             "homepage": "https://github.com/mapbox/point-geometry"
           },
           {
-            "name": "@mapbox/whoots-js",
-            "versions": ["3.1.0"],
-            "license": "ISC",
-            "homepage": "https://github.com/mapbox/whoots-js#readme"
-          },
-          {
             "name": "@maplibre/geojson-vt",
             "versions": ["6.1.1"],
             "license": "ISC",
@@ -272,7 +266,7 @@
           },
           {
             "name": "@maplibre/maplibre-gl-style-spec",
-            "versions": ["24.8.5", "24.10.0"],
+            "versions": ["24.8.5", "26.4.4"],
             "license": "ISC",
             "homepage": "https://maplibre.org/maplibre-style-spec/"
           },
@@ -412,7 +406,7 @@
       },
       {
         "license": "MIT",
-        "packageCount": 204,
+        "packageCount": 206,
         "packages": [
           {
             "name": "@babel/code-frame",
@@ -803,6 +797,12 @@
             "versions": ["1.5.1"],
             "license": "MIT",
             "homepage": "https://github.com/beatgammit/base64-js"
+          },
+          {
+            "name": "bidi-js",
+            "versions": ["1.1.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/lojjic/bidi-js#readme"
           },
           {
             "name": "braces",
@@ -1446,6 +1446,12 @@
             "versions": ["2.1.1"],
             "license": "MIT",
             "homepage": "https://github.com/troygoode/node-require-directory/"
+          },
+          {
+            "name": "require-from-string",
+            "versions": ["2.0.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/floatdrop/require-from-string#readme"
           },
           {
             "name": "resolve-protobuf-schema",
@@ -2350,6 +2356,17 @@
         "author": "T. Jameson Little",
         "homepage": "https://github.com/beatgammit/base64-js",
         "description": "Base64 encoding/decoding in pure JS"
+      },
+      {
+        "name": "bidi-js",
+        "versions": ["1.1.0"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/bidi-js@1.1.0/node_modules/bidi-js"
+        ],
+        "license": "MIT",
+        "author": "Jason Johnston",
+        "homepage": "https://github.com/lojjic/bidi-js#readme",
+        "description": "A JavaScript implementation of the Unicode Bidirectional Algorithm"
       },
       {
         "name": "braces",
@@ -3499,6 +3516,17 @@
         "description": "Recursively iterates over specified directory, require()'ing each file, and returning a nested hash structure containing those modules."
       },
       {
+        "name": "require-from-string",
+        "versions": ["2.0.2"],
+        "paths": [
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/require-from-string@2.0.2/node_modules/require-from-string"
+        ],
+        "license": "MIT",
+        "author": "Vsevolod Strukchinsky",
+        "homepage": "https://github.com/floatdrop/require-from-string#readme",
+        "description": "Require module from string"
+      },
+      {
         "name": "resolve-protobuf-schema",
         "versions": ["2.1.0"],
         "paths": [
@@ -3853,17 +3881,6 @@
         "description": "a point geometry with transforms"
       },
       {
-        "name": "@mapbox/whoots-js",
-        "versions": ["3.1.0"],
-        "paths": [
-          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@mapbox+whoots-js@3.1.0/node_modules/@mapbox/whoots-js"
-        ],
-        "license": "ISC",
-        "author": "Bryan Housel",
-        "homepage": "https://github.com/mapbox/whoots-js#readme",
-        "description": "Request tiles from WMS servers that support EPSG:3857"
-      },
-      {
         "name": "@maplibre/geojson-vt",
         "versions": ["6.1.1"],
         "paths": [
@@ -3876,10 +3893,10 @@
       },
       {
         "name": "@maplibre/maplibre-gl-style-spec",
-        "versions": ["24.8.5", "24.10.0"],
+        "versions": ["24.8.5", "26.4.4"],
         "paths": [
           "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@maplibre+maplibre-gl-style-spec@24.8.5/node_modules/@maplibre/maplibre-gl-style-spec",
-          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@maplibre+maplibre-gl-style-spec@24.10.0/node_modules/@maplibre/maplibre-gl-style-spec"
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@maplibre+maplibre-gl-style-spec@26.4.4/node_modules/@maplibre/maplibre-gl-style-spec"
         ],
         "license": "ISC",
         "author": "MapLibre",
@@ -4185,9 +4202,9 @@
     "BSD-3-Clause": [
       {
         "name": "@mapbox/vector-tile",
-        "versions": ["2.0.5"],
+        "versions": ["3.0.0"],
         "paths": [
-          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@mapbox+vector-tile@2.0.5/node_modules/@mapbox/vector-tile"
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@mapbox+vector-tile@3.0.0/node_modules/@mapbox/vector-tile"
         ],
         "license": "BSD-3-Clause",
         "homepage": "https://github.com/mapbox/vector-tile-js#readme",
@@ -4216,9 +4233,9 @@
       },
       {
         "name": "maplibre-gl",
-        "versions": ["5.24.0"],
+        "versions": ["6.11.2"],
         "paths": [
-          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/maplibre-gl@5.24.0/node_modules/maplibre-gl"
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/maplibre-gl@6.11.2/node_modules/maplibre-gl"
         ],
         "license": "BSD-3-Clause",
         "homepage": "https://maplibre.org/",
@@ -4226,11 +4243,8 @@
       },
       {
         "name": "pbf",
-        "versions": ["4.0.2", "5.1.2"],
-        "paths": [
-          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/pbf@4.0.2/node_modules/pbf",
-          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/pbf@5.1.2/node_modules/pbf"
-        ],
+        "versions": ["5.1.2"],
+        "paths": ["/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/pbf@5.1.2/node_modules/pbf"],
         "license": "BSD-3-Clause",
         "author": "Konstantin Kaefer",
         "homepage": "https://github.com/mapbox/pbf",
@@ -4263,9 +4277,9 @@
     "(MIT OR Apache-2.0)": [
       {
         "name": "@maplibre/mlt",
-        "versions": ["1.1.12"],
+        "versions": ["1.3.0"],
         "paths": [
-          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@maplibre+mlt@1.1.12/node_modules/@maplibre/mlt"
+          "/Users/mbkaya/Repo/TerritoryKit/node_modules/.pnpm/@maplibre+mlt@1.3.0/node_modules/@maplibre/mlt"
         ],
         "license": "(MIT OR Apache-2.0)",
         "homepage": "https://github.com/maplibre/maplibre-tile-spec/#readme"

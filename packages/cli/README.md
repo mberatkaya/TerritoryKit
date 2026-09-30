@@ -137,3 +137,5 @@ The `2.1.0-rc.2` figures above are the preserved calibration baseline. The separ
 geometry when generated gap fill fails, and evaluates Standard and Organic realism.
 The 39-district Istanbul report and final national acceptance must pass before this
 candidate can be merged. Generated territories remain estimated gameplay boundaries.
+
+Local registry development now requires `--allow-file` with `dataset install` or `dataset update`. HTTP registries require `--allow-http`. Private-network hosting is an explicit SDK option. Remote HTTPS remains the default.

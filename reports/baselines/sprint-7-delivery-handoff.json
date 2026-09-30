@@ -6,11 +6,11 @@
   "canonicalGeometryHash": "fb19b468c0555dd0e167d5937037b1609f610014d9231c80b4bc9834685dd8f3",
   "adm3GeometryHash": "19f50ba312657f39f61d9ce8eb6562491fa66de106681eec5352b85ae1b6e333",
   "deliveryManifestSchema": "territorykit-tr-v2-delivery@1",
-  "deliveryManifestContentHash": "55a70b952b01dec86fff95453491efad0959b41110927d83b8ecf8eb4c977ee6",
+  "deliveryManifestContentHash": "4c1d42a082a63f5170a63ce150a1e3c5abbe4486ec4dbf1ed3c43789088a31cb",
   "tileChecksumIndexHash": "f0ebef67fa6add89f56ad62afd4ce22684da6936449b9c3f1e8faac6dd1a4be5",
   "tileTemplate": "render/tiles/{z}/{x}/{y}.mvt",
   "tileZoom": [10, 12],
-  "districtShardTemplate": "districts/<sanitized-adm2-id>/dataset.json",
+  "districtShardTemplate": "Use adm2Shards mapping from manifest",
   "runtimeImport": "@territory-kit/runtime/turkey-v2-delivery",
   "runtimeResolver": "resolveTurkeyV2Boundaries",
   "estimatedControl": "allowEstimated: true",
@@ -21,9 +21,21 @@
     "datasetVersion",
     "canonicalGeometryHash",
     "artifactPath",
+    "manifestContentHash",
     "artifactSha256"
   ],
   "npmPackageVersionBeforeRelease": "2.1.0",
-  "expectedFixedPackageVersionAfterChangesets": "2.2.0",
-  "npmPublishedInSprint7": false
+  "npmPublishedInSprint7": false,
+  "districtShardMapping": "adm2Shards maps canonical ADM2 id to exact shard path in newly generated manifests; legacy manifests fail closed on parent mismatch",
+  "manifestTrust": "Validate self-hash; obtain expectedManifestContentHash from a trusted channel and pass to resolver",
+  "shardValidation": [
+    "manifest content hash",
+    "optional trusted manifest pin",
+    "byteSize before parse",
+    "SHA-256",
+    "datasetVersion",
+    "ADM2 parent",
+    "boundary semantics"
+  ],
+  "expectedFixedPackageRelease": "major because registry URL defaults require explicit opt-in; Changesets determines exact versions"
 }
