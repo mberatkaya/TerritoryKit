@@ -11,6 +11,19 @@ import {
 } from "../src/render-artifacts.js";
 
 describe("render artifacts", () => {
+  it("can omit the duplicate query file for national rendering", () => {
+    const result = buildTerritoryRenderArtifacts({
+      dataset: createSampleTerritoryDataset(),
+      format: "mvt",
+      minZoom: 0,
+      maxZoom: 0,
+      includeQueryFile: false
+    });
+    expect(result.files.has("query/query-artifact.json")).toBe(false);
+    expect(result.queryArtifact.zones.length).toBeGreaterThan(0);
+    expect(result.files.has("render/manifest.json")).toBe(true);
+  });
+
   it("builds deterministic MVT directory artifacts", async () => {
     const dataset = createSampleTerritoryDataset();
     const result = buildTerritoryRenderArtifacts({
@@ -34,6 +47,9 @@ describe("render artifacts", () => {
       }
     });
     expect(result.files.has("render/mvt-policy-report.json")).toBe(true);
+    const publishedReport = JSON.parse(result.files.get("render/mvt-policy-report.json") as string);
+    expect(publishedReport.levels[0]).not.toHaveProperty("durationMs");
+    expect(result.mvtReport?.levels[0]?.durationMs).toEqual(expect.any(Number));
   });
 
   it("bounds MVT candidates by ADM policy and feature bbox", () => {

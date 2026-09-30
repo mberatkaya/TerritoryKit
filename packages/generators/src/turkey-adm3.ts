@@ -120,6 +120,7 @@ export {
   validateTurkeyV2NationalArtifactIntegrity,
   validateTurkeyV2NationalCompleteness
 } from "./turkey-v2-national-validation.js";
+export { isLargeNationalJsonArtifact, serializeNationalJsonChunks } from "./national-json.js";
 export type {
   ResolvedTurkeyGameZoneConfiguration,
   ResolvedTurkeyGameZoneProfile,

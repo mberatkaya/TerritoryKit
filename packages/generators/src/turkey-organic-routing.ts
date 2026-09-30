@@ -12,7 +12,23 @@ const Flatbush =
     : (FlatbushDefault as unknown as { default: typeof FlatbushDefault }).default;
 type Segment = { a: LngLat; b: LngLat; barrier: TurkeySmartFallbackBarrier };
 type Piece = { geometry: MultiPolygon; barrierIds: string[] };
+export interface TurkeyOrganicRoutingDiagnostics {
+  attemptedLongEdges: number;
+  routeFound: number;
+  routeSupportImproved: number;
+  routeGeometryRejected: number;
+  routeTopologyRejected: number;
+  routeApplied: number;
+  longestUnroutedMeters: number;
+  longestSharedEdgeMeters?: number;
+  longestSkippedForSupportMeters?: number;
+  unmatchedLongEdges?: Array<{ owner: number; a: LngLat; b: LngLat; meters: number }>;
+  sharedBoundaryNodedVertexCount?: number;
+  longestUnroutedReason?:
+    "NO_ROUTE" | "SUPPORT_NOT_IMPROVED" | "GEOMETRY_REJECTED" | "TOPOLOGY_REJECTED";
+}
 const key = (p: readonly number[]) => `${p[0]!.toFixed(8)},${p[1]!.toFixed(8)}`;
+const COLLINEAR_TOLERANCE_METERS = 0.00001;
 const length = (a: readonly number[], b: readonly number[], cos: number) =>
   Math.hypot((a[0]! - b[0]!) * cos, a[1]! - b[1]!) * 111320;
 
@@ -23,13 +39,25 @@ export function routeOrganicSharedBoundaries<T extends Piece>(
   barriers: readonly TurkeySmartFallbackBarrier[],
   roadDensity: number,
   measureSupport?: (a: LngLat, b: LngLat) => number,
-  acceptsGeometry?: (geometry: MultiPolygon) => boolean
+  acceptsGeometry?: (geometry: MultiPolygon) => boolean,
+  options: {
+    minChordMeters?: number;
+    maxExistingSupportRatio?: number;
+    diagnostics?: TurkeyOrganicRoutingDiagnostics;
+  } = {}
 ): T[] {
   const pieces = input.map((p) => ({
     ...p,
-    geometry: structuredClone(p.geometry),
+    geometry: options.diagnostics
+      ? p.geometry.map((polygon) => polygon.map(simplifyCollinearRing))
+      : structuredClone(p.geometry),
     barrierIds: [...p.barrierIds]
   }));
+  if (options.diagnostics) {
+    const noded = nodeSharedBoundaryVertices(pieces.map((piece) => piece.geometry));
+    for (const [index, geometry] of noded.geometries.entries()) pieces[index]!.geometry = geometry;
+    options.diagnostics.sharedBoundaryNodedVertexCount = noded.insertedCount;
+  }
   const segments: Segment[] = [];
   for (const barrier of [...barriers].sort((a, b) => a.id.localeCompare(b.id))) {
     if (barrier.strength <= 0 || barrier.barrierClass === "coastline") continue;
@@ -126,6 +154,17 @@ export function routeOrganicSharedBoundaries<T extends Piece>(
           shared.set(k, owners);
         }
       }
+  if (options.diagnostics)
+    options.diagnostics.unmatchedLongEdges = [...shared.values()]
+      .filter((owners) => owners.length === 1)
+      .map((owners) => {
+        const edge = owners[0]!;
+        const cos = Math.cos((((edge.a[1] + edge.b[1]) / 2) * Math.PI) / 180);
+        return { ...edge, meters: length(edge.a, edge.b, cos) };
+      })
+      .filter((edge) => edge.meters >= 2_000)
+      .sort((a, b) => b.meters - a.meters || a.owner - b.owner)
+      .slice(0, 8);
   for (const [, owners] of [...shared].sort(([a], [b]) => a.localeCompare(b))) {
     if (owners.length !== 2 || owners[0]!.owner === owners[1]!.owner) continue;
     const first = owners[0]!,
@@ -134,9 +173,23 @@ export function routeOrganicSharedBoundaries<T extends Piece>(
       b = first.b;
     const cos = Math.cos((((a[1] + b[1]) / 2) * Math.PI) / 180),
       chord = length(a, b, cos);
-    if (chord < 100) continue;
+    if (chord < (options.minChordMeters ?? 100)) continue;
+    if (options.diagnostics)
+      options.diagnostics.longestSharedEdgeMeters = Math.max(
+        options.diagnostics.longestSharedEdgeMeters ?? 0,
+        chord
+      );
     const existingSupport = measureSupport?.(a, b) ?? 0;
-    if (existingSupport >= chord * 0.95) continue;
+    if (existingSupport >= chord * (options.maxExistingSupportRatio ?? 0.95)) {
+      if (options.diagnostics)
+        options.diagnostics.longestSkippedForSupportMeters = Math.max(
+          options.diagnostics.longestSkippedForSupportMeters ?? 0,
+          chord
+        );
+      continue;
+    }
+    const diagnostics = options.diagnostics;
+    if (diagnostics) diagnostics.attemptedLongEdges++;
     const corridor = Math.min(
       chord * 0.4,
       roadDensity >= 15 ? 400 : roadDensity >= 3 ? 2000 : 5000
@@ -162,41 +215,255 @@ export function routeOrganicSharedBoundaries<T extends Piece>(
           )
           .map((i) => network[i]!)
       : [];
-    const route =
-      findOrganicBarrierRoute(a, b, candidates, corridor) ??
-      (chord >= 1_000
-        ? findPiecewiseBarrierRoute(a, b, candidates, localJunctions, corridor)
-        : undefined) ??
-      findPartialBarrierRoute(a, b, candidates, corridor);
-    if (!route || route.path.length < 3) continue;
-    if (
-      measureSupport &&
-      route.path.slice(1).reduce((sum, p, i) => sum + measureSupport(route.path[i]!, p), 0) <=
-        existingSupport + 1
-    )
-      continue;
-    const left = replace(pieces[first.owner]!.geometry, a, b, route.path);
-    const right = replace(
-      pieces[second.owner]!.geometry,
-      second.a,
-      second.b,
-      key(second.a) === key(a) ? route.path : [...route.path].reverse()
-    );
-    if (
-      !left ||
-      !right ||
-      (acceptsGeometry && (!acceptsGeometry(left) || !acceptsGeometry(right))) ||
-      !safeReplacement(pieces[first.owner]!.geometry, pieces[second.owner]!.geometry, left, right)
-    )
-      continue;
-    pieces[first.owner]!.geometry = left;
-    pieces[second.owner]!.geometry = right;
-    for (const owner of [first.owner, second.owner])
-      pieces[owner]!.barrierIds = [
-        ...new Set([...pieces[owner]!.barrierIds, ...route.barrierIds])
-      ].sort();
+    const recordUnrouted = (
+      reason: NonNullable<TurkeyOrganicRoutingDiagnostics["longestUnroutedReason"]>
+    ) => {
+      if (diagnostics && chord > diagnostics.longestUnroutedMeters) {
+        diagnostics.longestUnroutedMeters = chord;
+        diagnostics.longestUnroutedReason = reason;
+      }
+    };
+    // The shortest graph route may cross another territory or a water hole.
+    // Try the piecewise and partial real-barrier routes before retaining the
+    // synthetic chord; every candidate still has to preserve the partition.
+    const alternatives = [
+      () => findOrganicBarrierRoute(a, b, candidates, corridor),
+      () =>
+        chord >= 1_000
+          ? findPiecewiseBarrierRoute(a, b, candidates, localJunctions, corridor)
+          : undefined,
+      () =>
+        chord >= 2_000 && roadDensity < 6
+          ? findInteriorBarrierRoute(a, b, candidates, localJunctions, corridor)
+          : undefined,
+      () => findPartialBarrierRoute(a, b, candidates, corridor)
+    ];
+    let applied = false;
+    let failure: NonNullable<TurkeyOrganicRoutingDiagnostics["longestUnroutedReason"]> = "NO_ROUTE";
+    for (const buildRoute of alternatives) {
+      const route = buildRoute();
+      if (!route || route.path.length < 3) continue;
+      if (diagnostics) diagnostics.routeFound++;
+      if (
+        measureSupport &&
+        route.path.slice(1).reduce((sum, p, i) => sum + measureSupport(route.path[i]!, p), 0) <=
+          existingSupport + 1
+      ) {
+        failure = "SUPPORT_NOT_IMPROVED";
+        continue;
+      }
+      if (diagnostics) diagnostics.routeSupportImproved++;
+      const left = replace(pieces[first.owner]!.geometry, a, b, route.path);
+      const right = replace(
+        pieces[second.owner]!.geometry,
+        second.a,
+        second.b,
+        key(second.a) === key(a) ? route.path : [...route.path].reverse()
+      );
+      if (
+        !left ||
+        !right ||
+        (acceptsGeometry && (!acceptsGeometry(left) || !acceptsGeometry(right)))
+      ) {
+        if (diagnostics) diagnostics.routeGeometryRejected++;
+        failure = "GEOMETRY_REJECTED";
+        continue;
+      }
+      if (
+        !safeReplacement(pieces[first.owner]!.geometry, pieces[second.owner]!.geometry, left, right)
+      ) {
+        if (diagnostics) diagnostics.routeTopologyRejected++;
+        failure = "TOPOLOGY_REJECTED";
+        continue;
+      }
+      if (diagnostics) diagnostics.routeApplied++;
+      pieces[first.owner]!.geometry = left;
+      pieces[second.owner]!.geometry = right;
+      for (const owner of [first.owner, second.owner])
+        pieces[owner]!.barrierIds = [
+          ...new Set([...pieces[owner]!.barrierIds, ...route.barrierIds])
+        ].sort();
+      applied = true;
+      break;
+    }
+    if (!applied) recordUnrouted(failure);
   }
   return pieces;
+}
+
+/** Split a long edge at an existing vertex of another owner. This restores
+ * pairwise ownership at T-junctions; the inserted point lies on the same line
+ * to sub-millimetre precision and introduces no gameplay boundary. */
+function nodeSharedBoundaryVertices(geometries: readonly MultiPolygon[]): {
+  geometries: MultiPolygon[];
+  insertedCount: number;
+} {
+  const vertices = new Map<string, LngLat>();
+  for (const geometry of geometries)
+    for (const polygon of geometry)
+      for (const ring of polygon)
+        for (const point of ring.slice(0, -1)) vertices.set(key(point), point as LngLat);
+  const points = [...vertices.values()];
+  if (points.length === 0 || points.length > 250_000)
+    return {
+      geometries: geometries.map((geometry) => structuredClone(geometry)),
+      insertedCount: 0
+    };
+  const index = new Flatbush(points.length);
+  for (const p of points) index.add(p[0], p[1], p[0], p[1]);
+  index.finish();
+  let insertedCount = 0;
+  const noded = geometries.map((geometry) =>
+    geometry.map((polygon) =>
+      polygon.map((ring) => {
+        const output: LngLat[] = [];
+        for (let i = 1; i < ring.length; i++) {
+          const a = ring[i - 1]! as LngLat,
+            b = ring[i]! as LngLat;
+          output.push(a);
+          const latitude = (a[1] + b[1]) / 2,
+            cos = Math.cos((latitude * Math.PI) / 180),
+            vx = (b[0] - a[0]) * cos,
+            vy = b[1] - a[1],
+            vv = vx * vx + vy * vy;
+          if (vv <= 0 || Math.sqrt(vv) * 111320 < 500) continue;
+          const marginX = COLLINEAR_TOLERANCE_METERS / (111320 * cos),
+            marginY = COLLINEAR_TOLERANCE_METERS / 111320;
+          const candidates = index
+            .search(
+              Math.min(a[0], b[0]) - marginX,
+              Math.min(a[1], b[1]) - marginY,
+              Math.max(a[0], b[0]) + marginX,
+              Math.max(a[1], b[1]) + marginY
+            )
+            .map((position) => points[position]!)
+            .map((p) => {
+              const wx = (p[0] - a[0]) * cos,
+                wy = p[1] - a[1];
+              return {
+                p,
+                t: (wx * vx + wy * vy) / vv,
+                offsetMeters: (Math.abs(vx * wy - vy * wx) / Math.sqrt(vv)) * 111320
+              };
+            })
+            .filter(
+              ({ t, offsetMeters }) =>
+                t > 1e-8 && t < 1 - 1e-8 && offsetMeters <= COLLINEAR_TOLERANCE_METERS
+            )
+            .sort((x, y) => x.t - y.t || key(x.p).localeCompare(key(y.p)));
+          const used = new Set<string>();
+          for (const candidate of candidates) {
+            const k = key(candidate.p);
+            if (used.has(k)) continue;
+            used.add(k);
+            output.push(candidate.p);
+            insertedCount++;
+          }
+        }
+        output.push(output[0]!);
+        return output;
+      })
+    )
+  );
+  return { geometries: noded, insertedCount };
+}
+
+/** Polygon clipping can leave a vertex on one side of a shared straight seam
+ * but not the other. Remove only sub-millimetre collinear vertices so the
+ * common edge is recognized and routed as one topology transaction. */
+function simplifyCollinearRing(ring: MultiPolygon[number][number]): LngLat[] {
+  const points: LngLat[] = [];
+  for (const point of ring.slice(0, -1)) {
+    while (points.length >= 2) {
+      const a = points[points.length - 2]!,
+        b = points[points.length - 1]!,
+        c = point;
+      const cos = Math.cos((b[1] * Math.PI) / 180);
+      const vx = (c[0] - a[0]) * cos,
+        vy = c[1] - a[1],
+        wx = (b[0] - a[0]) * cos,
+        wy = b[1] - a[1],
+        vv = vx * vx + vy * vy;
+      if (vv <= 0) break;
+      const t = (wx * vx + wy * vy) / vv;
+      const offsetMeters = (Math.abs(vx * wy - vy * wx) / Math.sqrt(vv)) * 111320;
+      if (t <= 0 || t >= 1 || offsetMeters > COLLINEAR_TOLERANCE_METERS) break;
+      points.pop();
+    }
+    points.push(point as LngLat);
+  }
+  return points.length >= 3 ? [...points, points[0]!] : ([...ring] as LngLat[]);
+}
+
+/** Use a connected real corridor across the middle of a coarse seam when
+ * neither endpoint reaches that corridor. The two exposed connectors remain
+ * synthetic, and the caller still checks the complete replacement topology. */
+function findInteriorBarrierRoute(
+  a: LngLat,
+  b: LngLat,
+  segments: readonly Segment[],
+  junctions: readonly { p: LngLat; strength: number; degree: number }[],
+  corridor: number
+) {
+  const cos = Math.cos((((a[1] + b[1]) / 2) * Math.PI) / 180);
+  const chord = length(a, b, cos);
+  const vx = (b[0] - a[0]) * cos,
+    vy = b[1] - a[1],
+    vv = vx * vx + vy * vy;
+  if (vv <= 0) return;
+  const progress = (p: LngLat) => ((p[0] - a[0]) * cos * vx + (p[1] - a[1]) * vy) / vv;
+  const point = (t: number): LngLat => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+  const anchors = new Map<string, { p: LngLat; strength: number; degree: number }>();
+  for (const junction of junctions) anchors.set(key(junction.p), junction);
+  for (const segment of segments) {
+    if (segment.barrier.strength < 0.15) continue;
+    for (const p of [segment.a, segment.b]) {
+      const k = key(p);
+      if (!anchors.has(k)) anchors.set(k, { p, strength: segment.barrier.strength, degree: 1 });
+    }
+  }
+  for (const anchorSet of [junctions, [...anchors.values()]]) {
+    const eligible = anchorSet
+      .map((j) => ({ ...j, t: progress(j.p) }))
+      .filter(
+        (j) =>
+          j.t >= 0.1 && j.t <= 0.9 && length(j.p, point(j.t), cos) <= Math.min(corridor * 0.5, 700)
+      );
+    const starts = eligible
+      .filter((j) => j.t <= 0.4)
+      .sort(
+        (x, y) =>
+          Math.abs(x.t - 0.2) - Math.abs(y.t - 0.2) ||
+          y.strength - x.strength ||
+          key(x.p).localeCompare(key(y.p))
+      )
+      .slice(0, 2);
+    const ends = eligible
+      .filter((j) => j.t >= 0.6)
+      .sort(
+        (x, y) =>
+          Math.abs(x.t - 0.8) - Math.abs(y.t - 0.8) ||
+          y.strength - x.strength ||
+          key(x.p).localeCompare(key(y.p))
+      )
+      .slice(0, 2);
+    for (const start of starts)
+      for (const end of ends) {
+        const from = point(start.t),
+          to = point(end.t);
+        const inner = findOrganicBarrierRoute(from, to, segments, corridor);
+        if (!inner) continue;
+        const connectorMeters = inner.connectorMeters + start.t * chord + (1 - end.t) * chord;
+        if (connectorMeters > chord * 0.55 || inner.supportedMeters < chord * 0.35) continue;
+        return {
+          path: [a, ...inner.path, b],
+          barrierIds: inner.barrierIds,
+          supportedMeters: inner.supportedMeters,
+          connectorMeters
+        };
+      }
+  }
+  return;
 }
 
 /** Break a long chord at nearby real network junctions. Each interval uses its

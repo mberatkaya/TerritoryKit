@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
-import { mkdir, readFile, writeFile, rename } from "node:fs/promises";
+import { mkdir, open, readFile, writeFile, rename } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { computeTerritoryAreaM2 } from "@territory-kit/dataset";
@@ -12,6 +12,8 @@ import {
   buildTurkeyV2NationalDataset,
   createTurkeyV2NationalArtifactPayloads,
   createDatasetGeometryHash,
+  isLargeNationalJsonArtifact,
+  serializeNationalJsonChunks,
   createTurkeyV2NationalSourceLock,
   createTurkeyOsmSmartFallbackGeneratedOptions,
   readTurkeyOsmAdm2BarrierArtifact,
@@ -48,7 +50,7 @@ const DEFAULT_OFFICIAL_ARTIFACT = workspacePath(
 const DEFAULT_OUTPUT = workspacePath(".territory/sprint-6/candidate");
 const DEFAULT_REPORTS_OUTPUT = workspacePath("reports/tr-v2-smart-candidate");
 const DEFAULT_BUILD_DATE = "2026-09-27T00:00:00.000Z";
-const DEFAULT_SMART_CANDIDATE_VERSION = "2.1.0-rc.1";
+const DEFAULT_SMART_CANDIDATE_VERSION = "2.1.0-rc.7";
 const DISTRICT_CHECKPOINT_SCHEMA = "territorykit-tr-smart-district-checkpoint@4";
 
 export async function runTurkeyV2(args: string[]): Promise<number> {
@@ -316,6 +318,7 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
       algorithm: TURKEY_SMART_FALLBACK_ALGORITHM_VERSION
     });
   const districtLimit = readPositiveIntegerFlag(flags, "max-districts");
+  const districtOffset = readNonNegativeIntegerFlag(flags, "district-offset");
   const result = await buildTurkeyV2NationalDataset({
     adm0Adm2Dataset: admDataset,
     officialSources: {
@@ -330,6 +333,7 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
     outputMode: mode,
     continueOnError: flags.has("continue-on-error") && mode !== "publish-ready",
     ...(districtLimit ? { districtLimit } : {}),
+    ...(districtOffset ? { districtOffset } : {}),
     allowLegacyGridEmergency,
     ...(getFlag(flags, "migration-baseline")
       ? { migrationBaselineZones: await readAdm3Zones(getFlag(flags, "migration-baseline")) }
@@ -458,6 +462,7 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
       .filter(
         (d) =>
           d.selectedSourceTier === "organic-smart" ||
+          d.confidence === "low" ||
           d.selectedSourceTier === "unavailable" ||
           d.reasonCodes.some((code) => code.includes("LICENSE"))
       )
@@ -686,11 +691,7 @@ async function runValidate(args: string[]): Promise<number> {
       }
       if (
         !isRecord(smartCoverage.totals) ||
-        smartCoverage.totals.adm2Total !== TURKEY_V2_NATIONAL_EXPECTED_COUNTS.ADM2 ||
-        smartCoverage.totals.adm2Failed !== 0 ||
-        smartCoverage.totals.legacyProductionDistricts !== 0 ||
-        smartCoverage.totals.gridThresholdViolations !== 0 ||
-        smartCoverage.totals.unsupportedStraightThresholdViolations !== 0
+        !isSmartNationalCoverageComplete(smartCoverage.totals)
       ) {
         issues.push(
           issue(
@@ -847,6 +848,19 @@ async function runValidate(args: string[]): Promise<number> {
   return issues.length === 0 ? 0 : 1;
 }
 
+export function isSmartNationalCoverageComplete(totals: Record<string, unknown>): boolean {
+  const expected = TURKEY_V2_NATIONAL_EXPECTED_COUNTS.ADM2;
+  return (
+    totals.adm2Total === expected &&
+    totals.adm2Attempted === expected &&
+    totals.adm2Successful === expected &&
+    totals.adm2Failed === 0 &&
+    totals.unavailableDistricts === 0 &&
+    totals.legacyProductionDistricts === 0 &&
+    totals.gridThresholdViolations === 0
+  );
+}
+
 async function runBenchmark(args: string[]): Promise<number> {
   const flags = parseFlags(args);
   const outputRoot = resolve(
@@ -910,6 +924,7 @@ export function createSmartCoverageManifest(result: TurkeyV2NationalBuildResult)
     const d = result.districts.find((d) => d.district.id === c.districtId);
     const q = d?.smartFallbackResult?.quality;
     const organic = d?.smartFallbackResult?.configuration.organic === true;
+    const networkFirst = d?.smartFallbackResult?.configuration.networkFirst === true;
     const legacy = d?.generatedResult !== undefined;
     const generatedCount = d?.effective.generated.length ?? 0;
     const officialCount = d?.effective.official.length ?? 0;
@@ -917,7 +932,7 @@ export function createSmartCoverageManifest(result: TurkeyV2NationalBuildResult)
     const tier = legacy
       ? "legacy"
       : generatedCount > 0
-        ? organic
+        ? organic && !networkFirst
           ? "organic-smart"
           : "standard-smart"
         : officialCount > 0
@@ -940,19 +955,30 @@ export function createSmartCoverageManifest(result: TurkeyV2NationalBuildResult)
       province: c.provinceName,
       district: c.districtName,
       selectedSourceTier: tier,
+      smartMode: generatedCount
+        ? networkFirst
+          ? "network-first"
+          : organic
+            ? "organic"
+            : "standard"
+        : null,
       boundaryKind: !d ? "unavailable" : generatedCount ? "estimated" : "administrative",
       sourceClass: generatedCount ? "smart-derived" : tier,
       confidence: !d
         ? "unavailable"
-        : organic ||
-            d.effective.generated.some(
-              (z) => (z.properties.territory as Record<string, unknown>)?.confidence === "low"
-            )
-          ? "low"
-          : String(
-              (d.effective.zones[0]?.properties.territory as Record<string, unknown>)?.confidence ??
-                "unavailable"
-            ),
+        : (q?.confidenceTier ??
+          (organic ||
+          d.effective.generated.some(
+            (z) => (z.properties.territory as Record<string, unknown>)?.confidence === "low"
+          )
+            ? "low"
+            : String(
+                (d.effective.zones[0]?.properties.territory as Record<string, unknown>)
+                  ?.confidence ?? "unavailable"
+              ))),
+      smartAcceptanceStatus: q?.acceptanceStatus ?? null,
+      smartHardGateFailures: q?.hardGateFailures ?? [],
+      syntheticConnectorEvidence: q?.syntheticConnectorEvidence ?? null,
       qualityAccepted: d?.quality.ok === true,
       zoneCount: c.zoneCount,
       coverage: c.finalCoveragePercent,
@@ -981,15 +1007,15 @@ export function createSmartCoverageManifest(result: TurkeyV2NationalBuildResult)
       zones: {
         official: officialCount,
         osmAdministrative: osmCount,
-        standardSmart: organic ? 0 : generatedCount,
-        organicSmart: organic ? generatedCount : 0
+        standardSmart: organic && !networkFirst ? 0 : generatedCount,
+        organicSmart: organic && !networkFirst ? generatedCount : 0
       },
       areaKm2: {
         parent: computeTerritoryAreaM2(parent.geometry) / 1_000_000,
         official: d?.coverage.officialEffectiveAreaKm2 ?? 0,
         osmAdministrative: d?.coverage.osmEffectiveAreaKm2 ?? 0,
-        standardSmart: organic ? 0 : (d?.coverage.generatedEffectiveAreaKm2 ?? 0),
-        organicSmart: organic ? (d?.coverage.generatedEffectiveAreaKm2 ?? 0) : 0
+        standardSmart: organic && !networkFirst ? 0 : (d?.coverage.generatedEffectiveAreaKm2 ?? 0),
+        organicSmart: organic && !networkFirst ? (d?.coverage.generatedEffectiveAreaKm2 ?? 0) : 0
       },
       barrierArtifactChecksum:
         d?.effective.generated[0]?.properties.territory &&
@@ -1217,7 +1243,11 @@ async function writeNationalArtifacts(
   });
 
   for (const [path, payload] of payloads.json.entries()) {
-    await writeJson(join(outputRoot, path), payload, options.force);
+    if (isLargeNationalJsonArtifact(path)) {
+      await writeLargeJson(join(outputRoot, path), payload, options.force);
+    } else {
+      await writeJson(join(outputRoot, path), payload, options.force);
+    }
   }
 
   for (const [path, payload] of payloads.text.entries()) {
@@ -1582,6 +1612,36 @@ async function writeJson(path: string, payload: unknown, force: boolean): Promis
   await writeText(path, `${JSON.stringify(payload, null, 2)}\n`, force);
 }
 
+async function writeLargeJson(path: string, payload: unknown, force: boolean): Promise<void> {
+  if (!force && existsSync(path)) {
+    throw new Error(`Refusing to overwrite existing output ${path}. Pass --force to replace it.`);
+  }
+  await mkdir(dirname(path), { recursive: true });
+  const file = await open(path, "w");
+  try {
+    let buffer = "";
+    const flush = async (): Promise<void> => {
+      const bytes = Buffer.from(buffer, "utf8");
+      buffer = "";
+      let offset = 0;
+      while (offset < bytes.length) {
+        const { bytesWritten } = await file.write(bytes, offset, bytes.length - offset);
+        if (bytesWritten === 0) throw new Error(`Unable to finish writing ${path}.`);
+        offset += bytesWritten;
+      }
+    };
+    for (const chunk of serializeNationalJsonChunks(payload)) {
+      buffer += chunk;
+      if (buffer.length >= 1_000_000) {
+        await flush();
+      }
+    }
+    if (buffer) await flush();
+  } finally {
+    await file.close();
+  }
+}
+
 async function writeText(path: string, payload: string, force: boolean): Promise<void> {
   if (!force && existsSync(path)) {
     throw new Error(`Refusing to overwrite existing output ${path}. Pass --force to replace it.`);
@@ -1643,6 +1703,16 @@ function readPositiveIntegerFlag(
   }
   const parsed = Number(value);
   return Number.isInteger(parsed) && parsed > 0 ? parsed : undefined;
+}
+
+function readNonNegativeIntegerFlag(
+  flags: Map<string, string | true>,
+  key: string
+): number | undefined {
+  const value = getFlag(flags, key);
+  if (!value) return undefined;
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed >= 0 ? parsed : undefined;
 }
 
 function readString(input: unknown): string | undefined {
@@ -1720,9 +1790,10 @@ Common flags:
   --osm-artifact <dataset.json>
   --output <dir>
   --reports-output <dir>
-  --dataset-version 2.1.0-rc.1
+  --dataset-version 2.1.0-rc.7
   --build-date 2026-09-27T00:00:00.000Z
   --max-districts <n>
+  --district-offset <n> (partial build starting after n sorted districts)
   --force
 `);
 }

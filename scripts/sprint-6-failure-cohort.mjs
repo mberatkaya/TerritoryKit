@@ -54,11 +54,18 @@ for (const before of baseline.failedDistrictInputSignals) {
     beforeFailureReason:
       baseline.districts.find((d) => d.adm2Id === district.id)?.failureReason ?? null,
     afterAccepted: result?.quality.ok ?? false,
+    acceptanceStatus:
+      q?.acceptanceStatus ?? (result?.quality.ok ? "USABLE_REAL_SOURCE" : "HARD_REJECT"),
+    confidence: q?.confidenceTier ?? null,
+    hardGateFailures: q?.hardGateFailures ?? [],
+    syntheticConnectorEvidence: q?.syntheticConnectorEvidence ?? null,
     afterError: error ?? null,
     sourceTier: result?.smartFallbackResult
-      ? result.smartFallbackResult.configuration.organic
-        ? "organic-smart"
-        : "standard-smart"
+      ? result.smartFallbackResult.configuration.networkFirst
+        ? "network-first"
+        : result.smartFallbackResult.configuration.organic
+          ? "organic-smart"
+          : "standard-smart"
       : null,
     officialInputCount: officialZones.length,
     officialRetainedCount: result?.effective.official.length ?? 0,
@@ -110,6 +117,6 @@ const report = {
   districts: rows
 };
 await fs.writeFile(
-  "reports/baselines/sprint-6-final-recovery.json",
+  process.env.SPRINT6_FAILURE_REPORT ?? "reports/baselines/sprint-6-final-recovery.json",
   JSON.stringify(report, null, 2) + "\n"
 );

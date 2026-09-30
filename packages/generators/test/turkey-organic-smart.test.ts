@@ -39,6 +39,22 @@ const input = {
 };
 
 describe("organic smart production fallback", () => {
+  it("accepts one unavoidable locality seam as estimated low confidence", async () => {
+    const result = await buildTurkeyOrganicSmartFallbackWithAdjacency({
+      ...input,
+      localitySeeds: seeds.slice(0, 2),
+      options: { ...input.options, targetTerritoryCount: 2, maxAreaKm2: 10 }
+    });
+    expect(result.quality.gates.geographicRealism).toBe(false);
+    expect(result.quality.gates.gridLikeness).toBe(true);
+    expect(result.quality.ok).toBe(true);
+    expect(result.quality.acceptanceStatus).toBe("USABLE_LOW_CONFIDENCE");
+    expect(result.quality.syntheticConnectorEvidence).toMatchObject({
+      candidateRouteAttempted: false,
+      syntheticConnectorReason: "NO_USABLE_REAL_SEPARATOR"
+    });
+    expect(result.zones).toHaveLength(2);
+  });
   it("keeps small disconnected geographic components whole without invented shared seams", async () => {
     const geometry: TerritoryGeometry = {
       type: "MultiPolygon",

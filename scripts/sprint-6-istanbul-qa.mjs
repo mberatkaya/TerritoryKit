@@ -23,9 +23,15 @@ const districts = source.zones
 if (districts.length !== 39 || new Set(districts.map((z) => z.id)).size !== districts.length)
   throw Error(`Unexpected Istanbul canonical cohort: ${districts.length}`);
 const root = process.env.ISTANBUL_QA_ARTIFACT_ROOT ?? ".territory/sprint-6/final/istanbul-qa";
-const reportPath = process.env.ISTANBUL_QA_REPORT ?? "reports/baselines/sprint-6-istanbul-39.json";
+const reportPath =
+  process.env.ISTANBUL_QA_REPORT ??
+  (process.env.ISTANBUL_QA_DISTRICT
+    ? path.join(root, "report.json")
+    : "reports/baselines/sprint-6-istanbul-39.json");
 const selectedDistricts = process.env.ISTANBUL_QA_DISTRICT
-  ? districts.filter((district) => district.name === process.env.ISTANBUL_QA_DISTRICT)
+  ? districts.filter((district) =>
+      process.env.ISTANBUL_QA_DISTRICT.split(",").includes(district.name)
+    )
   : districts;
 if (!selectedDistricts.length) throw Error("Requested Istanbul district is not canonical ADM2");
 await fs.mkdir(root, { recursive: true });
@@ -67,6 +73,9 @@ for (const [index, district] of selectedDistricts.entries()) {
   const durationMs = Math.round(performance.now() - t);
   peakRssBytes = Math.max(peakRssBytes, process.memoryUsage().rss);
   const quality = result?.smartFallbackResult?.quality;
+  const networkCandidate = result?.smartFallbackResult?.candidateComparisons?.find(
+    (candidate) => candidate.mode === "network-first"
+  );
   const row = {
     district: district.name,
     districtId: district.id,
@@ -95,6 +104,13 @@ for (const [index, district] of selectedDistricts.entries()) {
       ? (result?.effective.generated.length ?? 0)
       : 0,
     zoneCount: result?.effective.zones.length ?? 0,
+    largestTerritoryAreaShare: quality?.largestTerritoryAreaShare ?? null,
+    effectivePartitionCount: quality?.effectivePartitionCount ?? null,
+    minimumUsefulTerritoryCount: quality?.minimumUsefulTerritoryCount ?? null,
+    territoryCountAdequacy: quality?.territoryCountAdequacy ?? null,
+    medianTerritoryAreaKm2: quality?.medianTerritoryAreaKm2 ?? null,
+    p90TerritoryAreaKm2: quality?.p90TerritoryAreaKm2 ?? null,
+    territoryAreaCV: quality?.territoryAreaCV ?? null,
     geometryHash: result?.dataset?.manifest?.geometryHash ?? null,
     coveragePercent: result?.coverage.finalCoveragePercent ?? null,
     uncoveredKm2: result?.quality.summary.remainingGapAreaKm2 ?? null,
@@ -115,21 +131,39 @@ for (const [index, district] of selectedDistricts.entries()) {
     axisAlignedInternalBoundaryRatio: quality?.axisAlignedInternalBoundaryRatio ?? null,
     longUnsupportedStraightBoundaryRatio: quality?.longUnsupportedStraightBoundaryRatio ?? null,
     longestUnsupportedStraightChainMeters: quality?.longestUnsupportedStraightChainMeters ?? null,
+    longestUnsupportedStraightChain: quality?.longestUnsupportedStraightChain ?? null,
     longestUnsupportedStraightNormalized: quality
       ? quality.longestUnsupportedStraightNormalized
       : null,
     networkFaceCountRaw: quality?.networkFaceCountRaw ?? null,
+    networkAttemptDiagnostics:
+      networkCandidate?.networkConstruction ?? quality?.networkConstruction ?? null,
+    networkConstructionSucceeded:
+      networkCandidate?.networkConstruction?.constructionStatus === "constructed",
+    networkCandidateQualityAccepted: networkCandidate?.accepted ?? false,
+    networkCandidateLargestTerritoryAreaShare: networkCandidate?.largestTerritoryAreaShare ?? null,
+    networkCandidateEffectivePartitionCount: networkCandidate?.effectivePartitionCount ?? null,
+    networkCandidateMinimumUsefulTerritoryCount:
+      networkCandidate?.minimumUsefulTerritoryCount ?? null,
     networkFaceCountAfterFiltering: quality?.networkFaceCountAfterFiltering ?? null,
     networkFaceCoveragePercent: quality?.networkFaceCoveragePercent ?? null,
     networkDerivedTerritoryCount: quality?.networkDerivedTerritoryCount ?? null,
     networkBoundaryUsageRatio: quality?.networkBoundaryUsageRatio ?? null,
     residualAreaPercent: quality?.residualAreaPercent ?? null,
     residualOrganicTerritoryCount: quality?.residualOrganicTerritoryCount ?? null,
+    largestResidualTerritoryAreaShare: quality?.largestResidualTerritoryAreaShare ?? null,
+    effectiveResidualPartitionCount: quality?.effectiveResidualPartitionCount ?? null,
+    minimumUsefulResidualTerritoryCount: quality?.minimumUsefulResidualTerritoryCount ?? null,
+    residualPartitionAdequacy: quality?.residualPartitionAdequacy ?? null,
     strongBarrierEdgeRetentionRatio: quality?.strongBarrierEdgeRetentionRatio ?? null,
     weakBarrierMergeCount: quality?.weakBarrierMergeCount ?? null,
     candidateComparisons: result?.smartFallbackResult?.candidateComparisons ?? [],
     meanQuality: quality?.meanQualityScore ?? null,
-    confidence: result?.smartFallbackResult?.configuration?.organic ? "low" : "standard",
+    confidence: quality?.confidenceTier ?? null,
+    acceptanceStatus:
+      quality?.acceptanceStatus ?? (result?.quality.ok ? "USABLE_REAL_SOURCE" : "HARD_REJECT"),
+    hardGateFailures: quality?.hardGateFailures ?? [],
+    syntheticConnectorEvidence: quality?.syntheticConnectorEvidence ?? null,
     reasonCodes: result?.issues.map((i) => i.code) ?? [],
     gates: result?.quality.gates ?? {},
     smartGates: quality?.gates ?? {},

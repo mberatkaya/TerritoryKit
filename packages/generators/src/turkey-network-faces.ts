@@ -90,15 +90,24 @@ function ringsOf(geometry: TerritoryGeometry): LngLat[][] {
  * faces; parent-boundary closure is recorded separately from real support.
  */
 export function polygonizeTurkeyBarrierNetwork(
-  parent: TerritoryGeometry,
+  parent: TerritoryGeometry | null,
   barriers: readonly TurkeySmartFallbackBarrier[],
   minimumAreaKm2 = 0.001,
-  statistics?: { rawFaceCount: number }
+  statistics?: {
+    rawFaceCount: number;
+    inputSegmentCount?: number;
+    viableSegmentCount?: number;
+    graphComponentCount?: number;
+    largestComponentSegments?: number;
+    rejectedFaceAreaKm2?: number;
+    rejectedFaces?: Array<{ key: string; areaKm2: number; representative: LngLat }>;
+  }
 ): TurkeyNetworkFace[] {
   const segments: Segment[] = [];
-  for (const ring of ringsOf(parent))
-    for (let i = 1; i < ring.length; i++)
-      segments.push({ a: ring[i - 1]!, b: ring[i]!, grade: "parent" });
+  if (parent)
+    for (const ring of ringsOf(parent))
+      for (let i = 1; i < ring.length; i++)
+        segments.push({ a: ring[i - 1]!, b: ring[i]!, grade: "parent" });
   for (const barrier of barriers) {
     if (barrier.sourceLayer === "roads" && barrier.tags.highway === "service") continue;
     // A planar face graph cannot represent an overpass crossing at another
@@ -113,6 +122,11 @@ export function polygonizeTurkeyBarrierNetwork(
       });
   }
   const viable = segments.filter((s) => lengthMeters(s.a, s.b) > 0.05);
+  if (statistics) {
+    statistics.inputSegmentCount = segments.length;
+    statistics.viableSegmentCount = viable.length;
+    statistics.rejectedFaceAreaKm2 = 0;
+  }
   if (!viable.length) return [];
   const index = new Flatbush(viable.length);
   for (const s of viable)
@@ -184,6 +198,26 @@ export function polygonizeTurkeyBarrierNetwork(
         Math.atan2(b[1] - origin[1], b[0] - origin[0])
       );
     });
+  if (statistics) {
+    const roots = vertices.map((_, index) => index);
+    const find = (index: number): number => {
+      while (roots[index] !== index) {
+        roots[index] = roots[roots[index]!]!;
+        index = roots[index]!;
+      }
+      return index;
+    };
+    for (let i = 0; i < edges.length; i += 2) roots[find(edges[i]!.from)] = find(edges[i]!.to);
+    const componentEdges = new Map<number, number>();
+    for (let i = 0; i < edges.length; i += 2) {
+      const root = find(edges[i]!.from);
+      componentEdges.set(root, (componentEdges.get(root) ?? 0) + 1);
+    }
+    statistics.graphComponentCount = componentEdges.size;
+    statistics.largestComponentSegments = 0;
+    for (const count of componentEdges.values())
+      statistics.largestComponentSegments = Math.max(statistics.largestComponentSegments, count);
+  }
   const faces: TurkeyNetworkFace[] = [];
   for (let start = 0; start < edges.length; start++) {
     if (edges[start]!.visited) continue;
@@ -202,16 +236,50 @@ export function polygonizeTurkeyBarrierNetwork(
     ring.push(ring[0]!);
     const area = signedArea(ring);
     if (area <= 0) continue;
-    if (statistics) statistics.rawFaceCount++;
     const midLat = ring.reduce((sum, p) => sum + p[1], 0) / ring.length;
     const areaKm2 = area * 111.195 ** 2 * Math.cos((midLat * Math.PI) / 180);
-    if (areaKm2 < minimumAreaKm2) continue;
-    const sourceEdges = boundary.map((id) => edges[id]!).filter((edge) => edge.segment.barrier);
+    const recordRejected = () => {
+      if (!statistics) return;
+      statistics.rejectedFaceAreaKm2! += areaKm2;
+      if (statistics.rejectedFaces) {
+        const count = ring.length - 1;
+        const representative: LngLat = [
+          ring.slice(0, count).reduce((sum, p) => sum + p[0], 0) / count,
+          ring.slice(0, count).reduce((sum, p) => sum + p[1], 0) / count
+        ];
+        statistics.rejectedFaces.push({
+          key: ring.slice(0, count).map(key).sort().join(";"),
+          areaKm2,
+          representative
+        });
+      }
+    };
+    // A dangling road can be traversed in both directions around the same
+    // face. It encloses no territory and must not turn the whole ADM2 ring
+    // into a purported Network face.
+    const edgeVisits = new Map<number, number>();
+    for (const id of boundary) {
+      const undirected = Math.min(id, edges[id]!.twin);
+      edgeVisits.set(undirected, (edgeVisits.get(undirected) ?? 0) + 1);
+    }
+    const sourceEdges = boundary
+      .filter((id) => edgeVisits.get(Math.min(id, edges[id]!.twin)) === 1)
+      .map((id) => edges[id]!)
+      .filter((edge) => edge.segment.barrier);
     const realBoundaryLengthMeters = sourceEdges.reduce(
       (sum, edge) => sum + lengthMeters(vertices[edge.from]!, vertices[edge.to]!),
       0
     );
-    if (realBoundaryLengthMeters <= 0) continue;
+    if (realBoundaryLengthMeters <= 0) {
+      // The parent ring is processing context, not a rejected Network face.
+      // Counting it once per component/chunk inflates rejected area far beyond ADM2.
+      continue;
+    }
+    if (statistics) statistics.rawFaceCount++;
+    if (areaKm2 < minimumAreaKm2) {
+      recordRejected();
+      continue;
+    }
     const parentBoundaryLengthMeters = boundary.reduce((sum, id) => {
       const edge = edges[id]!;
       return (
@@ -230,7 +298,7 @@ export function polygonizeTurkeyBarrierNetwork(
       edges: boundary.map((id) => {
         const edge = edges[id]!;
         return {
-          key: `${Math.min(edge.from, edge.to)}:${Math.max(edge.from, edge.to)}`,
+          key: [key(vertices[edge.from]!), key(vertices[edge.to]!)].sort().join("|"),
           strength: edge.segment.barrier?.strength ?? 1,
           lengthMeters: lengthMeters(vertices[edge.from]!, vertices[edge.to]!),
           a: vertices[edge.from]!,

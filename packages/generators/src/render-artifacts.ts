@@ -35,6 +35,7 @@ export interface TerritoryRenderBuildOptions {
   minZoom?: number;
   maxZoom?: number;
   buildDate?: string;
+  includeQueryFile?: boolean;
 }
 
 export interface TerritoryRenderBuildResult {
@@ -140,9 +141,11 @@ export function buildTerritoryRenderArtifacts(
     ...(policies ? { policies } : {})
   });
   const files = new Map<string, string | Uint8Array>([
-    ["query/query-artifact.json", serializeJsonArtifact(queryArtifact)],
     ["render/manifest.json", serializeJsonStable(manifest)]
   ]);
+  if (options.includeQueryFile !== false) {
+    files.set("query/query-artifact.json", serializeJsonArtifact(queryArtifact));
+  }
   let mvtReport: TerritoryMvtPolicyReport | undefined;
 
   if (format === "geojson") {
@@ -163,7 +166,14 @@ export function buildTerritoryRenderArtifacts(
       files.set(`render/tiles/${tile.z}/${tile.x}/${tile.y}.mvt`, tile.bytes);
     }
 
-    files.set("render/mvt-policy-report.json", serializeJsonStable(mvt.report));
+    // Build duration is diagnostic, but published checksums must describe reproducible content.
+    files.set(
+      "render/mvt-policy-report.json",
+      serializeJsonStable({
+        ...mvt.report,
+        levels: mvt.report.levels.map(({ durationMs: _durationMs, ...level }) => level)
+      })
+    );
   }
 
   return { manifest, queryArtifact, files, ...(mvtReport ? { mvtReport } : {}) };

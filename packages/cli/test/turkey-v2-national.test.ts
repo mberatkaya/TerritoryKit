@@ -11,10 +11,32 @@ import type {
 import { describe, expect, it, vi } from "vitest";
 import { validateTurkeyV2Dataset } from "@territory-kit/dataset/turkey-v2";
 import { runCli } from "../src/index.js";
-import { createSmartCoverageManifest } from "../src/turkey-v2-national.js";
+import {
+  createSmartCoverageManifest,
+  isSmartNationalCoverageComplete
+} from "../src/turkey-v2-national.js";
 import type { TurkeyV2NationalBuildResult } from "@territory-kit/generators/turkey-adm3";
 
 describe("territory cli Turkey V2 national build", () => {
+  it("treats unsupported straight boundaries as confidence evidence while keeping grid and coverage hard", () => {
+    const totals = {
+      adm2Total: 973,
+      adm2Attempted: 973,
+      adm2Successful: 973,
+      adm2Failed: 0,
+      unavailableDistricts: 0,
+      legacyProductionDistricts: 0,
+      gridThresholdViolations: 0,
+      unsupportedStraightThresholdViolations: 577
+    };
+    expect(isSmartNationalCoverageComplete(totals)).toBe(true);
+    expect(isSmartNationalCoverageComplete({ ...totals, gridThresholdViolations: 1 })).toBe(false);
+    expect(isSmartNationalCoverageComplete({ ...totals, adm2Failed: 1 })).toBe(false);
+    expect(isSmartNationalCoverageComplete({ ...totals, legacyProductionDistricts: 1 })).toBe(
+      false
+    );
+  });
+
   it("exposes rejected hybrid gates even when the Smart stage accepted its geometry", () => {
     const district = nationalFixture().zones.find((z) => z.level === 2)!;
     const generated = { ...district, level: 3, parentId: district.id };
@@ -40,8 +62,20 @@ describe("territory cli Turkey V2 national build", () => {
           issues: [],
           coverage: { generatedEffectiveAreaKm2: 1 },
           smartFallbackResult: {
-            configuration: { organic: true },
-            quality: { gates: { coverage: true, overlap: true } }
+            configuration: { organic: true, networkFirst: true },
+            quality: {
+              gates: { coverage: true, overlap: true },
+              acceptanceStatus: "USABLE_LOW_CONFIDENCE",
+              confidenceTier: "low",
+              hardGateFailures: [],
+              syntheticConnectorEvidence: {
+                syntheticConnectorLengthMeters: 2_100,
+                syntheticConnectorReason: "NO_SAFE_NETWORK_PATH",
+                nearestUsableBarrierDistanceMeters: 300,
+                candidateRouteAttempted: true,
+                routeFailureReason: "NO_ROUTE"
+              }
+            }
           }
         }
       ],
@@ -56,6 +90,14 @@ describe("territory cli Turkey V2 national build", () => {
     expect(report.totals.adm2Failed).toBe(1);
     expect(report.districts[0]).toMatchObject({
       qualityAccepted: false,
+      selectedSourceTier: "standard-smart",
+      smartMode: "network-first",
+      confidence: "low",
+      smartAcceptanceStatus: "USABLE_LOW_CONFIDENCE",
+      syntheticConnectorEvidence: {
+        syntheticConnectorLengthMeters: 2_100,
+        candidateRouteAttempted: true
+      },
       qualityGates: { effectiveSiblingOverlap: false },
       smartQualityGates: { overlap: true },
       hybridQualityGates: { effectiveSiblingOverlap: false }
@@ -97,7 +139,7 @@ describe("territory cli Turkey V2 national build", () => {
           command: "tr v2 national plan",
           data: {
             datasetId: "territory-kit-tr-v2-playable",
-            datasetVersion: "2.1.0-rc.1",
+            datasetVersion: "2.1.0-rc.7",
             buildDate: "2026-09-27T00:00:00.000Z",
             adm1Count: 81,
             adm2Count: 1,
@@ -180,7 +222,7 @@ describe("territory cli Turkey V2 national build", () => {
       const districtPath = shardPaths.find((p) => p.startsWith("districts/"))!;
       const districtShard = JSON.parse(await readFile(join(outputPath, districtPath), "utf8"));
       expect(validateTurkeyV2Dataset(districtShard).ok).toBe(true);
-      expect(districtShard.manifest.datasetVersion).toBe("2.1.0-rc.1");
+      expect(districtShard.manifest.datasetVersion).toBe("2.1.0-rc.7");
       const populatedProvince = await Promise.all(
         shardPaths
           .filter((p) => p.startsWith("provinces/"))

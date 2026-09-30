@@ -22,6 +22,8 @@ import {
   buildTurkeyV2NationalDataset,
   createTurkeyV2NationalArtifactPayloads,
   createTurkeyV2NationalSourceLock,
+  isLargeNationalJsonArtifact,
+  serializeNationalJsonChunks,
   validateTurkeyV2NationalArtifactIntegrity,
   validateTurkeyV2NationalCompleteness
 } from "../src/turkey-adm3.js";
@@ -56,6 +58,35 @@ describe("Turkey V2 national playable build", () => {
         districtLimit: 50
       });
 
+      expect(result.quality.buildMode).toBe("partial");
+    });
+
+    it("selects a non-overlapping sorted district range for checkpoint workers", async () => {
+      const result = await buildTurkeyV2NationalDataset({
+        allowLegacyGridEmergency: true,
+        adm0Adm2Dataset: nationalFixture(),
+        sourceLock: sourceLock(),
+        buildDate: BUILD_DATE,
+        datasetVersion: TURKEY_V2_NATIONAL_DATASET_VERSION,
+        generatedDefaults: generatedDefaults(),
+        buildArtifacts: { adjacency: false, render: false, mvt: false },
+        districtOffset: 1,
+        districtLimit: 1
+      });
+      const first = await buildTurkeyV2NationalDataset({
+        allowLegacyGridEmergency: true,
+        adm0Adm2Dataset: nationalFixture(),
+        sourceLock: sourceLock(),
+        buildDate: BUILD_DATE,
+        datasetVersion: TURKEY_V2_NATIONAL_DATASET_VERSION,
+        generatedDefaults: generatedDefaults(),
+        buildArtifacts: { adjacency: false, render: false, mvt: false },
+        districtLimit: 1
+      });
+      expect(result.coverage.districts).toHaveLength(1);
+      expect(result.coverage.districts[0]?.districtId).not.toBe(
+        first.coverage.districts[0]?.districtId
+      );
       expect(result.quality.buildMode).toBe("partial");
     });
 
@@ -453,6 +484,37 @@ describe("Turkey V2 national playable build", () => {
     expect(result.distributionPolicy.policies.map((policy) => policy.license)).toContain(
       "ODbL-1.0"
     );
+  });
+
+  it("reparents an approved polygon whose reported district has no intersection", async () => {
+    const official = realAdm3Zone({
+      id: "tr:adm3:reported-a-actually-b",
+      parentId: "tr:adm2:01-a",
+      sourceClass: "official",
+      west: 1.2,
+      south: 0.2,
+      east: 1.8,
+      north: 0.8
+    });
+    const result = await buildTurkeyV2NationalDataset({
+      allowLegacyGridEmergency: true,
+      adm0Adm2Dataset: nationalFixture(),
+      officialSources: { status: "artifact-loaded", zones: [official] },
+      sourceLock: sourceLock(),
+      buildDate: BUILD_DATE,
+      datasetVersion: TURKEY_V2_NATIONAL_DATASET_VERSION,
+      generatedDefaults: generatedDefaults(),
+      buildArtifacts: { adjacency: false, render: false, mvt: false },
+      districtLimit: 2
+    });
+    const retained = result.hybridBatch.districts
+      .find((district) => district.district.id === "tr:adm2:01-b")
+      ?.effective.official.find((zone) => zone.id === official.id);
+    expect(retained?.parentId).toBe("tr:adm2:01-b");
+    expect((retained?.properties.territory as Record<string, unknown>)?.reportedParentAdm2Id).toBe(
+      "tr:adm2:01-a"
+    );
+    expect(result.quality.ok).toBe(true);
   });
 
   it("validates generated registry artifacts against the filesystem", async () => {
@@ -945,7 +1007,12 @@ async function writePayloads(
   payloads: ReturnType<typeof createTurkeyV2NationalArtifactPayloads>
 ): Promise<void> {
   for (const [path, payload] of payloads.json.entries()) {
-    await writeFixtureFile(join(root, path), `${JSON.stringify(payload, null, 2)}\n`);
+    await writeFixtureFile(
+      join(root, path),
+      isLargeNationalJsonArtifact(path)
+        ? [...serializeNationalJsonChunks(payload)].join("")
+        : `${JSON.stringify(payload, null, 2)}\n`
+    );
   }
   for (const [path, payload] of payloads.text.entries()) {
     await writeFixtureFile(join(root, path), payload.endsWith("\n") ? payload : `${payload}\n`);

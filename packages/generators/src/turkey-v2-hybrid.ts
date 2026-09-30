@@ -825,10 +825,30 @@ export async function buildTurkeyV2HybridDistrict(
           mode,
           accepted: result.quality.ok,
           coveragePercent: result.quality.coveragePercent,
+          territoryCount: result.quality.territoryCount,
+          largestTerritoryAreaShare: result.quality.largestTerritoryAreaShare,
+          minimumZoneAreaKm2: result.quality.minAreaKm2,
+          configuredMinimumAreaKm2: result.configuration.minAreaKm2,
+          effectivePartitionCount: result.quality.effectivePartitionCount,
+          minimumUsefulTerritoryCount: result.quality.minimumUsefulTerritoryCount,
+          partitionAdequacy: result.quality.gates.partitionAdequacy,
           followingRatio: result.quality.barrierFollowingInternalBoundaryRatio,
           syntheticRatio: result.quality.meanSyntheticBoundaryRatio,
+          axisAlignedInternalBoundaryRatio: result.quality.axisAlignedInternalBoundaryRatio,
+          longUnsupportedStraightBoundaryRatio: result.quality.longUnsupportedStraightBoundaryRatio,
+          unsupportedStraightChainCountAbove500m:
+            result.quality.unsupportedStraightChainCountAbove500m,
+          availableBarrierOpportunityRatio: result.quality.availableBarrierOpportunityRatio,
           longestUnsupportedMeters: result.quality.longestUnsupportedStraightChainMeters,
-          deterministicHash: result.deterministicHash
+          deterministicHash: result.deterministicHash,
+          rejectionCodes: result.quality.ok ? [] : result.reasonCodes,
+          failedGates: Object.entries(result.quality.gates)
+            .filter(([, passed]) => !passed)
+            .map(([gate]) => gate),
+          geometryValidationErrors: result.quality.geometryValidationErrors,
+          ...(result.quality.networkConstruction
+            ? { networkConstruction: result.quality.networkConstruction }
+            : {})
         }));
 
         if (smartFallbackResult.quality.ok) {
@@ -2357,7 +2377,7 @@ function createQualityReport(input: {
   smartFallbackResult?: TurkeySmartFallbackBuildResult;
   deterministicHash: string;
 }): TurkeyV2HybridQualityReport {
-  const finalOverlaps = validateGeometryDataset(input.dataset, {
+  const siblingOverlapIssues = validateGeometryDataset(input.dataset, {
     checks: {
       coordinates: false,
       rings: false,
@@ -2371,7 +2391,23 @@ function createQualityReport(input: {
     }
   }).issues.filter(
     (issue) => issue.code === "SIBLING_GEOMETRY_OVERLAP" && issue.severity === "error"
-  ).length;
+  );
+  const zonesById = new Map(input.zones.map((zone) => [zone.id, zone]));
+  // The predicate can flag sub-metre precision slivers along a shared edge.
+  // Check the actual clipped intersection before treating one as an overlap.
+  const finalOverlaps = siblingOverlapIssues.filter((issue) => {
+    const left = issue.zoneId && zonesById.get(issue.zoneId);
+    const right = issue.otherZoneId && zonesById.get(issue.otherZoneId);
+    if (!left || !right) return true;
+    return (
+      clippingAreaKm2(
+        intersectClippingGeometries(
+          toClippingMultiPolygon(left.geometry),
+          toClippingMultiPolygon(right.geometry)
+        )
+      ) > Math.min(input.overlapToleranceKm2, 0.000001)
+    );
+  }).length;
   const parentContainmentErrors = computeParentContainmentErrors(
     input.district,
     input.zones,

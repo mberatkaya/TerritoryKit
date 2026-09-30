@@ -1,6 +1,7 @@
 import {
   TERRITORY_SCHEMA_VERSION,
   computeGeometryBBox,
+  computeTerritoryAreaM2,
   validateGeometryDataset
 } from "@territory-kit/dataset";
 import { validateTurkeyV2Dataset } from "@territory-kit/dataset/turkey-v2";
@@ -16,6 +17,11 @@ import type {
   TerritoryZone
 } from "@territory-kit/dataset";
 import { buildTerritoryAdjacency } from "./adjacency.js";
+import * as polygonClipping from "polygon-clipping";
+import type { MultiPolygon as ClippingMultiPolygon } from "polygon-clipping";
+
+const CLIPPER =
+  (polygonClipping as unknown as { default?: typeof polygonClipping }).default ?? polygonClipping;
 import { computeGeometryRepresentativePoint } from "./geometry-repair.js";
 import { buildTerritoryRenderArtifacts } from "./render-artifacts.js";
 import type { TerritoryRenderBuildResult } from "./render-artifacts.js";
@@ -50,6 +56,8 @@ import {
   serializeJsonStable,
   sha256Hex
 } from "./sources/utils.js";
+import { createHash } from "node:crypto";
+import { isLargeNationalJsonArtifact, serializeNationalJsonChunks } from "./national-json.js";
 
 export const TURKEY_V2_NATIONAL_DATASET_ID = "territory-kit-tr-v2-playable" as const;
 export const TURKEY_V2_NATIONAL_DATASET_VERSION = "2.0.0" as const;
@@ -232,6 +240,7 @@ export interface TurkeyV2NationalBuildOptions {
   outputMode?: TurkeyV2NationalOutputMode;
   continueOnError?: boolean;
   districtLimit?: number;
+  districtOffset?: number;
   buildArtifacts?: {
     query?: boolean;
     render?: boolean;
@@ -635,8 +644,16 @@ export async function buildTurkeyV2NationalDataset(
         left.id.localeCompare(right.id)
       );
     })
-    .slice(0, options.districtLimit ?? undefined);
-  const officialZones = normalizeAdm3SourceZones(options.officialSources?.zones ?? [], datasetId);
+    .slice(
+      options.districtOffset ?? 0,
+      options.districtLimit !== undefined
+        ? (options.districtOffset ?? 0) + options.districtLimit
+        : undefined
+    );
+  const officialZones = reconcileOfficialParentAssignments(
+    normalizeAdm3SourceZones(options.officialSources?.zones ?? [], datasetId),
+    hierarchy.adm2
+  );
   const osmZones = normalizeAdm3SourceZones(options.osmSources?.zones ?? [], datasetId);
   const sourcesByDistrict = createSourcesByDistrict(selectedAdm2, officialZones, osmZones);
   const hybridBatch = await buildTurkeyV2HybridBatch({
@@ -799,7 +816,8 @@ export async function buildTurkeyV2NationalDataset(
         policies: [{ adminLevel: "ADM3", minZoom: 10, maxZoom: 12 }],
         minZoom: 10,
         maxZoom: 12,
-        buildDate
+        buildDate,
+        includeQueryFile: false
       })
     : undefined;
   const coreArtifactFiles = createCoreNationalArtifactFiles({
@@ -1102,6 +1120,70 @@ function clampCoordinate(value: number, minimum: number, maximum: number): numbe
   }
 
   return Math.min(maximum, Math.max(minimum, value));
+}
+
+function reconcileOfficialParentAssignments(
+  zones: readonly TerritoryZone[],
+  districts: readonly TerritoryZone[]
+): TerritoryZone[] {
+  const parentsById = new Map(districts.map((district) => [district.id, district]));
+  const clippingGeometry = (geometry: TerritoryGeometry): ClippingMultiPolygon =>
+    (geometry.type === "Polygon"
+      ? [geometry.coordinates]
+      : geometry.coordinates) as ClippingMultiPolygon;
+  const intersection = (zone: TerritoryZone, parent: TerritoryZone): ClippingMultiPolygon =>
+    CLIPPER.intersection(clippingGeometry(zone.geometry), clippingGeometry(parent.geometry));
+  const areaKm2 = (geometry: ClippingMultiPolygon): number =>
+    geometry.length === 0
+      ? 0
+      : computeTerritoryAreaM2({ type: "MultiPolygon", coordinates: geometry }) / 1_000_000;
+
+  return zones.map((zone) => {
+    const reportedParent = zone.parentId ? parentsById.get(zone.parentId) : undefined;
+    if (!reportedParent || areaKm2(intersection(zone, reportedParent)) > 0.000001) return zone;
+    const sourceAreaKm2 = computeTerritoryAreaM2(zone.geometry) / 1_000_000;
+    if (sourceAreaKm2 <= 0) return zone;
+    const matches = districts
+      .filter(
+        (parent) =>
+          !(
+            zone.bbox[2] < parent.bbox[0] ||
+            zone.bbox[0] > parent.bbox[2] ||
+            zone.bbox[3] < parent.bbox[1] ||
+            zone.bbox[1] > parent.bbox[3]
+          )
+      )
+      .map((parent) => ({ parent, clipped: intersection(zone, parent) }))
+      .map((candidate) => ({ ...candidate, areaKm2: areaKm2(candidate.clipped) }))
+      .sort((a, b) => b.areaKm2 - a.areaKm2 || a.parent.id.localeCompare(b.parent.id));
+    const best = matches[0];
+    if (!best || best.areaKm2 / sourceAreaKm2 < 0.95) return zone;
+    const geometry = (
+      best.clipped.length === 1
+        ? { type: "Polygon", coordinates: best.clipped[0]! }
+        : { type: "MultiPolygon", coordinates: best.clipped }
+    ) as TerritoryGeometry;
+    const territory = isRecord(zone.properties.territory) ? zone.properties.territory : {};
+    return {
+      ...zone,
+      parentId: best.parent.id,
+      geometry,
+      bbox: computeGeometryBBox(geometry),
+      center: computeSafeGeometryCenter(geometry),
+      properties: {
+        ...zone.properties,
+        territory: {
+          ...territory,
+          parentId: best.parent.id,
+          parentAdm2Id: best.parent.id,
+          sourceParentId: best.parent.id,
+          reportedParentAdm2Id: reportedParent.id,
+          sourceParentCorrection: "geometry-overlap-majority",
+          sourceParentOverlapShare: Number((best.areaKm2 / sourceAreaKm2).toFixed(6))
+        }
+      }
+    };
+  });
 }
 
 function normalizeAdm3SourceZones(
@@ -1710,9 +1792,28 @@ function createNationalQuality(input: {
   const sourceClassByZoneId = new Map(
     input.dataset.zones.map((zone) => [zone.id, readZoneSourceClass(zone)] as const)
   );
-  const siblingOverlapIssues = adm3SiblingValidation.issues.filter(
-    (issue) => issue.code === "SIBLING_GEOMETRY_OVERLAP" && issue.severity === "error"
+  const adm3ById = new Map(
+    input.dataset.zones.filter((zone) => zone.level === 3).map((zone) => [zone.id, zone])
   );
+  const siblingOverlapIssues = adm3SiblingValidation.issues.filter((issue) => {
+    if (issue.code !== "SIBLING_GEOMETRY_OVERLAP" || issue.severity !== "error") return false;
+    const left = issue.zoneId && adm3ById.get(issue.zoneId);
+    const right = issue.otherZoneId && adm3ById.get(issue.otherZoneId);
+    if (!left || !right) return true;
+    const clippingGeometry = (geometry: TerritoryGeometry): ClippingMultiPolygon =>
+      (geometry.type === "Polygon"
+        ? [geometry.coordinates]
+        : geometry.coordinates) as ClippingMultiPolygon;
+    const overlap = CLIPPER.intersection(
+      clippingGeometry(left.geometry),
+      clippingGeometry(right.geometry)
+    );
+    return (
+      overlap.length > 0 &&
+      computeTerritoryAreaM2({ type: "MultiPolygon", coordinates: overlap } as TerritoryGeometry) >
+        1
+    );
+  });
   const realGeneratedOverlapCount = siblingOverlapIssues.filter((issue) => {
     const leftSourceClass = issue.zoneId ? sourceClassByZoneId.get(issue.zoneId) : undefined;
     const rightSourceClass = issue.otherZoneId
@@ -2110,6 +2211,15 @@ function createChecksums(files: ReadonlyMap<string, unknown>): TurkeyV2NationalC
     files: Object.fromEntries(
       [...files.entries()]
         .map(([path, payload]) => {
+          if (isLargeNationalJsonArtifact(path)) {
+            const hash = createHash("sha256");
+            let byteSize = 0;
+            for (const chunk of serializeNationalJsonChunks(payload)) {
+              hash.update(chunk);
+              byteSize += Buffer.byteLength(chunk);
+            }
+            return [path, { sha256: hash.digest("hex"), byteSize }] as const;
+          }
           const bytes =
             typeof payload === "string" || payload instanceof Uint8Array
               ? payload

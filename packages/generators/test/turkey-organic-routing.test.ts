@@ -141,6 +141,64 @@ describe("Organic shared barrier routing", () => {
         expect(output.filter((c) => contains(p, c.geometry))).toHaveLength(1);
       }
   });
+  it("routes a shared straight seam split by a collinear vertex on one owner", () => {
+    const split = cells();
+    split[0]!.geometry[0]![0]!.splice(2, 0, [29, 40.01]);
+    const curve = barrier([a, [29.001, 40.005], [29.001, 40.015], b]);
+    const diagnostics = {
+      attemptedLongEdges: 0,
+      routeFound: 0,
+      routeSupportImproved: 0,
+      routeGeometryRejected: 0,
+      routeTopologyRejected: 0,
+      routeApplied: 0,
+      longestUnroutedMeters: 0
+    };
+    const output = routeOrganicSharedBoundaries(split, [curve], 2, undefined, undefined, {
+      diagnostics
+    });
+    expect(diagnostics.routeApplied).toBeGreaterThan(0);
+    expect(output[0]!.geometry[0]![0]).toContainEqual([29.001, 40.005]);
+    expect(output[1]!.geometry[0]![0]).toContainEqual([29.001, 40.005]);
+  });
+  it("nodes a long edge where two different neighbours meet at a T-junction", () => {
+    const mid: LngLat = [29, 40.01];
+    const partition = [
+      cells()[0]!,
+      {
+        geometry: [[[a, [29.01, 40], [29.01, 40.01], mid, a]]],
+        barrierIds: []
+      },
+      {
+        geometry: [[[mid, [29.01, 40.01], [29.01, 40.02], b, mid]]],
+        barrierIds: []
+      }
+    ] as { geometry: MultiPolygon; barrierIds: string[] }[];
+    const diagnostics = {
+      attemptedLongEdges: 0,
+      routeFound: 0,
+      routeSupportImproved: 0,
+      routeGeometryRejected: 0,
+      routeTopologyRejected: 0,
+      routeApplied: 0,
+      longestUnroutedMeters: 0,
+      sharedBoundaryNodedVertexCount: 0
+    };
+    const output = routeOrganicSharedBoundaries(
+      partition,
+      [
+        barrier([a, [29.0006, 40.005], mid], "road", "south"),
+        barrier([mid, [29.0006, 40.015], b], "road", "north")
+      ],
+      2,
+      undefined,
+      undefined,
+      { diagnostics }
+    );
+    expect(diagnostics.sharedBoundaryNodedVertexCount).toBeGreaterThan(0);
+    expect(diagnostics.routeApplied).toBeGreaterThan(0);
+    expect(output[0]!.geometry[0]![0]).toContainEqual([29.0006, 40.005]);
+  });
   it("routes connected road and water fragments", () => {
     const mid: LngLat = [29.001, 40.01];
     const route = findOrganicBarrierRoute(
@@ -166,6 +224,30 @@ describe("Organic shared barrier routing", () => {
     expect(routed[0]!.barrierIds).toContain("south-road");
     expect(routed[0]!.barrierIds).toContain("north-water");
     expect(routed[1]!.geometry[0]![0]).toContainEqual([29.0007, 40.017]);
+  });
+  it("uses a connected interior road while keeping exposed ends synthetic", () => {
+    const road = barrier(
+      [
+        [29.0008, 40.005],
+        [29.0015, 40.01],
+        [29.0008, 40.015]
+      ],
+      "road",
+      "interior-road"
+    );
+    const output = routeOrganicSharedBoundaries(cells(), [road], 2, undefined, undefined, {
+      minChordMeters: 500,
+      maxExistingSupportRatio: 0.2
+    });
+    expect(output[0]!.barrierIds).toContain("interior-road");
+    expect(output[0]!.geometry[0]![0]).toContainEqual([29.0015, 40.01]);
+    expect(output[1]!.geometry[0]![0]).toContainEqual([29.0015, 40.01]);
+    expect(
+      routeOrganicSharedBoundaries(cells(), [road], 2, undefined, undefined, {
+        minChordMeters: 500,
+        maxExistingSupportRatio: 0.2
+      })
+    ).toEqual(output);
   });
   it("does not invent a connection at a bridge crossing", () => {
     const mid: LngLat = [29.001, 40.01];
@@ -321,7 +403,7 @@ describe("Organic shared barrier routing", () => {
   });
 });
 describe("unsupported straight chain metric", () => {
-  it("rejects one dominant missed corridor while allowing sparse geography", () => {
+  it("rejects a long unsupported seam even in sparse geography", () => {
     const metrics = {
       longUnsupportedStraightBoundaryRatio: 0.36,
       longestUnsupportedStraightChainMeters: 2_400,
@@ -338,7 +420,7 @@ describe("unsupported straight chain metric", () => {
     ).toBe(false);
     expect(
       passesTurkeySmartGeographicRealism({ ...metrics, availableBarrierOpportunityRatio: 0.2 }, 60)
-    ).toBe(true);
+    ).toBe(false);
     expect(
       passesTurkeySmartGeographicRealism(
         { ...metrics, longestUnsupportedStraightChainMeters: 800 },

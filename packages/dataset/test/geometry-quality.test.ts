@@ -8,6 +8,46 @@ import {
 import type { TerritoryDataset, TerritoryGeometry, TerritoryZone } from "../src/index.js";
 
 describe("validateGeometryDataset", () => {
+  it("honors the hole-boundary-touch policy without allowing crossings or edge overlap", () => {
+    const dataset = validDataset();
+    const left = square("left", 1, 0, 0, 4, 4, { parentId: "root" });
+    const shell: [number, number][] = [
+      [0, 0],
+      [4, 0],
+      [4, 4],
+      [0, 4],
+      [0, 0]
+    ];
+    const hole: [number, number][] = [
+      [0, 2],
+      [1, 3],
+      [1, 1],
+      [0, 2]
+    ];
+    left.geometry = { type: "Polygon", coordinates: [shell, hole] };
+    dataset.zones[1] = left;
+    const codes = (allowHoleBoundaryTouch: boolean) =>
+      validateGeometryDataset(dataset, {
+        checks: { holes: true },
+        allowHoleBoundaryTouch
+      }).issues.map((issue) => issue.code);
+    expect(codes(true)).not.toContain("HOLE_SHELL_INTERSECTION");
+    expect(codes(false)).toContain("HOLE_SHELL_INTERSECTION");
+    left.geometry = {
+      type: "Polygon",
+      coordinates: [
+        shell,
+        [
+          [0, 1],
+          [1, 2],
+          [0, 3],
+          [0, 1]
+        ]
+      ]
+    };
+    expect(codes(true)).toContain("HOLE_SHELL_INTERSECTION");
+  });
+
   it("computes bbox iteratively for very large coordinate arrays", () => {
     const ring = createLargeRectangleRing(60_000);
     const bbox = computeGeometryBBox({
