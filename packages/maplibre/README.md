@@ -2,6 +2,8 @@
 
 MapLibre GL JS adapter utilities for rendering TerritoryKit zones as GeoJSON sources and layers.
 
+Registry-backed MVT sources support Turkey V2 map loading without fetching national full GeoJSON. Use the [delivery manifest](../../docs/datasets/turkey-sprint-7-delivery.md) to discover the tile template and dataset version before configuring a source.
+
 ## Installation
 
 ```sh

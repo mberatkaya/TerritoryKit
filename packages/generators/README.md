@@ -1,5 +1,7 @@
 # @territory-kit/generators
 
+Turkey V2 publishing helpers `createTurkeyV2DeliveryManifest` and `diffTurkeyV2SourceLocks` assemble a deterministic delivery index and compare pinned source locks without promoting candidate data. See [the delivery contract](../../docs/datasets/turkey-sprint-7-delivery.md).
+
 ## Sprint 6 final candidate
 
 `smart-derived-v1.7` separates hard geometry, source, topology, grid, and coverage gates

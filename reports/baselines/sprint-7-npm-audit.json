@@ -1,0 +1,160 @@
+{
+  "schemaVersion": "territorykit-sprint-7-npm-audit@1",
+  "observedDate": "2026-09-30",
+  "registry": "https://registry.npmjs.org/",
+  "rootPrivate": true,
+  "packages": [
+    {
+      "package": "@territory-kit/adapter-core",
+      "localVersion": "2.1.0",
+      "npmLatest": "2.1.0",
+      "published": true,
+      "fixedGroup": true,
+      "sprint7Touched": false
+    },
+    {
+      "package": "@territory-kit/cli",
+      "localVersion": "2.1.0",
+      "npmLatest": "2.1.0",
+      "published": true,
+      "fixedGroup": true,
+      "sprint7Touched": true
+    },
+    {
+      "package": "@territory-kit/core",
+      "localVersion": "2.1.0",
+      "npmLatest": "2.1.0",
+      "published": true,
+      "fixedGroup": true,
+      "sprint7Touched": false
+    },
+    {
+      "package": "@territory-kit/data-de",
+      "localVersion": "2.1.0",
+      "npmLatest": "2.1.0",
+      "published": true,
+      "fixedGroup": true,
+      "sprint7Touched": false
+    },
+    {
+      "package": "@territory-kit/data-id",
+      "localVersion": "2.1.0",
+      "npmLatest": "2.1.0",
+      "published": true,
+      "fixedGroup": true,
+      "sprint7Touched": false
+    },
+    {
+      "package": "@territory-kit/data-jp",
+      "localVersion": "2.1.0",
+      "npmLatest": "2.1.0",
+      "published": true,
+      "fixedGroup": true,
+      "sprint7Touched": false
+    },
+    {
+      "package": "@territory-kit/data-tr",
+      "localVersion": "2.1.0",
+      "npmLatest": "2.1.0",
+      "published": true,
+      "fixedGroup": true,
+      "sprint7Touched": false
+    },
+    {
+      "package": "@territory-kit/data-us",
+      "localVersion": "2.1.0",
+      "npmLatest": "2.1.0",
+      "published": true,
+      "fixedGroup": true,
+      "sprint7Touched": false
+    },
+    {
+      "package": "@territory-kit/dataset",
+      "localVersion": "2.1.0",
+      "npmLatest": "2.1.0",
+      "published": true,
+      "fixedGroup": true,
+      "sprint7Touched": true
+    },
+    {
+      "package": "@territory-kit/game",
+      "localVersion": "2.1.0",
+      "npmLatest": "2.1.0",
+      "published": true,
+      "fixedGroup": true,
+      "sprint7Touched": false
+    },
+    {
+      "package": "@territory-kit/generators",
+      "localVersion": "2.1.0",
+      "npmLatest": "2.1.0",
+      "published": true,
+      "fixedGroup": true,
+      "sprint7Touched": true
+    },
+    {
+      "package": "@territory-kit/leaflet",
+      "localVersion": "1.2.12",
+      "npmLatest": "1.2.12",
+      "published": true,
+      "fixedGroup": false,
+      "sprint7Touched": false
+    },
+    {
+      "package": "@territory-kit/maplibre",
+      "localVersion": "2.1.0",
+      "npmLatest": "2.1.0",
+      "published": true,
+      "fixedGroup": true,
+      "sprint7Touched": true
+    },
+    {
+      "package": "@territory-kit/migration",
+      "localVersion": "2.1.0",
+      "npmLatest": "2.1.0",
+      "published": true,
+      "fixedGroup": false,
+      "sprint7Touched": false
+    },
+    {
+      "package": "@territory-kit/nestjs",
+      "localVersion": "2.1.0",
+      "npmLatest": "2.1.0",
+      "published": true,
+      "fixedGroup": true,
+      "sprint7Touched": false
+    },
+    {
+      "package": "@territory-kit/openlayers",
+      "localVersion": "1.2.12",
+      "npmLatest": "1.2.12",
+      "published": true,
+      "fixedGroup": false,
+      "sprint7Touched": false
+    },
+    {
+      "package": "@territory-kit/react-native",
+      "localVersion": "1.1.13",
+      "npmLatest": "1.1.13",
+      "published": true,
+      "fixedGroup": false,
+      "sprint7Touched": false
+    },
+    {
+      "package": "@territory-kit/registry",
+      "localVersion": "2.1.0",
+      "npmLatest": "2.1.0",
+      "published": true,
+      "fixedGroup": true,
+      "sprint7Touched": false
+    },
+    {
+      "package": "@territory-kit/runtime",
+      "localVersion": "2.1.0",
+      "npmLatest": "2.1.0",
+      "published": true,
+      "fixedGroup": true,
+      "sprint7Touched": true
+    }
+  ]
+}

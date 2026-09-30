@@ -1,5 +1,7 @@
 # @territory-kit/runtime
 
+Turkey V2 consumers can import `resolveTurkeyV2Boundaries` from `@territory-kit/runtime/turkey-v2-delivery` with a district-shard byte loader. It verifies SHA-256 and dataset version, returns source-aware metadata, and includes estimated zones only when `allowEstimated: true`. `createTurkeyV2ArtifactCacheKey`, `getTurkeyV2Attribution`, and `getTurkeyV2Neighbors` support cache, licensing, and gameplay integration. See [the delivery contract](../../docs/datasets/turkey-sprint-7-delivery.md).
+
 Viewport request orchestration for TerritoryKit datasets, core engines, runtime caches, and
 renderer-independent adapters.
 

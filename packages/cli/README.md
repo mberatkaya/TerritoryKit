@@ -1,5 +1,7 @@
 # @territory-kit/cli
 
+Sprint 7 adds `territory tr v2 national source-diff --previous-lock <old> --candidate-lock <new>` for audited source updates, `territory tr v2 national delivery-manifest --artifact-root <validated-root> --output <path>` for versioned tile and shard discovery, and `territory tr v2 national inspect --artifact-root <root>` for a compact artifact inventory. See [the delivery contract](../../docs/datasets/turkey-sprint-7-delivery.md).
+
 ## Sprint 6 final candidate
 
 `territory tr v2 national publish-ready` builds `2.1.0-rc.7` with `smart-derived-v1.7`.
