@@ -1,6 +1,6 @@
 # Turkey V2 delivery contract (Sprint 7)
 
-The national `territory-kit-tr-v2-playable@2.1.0-rc.7` artifact is a dataset candidate. Its version is independent of the npm package release. The current public fixed package family is `2.1.0`; the pending additive Changeset targets `2.2.0` after review and merge. This sprint does not promote the dataset candidate or publish npm packages.
+The national `territory-kit-tr-v2-playable@2.1.0-rc.7` artifact is a dataset candidate. Its version is independent of the npm package release. The current public fixed package family is `2.1.0`; the security URL-policy change makes the pending fixed-family Changeset major; Changesets currently projects `3.0.0` after review and merge. This sprint does not promote the dataset candidate or publish npm packages.
 
 ## Delivery tiers
 

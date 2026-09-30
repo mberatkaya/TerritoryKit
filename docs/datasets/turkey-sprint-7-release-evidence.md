@@ -2,17 +2,17 @@
 
 ## Capability audit
 
-| Requirement                 | Existing baseline                                            | Sprint 7 action                                                                          |
-| --------------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
-| Canonical national geometry | Sprint 6 full ADM3 and full GeoJSON                          | Preserved; no canonical generation changes                                               |
-| Province/district loading   | 81 province and 973 district shards                          | Indexed in a versioned delivery manifest                                                 |
-| MVT                         | Sprint 6 tile generator and policy validator                 | Added source version and ADM2 parent identity; regenerated candidate tiles locally       |
-| Adjacency                   | Canonical topology artifact and validator                    | Reused, indexed checksum                                                                 |
-| Spatial lookup              | Query artifact and binary-index infrastructure               | Reused, indexed checksum                                                                 |
-| Attribution                 | `attribution.json` and text                                  | Added consumer helper to select notices for loaded IDs                                   |
-| Source locks                | Pinned national and OSM locks                                | Added deterministic source diff command and province rebuild scope                       |
-| API/SDK                     | Catalog/runtime/MapLibre/NestJS                              | Added district resolver subpath with SHA-256 verification and explicit estimated control |
-| Release workflow            | Private root, fixed Changesets group, guarded publish script | Added minor Changeset; no publication or stable dataset promotion                        |
+| Requirement                 | Existing baseline                                            | Sprint 7 action                                                                               |
+| --------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| Canonical national geometry | Sprint 6 full ADM3 and full GeoJSON                          | Preserved; no canonical generation changes                                                    |
+| Province/district loading   | 81 province and 973 district shards                          | Indexed in a versioned delivery manifest                                                      |
+| MVT                         | Sprint 6 tile generator and policy validator                 | Added source version and ADM2 parent identity; regenerated candidate tiles locally            |
+| Adjacency                   | Canonical topology artifact and validator                    | Reused, indexed checksum                                                                      |
+| Spatial lookup              | Query artifact and binary-index infrastructure               | Reused, indexed checksum                                                                      |
+| Attribution                 | `attribution.json` and text                                  | Added consumer helper to select notices for loaded IDs                                        |
+| Source locks                | Pinned national and OSM locks                                | Added deterministic source diff command and province rebuild scope                            |
+| API/SDK                     | Catalog/runtime/MapLibre/NestJS                              | Added district resolver subpath with SHA-256 verification and explicit estimated control      |
+| Release workflow            | Private root, fixed Changesets group, guarded publish script | Security hardening revised the Changeset to major; no publication or stable dataset promotion |
 
 ## Candidate and delivery measurements
 
@@ -26,13 +26,13 @@ For a representative Istanbul viewport `[28.9, 40.9, 29.2, 41.2]`, the rebuilt d
 
 ## Version and release policy
 
-The npm registry and local manifests were checked for all 19 public workspace packages. The 15-package fixed family is currently `2.1.0` and receives a pending minor Changeset, yielding `2.2.0` after the normal version step. Changesets also schedules patch releases for Leaflet, OpenLayers, React Native, and Migration because their `workspace:*` dependencies need updated ranges for the fixed family. The root remains private at `0.0.0-private`. The Turkey dataset candidate remains `2.1.0-rc.7`; stable dataset promotion requires separate geometry and quality review.
+The npm registry and local manifests were checked for all 19 public workspace packages. The 15-package fixed family is currently `2.1.0` and receives a pending major Changeset due to the stricter registry URL defaults, yielding `3.0.0` after the normal version step. Changesets also schedules patch releases for Leaflet, OpenLayers, React Native, and Migration because their `workspace:*` dependencies need updated ranges for the fixed family. The root remains private at `0.0.0-private`. The Turkey dataset candidate remains `2.1.0-rc.7`; stable dataset promotion requires separate geometry and quality review.
 
 The complete package-by-package registry result is in the [npm audit](../../reports/baselines/sprint-7-npm-audit.json). The release hardening gate passes with zero critical advisories after upgrading repository MapLibre development and example dependencies to the patched 6.x line. The public MapLibre peer range stays compatible with existing consumers; applications should select a patched MapLibre version.
 
 The package tarball audit and clean temporary consumer import smoke cover ESM, CJS, CLI help, runtime delivery, generator exports, MapLibre, and NestJS (with its framework peers installed). The real publish script was not run. After merge, maintainers should run Changesets versioning on `main`, review the versioned package manifests and dependency ranges, run release checks and the guarded publish workflow, then create the GitHub release only after npm verification.
 
-`pnpm verify`, `pnpm release:check`, `pnpm release:hardening`, registry install/publish smokes, package dry run, docs link check, and strict Turkey V2 national validation passed. The guarded publish script's `--dry-run` found no unpublished packages at the current `2.1.0` manifests; it must be rerun after Changesets versioning to assess the actual `2.2.0` publication set.
+`pnpm verify`, `pnpm release:check`, `pnpm release:hardening` (before the current vulnerability policy), registry install/publish smokes, package dry run, docs link check, and strict Turkey V2 national validation passed. The guarded publish script's `--dry-run` found no unpublished packages at the current `2.1.0` manifests; it must be rerun after Changesets versioning to assess the actual Changesets publication set.
 
 ## README audit
 
@@ -41,3 +41,5 @@ All 19 first-party package READMEs and the root README were reviewed. Changed: r
 ## Remaining integration work
 
 The new MVT set and delivery manifest are generated locally and excluded by the large-artifact policy. A host must publish them atomically with the checksum inventory. Source-lock diff identifies changed sources and affected provinces; exact changed ADM2 IDs and geometry require a candidate rebuild and dataset/quality comparison. No stable dataset promotion, npm publication, GitHub release, or Rush&Claim rollout has occurred.
+
+The security hardening audit supersedes the earlier release-hardening pass: the current audit finds high dependency advisories, and `pnpm release:hardening` now fails until they are resolved or a reviewed exception is recorded. See [Sprint 7 security hardening](turkey-sprint-7-security-hardening.md).
