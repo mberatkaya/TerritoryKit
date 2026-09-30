@@ -33,6 +33,15 @@ on:
         type: boolean
         default: true
 
+env:
+  INPUT_LEVELS: ${{ inputs.levels }}
+  INPUT_SOURCE_LOCK: ${{ inputs.source_lock }}
+  INPUT_DATASET: ${{ inputs.dataset }}
+  INPUT_VERSION: ${{ inputs.version }}
+  INPUT_BASE_URL: ${{ inputs.base_url }}
+  INPUT_ARTIFACT_PREFIX: ${{ inputs.artifact_prefix }}
+  INPUT_DRY_RUN: ${{ inputs.dry_run }}
+
 permissions:
   contents: read
 
@@ -69,22 +78,23 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: pnpm/action-setup@a8198c4bff370c8506180b035930dea56dbd5288 # v5
         with:
           version: 11.7.0
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: node scripts/validate-workflow-inputs.mjs
       - run: pnpm --filter @territory-kit/generators build
       - name: Create source lock
         if: ${{ inputs.source_lock == '' }}
         run: |
           mkdir -p dist/publish
           pnpm --filter @territory-kit/cli exec territory country source lock TR \
-            --levels "${{ inputs.levels }}" \
+            --levels "$INPUT_LEVELS" \
             --output dist/publish/sources.lock.json \
             --force \
             --json
@@ -92,12 +102,12 @@ jobs:
         if: ${{ inputs.source_lock != '' }}
         run: |
           mkdir -p dist/publish
-          cp "${{ inputs.source_lock }}" dist/publish/sources.lock.json
+          cp "$INPUT_SOURCE_LOCK" dist/publish/sources.lock.json
       - name: Build dataset artifact
         run: |
           pnpm --filter @territory-kit/cli exec territory country build TR \
             --source-lock dist/publish/sources.lock.json \
-            --levels "${{ inputs.levels }}" \
+            --levels "$INPUT_LEVELS" \
             --output dist/publish/artifact \
             --build-adjacency \
             --build-query-artifacts \
@@ -111,7 +121,7 @@ jobs:
             --json
       - name: Validate artifact checksums
         run: pnpm --filter @territory-kit/cli exec territory country validate dist/publish/artifact --strict
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
           name: dataset-publish-artifact
           path: dist/publish/artifact
@@ -124,16 +134,16 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: pnpm/action-setup@a8198c4bff370c8506180b035930dea56dbd5288 # v5
         with:
           version: 11.7.0
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile --ignore-scripts
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
         with:
           name: dataset-publish-artifact
           path: dist/publish/artifact
@@ -141,23 +151,23 @@ jobs:
         run: pnpm --filter @territory-kit/registry build && pnpm --filter @territory-kit/cli build
       - name: Publish registry bundle
         run: |
-          DRY_RUN_FLAG=""
-          if [[ "${{ inputs.dry_run }}" == "true" ]]; then
-            DRY_RUN_FLAG="--dry-run"
+          DRY_RUN_FLAG=()
+          if [[ "$INPUT_DRY_RUN" == "true" ]]; then
+            DRY_RUN_FLAG=(--dry-run)
           fi
 
           pnpm --filter @territory-kit/cli exec territory registry publish \
             --artifact-root dist/publish/artifact \
             --registry-output dist/publish/registry \
-            --dataset "${{ inputs.dataset }}" \
-            --version "${{ inputs.version }}" \
-            --base-url "${{ inputs.base_url }}" \
-            --artifact-prefix "${{ inputs.artifact_prefix }}" \
+            --dataset "$INPUT_DATASET" \
+            --version "$INPUT_VERSION" \
+            --base-url "$INPUT_BASE_URL" \
+            --artifact-prefix "$INPUT_ARTIFACT_PREFIX" \
             --build-date "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)" \
-            $DRY_RUN_FLAG \
+            "${DRY_RUN_FLAG[@]}" \
             --json
       - name: Upload registry bundle for provider sync
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
           name: dataset-registry-bundle
           path: dist/publish/registry

@@ -1,0 +1,6 @@
+.github/workflows/ @mberatkaya
+.changeset/ @mberatkaya
+scripts/publish-packages.mjs @mberatkaya
+scripts/release-*.mjs @mberatkaya
+packages/registry/ @mberatkaya
+packages/runtime/ @mberatkaya
