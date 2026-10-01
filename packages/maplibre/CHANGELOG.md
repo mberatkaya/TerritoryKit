@@ -1,5 +1,17 @@
 # @territory-kit/maplibre
 
+## 3.1.0
+
+### Minor Changes
+
+- 0f1a964: Add a reusable MapLibre zoom level resolver with configurable hysteresis and explicit available-level fallback for one active administrative render source. Describe exact shallow query/render artifacts and the existing ADM3 MVT tile manifest in generated Turkey national registry entries.
+
+### Patch Changes
+
+- @territory-kit/adapter-core@3.1.0
+- @territory-kit/dataset@3.1.0
+- @territory-kit/registry@3.1.0
+
 ## 3.0.0
 
 ### Patch Changes
