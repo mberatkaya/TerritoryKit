@@ -16,6 +16,7 @@ import {
   createTerritoryMapLibreLevelLayers,
   createTerritoryMapLibreLayers,
   createTerritoryMapLibreSource,
+  resolveTerritoryMapLibreLevelForZoom,
   setTerritoryMapLibreHoverState,
   setTerritoryMapLibreSelectedState,
   zonesToFeatureCollection
@@ -28,6 +29,7 @@ import type {
 } from "../src/index.js";
 import type { TerritoryRendererAdapter } from "@territory-kit/adapter-core";
 import type { TerritoryZone } from "@territory-kit/dataset";
+import type { TerritoryAdminLevel } from "@territory-kit/dataset";
 import type { TerritoryRegistryClient } from "@territory-kit/registry";
 
 const RUNTIME_VIEWPORT = {
@@ -37,6 +39,58 @@ const RUNTIME_VIEWPORT = {
 };
 
 describe("maplibre adapter", () => {
+  it("resolves zoom detail with stable hysteresis and available-level fallback", () => {
+    const availableLevels = ["ADM0", "ADM1", "ADM2", "ADM3"] as const;
+    for (const [zoom, level] of [
+      [3.4, "ADM0"],
+      [6.4, "ADM1"],
+      [9.4, "ADM2"],
+      [12.6, "ADM3"]
+    ] as const) {
+      expect(resolveTerritoryMapLibreLevelForZoom({ zoom, availableLevels }).renderedLevel).toBe(
+        level
+      );
+    }
+
+    let currentLevel: TerritoryAdminLevel = "ADM1";
+    for (const zoom of [8.01, 7.99, 8.01, 8.24]) {
+      const result = resolveTerritoryMapLibreLevelForZoom({ zoom, availableLevels, currentLevel });
+      expect(result.renderedLevel).toBe("ADM1");
+      currentLevel = result.renderedLevel;
+    }
+    currentLevel = resolveTerritoryMapLibreLevelForZoom({
+      zoom: 8.25,
+      availableLevels,
+      currentLevel
+    }).renderedLevel;
+    expect(currentLevel).toBe("ADM2");
+    expect(
+      resolveTerritoryMapLibreLevelForZoom({ zoom: 7.75, availableLevels, currentLevel })
+        .renderedLevel
+    ).toBe("ADM2");
+    expect(
+      resolveTerritoryMapLibreLevelForZoom({ zoom: 7.74, availableLevels, currentLevel })
+        .renderedLevel
+    ).toBe("ADM1");
+    expect(
+      resolveTerritoryMapLibreLevelForZoom({
+        zoom: 12.6,
+        availableLevels: ["ADM0", "ADM1", "ADM2"]
+      })
+    ).toMatchObject({
+      requestedLevel: "ADM3",
+      renderedLevel: "ADM2",
+      exactMatch: false,
+      fallbackReason: "requested-level-unavailable"
+    });
+    expect(
+      resolveTerritoryMapLibreLevelForZoom({
+        zoom: 12.6,
+        availableLevels: ["ADM0", "ADM1", "ADM2"],
+        currentLevel: "ADM3"
+      }).renderedLevel
+    ).toBe("ADM2");
+  });
   it("passes the shared renderer adapter contract", async () => {
     const harness = createMapLibreEventHarness();
     const clicked: string[] = [];

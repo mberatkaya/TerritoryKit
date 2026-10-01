@@ -7,6 +7,8 @@ export const DEFAULT_DATASET_VERSION = "latest-compatible";
 interface DemoEnv {
   VITE_TERRITORY_DEMO_MODE?: string;
   VITE_TERRITORY_REGISTRY_URL?: string;
+  VITE_TERRITORY_DELIVERY_MANIFEST_URL?: string;
+  VITE_TERRITORY_DELIVERY_MANIFEST_HASH?: string;
   VITE_TERRITORY_DATASET_ID?: string;
   VITE_TERRITORY_DATASET_VERSION?: string;
   VITE_TERRITORY_ALLOW_PRERELEASE?: string;
@@ -29,8 +31,11 @@ export function readDemoConfig(
 ): DemoConfig {
   const requestedMode = readRequestedMode(params.get("mode") ?? env.VITE_TERRITORY_DEMO_MODE);
   const registryUrl = trimToUndefined(params.get("registryUrl") ?? env.VITE_TERRITORY_REGISTRY_URL);
+  const deliveryManifestUrl = trimToUndefined(env.VITE_TERRITORY_DELIVERY_MANIFEST_URL);
+  const deliveryManifestHash = trimToUndefined(env.VITE_TERRITORY_DELIVERY_MANIFEST_HASH);
   const styleUrl = trimToUndefined(env.VITE_MAP_STYLE_URL);
   const registryUrlError = registryUrl ? validateRegistryUrl(registryUrl) : undefined;
+  const deliveryError = deliveryManifestUrl ? validateRegistryUrl(deliveryManifestUrl) : undefined;
   const datasetVersion = trimToUndefined(env.VITE_TERRITORY_DATASET_VERSION);
   const mode: DemoMode =
     requestedMode === "fixture"
@@ -40,6 +45,7 @@ export function readDemoConfig(
         : "fixture";
   const configError =
     registryUrlError ??
+    deliveryError ??
     (requestedMode === "registry" && !registryUrl
       ? "VITE_TERRITORY_DEMO_MODE=registry requires VITE_TERRITORY_REGISTRY_URL."
       : undefined);
@@ -54,6 +60,8 @@ export function readDemoConfig(
     basePath: trimToUndefined(env.VITE_TERRITORY_BASE_PATH) ?? env.BASE_URL ?? "/",
     telemetryEnabled: parseBoolean(env.VITE_TERRITORY_TELEMETRY_ENABLED) ?? false,
     ...(registryUrl ? { registryUrl } : {}),
+    ...(deliveryManifestUrl ? { deliveryManifestUrl } : {}),
+    ...(deliveryManifestHash ? { deliveryManifestHash } : {}),
     ...(styleUrl ? { styleUrl } : {}),
     ...(configError ? { configError } : {})
   };

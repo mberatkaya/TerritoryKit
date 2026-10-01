@@ -370,6 +370,47 @@ describe("Turkey V2 national playable build", () => {
     });
   });
 
+  it("exposes exact shallow query artifacts and MVT-first ADM3 render delivery", async () => {
+    const result = await buildTurkeyV2NationalDataset({
+      allowLegacyGridEmergency: true,
+      adm0Adm2Dataset: nationalFixture(),
+      sourceLock: sourceLock(),
+      buildDate: BUILD_DATE,
+      datasetVersion: TURKEY_V2_NATIONAL_DATASET_VERSION,
+      generatedDefaults: generatedDefaults(),
+      buildArtifacts: { adjacency: false, render: true, mvt: true },
+      districtLimit: 1
+    });
+    const payloads = createTurkeyV2NationalArtifactPayloads({
+      result,
+      includeDataset: true,
+      includeGeoJson: false,
+      includeRender: true
+    });
+    const artifacts = result.registry.datasets[0].artifacts;
+    expect(artifacts.find((item) => item.id === "query-adm1")).toMatchObject({
+      purpose: "query",
+      format: "territory-json",
+      levels: ["ADM1"],
+      path: "levels/ADM1/dataset.json"
+    });
+    expect(artifacts.find((item) => item.id === "render-adm2")).toMatchObject({
+      purpose: "render",
+      format: "geojson",
+      levels: ["ADM2"]
+    });
+    expect(artifacts.find((item) => item.id === "adm3-render-manifest")).toMatchObject({
+      purpose: "render",
+      format: "mvt",
+      layer: "territory_adm3",
+      tileUrlTemplate: "tiles/{z}/{x}/{y}.mvt"
+    });
+    expect(payloads.json.has("render/levels/ADM0.geojson")).toBe(true);
+    expect(payloads.json.has("render/levels/ADM1.geojson")).toBe(true);
+    expect(payloads.json.has("render/levels/ADM2.geojson")).toBe(true);
+    expect(payloads.json.has("levels/ADM3/full.geojson")).toBe(false);
+  });
+
   it("derives registry prerelease metadata from dataset semver", async () => {
     const result = await buildTurkeyV2NationalDataset({
       allowLegacyGridEmergency: true,

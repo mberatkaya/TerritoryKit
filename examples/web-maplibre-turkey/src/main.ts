@@ -82,10 +82,11 @@ app.innerHTML = `
           <h2>Level</h2>
           <span id="rendered-level">ADM1</span>
         </div>
-        <div class="segmented" role="group" aria-label="Administrative level">
+        <div class="segmented" role="group" aria-label="İdari düzey">
+          <button class="segment" type="button" data-level="ADM0">Ülke</button>
           <button class="segment is-active" type="button" data-level="ADM1">İller</button>
           <button class="segment" type="button" data-level="ADM2">İlçeler</button>
-          <button class="segment" type="button" data-level="ADM3">Mahalle</button>
+          <button class="segment" type="button" data-level="ADM3">Mahalleler</button>
         </div>
         <p id="adm3-warning" class="notice">ADM3 coverage is partial and appears only where reviewed artifacts exist.</p>
       </section>
@@ -212,9 +213,10 @@ map.on("load", () => {
 });
 
 map.on("zoomend", () => {
-  const nextLevel = demoLevelForZoom(map.getZoom());
+  const nextLevel = demoLevelForZoom(map.getZoom(), currentLevel);
 
   if (nextLevel !== currentLevel) {
+    detailController?.abort();
     currentLevel = nextLevel;
     void renderCurrentLevel("zoom");
   } else {
@@ -223,6 +225,7 @@ map.on("zoomend", () => {
 });
 
 map.on("moveend", () => {
+  detailController?.abort();
   updateDisplayedFeatureCount();
 });
 
@@ -269,7 +272,11 @@ async function initializeDemo(): Promise<void> {
         datasetId: config.datasetId,
         datasetVersion: config.datasetVersion,
         datasetVersionPinned: config.datasetVersionPinned,
-        allowPrerelease: config.allowPrerelease
+        allowPrerelease: config.allowPrerelease,
+        ...(config.deliveryManifestUrl ? { deliveryManifestUrl: config.deliveryManifestUrl } : {}),
+        ...(config.deliveryManifestHash
+          ? { deliveryManifestHash: config.deliveryManifestHash }
+          : {})
       });
       registryStatus = "connected";
       mode = "registry";
@@ -291,7 +298,10 @@ async function initializeDemo(): Promise<void> {
   });
   renderer.bindInteractions({
     onTerritoryClick(event) {
-      void selectTerritory(event.territoryId, event.level ?? currentLevel, { flyTo: false });
+      void selectTerritory(event.territoryId, event.level ?? currentLevel, {
+        flyTo: false,
+        ...(event.parentId ? { parentId: event.parentId } : {})
+      });
     },
     onTerritoryHover(event) {
       elements.mapStatus.textContent = event.territoryId;
@@ -367,7 +377,10 @@ async function renderCurrentLevel(reason: string): Promise<void> {
       });
       renderer.bindInteractions({
         onTerritoryClick(event) {
-          void selectTerritory(event.territoryId, event.level ?? currentLevel, { flyTo: false });
+          void selectTerritory(event.territoryId, event.level ?? currentLevel, {
+            flyTo: false,
+            ...(event.parentId ? { parentId: event.parentId } : {})
+          });
         },
         onTerritoryHover(event) {
           elements.mapStatus.textContent = event.territoryId;
@@ -389,10 +402,11 @@ async function renderCurrentLevel(reason: string): Promise<void> {
 async function selectTerritory(
   territoryId: string,
   level: DemoAdminLevel | undefined,
-  options: { flyTo: boolean }
+  options: { flyTo: boolean; parentId?: string }
 ): Promise<string | undefined> {
   detailController?.abort();
   detailController = new AbortController();
+  const controller = detailController;
   const previousSelectedId = selectedTerritoryId;
   selectedTerritoryId = territoryId;
 
@@ -406,7 +420,8 @@ async function selectTerritory(
   try {
     const details = await query.getTerritoryDetails(territoryId, {
       ...(level ? { level } : {}),
-      signal: detailController.signal
+      ...(options.parentId ? { parentId: options.parentId } : {}),
+      signal: controller.signal
     });
 
     if (!details) {
@@ -441,6 +456,10 @@ async function selectTerritory(
     elements.mapStatus.textContent = renderMapStatusText();
     return details.zone.id;
   } catch (error) {
+    if (detailController === controller && controller.signal.aborted) {
+      selectedTerritoryId = previousSelectedId;
+      restoreSelectionHighlight();
+    }
     if (!isAbortError(error)) {
       lastError = readErrorMessage(error);
       renderFallbackPanel();
@@ -459,9 +478,7 @@ function wireControls(): void {
         return;
       }
 
-      currentLevel = level;
       map.easeTo({ zoom: zoomForDemoLevel(level), duration: reducedMotion() ? 0 : 250 });
-      void renderCurrentLevel("level-control");
     });
   }
 
@@ -697,7 +714,7 @@ function renderMetadata(): void {
 }
 
 function renderRuntime(): void {
-  elements.renderedLevel.textContent = currentLevel;
+  elements.renderedLevel.textContent = lastRender?.renderedLevel ?? currentLevel;
   updateLevelButtons();
   elements.runtimeGrid.replaceChildren(
     ...definitionRows([
@@ -705,6 +722,9 @@ function renderRuntime(): void {
       ["Telemetry", config.telemetryEnabled ? "enabled" : "off"],
       ["Mode", mode],
       ["Render", lastRender?.renderArtifactFormat ?? "waiting"],
+      ["Zoom", map.getZoom().toFixed(2)],
+      ["Requested", currentLevel],
+      ["Rendered", lastRender?.renderedLevel ?? currentLevel],
       ["Load", lastRender ? `${lastRender.loadMs} ms` : "waiting"],
       ["Cache", lastCache?.cacheLabel ?? "empty"],
       ["Features", String(lastRender?.displayedFeatureCount ?? 0)],
@@ -743,8 +763,12 @@ function renderFallbackPanel(): void {
 }
 
 function updateLevelButtons(): void {
+  const activeLevel =
+    lastRender && isDemoAdminLevel(lastRender.renderedLevel)
+      ? lastRender.renderedLevel
+      : currentLevel;
   for (const button of elements.levelButtons) {
-    const active = button.dataset.level === currentLevel;
+    const active = button.dataset.level === activeLevel;
     button.classList.toggle("is-active", active);
     button.setAttribute("aria-pressed", String(active));
   }
@@ -932,8 +956,11 @@ function createProbe(): TurkeyLiveDemoProbe {
       const idle = waitForMapIdle();
       map.setZoom(zoom);
       await idle;
-      currentLevel = demoLevelForZoom(map.getZoom());
-      await renderCurrentLevel("probe");
+      const nextLevel = demoLevelForZoom(map.getZoom(), currentLevel);
+      if (nextLevel !== currentLevel) {
+        currentLevel = nextLevel;
+        await renderCurrentLevel("probe");
+      }
       return {
         renderedLevel: currentLevel,
         displayedFeatureCount: lastRender?.displayedFeatureCount ?? 0

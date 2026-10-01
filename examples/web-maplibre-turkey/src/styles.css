@@ -121,7 +121,7 @@ h3 {
   border: 1px solid #c9d6cf;
   border-radius: 8px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   padding: 3px;
 }
 

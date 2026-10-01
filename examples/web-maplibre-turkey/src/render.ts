@@ -7,12 +7,13 @@ import type {
   StyleSpecification
 } from "maplibre-gl";
 import { territoryZonesToFeatureCollection } from "@territory-kit/adapter-core";
+import { isTerritoryError } from "@territory-kit/dataset";
 import {
   setTerritoryMapLibreHoverState,
   setTerritoryMapLibreSelectedState,
   type TerritoryMapLibreMap
 } from "@territory-kit/maplibre";
-import type { TerritoryRegistryClient } from "@territory-kit/registry";
+import type { TerritoryRegistryArtifact, TerritoryRegistryClient } from "@territory-kit/registry";
 import type { TerritoryQueryService } from "./types.js";
 import type {
   DemoAdminLevel,
@@ -35,6 +36,7 @@ interface RenderCallbacks {
 export interface RenderTerritoryEvent {
   territoryId: string;
   level?: DemoAdminLevel;
+  parentId?: string;
   feature: MapGeoJSONFeature;
   originalEvent: MapLayerMouseEvent;
 }
@@ -113,6 +115,9 @@ export function createTurkeyMapRenderService(input: {
     callbacks?.onTerritoryClick({
       territoryId,
       ...(level ? { level } : {}),
+      ...(typeof (feature.properties?.parentAdm2Id ?? feature.properties?.parentId) === "string"
+        ? { parentId: String(feature.properties.parentAdm2Id ?? feature.properties.parentId) }
+        : {}),
       feature,
       originalEvent: event
     });
@@ -322,8 +327,13 @@ async function createRegistryRenderPlan(input: {
   const resolved = await resolveRegistryRender(input);
   const sourceLayer = readString(resolved.artifact.layer) ?? DEFAULT_SOURCE_LAYER;
   const artifactFormat = resolved.artifact.format === "geojson" ? "geojson" : "mvt";
+  if (input.level === "ADM3" && resolved.renderedLevel === "ADM3" && artifactFormat !== "mvt") {
+    throw new Error("ADM3 rendering requires visible MVT tiles.");
+  }
   const manifest =
-    artifactFormat === "mvt" ? await fetchRenderManifest(resolved.url, input.signal) : undefined;
+    artifactFormat === "mvt"
+      ? await fetchRenderManifest(resolved.url, resolved.artifact, input.signal)
+      : undefined;
   const tileTemplate =
     artifactFormat === "mvt"
       ? (readString(resolved.artifact.tileUrlTemplate) ??
@@ -340,6 +350,9 @@ async function createRegistryRenderPlan(input: {
       : ({
           type: "vector",
           tiles: [resolveRelativeUrl(tileTemplate ?? "tiles/{z}/{x}/{y}.mvt", resolved.url)],
+          ...(readManifestMaxZoom(manifest) !== undefined
+            ? { maxzoom: readManifestMaxZoom(manifest) }
+            : {}),
           promoteId: "territoryId"
         } as SourceSpecification);
   const featureCount =
@@ -378,16 +391,32 @@ async function resolveRegistryRender(input: {
   datasetVersion: string;
   allowPrerelease: boolean;
 }): Promise<RegistryRenderResolution> {
-  const resolved = await input.registry.resolveDeepestAvailableTerritoryArtifact({
-    country: "TR",
-    requestedLevel: input.level,
-    purpose: "render",
-    fallback: "deepest-available",
-    version: input.datasetVersion,
-    allowPrerelease: input.allowPrerelease,
-    formatPreference: ["mvt", "geojson"],
-    ...(input.adm3ParentId ? { parentId: input.adm3ParentId } : {})
-  });
+  let resolved;
+  try {
+    resolved = await input.registry.resolveDeepestAvailableTerritoryArtifact({
+      country: "TR",
+      requestedLevel: input.level,
+      purpose: "render",
+      fallback: "deepest-available",
+      version: input.datasetVersion,
+      allowPrerelease: input.allowPrerelease,
+      // A national ADM3 GeoJSON artifact must never be a browser render source.
+      formatPreference: input.level === "ADM3" ? ["mvt"] : ["mvt", "geojson"],
+      ...(input.adm3ParentId ? { parentId: input.adm3ParentId } : {})
+    });
+  } catch (error) {
+    if (input.level !== "ADM3" || !isTerritoryError(error) || error.code !== "ARTIFACT_NOT_FOUND")
+      throw error;
+    resolved = await input.registry.resolveDeepestAvailableTerritoryArtifact({
+      country: "TR",
+      requestedLevel: "ADM2",
+      purpose: "render",
+      fallback: "deepest-available",
+      version: input.datasetVersion,
+      allowPrerelease: input.allowPrerelease,
+      formatPreference: ["mvt", "geojson"]
+    });
+  }
 
   return {
     dataset: resolved.dataset,
@@ -395,9 +424,16 @@ async function resolveRegistryRender(input: {
     registryHash: resolved.registryHash,
     requestedLevel: input.level,
     renderedLevel: resolved.resolvedLevel,
-    exactMatch: resolved.exactMatch,
+    exactMatch: resolved.exactMatch && resolved.resolvedLevel === input.level,
     coverageStatus: resolved.coverageStatus,
-    ...(resolved.reason !== "exact-match" ? { fallbackReason: resolved.reason } : {}),
+    ...(resolved.reason !== "exact-match" || resolved.resolvedLevel !== input.level
+      ? {
+          fallbackReason:
+            resolved.resolvedLevel !== input.level && resolved.reason === "exact-match"
+              ? "requested-level-unavailable"
+              : resolved.reason
+        }
+      : {}),
     url: resolved.url
   };
 }
@@ -465,15 +501,52 @@ function createLayers(sourceLayer: string | undefined): LayerSpecification[] {
   ] as LayerSpecification[];
 }
 
-async function fetchRenderManifest(url: string, signal: AbortSignal): Promise<RenderManifest> {
+async function fetchRenderManifest(
+  url: string,
+  artifact: TerritoryRegistryArtifact,
+  signal: AbortSignal
+): Promise<RenderManifest> {
   assertNotAborted(signal);
+  if (
+    !/^[a-f0-9]{64}$/.test(artifact.sha256) ||
+    artifact.sizeBytes < 1 ||
+    artifact.sizeBytes > 2_000_000
+  ) {
+    throw new Error("Render manifest has invalid checksum or size metadata.");
+  }
   const response = await fetch(url, { signal });
 
-  if (!response.ok) {
+  if (!response.ok || !response.body) {
     throw new Error(`Render manifest failed: HTTP ${response.status} for ${url}`);
   }
-
-  return (await response.json()) as RenderManifest;
+  const reader = response.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  try {
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > artifact.sizeBytes) throw new Error("Render manifest exceeds declared size.");
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  assertNotAborted(signal);
+  if (total !== artifact.sizeBytes) throw new Error("Render manifest size mismatch.");
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  const sha256 = Array.from(new Uint8Array(digest), (byte) =>
+    byte.toString(16).padStart(2, "0")
+  ).join("");
+  if (sha256 !== artifact.sha256) throw new Error("Render manifest checksum mismatch.");
+  return JSON.parse(new TextDecoder().decode(bytes)) as RenderManifest;
 }
 
 function readFeatureCount(manifest: RenderManifest | undefined, level: string): number | undefined {
@@ -492,6 +565,17 @@ function readFeatureCount(manifest: RenderManifest | undefined, level: string): 
     : undefined;
 }
 
+function readManifestMaxZoom(manifest: RenderManifest | undefined): number | undefined {
+  const zooms =
+    manifest?.layers
+      ?.map((layer) => layer.maxZoom)
+      .filter(
+        (zoom): zoom is number =>
+          typeof zoom === "number" && Number.isInteger(zoom) && zoom >= 0 && zoom <= 22
+      ) ?? [];
+  return zooms.length ? Math.max(...zooms) : undefined;
+}
+
 function readFeatureTerritoryId(feature: MapGeoJSONFeature | undefined): string | undefined {
   const territoryId = feature?.properties?.territoryId ?? feature?.properties?.id ?? feature?.id;
 
@@ -503,11 +587,20 @@ function readFeatureTerritoryId(feature: MapGeoJSONFeature | undefined): string 
 function readFeatureLevel(feature: MapGeoJSONFeature): DemoAdminLevel | undefined {
   const adminLevel = feature.properties?.adminLevel;
 
-  if (adminLevel === "ADM1" || adminLevel === "ADM2" || adminLevel === "ADM3") {
+  if (
+    adminLevel === "ADM0" ||
+    adminLevel === "ADM1" ||
+    adminLevel === "ADM2" ||
+    adminLevel === "ADM3"
+  ) {
     return adminLevel;
   }
 
   const level = feature.properties?.level;
+
+  if (level === 0 || level === "0") {
+    return "ADM0";
+  }
 
   if (level === 1 || level === "1") {
     return "ADM1";
@@ -526,7 +619,18 @@ function readFeatureLevel(feature: MapGeoJSONFeature): DemoAdminLevel | undefine
 
 function resolveRelativeUrl(template: string, manifestUrl: string): string {
   try {
-    return new URL(template, manifestUrl).href;
+    const adjusted =
+      template.startsWith("render/") && /\/render\/[^/]+$/.test(new URL(manifestUrl).pathname)
+        ? `../${template}`
+        : template;
+    const tokenized = adjusted
+      .replaceAll("{z}", "__TERRITORY_Z__")
+      .replaceAll("{x}", "__TERRITORY_X__")
+      .replaceAll("{y}", "__TERRITORY_Y__");
+    return new URL(tokenized, manifestUrl).href
+      .replaceAll("__TERRITORY_Z__", "{z}")
+      .replaceAll("__TERRITORY_X__", "{x}")
+      .replaceAll("__TERRITORY_Y__", "{y}");
   } catch {
     return template;
   }

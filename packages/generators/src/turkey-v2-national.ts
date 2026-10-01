@@ -493,6 +493,10 @@ export interface TurkeyV2NationalRegistryArtifact {
   sha256: string;
   sizeBytes: number;
   compression: "none";
+  layer?: string;
+  tileUrlTemplate?: string;
+  minZoom?: number;
+  maxZoom?: number;
 }
 
 export interface TurkeyV2NationalArtifactPlan {
@@ -967,6 +971,12 @@ export function createTurkeyV2NationalArtifactPayloads(input: {
   }
 
   if (input.includeRender && input.result.renderArtifacts) {
+    for (const level of ["ADM0", "ADM1", "ADM2"] as const) {
+      json.set(
+        `render/levels/${level}.geojson`,
+        territoryDatasetToFeatureCollection(input.result.levels[level])
+      );
+    }
     for (const [path, payload] of input.result.renderArtifacts.files.entries()) {
       if (path.startsWith("render/")) {
         bytes.set(path, payload);
@@ -2041,9 +2051,35 @@ function createNationalRegistryEntry(input: {
       "ADM2",
       "ADM3"
     ]),
+    ...(["ADM0", "ADM1", "ADM2"] as const).map((level) =>
+      artifact(
+        `query-${level.toLowerCase()}`,
+        "query",
+        "territory-json",
+        `levels/${level}/dataset.json`,
+        [level]
+      )
+    ),
     artifact("adm3", "metadata", "territory-json", "levels/ADM3/dataset.json", ["ADM3"], "full"),
     ...(input.includeRender
-      ? [artifact("adm3-render-manifest", "render", "json", "render/manifest.json", ["ADM3"])]
+      ? [
+          ...(["ADM0", "ADM1", "ADM2"] as const).map((level) =>
+            artifact(
+              `render-${level.toLowerCase()}`,
+              "render",
+              "geojson",
+              `render/levels/${level}.geojson`,
+              [level]
+            )
+          ),
+          {
+            ...artifact("adm3-render-manifest", "render", "mvt", "render/manifest.json", ["ADM3"]),
+            layer: "territory_adm3",
+            tileUrlTemplate: "tiles/{z}/{x}/{y}.mvt",
+            minZoom: 10,
+            maxZoom: 12
+          }
+        ]
       : []),
     ...(input.includeAdjacency
       ? [
@@ -2195,6 +2231,12 @@ function createCoreNationalArtifactFiles(input: {
   }
 
   if (input.renderArtifacts) {
+    for (const level of ["ADM0", "ADM1", "ADM2"] as const) {
+      files.set(
+        `render/levels/${level}.geojson`,
+        territoryDatasetToFeatureCollection(input.levels[level])
+      );
+    }
     for (const [path, payload] of input.renderArtifacts.files.entries()) {
       if (path.startsWith("render/")) {
         files.set(path, payload);

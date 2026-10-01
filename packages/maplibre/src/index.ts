@@ -148,6 +148,69 @@ export const DEFAULT_TERRITORY_MAPLIBRE_LEVEL_POLICY: readonly TerritoryMapLibre
   { level: "ADM5", minZoom: 18 }
 ];
 
+/** A zoom margin on either side of an entry threshold before changing the active source. */
+export const DEFAULT_TERRITORY_MAPLIBRE_ZOOM_HYSTERESIS = 0.25;
+
+export interface TerritoryMapLibreZoomLevelRequest {
+  zoom: number;
+  availableLevels: readonly TerritoryAdminLevel[];
+  currentLevel?: TerritoryAdminLevel;
+  levelPolicy?: readonly TerritoryMapLibreLevelPolicy[];
+  hysteresis?: number;
+}
+
+export interface TerritoryMapLibreZoomLevelResolution {
+  requestedLevel: TerritoryAdminLevel;
+  renderedLevel: TerritoryAdminLevel;
+  exactMatch: boolean;
+  changed: boolean;
+  fallbackReason?: "requested-level-unavailable";
+}
+
+/** Resolve one active render level. The requested level always reflects zoom without hysteresis. */
+export function resolveTerritoryMapLibreLevelForZoom(
+  input: TerritoryMapLibreZoomLevelRequest
+): TerritoryMapLibreZoomLevelResolution {
+  const policy = [...(input.levelPolicy ?? DEFAULT_TERRITORY_MAPLIBRE_LEVEL_POLICY)].sort(
+    (left, right) => left.minZoom - right.minZoom
+  );
+  const margin = input.hysteresis ?? DEFAULT_TERRITORY_MAPLIBRE_ZOOM_HYSTERESIS;
+
+  if (!Number.isFinite(input.zoom) || !Number.isFinite(margin) || margin < 0 || !policy.length) {
+    throw new RangeError("Zoom, hysteresis, and level policy must be valid.");
+  }
+
+  const requested =
+    [...policy].reverse().find((entry) => input.zoom >= entry.minZoom)?.level ?? policy[0]!.level;
+  const available = policy.filter((entry) => input.availableLevels.includes(entry.level));
+  const candidates = available.length ? available : policy;
+  const requestedDepth = getAdminLevelDepth(requested);
+  const target =
+    [...candidates].reverse().find((entry) => getAdminLevelDepth(entry.level) <= requestedDepth) ??
+    candidates[0]!;
+  const current = candidates.find((entry) => entry.level === input.currentLevel);
+  let rendered = target;
+
+  if (current && current !== target) {
+    if (target.minZoom > current.minZoom) {
+      rendered = input.zoom >= target.minZoom + margin ? target : current;
+    } else {
+      rendered = input.zoom < current.minZoom - margin ? target : current;
+    }
+  }
+
+  const exactMatch = rendered.level === requested;
+  return {
+    requestedLevel: requested,
+    renderedLevel: rendered.level,
+    exactMatch,
+    changed: input.currentLevel !== rendered.level,
+    ...(!available.length || candidates.some((entry) => entry.level === requested)
+      ? {}
+      : { fallbackReason: "requested-level-unavailable" as const })
+  };
+}
+
 export const TERRITORY_MAPLIBRE_ADAPTER_CAPABILITIES = defineTerritoryAdapterCapabilities({
   geoJson: true,
   vectorTiles: false,
@@ -311,6 +374,8 @@ export async function createTerritoryMapLibreSource(
     format?: string;
     layer?: unknown;
     tileUrlTemplate?: unknown;
+    minZoom?: unknown;
+    maxZoom?: unknown;
   };
   const sourceLayer =
     options.sourceLayer ?? (typeof artifact.layer === "string" ? artifact.layer : "territory");
@@ -352,6 +417,8 @@ export async function createTerritoryMapLibreSource(
       spec: {
         type: "vector",
         tiles: [tileTemplate],
+        ...(isValidTileZoom(artifact.minZoom) ? { minzoom: artifact.minZoom } : {}),
+        ...(isValidTileZoom(artifact.maxZoom) ? { maxzoom: artifact.maxZoom } : {}),
         promoteId: "territoryId"
       }
     },
@@ -923,4 +990,8 @@ function resolveTileTemplateUrl(template: string, baseUrl: string): string {
   }
 
   return resolved;
+}
+
+function isValidTileZoom(value: unknown): value is number {
+  return typeof value === "number" && Number.isInteger(value) && value >= 0 && value <= 22;
 }
