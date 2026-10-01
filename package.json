@@ -68,7 +68,7 @@
     "release:benchmark:test": "node --test scripts/release-benchmark-dataset.test.mjs"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.31.0",
+    "@changesets/cli": "^3.0.3",
     "@eslint/js": "^10.0.1",
     "@types/geojson": "^7946.0.16",
     "@types/node": "^26.6.3",
