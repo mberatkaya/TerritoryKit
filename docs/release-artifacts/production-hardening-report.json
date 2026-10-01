@@ -1,10 +1,11 @@
 {
   "schemaVersion": "territorykit-production-hardening-report@1",
-  "ok": false,
-  "generatedAt": "2026-10-01T08:01:21.549Z",
+  "ok": true,
+  "generatedAt": "2026-10-01T08:52:15.053Z",
   "git": {
     "branch": "feature/sprint-7-publishing-api-sdk-updates",
-    "head": "b0d7a489fdf79426250d12d3ed40567fac461164"
+    "auditedCodeHead": "b0c89fa4301e79f3119c2783f2e25a1db7a543f2",
+    "auditedTreeHash": "2c52312ba4e2da0458a4bc4313d156642bc39012"
   },
   "environment": {
     "node": "v24.14.0",
@@ -15,9 +16,7 @@
     "lockfileSha256": "b8c5e5fdde089494c90bf964ad855f317eeeea93b76c6fd4c13bb983c58d1f64"
   },
   "releaseDecisionInputs": {
-    "criticalVulnerabilities": 0,
-    "highProductionVulnerabilities": 0,
-    "highAllVulnerabilities": 1,
+    "auditExceptionPolicyOk": true,
     "publicPackageMetadataOk": true,
     "packageDryRunOk": true,
     "exportsOk": true,
@@ -223,7 +222,40 @@
         "totalDependencies": 777
       }
     },
-    "exceptions": [],
+    "rawAudit": { "productionCritical": 0, "productionHigh": 0, "fullCritical": 0, "fullHigh": 1 },
+    "approvedExceptions": [
+      {
+        "ghsaId": "GHSA-fx2h-pf6j-xcff",
+        "package": "vite",
+        "affectedVersion": "5.4.21",
+        "affectedRange": "<=6.4.2",
+        "severity": "high",
+        "dependencyPaths": [
+          ".>vitepress>@vitejs/plugin-vue>vite",
+          ".>vitepress>vite",
+          "docs>vitepress>@vitejs/plugin-vue>vite",
+          "docs>vitepress>vite"
+        ],
+        "scope": "development documentation tooling only",
+        "reason": "Stable VitePress 1.6.4 requires Vite ^5.4.14; this advisory has no patched Vite 5 release.",
+        "exploitPreconditions": "A network-exposed Vite development server serves sensitive files from a Windows NTFS or 8.3 short-name-enabled volume.",
+        "absentPreconditions": "TerritoryKit CI and release jobs run on Ubuntu and build documentation without starting its dev server. The documentation dev script does not use --host and its VitePress config does not set server.host. Vite 5 is limited to VitePress docs tooling.",
+        "compensatingControls": "Release check rejects changed dependency paths, versions and documentation dev-server exposure. Package tarball checks exclude VitePress and Vite implementation files. No npm package runtime depends on this Vite 5 path.",
+        "owner": "TerritoryKit maintainers",
+        "createdOn": "2026-10-01",
+        "reviewOn": "2026-10-15",
+        "expiresOn": "2026-10-29",
+        "removalCondition": "Remove immediately when stable VitePress supports a patched Vite line, a Vite 5 backport appears, docs deployment changes, or Windows/network-exposed docs development is supported."
+      }
+    ],
+    "effectiveBlockingFindings": {
+      "critical": 0,
+      "productionHigh": 0,
+      "fullHigh": 0,
+      "unapprovedHigh": [],
+      "policyErrors": []
+    },
+    "docsDevServerExposure": { "ok": true, "issues": [] },
     "workflowSecurity": {
       "workflows": [
         {
@@ -2427,8 +2459,8 @@
       {
         "package": "@territory-kit/cli",
         "tarball": "territory-kit-cli-2.1.0.tgz",
-        "tarballSizeBytes": 128878,
-        "tarballSha256": "1d0887b4b811f0d88bc457e30cffac06f7469f03cd69ebe1b063fc11456793dd",
+        "tarballSizeBytes": 128877,
+        "tarballSha256": "c2d2d36af0d008b577fc984ceb8137e250181cb0d01fb67847431262448a587f",
         "fileCount": 17,
         "entries": [
           "package/LICENSE",
@@ -2675,7 +2707,7 @@
         "package": "@territory-kit/leaflet",
         "tarball": "territory-kit-leaflet-1.2.12.tgz",
         "tarballSizeBytes": 7919,
-        "tarballSha256": "3934c53a3ef1639058997093f94fc8ebfa8395c42c0b673be3480013eccc17e1",
+        "tarballSha256": "4d4c3e7f982b4680ebdcf323d52ae7d15e8c3517b7a5614b05139558c0252bf2",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2693,7 +2725,7 @@
         "package": "@territory-kit/maplibre",
         "tarball": "territory-kit-maplibre-2.1.0.tgz",
         "tarballSizeBytes": 13699,
-        "tarballSha256": "50450fd661e23100008a17f5e944893eabe1bc7813e49a7b5b26294b2761ac75",
+        "tarballSha256": "868360623d7c460d5fa526dbea3c8acc304afe786ea63a7e195799239240cb58",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2729,7 +2761,7 @@
         "package": "@territory-kit/nestjs",
         "tarball": "territory-kit-nestjs-2.1.0.tgz",
         "tarballSizeBytes": 19336,
-        "tarballSha256": "db3f3491d049259ec2bc7f950d7874a6aadfedc73e620dbc6a0abd321a51fc93",
+        "tarballSha256": "6ce49fd1430468d1623e10c2028645a1ac4b986bab76b597adbc891aade1081a",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2765,7 +2797,7 @@
         "package": "@territory-kit/react-native",
         "tarball": "territory-kit-react-native-1.1.13.tgz",
         "tarballSizeBytes": 33128,
-        "tarballSha256": "353e1080d5ff1f5b53f825b0289eb59bfbe68f9be52911c6027c96ecb37d4d2d",
+        "tarballSha256": "1e1897e4a1866c1c42838073c5fc97f3f9f887a70e4445d28347c32ab866a499",
         "fileCount": 11,
         "entries": [
           "package/LICENSE",

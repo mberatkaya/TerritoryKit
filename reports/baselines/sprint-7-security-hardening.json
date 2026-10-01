@@ -1,8 +1,6 @@
 {
   "schemaVersion": "territorykit-sprint-7-security-hardening@1",
-  "gitHead": "b0d7a489fdf79426250d12d3ed40567fac461164",
   "baseMainSha": "316a76b0d43fc30884b3be3cdea61288e2384bd5",
-  "auditDate": "2026-10-01T08:02:53.620926+00:00",
   "lockfileSha256": "b8c5e5fdde089494c90bf964ad855f317eeeea93b76c6fd4c13bb983c58d1f64",
   "dependencyAudit": {
     "production": {
@@ -20,7 +18,39 @@
       "critical": 0
     },
     "exceptions": [],
-    "decision": "FAIL"
+    "decision": "PASS",
+    "approvedExceptions": [
+      {
+        "ghsaId": "GHSA-fx2h-pf6j-xcff",
+        "package": "vite",
+        "affectedVersion": "5.4.21",
+        "affectedRange": "<=6.4.2",
+        "severity": "high",
+        "dependencyPaths": [
+          ".>vitepress>@vitejs/plugin-vue>vite",
+          ".>vitepress>vite",
+          "docs>vitepress>@vitejs/plugin-vue>vite",
+          "docs>vitepress>vite"
+        ],
+        "scope": "development documentation tooling only",
+        "reason": "Stable VitePress 1.6.4 requires Vite ^5.4.14; this advisory has no patched Vite 5 release.",
+        "exploitPreconditions": "A network-exposed Vite development server serves sensitive files from a Windows NTFS or 8.3 short-name-enabled volume.",
+        "absentPreconditions": "TerritoryKit CI and release jobs run on Ubuntu and build documentation without starting its dev server. The documentation dev script does not use --host and its VitePress config does not set server.host. Vite 5 is limited to VitePress docs tooling.",
+        "compensatingControls": "Release check rejects changed dependency paths, versions and documentation dev-server exposure. Package tarball checks exclude VitePress and Vite implementation files. No npm package runtime depends on this Vite 5 path.",
+        "owner": "TerritoryKit maintainers",
+        "createdOn": "2026-10-01",
+        "reviewOn": "2026-10-15",
+        "expiresOn": "2026-10-29",
+        "removalCondition": "Remove immediately when stable VitePress supports a patched Vite line, a Vite 5 backport appears, docs deployment changes, or Windows/network-exposed docs development is supported."
+      }
+    ],
+    "effectiveBlockingFindings": {
+      "critical": 0,
+      "productionHigh": 0,
+      "fullHigh": 0,
+      "unapprovedHigh": [],
+      "policyErrors": []
+    }
   },
   "findings": [
     {
@@ -113,10 +143,10 @@
       "component": "dependencies",
       "description": "Production dependency advisories were removed; a high advisory remains in documentation build tooling.",
       "exploitPrecondition": "Vulnerable transitive dependency is exercised.",
-      "remediation": "Resolve React Native workspace peers to 0.87.1 and patch same-major transitive dependencies; retain release gate until VitePress supports a patched Vite line.",
+      "remediation": "Keep the exact, expiring VitePress documentation-tooling exception while its exploit preconditions are absent; fail on any additional high or changed path.",
       "testEvidence": "current pnpm audit",
-      "status": "open",
-      "residualRisk": "0 production high, 1 total high (Vite 5.4.21 through stable VitePress 1.6.4)",
+      "status": "time-bounded-exception",
+      "residualRisk": "Raw full audit retains 1 high in Vite 5.4.21; exception expires 2026-10-29.",
       "manualActionRequired": true
     },
     {
@@ -153,5 +183,8 @@
     "resolvedAdm3Features": 20392,
     "manifestContentHash": "4c1d42a082a63f5170a63ce150a1e3c5abbe4486ec4dbf1ed3c43789088a31cb",
     "result": "PASS"
-  }
+  },
+  "auditedCodeHead": "b0c89fa4301e79f3119c2783f2e25a1db7a543f2",
+  "auditedTreeHash": "2c52312ba4e2da0458a4bc4313d156642bc39012",
+  "generatedAt": "2026-10-01T08:52:15.053Z"
 }
