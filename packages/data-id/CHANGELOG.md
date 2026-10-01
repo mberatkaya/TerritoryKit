@@ -1,5 +1,11 @@
 # @territory-kit/data-id
 
+## 3.0.0
+
+### Patch Changes
+
+- @territory-kit/core@3.0.0
+
 ## 2.1.0
 
 ### Patch Changes
