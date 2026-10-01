@@ -55,7 +55,7 @@
   "devDependencies": {
     "@territory-kit/runtime": "workspace:*",
     "@territory-kit/shared-testkit": "workspace:*",
-    "@types/leaflet": "^1.9.21",
+    "@types/leaflet": "^1.9.22",
     "leaflet": "^1.9.4"
   }
 }
