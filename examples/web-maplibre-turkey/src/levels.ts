@@ -1,21 +1,19 @@
 import { DEMO_ADMIN_LEVELS, type DemoAdminLevel } from "./types.js";
+import { resolveTerritoryMapLibreLevelForZoom } from "@territory-kit/maplibre";
 
 export const LEVEL_ZOOM = {
+  ADM0: { min: 0, enter: 3.5 },
   ADM1: { min: 5, enter: 6 },
   ADM2: { min: 8, enter: 9.2 },
   ADM3: { min: 12, enter: 12.6 }
 } as const satisfies Record<DemoAdminLevel, { min: number; enter: number }>;
 
-export function demoLevelForZoom(zoom: number): DemoAdminLevel {
-  if (zoom >= LEVEL_ZOOM.ADM3.min) {
-    return "ADM3";
-  }
-
-  if (zoom >= LEVEL_ZOOM.ADM2.min) {
-    return "ADM2";
-  }
-
-  return "ADM1";
+export function demoLevelForZoom(zoom: number, currentLevel?: DemoAdminLevel): DemoAdminLevel {
+  return resolveTerritoryMapLibreLevelForZoom({
+    zoom,
+    availableLevels: DEMO_ADMIN_LEVELS,
+    ...(currentLevel ? { currentLevel } : {})
+  }).renderedLevel as DemoAdminLevel;
 }
 
 export function zoomForDemoLevel(level: DemoAdminLevel): number {

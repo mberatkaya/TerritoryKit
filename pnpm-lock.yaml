@@ -177,6 +177,9 @@ importers:
       '@territory-kit/registry':
         specifier: workspace:*
         version: link:../../packages/registry
+      '@territory-kit/runtime':
+        specifier: workspace:*
+        version: link:../../packages/runtime
       '@territory-kit/shared-testkit':
         specifier: workspace:*
         version: link:../../packages/shared-testkit

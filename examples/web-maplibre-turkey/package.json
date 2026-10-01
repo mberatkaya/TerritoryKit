@@ -21,6 +21,7 @@
     "@territory-kit/dataset": "workspace:*",
     "@territory-kit/maplibre": "workspace:*",
     "@territory-kit/registry": "workspace:*",
+    "@territory-kit/runtime": "workspace:*",
     "@territory-kit/shared-testkit": "workspace:*",
     "maplibre-gl": "^6.4.1"
   },

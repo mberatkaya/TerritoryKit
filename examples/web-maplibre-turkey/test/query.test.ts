@@ -1,10 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { createHash } from "node:crypto";
 import { createTurkeyAdm3DemoDataset } from "@territory-kit/shared-testkit";
 import type { TerritoryAdminLevel, TerritoryDataset } from "@territory-kit/dataset";
-import type {
-  TerritoryRegistryClient,
-  TerritoryRegistryInstallOptions
-} from "@territory-kit/registry";
+import type { TerritoryRegistryClient } from "@territory-kit/registry";
 import { createFixtureQueryService, createRegistryQueryService } from "../src/query.js";
 
 describe("turkey live demo query service", () => {
@@ -46,6 +44,20 @@ describe("turkey live demo query service", () => {
     expect(results.map((result) => result.id)).toEqual(["tr:adm1:istanbul"]);
     expect(calls).toEqual([["ADM1"]]);
   });
+
+  it("never installs national ADM3 query data during ordinary lookup", async () => {
+    const calls: TerritoryAdminLevel[][] = [];
+    const registry = createFakeRegistry(createTurkeyAdm3DemoDataset(), calls);
+    const query = createRegistryQueryService({
+      registry,
+      datasetId: "territory-kit-tr",
+      datasetVersion: "1.0.0",
+      datasetVersionPinned: true,
+      allowPrerelease: false
+    });
+    await expect(query.locate({ lng: 28.965, lat: 41.03 }, { level: "ADM3" })).rejects.toThrow();
+    expect(calls).toEqual([["ADM2"], ["ADM3"]]);
+  });
 });
 
 function createFakeRegistry(
@@ -53,87 +65,39 @@ function createFakeRegistry(
   calls: TerritoryAdminLevel[][]
 ): TerritoryRegistryClient {
   return {
-    async installDataset(options: TerritoryRegistryInstallOptions) {
-      const levels = options.levels ?? ["ADM0", "ADM1", "ADM2", "ADM3"];
-      calls.push([...levels]);
-
+    async resolveTerritoryArtifact(options: { level: TerritoryAdminLevel }) {
+      const level = options.level;
+      calls.push([level]);
+      const levelDataset = {
+        ...dataset,
+        manifest: { ...dataset.manifest, datasetVersion: "1.0.0", adminLevels: [level] },
+        zones: dataset.zones.filter((zone) => zone.level === Number(level.slice(3)))
+      };
+      const body = Buffer.from(JSON.stringify(levelDataset));
+      const path = `levels/${level}/dataset.json`;
       return {
-        dataset: {
-          id: "territory-kit-tr",
-          displayName: "Turkey",
-          version: "1.0.0",
-          schemaVersion: "territory-schema@1",
-          levels,
-          source: { provider: "fixture-registry" },
-          license: { id: "Apache-2.0", attribution: "Fixture registry" },
-          artifacts: []
+        dataset: { id: "territory-kit-tr", version: "1.0.0" },
+        artifact: {
+          id: level,
+          purpose: "query",
+          format: "territory-json",
+          levels: [level],
+          path,
+          url: path,
+          sha256: createHash("sha256").update(body).digest("hex"),
+          sizeBytes: body.byteLength
         },
         registryHash: "fixture-registry-hash",
-        installedArtifacts: levels.map((level) => ({
-          key: { datasetId: "territory-kit-tr", version: "1.0.0", artifactId: level },
-          artifact: {
-            id: level,
-            purpose: "query",
-            format: "territory-json",
-            levels: [level],
-            path: `levels/${level}/dataset.json`,
-            url: `levels/${level}/dataset.json`,
-            sha256: "fixture",
-            sizeBytes: 1
-          },
-          metadata: {
-            datasetId: "territory-kit-tr",
-            version: "1.0.0",
-            artifactId: level,
-            sha256: "fixture",
-            sizeBytes: 1,
-            installedAt: "2026-01-01T00:00:00.000Z",
-            sourceUrl: `https://datasets.example.test/levels/${level}/dataset.json`,
-            registryHash: "fixture-registry-hash",
-            compression: "none",
-            path: `levels/${level}/dataset.json`
-          },
-          bytes: new Uint8Array()
-        })),
-        manifest: {
-          datasetId: "territory-kit-tr",
-          version: "1.0.0",
-          artifactCount: levels.length,
-          installedAt: "2026-01-01T00:00:00.000Z",
-          verified: true,
-          registryHash: "fixture-registry-hash"
-        },
-        readText(path: string) {
-          const level = path.split("/")[1] as TerritoryAdminLevel;
-          const levelDataset = {
-            ...dataset,
-            manifest: { ...dataset.manifest, adminLevels: [level] },
-            zones: dataset.zones.filter((zone) => zone.level === Number(level.slice(3)))
-          };
-          return Promise.resolve(JSON.stringify(levelDataset));
-        },
-        readBytes() {
-          return Promise.resolve(new Uint8Array());
-        },
-        resolveArtifact(path: string) {
-          return this.readText(path);
-        }
+        requestedLevel: level,
+        resolvedLevel: level,
+        exactMatch: true,
+        coverageStatus: "verified",
+        reason: "exact-match",
+        url: `data:application/json;base64,${body.toString("base64")}`
       };
     },
-    loadRegistry: notImplemented,
-    listDatasets: notImplemented,
-    searchDatasets: notImplemented,
-    getDatasetInfo: notImplemented,
-    resolveArtifact: notImplemented,
-    resolveTerritoryArtifact: notImplemented,
-    resolveDeepestAvailableTerritoryArtifact: notImplemented,
-    updateDataset: notImplemented,
-    verifyInstalledDataset: notImplemented,
-    removeInstalledDataset: notImplemented,
-    listInstalledDatasets: notImplemented
-  };
-}
-
-function notImplemented(): never {
-  throw new Error("Not implemented in query test fake.");
+    installDataset() {
+      throw new Error("National install must not be used by the demo.");
+    }
+  } as unknown as TerritoryRegistryClient;
 }

@@ -6,7 +6,7 @@ import type {
 } from "@territory-kit/dataset";
 import type { TerritoryRegistryArtifact, TerritoryRegistryDataset } from "@territory-kit/registry";
 
-export const DEMO_ADMIN_LEVELS = ["ADM1", "ADM2", "ADM3"] as const;
+export const DEMO_ADMIN_LEVELS = ["ADM0", "ADM1", "ADM2", "ADM3"] as const;
 
 export type DemoAdminLevel = (typeof DEMO_ADMIN_LEVELS)[number];
 export type DemoMode = "fixture" | "registry";
@@ -24,6 +24,8 @@ export interface DemoConfig {
   basePath: string;
   telemetryEnabled: boolean;
   registryUrl?: string;
+  deliveryManifestUrl?: string;
+  deliveryManifestHash?: string;
   styleUrl?: string;
   configError?: string;
 }
@@ -46,6 +48,7 @@ export interface DemoMetadata {
 }
 
 export interface RenderTelemetry {
+  zoom?: number;
   cacheHit: boolean;
   displayedFeatureCount: number;
   loadMs: number;
@@ -105,7 +108,7 @@ export interface TerritoryQueryService {
   ): Promise<TerritoryDetails | undefined>;
   getTerritoryDetails(
     territoryId: string,
-    options?: { level?: DemoAdminLevel; signal?: AbortSignal }
+    options?: { level?: DemoAdminLevel; parentId?: string; signal?: AbortSignal }
   ): Promise<TerritoryDetails | undefined>;
   getRenderDataset(level: DemoAdminLevel, adm3ParentId?: string): TerritoryDataset;
   getCacheTelemetry(): Promise<QueryCacheTelemetry>;

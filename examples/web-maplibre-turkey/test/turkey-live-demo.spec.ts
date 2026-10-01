@@ -117,6 +117,23 @@ test("stays within the browser performance smoke budget", async ({ page }) => {
   expect(metrics.displayedFeatureCount).toBeLessThanOrEqual(120);
 });
 
+test("switches ADM0 through ADM3 automatically with zoom", async ({ page }) => {
+  for (const [zoom, level] of [
+    [3.4, "ADM0"],
+    [6.4, "ADM1"],
+    [9.4, "ADM2"],
+    [12.6, "ADM3"]
+  ] as const) {
+    const result = await page.evaluate(
+      async (value) => (window as WindowWithTurkeyDemo).__territoryKitTurkeyDemo?.setZoom(value),
+      zoom
+    );
+    expect(result?.renderedLevel).toBe(level);
+    await expect(page.locator(`#rendered-level`)).toHaveText(level);
+    await expect(page.locator(`[data-level="${level}"]`)).toHaveAttribute("aria-pressed", "true");
+  }
+});
+
 async function clickTerritory(
   page: import("@playwright/test").Page,
   territoryId: string,
@@ -152,7 +169,7 @@ async function clickTerritory(
   }, territoryId);
 }
 
-type DemoAdminLevel = "ADM1" | "ADM2" | "ADM3";
+type DemoAdminLevel = "ADM0" | "ADM1" | "ADM2" | "ADM3";
 
 interface TurkeyDemoProbe {
   readonly ready: boolean;
