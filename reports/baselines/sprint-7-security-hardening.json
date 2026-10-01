@@ -1,0 +1,223 @@
+{
+  "schemaVersion": "territorykit-sprint-7-security-hardening@1",
+  "baseMainSha": "316a76b0d43fc30884b3be3cdea61288e2384bd5",
+  "lockfileSha256": "b8c5e5fdde089494c90bf964ad855f317eeeea93b76c6fd4c13bb983c58d1f64",
+  "dependencyAudit": {
+    "production": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0
+    },
+    "all": {
+      "info": 0,
+      "low": 0,
+      "moderate": 6,
+      "high": 1,
+      "critical": 0
+    },
+    "exceptions": [],
+    "decision": "PASS",
+    "approvedExceptions": [
+      {
+        "ghsaId": "GHSA-fx2h-pf6j-xcff",
+        "package": "vite",
+        "affectedVersion": "5.4.21",
+        "affectedRange": "<=6.4.2",
+        "severity": "high",
+        "dependencyPaths": [
+          ".>vitepress>@vitejs/plugin-vue>vite",
+          ".>vitepress>vite",
+          "docs>vitepress>@vitejs/plugin-vue>vite",
+          "docs>vitepress>vite"
+        ],
+        "scope": "development documentation tooling only",
+        "reason": "Stable VitePress 1.6.4 requires Vite ^5.4.14; this advisory has no patched Vite 5 release.",
+        "exploitPreconditions": "A network-exposed Vite development server serves sensitive files from a Windows NTFS or 8.3 short-name-enabled volume.",
+        "absentPreconditions": "TerritoryKit CI and release jobs run on Ubuntu and build documentation without starting its dev server. The documentation dev script does not use --host and its VitePress config does not set server.host. Vite 5 is limited to VitePress docs tooling.",
+        "compensatingControls": "Release check rejects changed dependency paths, versions and documentation dev-server exposure. Package tarball checks exclude VitePress and Vite implementation files. No npm package runtime depends on this Vite 5 path.",
+        "owner": "TerritoryKit maintainers",
+        "createdOn": "2026-10-01",
+        "reviewOn": "2026-10-15",
+        "expiresOn": "2026-10-29",
+        "removalCondition": "Remove immediately when stable VitePress supports a patched Vite line, a Vite 5 backport appears, docs deployment changes, or Windows/network-exposed docs development is supported."
+      }
+    ],
+    "effectiveBlockingFindings": {
+      "critical": 0,
+      "productionHigh": 0,
+      "fullHigh": 0,
+      "unapprovedHigh": [],
+      "policyErrors": []
+    }
+  },
+  "findings": [
+    {
+      "id": "TK-S7-001",
+      "severity": "critical",
+      "component": "workflow_dispatch",
+      "description": "Direct dispatch input interpolation into Bash could execute runner commands.",
+      "exploitPrecondition": "Malicious actor can trigger or influence workflow input.",
+      "remediation": "Move to environment variables, validate before use, use arrays.",
+      "testEvidence": "pnpm security:test",
+      "status": "fixed",
+      "residualRisk": "Validator covers current workflows; future edits need review",
+      "manualActionRequired": false
+    },
+    {
+      "id": "TK-S7-002",
+      "severity": "high",
+      "component": "release workflow",
+      "description": "Push to main previously could publish with OIDC.",
+      "exploitPrecondition": "Unintended main push after versioning.",
+      "remediation": "Explicit dispatch publish job with scoped OIDC and environment.",
+      "testEvidence": "release.yml inspection",
+      "status": "fixed",
+      "residualRisk": "npm-production is restricted to main, but dual-control publishing still requires a second trusted maintainer as required reviewer",
+      "manualActionRequired": true
+    },
+    {
+      "id": "TK-S7-003",
+      "severity": "high",
+      "component": "registry transport",
+      "description": "Remote registry could select file or private network destinations.",
+      "exploitPrecondition": "Compromised registry or artifact host.",
+      "remediation": "HTTPS default, file opt-in, same origin, private address and redirect checks.",
+      "testEvidence": "registry security tests",
+      "status": "partially-fixed",
+      "residualRisk": "DNS rebinding needs network egress enforcement",
+      "manualActionRequired": false
+    },
+    {
+      "id": "TK-S7-004",
+      "severity": "high",
+      "component": "artifact size",
+      "description": "HTTP could allocate unbounded body before size check.",
+      "exploitPrecondition": "Host sends oversized body.",
+      "remediation": "Streaming ceiling, file stat and decompression ceiling.",
+      "testEvidence": "registry security tests",
+      "status": "fixed",
+      "residualRisk": "Default 512 MiB bound is large; consumers should lower",
+      "manualActionRequired": false
+    },
+    {
+      "id": "TK-S7-005",
+      "severity": "high",
+      "component": "delivery manifest",
+      "description": "Manifest self-hash was not checked; shard size not checked before parse.",
+      "exploitPrecondition": "Tampered manifest or shard.",
+      "remediation": "Recompute self-hash, optional pin, byteSize before parse.",
+      "testEvidence": "runtime delivery tests",
+      "status": "fixed",
+      "residualRisk": "Checksum integrity is not publisher authentication; use a trusted pin or channel",
+      "manualActionRequired": false
+    },
+    {
+      "id": "TK-S7-006",
+      "severity": "high",
+      "component": "district semantics",
+      "description": "Checksum-valid shard could contradict administrative semantics.",
+      "exploitPrecondition": "Malicious or corrupt shard with matching checksum.",
+      "remediation": "Validate parent, boundary kind, confidence and source relationships.",
+      "testEvidence": "runtime delivery tests",
+      "status": "fixed",
+      "residualRisk": "Source policy still depends on trusted manifest",
+      "manualActionRequired": false
+    },
+    {
+      "id": "TK-S7-007",
+      "severity": "moderate",
+      "component": "source diff",
+      "description": "Multiple source changes collapsed to one kind.",
+      "exploitPrecondition": "Source checksum and metadata change together.",
+      "remediation": "Add deterministic kinds array.",
+      "testEvidence": "generator source-diff test",
+      "status": "fixed",
+      "residualRisk": "Exact geometry impacts require candidate rebuild",
+      "manualActionRequired": false
+    },
+    {
+      "id": "TK-S7-008",
+      "severity": "high",
+      "component": "dependencies",
+      "description": "Production dependency advisories were removed; a high advisory remains in documentation build tooling.",
+      "exploitPrecondition": "Vulnerable transitive dependency is exercised.",
+      "remediation": "Keep the exact, expiring VitePress documentation-tooling exception while its exploit preconditions are absent; fail on any additional high or changed path.",
+      "testEvidence": "current pnpm audit",
+      "status": "time-bounded-exception",
+      "residualRisk": "Raw full audit retains 1 high in Vite 5.4.21; exception expires 2026-10-29.",
+      "manualActionRequired": true
+    },
+    {
+      "id": "TK-S7-009",
+      "severity": "high",
+      "component": "GitHub governance",
+      "description": "Main previously had no verified protection or ruleset.",
+      "exploitPrecondition": "Maintainer or compromised credential pushes directly.",
+      "remediation": "Active main ruleset requires PRs, current CI, conversation resolution and an up-to-date branch; blocks force pushes and deletion.",
+      "testEvidence": "GitHub ruleset 24299690 and effective main rules API, verified 2026-10-01",
+      "status": "fixed",
+      "residualRisk": "Zero required approvals is a documented single-maintainer exception until a second trusted maintainer is added",
+      "manualActionRequired": false
+    }
+  ],
+  "githubGovernance": {
+    "verifiedOn": "2026-10-01",
+    "mainProtection": {
+      "state": "verified",
+      "type": "repository-branch-ruleset",
+      "rulesetId": 24299690,
+      "enforcement": "active",
+      "target": "refs/heads/main",
+      "pullRequestRequired": true,
+      "requiredApprovingReviewCount": 0,
+      "singleMaintainerApprovalException": true,
+      "dismissStaleReviewsOnPush": false,
+      "requireLastPushApproval": false,
+      "requireCodeOwnerReview": false,
+      "requiredReviewThreadResolution": true,
+      "strictRequiredStatusChecksPolicy": true,
+      "requiredStatusChecks": ["Node 22", "Node 24", "Live PostGIS validation"],
+      "statusCheckIntegration": "github-actions",
+      "forcePushBlocked": true,
+      "deletionRestricted": true,
+      "bypassActors": []
+    },
+    "trustedMaintainers": ["mberatkaya"],
+    "npmProduction": {
+      "state": "partially-configured",
+      "environmentId": 23192095401,
+      "customDeploymentBranchPolicies": true,
+      "allowedBranches": ["main"],
+      "allowedTags": [],
+      "requiredReviewer": null,
+      "reviewerState": "manual-second-reviewer-required"
+    }
+  },
+  "secretScan": {
+    "tool": "gitleaks",
+    "scope": [
+      "git history",
+      "scripts",
+      ".github",
+      "packages/registry",
+      "packages/runtime",
+      "packages/generators",
+      "docs/datasets",
+      "reports/baselines"
+    ],
+    "findings": 0,
+    "redacted": true
+  },
+  "nationalResolverValidation": {
+    "candidateDatasetVersion": "2.1.0-rc.7",
+    "districtShards": 973,
+    "resolvedAdm3Features": 20392,
+    "manifestContentHash": "4c1d42a082a63f5170a63ce150a1e3c5abbe4486ec4dbf1ed3c43789088a31cb",
+    "result": "PASS"
+  },
+  "auditedCodeHead": "b0c89fa4301e79f3119c2783f2e25a1db7a543f2",
+  "auditedTreeHash": "2c52312ba4e2da0458a4bc4313d156642bc39012",
+  "generatedAt": "2026-10-01T08:52:15.053Z"
+}

@@ -50,6 +50,8 @@ describe("query and render artifacts", () => {
     zone.properties.territory = {
       ...(zone.properties.territory as Record<string, unknown>),
       sourceClass: "generated",
+      sourceVersion: "snapshot-v1",
+      boundaryKind: "estimated",
       boundarySourceClass: "smart-derived",
       administrative: false,
       authoritative: false,
@@ -61,6 +63,7 @@ describe("query and render artifacts", () => {
     expect(createTerritoryRenderFeatureCollection(dataset).features[0]?.properties).toMatchObject({
       sourceClass: "generated",
       boundarySourceClass: "smart-derived",
+      sourceVersion: "snapshot-v1",
       administrative: false,
       authoritative: false,
       boundaryKind: "estimated",
@@ -68,6 +71,28 @@ describe("query and render artifacts", () => {
       generatorVersion: "smart-derived-v1.7",
       sourceSnapshotChecksum: "sha256:source",
       geometryHash: "sha256:geometry"
+    });
+  });
+
+  it("keeps an explicit administrative boundary kind and ADM3 parent identity", () => {
+    const dataset = createArtifactDataset();
+    const zone = dataset.zones[0]!;
+    zone.level = 3;
+    delete zone.parentId;
+    zone.properties.territory = {
+      parentId: "world",
+      sourceClass: "official",
+      boundaryKind: "administrative",
+      sourceVersion: "official-2026",
+      administrative: true,
+      authoritative: true
+    };
+    expect(createTerritoryRenderFeatureCollection(dataset).features[0]?.properties).toMatchObject({
+      territoryId: "world:europe",
+      parentAdm2Id: "world",
+      boundaryKind: "administrative",
+      sourceVersion: "official-2026",
+      administrative: true
     });
   });
 });

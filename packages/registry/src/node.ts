@@ -1,4 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
+import { lookup } from "node:dns/promises";
+import { isIP } from "node:net";
 import { createReadStream } from "node:fs";
 import { mkdir, readdir, readFile, rename, rm, stat, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
@@ -23,7 +25,7 @@ import type {
   TerritoryRegistrySnapshot,
   TerritoryRegistryTransport
 } from "./types.js";
-import { joinUrl, serializeJsonStable } from "./utils.js";
+import { joinUrl, readBoundedResponse, serializeJsonStable } from "./utils.js";
 
 const gunzipAsync = promisify(gunzip);
 const brotliDecompressAsync = promisify(brotliDecompress);
@@ -49,16 +51,25 @@ export function createNodeTerritoryRegistryClient(
           createNodeTerritoryRegistryCache({
             ...(options.cacheDir ? { rootDir: options.cacheDir } : {})
           })),
-    transport: options.transport ?? createNodeRegistryTransport(),
-    decompressArtifactBytes
+    transport:
+      options.transport ??
+      createNodeRegistryTransport({
+        ...(options.allowPrivateNetwork ? { allowPrivateNetwork: true } : {})
+      }),
+    decompressArtifactBytes: (bytes, compression) =>
+      decompressArtifactBytes(bytes, compression, options.maxDecompressedBytes ?? 512 * 1024 * 1024)
   });
 }
 
-export function createNodeRegistryTransport(): TerritoryRegistryTransport {
+export function createNodeRegistryTransport(
+  options: { allowPrivateNetwork?: boolean } = {}
+): TerritoryRegistryTransport {
   return {
     async fetch(request) {
       if (request.url.startsWith("file:")) {
         const path = fileURLToPath(request.url);
+        if (request.maxBytes && (await stat(path)).size > request.maxBytes)
+          throw new Error(`File response exceeded maxBytes for ${request.url}.`);
         const bytes = new Uint8Array(await readFile(path));
 
         if (request.maxBytes && bytes.byteLength > request.maxBytes) {
@@ -74,6 +85,8 @@ export function createNodeRegistryTransport(): TerritoryRegistryTransport {
 
       if (/^[./]|^[A-Za-z]:/.test(request.url)) {
         const absolutePath = resolve(request.url);
+        if (request.maxBytes && (await stat(absolutePath)).size > request.maxBytes)
+          throw new Error(`File response exceeded maxBytes for ${request.url}.`);
         const bytes = new Uint8Array(await readFile(absolutePath));
 
         if (request.maxBytes && bytes.byteLength > request.maxBytes) {
@@ -95,10 +108,18 @@ export function createNodeRegistryTransport(): TerritoryRegistryTransport {
       request.signal?.addEventListener("abort", linkedAbort, { once: true });
 
       try {
-        const response = await fetch(request.url, {
-          signal: controller.signal,
-          redirect: "follow"
-        });
+        let currentUrl = request.url;
+        let response: Response;
+        for (let redirect = 0; ; redirect++) {
+          await assertPublicRemoteUrl(currentUrl, options.allowPrivateNetwork === true);
+          response = await fetch(currentUrl, { signal: controller.signal, redirect: "manual" });
+          if (response.status < 300 || response.status >= 400) break;
+          if (redirect >= 5) throw new Error("Too many registry redirects.");
+          const location = response.headers.get("location");
+          if (!location) throw new Error("Redirect lacks Location.");
+          currentUrl = new URL(location, currentUrl).toString();
+          await response.body?.cancel();
+        }
 
         if (!response.ok) {
           throw new Error(
@@ -106,22 +127,7 @@ export function createNodeRegistryTransport(): TerritoryRegistryTransport {
           );
         }
 
-        const contentLength = response.headers.get("content-length");
-
-        if (
-          request.maxBytes &&
-          contentLength &&
-          Number.isFinite(Number(contentLength)) &&
-          Number(contentLength) > request.maxBytes
-        ) {
-          throw new Error(`Response exceeded maxBytes for ${request.url}.`);
-        }
-
-        const bytes = new Uint8Array(await response.arrayBuffer());
-
-        if (request.maxBytes && bytes.byteLength > request.maxBytes) {
-          throw new Error(`Response exceeded maxBytes for ${request.url}.`);
-        }
+        const bytes = await readBoundedResponse(response, request.maxBytes ?? 512 * 1024 * 1024);
 
         const result = {
           bytes,
@@ -1900,17 +1906,18 @@ export function getDefaultTerritoryRegistryCacheDir(): string {
 
 async function decompressArtifactBytes(
   bytes: Uint8Array,
-  compression: "none" | "gzip" | "br"
+  compression: "none" | "gzip" | "br",
+  maxBytes = 512 * 1024 * 1024
 ): Promise<Uint8Array> {
   if (compression === "none") {
     return bytes;
   }
 
   if (compression === "gzip") {
-    return new Uint8Array(await gunzipAsync(bytes));
+    return new Uint8Array(await gunzipAsync(bytes, { maxOutputLength: maxBytes }));
   }
 
-  return new Uint8Array(await brotliDecompressAsync(bytes));
+  return new Uint8Array(await brotliDecompressAsync(bytes, { maxOutputLength: maxBytes }));
 }
 
 function artifactDirectory(rootDir: string, key: TerritoryRegistryArtifactCacheKey): string {
@@ -2057,4 +2064,47 @@ export async function sha256File(path: string): Promise<string> {
   });
 
   return hash.digest("hex");
+}
+
+async function assertPublicRemoteUrl(value: string, allowPrivate: boolean): Promise<void> {
+  const url = new URL(value);
+  if (url.protocol !== "https:" && url.protocol !== "http:")
+    throw new Error("Unsafe registry redirect scheme.");
+  if (url.username || url.password) throw new Error("Credentials in registry URL are forbidden.");
+  if (allowPrivate) return;
+  const host = url.hostname.toLowerCase().replace(/^\[|\]$/g, "");
+  if (host === "localhost" || host.endsWith(".localhost") || host.endsWith(".local"))
+    throw new Error("Private registry host blocked.");
+  const addresses = isIP(host) ? [{ address: host }] : await lookup(host, { all: true });
+  if (addresses.some(({ address }) => isPrivateAddress(address)))
+    throw new Error("Private registry address blocked.");
+}
+function isPrivateAddress(address: string): boolean {
+  if (address.includes(":")) {
+    const value = address.toLowerCase();
+    if (value.startsWith("::ffff:")) return isPrivateAddress(value.slice(7));
+    const first = Number.parseInt(value.split(":")[0] ?? "0", 16);
+    return (
+      value === "::1" ||
+      value === "::" ||
+      (first & 0xffc0) === 0xfe80 ||
+      (first & 0xfe00) === 0xfc00 ||
+      value.startsWith("2001:db8:")
+    );
+  }
+  const parts = address.split(".").map(Number);
+  const [a, b] = parts;
+  return (
+    a === 0 ||
+    a === 10 ||
+    a === 127 ||
+    (a === 169 && b === 254) ||
+    (a === 172 && b! >= 16 && b! <= 31) ||
+    (a === 192 && b === 168) ||
+    (a === 100 && b! >= 64 && b! <= 127) ||
+    (a === 192 && b === 0) ||
+    (a === 198 && (b === 18 || b === 19 || b === 51)) ||
+    (a === 203 && b === 0) ||
+    a! >= 224
+  );
 }

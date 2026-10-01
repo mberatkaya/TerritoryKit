@@ -35,7 +35,8 @@ import {
   joinUrl,
   normalizeCompression,
   serializeJsonStable,
-  sha256Hex
+  sha256Hex,
+  readBoundedResponse
 } from "./utils.js";
 import { createMemoryTerritoryRegistryCache } from "./memory-cache.js";
 
@@ -47,6 +48,7 @@ export function createTerritoryRegistryClient(
       ? createMemoryTerritoryRegistryCache()
       : (options.cache ?? createMemoryTerritoryRegistryCache());
   const verifyChecksums = options.verifyChecksums ?? true;
+  const registryIsRemote = /^https?:/i.test(options.registryUrl ?? "");
   const now = options.now ?? (() => new Date());
   let loadedRegistry: TerritoryDatasetRegistry | undefined;
   let loadedRegistryHash: string | undefined;
@@ -71,11 +73,20 @@ export function createTerritoryRegistryClient(
         );
       }
 
+      const validation = validateTerritoryDatasetRegistry(snapshot.registry);
+      const actualHash = await sha256Hex(serializeJsonStable(snapshot.registry));
+      if (!validation.ok || actualHash !== snapshot.registryHash)
+        throw new TerritoryError(
+          "CACHE_CORRUPTED",
+          "Offline registry snapshot failed integrity validation."
+        );
+      assertRegistryBase(snapshot.registry.baseUrl);
       loadedRegistry = snapshot.registry;
       loadedRegistryHash = snapshot.registryHash;
       return loadedRegistry;
     }
 
+    assertRegistryUrl(registryUrl);
     const registryInput =
       options.registry ??
       JSON.parse(bytesToText((await fetchBytes(registryUrl, { purpose: "registry" })).bytes));
@@ -89,6 +100,7 @@ export function createTerritoryRegistryClient(
       );
     }
 
+    assertRegistryBase(validation.registry.baseUrl);
     loadedRegistry = validation.registry;
     loadedRegistryHash = await sha256Hex(serializeJsonStable(loadedRegistry));
     await cache.writeRegistrySnapshot({
@@ -160,7 +172,7 @@ export function createTerritoryRegistryClient(
     return {
       dataset,
       artifact,
-      url: joinUrl(registry.baseUrl, artifact.url),
+      url: trustedArtifactUrl(registry.baseUrl, artifact.url),
       registryHash: await currentRegistryHash()
     };
   }
@@ -279,7 +291,7 @@ export function createTerritoryRegistryClient(
         : (input.coverageStatus ?? "source-unavailable"),
       dataset: input.match.dataset,
       artifact: input.match.artifact,
-      url: joinUrl(input.registry.baseUrl, input.match.artifact.url),
+      url: trustedArtifactUrl(input.registry.baseUrl, input.match.artifact.url),
       registryHash: await currentRegistryHash()
     };
   }
@@ -316,7 +328,7 @@ export function createTerritoryRegistryClient(
         );
       }
 
-      const sourceUrl = joinUrl(registry.baseUrl, artifact.url);
+      const sourceUrl = trustedArtifactUrl(registry.baseUrl, artifact.url);
       const response = await fetchBytes(sourceUrl, {
         purpose: artifact.purpose,
         ...(request.signal ? { signal: request.signal } : {})
@@ -381,6 +393,10 @@ export function createTerritoryRegistryClient(
     }
 
     if (
+      cached.metadata.datasetId !== key.datasetId ||
+      cached.metadata.version !== key.version ||
+      cached.metadata.artifactId !== key.artifactId ||
+      cached.metadata.path !== artifact.path ||
       cached.metadata.sha256 !== artifact.sha256 ||
       cached.metadata.sizeBytes !== artifact.sizeBytes
     ) {
@@ -427,7 +443,80 @@ export function createTerritoryRegistryClient(
     return loadedRegistryHash;
   }
 
+  function assertRegistryUrl(url: string): void {
+    if (url.startsWith("inline:") && options.registry) return;
+    if (/^https:/i.test(url)) return;
+    if (/^http:/i.test(url) && options.allowHttp) return;
+    if (!registryIsRemote && options.allowFile && (/^file:/i.test(url) || /^[./]/.test(url)))
+      return;
+    throw new Error("Registry URL requires HTTPS or explicit allowHttp/allowFile opt-in.");
+  }
+
+  function assertRegistryBase(baseUrl: string | undefined): void {
+    if (!baseUrl) return;
+    if (registryIsRemote && !/^https?:/i.test(baseUrl))
+      throw new Error("Remote registry cannot select a local artifact base URL.");
+    assertFetchUrl(baseUrl);
+    if (
+      registryIsRemote &&
+      new URL(baseUrl).origin !== new URL(options.registryUrl!).origin &&
+      !options.allowedOrigins?.includes(new URL(baseUrl).origin)
+    )
+      throw new Error("Cross-origin artifact base requires allowedOrigins.");
+  }
+
+  function assertFetchUrl(url: string): void {
+    if (/^https:/i.test(url)) return;
+    if (/^http:/i.test(url) && options.allowHttp) return;
+    if (!registryIsRemote && options.allowFile && (/^file:/i.test(url) || /^[./]/.test(url)))
+      return;
+    throw new Error("Artifact URL requires HTTPS or explicit allowHttp/allowFile opt-in.");
+  }
+
+  function trustedArtifactUrl(baseUrl: string | undefined, artifactUrl: string): string {
+    if (
+      registryIsRemote &&
+      (/^file:/i.test(artifactUrl) || (/^[./]/.test(artifactUrl) && !baseUrl))
+    )
+      throw new Error("Remote registry cannot read local files.");
+    if (
+      /[\\]/.test(artifactUrl) ||
+      [...artifactUrl].some(
+        (character) => character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127
+      )
+    )
+      throw new Error("Unsafe artifact URL");
+    let decoded = artifactUrl;
+    for (let index = 0; index < 3; index++) {
+      const next = decodeURIComponent(decoded);
+      if (next.split("/").length !== decoded.split("/").length || next.includes("\\"))
+        throw new Error("Encoded artifact path separator is forbidden");
+      if (next === decoded) break;
+      decoded = next;
+    }
+    if (decoded.split("/").some((segment) => segment === ".." || segment === "."))
+      throw new Error("Artifact path traversal is forbidden");
+    const url = joinUrl(baseUrl, artifactUrl);
+    assertFetchUrl(url);
+    if (
+      baseUrl &&
+      !new URL(url).pathname.startsWith(
+        new URL(baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`).pathname
+      )
+    )
+      throw new Error("Artifact URL escapes base path");
+    if (
+      registryIsRemote &&
+      baseUrl &&
+      new URL(url).origin !== new URL(baseUrl).origin &&
+      !options.allowedOrigins?.includes(new URL(url).origin)
+    )
+      throw new Error("Cross-origin artifact URL requires allowedOrigins.");
+    return url;
+  }
+
   async function fetchBytes(url: string, context: { purpose: string; signal?: AbortSignal }) {
+    assertFetchUrl(url);
     if (!options.transport) {
       if (!globalThis.fetch) {
         throw new TerritoryError(
@@ -441,7 +530,10 @@ export function createTerritoryRegistryClient(
         url,
         ...(context.signal ? { signal: context.signal } : {}),
         ...(options.timeoutMs ? { timeoutMs: options.timeoutMs } : {}),
-        ...(options.maxArtifactBytes ? { maxBytes: options.maxArtifactBytes } : {})
+        maxBytes:
+          context.purpose === "registry"
+            ? 8 * 1024 * 1024
+            : (options.maxArtifactBytes ?? 512 * 1024 * 1024)
       });
     }
 
@@ -449,7 +541,10 @@ export function createTerritoryRegistryClient(
       url,
       ...(context.signal ? { signal: context.signal } : {}),
       ...(options.timeoutMs ? { timeoutMs: options.timeoutMs } : {}),
-      ...(options.maxArtifactBytes ? { maxBytes: options.maxArtifactBytes } : {})
+      maxBytes:
+        context.purpose === "registry"
+          ? 8 * 1024 * 1024
+          : (options.maxArtifactBytes ?? 512 * 1024 * 1024)
     });
   }
 
@@ -494,7 +589,7 @@ export function createTerritoryRegistryClient(
 
     const decoded = await options.decompressArtifactBytes(bytes, compression);
 
-    if (options.maxDecompressedBytes && decoded.byteLength > options.maxDecompressedBytes) {
+    if (decoded.byteLength > (options.maxDecompressedBytes ?? 512 * 1024 * 1024)) {
       throw new Error("Decompressed artifact exceeds maxDecompressedBytes.");
     }
 
@@ -550,7 +645,12 @@ function createFetchTransport(): TerritoryRegistryTransport {
       request.signal?.addEventListener("abort", linkedAbort, { once: true });
 
       try {
-        const response = await globalThis.fetch(request.url, { signal: controller.signal });
+        const response = await globalThis.fetch(request.url, {
+          signal: controller.signal,
+          redirect: "manual"
+        });
+        if (response.status >= 300 && response.status < 400)
+          throw new Error("Redirects require an explicit trusted transport.");
 
         if (!response.ok) {
           throw new Error(
@@ -558,8 +658,7 @@ function createFetchTransport(): TerritoryRegistryTransport {
           );
         }
 
-        const arrayBuffer = await response.arrayBuffer();
-        const bytes = new Uint8Array(arrayBuffer);
+        const bytes = await readBoundedResponse(response, request.maxBytes ?? 512 * 1024 * 1024);
 
         if (request.maxBytes && bytes.byteLength > request.maxBytes) {
           throw new Error(`Response exceeded maxBytes for ${request.url}.`);

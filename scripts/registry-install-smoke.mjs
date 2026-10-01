@@ -62,6 +62,7 @@ try {
     registry,
     registryUrl,
     cacheDir,
+    allowFile: true,
     now: () => new Date("2026-07-14T00:00:00.000Z")
   });
   const handle = await client.installDataset({ datasetId: dataset.manifest.datasetId });
@@ -71,7 +72,8 @@ try {
   const offlineClient = createNodeTerritoryRegistryClient({
     registryUrl,
     cacheDir,
-    offline: true
+    offline: true,
+    allowFile: true
   });
   await offlineClient.loadRegistry();
   const offlineInstalled = await offlineClient.listInstalledDatasets();

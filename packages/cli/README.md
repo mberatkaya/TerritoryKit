@@ -1,5 +1,7 @@
 # @territory-kit/cli
 
+Sprint 7 adds `territory tr v2 national source-diff --previous-lock <old> --candidate-lock <new>` for audited source updates, `territory tr v2 national delivery-manifest --artifact-root <validated-root> --output <path>` for versioned tile and shard discovery, and `territory tr v2 national inspect --artifact-root <root>` for a compact artifact inventory. See [the delivery contract](../../docs/datasets/turkey-sprint-7-delivery.md).
+
 ## Sprint 6 final candidate
 
 `territory tr v2 national publish-ready` builds `2.1.0-rc.7` with `smart-derived-v1.7`.
@@ -135,3 +137,5 @@ The `2.1.0-rc.2` figures above are the preserved calibration baseline. The separ
 geometry when generated gap fill fails, and evaluates Standard and Organic realism.
 The 39-district Istanbul report and final national acceptance must pass before this
 candidate can be merged. Generated territories remain estimated gameplay boundaries.
+
+Local registry development now requires `--allow-file` with `dataset install` or `dataset update`. HTTP registries require `--allow-http`. Private-network hosting is an explicit SDK option. Remote HTTPS remains the default.

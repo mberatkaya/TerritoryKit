@@ -34,6 +34,11 @@
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
+    },
+    "./turkey-v2-delivery": {
+      "types": "./dist/turkey-v2-delivery.d.mts",
+      "import": "./dist/turkey-v2-delivery.mjs",
+      "require": "./dist/turkey-v2-delivery.cjs"
     }
   },
   "scripts": {

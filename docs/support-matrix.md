@@ -3,21 +3,21 @@
 Support entries are derived from package peer dependencies, `pnpm-lock.yaml`, and the CI/test
 environment for `release/production-hardening`.
 
-| Area                  | Supported range                                             | Verified environment                                                          |
-| --------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| Node.js               | `>=22`                                                      | CI matrix Node 22 and 24; local hardening Node `v24.14.0`                     |
-| pnpm                  | `>=11`                                                      | `pnpm@11.7.0`                                                                 |
-| TypeScript            | repo compiler                                               | `typescript@6.0.3`                                                            |
-| Browser               | modern ESM browsers                                         | Vite `8.1.4`, Playwright `1.61.1`, Chromium visual smoke for MapLibre example |
-| MapLibre GL JS        | `maplibre-gl >=5`                                           | `maplibre-gl@5.24.0`                                                          |
-| Leaflet               | `leaflet >=1.9`                                             | `leaflet@1.9.4`                                                               |
-| OpenLayers            | `ol >=10`                                                   | `ol@10.10.0`                                                                  |
-| React Native          | `react-native >=0.72`, `react >=18`                         | lockfile has `react-native@0.86.2`, `react@19.2.8`                            |
-| MapLibre React Native | `@maplibre/maplibre-react-native >=11`                      | lockfile has `11.3.6`                                                         |
-| Android               | inherited from React Native and MapLibre React Native peers | no native Android CI job in this repo                                         |
-| iOS                   | inherited from React Native and MapLibre React Native peers | no native iOS CI job in this repo                                             |
-| NestJS                | `@nestjs/common >=11`, `@nestjs/swagger >=11`, `rxjs >=7`   | `@nestjs/common@11.1.28`, `@nestjs/swagger@11.4.5`, `rxjs@7.8.2`              |
-| PostGIS               | extension required by example SQL                           | no version-pinned package dependency or live DB CI matrix                     |
+| Area                  | Supported range                                             | Verified environment                                                                             |
+| --------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Node.js               | `>=22`                                                      | CI matrix Node 22 and 24; local hardening Node `v24.14.0`                                        |
+| pnpm                  | `>=11`                                                      | `pnpm@11.7.0`                                                                                    |
+| TypeScript            | repo compiler                                               | `typescript@6.0.3`                                                                               |
+| Browser               | modern ESM browsers                                         | Vite `8.1.4`, Playwright `1.61.1`, Chromium visual smoke for MapLibre example                    |
+| MapLibre GL JS        | `maplibre-gl >=5`                                           | `maplibre-gl@5.24.0`                                                                             |
+| Leaflet               | `leaflet >=1.9`                                             | `leaflet@1.9.4`                                                                                  |
+| OpenLayers            | `ol >=10`                                                   | `ol@10.10.0`                                                                                     |
+| React Native          | `react-native >=0.72`, `react >=18`                         | lockfile has `react-native@0.87.1`, `react@19.2.8`; optional published peer ranges are unchanged |
+| MapLibre React Native | `@maplibre/maplibre-react-native >=11`                      | lockfile has `11.3.6`                                                                            |
+| Android               | inherited from React Native and MapLibre React Native peers | no native Android CI job in this repo                                                            |
+| iOS                   | inherited from React Native and MapLibre React Native peers | no native iOS CI job in this repo                                                                |
+| NestJS                | `@nestjs/common >=11`, `@nestjs/swagger >=11`, `rxjs >=7`   | `@nestjs/common@11.1.28`, `@nestjs/swagger@11.4.5`, `rxjs@7.8.2`                                 |
+| PostGIS               | extension required by example SQL                           | no version-pinned package dependency or live DB CI matrix                                        |
 
 ## Package Runtime Boundaries
 

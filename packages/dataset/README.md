@@ -2,6 +2,8 @@
 
 Dataset schema, validation, and GeoJSON conversion utilities for TerritoryKit.
 
+Render feature properties now preserve Turkey V2 `parentAdm2Id`, `sourceVersion`, and the recorded `boundaryKind` alongside source class, confidence, administrative status, attribution, and canonical geometry hash. See [the delivery contract](../../docs/datasets/turkey-sprint-7-delivery.md).
+
 ## Installation
 
 ```sh

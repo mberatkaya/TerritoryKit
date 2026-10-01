@@ -1,19 +1,22 @@
 {
   "schemaVersion": "territorykit-production-hardening-report@1",
   "ok": true,
-  "generatedAt": "2026-08-24T19:42:10.961Z",
+  "generatedAt": "2026-10-01T08:52:15.053Z",
   "git": {
-    "branch": "release/npm-registry-sync",
-    "head": "a85c875a81515f143294babcaa00ee3dcb3dff44"
+    "branch": "feature/sprint-7-publishing-api-sdk-updates",
+    "auditedCodeHead": "b0c89fa4301e79f3119c2783f2e25a1db7a543f2",
+    "auditedTreeHash": "2c52312ba4e2da0458a4bc4313d156642bc39012"
   },
   "environment": {
     "node": "v24.14.0",
     "platform": "darwin",
     "arch": "arm64",
-    "packageManager": "pnpm@11.7.0"
+    "packageManager": "pnpm@11.7.0",
+    "pnpmVersion": "11.7.0",
+    "lockfileSha256": "b8c5e5fdde089494c90bf964ad855f317eeeea93b76c6fd4c13bb983c58d1f64"
   },
   "releaseDecisionInputs": {
-    "criticalVulnerabilities": 0,
+    "auditExceptionPolicyOk": true,
     "publicPackageMetadataOk": true,
     "packageDryRunOk": true,
     "exportsOk": true,
@@ -22,17 +25,18 @@
     "turkeyAdm3ChecksumOk": true,
     "turkeyV2StableNationalOk": true,
     "turkeyBenchmarkOk": true,
-    "changesetStatusOk": true
+    "changesetStatusOk": true,
+    "workflowSecurityOk": true
   },
   "security": {
     "audit": {
       "advisories": {},
       "metadata": {
-        "vulnerabilities": { "info": 0, "low": 0, "moderate": 4, "high": 9, "critical": 0 },
-        "dependencies": 281,
-        "devDependencies": 504,
-        "optionalDependencies": 110,
-        "totalDependencies": 785
+        "vulnerabilities": { "info": 0, "low": 0, "moderate": 0, "high": 0, "critical": 0 },
+        "dependencies": 271,
+        "devDependencies": 0,
+        "optionalDependencies": 0,
+        "totalDependencies": 271
       }
     },
     "fullAudit": {
@@ -137,464 +141,277 @@
           "github_advisory_id": "GHSA-fx2h-pf6j-xcff",
           "url": "https://github.com/advisories/GHSA-fx2h-pf6j-xcff"
         },
-        "1130591": {
+        "1193683": {
           "findings": [
             {
-              "version": "5.0.7",
+              "version": "4.1.10",
               "paths": [
-                ".>@eslint/js>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>@eslint/js>eslint>minimatch>brace-expansion",
-                ".>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>eslint>minimatch>brace-expansion",
-                ".>rimraf>glob>minimatch>brace-expansion",
-                ".>typedoc>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>eslint>minimatch>brace-expansion"
+                ".>@vitest/coverage-v8>vitest",
+                ".>vitest",
+                "examples__web-leaflet-turkey>vitest",
+                "examples__web-maplibre-turkey>vitest",
+                "examples__web-openlayers-turkey>vitest"
               ],
               "dev": true,
               "optional": false,
               "bundled": false
             }
           ],
-          "id": 1130591,
-          "title": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
-          "module_name": "brace-expansion",
-          "vulnerable_versions": ">=4.0.0 <5.0.8",
-          "patched_versions": ">=5.0.8",
-          "severity": "high",
-          "cwe": "CWE-400, CWE-770",
-          "github_advisory_id": "GHSA-mh99-v99m-4gvg",
-          "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg"
-        },
-        "1130709": {
-          "findings": [
-            {
-              "version": "8.5.17",
-              "paths": [
-                ".>@vitest/coverage-v8>vitest>@vitest/mocker>vite>postcss",
-                ".>@vitest/coverage-v8>vitest>vite>postcss",
-                ".>vite>postcss",
-                ".>vitepress>@vitejs/plugin-vue>vite>postcss",
-                ".>vitepress>@vitejs/plugin-vue>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/core>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/integrations>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/integrations>@vueuse/core>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/integrations>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/integrations>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>vite>postcss",
-                ".>vitepress>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>postcss",
-                ".>vitest>@vitest/mocker>vite>postcss",
-                ".>vitest>vite>postcss",
-                "docs>vitepress>@vitejs/plugin-vue>vite>postcss",
-                "docs>vitepress>@vitejs/plugin-vue>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/core>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/integrations>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/integrations>@vueuse/core>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/integrations>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/integrations>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>vite>postcss",
-                "docs>vitepress>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>postcss",
-                "examples__web-leaflet-turkey>vite>postcss",
-                "examples__web-leaflet-turkey>vitest>@vitest/mocker>vite>postcss",
-                "examples__web-leaflet-turkey>vitest>vite>postcss",
-                "examples__web-maplibre>vite>postcss",
-                "examples__web-maplibre-turkey>vite>postcss",
-                "examples__web-maplibre-turkey>vitest>@vitest/mocker>vite>postcss",
-                "examples__web-maplibre-turkey>vitest>vite>postcss",
-                "examples__web-openlayers-turkey>vite>postcss",
-                "examples__web-openlayers-turkey>vitest>@vitest/mocker>vite>postcss",
-                "examples__web-openlayers-turkey>vitest>vite>postcss"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1130709,
-          "title": "PostCSS: incomplete fix of GHSA-6g55-p6wh-862q — attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset",
-          "module_name": "postcss",
-          "vulnerable_versions": "<=8.5.22",
-          "patched_versions": ">=8.5.23",
+          "id": 1193683,
+          "title": "Vitest: Path Traversal / Arbitrary File Read via @vitest/mocker Redirect Mock",
+          "module_name": "vitest",
+          "vulnerable_versions": ">=2.1.0 <4.1.11",
+          "patched_versions": ">=4.1.11",
           "severity": "moderate",
-          "cwe": "CWE-22, CWE-200",
-          "github_advisory_id": "GHSA-fxqj-rqcc-2cmp",
-          "url": "https://github.com/advisories/GHSA-fxqj-rqcc-2cmp"
-        },
-        "1130734": {
-          "findings": [
-            {
-              "version": "5.0.7",
-              "paths": [
-                ".>@eslint/js>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>@eslint/js>eslint>minimatch>brace-expansion",
-                ".>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>eslint>minimatch>brace-expansion",
-                ".>rimraf>glob>minimatch>brace-expansion",
-                ".>typedoc>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>eslint>minimatch>brace-expansion"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1130734,
-          "title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
-          "module_name": "brace-expansion",
-          "vulnerable_versions": ">=4.0.0 <5.0.9",
-          "patched_versions": ">=5.0.9",
-          "severity": "high",
-          "cwe": "CWE-400, CWE-770",
-          "github_advisory_id": "GHSA-rgw5-rvv9-x895",
-          "url": "https://github.com/advisories/GHSA-rgw5-rvv9-x895"
-        },
-        "1138114": {
-          "findings": [
-            {
-              "version": "3.15.0",
-              "paths": [
-                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/config>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/config>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/config>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/git>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/apply-release-plan>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/assemble-release-plan>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/assemble-release-plan>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/assemble-release-plan>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/config>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/config>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/config>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/assemble-release-plan>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/assemble-release-plan>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/assemble-release-plan>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/config>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/config>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/config>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/pre>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/read>@changesets/git>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/git>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/pre>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/read>@changesets/git>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@manypkg/get-packages>read-yaml-file>js-yaml"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1138114,
-          "title": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) — CVE-2026-59870 fix not backported",
-          "module_name": "js-yaml",
-          "vulnerable_versions": ">=3.0.0 <3.15.1",
-          "patched_versions": ">=3.15.1",
-          "severity": "high",
-          "cwe": "CWE-407",
-          "github_advisory_id": "GHSA-5p4m-2wfm-xmqj",
-          "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj"
-        },
-        "1138115": {
-          "findings": [
-            {
-              "version": "4.3.0",
-              "paths": [
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/read>@changesets/parse>js-yaml",
-                ".>@changesets/cli>@changesets/read>@changesets/parse>js-yaml",
-                "packages__nestjs>@nestjs/swagger>js-yaml"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1138115,
-          "title": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) — CVE-2026-59870 fix not backported",
-          "module_name": "js-yaml",
-          "vulnerable_versions": ">=4.0.0 <4.3.1",
-          "patched_versions": ">=4.3.1",
-          "severity": "high",
-          "cwe": "CWE-407",
-          "github_advisory_id": "GHSA-5p4m-2wfm-xmqj",
-          "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj"
-        },
-        "1138808": {
-          "findings": [
-            {
-              "version": "1.2.1",
-              "paths": [
-                "packages__react-native>@maplibre/maplibre-react-native>react-native>@react-native/community-cli-plugin>metro>image-size",
-                "packages__react-native>@maplibre/maplibre-react-native>react-native>@react-native/community-cli-plugin>metro-config>metro>image-size",
-                "packages__react-native>react-native>@react-native/community-cli-plugin>metro>image-size",
-                "packages__react-native>react-native>@react-native/community-cli-plugin>metro-config>metro>image-size"
-              ],
-              "dev": false,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1138808,
-          "title": "image-size: ICNS parser allows denial of service through an infinite loop",
-          "module_name": "image-size",
-          "vulnerable_versions": "<=2.0.2",
-          "patched_versions": ">=2.0.3",
-          "severity": "high",
-          "cwe": "CWE-835",
-          "github_advisory_id": "GHSA-w3rx-r6r6-pgpr",
-          "url": "https://github.com/advisories/GHSA-w3rx-r6r6-pgpr"
-        },
-        "1138809": {
-          "findings": [
-            {
-              "version": "1.2.1",
-              "paths": [
-                "packages__react-native>@maplibre/maplibre-react-native>react-native>@react-native/community-cli-plugin>metro>image-size",
-                "packages__react-native>@maplibre/maplibre-react-native>react-native>@react-native/community-cli-plugin>metro-config>metro>image-size",
-                "packages__react-native>react-native>@react-native/community-cli-plugin>metro>image-size",
-                "packages__react-native>react-native>@react-native/community-cli-plugin>metro-config>metro>image-size"
-              ],
-              "dev": false,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1138809,
-          "title": "image-size: JXL and HEIF parsers allow denial of service through infinite loops",
-          "module_name": "image-size",
-          "vulnerable_versions": "<=2.0.2",
-          "patched_versions": ">=2.0.3",
-          "severity": "high",
-          "cwe": "CWE-835",
-          "github_advisory_id": "GHSA-5p2g-fcmc-qvqq",
-          "url": "https://github.com/advisories/GHSA-5p2g-fcmc-qvqq"
-        },
-        "1139427": {
-          "findings": [
-            {
-              "version": "3.3.16",
-              "paths": [
-                ".>@vitest/coverage-v8>vitest>@vitest/mocker>vite>postcss>nanoid",
-                ".>@vitest/coverage-v8>vitest>vite>postcss>nanoid",
-                ".>vite>postcss>nanoid",
-                ".>vitepress>@vitejs/plugin-vue>vite>postcss>nanoid",
-                ".>vitepress>@vitejs/plugin-vue>vue>@vue/compiler-sfc>postcss>nanoid",
-                ".>vitepress>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
-                ".>vitepress>@vueuse/core>vue>@vue/compiler-sfc>postcss>nanoid",
-                ".>vitepress>@vueuse/integrations>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
-                ".>vitepress>@vueuse/integrations>@vueuse/core>vue>@vue/compiler-sfc>postcss>nanoid",
-                ".>vitepress>@vueuse/integrations>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
-                ".>vitepress>@vueuse/integrations>vue>@vue/compiler-sfc>postcss>nanoid",
-                ".>vitepress>vite>postcss>nanoid",
-                ".>vitepress>vue>@vue/compiler-sfc>postcss>nanoid",
-                ".>vitepress>postcss>nanoid",
-                ".>vitest>@vitest/mocker>vite>postcss>nanoid",
-                ".>vitest>vite>postcss>nanoid",
-                "docs>vitepress>@vitejs/plugin-vue>vite>postcss>nanoid",
-                "docs>vitepress>@vitejs/plugin-vue>vue>@vue/compiler-sfc>postcss>nanoid",
-                "docs>vitepress>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
-                "docs>vitepress>@vueuse/core>vue>@vue/compiler-sfc>postcss>nanoid",
-                "docs>vitepress>@vueuse/integrations>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
-                "docs>vitepress>@vueuse/integrations>@vueuse/core>vue>@vue/compiler-sfc>postcss>nanoid",
-                "docs>vitepress>@vueuse/integrations>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
-                "docs>vitepress>@vueuse/integrations>vue>@vue/compiler-sfc>postcss>nanoid",
-                "docs>vitepress>vite>postcss>nanoid",
-                "docs>vitepress>vue>@vue/compiler-sfc>postcss>nanoid",
-                "docs>vitepress>postcss>nanoid",
-                "examples__web-leaflet-turkey>vite>postcss>nanoid",
-                "examples__web-leaflet-turkey>vitest>@vitest/mocker>vite>postcss>nanoid",
-                "examples__web-leaflet-turkey>vitest>vite>postcss>nanoid",
-                "examples__web-maplibre>vite>postcss>nanoid",
-                "examples__web-maplibre-turkey>vite>postcss>nanoid",
-                "examples__web-maplibre-turkey>vitest>@vitest/mocker>vite>postcss>nanoid",
-                "examples__web-maplibre-turkey>vitest>vite>postcss>nanoid",
-                "examples__web-openlayers-turkey>vite>postcss>nanoid",
-                "examples__web-openlayers-turkey>vitest>@vitest/mocker>vite>postcss>nanoid",
-                "examples__web-openlayers-turkey>vitest>vite>postcss>nanoid"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1139427,
-          "title": "nanoid: custom generators can loop indefinitely when size is zero",
-          "module_name": "nanoid",
-          "vulnerable_versions": "<3.3.18",
-          "patched_versions": ">=3.3.18",
-          "severity": "high",
-          "cwe": "CWE-835",
-          "github_advisory_id": "GHSA-2v37-7h3g-55p8",
-          "url": "https://github.com/advisories/GHSA-2v37-7h3g-55p8"
-        },
-        "1139510": {
-          "findings": [
-            {
-              "version": "8.5.17",
-              "paths": [
-                ".>@vitest/coverage-v8>vitest>@vitest/mocker>vite>postcss",
-                ".>@vitest/coverage-v8>vitest>vite>postcss",
-                ".>vite>postcss",
-                ".>vitepress>@vitejs/plugin-vue>vite>postcss",
-                ".>vitepress>@vitejs/plugin-vue>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/core>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/integrations>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/integrations>@vueuse/core>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/integrations>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/integrations>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>vite>postcss",
-                ".>vitepress>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>postcss",
-                ".>vitest>@vitest/mocker>vite>postcss",
-                ".>vitest>vite>postcss",
-                "docs>vitepress>@vitejs/plugin-vue>vite>postcss",
-                "docs>vitepress>@vitejs/plugin-vue>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/core>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/integrations>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/integrations>@vueuse/core>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/integrations>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/integrations>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>vite>postcss",
-                "docs>vitepress>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>postcss",
-                "examples__web-leaflet-turkey>vite>postcss",
-                "examples__web-leaflet-turkey>vitest>@vitest/mocker>vite>postcss",
-                "examples__web-leaflet-turkey>vitest>vite>postcss",
-                "examples__web-maplibre>vite>postcss",
-                "examples__web-maplibre-turkey>vite>postcss",
-                "examples__web-maplibre-turkey>vitest>@vitest/mocker>vite>postcss",
-                "examples__web-maplibre-turkey>vitest>vite>postcss",
-                "examples__web-openlayers-turkey>vite>postcss",
-                "examples__web-openlayers-turkey>vitest>@vitest/mocker>vite>postcss",
-                "examples__web-openlayers-turkey>vitest>vite>postcss"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1139510,
-          "title": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
-          "module_name": "postcss",
-          "vulnerable_versions": "<=8.5.17",
-          "patched_versions": ">=8.5.18",
-          "severity": "high",
           "cwe": "CWE-22",
-          "github_advisory_id": "GHSA-r28c-9q8g-f849",
-          "url": "https://github.com/advisories/GHSA-r28c-9q8g-f849"
+          "github_advisory_id": "GHSA-82fw-gwwq-j7x9",
+          "url": "https://github.com/advisories/GHSA-82fw-gwwq-j7x9"
+        },
+        "1193684": {
+          "findings": [
+            {
+              "version": "4.1.10",
+              "paths": [
+                ".>@vitest/coverage-v8>vitest>@vitest/mocker",
+                ".>vitest>@vitest/mocker",
+                "examples__web-leaflet-turkey>vitest>@vitest/mocker",
+                "examples__web-maplibre-turkey>vitest>@vitest/mocker",
+                "examples__web-openlayers-turkey>vitest>@vitest/mocker"
+              ],
+              "dev": true,
+              "optional": false,
+              "bundled": false
+            }
+          ],
+          "id": 1193684,
+          "title": "Vitest: Path Traversal / Arbitrary File Read via @vitest/mocker Redirect Mock",
+          "module_name": "@vitest/mocker",
+          "vulnerable_versions": ">=2.1.0 <4.1.11",
+          "patched_versions": ">=4.1.11",
+          "severity": "moderate",
+          "cwe": "CWE-22",
+          "github_advisory_id": "GHSA-82fw-gwwq-j7x9",
+          "url": "https://github.com/advisories/GHSA-82fw-gwwq-j7x9"
+        },
+        "1239989": {
+          "findings": [
+            {
+              "version": "14.3.0",
+              "paths": [".>typedoc>markdown-it"],
+              "dev": true,
+              "optional": false,
+              "bundled": false
+            }
+          ],
+          "id": 1239989,
+          "title": "markdown-it linkify: true has two quadratic paths, so a few hundred KB of markdown blocks the event loop for tens of seconds",
+          "module_name": "markdown-it",
+          "vulnerable_versions": "<14.3.1",
+          "patched_versions": ">=14.3.1",
+          "severity": "moderate",
+          "cwe": "CWE-400, CWE-407",
+          "github_advisory_id": "GHSA-253c-mchw-3w2r",
+          "url": "https://github.com/advisories/GHSA-253c-mchw-3w2r"
         }
       },
       "metadata": {
-        "vulnerabilities": { "info": 0, "low": 0, "moderate": 4, "high": 9, "critical": 0 },
-        "dependencies": 281,
-        "devDependencies": 504,
+        "vulnerabilities": { "info": 0, "low": 0, "moderate": 6, "high": 1, "critical": 0 },
+        "dependencies": 271,
+        "devDependencies": 506,
         "optionalDependencies": 110,
-        "totalDependencies": 785
+        "totalDependencies": 777
       }
     },
+    "rawAudit": { "productionCritical": 0, "productionHigh": 0, "fullCritical": 0, "fullHigh": 1 },
+    "approvedExceptions": [
+      {
+        "ghsaId": "GHSA-fx2h-pf6j-xcff",
+        "package": "vite",
+        "affectedVersion": "5.4.21",
+        "affectedRange": "<=6.4.2",
+        "severity": "high",
+        "dependencyPaths": [
+          ".>vitepress>@vitejs/plugin-vue>vite",
+          ".>vitepress>vite",
+          "docs>vitepress>@vitejs/plugin-vue>vite",
+          "docs>vitepress>vite"
+        ],
+        "scope": "development documentation tooling only",
+        "reason": "Stable VitePress 1.6.4 requires Vite ^5.4.14; this advisory has no patched Vite 5 release.",
+        "exploitPreconditions": "A network-exposed Vite development server serves sensitive files from a Windows NTFS or 8.3 short-name-enabled volume.",
+        "absentPreconditions": "TerritoryKit CI and release jobs run on Ubuntu and build documentation without starting its dev server. The documentation dev script does not use --host and its VitePress config does not set server.host. Vite 5 is limited to VitePress docs tooling.",
+        "compensatingControls": "Release check rejects changed dependency paths, versions and documentation dev-server exposure. Package tarball checks exclude VitePress and Vite implementation files. No npm package runtime depends on this Vite 5 path.",
+        "owner": "TerritoryKit maintainers",
+        "createdOn": "2026-10-01",
+        "reviewOn": "2026-10-15",
+        "expiresOn": "2026-10-29",
+        "removalCondition": "Remove immediately when stable VitePress supports a patched Vite line, a Vite 5 backport appears, docs deployment changes, or Windows/network-exposed docs development is supported."
+      }
+    ],
+    "effectiveBlockingFindings": {
+      "critical": 0,
+      "productionHigh": 0,
+      "fullHigh": 0,
+      "unapprovedHigh": [],
+      "policyErrors": []
+    },
+    "docsDevServerExposure": { "ok": true, "issues": [] },
     "workflowSecurity": {
       "workflows": [
         {
           "file": ".github/workflows/ci.yml",
-          "hasPermissionsBlock": true,
-          "secrets": [],
-          "usesProvenance": false,
-          "workflowDispatchOnly": false
+          "parseErrors": [],
+          "dispatchInputs": [],
+          "pullRequestTarget": false,
+          "jobs": [
+            {
+              "name": "verify",
+              "permissions": { "contents": "read" },
+              "environment": null,
+              "condition": null,
+              "unpinnedActions": [],
+              "dispatchInterpolationInRun": false,
+              "installWithoutIgnoreScripts": false,
+              "commandConstructionRisk": false,
+              "secretBearing": false,
+              "publishesNpm": true
+            },
+            {
+              "name": "postgis-live",
+              "permissions": { "contents": "read" },
+              "environment": null,
+              "condition": null,
+              "unpinnedActions": [],
+              "dispatchInterpolationInRun": false,
+              "installWithoutIgnoreScripts": false,
+              "commandConstructionRisk": false,
+              "secretBearing": false,
+              "publishesNpm": false
+            }
+          ]
         },
         {
           "file": ".github/workflows/dataset-registry-publish.yml",
-          "hasPermissionsBlock": true,
-          "secrets": ["TERRITORY_REGISTRY_PUBLISH_ENABLED"],
-          "usesProvenance": false,
-          "workflowDispatchOnly": true
+          "parseErrors": [],
+          "dispatchInputs": [
+            "dataset",
+            "version",
+            "levels",
+            "base_url",
+            "artifact_prefix",
+            "source_lock",
+            "dry_run"
+          ],
+          "pullRequestTarget": false,
+          "jobs": [
+            {
+              "name": "preflight",
+              "permissions": { "contents": "read" },
+              "environment": null,
+              "condition": null,
+              "unpinnedActions": [],
+              "dispatchInterpolationInRun": false,
+              "installWithoutIgnoreScripts": false,
+              "commandConstructionRisk": false,
+              "secretBearing": true,
+              "publishesNpm": false
+            },
+            {
+              "name": "build-artifact",
+              "permissions": { "contents": "read" },
+              "environment": null,
+              "condition": "needs.preflight.outputs.should_run == 'true'",
+              "unpinnedActions": [],
+              "dispatchInterpolationInRun": false,
+              "installWithoutIgnoreScripts": false,
+              "commandConstructionRisk": false,
+              "secretBearing": false,
+              "publishesNpm": false
+            },
+            {
+              "name": "publish-registry",
+              "permissions": { "contents": "read" },
+              "environment": "dataset-registry-production",
+              "condition": "needs.preflight.outputs.should_run == 'true'",
+              "unpinnedActions": [],
+              "dispatchInterpolationInRun": false,
+              "installWithoutIgnoreScripts": false,
+              "commandConstructionRisk": false,
+              "secretBearing": false,
+              "publishesNpm": false
+            }
+          ]
         },
         {
           "file": ".github/workflows/release.yml",
-          "hasPermissionsBlock": true,
-          "secrets": ["GITHUB_TOKEN", "NPM_TOKEN"],
-          "usesProvenance": true,
-          "workflowDispatchOnly": false
+          "parseErrors": [],
+          "dispatchInputs": ["publish"],
+          "pullRequestTarget": false,
+          "jobs": [
+            {
+              "name": "release",
+              "permissions": { "contents": "write", "pull-requests": "write" },
+              "environment": null,
+              "condition": "${{ github.repository == 'mberatkaya/TerritoryKit' && github.ref == 'refs/heads/main' }}",
+              "unpinnedActions": [],
+              "dispatchInterpolationInRun": false,
+              "installWithoutIgnoreScripts": false,
+              "commandConstructionRisk": false,
+              "secretBearing": true,
+              "publishesNpm": false
+            },
+            {
+              "name": "publish",
+              "permissions": { "contents": "read", "id-token": "write" },
+              "environment": "npm-production",
+              "condition": "${{ needs.release.outputs.hasChangesets == 'false' && github.repository == 'mberatkaya/TerritoryKit' && github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch' && inputs.publish == 'true' }}",
+              "unpinnedActions": [],
+              "dispatchInterpolationInRun": false,
+              "installWithoutIgnoreScripts": false,
+              "commandConstructionRisk": false,
+              "secretBearing": true,
+              "publishesNpm": true
+            }
+          ]
         },
         {
           "file": ".github/workflows/turkey-dataset-build.yml",
-          "hasPermissionsBlock": true,
-          "secrets": [],
-          "usesProvenance": false,
-          "workflowDispatchOnly": true
+          "parseErrors": [],
+          "dispatchInputs": [
+            "levels",
+            "adm3_provinces",
+            "adm3_catalog",
+            "allow_partial",
+            "source_lock",
+            "benchmark_baseline"
+          ],
+          "pullRequestTarget": false,
+          "jobs": [
+            {
+              "name": "build",
+              "permissions": { "contents": "read" },
+              "environment": null,
+              "condition": null,
+              "unpinnedActions": [],
+              "dispatchInterpolationInRun": false,
+              "installWithoutIgnoreScripts": false,
+              "commandConstructionRisk": false,
+              "secretBearing": false,
+              "publishesNpm": false
+            }
+          ]
         }
       ],
+      "ok": true,
       "secretPolicy": {
-        "npmPublish": "NPM_TOKEN is optional; release.yml prefers npm provenance/trusted publishing when configured.",
-        "registryPublish": "dataset-registry-publish.yml requires TERRITORY_REGISTRY_PUBLISH_ENABLED=true for non-dry-run activation.",
-        "normalCi": "ci.yml uses no repository secrets and installs with --ignore-scripts."
+        "npmPublish": "Explicit dispatch and npm-production environment are required; only publish job has OIDC.",
+        "registryPublish": "TERRITORY_REGISTRY_PUBLISH_ENABLED=true is required for non-dry-run activation."
       }
     }
   },
   "licenses": {
     "licenseCount": 13,
-    "packageCount": 264,
+    "packageCount": 258,
     "unknown": [],
     "licenses": [
       {
@@ -615,7 +432,7 @@
         "packages": [
           {
             "name": "@maplibre/mlt",
-            "versions": ["1.1.12"],
+            "versions": ["1.3.0"],
             "license": "(MIT OR Apache-2.0)",
             "homepage": "https://github.com/maplibre/maplibre-tile-spec/#readme"
           },
@@ -659,7 +476,7 @@
       },
       {
         "license": "Apache-2.0",
-        "packageCount": 11,
+        "packageCount": 10,
         "packages": [
           {
             "name": "baseline-browser-mapping",
@@ -711,12 +528,6 @@
             "homepage": "https://github.com/nolanlawson/marky#readme"
           },
           {
-            "name": "walker",
-            "versions": ["1.0.8"],
-            "license": "Apache-2.0",
-            "homepage": "https://github.com/daaku/nodejs-walker"
-          },
-          {
             "name": "web-worker",
             "versions": ["1.5.0"],
             "license": "Apache-2.0",
@@ -762,35 +573,29 @@
       },
       {
         "license": "BSD-3-Clause",
-        "packageCount": 7,
+        "packageCount": 5,
         "packages": [
           {
             "name": "@mapbox/vector-tile",
-            "versions": ["2.0.5"],
+            "versions": ["3.0.0"],
             "license": "BSD-3-Clause",
             "homepage": "https://github.com/mapbox/vector-tile-js#readme"
           },
           {
             "name": "@react-native/debugger-frontend",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "BSD-3-Clause",
             "homepage": "https://github.com/react/react-native/tree/HEAD/packages/debugger-frontend#readme"
           },
           {
-            "name": "makeerror",
-            "versions": ["1.0.12"],
-            "license": "BSD-3-Clause",
-            "homepage": "https://github.com/daaku/nodejs-makeerror#readme"
-          },
-          {
             "name": "maplibre-gl",
-            "versions": ["5.24.0"],
+            "versions": ["6.11.2"],
             "license": "BSD-3-Clause",
             "homepage": "https://maplibre.org/"
           },
           {
             "name": "pbf",
-            "versions": ["4.0.2", "5.1.2"],
+            "versions": ["5.1.2"],
             "license": "BSD-3-Clause",
             "homepage": "https://github.com/mapbox/pbf"
           },
@@ -799,12 +604,6 @@
             "versions": ["0.5.7", "0.6.1"],
             "license": "BSD-3-Clause",
             "homepage": "https://github.com/mozilla/source-map"
-          },
-          {
-            "name": "tmpl",
-            "versions": ["1.0.5"],
-            "license": "BSD-3-Clause",
-            "homepage": "https://github.com/daaku/nodejs-tmpl"
           }
         ]
       },
@@ -834,7 +633,7 @@
       },
       {
         "license": "ISC",
-        "packageCount": 27,
+        "packageCount": 25,
         "packages": [
           {
             "name": "@isaacs/ttlcache",
@@ -849,12 +648,6 @@
             "homepage": "https://github.com/mapbox/point-geometry"
           },
           {
-            "name": "@mapbox/whoots-js",
-            "versions": ["3.1.0"],
-            "license": "ISC",
-            "homepage": "https://github.com/mapbox/whoots-js#readme"
-          },
-          {
             "name": "@maplibre/geojson-vt",
             "versions": ["6.1.1"],
             "license": "ISC",
@@ -862,7 +655,7 @@
           },
           {
             "name": "@maplibre/maplibre-gl-style-spec",
-            "versions": ["24.8.5", "24.10.0"],
+            "versions": ["24.8.5", "26.4.4"],
             "license": "ISC",
             "homepage": "https://maplibre.org/maplibre-style-spec/"
           },
@@ -987,12 +780,6 @@
             "homepage": "https://github.com/isaacs/yallist#readme"
           },
           {
-            "name": "yaml",
-            "versions": ["2.9.0"],
-            "license": "ISC",
-            "homepage": "https://eemeli.org/yaml/"
-          },
-          {
             "name": "yargs-parser",
             "versions": ["21.1.1"],
             "license": "ISC",
@@ -1002,7 +789,7 @@
       },
       {
         "license": "MIT",
-        "packageCount": 204,
+        "packageCount": 203,
         "packages": [
           {
             "name": "@babel/code-frame",
@@ -1185,56 +972,50 @@
             "homepage": "https://github.com/petamoriken/float16"
           },
           {
-            "name": "@react-native/assets-registry",
-            "versions": ["0.86.2"],
+            "name": "@react-native/asset-utils",
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/react/react-native/tree/HEAD/packages/assets#readme"
+            "homepage": "https://github.com/react/react-native/tree/HEAD/packages/asset-utils#readme"
           },
           {
             "name": "@react-native/codegen",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "MIT",
             "homepage": "https://github.com/react/react-native/tree/HEAD/packages/react-native-codegen#readme"
           },
           {
             "name": "@react-native/community-cli-plugin",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "MIT",
             "homepage": "https://github.com/react/react-native/tree/HEAD/packages/community-cli-plugin#readme"
           },
           {
             "name": "@react-native/debugger-shell",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "MIT",
             "homepage": "https://github.com/react/react-native/tree/HEAD/packages/debugger-shell#readme"
           },
           {
             "name": "@react-native/dev-middleware",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "MIT",
             "homepage": "https://github.com/react/react-native/tree/HEAD/packages/dev-middleware#readme"
           },
           {
             "name": "@react-native/gradle-plugin",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "MIT",
             "homepage": "https://github.com/react/react-native/tree/HEAD/packages/gradle-plugin#readme"
           },
           {
-            "name": "@react-native/js-polyfills",
-            "versions": ["0.86.2"],
-            "license": "MIT",
-            "homepage": "https://github.com/react/react-native/tree/HEAD/packages/polyfills#readme"
-          },
-          {
             "name": "@react-native/normalize-colors",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "MIT",
             "homepage": "https://github.com/react/react-native/tree/HEAD/packages/normalize-color#readme"
           },
           {
             "name": "@react-native/virtualized-lists",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "MIT",
             "homepage": "https://github.com/react/react-native/tree/HEAD/packages/virtualized-lists#readme"
           },
@@ -1335,12 +1116,6 @@
             "homepage": "https://github.com/manzt/zarrita.js#readme"
           },
           {
-            "name": "abort-controller",
-            "versions": ["3.0.0"],
-            "license": "MIT",
-            "homepage": "https://github.com/mysticatea/abort-controller#readme"
-          },
-          {
             "name": "accepts",
             "versions": ["2.0.0"],
             "license": "MIT",
@@ -1384,7 +1159,7 @@
           },
           {
             "name": "babel-plugin-syntax-hermes-parser",
-            "versions": ["0.36.0"],
+            "versions": ["0.36.1"],
             "license": "MIT",
             "homepage": "https://github.com/facebook/hermes#readme"
           },
@@ -1393,6 +1168,12 @@
             "versions": ["1.5.1"],
             "license": "MIT",
             "homepage": "https://github.com/beatgammit/base64-js"
+          },
+          {
+            "name": "bidi-js",
+            "versions": ["1.1.0"],
+            "license": "MIT",
+            "homepage": "https://github.com/lojjic/bidi-js#readme"
           },
           {
             "name": "braces",
@@ -1426,7 +1207,7 @@
           },
           {
             "name": "ci-info",
-            "versions": ["2.0.0", "3.9.0"],
+            "versions": ["3.9.0"],
             "license": "MIT",
             "homepage": "https://github.com/watson/ci-info"
           },
@@ -1533,12 +1314,6 @@
             "homepage": "https://github.com/jshttp/etag#readme"
           },
           {
-            "name": "event-target-shim",
-            "versions": ["5.0.1"],
-            "license": "MIT",
-            "homepage": "https://github.com/mysticatea/event-target-shim"
-          },
-          {
             "name": "fdir",
             "versions": ["6.5.0"],
             "license": "MIT",
@@ -1567,6 +1342,18 @@
             "versions": ["0.0.6"],
             "license": "MIT",
             "homepage": "https://github.com/facebook/flow#readme"
+          },
+          {
+            "name": "flow-estree",
+            "versions": ["0.331.0"],
+            "license": "MIT",
+            "homepage": "https://flow.org"
+          },
+          {
+            "name": "flow-parser",
+            "versions": ["0.331.0"],
+            "license": "MIT",
+            "homepage": "https://flow.org"
           },
           {
             "name": "fresh",
@@ -1600,19 +1387,19 @@
           },
           {
             "name": "hermes-compiler",
-            "versions": ["250829098.0.16"],
+            "versions": ["250829098.0.17"],
             "license": "MIT",
             "homepage": "https://github.com/facebook/hermes#readme"
           },
           {
             "name": "hermes-estree",
-            "versions": ["0.35.0", "0.36.0"],
+            "versions": ["0.36.1"],
             "license": "MIT",
             "homepage": "https://github.com/facebook/hermes#readme"
           },
           {
             "name": "hermes-parser",
-            "versions": ["0.35.0", "0.36.0"],
+            "versions": ["0.36.1"],
             "license": "MIT",
             "homepage": "https://github.com/facebook/hermes#readme"
           },
@@ -1627,12 +1414,6 @@
             "versions": ["7.0.6"],
             "license": "MIT",
             "homepage": "https://github.com/TooTallNate/proxy-agents#readme"
-          },
-          {
-            "name": "image-size",
-            "versions": ["1.2.1"],
-            "license": "MIT",
-            "homepage": "https://github.com/image-size/image-size#readme"
           },
           {
             "name": "invariant",
@@ -1744,87 +1525,87 @@
           },
           {
             "name": "metro",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-babel-transformer",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-cache",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-cache-key",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-config",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-core",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-file-map",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-minify-terser",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-resolver",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-runtime",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-source-map",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-symbolicate",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-transform-plugins",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-transform-worker",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "micromatch",
@@ -1906,9 +1687,9 @@
           },
           {
             "name": "ob1",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "on-finished",
@@ -1971,12 +1752,6 @@
             "homepage": "https://github.com/mafintosh/protocol-buffers-schema"
           },
           {
-            "name": "queue",
-            "versions": ["6.0.2"],
-            "license": "MIT",
-            "homepage": "https://github.com/jessetane/queue#readme"
-          },
-          {
             "name": "quick-lru",
             "versions": ["6.1.2"],
             "license": "MIT",
@@ -2014,7 +1789,7 @@
           },
           {
             "name": "react-native",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "MIT",
             "homepage": "https://reactnative.dev/"
           },
@@ -2036,6 +1811,12 @@
             "versions": ["2.1.1"],
             "license": "MIT",
             "homepage": "https://github.com/troygoode/node-require-directory/"
+          },
+          {
+            "name": "require-from-string",
+            "versions": ["2.0.2"],
+            "license": "MIT",
+            "homepage": "https://github.com/floatdrop/require-from-string#readme"
           },
           {
             "name": "resolve-protobuf-schema",
@@ -2678,9 +2459,9 @@
       {
         "package": "@territory-kit/cli",
         "tarball": "territory-kit-cli-2.1.0.tgz",
-        "tarballSizeBytes": 96797,
-        "tarballSha256": "345ccf294845cd2c75fe1218ff59b6707c7a38ca525308b16c5cc386b2985679",
-        "fileCount": 13,
+        "tarballSizeBytes": 128877,
+        "tarballSha256": "c2d2d36af0d008b577fc984ceb8137e250181cb0d01fb67847431262448a587f",
+        "fileCount": 17,
         "entries": [
           "package/LICENSE",
           "package/README.md",
@@ -2690,10 +2471,14 @@
           "package/dist/index.mjs",
           "package/dist/migrate-spatial-CgqZnmyQ.cjs",
           "package/dist/migrate-spatial-DsxIzDfn.mjs",
-          "package/dist/turkey-adm3-hybrid-BisW1TqX.mjs",
-          "package/dist/turkey-adm3-hybrid-CP2Nie0a.cjs",
-          "package/dist/turkey-v2-national-BpNfBC_D.cjs",
-          "package/dist/turkey-v2-national-CIgEc6ur.mjs",
+          "package/dist/turkey-adm3-hybrid-By97HTLK.cjs",
+          "package/dist/turkey-adm3-hybrid-DeOBkFmL.mjs",
+          "package/dist/turkey-adm3-smart-generate-Bb4HoABb.mjs",
+          "package/dist/turkey-adm3-smart-generate-CtK3aXth.cjs",
+          "package/dist/turkey-osm-1dcI7UrN.cjs",
+          "package/dist/turkey-osm-hLZN4lnu.mjs",
+          "package/dist/turkey-v2-national-B5HJt7bW.cjs",
+          "package/dist/turkey-v2-national-D2hBad_N.mjs",
           "package/package.json"
         ],
         "ok": true,
@@ -2761,8 +2546,8 @@
       {
         "package": "@territory-kit/data-de",
         "tarball": "territory-kit-data-de-2.1.0.tgz",
-        "tarballSizeBytes": 3476,
-        "tarballSha256": "f4bc362b386ac5d3ff66bc5ea9ac3057e8a1938a4a1682e0bf0f53b193360b12",
+        "tarballSizeBytes": 3475,
+        "tarballSha256": "37c656c621db7f2286139d03479f22d4cc109b1c75c70c50a2bd4addc4c5866f",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2780,7 +2565,7 @@
         "package": "@territory-kit/data-id",
         "tarball": "territory-kit-data-id-2.1.0.tgz",
         "tarballSizeBytes": 3494,
-        "tarballSha256": "be4d391a1679c9ff1f8ecc4acc39f6ac384fd7dff223b9e23434607386f0dee4",
+        "tarballSha256": "46b8682e28751d4d6ce2436e84eb182695b74a268fb9d948e98c88e2e962e923",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2798,7 +2583,7 @@
         "package": "@territory-kit/data-jp",
         "tarball": "territory-kit-data-jp-2.1.0.tgz",
         "tarballSizeBytes": 3487,
-        "tarballSha256": "9ba4a11884ce1172080719fa1f05284eccfaaee612d75dcd5eea984f5ccd9fd7",
+        "tarballSha256": "d4485883e101d573210f576a908765ad10eacc1384e0f24d3af17cf787c0748f",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2815,8 +2600,8 @@
       {
         "package": "@territory-kit/data-tr",
         "tarball": "territory-kit-data-tr-2.1.0.tgz",
-        "tarballSizeBytes": 6148,
-        "tarballSha256": "1bdc572439d55a78014694f44dbaecd5842d210f6b67a8f536c61d707620f138",
+        "tarballSizeBytes": 7215,
+        "tarballSha256": "5cbac2873c887793594eaaa0872b73f37a1bc6e4a5596c71f645515b1e5e78c5",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2834,7 +2619,7 @@
         "package": "@territory-kit/data-us",
         "tarball": "territory-kit-data-us-2.1.0.tgz",
         "tarballSizeBytes": 3498,
-        "tarballSha256": "b7b57d42e686458a65d20410e62798e37d812025b8bd251e28ed9f3dce918231",
+        "tarballSha256": "8f7cba5044aefa682195c7162ac72f79dd055806170a929c37515984515ccfef",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2851,8 +2636,8 @@
       {
         "package": "@territory-kit/dataset",
         "tarball": "territory-kit-dataset-2.1.0.tgz",
-        "tarballSizeBytes": 120543,
-        "tarballSha256": "4b2fa58031df749c992253031eee929d3117467dc84dd03bc13eff89196f4ccb",
+        "tarballSizeBytes": 128696,
+        "tarballSha256": "28a3d81fe698ffb56f21d1561d82f56ad88412fe186bfc6aeff047d579e804a7",
         "fileCount": 15,
         "entries": [
           "package/LICENSE",
@@ -2865,10 +2650,10 @@
           "package/dist/turkey-v2.d.cts",
           "package/dist/turkey-v2.d.mts",
           "package/dist/turkey-v2.mjs",
-          "package/dist/types-3RHQtcke.d.cts",
-          "package/dist/types-3RHQtcke.d.mts",
-          "package/dist/validation-D39z0H2A.cjs",
-          "package/dist/validation-DzJyvGCR.mjs",
+          "package/dist/types-bC3aEhYD.d.cts",
+          "package/dist/types-bC3aEhYD.d.mts",
+          "package/dist/validation-DTgem0P0.cjs",
+          "package/dist/validation-sEZQPnfG.mjs",
           "package/package.json"
         ],
         "ok": true,
@@ -2895,8 +2680,8 @@
       {
         "package": "@territory-kit/generators",
         "tarball": "territory-kit-generators-2.1.0.tgz",
-        "tarballSizeBytes": 388933,
-        "tarballSha256": "65139994b177877ee8b0581c1d6aed62b8e004a98494b6dcc749789fe527dce4",
+        "tarballSizeBytes": 608172,
+        "tarballSha256": "efde886fd88fd5f96a0835863312af743f26b183a12b63effa097967b57ce0ff",
         "fileCount": 15,
         "entries": [
           "package/LICENSE",
@@ -2909,10 +2694,10 @@
           "package/dist/turkey-adm3.d.cts",
           "package/dist/turkey-adm3.d.mts",
           "package/dist/turkey-adm3.mjs",
-          "package/dist/turkey-v2-national-Bl_N9Ubc.d.mts",
-          "package/dist/turkey-v2-national-C0J7ILJQ.d.cts",
-          "package/dist/turkey-v2-national-Do-ORQqw.cjs",
-          "package/dist/turkey-v2-national-DyIBwZa8.mjs",
+          "package/dist/turkey-v2-national-BV9XIWfR.cjs",
+          "package/dist/turkey-v2-national-BjRENpR7.d.mts",
+          "package/dist/turkey-v2-national-C17zBv4S.mjs",
+          "package/dist/turkey-v2-national-FWc_vA_4.d.cts",
           "package/package.json"
         ],
         "ok": true,
@@ -2921,8 +2706,8 @@
       {
         "package": "@territory-kit/leaflet",
         "tarball": "territory-kit-leaflet-1.2.12.tgz",
-        "tarballSizeBytes": 7921,
-        "tarballSha256": "443407d0fd0c36128721a93686db4c9cbd1c9e626b284e69e27404d567d61d0d",
+        "tarballSizeBytes": 7919,
+        "tarballSha256": "4d4c3e7f982b4680ebdcf323d52ae7d15e8c3517b7a5614b05139558c0252bf2",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -2939,8 +2724,8 @@
       {
         "package": "@territory-kit/maplibre",
         "tarball": "territory-kit-maplibre-2.1.0.tgz",
-        "tarballSizeBytes": 13492,
-        "tarballSha256": "ac5cd6554c6654604bd301c21e79f64ca376604b9433202107a792b515fbadda",
+        "tarballSizeBytes": 13699,
+        "tarballSha256": "868360623d7c460d5fa526dbea3c8acc304afe786ea63a7e195799239240cb58",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -3012,7 +2797,7 @@
         "package": "@territory-kit/react-native",
         "tarball": "territory-kit-react-native-1.1.13.tgz",
         "tarballSizeBytes": 33128,
-        "tarballSha256": "353e1080d5ff1f5b53f825b0289eb59bfbe68f9be52911c6027c96ecb37d4d2d",
+        "tarballSha256": "1e1897e4a1866c1c42838073c5fc97f3f9f887a70e4445d28347c32ab866a499",
         "fileCount": 11,
         "entries": [
           "package/LICENSE",
@@ -3033,14 +2818,14 @@
       {
         "package": "@territory-kit/registry",
         "tarball": "territory-kit-registry-2.1.0.tgz",
-        "tarballSizeBytes": 44315,
-        "tarballSha256": "f89b6c3f8181cca583c908ac243eafd8c4e7e0381474a8fafecb51ac5be3b45b",
+        "tarballSizeBytes": 48744,
+        "tarballSha256": "71773a025f4fcb5b1f8c42eda5605ad56bb4ee60bee7b96612897108cbb03ca5",
         "fileCount": 15,
         "entries": [
           "package/LICENSE",
           "package/README.md",
-          "package/dist/client-CtzYr_gT.cjs",
-          "package/dist/client-CzTRavGv.mjs",
+          "package/dist/client-CnME8haT.cjs",
+          "package/dist/client-DS1Wvhq0.mjs",
           "package/dist/index.cjs",
           "package/dist/index.d.cts",
           "package/dist/index.d.mts",
@@ -3049,8 +2834,8 @@
           "package/dist/node.d.cts",
           "package/dist/node.d.mts",
           "package/dist/node.mjs",
-          "package/dist/types-CglN8BV-.d.cts",
-          "package/dist/types-CglN8BV-.d.mts",
+          "package/dist/types-lnfdHxn0.d.cts",
+          "package/dist/types-lnfdHxn0.d.mts",
           "package/package.json"
         ],
         "ok": true,
@@ -3059,9 +2844,9 @@
       {
         "package": "@territory-kit/runtime",
         "tarball": "territory-kit-runtime-2.1.0.tgz",
-        "tarballSizeBytes": 45433,
-        "tarballSha256": "dbef27af6917afa9329c0ebf8a080675f8fea0ef2d0e11ebcd91b00e638fabca",
-        "fileCount": 7,
+        "tarballSizeBytes": 52216,
+        "tarballSha256": "2e5181b6cb7784eba118d1e51babcb65525bb32c8bd7404a846ba312f608731c",
+        "fileCount": 11,
         "entries": [
           "package/LICENSE",
           "package/README.md",
@@ -3069,6 +2854,10 @@
           "package/dist/index.d.cts",
           "package/dist/index.d.mts",
           "package/dist/index.mjs",
+          "package/dist/turkey-v2-delivery.cjs",
+          "package/dist/turkey-v2-delivery.d.cts",
+          "package/dist/turkey-v2-delivery.d.mts",
+          "package/dist/turkey-v2-delivery.mjs",
           "package/package.json"
         ],
         "ok": true,
@@ -3078,7 +2867,7 @@
   },
   "exports": {
     "ok": true,
-    "checkedExports": 24,
+    "checkedExports": 25,
     "issues": [],
     "results": [
       {
@@ -3248,10 +3037,17 @@
         "import": "packages/runtime/dist/index.mjs",
         "require": "packages/runtime/dist/index.cjs",
         "types": "packages/runtime/dist/index.d.mts"
+      },
+      {
+        "package": "@territory-kit/runtime",
+        "subpath": "./turkey-v2-delivery",
+        "import": "packages/runtime/dist/turkey-v2-delivery.mjs",
+        "require": "packages/runtime/dist/turkey-v2-delivery.cjs",
+        "types": "packages/runtime/dist/turkey-v2-delivery.d.mts"
       }
     ]
   },
-  "importBoundaries": { "ok": true, "scannedFiles": 43, "issues": [] },
+  "importBoundaries": { "ok": true, "scannedFiles": 44, "issues": [] },
   "coverage": {
     "lines": { "total": 4702, "covered": 4091, "skipped": 0, "pct": 87 },
     "statements": { "total": 4805, "covered": 4183, "skipped": 0, "pct": 87.05 },
@@ -3531,6 +3327,6 @@
   },
   "changesetStatus": {
     "ok": true,
-    "output": "[ELIFECYCLE] Command failed with exit code 1.\n\n$ changeset status --verbose\n🦋  error Some packages have been changed but no changesets were found. Run `changeset add` to resolve this error.\n🦋  error If this change doesn't need a release, run `changeset add --empty`."
+    "output": "🦋  info Packages to be bumped at patch\n🦋  - @territory-kit/leaflet 1.2.13\n🦋  - @territory-kit/migration 2.1.1\n🦋  - @territory-kit/openlayers 1.2.13\n🦋  - @territory-kit/react-native 1.1.14\n🦋  ---\n🦋  info Running release would release NO packages as a minor\n🦋  ---\n🦋  info Packages to be bumped at major\n🦋  - @territory-kit/dataset 3.0.0\n🦋    - .changeset/turkey-v2-sprint-7-delivery.md\n🦋  - @territory-kit/generators 3.0.0\n🦋    - .changeset/turkey-v2-sprint-7-delivery.md\n🦋  - @territory-kit/runtime 3.0.0\n🦋    - .changeset/turkey-v2-sprint-7-delivery.md\n🦋  - @territory-kit/registry 3.0.0\n🦋    - .changeset/turkey-v2-sprint-7-delivery.md\n🦋  - @territory-kit/cli 3.0.0\n🦋    - .changeset/turkey-v2-sprint-7-delivery.md\n🦋  - @territory-kit/adapter-core 3.0.0\n🦋  - @territory-kit/core 3.0.0\n🦋  - @territory-kit/game 3.0.0\n🦋  - @territory-kit/maplibre 3.0.0\n🦋  - @territory-kit/nestjs 3.0.0\n🦋  - @territory-kit/data-de 3.0.0\n🦋  - @territory-kit/data-id 3.0.0\n🦋  - @territory-kit/data-jp 3.0.0\n🦋  - @territory-kit/data-tr 3.0.0\n🦋  - @territory-kit/data-us 3.0.0\n\n$ changeset status --verbose"
   }
 }

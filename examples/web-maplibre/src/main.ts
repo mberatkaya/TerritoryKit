@@ -1,5 +1,5 @@
 import "maplibre-gl/dist/maplibre-gl.css";
-import maplibregl from "maplibre-gl";
+import * as maplibregl from "maplibre-gl";
 import { createTerritoryEngine } from "@territory-kit/core";
 import { createTerritoryMapLibreAdapter } from "@territory-kit/maplibre";
 import type { TerritoryMapLibreMap, TerritoryMapLibreState } from "@territory-kit/maplibre";

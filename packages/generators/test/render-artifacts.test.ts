@@ -2,6 +2,8 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { DEFAULT_TERRITORY_RENDER_LEVEL_POLICY } from "@territory-kit/dataset";
+import { VectorTile } from "@mapbox/vector-tile";
+import { PbfReader } from "pbf";
 import { createSampleTerritoryDataset } from "@territory-kit/shared-testkit";
 import { describe, expect, it } from "vitest";
 import {
@@ -11,6 +13,50 @@ import {
 } from "../src/render-artifacts.js";
 
 describe("render artifacts", () => {
+  it("encodes canonical ADM3 identity and source semantics into an MVT tile", () => {
+    const dataset = createSampleTerritoryDataset();
+    const zone = dataset.zones[0]!;
+    zone.level = 3;
+    delete zone.parentId;
+    zone.properties.territory = {
+      parentId: "adm2:parent",
+      boundaryKind: "estimated",
+      boundarySourceClass: "smart-derived",
+      sourceClass: "generated",
+      confidence: "low",
+      administrative: false,
+      authoritative: false,
+      sourceVersion: "osm-v1",
+      algorithmVersion: "smart-v1",
+      geometryHash: "canonical-geometry"
+    };
+    dataset.zones = [zone];
+    const result = buildTerritoryRenderArtifacts({
+      dataset,
+      format: "mvt",
+      layerId: "territory_adm3",
+      policies: [{ adminLevel: "ADM3", minZoom: 0, maxZoom: 0 }],
+      minZoom: 0,
+      maxZoom: 0
+    });
+    const tileBytes = result.files.get("render/tiles/0/0/0.mvt") as Uint8Array;
+    const tile = new VectorTile(new PbfReader(tileBytes));
+    const layer = tile.layers.territory_adm3!;
+    expect(layer.length).toBe(1);
+    expect(layer.feature(0).properties).toMatchObject({
+      territoryId: zone.id,
+      parentAdm2Id: "adm2:parent",
+      boundaryKind: "estimated",
+      boundarySourceClass: "smart-derived",
+      confidence: "low",
+      administrative: false,
+      authoritative: false,
+      sourceVersion: "osm-v1",
+      datasetVersion: dataset.manifest.datasetVersion,
+      generatorVersion: "smart-v1",
+      geometryHash: "canonical-geometry"
+    });
+  });
   it("can omit the duplicate query file for national rendering", () => {
     const result = buildTerritoryRenderArtifacts({
       dataset: createSampleTerritoryDataset(),

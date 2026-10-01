@@ -42,7 +42,7 @@ try {
     const tarballPath = join(destination, tarball);
     const tarballBytes = await readFile(tarballPath);
     const entries = listTarballEntries(tarballPath);
-    const issues = auditTarball(packageJson.name, entries);
+    const issues = auditTarball(packageJson.name, entries, tarballPath);
     results.push({
       package: packageJson.name,
       tarball,
@@ -109,7 +109,7 @@ function listTarballEntries(tarballPath) {
     .sort();
 }
 
-function auditTarball(packageName, entries) {
+function auditTarball(packageName, entries, tarballPath) {
   const issues = [];
   const entrySet = new Set(entries);
   const requiredFiles = ["package/package.json", "package/README.md", "package/LICENSE"];
@@ -138,6 +138,27 @@ function auditTarball(packageName, entries) {
 
   if (forbidden) {
     issues.push(`${packageName} tarball includes forbidden development file ${forbidden}.`);
+  }
+
+  const secretFile = entries.find((entry) =>
+    /(?:^|\/)(?:\.env(?:\.|$)|\.npmrc$|.*credentials.*|.*secret.*|.*private.*key.*)/i.test(entry)
+  );
+  if (secretFile)
+    issues.push(`${packageName} tarball includes credential-like file ${secretFile}.`);
+
+  for (const entry of entries.filter(
+    (item) => item.startsWith("package/dist/") && /\.(?:mjs|cjs|json)$/.test(item)
+  )) {
+    const extracted = spawnSync("tar", ["-xOf", tarballPath, entry], {
+      encoding: "utf8",
+      maxBuffer: 16 * 1024 * 1024
+    });
+    if (extracted.status !== 0) {
+      issues.push(`${packageName} could not inspect ${entry}.`);
+      continue;
+    }
+    if (/(?:\/Users\/|\/home\/)[A-Za-z0-9._-]+\//.test(extracted.stdout))
+      issues.push(`${packageName} contains a machine-specific absolute path in ${entry}.`);
   }
 
   const geometryArtifact = entries.find(isGeometryArtifactEntry);

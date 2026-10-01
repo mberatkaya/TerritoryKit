@@ -29,6 +29,14 @@ on:
         required: false
         default: "benchmarks/baselines/turkey-adm2-production.json"
 
+env:
+  INPUT_LEVELS: ${{ inputs.levels }}
+  INPUT_ADM3_PROVINCES: ${{ inputs.adm3_provinces }}
+  INPUT_ADM3_CATALOG: ${{ inputs.adm3_catalog }}
+  INPUT_ALLOW_PARTIAL: ${{ inputs.allow_partial }}
+  INPUT_SOURCE_LOCK: ${{ inputs.source_lock }}
+  INPUT_BENCHMARK_BASELINE: ${{ inputs.benchmark_baseline }}
+
 permissions:
   contents: read
 
@@ -36,46 +44,47 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v5
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: pnpm/action-setup@a8198c4bff370c8506180b035930dea56dbd5288 # v5
         with:
           version: 11.7.0
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
         with:
           node-version: 22
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: node scripts/validate-workflow-inputs.mjs
       - run: pnpm --filter @territory-kit/generators build
       - name: Create source lock
         if: ${{ inputs.source_lock == '' }}
         run: |
           mkdir -p dist/tr
-          ADM3_FLAGS=""
-          if [[ -n "${{ inputs.adm3_provinces }}" ]]; then
-            ADM3_FLAGS="--adm3-provinces ${{ inputs.adm3_provinces }} --adm3-catalog ${{ inputs.adm3_catalog }}"
+          ADM3_FLAGS=()
+          if [[ -n "$INPUT_ADM3_PROVINCES" ]]; then
+            ADM3_FLAGS=(--adm3-provinces "$INPUT_ADM3_PROVINCES" --adm3-catalog "$INPUT_ADM3_CATALOG")
           fi
           pnpm --filter @territory-kit/cli exec territory country source lock TR \
-            --levels "${{ inputs.levels }}" \
+            --levels "$INPUT_LEVELS" \
             --output dist/tr/sources.lock.json \
-            $ADM3_FLAGS \
+            "${ADM3_FLAGS[@]}" \
             --force \
             --json
       - name: Copy provided source lock
         if: ${{ inputs.source_lock != '' }}
         run: |
           mkdir -p dist/tr
-          cp "${{ inputs.source_lock }}" dist/tr/sources.lock.json
+          cp "$INPUT_SOURCE_LOCK" dist/tr/sources.lock.json
       - name: Build Turkey artifacts
         run: |
           mkdir -p dist/tr
-          PARTIAL_FLAGS=""
-          if [[ "${{ inputs.allow_partial }}" == "true" ]]; then
-            PARTIAL_FLAGS="--allow-partial"
+          PARTIAL_FLAGS=()
+          if [[ "$INPUT_ALLOW_PARTIAL" == "true" ]]; then
+            PARTIAL_FLAGS=(--allow-partial)
           fi
           /usr/bin/time -v -o dist/tr/turkey-build-resource-report.txt \
             pnpm --filter @territory-kit/cli exec territory country build TR \
             --source-lock dist/tr/sources.lock.json \
-            --levels "${{ inputs.levels }}" \
+            --levels "$INPUT_LEVELS" \
             --output dist/tr/artifact \
             --build-adjacency \
             --build-query-artifacts \
@@ -86,7 +95,7 @@ jobs:
             --profile \
             --profile-report dist/tr/artifact/build-performance-report.json \
             --phase-timeout-ms 300000 \
-            $PARTIAL_FLAGS \
+            "${PARTIAL_FLAGS[@]}" \
             --json
           cp dist/tr/turkey-build-resource-report.txt dist/tr/artifact/turkey-build-resource-report.txt
       - name: Validate artifact checksums
@@ -103,7 +112,7 @@ jobs:
         if: ${{ inputs.benchmark_baseline != '' }}
         run: |
           pnpm benchmark:compare -- \
-            --baseline "${{ inputs.benchmark_baseline }}" \
+            --baseline "$INPUT_BENCHMARK_BASELINE" \
             --current dist/tr/artifact/turkey-adm2-benchmark.json
       - name: Summarize Turkey build evidence
         run: |
@@ -149,7 +158,7 @@ jobs:
           };
           writeFileSync(join(root, "release-performance-summary.json"), `${JSON.stringify(summary, null, 2)}\n`);
           NODE
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
           name: turkey-build-performance-report
           path: |
@@ -157,17 +166,17 @@ jobs:
             dist/tr/artifact/turkey-build-resource-report.txt
             dist/tr/artifact/turkey-adm2-benchmark.json
             dist/tr/artifact/release-performance-summary.json
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
           name: turkey-adjacency-report
           path: |
             dist/tr/artifact/adjacency-report.json
             dist/tr/artifact/adjacency/**/build-report.json
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
           name: turkey-mvt-policy-report
           path: dist/tr/artifact/render/mvt-policy-report.json
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         with:
           name: turkey-coverage-checksum-reports
           path: |

@@ -1,5 +1,7 @@
 # TerritoryKit
 
+Sprint 7 adds a [versioned Turkey delivery contract](./docs/datasets/turkey-sprint-7-delivery.md) for scoped shards, MVT, source changes, attribution, and explicit estimated-boundary resolution. The Sprint 6 dataset candidate remains `2.1.0-rc.7`; npm packages remain `2.1.0` pending review and the normal Changesets release process.
+
 ## Sprint 6 final candidate: `2.1.0-rc.7`
 
 The publish-ready local candidate uses `smart-derived-v1.7`. All 39 Istanbul districts and all

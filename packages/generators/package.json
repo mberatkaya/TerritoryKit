@@ -58,6 +58,8 @@
     "polygon-clipping": "^0.15.7"
   },
   "devDependencies": {
-    "@territory-kit/shared-testkit": "workspace:*"
+    "@mapbox/vector-tile": "^3.0.0",
+    "@territory-kit/shared-testkit": "workspace:*",
+    "pbf": "^5.1.2"
   }
 }
