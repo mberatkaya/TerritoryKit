@@ -74,7 +74,7 @@
       "remediation": "Explicit dispatch publish job with scoped OIDC and environment.",
       "testEvidence": "release.yml inspection",
       "status": "fixed",
-      "residualRisk": "Environment required-reviewer settings are unverified",
+      "residualRisk": "npm-production is restricted to main, but dual-control publishing still requires a second trusted maintainer as required reviewer",
       "manualActionRequired": true
     },
     {
@@ -153,15 +153,48 @@
       "id": "TK-S7-009",
       "severity": "high",
       "component": "GitHub governance",
-      "description": "Main has no verified protection or ruleset.",
+      "description": "Main previously had no verified protection or ruleset.",
       "exploitPrecondition": "Maintainer or compromised credential pushes directly.",
-      "remediation": "Enable required PR, checks, reviews and force-push protection.",
-      "testEvidence": "gh api rulesets and branch protection",
-      "status": "open",
-      "residualRisk": "Source control cannot enforce remote settings",
-      "manualActionRequired": true
+      "remediation": "Active main ruleset requires PRs, current CI, conversation resolution and an up-to-date branch; blocks force pushes and deletion.",
+      "testEvidence": "GitHub ruleset 24299690 and effective main rules API, verified 2026-10-01",
+      "status": "fixed",
+      "residualRisk": "Zero required approvals is a documented single-maintainer exception until a second trusted maintainer is added",
+      "manualActionRequired": false
     }
   ],
+  "githubGovernance": {
+    "verifiedOn": "2026-10-01",
+    "mainProtection": {
+      "state": "verified",
+      "type": "repository-branch-ruleset",
+      "rulesetId": 24299690,
+      "enforcement": "active",
+      "target": "refs/heads/main",
+      "pullRequestRequired": true,
+      "requiredApprovingReviewCount": 0,
+      "singleMaintainerApprovalException": true,
+      "dismissStaleReviewsOnPush": false,
+      "requireLastPushApproval": false,
+      "requireCodeOwnerReview": false,
+      "requiredReviewThreadResolution": true,
+      "strictRequiredStatusChecksPolicy": true,
+      "requiredStatusChecks": ["Node 22", "Node 24", "Live PostGIS validation"],
+      "statusCheckIntegration": "github-actions",
+      "forcePushBlocked": true,
+      "deletionRestricted": true,
+      "bypassActors": []
+    },
+    "trustedMaintainers": ["mberatkaya"],
+    "npmProduction": {
+      "state": "partially-configured",
+      "environmentId": 23192095401,
+      "customDeploymentBranchPolicies": true,
+      "allowedBranches": ["main"],
+      "allowedTags": [],
+      "requiredReviewer": null,
+      "reviewerState": "manual-second-reviewer-required"
+    }
+  },
   "secretScan": {
     "tool": "gitleaks",
     "scope": [
