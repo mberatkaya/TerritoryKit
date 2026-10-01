@@ -1,10 +1,10 @@
 {
   "schemaVersion": "territorykit-production-hardening-report@1",
   "ok": false,
-  "generatedAt": "2026-09-30T20:54:37.179Z",
+  "generatedAt": "2026-10-01T08:01:21.549Z",
   "git": {
     "branch": "feature/sprint-7-publishing-api-sdk-updates",
-    "head": "b189d95d1ae82ef310a872a1ce9d199fd9a1d1a0"
+    "head": "b0d7a489fdf79426250d12d3ed40567fac461164"
   },
   "environment": {
     "node": "v24.14.0",
@@ -12,12 +12,12 @@
     "arch": "arm64",
     "packageManager": "pnpm@11.7.0",
     "pnpmVersion": "11.7.0",
-    "lockfileSha256": "03439078bf45b60391355b7fae94cec0fa36bf53f7c669d146860214e1402d3e"
+    "lockfileSha256": "b8c5e5fdde089494c90bf964ad855f317eeeea93b76c6fd4c13bb983c58d1f64"
   },
   "releaseDecisionInputs": {
     "criticalVulnerabilities": 0,
-    "highProductionVulnerabilities": 2,
-    "highAllVulnerabilities": 13,
+    "highProductionVulnerabilities": 0,
+    "highAllVulnerabilities": 1,
     "publicPackageMetadataOk": true,
     "packageDryRunOk": true,
     "exportsOk": true,
@@ -31,64 +31,13 @@
   },
   "security": {
     "audit": {
-      "advisories": {
-        "1239765": {
-          "findings": [
-            {
-              "version": "1.2.1",
-              "paths": [
-                "packages__react-native>@maplibre/maplibre-react-native>react-native>@react-native/community-cli-plugin>metro>image-size",
-                "packages__react-native>@maplibre/maplibre-react-native>react-native>@react-native/community-cli-plugin>metro-config>metro>image-size",
-                "packages__react-native>react-native>@react-native/community-cli-plugin>metro>image-size",
-                "packages__react-native>react-native>@react-native/community-cli-plugin>metro-config>metro>image-size"
-              ],
-              "dev": false,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1239765,
-          "title": "image-size: JXL and HEIF parsers allow denial of service through infinite loops",
-          "module_name": "image-size",
-          "vulnerable_versions": ">=1.2.0 <=2.0.2",
-          "patched_versions": ">=2.0.3",
-          "severity": "high",
-          "cwe": "CWE-835",
-          "github_advisory_id": "GHSA-5p2g-fcmc-qvqq",
-          "url": "https://github.com/advisories/GHSA-5p2g-fcmc-qvqq"
-        },
-        "1239766": {
-          "findings": [
-            {
-              "version": "1.2.1",
-              "paths": [
-                "packages__react-native>@maplibre/maplibre-react-native>react-native>@react-native/community-cli-plugin>metro>image-size",
-                "packages__react-native>@maplibre/maplibre-react-native>react-native>@react-native/community-cli-plugin>metro-config>metro>image-size",
-                "packages__react-native>react-native>@react-native/community-cli-plugin>metro>image-size",
-                "packages__react-native>react-native>@react-native/community-cli-plugin>metro-config>metro>image-size"
-              ],
-              "dev": false,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1239766,
-          "title": "image-size: ICNS parser allows denial of service through an infinite loop",
-          "module_name": "image-size",
-          "vulnerable_versions": ">=0.6.3 <=2.0.2",
-          "patched_versions": ">=2.0.3",
-          "severity": "high",
-          "cwe": "CWE-835",
-          "github_advisory_id": "GHSA-w3rx-r6r6-pgpr",
-          "url": "https://github.com/advisories/GHSA-w3rx-r6r6-pgpr"
-        }
-      },
+      "advisories": {},
       "metadata": {
-        "vulnerabilities": { "info": 0, "low": 0, "moderate": 0, "high": 2, "critical": 0 },
-        "dependencies": 281,
+        "vulnerabilities": { "info": 0, "low": 0, "moderate": 0, "high": 0, "critical": 0 },
+        "dependencies": 271,
         "devDependencies": 0,
         "optionalDependencies": 0,
-        "totalDependencies": 281
+        "totalDependencies": 271
       }
     },
     "fullAudit": {
@@ -193,364 +142,6 @@
           "github_advisory_id": "GHSA-fx2h-pf6j-xcff",
           "url": "https://github.com/advisories/GHSA-fx2h-pf6j-xcff"
         },
-        "1130591": {
-          "findings": [
-            {
-              "version": "5.0.7",
-              "paths": [
-                ".>@eslint/js>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>@eslint/js>eslint>minimatch>brace-expansion",
-                ".>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>eslint>minimatch>brace-expansion",
-                ".>rimraf>glob>minimatch>brace-expansion",
-                ".>typedoc>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>eslint>minimatch>brace-expansion"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1130591,
-          "title": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
-          "module_name": "brace-expansion",
-          "vulnerable_versions": ">=4.0.0 <5.0.8",
-          "patched_versions": ">=5.0.8",
-          "severity": "high",
-          "cwe": "CWE-400, CWE-770",
-          "github_advisory_id": "GHSA-mh99-v99m-4gvg",
-          "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg"
-        },
-        "1130709": {
-          "findings": [
-            {
-              "version": "8.5.17",
-              "paths": [
-                ".>@vitest/coverage-v8>vitest>@vitest/mocker>vite>postcss",
-                ".>@vitest/coverage-v8>vitest>vite>postcss",
-                ".>vite>postcss",
-                ".>vitepress>@vitejs/plugin-vue>vite>postcss",
-                ".>vitepress>@vitejs/plugin-vue>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/core>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/integrations>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/integrations>@vueuse/core>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/integrations>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/integrations>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>vite>postcss",
-                ".>vitepress>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>postcss",
-                ".>vitest>@vitest/mocker>vite>postcss",
-                ".>vitest>vite>postcss",
-                "docs>vitepress>@vitejs/plugin-vue>vite>postcss",
-                "docs>vitepress>@vitejs/plugin-vue>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/core>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/integrations>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/integrations>@vueuse/core>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/integrations>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/integrations>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>vite>postcss",
-                "docs>vitepress>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>postcss",
-                "examples__web-leaflet-turkey>vite>postcss",
-                "examples__web-leaflet-turkey>vitest>@vitest/mocker>vite>postcss",
-                "examples__web-leaflet-turkey>vitest>vite>postcss",
-                "examples__web-maplibre>vite>postcss",
-                "examples__web-maplibre-turkey>vite>postcss",
-                "examples__web-maplibre-turkey>vitest>@vitest/mocker>vite>postcss",
-                "examples__web-maplibre-turkey>vitest>vite>postcss",
-                "examples__web-openlayers-turkey>vite>postcss",
-                "examples__web-openlayers-turkey>vitest>@vitest/mocker>vite>postcss",
-                "examples__web-openlayers-turkey>vitest>vite>postcss"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1130709,
-          "title": "PostCSS: incomplete fix of GHSA-6g55-p6wh-862q — attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset",
-          "module_name": "postcss",
-          "vulnerable_versions": "<=8.5.22",
-          "patched_versions": ">=8.5.23",
-          "severity": "moderate",
-          "cwe": "CWE-22, CWE-200",
-          "github_advisory_id": "GHSA-fxqj-rqcc-2cmp",
-          "url": "https://github.com/advisories/GHSA-fxqj-rqcc-2cmp"
-        },
-        "1130734": {
-          "findings": [
-            {
-              "version": "5.0.7",
-              "paths": [
-                ".>@eslint/js>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>@eslint/js>eslint>minimatch>brace-expansion",
-                ".>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>eslint>minimatch>brace-expansion",
-                ".>rimraf>glob>minimatch>brace-expansion",
-                ".>typedoc>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>eslint>minimatch>brace-expansion"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1130734,
-          "title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
-          "module_name": "brace-expansion",
-          "vulnerable_versions": ">=4.0.0 <5.0.9",
-          "patched_versions": ">=5.0.9",
-          "severity": "high",
-          "cwe": "CWE-400, CWE-770",
-          "github_advisory_id": "GHSA-rgw5-rvv9-x895",
-          "url": "https://github.com/advisories/GHSA-rgw5-rvv9-x895"
-        },
-        "1138114": {
-          "findings": [
-            {
-              "version": "3.15.0",
-              "paths": [
-                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/config>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/config>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/config>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/git>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/apply-release-plan>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/assemble-release-plan>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/assemble-release-plan>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/assemble-release-plan>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/config>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/config>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/config>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/assemble-release-plan>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/assemble-release-plan>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/assemble-release-plan>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/config>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/config>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/config>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/pre>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/read>@changesets/git>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/git>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/pre>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/read>@changesets/git>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@manypkg/get-packages>read-yaml-file>js-yaml"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1138114,
-          "title": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) — CVE-2026-59870 fix not backported",
-          "module_name": "js-yaml",
-          "vulnerable_versions": ">=3.0.0 <3.15.1",
-          "patched_versions": ">=3.15.1",
-          "severity": "high",
-          "cwe": "CWE-407",
-          "github_advisory_id": "GHSA-5p4m-2wfm-xmqj",
-          "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj"
-        },
-        "1138115": {
-          "findings": [
-            {
-              "version": "4.3.0",
-              "paths": [
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/read>@changesets/parse>js-yaml",
-                ".>@changesets/cli>@changesets/read>@changesets/parse>js-yaml",
-                "packages__nestjs>@nestjs/swagger>js-yaml"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1138115,
-          "title": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) — CVE-2026-59870 fix not backported",
-          "module_name": "js-yaml",
-          "vulnerable_versions": ">=4.0.0 <4.3.1",
-          "patched_versions": ">=4.3.1",
-          "severity": "high",
-          "cwe": "CWE-407",
-          "github_advisory_id": "GHSA-5p4m-2wfm-xmqj",
-          "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj"
-        },
-        "1139427": {
-          "findings": [
-            {
-              "version": "3.3.16",
-              "paths": [
-                ".>@vitest/coverage-v8>vitest>@vitest/mocker>vite>postcss>nanoid",
-                ".>@vitest/coverage-v8>vitest>vite>postcss>nanoid",
-                ".>vite>postcss>nanoid",
-                ".>vitepress>@vitejs/plugin-vue>vite>postcss>nanoid",
-                ".>vitepress>@vitejs/plugin-vue>vue>@vue/compiler-sfc>postcss>nanoid",
-                ".>vitepress>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
-                ".>vitepress>@vueuse/core>vue>@vue/compiler-sfc>postcss>nanoid",
-                ".>vitepress>@vueuse/integrations>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
-                ".>vitepress>@vueuse/integrations>@vueuse/core>vue>@vue/compiler-sfc>postcss>nanoid",
-                ".>vitepress>@vueuse/integrations>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
-                ".>vitepress>@vueuse/integrations>vue>@vue/compiler-sfc>postcss>nanoid",
-                ".>vitepress>vite>postcss>nanoid",
-                ".>vitepress>vue>@vue/compiler-sfc>postcss>nanoid",
-                ".>vitepress>postcss>nanoid",
-                ".>vitest>@vitest/mocker>vite>postcss>nanoid",
-                ".>vitest>vite>postcss>nanoid",
-                "docs>vitepress>@vitejs/plugin-vue>vite>postcss>nanoid",
-                "docs>vitepress>@vitejs/plugin-vue>vue>@vue/compiler-sfc>postcss>nanoid",
-                "docs>vitepress>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
-                "docs>vitepress>@vueuse/core>vue>@vue/compiler-sfc>postcss>nanoid",
-                "docs>vitepress>@vueuse/integrations>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
-                "docs>vitepress>@vueuse/integrations>@vueuse/core>vue>@vue/compiler-sfc>postcss>nanoid",
-                "docs>vitepress>@vueuse/integrations>@vueuse/shared>vue>@vue/compiler-sfc>postcss>nanoid",
-                "docs>vitepress>@vueuse/integrations>vue>@vue/compiler-sfc>postcss>nanoid",
-                "docs>vitepress>vite>postcss>nanoid",
-                "docs>vitepress>vue>@vue/compiler-sfc>postcss>nanoid",
-                "docs>vitepress>postcss>nanoid",
-                "examples__web-leaflet-turkey>vite>postcss>nanoid",
-                "examples__web-leaflet-turkey>vitest>@vitest/mocker>vite>postcss>nanoid",
-                "examples__web-leaflet-turkey>vitest>vite>postcss>nanoid",
-                "examples__web-maplibre>vite>postcss>nanoid",
-                "examples__web-maplibre-turkey>vite>postcss>nanoid",
-                "examples__web-maplibre-turkey>vitest>@vitest/mocker>vite>postcss>nanoid",
-                "examples__web-maplibre-turkey>vitest>vite>postcss>nanoid",
-                "examples__web-openlayers-turkey>vite>postcss>nanoid",
-                "examples__web-openlayers-turkey>vitest>@vitest/mocker>vite>postcss>nanoid",
-                "examples__web-openlayers-turkey>vitest>vite>postcss>nanoid"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1139427,
-          "title": "nanoid: custom generators can loop indefinitely when size is zero",
-          "module_name": "nanoid",
-          "vulnerable_versions": "<3.3.18",
-          "patched_versions": ">=3.3.18",
-          "severity": "high",
-          "cwe": "CWE-835",
-          "github_advisory_id": "GHSA-2v37-7h3g-55p8",
-          "url": "https://github.com/advisories/GHSA-2v37-7h3g-55p8"
-        },
-        "1139510": {
-          "findings": [
-            {
-              "version": "8.5.17",
-              "paths": [
-                ".>@vitest/coverage-v8>vitest>@vitest/mocker>vite>postcss",
-                ".>@vitest/coverage-v8>vitest>vite>postcss",
-                ".>vite>postcss",
-                ".>vitepress>@vitejs/plugin-vue>vite>postcss",
-                ".>vitepress>@vitejs/plugin-vue>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/core>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/integrations>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/integrations>@vueuse/core>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/integrations>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>@vueuse/integrations>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>vite>postcss",
-                ".>vitepress>vue>@vue/compiler-sfc>postcss",
-                ".>vitepress>postcss",
-                ".>vitest>@vitest/mocker>vite>postcss",
-                ".>vitest>vite>postcss",
-                "docs>vitepress>@vitejs/plugin-vue>vite>postcss",
-                "docs>vitepress>@vitejs/plugin-vue>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/core>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/integrations>@vueuse/core>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/integrations>@vueuse/core>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/integrations>@vueuse/shared>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>@vueuse/integrations>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>vite>postcss",
-                "docs>vitepress>vue>@vue/compiler-sfc>postcss",
-                "docs>vitepress>postcss",
-                "examples__web-leaflet-turkey>vite>postcss",
-                "examples__web-leaflet-turkey>vitest>@vitest/mocker>vite>postcss",
-                "examples__web-leaflet-turkey>vitest>vite>postcss",
-                "examples__web-maplibre>vite>postcss",
-                "examples__web-maplibre-turkey>vite>postcss",
-                "examples__web-maplibre-turkey>vitest>@vitest/mocker>vite>postcss",
-                "examples__web-maplibre-turkey>vitest>vite>postcss",
-                "examples__web-openlayers-turkey>vite>postcss",
-                "examples__web-openlayers-turkey>vitest>@vitest/mocker>vite>postcss",
-                "examples__web-openlayers-turkey>vitest>vite>postcss"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1139510,
-          "title": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
-          "module_name": "postcss",
-          "vulnerable_versions": "<=8.5.17",
-          "patched_versions": ">=8.5.18",
-          "severity": "high",
-          "cwe": "CWE-22",
-          "github_advisory_id": "GHSA-r28c-9q8g-f849",
-          "url": "https://github.com/advisories/GHSA-r28c-9q8g-f849"
-        },
         "1193683": {
           "findings": [
             {
@@ -603,128 +194,6 @@
           "github_advisory_id": "GHSA-82fw-gwwq-j7x9",
           "url": "https://github.com/advisories/GHSA-82fw-gwwq-j7x9"
         },
-        "1193726": {
-          "findings": [
-            {
-              "version": "3.15.0",
-              "paths": [
-                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/config>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/config>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/config>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/git>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/apply-release-plan>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/apply-release-plan>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/assemble-release-plan>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/assemble-release-plan>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/assemble-release-plan>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/config>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/config>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/config>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/assemble-release-plan>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/assemble-release-plan>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/assemble-release-plan>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/config>@changesets/get-dependents-graph>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/config>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/config>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/pre>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/read>@changesets/git>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/get-release-plan>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/git>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/pre>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/read>@changesets/git>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@changesets/should-skip-package>@manypkg/get-packages>read-yaml-file>js-yaml",
-                ".>@changesets/cli>@manypkg/get-packages>read-yaml-file>js-yaml"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1193726,
-          "title": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
-          "module_name": "js-yaml",
-          "vulnerable_versions": ">=3.0.0 <3.15.2",
-          "patched_versions": ">=3.15.2",
-          "severity": "high",
-          "cwe": "CWE-400, CWE-407",
-          "github_advisory_id": "GHSA-2883-xcg3-v3hh",
-          "url": "https://github.com/advisories/GHSA-2883-xcg3-v3hh"
-        },
-        "1193727": {
-          "findings": [
-            {
-              "version": "4.3.0",
-              "paths": [
-                ".>@changesets/cli>@changesets/get-release-plan>@changesets/read>@changesets/parse>js-yaml",
-                ".>@changesets/cli>@changesets/read>@changesets/parse>js-yaml",
-                "packages__nestjs>@nestjs/swagger>js-yaml"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1193727,
-          "title": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
-          "module_name": "js-yaml",
-          "vulnerable_versions": ">=4.0.0 <4.3.2",
-          "patched_versions": ">=4.3.2",
-          "severity": "high",
-          "cwe": "CWE-400, CWE-407",
-          "github_advisory_id": "GHSA-2883-xcg3-v3hh",
-          "url": "https://github.com/advisories/GHSA-2883-xcg3-v3hh"
-        },
-        "1239765": {
-          "findings": [
-            {
-              "version": "1.2.1",
-              "paths": [
-                "packages__react-native>@maplibre/maplibre-react-native>react-native>@react-native/community-cli-plugin>metro>image-size",
-                "packages__react-native>@maplibre/maplibre-react-native>react-native>@react-native/community-cli-plugin>metro-config>metro>image-size",
-                "packages__react-native>react-native>@react-native/community-cli-plugin>metro>image-size",
-                "packages__react-native>react-native>@react-native/community-cli-plugin>metro-config>metro>image-size"
-              ],
-              "dev": false,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1239765,
-          "title": "image-size: JXL and HEIF parsers allow denial of service through infinite loops",
-          "module_name": "image-size",
-          "vulnerable_versions": ">=1.2.0 <=2.0.2",
-          "patched_versions": ">=2.0.3",
-          "severity": "high",
-          "cwe": "CWE-835",
-          "github_advisory_id": "GHSA-5p2g-fcmc-qvqq",
-          "url": "https://github.com/advisories/GHSA-5p2g-fcmc-qvqq"
-        },
-        "1239766": {
-          "findings": [
-            {
-              "version": "1.2.1",
-              "paths": [
-                "packages__react-native>@maplibre/maplibre-react-native>react-native>@react-native/community-cli-plugin>metro>image-size",
-                "packages__react-native>@maplibre/maplibre-react-native>react-native>@react-native/community-cli-plugin>metro-config>metro>image-size",
-                "packages__react-native>react-native>@react-native/community-cli-plugin>metro>image-size",
-                "packages__react-native>react-native>@react-native/community-cli-plugin>metro-config>metro>image-size"
-              ],
-              "dev": false,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1239766,
-          "title": "image-size: ICNS parser allows denial of service through an infinite loop",
-          "module_name": "image-size",
-          "vulnerable_versions": ">=0.6.3 <=2.0.2",
-          "patched_versions": ">=2.0.3",
-          "severity": "high",
-          "cwe": "CWE-835",
-          "github_advisory_id": "GHSA-w3rx-r6r6-pgpr",
-          "url": "https://github.com/advisories/GHSA-w3rx-r6r6-pgpr"
-        },
         "1239989": {
           "findings": [
             {
@@ -744,182 +213,14 @@
           "cwe": "CWE-400, CWE-407",
           "github_advisory_id": "GHSA-253c-mchw-3w2r",
           "url": "https://github.com/advisories/GHSA-253c-mchw-3w2r"
-        },
-        "1240103": {
-          "findings": [
-            {
-              "version": "5.0.7",
-              "paths": [
-                ".>@eslint/js>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>@eslint/js>eslint>minimatch>brace-expansion",
-                ".>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>eslint>minimatch>brace-expansion",
-                ".>rimraf>glob>minimatch>brace-expansion",
-                ".>typedoc>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>eslint>minimatch>brace-expansion"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1240103,
-          "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
-          "module_name": "brace-expansion",
-          "vulnerable_versions": ">=4.0.0 <5.0.12",
-          "patched_versions": ">=5.0.12",
-          "severity": "moderate",
-          "cwe": "CWE-400, CWE-407",
-          "github_advisory_id": "GHSA-q2hr-2g5m-vwhr",
-          "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr"
-        },
-        "1240107": {
-          "findings": [
-            {
-              "version": "5.0.7",
-              "paths": [
-                ".>@eslint/js>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>@eslint/js>eslint>minimatch>brace-expansion",
-                ".>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>eslint>minimatch>brace-expansion",
-                ".>rimraf>glob>minimatch>brace-expansion",
-                ".>typedoc>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>eslint>minimatch>brace-expansion"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1240107,
-          "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
-          "module_name": "brace-expansion",
-          "vulnerable_versions": ">=4.0.0 <5.0.11",
-          "patched_versions": ">=5.0.11",
-          "severity": "high",
-          "cwe": "CWE-400, CWE-674",
-          "github_advisory_id": "GHSA-qhr7-859c-m2p7",
-          "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7"
-        },
-        "1240111": {
-          "findings": [
-            {
-              "version": "5.0.7",
-              "paths": [
-                ".>@eslint/js>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>@eslint/js>eslint>minimatch>brace-expansion",
-                ".>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>eslint>minimatch>brace-expansion",
-                ".>rimraf>glob>minimatch>brace-expansion",
-                ".>typedoc>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/parser>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/type-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/eslint-plugin>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/parser>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@eslint-community/eslint-utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>@typescript-eslint/typescript-estree>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>@typescript-eslint/utils>eslint>minimatch>brace-expansion",
-                ".>typescript-eslint>eslint>@eslint/config-array>minimatch>brace-expansion",
-                ".>typescript-eslint>eslint>minimatch>brace-expansion"
-              ],
-              "dev": true,
-              "optional": false,
-              "bundled": false
-            }
-          ],
-          "id": 1240111,
-          "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
-          "module_name": "brace-expansion",
-          "vulnerable_versions": ">=4.0.0 <5.0.10",
-          "patched_versions": ">=5.0.10",
-          "severity": "high",
-          "cwe": "CWE-400, CWE-674",
-          "github_advisory_id": "GHSA-6j4f-fj2g-mc7p",
-          "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p"
         }
       },
       "metadata": {
-        "vulnerabilities": { "info": 0, "low": 0, "moderate": 8, "high": 13, "critical": 0 },
-        "dependencies": 281,
-        "devDependencies": 505,
+        "vulnerabilities": { "info": 0, "low": 0, "moderate": 6, "high": 1, "critical": 0 },
+        "dependencies": 271,
+        "devDependencies": 506,
         "optionalDependencies": 110,
-        "totalDependencies": 786
+        "totalDependencies": 777
       }
     },
     "exceptions": [],
@@ -1078,7 +379,7 @@
   },
   "licenses": {
     "licenseCount": 13,
-    "packageCount": 265,
+    "packageCount": 258,
     "unknown": [],
     "licenses": [
       {
@@ -1143,7 +444,7 @@
       },
       {
         "license": "Apache-2.0",
-        "packageCount": 11,
+        "packageCount": 10,
         "packages": [
           {
             "name": "baseline-browser-mapping",
@@ -1195,12 +496,6 @@
             "homepage": "https://github.com/nolanlawson/marky#readme"
           },
           {
-            "name": "walker",
-            "versions": ["1.0.8"],
-            "license": "Apache-2.0",
-            "homepage": "https://github.com/daaku/nodejs-walker"
-          },
-          {
             "name": "web-worker",
             "versions": ["1.5.0"],
             "license": "Apache-2.0",
@@ -1246,7 +541,7 @@
       },
       {
         "license": "BSD-3-Clause",
-        "packageCount": 7,
+        "packageCount": 5,
         "packages": [
           {
             "name": "@mapbox/vector-tile",
@@ -1256,15 +551,9 @@
           },
           {
             "name": "@react-native/debugger-frontend",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "BSD-3-Clause",
             "homepage": "https://github.com/react/react-native/tree/HEAD/packages/debugger-frontend#readme"
-          },
-          {
-            "name": "makeerror",
-            "versions": ["1.0.12"],
-            "license": "BSD-3-Clause",
-            "homepage": "https://github.com/daaku/nodejs-makeerror#readme"
           },
           {
             "name": "maplibre-gl",
@@ -1283,12 +572,6 @@
             "versions": ["0.5.7", "0.6.1"],
             "license": "BSD-3-Clause",
             "homepage": "https://github.com/mozilla/source-map"
-          },
-          {
-            "name": "tmpl",
-            "versions": ["1.0.5"],
-            "license": "BSD-3-Clause",
-            "homepage": "https://github.com/daaku/nodejs-tmpl"
           }
         ]
       },
@@ -1318,7 +601,7 @@
       },
       {
         "license": "ISC",
-        "packageCount": 26,
+        "packageCount": 25,
         "packages": [
           {
             "name": "@isaacs/ttlcache",
@@ -1465,12 +748,6 @@
             "homepage": "https://github.com/isaacs/yallist#readme"
           },
           {
-            "name": "yaml",
-            "versions": ["2.9.0"],
-            "license": "ISC",
-            "homepage": "https://eemeli.org/yaml/"
-          },
-          {
             "name": "yargs-parser",
             "versions": ["21.1.1"],
             "license": "ISC",
@@ -1480,7 +757,7 @@
       },
       {
         "license": "MIT",
-        "packageCount": 206,
+        "packageCount": 203,
         "packages": [
           {
             "name": "@babel/code-frame",
@@ -1663,56 +940,50 @@
             "homepage": "https://github.com/petamoriken/float16"
           },
           {
-            "name": "@react-native/assets-registry",
-            "versions": ["0.86.2"],
+            "name": "@react-native/asset-utils",
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/react/react-native/tree/HEAD/packages/assets#readme"
+            "homepage": "https://github.com/react/react-native/tree/HEAD/packages/asset-utils#readme"
           },
           {
             "name": "@react-native/codegen",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "MIT",
             "homepage": "https://github.com/react/react-native/tree/HEAD/packages/react-native-codegen#readme"
           },
           {
             "name": "@react-native/community-cli-plugin",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "MIT",
             "homepage": "https://github.com/react/react-native/tree/HEAD/packages/community-cli-plugin#readme"
           },
           {
             "name": "@react-native/debugger-shell",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "MIT",
             "homepage": "https://github.com/react/react-native/tree/HEAD/packages/debugger-shell#readme"
           },
           {
             "name": "@react-native/dev-middleware",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "MIT",
             "homepage": "https://github.com/react/react-native/tree/HEAD/packages/dev-middleware#readme"
           },
           {
             "name": "@react-native/gradle-plugin",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "MIT",
             "homepage": "https://github.com/react/react-native/tree/HEAD/packages/gradle-plugin#readme"
           },
           {
-            "name": "@react-native/js-polyfills",
-            "versions": ["0.86.2"],
-            "license": "MIT",
-            "homepage": "https://github.com/react/react-native/tree/HEAD/packages/polyfills#readme"
-          },
-          {
             "name": "@react-native/normalize-colors",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "MIT",
             "homepage": "https://github.com/react/react-native/tree/HEAD/packages/normalize-color#readme"
           },
           {
             "name": "@react-native/virtualized-lists",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "MIT",
             "homepage": "https://github.com/react/react-native/tree/HEAD/packages/virtualized-lists#readme"
           },
@@ -1813,12 +1084,6 @@
             "homepage": "https://github.com/manzt/zarrita.js#readme"
           },
           {
-            "name": "abort-controller",
-            "versions": ["3.0.0"],
-            "license": "MIT",
-            "homepage": "https://github.com/mysticatea/abort-controller#readme"
-          },
-          {
             "name": "accepts",
             "versions": ["2.0.0"],
             "license": "MIT",
@@ -1862,7 +1127,7 @@
           },
           {
             "name": "babel-plugin-syntax-hermes-parser",
-            "versions": ["0.36.0"],
+            "versions": ["0.36.1"],
             "license": "MIT",
             "homepage": "https://github.com/facebook/hermes#readme"
           },
@@ -1910,7 +1175,7 @@
           },
           {
             "name": "ci-info",
-            "versions": ["2.0.0", "3.9.0"],
+            "versions": ["3.9.0"],
             "license": "MIT",
             "homepage": "https://github.com/watson/ci-info"
           },
@@ -2017,12 +1282,6 @@
             "homepage": "https://github.com/jshttp/etag#readme"
           },
           {
-            "name": "event-target-shim",
-            "versions": ["5.0.1"],
-            "license": "MIT",
-            "homepage": "https://github.com/mysticatea/event-target-shim"
-          },
-          {
             "name": "fdir",
             "versions": ["6.5.0"],
             "license": "MIT",
@@ -2051,6 +1310,18 @@
             "versions": ["0.0.6"],
             "license": "MIT",
             "homepage": "https://github.com/facebook/flow#readme"
+          },
+          {
+            "name": "flow-estree",
+            "versions": ["0.331.0"],
+            "license": "MIT",
+            "homepage": "https://flow.org"
+          },
+          {
+            "name": "flow-parser",
+            "versions": ["0.331.0"],
+            "license": "MIT",
+            "homepage": "https://flow.org"
           },
           {
             "name": "fresh",
@@ -2084,19 +1355,19 @@
           },
           {
             "name": "hermes-compiler",
-            "versions": ["250829098.0.16"],
+            "versions": ["250829098.0.17"],
             "license": "MIT",
             "homepage": "https://github.com/facebook/hermes#readme"
           },
           {
             "name": "hermes-estree",
-            "versions": ["0.35.0", "0.36.0"],
+            "versions": ["0.36.1"],
             "license": "MIT",
             "homepage": "https://github.com/facebook/hermes#readme"
           },
           {
             "name": "hermes-parser",
-            "versions": ["0.35.0", "0.36.0"],
+            "versions": ["0.36.1"],
             "license": "MIT",
             "homepage": "https://github.com/facebook/hermes#readme"
           },
@@ -2111,12 +1382,6 @@
             "versions": ["7.0.6"],
             "license": "MIT",
             "homepage": "https://github.com/TooTallNate/proxy-agents#readme"
-          },
-          {
-            "name": "image-size",
-            "versions": ["1.2.1"],
-            "license": "MIT",
-            "homepage": "https://github.com/image-size/image-size#readme"
           },
           {
             "name": "invariant",
@@ -2228,87 +1493,87 @@
           },
           {
             "name": "metro",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-babel-transformer",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-cache",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-cache-key",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-config",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-core",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-file-map",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-minify-terser",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-resolver",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-runtime",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-source-map",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-symbolicate",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-transform-plugins",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "metro-transform-worker",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "micromatch",
@@ -2390,9 +1655,9 @@
           },
           {
             "name": "ob1",
-            "versions": ["0.84.4"],
+            "versions": ["0.87.1"],
             "license": "MIT",
-            "homepage": "https://github.com/facebook/metro#readme"
+            "homepage": "https://github.com/react/metro#readme"
           },
           {
             "name": "on-finished",
@@ -2455,12 +1720,6 @@
             "homepage": "https://github.com/mafintosh/protocol-buffers-schema"
           },
           {
-            "name": "queue",
-            "versions": ["6.0.2"],
-            "license": "MIT",
-            "homepage": "https://github.com/jessetane/queue#readme"
-          },
-          {
             "name": "quick-lru",
             "versions": ["6.1.2"],
             "license": "MIT",
@@ -2498,7 +1757,7 @@
           },
           {
             "name": "react-native",
-            "versions": ["0.86.2"],
+            "versions": ["0.87.1"],
             "license": "MIT",
             "homepage": "https://reactnative.dev/"
           },
@@ -3169,7 +2428,7 @@
         "package": "@territory-kit/cli",
         "tarball": "territory-kit-cli-2.1.0.tgz",
         "tarballSizeBytes": 128878,
-        "tarballSha256": "ef132c63ee4fce1f912c96075a62088acc012137b2470dd57f9e2e74c7c0405b",
+        "tarballSha256": "1d0887b4b811f0d88bc457e30cffac06f7469f03cd69ebe1b063fc11456793dd",
         "fileCount": 17,
         "entries": [
           "package/LICENSE",
@@ -3390,7 +2649,7 @@
         "package": "@territory-kit/generators",
         "tarball": "territory-kit-generators-2.1.0.tgz",
         "tarballSizeBytes": 608172,
-        "tarballSha256": "b054e8a32f77e3552849f8e82a67d6a94fcca71f38cc8232935e30f9f39c9385",
+        "tarballSha256": "efde886fd88fd5f96a0835863312af743f26b183a12b63effa097967b57ce0ff",
         "fileCount": 15,
         "entries": [
           "package/LICENSE",
@@ -3433,8 +2692,8 @@
       {
         "package": "@territory-kit/maplibre",
         "tarball": "territory-kit-maplibre-2.1.0.tgz",
-        "tarballSizeBytes": 13700,
-        "tarballSha256": "c7ace6279e7eba0026c598e714f1ef2eb12a7a7973594e4591662a285dd7d871",
+        "tarballSizeBytes": 13699,
+        "tarballSha256": "50450fd661e23100008a17f5e944893eabe1bc7813e49a7b5b26294b2761ac75",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",
@@ -3488,7 +2747,7 @@
         "package": "@territory-kit/openlayers",
         "tarball": "territory-kit-openlayers-1.2.12.tgz",
         "tarballSizeBytes": 9332,
-        "tarballSha256": "12342ce0e5ef06f9f17480865453d60d66d455c20865419e14adea523303b6ee",
+        "tarballSha256": "e4746ac7ebfa92ef681ba37e7474a8cf641d5edf397f05c58f727a59d92d8d93",
         "fileCount": 7,
         "entries": [
           "package/LICENSE",

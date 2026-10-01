@@ -1,22 +1,22 @@
 {
   "schemaVersion": "territorykit-sprint-7-security-hardening@1",
-  "gitHead": "b189d95d1ae82ef310a872a1ce9d199fd9a1d1a0",
+  "gitHead": "b0d7a489fdf79426250d12d3ed40567fac461164",
   "baseMainSha": "316a76b0d43fc30884b3be3cdea61288e2384bd5",
-  "auditDate": "2026-09-30T20:54:37.570586+00:00",
-  "lockfileSha256": "03439078bf45b60391355b7fae94cec0fa36bf53f7c669d146860214e1402d3e",
+  "auditDate": "2026-10-01T08:02:53.620926+00:00",
+  "lockfileSha256": "b8c5e5fdde089494c90bf964ad855f317eeeea93b76c6fd4c13bb983c58d1f64",
   "dependencyAudit": {
     "production": {
       "info": 0,
       "low": 0,
       "moderate": 0,
-      "high": 2,
+      "high": 0,
       "critical": 0
     },
     "all": {
       "info": 0,
       "low": 0,
-      "moderate": 8,
-      "high": 13,
+      "moderate": 6,
+      "high": 1,
       "critical": 0
     },
     "exceptions": [],
@@ -111,12 +111,12 @@
       "id": "TK-S7-008",
       "severity": "high",
       "component": "dependencies",
-      "description": "High advisories remain in production and build tooling.",
+      "description": "Production dependency advisories were removed; a high advisory remains in documentation build tooling.",
       "exploitPrecondition": "Vulnerable transitive dependency is exercised.",
-      "remediation": "Fail release hardening gate; evaluate compatible fixes.",
+      "remediation": "Resolve React Native workspace peers to 0.87.1 and patch same-major transitive dependencies; retain release gate until VitePress supports a patched Vite line.",
       "testEvidence": "current pnpm audit",
       "status": "open",
-      "residualRisk": "2 production high, 13 total high",
+      "residualRisk": "0 production high, 1 total high (Vite 5.4.21 through stable VitePress 1.6.4)",
       "manualActionRequired": true
     },
     {
