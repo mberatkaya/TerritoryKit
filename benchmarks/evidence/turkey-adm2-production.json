@@ -1,0 +1,242 @@
+{
+  "schemaVersion": "territorykit-release-turkey-evidence@1",
+  "source": {
+    "provider": "geoboundaries",
+    "sourceLockHash": "sha256:6a45ff4bcd7e7096d15e2ea7215fdf47b3093507706cf1bd1f40a3d2cc9ebb61",
+    "datasetId": "tr-adm2",
+    "datasetVersion": "0.1.0",
+    "datasetSha256": "2baa4e2248d873e5385dbeaceccf19b450b1a91f3fe9897dad3682c5251f5ee8",
+    "featureCount": 973
+  },
+  "benchmark": {
+    "schemaVersion": "territorykit-benchmark-result@1",
+    "mode": "local-real",
+    "scenario": "turkey-adm2-production",
+    "generatedAt": "2026-10-01T08:52:14.555Z",
+    "runtime": {
+      "node": "v24.14.0",
+      "platform": "darwin",
+      "arch": "arm64"
+    },
+    "source": {
+      "type": "local-real",
+      "datasetPath": "datasets/generated/countries/TR/levels/ADM2/dataset.json"
+    },
+    "inputs": {
+      "datasetId": "tr-adm2",
+      "datasetVersion": "0.1.0",
+      "featureCount": 973,
+      "iterations": 5000
+    },
+    "metrics": {
+      "datasetValidationMs": 19.651958,
+      "engineConstructionMs": 19.364542,
+      "getZoneByIdMeanMs": 0.00004,
+      "latLngToZoneMeanMs": 0.003878,
+      "getZonesInBoundsMeanMs": 0.002307,
+      "datasetLoadMs": 38.671124999999996
+    }
+  },
+  "turkey": {
+    "adm0Adm2": {
+      "sourceLockHash": "sha256:6a45ff4bcd7e7096d15e2ea7215fdf47b3093507706cf1bd1f40a3d2cc9ebb61",
+      "sourceProvider": "geoboundaries",
+      "schemaVersion": "territory-schema@1",
+      "datasetVersion": "0.1.0",
+      "publishReady": true,
+      "publishReadyFailures": [],
+      "featureCountByLevel": {
+        "ADM0": 1,
+        "ADM1": 81,
+        "ADM2": 973
+      },
+      "geometryQualitySummary": {
+        "errorCount": 0,
+        "warningCount": 0
+      },
+      "geometryRepairSummary": {
+        "ADM0": {
+          "areaDifference": 0,
+          "componentsDiscarded": 0,
+          "engine": "GEOS/Shapely",
+          "engineVersion": "Shapely 2.1.2; GEOS 3.13.1",
+          "featuresRejected": 0,
+          "featuresRepaired": 0,
+          "featuresUnchanged": 1,
+          "mode": "make-valid",
+          "precision": 6
+        },
+        "ADM1": {
+          "areaDifference": 0.000007,
+          "componentsDiscarded": 0,
+          "engine": "GEOS/Shapely",
+          "engineVersion": "Shapely 2.1.2; GEOS 3.13.1",
+          "featuresRejected": 0,
+          "featuresRepaired": 0,
+          "featuresUnchanged": 81,
+          "mode": "make-valid",
+          "precision": 6
+        },
+        "ADM2": {
+          "areaDifference": 0.000036,
+          "componentsDiscarded": 0,
+          "engine": "GEOS/Shapely",
+          "engineVersion": "Shapely 2.1.2; GEOS 3.13.1",
+          "featuresRejected": 0,
+          "featuresRepaired": 0,
+          "featuresUnchanged": 973,
+          "mode": "make-valid",
+          "precision": 6
+        }
+      },
+      "hierarchySummary": {
+        "ambiguousCount": 0,
+        "containmentFailureCount": 0,
+        "explicitParentCount": 0,
+        "officialCodeParentCount": 0,
+        "spatialParentCount": 1054,
+        "unresolvedCount": 0
+      },
+      "adjacency": {
+        "ADM1": {
+          "ambiguousCount": 0,
+          "candidatePairCount": 54,
+          "disjointPairCount": 8,
+          "eligibleZoneCount": 36,
+          "exactComparisonCount": 54,
+          "finalEdgeCount": 45,
+          "manualAddCount": 0,
+          "manualRemoveCount": 0,
+          "overlapRejectedCount": 0,
+          "pointTouchCount": 1,
+          "sharedBorderCount": 45,
+          "skippedZoneCount": 45,
+          "totalSharedBoundaryMeters": 4913433.743,
+          "zoneCount": 81
+        },
+        "ADM2": {
+          "ambiguousCount": 0,
+          "candidatePairCount": 645,
+          "disjointPairCount": 74,
+          "eligibleZoneCount": 547,
+          "exactComparisonCount": 645,
+          "finalEdgeCount": 547,
+          "manualAddCount": 0,
+          "manualRemoveCount": 0,
+          "overlapRejectedCount": 0,
+          "pointTouchCount": 24,
+          "sharedBorderCount": 547,
+          "skippedZoneCount": 426,
+          "totalSharedBoundaryMeters": 14495851.559,
+          "zoneCount": 973
+        }
+      },
+      "checksums": {
+        "ok": true,
+        "checkedFiles": 40,
+        "mismatches": []
+      }
+    },
+    "adm3": {
+      "schemaVersion": "territorykit-partial-coverage@1",
+      "status": "partial",
+      "scopeType": "complete-selected-parents",
+      "coveredProvince": "tr:adm1:tr-27",
+      "coveredParentCount": 9,
+      "actualAdm3FeatureCount": 786,
+      "coverageFeatureCount": 786,
+      "sourceProvider": "Gaziantep Büyükşehir Belediyesi",
+      "sourceVersion": "2026-02-18T13:52:03Z",
+      "sourceSha256": "f145ae9edd2db7a341634e14d59060a535258461794d361c3f49bdec2bcbfa9a",
+      "artifactPolicy": {
+        "duplicateGeojsonTierHashCount": 0,
+        "fileCount": 182,
+        "largestFileBytes": 15891308,
+        "largestTileBytes": 27168,
+        "tileCount": 155,
+        "tileTotalSizeBytes": 621373,
+        "totalSizeBytes": 47304670
+      },
+      "artifactPolicyOk": true,
+      "qualityCheckStatuses": [
+        {
+          "backend": "typescript",
+          "check": "coordinates",
+          "issueCount": 0,
+          "status": "passed"
+        },
+        {
+          "backend": "typescript",
+          "check": "rings",
+          "issueCount": 0,
+          "status": "passed"
+        },
+        {
+          "backend": "typescript",
+          "check": "bbox",
+          "issueCount": 0,
+          "status": "passed"
+        },
+        {
+          "backend": "typescript",
+          "check": "center",
+          "issueCount": 0,
+          "status": "passed"
+        },
+        {
+          "backend": "typescript",
+          "check": "holes",
+          "issueCount": 0,
+          "status": "passed"
+        },
+        {
+          "backend": "typescript",
+          "check": "selfIntersections",
+          "issueCount": 20,
+          "status": "failed"
+        },
+        {
+          "backend": "typescript",
+          "check": "parentContainment",
+          "issueCount": 261,
+          "status": "failed"
+        },
+        {
+          "backend": "typescript",
+          "check": "siblingOverlaps",
+          "issueCount": 55,
+          "status": "failed"
+        },
+        {
+          "backend": "typescript",
+          "check": "duplicateGeometries",
+          "issueCount": 0,
+          "status": "passed"
+        },
+        {
+          "backend": "typescript",
+          "check": "degenerateComponents",
+          "issueCount": 0,
+          "status": "passed"
+        },
+        {
+          "backend": "typescript",
+          "check": "emptyGeometries",
+          "issueCount": 0,
+          "status": "passed"
+        },
+        {
+          "backend": "typescript",
+          "check": "invalidMultiPolygonMembers",
+          "issueCount": 0,
+          "status": "passed"
+        }
+      ],
+      "checksums": {
+        "ok": true,
+        "checkedFiles": 183,
+        "mismatches": []
+      }
+    }
+  }
+}

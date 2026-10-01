@@ -6,6 +6,7 @@ import { createRequire } from "node:module";
 import { join, relative } from "node:path";
 import { format as formatPrettier, resolveConfig } from "prettier";
 import YAML from "yaml";
+import { resolveTurkeyAdm2BenchmarkDataset } from "./release-benchmark-dataset.mjs";
 import {
   evaluateAuditExceptions,
   inspectDocsDevServerExposure
@@ -37,32 +38,83 @@ const changesetStatus = runText("pnpm", ["changeset", "status", "--verbose"], {
 const changesetStatusOk = isChangesetStatusOk(changesetStatus);
 
 const benchmarkPath = join(outputDir, "turkey-adm2-benchmark.json");
+const benchmarkDataset = resolveTurkeyAdm2BenchmarkDataset({
+  root,
+  override: process.env.TERRITORYKIT_BENCHMARK_DATASET
+});
+const fixtureBenchmarkPath = join(outputDir, "release-fixture-benchmark.json");
 runText("node", [
   "scripts/benchmark-run.mjs",
   "--mode",
-  "local-real",
-  "--dataset",
-  "datasets/generated/countries/TR/levels/ADM2/dataset.json",
+  "fixture",
   "--scenario",
-  "turkey-adm2-production",
+  "smoke",
   "--iterations",
   "5000",
   "--output",
-  relative(root, benchmarkPath)
+  relative(root, fixtureBenchmarkPath)
 ]);
-const benchmarkComparison = runJson("node", [
+const fixtureComparison = runJson("node", [
+  "scripts/benchmark-compare.mjs",
+  "--baseline",
+  "benchmarks/baselines/fixture-smoke.json",
+  "--current",
+  relative(root, fixtureBenchmarkPath)
+]);
+if (benchmarkDataset.datasetPath) {
+  runText("node", [
+    "scripts/benchmark-run.mjs",
+    "--mode",
+    "local-real",
+    "--dataset",
+    benchmarkDataset.datasetPath,
+    "--scenario",
+    "turkey-adm2-production",
+    "--iterations",
+    "5000",
+    "--output",
+    relative(root, benchmarkPath)
+  ]);
+} else {
+  writeFileSync(benchmarkPath, `${JSON.stringify(benchmarkDataset.evidence.benchmark, null, 2)}\n`);
+}
+const productionComparison = runJson("node", [
   "scripts/benchmark-compare.mjs",
   "--baseline",
   "benchmarks/baselines/turkey-adm2-production.json",
   "--current",
   relative(root, benchmarkPath)
 ]);
+const benchmarkComparison = {
+  ...productionComparison,
+  ok: productionComparison.ok && fixtureComparison.ok,
+  fixtureComparison,
+  dataset: {
+    source: benchmarkDataset.source.provider,
+    sourceLockHash: benchmarkDataset.source.sourceLockHash,
+    datasetId: benchmarkDataset.source.datasetId,
+    datasetVersion: benchmarkDataset.source.datasetVersion,
+    datasetSha256: benchmarkDataset.source.datasetSha256,
+    featureCount: benchmarkDataset.source.featureCount,
+    scenario: "turkey-adm2-production",
+    mode: benchmarkDataset.mode,
+    materialized: benchmarkDataset.materialized
+  }
+};
 
 const exports = await validateExports();
 const packageMetadata = validatePackageMetadata(publicPackages);
 const importBoundaries = inspectImportBoundaries();
 const workflowSecurity = inspectWorkflowSecurity();
-const turkey = collectTurkeyEvidence();
+const turkey =
+  benchmarkDataset.datasetPath &&
+  existsSync(join(root, "datasets/generated/countries/TR/levels/ADM3/checksums.json"))
+    ? collectTurkeyEvidence()
+    : benchmarkDataset.evidence.turkey;
+turkey.evidenceMode =
+  turkey === benchmarkDataset.evidence.turkey
+    ? "pinned-reviewed-evidence"
+    : "verified-local-artifacts";
 const turkeyV2 = collectTurkeyV2StableEvidence();
 const coverage = existsSync(join(root, "coverage", "coverage-summary.json"))
   ? readJson("coverage/coverage-summary.json").total
@@ -145,7 +197,8 @@ await writeJson(join(outputDir, "checksums.json"), {
     [
       "production-hardening-report.json",
       "license-inventory.prod.json",
-      "turkey-adm2-benchmark.json"
+      "turkey-adm2-benchmark.json",
+      "release-fixture-benchmark.json"
     ].map((file) => [
       file,
       createHash("sha256")
