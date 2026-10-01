@@ -16,6 +16,11 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # Remove this guard when deliberately migrating Changesets CLI to v3.
+    ignore:
+      - dependency-name: changesets/action
+        update-types:
+          - version-update:semver-major
     groups:
       actions:
         patterns:
