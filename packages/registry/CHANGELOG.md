@@ -1,5 +1,11 @@
 # @territory-kit/registry
 
+## 3.1.0
+
+### Patch Changes
+
+- @territory-kit/dataset@3.1.0
+
 ## 3.0.0
 
 ### Major Changes

@@ -1,5 +1,16 @@
 # @territory-kit/cli
 
+## 3.1.0
+
+### Patch Changes
+
+- Updated dependencies [0f1a964]
+  - @territory-kit/generators@3.1.0
+  - @territory-kit/core@3.1.0
+  - @territory-kit/dataset@3.1.0
+  - @territory-kit/registry@3.1.0
+  - @territory-kit/migration@2.1.2
+
 ## 3.0.0
 
 ### Minor Changes
