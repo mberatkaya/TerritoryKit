@@ -31,6 +31,9 @@ adapter.attach(map);
   artifacts with `requestedLevel`, `renderedLevel`, and fallback metadata.
 - `createTerritoryMapLibreLevelLayers(options)` returns ADM0-ADM5 layer specs from the default zoom
   policy.
+- `resolveTerritoryMapLibreLevelForZoom({ zoom, availableLevels, currentLevel, hysteresis })`
+  chooses one active render level with a 0.25 zoom default hysteresis and explicit missing-level
+  fallback. Its requested level follows 0/5/8/12/15/18 entry zooms for ADM0–ADM5.
 - `setTerritoryMapLibreHoverState` and `setTerritoryMapLibreSelectedState` wrap MapLibre feature
   state for vector-tile interactions.
 - `createTerritoryMapLibreAdapter(options)` implements the shared adapter contract and manages
