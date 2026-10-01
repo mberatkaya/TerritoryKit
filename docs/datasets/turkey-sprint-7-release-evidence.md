@@ -42,4 +42,4 @@ All 19 first-party package READMEs and the root README were reviewed. Changed: r
 
 The new MVT set and delivery manifest are generated locally and excluded by the large-artifact policy. A host must publish them atomically with the checksum inventory. Source-lock diff identifies changed sources and affected provinces; exact changed ADM2 IDs and geometry require a candidate rebuild and dataset/quality comparison. No stable dataset promotion, npm publication, GitHub release, or Rush&Claim rollout has occurred.
 
-The security hardening audit supersedes the earlier release-hardening pass: the current audit finds high dependency advisories, and `pnpm release:hardening` now fails until they are resolved or a reviewed exception is recorded. See [Sprint 7 security hardening](turkey-sprint-7-security-hardening.md).
+The security hardening audit supersedes the earlier release-hardening pass. The remaining raw high finding is Vite 5 in stable VitePress docs tooling; an exact, expiring exception is recorded in [Sprint 7 security hardening](turkey-sprint-7-security-hardening.md). This does not patch Vite or clear GitHub governance requirements for publication.

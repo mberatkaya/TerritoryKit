@@ -64,7 +64,7 @@
     "verify": "pnpm format:check && pnpm security:test && pnpm lint && pnpm package:boundaries && pnpm typecheck && pnpm test && pnpm build && pnpm turkey:osm:multipolygon:smoke && pnpm bundle:size && pnpm data:tr:adm3:artifact-policy",
     "version-packages": "changeset version",
     "turkey:osm:multipolygon:smoke": "node scripts/turkey-osm-multipolygon-runtime-smoke.mjs",
-    "security:test": "node --test scripts/validate-workflow-inputs.test.mjs"
+    "security:test": "node --test scripts/validate-workflow-inputs.test.mjs scripts/security-audit-exceptions.test.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",

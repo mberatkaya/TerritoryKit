@@ -6,6 +6,10 @@ import { createRequire } from "node:module";
 import { join, relative } from "node:path";
 import { format as formatPrettier, resolveConfig } from "prettier";
 import YAML from "yaml";
+import {
+  evaluateAuditExceptions,
+  inspectDocsDevServerExposure
+} from "./security-audit-exceptions.mjs";
 
 const root = process.cwd();
 const outputDir = join(root, "docs", "release-artifacts");
@@ -16,6 +20,15 @@ mkdirSync(outputDir, { recursive: true });
 
 const audit = runJson("pnpm", ["audit", "--prod", "--json"], { allowFailure: true });
 const fullAudit = runJson("pnpm", ["audit", "--json"], { allowFailure: true });
+const exceptionPolicy = readJson("reports/baselines/sprint-7-security-exceptions.json");
+const docsDevServerExposure = inspectDocsDevServerExposure(root);
+const auditExceptionDecision = evaluateAuditExceptions({
+  productionAudit: audit,
+  fullAudit,
+  policy: exceptionPolicy,
+  exposure: docsDevServerExposure,
+  today: new Date().toISOString().slice(0, 10)
+});
 const prodLicenseInventory = runJson("pnpm", ["licenses", "list", "--prod", "--json"]);
 const packageDryRun = runJson("node", ["scripts/package-dry-run.mjs"]);
 const changesetStatus = runText("pnpm", ["changeset", "status", "--verbose"], {
@@ -56,9 +69,7 @@ const coverage = existsSync(join(root, "coverage", "coverage-summary.json"))
   : undefined;
 const licenseSummary = summarizeLicenses(prodLicenseInventory);
 const releaseDecisionInputs = {
-  criticalVulnerabilities: fullAudit.metadata?.vulnerabilities?.critical ?? null,
-  highProductionVulnerabilities: audit.metadata?.vulnerabilities?.high ?? null,
-  highAllVulnerabilities: fullAudit.metadata?.vulnerabilities?.high ?? null,
+  auditExceptionPolicyOk: auditExceptionDecision.ok,
   publicPackageMetadataOk: packageMetadata.ok,
   packageDryRunOk: packageDryRun.ok,
   exportsOk: exports.ok,
@@ -70,20 +81,7 @@ const releaseDecisionInputs = {
   changesetStatusOk,
   workflowSecurityOk: workflowSecurity.ok
 };
-const releaseGateOk =
-  releaseDecisionInputs.criticalVulnerabilities === 0 &&
-  releaseDecisionInputs.highProductionVulnerabilities === 0 &&
-  releaseDecisionInputs.highAllVulnerabilities === 0 &&
-  Object.entries(releaseDecisionInputs)
-    .filter(
-      ([key]) =>
-        ![
-          "criticalVulnerabilities",
-          "highProductionVulnerabilities",
-          "highAllVulnerabilities"
-        ].includes(key)
-    )
-    .every(([, value]) => value === true);
+const releaseGateOk = Object.values(releaseDecisionInputs).every((value) => value === true);
 
 const reportPath = join(outputDir, "production-hardening-report.json");
 const licenseInventoryPath = join(outputDir, "license-inventory.prod.json");
@@ -102,7 +100,8 @@ await writeJson(reportPath, {
   generatedAt: new Date().toISOString(),
   git: {
     branch: runText("git", ["branch", "--show-current"]).stdout.trim(),
-    head: runText("git", ["rev-parse", "HEAD"]).stdout.trim()
+    auditedCodeHead: runText("git", ["rev-parse", "HEAD"]).stdout.trim(),
+    auditedTreeHash: runText("git", ["rev-parse", "HEAD^{tree}"]).stdout.trim()
   },
   environment: {
     node: process.version,
@@ -118,7 +117,10 @@ await writeJson(reportPath, {
   security: {
     audit,
     fullAudit,
-    exceptions: [],
+    rawAudit: auditExceptionDecision.rawAudit,
+    approvedExceptions: auditExceptionDecision.approvedExceptions,
+    effectiveBlockingFindings: auditExceptionDecision.effectiveBlockingFindings,
+    docsDevServerExposure,
     workflowSecurity
   },
   licenses: licenseSummary,

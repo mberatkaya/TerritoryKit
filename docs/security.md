@@ -25,10 +25,23 @@ The remaining non-critical advisories are in dev paths:
 | `vitest` / mocker | moderate      | `>=4.1.11`      | Test runner; requires a same-major tooling update.      |
 | `markdown-it`     | moderate      | `>=14.3.1`      | Documentation rendering path.                           |
 
-The Vite high advisory blocks the release hardening gate even though its path is documentation
-tooling and no vulnerable dependency is in the production audit. No security exception has been
-approved. The moderate findings require tooling maintenance and are not published package runtime
-dependencies.
+The raw Vite high advisory remains. A narrow exception for `GHSA-fx2h-pf6j-xcff` is recorded in
+`reports/baselines/sprint-7-security-exceptions.json` and expires on 2026-10-29, with review due
+2026-10-15. The release hardening gate accepts it only while the exact package, version, affected
+range, dependency paths, dev-only classification, and documentation exposure checks match. Other
+high or critical findings still block. The moderate findings require tooling maintenance and are
+not published package runtime dependencies.
+
+The advisory concerns Vite `server.fs.deny` bypass on Windows alternate path forms. Exploitation
+requires a network-exposed development server and a sensitive file on a qualifying Windows
+volume. CI and release jobs use Ubuntu and build docs without running VitePress dev. The docs dev
+script has no `--host`, and VitePress config does not set `server.host`. Example dev servers that
+use `--host` resolve patched Vite 8, not the vulnerable VitePress Vite 5 path. Re-review or remove
+the exception immediately if docs deployment changes, Windows or network-exposed docs development
+is supported, a Vite 5 backport appears, or stable VitePress supports patched Vite.
+
+Release hardening passing does not authorize publication. Main branch protection and the
+`npm-production` environment reviewer policy are still missing and must be configured first.
 
 ## Supply Chain
 

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "territorykit-security-exceptions@1",
+  "exceptions": [
+    {
+      "ghsaId": "GHSA-fx2h-pf6j-xcff",
+      "package": "vite",
+      "affectedVersion": "5.4.21",
+      "affectedRange": "<=6.4.2",
+      "severity": "high",
+      "dependencyPaths": [
+        ".>vitepress>@vitejs/plugin-vue>vite",
+        ".>vitepress>vite",
+        "docs>vitepress>@vitejs/plugin-vue>vite",
+        "docs>vitepress>vite"
+      ],
+      "scope": "development documentation tooling only",
+      "reason": "Stable VitePress 1.6.4 requires Vite ^5.4.14; this advisory has no patched Vite 5 release.",
+      "exploitPreconditions": "A network-exposed Vite development server serves sensitive files from a Windows NTFS or 8.3 short-name-enabled volume.",
+      "absentPreconditions": "TerritoryKit CI and release jobs run on Ubuntu and build documentation without starting its dev server. The documentation dev script does not use --host and its VitePress config does not set server.host. Vite 5 is limited to VitePress docs tooling.",
+      "compensatingControls": "Release check rejects changed dependency paths, versions and documentation dev-server exposure. Package tarball checks exclude VitePress and Vite implementation files. No npm package runtime depends on this Vite 5 path.",
+      "owner": "TerritoryKit maintainers",
+      "createdOn": "2026-10-01",
+      "reviewOn": "2026-10-15",
+      "expiresOn": "2026-10-29",
+      "removalCondition": "Remove immediately when stable VitePress supports a patched Vite line, a Vite 5 backport appears, docs deployment changes, or Windows/network-exposed docs development is supported."
+    }
+  ]
+}
