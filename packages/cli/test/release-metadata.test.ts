@@ -35,8 +35,10 @@ describe("release metadata", () => {
   it("keeps fixed-group versions Changesets-owned after the 2.0 handoff", () => {
     const rootPackage = readJson<PackageJson>("package.json");
     const changesetConfig = readJson<ChangesetConfig>(".changeset/config.json");
-    const fixedPackages = new Set(changesetConfig.fixed.flat());
-    const fixedGroupVersions = new Set<string>();
+    const fixedPackages = new Set(
+      changesetConfig.fixed.find((group) => group.includes("@territory-kit/cli")) ?? []
+    );
+    const fixedGroupVersions: string[] = [];
     const v2StableChangesetExists = existsRelativePath(".changeset/territorykit-v2-stable.md");
 
     expect(rootPackage.version).toBe("0.0.0-private");
@@ -44,19 +46,18 @@ describe("release metadata", () => {
     for (const packagePath of fixedGroupPackageJsonPaths) {
       const packageJson = readJson<PackageJson>(packagePath);
 
-      fixedGroupVersions.add(packageJson.version);
+      fixedGroupVersions.push(packageJson.version);
       expect(packageJson.name ? fixedPackages.has(packageJson.name) : false).toBe(true);
     }
 
-    expect(fixedGroupVersions.size).toBe(1);
-    const [fixedGroupVersion] = fixedGroupVersions;
-    if (fixedGroupVersion === undefined) {
-      throw new Error("Expected at least one fixed-group package version.");
-    }
+    const fixedGroupVersion = consistentReleaseVersion(fixedGroupVersions);
 
     const readme = readText("README.md");
     expect(readText("CHANGELOG.md")).toContain("## 2.0.0 - 2026-08-22");
-    expect(readme).toContain("TerritoryKit `2.1.0` is the current npm sync release");
+    const publishedVersion = readme.match(
+      /TerritoryKit `(\d+\.\d+\.\d+)` is the current npm sync release/
+    )?.[1];
+    expect(publishedVersion).toBeDefined();
     expect(readme).toContain("`territory-kit-tr-v2-playable@2.0.0`");
     expect(readme).toMatch(/\| `1\.2\.0`\s+\| Sprint 11/);
     expect(readme).toMatch(/\| `1\.2\.0`\s+\| Sprint 12/);
@@ -71,18 +72,40 @@ describe("release metadata", () => {
       return;
     }
 
-    expect(fixedGroupVersion).toBe("2.1.0");
-    expect(readme).toMatch(
-      /Public package manifests for\s+the fixed core family are versioned at `2\.1\.0`/
-    );
-    expect(readText("packages/cli/CHANGELOG.md")).toContain("## 2.1.0");
-    expect(readText("packages/cli/CHANGELOG.md")).toContain("## 2.0.0");
-    expect(readText("packages/adapter-core/CHANGELOG.md")).toContain("## 2.1.0");
-    expect(readText("packages/adapter-core/CHANGELOG.md")).toContain("## 2.0.0");
-    expect(readText("packages/runtime/CHANGELOG.md")).toContain("## 2.1.0");
-    expect(readText("packages/runtime/CHANGELOG.md")).toContain("## 2.0.0");
+    for (const packagePath of fixedGroupPackageJsonPaths) {
+      const changelogPath = packagePath.replace("package.json", "CHANGELOG.md");
+      expect(readText(changelogPath)).toContain(`## ${fixedGroupVersion}`);
+    }
+    for (const packageName of ["cli", "adapter-core", "runtime"]) {
+      expect(readText(`packages/${packageName}/CHANGELOG.md`)).toContain("## 2.0.0");
+      expect(readText(`packages/${packageName}/CHANGELOG.md`)).toContain(`## ${publishedVersion}`);
+    }
+  });
+
+  it.each(["2.1.0", "3.0.0", "4.2.1"])(
+    "accepts a consistent fixed-family release at %s",
+    (version) => {
+      expect(consistentReleaseVersion(Array(15).fill(version))).toBe(version);
+      const otherVersion = version === "2.1.0" ? "3.0.0" : "2.1.0";
+      expect(() => consistentReleaseVersion([version, otherVersion])).toThrow();
+    }
+  );
+
+  it.each(["", "2.1", "v3.0.0", "03.0.0"])("rejects invalid release version %s", (version) => {
+    expect(() => consistentReleaseVersion([version])).toThrow();
   });
 });
+
+function consistentReleaseVersion(versions: readonly string[]): string {
+  const [version] = versions;
+  if (version === undefined || !/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(version)) {
+    throw new Error(`Invalid fixed-family release version: ${version}`);
+  }
+  if (versions.some((candidate) => candidate !== version)) {
+    throw new Error("Fixed-family package versions differ.");
+  }
+  return version;
+}
 
 function readJson<T>(relativePath: string): T {
   return JSON.parse(readText(relativePath)) as T;
