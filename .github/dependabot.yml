@@ -7,6 +7,8 @@ updates:
     groups:
       development-dependencies:
         dependency-type: development
+        exclude-patterns:
+          - tsdown
         update-types:
           - minor
           - patch
