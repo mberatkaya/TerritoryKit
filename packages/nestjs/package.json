@@ -53,8 +53,8 @@
     "@territory-kit/dataset": "workspace:*"
   },
   "devDependencies": {
-    "@nestjs/common": "^11.1.28",
-    "@nestjs/swagger": "^11.4.5",
+    "@nestjs/common": "^12.1.1",
+    "@nestjs/swagger": "^12.0.2",
     "@territory-kit/shared-testkit": "workspace:*",
     "rxjs": "^7.8.2"
   }
