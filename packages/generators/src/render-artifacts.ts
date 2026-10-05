@@ -140,6 +140,24 @@ export function buildTerritoryRenderArtifacts(
     ...(format === "mvt" ? { tileTemplate: "tiles/{z}/{x}/{y}.mvt" } : {}),
     ...(policies ? { policies } : {})
   });
+  if (format === "mvt") {
+    // Describe the source layer and zooms actually encoded, including explicit
+    // CLI overrides. Default administrative policy is not the emitted inventory.
+    manifest.layers = createMvtFeatureGroups(features, {
+      ...(options.minZoom !== undefined ? { minZoom: options.minZoom } : {}),
+      ...(options.maxZoom !== undefined ? { maxZoom: options.maxZoom } : {}),
+      ...(policies ? { policies } : {})
+    }).map((group) => ({
+      id: layerId,
+      adminLevels:
+        group.level === "ALL"
+          ? (Object.keys(manifest.featureCounts) as TerritoryAdminLevel[])
+          : [group.level],
+      minZoom: group.minZoom,
+      maxZoom: group.maxZoom,
+      featureCount: group.features.features.length
+    }));
+  }
   const files = new Map<string, string | Uint8Array>([
     ["render/manifest.json", serializeJsonStable(manifest)]
   ]);

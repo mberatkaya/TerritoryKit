@@ -57,6 +57,40 @@ describe("render artifacts", () => {
       geometryHash: "canonical-geometry"
     });
   });
+  it("publishes the encoded custom layer and actual zoom overrides", () => {
+    const dataset = createSampleTerritoryDataset();
+    dataset.zones = dataset.zones.filter((zone) => zone.level === 2);
+    const result = buildTerritoryRenderArtifacts({
+      dataset,
+      format: "mvt",
+      layerId: "districts_custom",
+      minZoom: 0,
+      maxZoom: 1
+    });
+    expect(result.manifest.layers).toEqual([
+      {
+        id: "districts_custom",
+        adminLevels: ["ADM2"],
+        minZoom: 0,
+        maxZoom: 1,
+        featureCount: dataset.zones.length
+      }
+    ]);
+    const published = JSON.parse(result.files.get("render/manifest.json") as string);
+    expect(published.layers).toEqual(result.manifest.layers);
+    const zooms = [
+      ...new Set(
+        [...result.files.keys()]
+          .filter((path) => path.endsWith(".mvt"))
+          .map((path) => Number(path.split("/")[2]))
+      )
+    ].sort();
+    expect(zooms).toEqual([0, 1]);
+    const tile = new VectorTile(
+      new PbfReader(result.files.get("render/tiles/0/0/0.mvt") as Uint8Array)
+    );
+    expect(Object.keys(tile.layers)).toEqual([result.manifest.layers[0]!.id]);
+  });
   it("can omit the duplicate query file for national rendering", () => {
     const result = buildTerritoryRenderArtifacts({
       dataset: createSampleTerritoryDataset(),

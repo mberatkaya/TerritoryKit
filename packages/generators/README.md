@@ -245,3 +245,5 @@ The 39-district Istanbul report and final national acceptance must pass before t
 candidate can be merged. Generated territories remain estimated gameplay boundaries.
 
 Turkey V2 delivery manifests include available `levels/ADM0`, `ADM1` and `ADM2` dataset checksums as `adm0`, `adm1`, `adm2` artifacts. Level and district dataset IDs remain distinct from the whole delivery dataset ID; consumers verify version, checksum and parent membership under the delivery pin.
+
+MVT render manifests report the encoded source layer and effective zoom range, including explicit build overrides. Configure native sources from this emitted inventory.
