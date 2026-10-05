@@ -243,3 +243,5 @@ The `2.1.0-rc.2` figures above are the preserved calibration baseline. The separ
 geometry when generated gap fill fails, and evaluates Standard and Organic realism.
 The 39-district Istanbul report and final national acceptance must pass before this
 candidate can be merged. Generated territories remain estimated gameplay boundaries.
+
+Turkey V2 delivery manifests include available `levels/ADM0`, `ADM1` and `ADM2` dataset checksums as `adm0`, `adm1`, `adm2` artifacts. Level and district dataset IDs remain distinct from the whole delivery dataset ID; consumers verify version, checksum and parent membership under the delivery pin.

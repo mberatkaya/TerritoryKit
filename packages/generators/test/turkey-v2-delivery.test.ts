@@ -47,6 +47,21 @@ describe("Turkey V2 delivery manifest", () => {
     expect(createTurkeyV2DeliveryManifest(input)).toEqual(first);
   });
 
+  it("pins available administrative lookup artifacts without changing their IDs", () => {
+    const files = {
+      ...input.checksums.files,
+      "levels/ADM2/dataset.json": { sha256: "adm2-checksum", byteSize: 123 }
+    };
+    const manifest = createTurkeyV2DeliveryManifest({ ...input, checksums: { files } });
+    expect(manifest.artifacts.adm2).toEqual({
+      path: "levels/ADM2/dataset.json",
+      sha256: "adm2-checksum",
+      byteSize: 123
+    });
+    expect(manifest.contentHash).not.toBe(createTurkeyV2DeliveryManifest(input).contentHash);
+    expect(manifest.artifacts.adm0).toBeUndefined();
+  });
+
   it("refuses mixed source locks", () => {
     expect(() =>
       createTurkeyV2DeliveryManifest({
