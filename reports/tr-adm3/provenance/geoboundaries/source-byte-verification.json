@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "territorykit-tr-geoboundaries-byte-verification@1",
+  "inspectedCommit": "b22f3b8562cf56bfd3e4386e33beb8cd488592a3",
+  "generatedAt": "2026-10-08T21:52:12.975Z",
+  "geoBoundariesUpstreamBytesVerified": true,
+  "entries": [
+    {
+      "adminLevel": "ADM0",
+      "status": "LOCKED_BYTES_VERIFIED",
+      "expectedSha256": "263ed2d7855f4cd23a8314a12c0a2bec773dc0dbe62a4e40d3a6a687939f7379",
+      "expectedByteSize": 498489,
+      "actualSha256": "263ed2d7855f4cd23a8314a12c0a2bec773dc0dbe62a4e40d3a6a687939f7379",
+      "actualByteSize": 498489,
+      "artifactPath": ".territory/cache/sources/geoboundaries/6e0bf9edcb0a2a0e0341bd16d7a175c96c863be4fe10d960a56686acd7b646c7/artifact",
+      "originalUrl": "https://media.githubusercontent.com/media/wmgeolab/geoBoundaries/9469f09592ced973a3448cf66b6100b741b64c0d/releaseData/gbOpen/TUR/ADM0/geoBoundaries-TUR-ADM0_simplified.geojson",
+      "fetchedAt": "2026-07-15T11:06:13.488Z"
+    },
+    {
+      "adminLevel": "ADM1",
+      "status": "LOCKED_BYTES_VERIFIED",
+      "expectedSha256": "94f64008c50e1953a56eb9dc1fb7367944d2290c6da5976a4f31e7eca35b3117",
+      "expectedByteSize": 1559408,
+      "actualSha256": "94f64008c50e1953a56eb9dc1fb7367944d2290c6da5976a4f31e7eca35b3117",
+      "actualByteSize": 1559408,
+      "artifactPath": ".territory/cache/sources/geoboundaries/2e744e9c17f8484f53d812589dce6d019c1c8265dc78a012979cc1ac22a91c1e/artifact",
+      "originalUrl": "https://media.githubusercontent.com/media/wmgeolab/geoBoundaries/9469f09592ced973a3448cf66b6100b741b64c0d/releaseData/gbOpen/TUR/ADM1/geoBoundaries-TUR-ADM1_simplified.geojson",
+      "fetchedAt": "2026-07-15T11:06:13.488Z"
+    },
+    {
+      "adminLevel": "ADM2",
+      "status": "LOCKED_BYTES_VERIFIED",
+      "expectedSha256": "17af9a6bff9bed53390e49cbbf66569e0d296f134cd4528e1dc3c0d204e358f3",
+      "expectedByteSize": 3868305,
+      "actualSha256": "17af9a6bff9bed53390e49cbbf66569e0d296f134cd4528e1dc3c0d204e358f3",
+      "actualByteSize": 3868305,
+      "artifactPath": ".territory/cache/sources/geoboundaries/4fd1be51f4b41a276aefd72e25629062f5819edd69b13f745247a1d66f1ca83d/artifact",
+      "originalUrl": "https://media.githubusercontent.com/media/wmgeolab/geoBoundaries/9469f09592ced973a3448cf66b6100b741b64c0d/releaseData/gbOpen/TUR/ADM2/geoBoundaries-TUR-ADM2_simplified.geojson",
+      "fetchedAt": "2026-07-15T11:06:13.488Z"
+    }
+  ]
+}

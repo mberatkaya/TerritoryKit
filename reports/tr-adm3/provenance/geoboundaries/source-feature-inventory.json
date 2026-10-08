@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "territorykit-tr-geoboundaries-source-feature-inventory@1",
+  "inspectedCommit": "b22f3b8562cf56bfd3e4386e33beb8cd488592a3",
+  "generatedAt": "2026-10-08T21:52:12.975Z",
+  "rows": [
+    {
+      "adminLevel": "ADM0",
+      "rawGeoJsonFeatureCount": 1,
+      "parsedFeatureCount": 1,
+      "rejectedFeatureCount": 0,
+      "rejectionReasons": {},
+      "duplicateShapeIdCount": 0,
+      "lockMetadataFeatureCount": 1,
+      "canonicalParentZoneCount": 1,
+      "unmatchedSourceFeaturesAfterParentJoin": 0,
+      "inventoryInterpretation": "Raw, parsed, and canonical parent counts align for this inspection scope."
+    },
+    {
+      "adminLevel": "ADM1",
+      "rawGeoJsonFeatureCount": 81,
+      "parsedFeatureCount": 81,
+      "rejectedFeatureCount": 0,
+      "rejectionReasons": {},
+      "duplicateShapeIdCount": 0,
+      "lockMetadataFeatureCount": 81,
+      "canonicalParentZoneCount": 81,
+      "unmatchedSourceFeaturesAfterParentJoin": 0,
+      "inventoryInterpretation": "Raw, parsed, and canonical parent counts align for this inspection scope."
+    },
+    {
+      "adminLevel": "ADM2",
+      "rawGeoJsonFeatureCount": 973,
+      "parsedFeatureCount": 973,
+      "rejectedFeatureCount": 0,
+      "rejectionReasons": {},
+      "duplicateShapeIdCount": 0,
+      "lockMetadataFeatureCount": 999,
+      "canonicalParentZoneCount": 973,
+      "unmatchedSourceFeaturesAfterParentJoin": 0,
+      "inventoryInterpretation": "source-lock sourceFeatureCount (999) differs from raw GeoJSON features (973); lock metadata likely from geoBoundaries API admUnitCount and may not match simplified artifact bytes."
+    }
+  ]
+}

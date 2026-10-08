@@ -1,50 +1,49 @@
 # Current milestone
 
-## Türkiye ADM0–ADM2 source provenance and parent geometry lineage
+## Türkiye ADM0–ADM2 geoBoundaries Path B lineage verification
 
-**Status:** Root cause confirmed; safe guardrails landed on sprint branch. **Canonical parent geometry migration not authorized.**
+**Status:** Path B investigation tooling and evidence landed on research branch. **Catalog migration not authorized.**
 
 **Observation time:** 2026-10-08
 
 ### Verified conclusions
 
-1. Locked HDX COD-AB GeoJSON members in `datasets/sources/TR/national.json` match locally cached `tur_admin{0,1,2}.geojson` byte hashes (archive ZIP not present locally).
-2. Git-tracked parent dataset `datasets/generated/countries/TR/dataset.json` and rc.7 candidate parents carry **geoBoundaries** provenance on zones, not HDX.
-3. National v2 assembly (`packages/cli/src/turkey-v2-national.ts`) defaults to the geoBoundaries parent file while `createSourceLockForCli` copies HDX catalog metadata — source-lock did not represent ingested parent bytes.
-4. Name-normalized geometry hash comparison shows **no** ADM1/ADM2 exact matches between HDX members and canonical parents (see `reports/tr-adm3/provenance/`).
+1. Canonical parent `datasets/generated/countries/TR/dataset.json` is **not Git-tracked**; reproducible only with local `datasets/generated/countries/TR/sources.lock.json` + geoBoundaries cache/build.
+2. Historical country build lock pins **gbOpen** simplified members at git commit `9469f09592ced973a3448cf66b6100b741b64c0d` (see `sources.lock.json` and `reports/tr-adm3/provenance/geoboundaries/source-byte-verification.json`).
+3. shapeID ↔ `territory.source.sourceId` coverage is **complete** for ADM0–ADM2 (1 / 81 / 973).
+4. Geometry-repair + serialized hash replay matches **partially** (ADM0 100%, ADM1 57/81, ADM2 953/973) — geographic equivalence **not** assessed.
+5. ADR-006 (HDX default catalog) remains **Accepted**; Path B metadata realignment requires separate approval (see `DECISIONS.md` DEC-008).
 
 ### Sprint branch deliverables
 
-| Item                                     | Location                                                                                                   |
-| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| Inspection + verification API            | `packages/generators/src/turkey-parent-provenance.ts`                                                      |
-| Build/plan fail-closed gate              | `packages/cli/src/turkey-v2-national.ts`                                                                   |
-| `parentInputDataset` on new source locks | `packages/generators/src/turkey-v2-national.ts`                                                            |
-| Reproducible audit reports               | `reports/tr-adm3/provenance/`                                                                              |
-| Regression tests                         | `packages/generators/test/turkey-parent-provenance.test.ts`, `scripts/tr-parent-provenance-audit.test.mjs` |
+| Item                             | Location                                                                                                                 |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Path B inspection API            | `packages/generators/src/turkey-geoboundaries-parent-lineage.ts`                                                         |
+| Reproducible geoBoundaries audit | `scripts/tr-geoboundaries-parent-audit.mjs`                                                                              |
+| Evidence pack                    | `reports/tr-adm3/provenance/geoboundaries/`                                                                              |
+| Regression tests                 | `packages/generators/test/turkey-geoboundaries-parent-lineage.test.ts`, `scripts/tr-geoboundaries-parent-audit.test.mjs` |
 
-### Acceptance criteria (milestone — remaining)
+### Acceptance criteria
 
-| #   | Criterion                                                              | Status                                                                    |
-| --- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| 1   | Byte-verified answer which upstream files produced canonical ADM0–ADM2 | **Done** — geoBoundaries tracked dataset; HDX members verified separately |
-| 2   | Registry, dataset provenance, source-lock mutually consistent          | **Not done** — intentional mismatch documented; migration PR required     |
-| 3   | No silent HDX ↔ geoBoundaries swap                                     | **Done** — no geometry relabel                                            |
-| 4   | Regression tests fail on provenance drift                              | **Done** on branch                                                        |
-| 5   | `pnpm data:tr:adm3:audit:test` passes in CI                            | **Done** on branch (audit CLI entry + v2 evidence semantics)              |
+| #   | Criterion                                               | Status                                 |
+| --- | ------------------------------------------------------- | -------------------------------------- |
+| 1   | Identify historical geoBoundaries release + byte hashes | **Done** (local lock + cache)          |
+| 2   | Canonical artifact storage status documented            | **Done** (gitignored local generation) |
+| 3   | Deterministic comparison tooling                        | **Done**                               |
+| 4   | Path B feasibility classification with limitations      | **Done** — `PATH_B_PARTIALLY_VERIFIED` |
+| 5   | No production migration in this PR                      | **Done**                               |
+| 6   | `pnpm data:tr:adm3:audit:test` passes                   | Pending CI on PR                       |
 
 ### Next authorized work (separate PR)
 
-Choose one path with explicit approval:
-
-- **Path A:** Re-import ADM0–ADM2 from locked HDX members into `datasets/generated/countries/TR/`, replay ADM3 clipping / stable ID impact.
-- **Path B:** Realign `national.json`, source-lock schema defaults, and registry TR rows to geoBoundaries with correct CC BY 4.0 attribution (no polygon change).
+- **Path B migration (metadata only):** realign `national.json`, registry, national v2 default locks to pinned geoBoundaries gbOpen members; legal review on mixed OSM/ODbL attribution strings in geoBoundaries metadata; ADR-006 amendment.
+- **Path A (geometry):** re-import from HDX locked members if policy chooses official COD-AB polygons over current bytes.
+- **Geometry replay hardening:** reproduce remaining ADM1/ADM2 mismatches via full `buildTerritoryCountryDataset` pipeline diff (out of scope for this research PR).
 
 ### Verification commands
 
 ```sh
 pnpm --filter @territory-kit/generators build
-pnpm --filter @territory-kit/cli build
+pnpm data:tr:geoboundaries:parent:audit -- --diagnostic
 pnpm data:tr:adm3:audit:test
-pnpm data:tr:parent-provenance:audit   # optional; refreshes reports/tr-adm3/provenance/
 ```

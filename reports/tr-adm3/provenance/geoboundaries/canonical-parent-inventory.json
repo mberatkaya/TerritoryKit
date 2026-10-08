@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "territorykit-tr-geoboundaries-canonical-parent@1",
+  "inspectedCommit": "b22f3b8562cf56bfd3e4386e33beb8cd488592a3",
+  "generatedAt": "2026-10-08T21:52:12.975Z",
+  "parentDatasetPath": "datasets/generated/countries/TR/dataset.json",
+  "gitTracked": false,
+  "gitignoreNote": "datasets/generated/ is gitignored; canonical parent is a local generation artifact.",
+  "parentDatasetVersion": "0.1.0",
+  "parentDatasetSha256": "648981940b96ac18f8e729b31d551e2922f1d76a5f33cdd99b92982e90eaf992",
+  "parentInventoryStatus": "COMPLETE",
+  "expectedInventory": {
+    "ADM0": 1,
+    "ADM1": 81,
+    "ADM2": 973
+  }
+}

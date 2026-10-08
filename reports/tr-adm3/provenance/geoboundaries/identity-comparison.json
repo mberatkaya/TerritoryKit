@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "territorykit-tr-geoboundaries-identity-comparison@1",
+  "inspectedCommit": "b22f3b8562cf56bfd3e4386e33beb8cd488592a3",
+  "generatedAt": "2026-10-08T21:52:12.975Z",
+  "rows": [
+    {
+      "adminLevel": "ADM0",
+      "parentZoneCount": 1,
+      "sourceFeatureCount": 1,
+      "matchedBySourceNativeId": 1,
+      "unmatchedParentZones": 0,
+      "unmatchedSourceFeatures": 0,
+      "duplicateSourceNativeIds": 0,
+      "territoryStableIdAssessment": "NOT_ASSESSED",
+      "parentRelationshipAssessment": "NOT_ASSESSED",
+      "administrativeNameMatches": 1,
+      "administrativeNameMismatches": 0,
+      "identityMatchMethod": "shapeID-to-territory.source.sourceId"
+    },
+    {
+      "adminLevel": "ADM1",
+      "parentZoneCount": 81,
+      "sourceFeatureCount": 81,
+      "matchedBySourceNativeId": 81,
+      "unmatchedParentZones": 0,
+      "unmatchedSourceFeatures": 0,
+      "duplicateSourceNativeIds": 0,
+      "territoryStableIdAssessment": "NOT_ASSESSED",
+      "parentRelationshipAssessment": "NOT_ASSESSED",
+      "administrativeNameMatches": 81,
+      "administrativeNameMismatches": 0,
+      "identityMatchMethod": "shapeID-to-territory.source.sourceId"
+    },
+    {
+      "adminLevel": "ADM2",
+      "parentZoneCount": 973,
+      "sourceFeatureCount": 973,
+      "matchedBySourceNativeId": 973,
+      "unmatchedParentZones": 0,
+      "unmatchedSourceFeatures": 0,
+      "duplicateSourceNativeIds": 0,
+      "territoryStableIdAssessment": "NOT_ASSESSED",
+      "parentRelationshipAssessment": "NOT_ASSESSED",
+      "administrativeNameMatches": 973,
+      "administrativeNameMismatches": 0,
+      "identityMatchMethod": "shapeID-to-territory.source.sourceId"
+    }
+  ]
+}
