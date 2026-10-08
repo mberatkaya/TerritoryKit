@@ -70,6 +70,21 @@ describe("Turkey V2 delivery manifest", () => {
       })
     ).toThrow("mismatched");
   });
+  it("binds all render manifests and invalidates the delivery pin when metadata changes", () => {
+    const files = { ...input.checksums.files };
+    for (const level of [0, 1, 2, 3]) {
+      const path = level === 3 ? "render/manifest.json" : `map/ADM${level}/render/manifest.json`;
+      files[path] = { sha256: `render-${level}`, byteSize: 100 };
+    }
+    const first = createTurkeyV2DeliveryManifest({ ...input, checksums: { files } });
+    expect(Object.keys(first.artifacts).filter((key) => key.startsWith("renderAdm"))).toHaveLength(
+      4
+    );
+    files["render/manifest.json"] = { sha256: "new-layer-or-source-version", byteSize: 101 };
+    const second = createTurkeyV2DeliveryManifest({ ...input, checksums: { files } });
+    expect(second.contentHash).not.toBe(first.contentHash);
+    expect(second.artifacts.renderAdm3?.sha256).toBe("new-layer-or-source-version");
+  });
   it("uses exact ADM2 IDs and rejects sanitized path collisions", () => {
     const shardPath = "districts/tr_adm2_a/dataset.json";
     const candidate = {
