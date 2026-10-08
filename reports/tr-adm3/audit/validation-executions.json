@@ -83,6 +83,23 @@
       "logSha256": "2379632892e2f741203510508df4392384f407e474a5de719121a9a3ea632278"
     }
   ],
+  "auditRegressionTests": {
+    "localVerifySnapshot": {
+      "date": "2026-10-08",
+      "command": "node --test scripts/tr-adm3-quality-source-audit.test.mjs",
+      "passing": 5,
+      "note": "Embedded in first pnpm verify on this branch; count preserved as historical evidence."
+    },
+    "ciVerified": {
+      "pr": 100,
+      "headSha": "87b010d9552fde08061b596727c4d41edd5ae982",
+      "workflowRunId": 37828925320,
+      "workflowRunUrl": "https://github.com/mberatkaya/TerritoryKit/actions/runs/37828925320",
+      "command": "pnpm data:tr:adm3:audit:test",
+      "passing": 13,
+      "note": "Executed via pnpm verify on Node 24 job; Node 22 job ran release:check in the same run."
+    }
+  },
   "verifyTests": {
     "vitestPassing": 663,
     "vitestSkipped": 3,

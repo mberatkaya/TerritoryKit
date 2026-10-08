@@ -10,8 +10,58 @@
       "number": 94,
       "title": "Make delivery and render manifests match verified geographic artifacts",
       "url": "https://github.com/mberatkaya/TerritoryKit/pull/94"
+    },
+    {
+      "baseRefName": "main",
+      "headRefName": "feature/tr-adm3-quality-source-audit",
+      "number": 100,
+      "title": "Audit Türkiye ADM3 coverage, source fidelity and Istanbul geometry",
+      "url": "https://github.com/mberatkaya/TerritoryKit/pull/100"
     }
   ],
+  "pr100": {
+    "baseRefName": "main",
+    "headRefName": "feature/tr-adm3-quality-source-audit",
+    "headRefOid": "87b010d9552fde08061b596727c4d41edd5ae982",
+    "number": 100,
+    "mergeableWithMain": "MERGEABLE",
+    "mergeableWithPr94": "NO_FILE_OVERLAP",
+    "state": "OPEN",
+    "statusCheckRollup": [
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-08T19:06:06Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/mberatkaya/TerritoryKit/actions/runs/37828925320/job/113488889905",
+        "name": "Node 22",
+        "startedAt": "2026-10-08T19:02:28Z",
+        "status": "COMPLETED",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-08T19:04:58Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/mberatkaya/TerritoryKit/actions/runs/37828925320/job/113488889518",
+        "name": "Node 24",
+        "startedAt": "2026-10-08T19:02:28Z",
+        "status": "COMPLETED",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-08T19:03:51Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/mberatkaya/TerritoryKit/actions/runs/37828925320/job/113488889951",
+        "name": "Live PostGIS validation",
+        "startedAt": "2026-10-08T19:02:28Z",
+        "status": "COMPLETED",
+        "workflowName": "CI"
+      }
+    ],
+    "title": "Audit Türkiye ADM3 coverage, source fidelity and Istanbul geometry",
+    "url": "https://github.com/mberatkaya/TerritoryKit/pull/100"
+  },
   "pr94": {
     "baseRefName": "main",
     "headRefName": "feature/rushclaim-cutover-support",

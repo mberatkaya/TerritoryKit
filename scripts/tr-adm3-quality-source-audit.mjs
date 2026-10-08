@@ -13,11 +13,32 @@ export const parentId = (zone) =>
 const unique = (values) => [...new Set(values.filter((v) => v != null))].sort();
 
 export const DEFAULT_PARENT_REGISTRY = "datasets/registry/tr-adm3-district-fallbacks.json";
+export const CANONICAL_ADM1_HIERARCHY_REPORT = "reports/tr-v2-national/hierarchy-report.json";
 const EXPECTED_ADM2_COUNT = 973;
 const EXPECTED_ADM1_COUNT = 81;
+/** Registry-only ADM1 ids follow the national hierarchy formula but are not polygon-verified. */
+export const METADATA_LOOKUP_ADM1_IDENTITY_SCOPE = "METADATA_LOOKUP_REF";
 
-export function adm1IdFromProvinceCode(provinceCode) {
+export function adm1LookupRefFromProvinceCode(provinceCode) {
   return `tr:adm1:tr-${provinceCode}`;
+}
+
+/** @deprecated Use adm1LookupRefFromProvinceCode; name kept for importers. */
+export const adm1IdFromProvinceCode = adm1LookupRefFromProvinceCode;
+
+export function adm2ParentGeometryIsUsable(zone) {
+  if (!zone?.geometry) return false;
+  try {
+    const area = computeTerritoryAreaM2(zone.geometry);
+    return Number.isFinite(area) && area > 0;
+  } catch {
+    return false;
+  }
+}
+
+export function parentInventoryHasUsableAdm2Geometries(dataset) {
+  const districts = dataset?.zones?.filter((zone) => zone.level === 2) ?? [];
+  return districts.length === EXPECTED_ADM2_COUNT && districts.every(adm2ParentGeometryIsUsable);
 }
 
 export function parentInventoryFromRegistry(registry) {
@@ -32,14 +53,20 @@ export function parentInventoryFromRegistry(registry) {
   const provinceByCode = new Map();
   const districts = registry.districts.map((entry) => {
     const provinceCode = entry.provinceCode;
-    const parentId = adm1IdFromProvinceCode(provinceCode);
+    const parentId = adm1LookupRefFromProvinceCode(provinceCode);
     if (!provinceByCode.has(provinceCode)) {
       provinceByCode.set(provinceCode, {
         id: parentId,
         name: entry.provinceName,
         level: 1,
         geometry: null,
-        properties: { territory: { provinceCode } }
+        properties: {
+          territory: {
+            provinceCode,
+            identityScope: METADATA_LOOKUP_ADM1_IDENTITY_SCOPE,
+            authoritativeProductionIdentity: false
+          }
+        }
       });
     }
     return {
@@ -48,7 +75,13 @@ export function parentInventoryFromRegistry(registry) {
       level: 2,
       parentId,
       geometry: null,
-      properties: { territory: { provinceCode } }
+      properties: {
+        territory: {
+          provinceCode,
+          parentAdm1LookupRef: parentId,
+          parentAdm1IdentityScope: METADATA_LOOKUP_ADM1_IDENTITY_SCOPE
+        }
+      }
     };
   });
   if (new Set(districts.map((district) => district.id)).size !== EXPECTED_ADM2_COUNT) {
@@ -65,7 +98,8 @@ export function parentInventoryFromRegistry(registry) {
       )
     },
     parentInventorySource: "METADATA_REGISTRY_ONLY",
-    parentGeometryAvailable: false
+    parentGeometryAvailable: false,
+    parentAdm1IdentityScope: METADATA_LOOKUP_ADM1_IDENTITY_SCOPE
   };
 }
 
@@ -114,6 +148,7 @@ export async function resolveCanonicalParentInventory({
     } catch {
       continue;
     }
+    if (!parentInventoryHasUsableAdm2Geometries(dataset)) continue;
     const provinceDataset =
       (candidate.provincePath ? await jsonIfAvailable(candidate.provincePath) : null) ?? dataset;
     const provinces = provinceDataset?.zones?.filter((zone) => zone.level === 1) ?? [];
@@ -123,6 +158,7 @@ export async function resolveCanonicalParentInventory({
       provinces: provinceDataset,
       parentInventorySource: candidate.label,
       parentGeometryAvailable: true,
+      parentAdm1IdentityScope: "CANONICAL_POLYGON_BYTES",
       parentFileEvidence: fileEvidence,
       parentResolutionAttempts: attempts
     };
@@ -254,6 +290,7 @@ export async function generateCoverage({
     provinces,
     parentInventorySource,
     parentGeometryAvailable,
+    parentAdm1IdentityScope,
     parentFileEvidence,
     parentResolutionAttempts
   } = await resolveCanonicalParentInventory({
@@ -311,6 +348,7 @@ export async function generateCoverage({
     fileEvidence,
     parentInventorySource,
     parentGeometryAvailable,
+    parentAdm1IdentityScope,
     parentFileEvidence,
     parentResolutionAttempts,
     orphanIds,

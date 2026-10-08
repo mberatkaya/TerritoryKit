@@ -6,7 +6,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import {
+  CANONICAL_ADM1_HIERARCHY_REPORT,
   DEFAULT_PARENT_REGISTRY,
+  METADATA_LOOKUP_ADM1_IDENTITY_SCOPE,
+  adm1LookupRefFromProvinceCode,
   districtRow,
   generateCoverage,
   inspectFile,
@@ -134,8 +137,29 @@ test("registry metadata enumerates the canonical 973/81 parent inventory", async
   const inventory = parentInventoryFromRegistry(registry);
   assert.equal(inventory.parentInventorySource, "METADATA_REGISTRY_ONLY");
   assert.equal(inventory.parentGeometryAvailable, false);
+  assert.equal(inventory.parentAdm1IdentityScope, METADATA_LOOKUP_ADM1_IDENTITY_SCOPE);
   assert.equal(inventory.parents.zones.length, 973);
   assert.equal(inventory.provinces.zones.length, 81);
+  assert.ok(
+    inventory.provinces.zones.every(
+      (zone) =>
+        zone.properties.territory.identityScope === METADATA_LOOKUP_ADM1_IDENTITY_SCOPE &&
+        zone.properties.territory.authoritativeProductionIdentity === false
+    )
+  );
+});
+
+test("province-code ADM1 lookup refs match locked national hierarchy ids", async () => {
+  const hierarchy = JSON.parse(
+    await readFile(path.join(REPO_ROOT, CANONICAL_ADM1_HIERARCHY_REPORT), "utf8")
+  );
+  const expected = new Set(hierarchy.countryChildIds);
+  for (let code = 1; code <= 81; code += 1) {
+    const provinceCode = String(code).padStart(2, "0");
+    const lookupRef = adm1LookupRefFromProvinceCode(provinceCode);
+    assert.ok(expected.has(lookupRef), lookupRef);
+  }
+  assert.equal(expected.size, 81);
 });
 
 test("an unavailable national candidate exports all 973 parents with null polygon measurements", async () => {
@@ -189,6 +213,36 @@ test("checksum-mismatched ADM2 bytes fall back to registry metadata instead of f
     assert.equal(resolved.parentInventorySource, "METADATA_REGISTRY_ONLY");
     assert.equal(resolved.parentResolutionAttempts[0].fileEvidence.status, "CHECKSUM_MISMATCH");
     assert.equal(resolved.parents.zones.length, 973);
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("ADM2 inventory without usable geometries cannot enable parent area measurements", async () => {
+  const root = await mkdtemp(path.join(os.tmpdir(), "territory-audit-parent-null-geo-"));
+  try {
+    const registry = JSON.parse(
+      await readFile(path.join(REPO_ROOT, DEFAULT_PARENT_REGISTRY), "utf8")
+    );
+    const inventory = parentInventoryFromRegistry(registry);
+    const parentDataset = path.join(root, "parents-null-geometry.json");
+    await writeFile(
+      parentDataset,
+      JSON.stringify({
+        zones: [
+          ...inventory.provinces.zones,
+          ...inventory.parents.zones.map((zone) => ({ ...zone, geometry: null }))
+        ]
+      }),
+      "utf8"
+    );
+    const resolved = await resolveCanonicalParentInventory({
+      artifactRoot: path.join(root, "missing-candidate"),
+      parentDataset,
+      parentRegistry: path.join(REPO_ROOT, DEFAULT_PARENT_REGISTRY)
+    });
+    assert.equal(resolved.parentInventorySource, "METADATA_REGISTRY_ONLY");
+    assert.equal(resolved.parentGeometryAvailable, false);
   } finally {
     await rm(root, { recursive: true, force: true });
   }
