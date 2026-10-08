@@ -436,6 +436,18 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
     });
     return 2;
   }
+  if (mode === "publish-ready" && flags.has("allow-partial-parent-inventory")) {
+    printJson({
+      ok: false,
+      command: "tr v2 national publish-ready",
+      issues: [
+        issue("Publish-ready builds cannot use --allow-partial-parent-inventory.", undefined, {
+          code: "PARENT_PROVENANCE_PUBLISH_PARTIAL_INVENTORY_FORBIDDEN"
+        })
+      ]
+    });
+    return 2;
+  }
   const admDataset = await readDataset(
     getFlag(flags, "adm0-adm2-dataset") ?? DEFAULT_ADM0_ADM2_DATASET
   );
@@ -443,7 +455,11 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
     getFlag(flags, "source-metadata") ?? DEFAULT_NATIONAL_SOURCE
   );
   const parentProvenance = await auditParentProvenanceForCli(admDataset, source, flags, mode);
-  if (!parentProvenance.authorizedForNationalBuild) {
+  const parentProvenanceAuthorized =
+    mode === "publish-ready"
+      ? parentProvenance.authorizedForPublishReady
+      : parentProvenance.authorizedForNationalBuild;
+  if (!parentProvenanceAuthorized) {
     printJson({
       ok: false,
       command: `tr v2 national ${mode}`,
@@ -1722,7 +1738,7 @@ async function auditParentProvenanceForCli(
   const inspection = await inspectTurkeyParentProvenance({
     parentDataset,
     catalog,
-    requireFullParentInventory: !allowPartialParentInventory,
+    requireFullParentInventory: true,
     ...(byteVerification ? { verifiedHdxMembers: byteVerification.verifiedHdxMembers } : {}),
     ...(hdxMemberPaths
       ? {

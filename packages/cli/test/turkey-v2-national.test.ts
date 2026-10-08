@@ -317,6 +317,29 @@ describe("territory cli Turkey V2 national build", () => {
     }
   }, 15_000);
 
+  it("rejects publish-ready when --allow-partial-parent-inventory is set", async () => {
+    const result = await captureCli([
+      "tr",
+      "v2",
+      "national",
+      "publish-ready",
+      "--build-date",
+      "2026-09-27T00:00:00.000Z",
+      "--allow-partial-parent-inventory"
+    ]);
+    expect(result).toMatchObject({
+      code: 2,
+      payload: {
+        ok: false,
+        issues: expect.arrayContaining([
+          expect.objectContaining({
+            code: "PARENT_PROVENANCE_PUBLISH_PARTIAL_INVENTORY_FORBIDDEN"
+          })
+        ])
+      }
+    });
+  });
+
   it("requires an explicit build date for publish-ready release builds", async () => {
     const result = await captureCli(["tr", "v2", "national", "publish-ready"]);
 

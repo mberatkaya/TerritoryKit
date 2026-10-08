@@ -116,6 +116,7 @@ export type TurkeyParentProvenanceIssueCode =
   | "PARENT_PROVENANCE_INVENTORY_INCOMPLETE"
   | "PARENT_PROVENANCE_SERIALIZED_GEOMETRY_DIFFERS"
   | "PARENT_PROVENANCE_PUBLISH_BYPASS_FORBIDDEN"
+  | "PARENT_PROVENANCE_PUBLISH_PARTIAL_INVENTORY_FORBIDDEN"
   | "PARENT_PROVENANCE_PUBLISH_LINEAGE_INSUFFICIENT";
 
 export interface TurkeyParentProvenanceIssue {
@@ -330,8 +331,7 @@ export async function verifyTurkeyNationalCatalogHdxMemberBytes(
 
 function resolveParentInventoryStatus(
   dataset: TerritoryDataset,
-  summaries: TurkeyParentProviderSummary[],
-  requireFull: boolean
+  summaries: TurkeyParentProviderSummary[]
 ): TurkeyParentInventoryStatus {
   if (summaries.some((summary) => summary.zoneCount === 0)) {
     return "MISSING_LEVEL";
@@ -354,9 +354,6 @@ function resolveParentInventoryStatus(
     if (zone.parentId && !adm0Ids.has(zone.parentId)) {
       return "INCOMPLETE";
     }
-  }
-  if (!requireFull) {
-    return "COMPLETE";
   }
   for (const level of TURKEY_V2_ADM_PARENT_LEVELS) {
     const summary = summaries.find((row) => row.level === level);
@@ -535,8 +532,7 @@ export async function inspectTurkeyParentProvenance(
   const providerSummary = summarizeProviders(options.parentDataset);
   const parentInventoryStatus = resolveParentInventoryStatus(
     options.parentDataset,
-    providerSummary,
-    requireFull
+    providerSummary
   );
   const providerMetadataStatus = resolveProviderMetadataStatus({
     catalogProvider: options.catalog.provider,
@@ -565,106 +561,114 @@ export async function inspectTurkeyParentProvenance(
   );
 
   if (options.hdxMemberPaths && options.readGeoJsonFeatures) {
-    if (parentInventoryStatus !== "COMPLETE" && requireFull) {
-      serializedGeometryStatus = "INVENTORY_INCOMPLETE";
-    } else {
-      let comparedAny = false;
-      let allMatched = true;
-      let insufficient = false;
+    let comparedAny = false;
+    let allMatched = true;
+    let insufficient = false;
+    let levelsCompared = 0;
 
-      for (const level of TURKEY_V2_ADM_PARENT_LEVELS) {
-        const catalogLevel = options.catalog.levels[level];
-        const memberPath = options.hdxMemberPaths[level];
-        if (!catalogLevel || !memberPath) {
-          insufficient = true;
+    for (const level of TURKEY_V2_ADM_PARENT_LEVELS) {
+      const catalogLevel = options.catalog.levels[level];
+      const memberPath = options.hdxMemberPaths[level];
+      if (!catalogLevel || !memberPath) {
+        insufficient = true;
+        continue;
+      }
+      let hdxFeatures: Array<{ properties: Record<string, unknown>; geometry: unknown }>;
+      try {
+        hdxFeatures = await options.readGeoJsonFeatures(memberPath);
+      } catch {
+        insufficient = true;
+        continue;
+      }
+      const indexes = buildHdxFeatureIndex(level, hdxFeatures);
+      const parentZones = zonesForLevel(options.parentDataset, level);
+      let identityMatchedPairs = 0;
+      let exactSerializedGeometryHashMatches = 0;
+      let serializedGeometryHashMismatches = 0;
+      let unmatchedParentZones = 0;
+      const sampleSerializedMismatches: TurkeyParentHdxGeometryComparison["sampleSerializedMismatches"] =
+        [];
+      const matchedHdxKeys = new Set<string>();
+      let matchMethod: TurkeyParentHdxGeometryComparison["identityMatchMethod"] = "not-applicable";
+
+      for (const zone of parentZones) {
+        const resolved = resolveParentMatchKey(level, zone, adm1ById);
+        if (!resolved) {
+          unmatchedParentZones += 1;
           continue;
         }
-        let hdxFeatures: Array<{ properties: Record<string, unknown>; geometry: unknown }>;
-        try {
-          hdxFeatures = await options.readGeoJsonFeatures(memberPath);
-        } catch {
-          insufficient = true;
+        matchMethod = resolved.method;
+        let feature = lookupHdxFeature(level, resolved.key, resolved.method, indexes);
+        if (!feature && level === "ADM1") {
+          const fallbackName = normalizeAdminName(zone.name ?? "");
+          feature = fallbackName ? indexes.byName.get(fallbackName) : undefined;
+          if (feature) matchMethod = "name-only";
+        }
+        if (!feature) {
+          unmatchedParentZones += 1;
           continue;
         }
-        const indexes = buildHdxFeatureIndex(level, hdxFeatures);
-        const parentZones = zonesForLevel(options.parentDataset, level);
-        let identityMatchedPairs = 0;
-        let exactSerializedGeometryHashMatches = 0;
-        let serializedGeometryHashMismatches = 0;
-        let unmatchedParentZones = 0;
-        const sampleSerializedMismatches: TurkeyParentHdxGeometryComparison["sampleSerializedMismatches"] =
-          [];
-        const matchedHdxKeys = new Set<string>();
-        let matchMethod: TurkeyParentHdxGeometryComparison["identityMatchMethod"] =
-          "not-applicable";
-
-        for (const zone of parentZones) {
-          const resolved = resolveParentMatchKey(level, zone, adm1ById);
-          if (!resolved) {
-            unmatchedParentZones += 1;
-            continue;
-          }
-          matchMethod = resolved.method;
-          let feature = lookupHdxFeature(level, resolved.key, resolved.method, indexes);
-          if (!feature && level === "ADM1") {
-            const fallbackName = normalizeAdminName(zone.name ?? "");
-            feature = fallbackName ? indexes.byName.get(fallbackName) : undefined;
-            if (feature) matchMethod = "name-only";
-          }
-          if (!feature) {
-            unmatchedParentZones += 1;
-            continue;
-          }
-          matchedHdxKeys.add(resolved.key);
-          identityMatchedPairs += 1;
-          const parentHash = auditGeometryHash(zone.geometry);
-          const hdxHash = auditGeometryHash(feature.geometry);
-          if (parentHash === hdxHash) {
-            exactSerializedGeometryHashMatches += 1;
-          } else {
-            serializedGeometryHashMismatches += 1;
-            allMatched = false;
-            if (sampleSerializedMismatches.length < 5) {
-              sampleSerializedMismatches.push({
-                matchKey: resolved.key,
-                parentHash,
-                hdxHash
-              });
-            }
-          }
-        }
-
-        const unmatchedHdxFeatures = hdxFeatures.length - matchedHdxKeys.size;
-        geometryComparisons.push({
-          level,
-          catalogMemberSha256: catalogLevel.sha256,
-          hdxFeatureCount: hdxFeatures.length,
-          parentZoneCount: parentZones.length,
-          identityMatchMethod: matchMethod,
-          identityMatchedPairs,
-          exactSerializedGeometryHashMatches,
-          serializedGeometryHashMismatches,
-          unmatchedParentZones,
-          unmatchedHdxFeatures,
-          serializedGeometryHashMethod: "sha256-json-stringify-geometry",
-          geographicEquivalenceStatus: "NOT_ASSESSED",
-          sampleSerializedMismatches
-        });
-        comparedAny = true;
-        if (unmatchedParentZones > 0 || unmatchedHdxFeatures > 0) {
+        matchedHdxKeys.add(resolved.key);
+        identityMatchedPairs += 1;
+        const parentHash = auditGeometryHash(zone.geometry);
+        const hdxHash = auditGeometryHash(feature.geometry);
+        if (parentHash === hdxHash) {
+          exactSerializedGeometryHashMatches += 1;
+        } else {
+          serializedGeometryHashMismatches += 1;
           allMatched = false;
+          if (sampleSerializedMismatches.length < 5) {
+            sampleSerializedMismatches.push({
+              matchKey: resolved.key,
+              parentHash,
+              hdxHash
+            });
+          }
         }
       }
 
-      serializedGeometryStatus =
-        insufficient && !comparedAny
-          ? "INSUFFICIENT_EVIDENCE"
-          : parentInventoryStatus !== "COMPLETE" && requireFull
-            ? "INVENTORY_INCOMPLETE"
-            : allMatched && comparedAny
-              ? "ALL_SERIALIZED_HASHES_MATCH"
-              : "COMPARED";
+      const unmatchedHdxFeatures = hdxFeatures.length - matchedHdxKeys.size;
+      geometryComparisons.push({
+        level,
+        catalogMemberSha256: catalogLevel.sha256,
+        hdxFeatureCount: hdxFeatures.length,
+        parentZoneCount: parentZones.length,
+        identityMatchMethod: matchMethod,
+        identityMatchedPairs,
+        exactSerializedGeometryHashMatches,
+        serializedGeometryHashMismatches,
+        unmatchedParentZones,
+        unmatchedHdxFeatures,
+        serializedGeometryHashMethod: "sha256-json-stringify-geometry",
+        geographicEquivalenceStatus: "NOT_ASSESSED",
+        sampleSerializedMismatches
+      });
+      comparedAny = true;
+      levelsCompared += 1;
+      if (unmatchedParentZones > 0 || unmatchedHdxFeatures > 0) {
+        allMatched = false;
+      }
     }
+
+    const allLevelsCompared = levelsCompared === TURKEY_V2_ADM_PARENT_LEVELS.length;
+    const canCertifyFullSerializedMatch =
+      parentInventoryStatus === "COMPLETE" &&
+      allMatched &&
+      comparedAny &&
+      allLevelsCompared &&
+      !insufficient;
+    serializedGeometryStatus =
+      insufficient && !comparedAny
+        ? "INSUFFICIENT_EVIDENCE"
+        : canCertifyFullSerializedMatch
+          ? "ALL_SERIALIZED_HASHES_MATCH"
+          : comparedAny
+            ? "COMPARED"
+            : parentInventoryStatus !== "COMPLETE"
+              ? "INVENTORY_INCOMPLETE"
+              : insufficient
+                ? "INSUFFICIENT_EVIDENCE"
+                : "NOT_RUN";
   }
 
   let classification: TurkeyParentLineageClassification = "BLOCKED_BY_MISSING_EVIDENCE";
@@ -824,6 +828,14 @@ export function verifyTurkeyParentProvenance(
     });
   }
 
+  if (purpose === "publish-ready" && options.allowPartialParentInventory) {
+    issues.push({
+      code: "PARENT_PROVENANCE_PUBLISH_PARTIAL_INVENTORY_FORBIDDEN",
+      severity: "error",
+      message: "Publish-ready builds cannot use --allow-partial-parent-inventory."
+    });
+  }
+
   const authorizedForNationalBuild = computeAuthorizedForNationalBuild(inspection, issues, options);
   const authorizedForPublishReady = computeAuthorizedForPublishReady(inspection, issues, options);
 
@@ -915,7 +927,7 @@ function computeAuthorizedForPublishReady(
   issues: TurkeyParentProvenanceIssue[],
   options: VerifyTurkeyParentProvenanceOptions
 ): boolean {
-  if (options.allowProvenanceMismatchBypass) {
+  if (options.allowProvenanceMismatchBypass || options.allowPartialParentInventory) {
     return false;
   }
   if (issues.some((issue) => issue.severity === "error")) {
