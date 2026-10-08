@@ -17,7 +17,7 @@
     "@territory-kit/registry": "workspace:*",
     "@territory-kit/runtime": "workspace:*",
     "@territory-kit/shared-testkit": "workspace:*",
-    "ol": "^10.10.0"
+    "ol": "^10.11.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
