@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import type { TerritoryAdminLevel, TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
+import type { TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
 import { sha256Hex, serializeJsonStable } from "./sources/utils.js";
 
 export const TURKEY_PARENT_PROVENANCE_SCHEMA_VERSION =
