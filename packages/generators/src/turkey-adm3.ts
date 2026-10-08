@@ -120,6 +120,28 @@ export type {
   TurkeyV2AdmParentLevel
 } from "./turkey-parent-provenance.js";
 export {
+  TURKEY_GEOBOUNDARIES_GIT_RELEASE_COMMIT,
+  TURKEY_GEOBOUNDARIES_PARENT_LINEAGE_SCHEMA_VERSION,
+  buildGeoBoundariesCandidatesFromSourceLock,
+  classifyPathBFeasibility,
+  computeParentDatasetContentSha256,
+  findGeoBoundariesArtifactBySha256,
+  inspectTurkeyGeoBoundariesParentLineage,
+  loadTurkeyGeoBoundariesSourceLock,
+  verifyGeoBoundariesSourceArtifactBytes,
+  verifyTurkeyGeoBoundariesParentLineage
+} from "./turkey-geoboundaries-parent-lineage.js";
+export type {
+  GeoBoundariesByteVerificationEntry,
+  GeoBoundariesGeometryComparisonRow,
+  GeoBoundariesIdentityComparisonRow,
+  GeoBoundariesSourceCandidate,
+  InspectTurkeyGeoBoundariesParentLineageOptions,
+  PathBFeasibilityClassification,
+  TurkeyGeoBoundariesParentLineageInspection,
+  TurkeyGeoBoundariesSourceLock
+} from "./turkey-geoboundaries-parent-lineage.js";
+export {
   TURKEY_V2_ADM0_EXPECTED_COUNT,
   TURKEY_V2_ADM1_EXPECTED_COUNT,
   TURKEY_V2_ADM2_EXPECTED_COUNT,

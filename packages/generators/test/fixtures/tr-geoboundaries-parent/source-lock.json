@@ -1,0 +1,16 @@
+{
+  "provider": "geoboundaries",
+  "releaseType": "gbOpen",
+  "resolvedAt": "2026-07-15T11:34:06.314Z",
+  "levels": {
+    "ADM0": {
+      "adminLevel": "ADM0",
+      "originalFilename": "geoBoundaries-TUR-ADM0-fixture.geojson",
+      "sha256": "af72983854237239724ecee55a93936764dc349689e1486b5f53cccd2069f9ac",
+      "sizeBytes": 473,
+      "sourceFeatureCount": 1,
+      "license": "CC BY 4.0",
+      "attribution": "geoBoundaries fixture"
+    }
+  }
+}

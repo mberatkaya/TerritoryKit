@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "territorykit-tr-geoboundaries-source-candidates@1",
+  "inspectedCommit": "5dfcd996c03bf9582ed33031a8ede40456a500be",
+  "generatedAt": "2026-10-08T21:39:31.356Z",
+  "sourceLockPath": "datasets/generated/countries/TR/sources.lock.json",
+  "candidates": [
+    {
+      "adminLevel": "ADM0",
+      "releaseFamily": "gbOpen",
+      "countryCode": "TR",
+      "gitReleaseCommit": "9469f09592ced973a3448cf66b6100b741b64c0d",
+      "originalFilename": "geoBoundaries-TUR-ADM0_simplified.geojson",
+      "downloadUrl": "https://media.githubusercontent.com/media/wmgeolab/geoBoundaries/9469f09592ced973a3448cf66b6100b741b64c0d/releaseData/gbOpen/TUR/ADM0/geoBoundaries-TUR-ADM0_simplified.geojson",
+      "metadataUrl": "https://www.geoboundaries.org/api/current/gbOpen/TUR/ADM0/",
+      "expectedSha256": "263ed2d7855f4cd23a8314a12c0a2bec773dc0dbe62a4e40d3a6a687939f7379",
+      "expectedByteSize": 498489,
+      "sourcePublicationDate": "Thu Jan 19 07:31:04 2023",
+      "sourceVersion": "Republic of Turkey",
+      "license": "Creative Commons Attribution-ShareAlike 2.0",
+      "attribution": "Open Street Map",
+      "sourceNativeIdField": "shapeID",
+      "featureCountFromLock": 1,
+      "confidence": "verified-lock"
+    },
+    {
+      "adminLevel": "ADM1",
+      "releaseFamily": "gbOpen",
+      "countryCode": "TR",
+      "gitReleaseCommit": "9469f09592ced973a3448cf66b6100b741b64c0d",
+      "originalFilename": "geoBoundaries-TUR-ADM1_simplified.geojson",
+      "downloadUrl": "https://media.githubusercontent.com/media/wmgeolab/geoBoundaries/9469f09592ced973a3448cf66b6100b741b64c0d/releaseData/gbOpen/TUR/ADM1/geoBoundaries-TUR-ADM1_simplified.geojson",
+      "metadataUrl": "https://www.geoboundaries.org/api/current/gbOpen/TUR/ADM1/",
+      "expectedSha256": "94f64008c50e1953a56eb9dc1fb7367944d2290c6da5976a4f31e7eca35b3117",
+      "expectedByteSize": 1559408,
+      "sourcePublicationDate": "Thu Aug 31 09:55:30 2023",
+      "sourceVersion": "province",
+      "license": "Creative Commons Attribution-ShareAlike 2.0",
+      "attribution": "Open Street Map",
+      "sourceNativeIdField": "shapeID",
+      "featureCountFromLock": 81,
+      "confidence": "verified-lock"
+    },
+    {
+      "adminLevel": "ADM2",
+      "releaseFamily": "gbOpen",
+      "countryCode": "TR",
+      "gitReleaseCommit": "9469f09592ced973a3448cf66b6100b741b64c0d",
+      "originalFilename": "geoBoundaries-TUR-ADM2_simplified.geojson",
+      "downloadUrl": "https://media.githubusercontent.com/media/wmgeolab/geoBoundaries/9469f09592ced973a3448cf66b6100b741b64c0d/releaseData/gbOpen/TUR/ADM2/geoBoundaries-TUR-ADM2_simplified.geojson",
+      "metadataUrl": "https://www.geoboundaries.org/api/current/gbOpen/TUR/ADM2/",
+      "expectedSha256": "17af9a6bff9bed53390e49cbbf66569e0d296f134cd4528e1dc3c0d204e358f3",
+      "expectedByteSize": 3868305,
+      "sourcePublicationDate": "Thu Jan 19 07:31:04 2023",
+      "sourceVersion": "Districts",
+      "license": "Open Data Commons Open Database License 1.0",
+      "attribution": "OpenStreetMap, OSM Boundaries",
+      "sourceNativeIdField": "shapeID",
+      "featureCountFromLock": 999,
+      "confidence": "verified-lock"
+    }
+  ]
+}

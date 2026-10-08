@@ -1,0 +1,26 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "shapeGroup": "TUR",
+        "shapeType": "ADM0",
+        "shapeID": "FIXTURE-ADM0-SERIAL",
+        "shapeName": "Turkey"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [28.0, 40.0],
+            [29.0, 40.0],
+            [29.0, 41.0],
+            [28.0, 41.0],
+            [28.0, 40.0]
+          ]
+        ]
+      }
+    }
+  ]
+}

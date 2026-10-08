@@ -1,0 +1,103 @@
+{
+  "schemaVersion": "territorykit-tr-geoboundaries-geometry-equivalence@1",
+  "inspectedCommit": "5dfcd996c03bf9582ed33031a8ede40456a500be",
+  "generatedAt": "2026-10-08T21:39:31.356Z",
+  "geographicEquivalenceStatus": "NOT_ASSESSED",
+  "rows": [
+    {
+      "adminLevel": "ADM0",
+      "comparisonMethod": "geometry-repair-then-serialized-hash",
+      "crs": "EPSG:4326 (source GeoJSON)",
+      "identityMatchedPairs": 1,
+      "rawSerializedGeometryHashMatches": 0,
+      "repairedSerializedGeometryHashMatches": 1,
+      "serializedGeometryHashMismatches": 0,
+      "geographicEquivalenceStatus": "NOT_ASSESSED",
+      "sampleMismatches": []
+    },
+    {
+      "adminLevel": "ADM1",
+      "comparisonMethod": "geometry-repair-then-serialized-hash",
+      "crs": "EPSG:4326 (source GeoJSON)",
+      "identityMatchedPairs": 81,
+      "rawSerializedGeometryHashMatches": 0,
+      "repairedSerializedGeometryHashMatches": 57,
+      "serializedGeometryHashMismatches": 24,
+      "geographicEquivalenceStatus": "NOT_ASSESSED",
+      "sampleMismatches": [
+        {
+          "sourceNativeId": "25984515B32583172380009",
+          "parentZoneId": "tr:adm1:tr-05",
+          "parentHash": "73c3d9143fc3a592dedcda63f2b67da6264dde0bc4f10cf806197a2c70209664",
+          "repairedSourceHash": "6264738dc8bc3a7dbe0426a72c7864257fe147374e066ad77a20daa188d7729c"
+        },
+        {
+          "sourceNativeId": "25984515B47806653651907",
+          "parentZoneId": "tr:adm1:tr-06",
+          "parentHash": "f9b9dfb124ed27e125fada8044d545375fb162ce3ecdcb1fe2ab49de2b08e950",
+          "repairedSourceHash": "16ed94c00c396d24d9cec7cb056409aa67315603902669c6407165ff8e9d0914"
+        },
+        {
+          "sourceNativeId": "25984515B1602304411378",
+          "parentZoneId": "tr:adm1:tr-08",
+          "parentHash": "f919b9815dc3557d24b11917c2d604698fd97e6929b62d4ea73948e8204da62a",
+          "repairedSourceHash": "a18d4c53f08c3651a3018c3bd01f969df3103a8abc11713d0bb40f6c46ee214e"
+        },
+        {
+          "sourceNativeId": "25984515B63739470532168",
+          "parentZoneId": "tr:adm1:tr-09",
+          "parentHash": "5c66ad468b4b123d6fdffdf40d562a5a4c064dfe6f4cb1f7ed8b2daf5c892fbd",
+          "repairedSourceHash": "cedc1f54e382ee71c3421ee0dfbc4a2bb86466390b118606c0a58bf0fb9470cf"
+        },
+        {
+          "sourceNativeId": "25984515B55384476443375",
+          "parentZoneId": "tr:adm1:tr-10",
+          "parentHash": "925ceeb704d0aa80132b588b142116968acc2dad4b281c311a3f5d7dfc7fcda5",
+          "repairedSourceHash": "504b9e3d711fc6b33609d742af4c0cab54f73971c100cc604cf5183eedcb7d0f"
+        }
+      ]
+    },
+    {
+      "adminLevel": "ADM2",
+      "comparisonMethod": "geometry-repair-then-serialized-hash",
+      "crs": "EPSG:4326 (source GeoJSON)",
+      "identityMatchedPairs": 973,
+      "rawSerializedGeometryHashMatches": 0,
+      "repairedSerializedGeometryHashMatches": 953,
+      "serializedGeometryHashMismatches": 20,
+      "geographicEquivalenceStatus": "NOT_ASSESSED",
+      "sampleMismatches": [
+        {
+          "sourceNativeId": "54988432B18155993888482",
+          "parentZoneId": "tr:adm2:54988432b18155993888482",
+          "parentHash": "5730c97f063cd033d6ca67d5ba89f63e1a8d0f54a462919bfae18bf0f0cae8c9",
+          "repairedSourceHash": "4892d3a2642b07fbd47b7f3f171e7d6c793f765d74e11a281c1e22fd14c02f5e"
+        },
+        {
+          "sourceNativeId": "54988432B19462176511596",
+          "parentZoneId": "tr:adm2:54988432b19462176511596",
+          "parentHash": "1d9f7546d2176c5c9f29b8d3f0824bc1efde5ed0c1c2def8f97843e36951022e",
+          "repairedSourceHash": "9d5a94a44144485f80be5681ad1e229eccc7122952ba91c00ae0f9a89665918b"
+        },
+        {
+          "sourceNativeId": "54988432B271913105949",
+          "parentZoneId": "tr:adm2:54988432b271913105949",
+          "parentHash": "cc14c8945bf971025f4584b324a6d80f6e63a5531d54c606c6291222bb9ef89d",
+          "repairedSourceHash": "d81744b5d9e71ac0ccb3949c9f786af4eeab001745607aed3cf6a3b4160eab07"
+        },
+        {
+          "sourceNativeId": "54988432B28558182878988",
+          "parentZoneId": "tr:adm2:54988432b28558182878988",
+          "parentHash": "f68366cae6dd787adbcb08cd88e625c06428d464ed68257570d40313ed6d9744",
+          "repairedSourceHash": "32667103ce8b26d9e996f61e0ab2c0b8b4a714a62c2db5b36da9321db4fc6e1c"
+        },
+        {
+          "sourceNativeId": "54988432B31268227976167",
+          "parentZoneId": "tr:adm2:54988432b31268227976167",
+          "parentHash": "26a0c76c64ef96ddb3b309aa23d22cbbf26d55ab301e7ec48a5cac0cb86c06c1",
+          "repairedSourceHash": "800f5585dfb86b4268453a57fabebe9af0871cc0b61eba3a6fc2d1562647f5e8"
+        }
+      ]
+    }
+  ]
+}
