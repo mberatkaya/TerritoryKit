@@ -3,12 +3,13 @@ import { existsSync } from "node:fs";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { spawnSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import {
   generateGeoBoundariesParentReports,
-  isGeoBoundariesParentAuditCliEntry
+  isGeoBoundariesParentAuditCliEntry,
+  prettifyMarkdownReports
 } from "./tr-geoboundaries-parent-audit.mjs";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -20,11 +21,15 @@ const FIXTURE_SOURCE_LOCK = path.join(
   REPO_ROOT,
   "packages/generators/test/fixtures/tr-geoboundaries-parent/source-lock.json"
 );
-const FIXTURE_GB_ADM0 = path.join(
-  REPO_ROOT,
-  "packages/generators/test/fixtures/tr-geoboundaries-parent/gb-adm0-tiny.geojson"
-);
 const AUDIT_SCRIPT = path.join(REPO_ROOT, "scripts/tr-geoboundaries-parent-audit.mjs");
+
+function assertPrettierCleanMarkdown(files) {
+  execFileSync("pnpm", ["exec", "prettier", "--check", ...files], {
+    cwd: REPO_ROOT,
+    stdio: "pipe",
+    env: { ...process.env, CI: "true" }
+  });
+}
 
 test("geoboundaries audit CLI entry detection", () => {
   assert.equal(isGeoBoundariesParentAuditCliEntry(["node", "/other.mjs"]), false);
@@ -48,6 +53,63 @@ test("generateGeoBoundariesParentReports never returns verified without full nat
     assert.notEqual(inspection.pathBFeasibility, "PATH_B_VERIFIED_CANDIDATE");
     const feasibility = await readFile(path.join(outputDir, "path-b-feasibility.md"), "utf8");
     assert.match(feasibility, /Path B/);
+    const requirements = JSON.parse(
+      await readFile(path.join(outputDir, "path-b-evidence-requirements.json"), "utf8")
+    );
+    assert.equal(requirements.migrationAuthorizationStatus, "NOT_AUTHORIZED");
+    assert.ok(requirements.unresolvedLicensingEvidence.length > 0);
+    assert.ok(
+      requirements.unresolvedGeometryEvidence.length > 0 ||
+        requirements.unresolvedSourceInventoryEvidence.length > 0 ||
+        requirements.missingArtifacts.length > 0
+    );
+    assertPrettierCleanMarkdown([
+      path.join(outputDir, "path-b-feasibility.md"),
+      path.join(outputDir, "README.md"),
+      path.join(outputDir, "migration-impact-plan.md")
+    ]);
+  } finally {
+    await rm(outputDir, { recursive: true, force: true });
+  }
+});
+
+test("regenerating reports twice does not introduce prettier drift", async () => {
+  const outputDir = await mkdtemp(path.join(os.tmpdir(), "territory-gb-parent-audit-drift-"));
+  try {
+    await generateGeoBoundariesParentReports({
+      outputDir,
+      parentDatasetPath: FIXTURE_PARENT,
+      sourceLockPath: FIXTURE_SOURCE_LOCK,
+      geoBoundariesCacheRoot: path.join(
+        REPO_ROOT,
+        "packages/generators/test/fixtures/tr-geoboundaries-parent/cache"
+      ),
+      diagnosticMode: true,
+      strict: false
+    });
+    const normalize = (text) =>
+      text
+        .replace(/\*\*Üretim zamanı \(UTC\):\*\* .+\n/g, "")
+        .replace(/\*\*İnceleme commit:\*\* `[^`]+`/g, "**İnceleme commit:** `PINNED`");
+    const first = normalize(await readFile(path.join(outputDir, "path-b-feasibility.md"), "utf8"));
+    await generateGeoBoundariesParentReports({
+      outputDir,
+      parentDatasetPath: FIXTURE_PARENT,
+      sourceLockPath: FIXTURE_SOURCE_LOCK,
+      geoBoundariesCacheRoot: path.join(
+        REPO_ROOT,
+        "packages/generators/test/fixtures/tr-geoboundaries-parent/cache"
+      ),
+      diagnosticMode: true,
+      strict: false
+    });
+    const second = normalize(await readFile(path.join(outputDir, "path-b-feasibility.md"), "utf8"));
+    assert.equal(first, second);
+    prettifyMarkdownReports(outputDir);
+    assertPrettierCleanMarkdown([
+      path.join(outputDir, "path-b-feasibility.md"),
+      path.join(outputDir, "README.md")
+    ]);
   } finally {
     await rm(outputDir, { recursive: true, force: true });
   }
@@ -92,10 +154,17 @@ test("optional full national audit when local generated parent exists", async (t
       strict: false
     });
     assert.ok(inspection.identityComparison.length > 0);
-    const bytes = JSON.parse(
-      await readFile(path.join(outputDir, "source-byte-verification.json"), "utf8")
+    const inventory = JSON.parse(
+      await readFile(path.join(outputDir, "source-feature-inventory.json"), "utf8")
     );
-    assert.equal(typeof bytes.geoBoundariesUpstreamBytesVerified, "boolean");
+    const adm2 = inventory.rows.find((row) => row.adminLevel === "ADM2");
+    assert.equal(adm2?.rawGeoJsonFeatureCount, 973);
+    assert.equal(adm2?.parsedFeatureCount, 973);
+    assert.equal(adm2?.lockMetadataFeatureCount, 999);
+    assertPrettierCleanMarkdown([
+      path.join(outputDir, "path-b-feasibility.md"),
+      path.join(outputDir, "README.md")
+    ]);
   } finally {
     await rm(outputDir, { recursive: true, force: true });
   }

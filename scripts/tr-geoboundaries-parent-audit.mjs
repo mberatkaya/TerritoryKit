@@ -4,6 +4,8 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { execFileSync } from "node:child_process";
 import {
   inspectTurkeyGeoBoundariesParentLineage,
+  renderGeoBoundariesProvenanceReadmeMarkdown,
+  renderPathBFeasibilityMarkdown,
   verifyTurkeyGeoBoundariesParentLineage
 } from "../packages/generators/dist/turkey-adm3.mjs";
 
@@ -19,6 +21,16 @@ const GEOBOUNDARIES_CACHE_ROOT = path.join(REPO_ROOT, ".territory/cache/sources/
 async function writeTextFile(filePath, contents) {
   const text = contents.endsWith("\n") ? contents : `${contents}\n`;
   await writeFile(filePath, text, "utf8");
+}
+
+const MARKDOWN_REPORT_FILES = ["path-b-feasibility.md", "migration-impact-plan.md", "README.md"];
+
+export function prettifyMarkdownReports(outputDir) {
+  const targets = MARKDOWN_REPORT_FILES.map((name) => path.join(outputDir, name));
+  execFileSync("pnpm", ["exec", "prettier", "--write", ...targets], {
+    cwd: REPO_ROOT,
+    stdio: "pipe"
+  });
 }
 
 export function isGeoBoundariesParentAuditCliEntry(argv = process.argv) {
@@ -125,6 +137,20 @@ export async function generateGeoBoundariesParentReports({
     geographicEquivalenceStatus: "NOT_ASSESSED",
     rows: inspection.geometryComparison
   };
+  const sourceFeatureInventory = {
+    schemaVersion: "territorykit-tr-geoboundaries-source-feature-inventory@1",
+    inspectedCommit,
+    generatedAt,
+    rows: inspection.sourceFeatureInventory
+  };
+  const pathBEvidenceRequirements = {
+    schemaVersion: "territorykit-tr-geoboundaries-path-b-evidence@1",
+    inspectedCommit,
+    generatedAt,
+    pathBFeasibility: inspection.pathBFeasibility,
+    legalReviewStatus: inspection.legalReviewStatus,
+    ...inspection.pathBEvidenceRequirements
+  };
 
   await writeTextFile(
     path.join(outputDir, "source-candidates.json"),
@@ -146,42 +172,19 @@ export async function generateGeoBoundariesParentReports({
     path.join(outputDir, "geometry-equivalence.json"),
     JSON.stringify(geometryEquivalence, null, 2)
   );
+  await writeTextFile(
+    path.join(outputDir, "source-feature-inventory.json"),
+    JSON.stringify(sourceFeatureInventory, null, 2)
+  );
+  await writeTextFile(
+    path.join(outputDir, "path-b-evidence-requirements.json"),
+    JSON.stringify(pathBEvidenceRequirements, null, 2)
+  );
 
-  const pathBFeasibility = `# Path B (geoBoundaries metadata realignment) feasibility
-
-**İnceleme commit:** \`${inspectedCommit}\`  
-**Üretim zamanı (UTC):** ${generatedAt}  
-**Sınıflandırma:** \`${inspection.pathBFeasibility}\`
-
-## Özet
-
-${inspection.pathBFeasibilitySummary}
-
-## Kanıt durumu
-
-| Alan | Durum |
-| --- | --- |
-| geoBoundaries bayt doğrulaması | ${inspection.geoBoundariesUpstreamBytesVerified ? "EVET" : "HAYIR"} |
-| Ebeveyn envanter | ${inspection.parentInventoryStatus} |
-| Lisans inceleme | ${inspection.licenseReviewStatus} |
-| Resmî devlet verisi iddiası | Hayır — geoBoundaries açık veri sınırları geçerli |
-
-## Eksik kanıt
-
-${inspection.missingEvidence.length > 0 ? inspection.missingEvidence.map((item) => `- ${item}`).join("\n") : "- (yok)"}
-
-## ADR-006 notu
-
-Bu rapor ADR-006 (HDX/OCHA COD-AB varsayılanı) kararını **değiştirmez**. Path B yalnızca ayrı yetkilendirilmiş bir migrasyon PR'si için ön koşul kanıtı sağlar.
-
-## Yeniden üretim
-
-\`\`\`sh
-pnpm data:tr:geoboundaries:parent:audit
-\`\`\`
-
-Yerel önbellek gerekir: \`.territory/cache/sources/geoboundaries\` ve gitignore altındaki \`datasets/generated/countries/TR/\`.
-`;
+  const pathBFeasibility = renderPathBFeasibilityMarkdown(inspection, {
+    inspectedCommit,
+    generatedAt
+  });
 
   const migrationImpact = `# Path B migrasyon etki planı (yalnızca plan)
 
@@ -218,23 +221,9 @@ Yerel önbellek gerekir: \`.territory/cache/sources/geoboundaries\` ve gitignore
   await writeTextFile(path.join(outputDir, "migration-impact-plan.md"), migrationImpact);
   await writeTextFile(
     path.join(outputDir, "README.md"),
-    `# geoBoundaries ebeveyn soy kanıtı (Path B)
-
-Türkiye ADM0–ADM2 canonical ebeveyn poligonlarının geoBoundaries gbOpen kaynağıyla hizalanabilirliği.
-
-| Dosya | Amaç |
-| --- | --- |
-| [source-candidates.json](./source-candidates.json) | Pinlenmiş gbOpen release adayları |
-| [source-byte-verification.json](./source-byte-verification.json) | SHA-256 bayt doğrulaması |
-| [canonical-parent-inventory.json](./canonical-parent-inventory.json) | Yerel canonical artifact envanteri |
-| [identity-comparison.json](./identity-comparison.json) | shapeID ↔ zone eşleşmeleri |
-| [geometry-equivalence.json](./geometry-equivalence.json) | Onarım sonrası serileştirilmiş geometri hash |
-| [path-b-feasibility.md](./path-b-feasibility.md) | Path B sınıflandırması |
-| [migration-impact-plan.md](./migration-impact-plan.md) | Migrasyon etki planı (uygulanmadı) |
-
-HDX karşılaştırma kanıtı: [../](../) (PR #104).
-`
+    renderGeoBoundariesProvenanceReadmeMarkdown()
   );
+  prettifyMarkdownReports(outputDir);
 
   const auditComplete =
     verification.verified ||

@@ -1,6 +1,6 @@
 # Path B migrasyon etki planı (yalnızca plan)
 
-**İnceleme commit:** `aac6e86c8e29d02da9acb6ec8a5e24216815eb10`  
+**İnceleme commit:** `4adc529dc6321a81daee782c7afcc1a9170071fe`  
 **Durum:** Migrasyon uygulanmadı — etki analizi taslağı
 
 ## ADM0–ADM2 kimlikler

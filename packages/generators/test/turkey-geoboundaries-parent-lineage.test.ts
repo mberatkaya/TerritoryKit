@@ -5,6 +5,8 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import type { TerritoryAdminLevel, TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
 import {
+  analyzeGeoBoundariesFeatureCollection,
+  buildPathBEvidenceRequirements,
   findGeoBoundariesArtifactBySha256,
   inspectTurkeyGeoBoundariesParentLineage,
   verifyGeoBoundariesSourceArtifactBytes,
@@ -114,6 +116,62 @@ describe("turkey-geoboundaries-parent-lineage", () => {
     );
   });
 
+  it("flags stale lock feature counts without silent drops", async () => {
+    const sourcePath = join(FIXTURE_ROOT, "gb-adm0-tiny.geojson");
+    const parsed = JSON.parse(await readFile(sourcePath, "utf8"));
+    const report = analyzeGeoBoundariesFeatureCollection(parsed);
+    expect(report.rawGeoJsonFeatureCount).toBe(1);
+    expect(report.parsedFeatureCount).toBe(1);
+    expect(report.rejectedFeatureCount).toBe(0);
+  });
+
+  it("exposes NOT_ASSESSED for territory stable ID and parent relationships", async () => {
+    const sourcePath = join(FIXTURE_ROOT, "gb-adm0-tiny.geojson");
+    const source = JSON.parse(await readFile(sourcePath, "utf8"));
+    const shapeId = source.features[0].properties.shapeID as string;
+    const inspection = await inspectTurkeyGeoBoundariesParentLineage({
+      parentDataset: dataset([zone({ id: "tr", level: 0, name: "Turkey", sourceId: shapeId })]),
+      sourceLockPath: join(FIXTURE_ROOT, "source-lock.json"),
+      sourceArtifactPaths: { ADM0: sourcePath }
+    });
+    const row = inspection.identityComparison[0];
+    expect(row?.territoryStableIdAssessment).toBe("NOT_ASSESSED");
+    expect(row?.parentRelationshipAssessment).toBe("NOT_ASSESSED");
+    expect(
+      inspection.pathBEvidenceRequirements.unresolvedSourceInventoryEvidence.some((entry) =>
+        entry.includes("999")
+      )
+    ).toBe(true);
+  });
+
+  it("lists unresolved blockers even when artifacts exist", () => {
+    const requirements = buildPathBEvidenceRequirements({
+      missingArtifacts: [],
+      sourceFeatureInventory: [],
+      geometryComparison: [
+        {
+          adminLevel: "ADM1",
+          comparisonMethod: "geometry-repair-then-serialized-hash",
+          crs: "EPSG:4326 (source GeoJSON)",
+          identityMatchedPairs: 81,
+          rawSerializedGeometryHashMatches: 0,
+          repairedSerializedGeometryHashMatches: 57,
+          serializedGeometryHashMismatches: 24,
+          geographicEquivalenceStatus: "NOT_ASSESSED",
+          sampleMismatches: []
+        }
+      ],
+      candidates: [],
+      geoBoundariesUpstreamBytesVerified: true,
+      parentInventoryStatus: "COMPLETE",
+      pathBFeasibility: "PATH_B_PARTIALLY_VERIFIED"
+    });
+    expect(requirements.missingArtifacts).toHaveLength(0);
+    expect(requirements.unresolvedGeometryEvidence.length).toBeGreaterThan(0);
+    expect(requirements.migrationAuthorizationStatus).toBe("NOT_AUTHORIZED");
+    expect(requirements.unresolvedLicensingEvidence.length).toBeGreaterThan(0);
+  });
+
   it("reports missing artifacts without claiming verified", async () => {
     const inspection = await inspectTurkeyGeoBoundariesParentLineage({
       parentDataset: dataset([zone({ id: "tr", level: 0, name: "Turkey", sourceId: "missing" })]),
@@ -121,6 +179,8 @@ describe("turkey-geoboundaries-parent-lineage", () => {
     });
     expect(inspection.geoBoundariesUpstreamBytesVerified).toBe(false);
     expect(inspection.pathBFeasibility).toBe("PATH_B_BLOCKED_BY_MISSING_EVIDENCE");
+    expect(inspection.pathBEvidenceRequirements.missingArtifacts.length).toBeGreaterThan(0);
+    expect(inspection.legalReviewStatus).toBe("PENDING_REVIEW");
     expect(verifyTurkeyGeoBoundariesParentLineage(inspection, { strict: true }).verified).toBe(
       false
     );

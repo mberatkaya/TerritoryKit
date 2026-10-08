@@ -19,7 +19,16 @@ import {
 } from "./sources/utils.js";
 
 export const TURKEY_GEOBOUNDARIES_PARENT_LINEAGE_SCHEMA_VERSION =
-  "territorykit-tr-geoboundaries-parent-lineage@1" as const;
+  "territorykit-tr-geoboundaries-parent-lineage@2" as const;
+
+export const GEOBOUNDARIES_ADAPTER_DEFAULT_LICENSE = GEOBOUNDARIES_LICENSE;
+
+export type ComparisonAssessmentStatus = "NOT_ASSESSED" | "COMPARED";
+
+export type PathBLegalReviewStatus = "PENDING_REVIEW" | "APPROVED_WITH_AUTHORIZATION";
+
+export type PathBMigrationAuthorizationStatus =
+  "NOT_AUTHORIZED" | "BLOCKED_PENDING_EVIDENCE" | "AUTHORIZED_SEPARATE_PR";
 
 export const TURKEY_GEOBOUNDARIES_GIT_RELEASE_COMMIT =
   "9469f09592ced973a3448cf66b6100b741b64c0d" as const;
@@ -48,6 +57,8 @@ export interface TurkeyGeoBoundariesSourceLockLevel {
   sourceVersion?: string;
   sourceFeatureCount?: number;
   license?: string;
+  licenseUrl?: string;
+  licenseDetail?: string;
   attribution?: string;
   boundaryYearRepresented?: string;
 }
@@ -71,11 +82,37 @@ export interface GeoBoundariesSourceCandidate {
   expectedByteSize: number | null;
   sourcePublicationDate: string | null;
   sourceVersion: string | null;
-  license: string;
-  attribution: string | null;
+  lockLicense: string | null;
+  lockLicenseUrl: string | null;
+  lockLicenseDetail: string | null;
+  lockAttribution: string | null;
+  adapterDefaultLicense: string;
+  distributionLicenseNote: string;
   sourceNativeIdField: "shapeID";
   featureCountFromLock: number | null;
   confidence: "verified-lock" | "inferred-cache" | "manual-pin";
+}
+
+export interface GeoBoundariesSourceFeatureInventory {
+  adminLevel: TurkeyV2AdmParentLevel;
+  rawGeoJsonFeatureCount: number;
+  parsedFeatureCount: number;
+  rejectedFeatureCount: number;
+  rejectionReasons: Record<string, number>;
+  duplicateShapeIdCount: number;
+  lockMetadataFeatureCount: number | null;
+  canonicalParentZoneCount: number;
+  unmatchedSourceFeaturesAfterParentJoin: number;
+  inventoryInterpretation: string;
+}
+
+export interface PathBEvidenceRequirements {
+  missingArtifacts: string[];
+  unresolvedGeometryEvidence: string[];
+  unresolvedSourceInventoryEvidence: string[];
+  unresolvedLicensingEvidence: string[];
+  migrationAuthorizationStatus: PathBMigrationAuthorizationStatus;
+  fullPipelineReproducibilityStatus: "NOT_ASSESSED" | "INCOMPLETE" | "COMPLETE";
 }
 
 export interface GeoBoundariesByteVerificationEntry {
@@ -98,11 +135,10 @@ export interface GeoBoundariesIdentityComparisonRow {
   unmatchedParentZones: number;
   unmatchedSourceFeatures: number;
   duplicateSourceNativeIds: number;
-  territoryIdMatches: number;
-  territoryIdMismatches: number;
+  territoryStableIdAssessment: ComparisonAssessmentStatus;
+  parentRelationshipAssessment: ComparisonAssessmentStatus;
   administrativeNameMatches: number;
   administrativeNameMismatches: number;
-  parentRelationshipIssues: number;
   identityMatchMethod: "shapeID-to-territory.source.sourceId";
 }
 
@@ -139,8 +175,11 @@ export interface TurkeyGeoBoundariesParentLineageInspection {
   geometryComparison: GeoBoundariesGeometryComparisonRow[];
   pathBFeasibility: PathBFeasibilityClassification;
   pathBFeasibilitySummary: string;
+  /** @deprecated Use pathBEvidenceRequirements.missingArtifacts */
   missingEvidence: string[];
-  licenseReviewStatus: "documented-cc-by-4.0-gbopen" | "pending-legal-review";
+  pathBEvidenceRequirements: PathBEvidenceRequirements;
+  sourceFeatureInventory: GeoBoundariesSourceFeatureInventory[];
+  legalReviewStatus: PathBLegalReviewStatus;
   notAuthoritativeGovernmentData: true;
 }
 
@@ -219,6 +258,8 @@ export async function loadTurkeyGeoBoundariesSourceLock(
         ? { sourceFeatureCount: entry.sourceFeatureCount }
         : {}),
       ...(typeof entry.license === "string" ? { license: entry.license } : {}),
+      ...(typeof entry.licenseUrl === "string" ? { licenseUrl: entry.licenseUrl } : {}),
+      ...(typeof entry.licenseDetail === "string" ? { licenseDetail: entry.licenseDetail } : {}),
       ...(typeof entry.attribution === "string" ? { attribution: entry.attribution } : {}),
       ...(typeof entry.boundaryYearRepresented === "string"
         ? { boundaryYearRepresented: entry.boundaryYearRepresented }
@@ -293,8 +334,13 @@ export function buildGeoBoundariesCandidatesFromSourceLock(
         expectedByteSize: level.sizeBytes ?? null,
         sourcePublicationDate: level.sourceDate ?? level.boundaryYearRepresented ?? null,
         sourceVersion: level.sourceVersion ?? null,
-        license: level.license ?? GEOBOUNDARIES_LICENSE,
-        attribution: level.attribution ?? null,
+        lockLicense: level.license ?? null,
+        lockLicenseUrl: level.licenseUrl ?? null,
+        lockLicenseDetail: level.licenseDetail ?? null,
+        lockAttribution: level.attribution ?? null,
+        adapterDefaultLicense: GEOBOUNDARIES_ADAPTER_DEFAULT_LICENSE,
+        distributionLicenseNote:
+          "gbOpen distribution is commonly described as CC BY 4.0; per-feature lock strings may cite upstream OSM/ODbL or other terms — not legal equivalence.",
         sourceNativeIdField: "shapeID",
         featureCountFromLock: level.sourceFeatureCount ?? null,
         confidence: "verified-lock"
@@ -362,26 +408,85 @@ function readGeoJsonPolygonGeometry(input: unknown): TerritoryGeometry | null {
   return input as unknown as TerritoryGeometry;
 }
 
-function readGeoBoundariesFeaturesFromCollection(input: unknown): ParsedGeoBoundariesFeature[] {
+export interface GeoBoundariesFeatureParseReport {
+  rawGeoJsonFeatureCount: number;
+  parsedFeatureCount: number;
+  rejectedFeatureCount: number;
+  rejectionReasons: Record<string, number>;
+  duplicateShapeIdCount: number;
+  features: ParsedGeoBoundariesFeature[];
+}
+
+function incrementReason(reasons: Record<string, number>, reason: string): void {
+  reasons[reason] = (reasons[reason] ?? 0) + 1;
+}
+
+export function analyzeGeoBoundariesFeatureCollection(
+  input: unknown
+): GeoBoundariesFeatureParseReport {
+  const rejectionReasons: Record<string, number> = {};
   if (!isRecord(input) || input.type !== "FeatureCollection" || !Array.isArray(input.features)) {
-    return [];
+    return {
+      rawGeoJsonFeatureCount: 0,
+      parsedFeatureCount: 0,
+      rejectedFeatureCount: 0,
+      rejectionReasons: { invalid_feature_collection: 1 },
+      duplicateShapeIdCount: 0,
+      features: []
+    };
   }
-  return input.features.flatMap((rawFeature): ParsedGeoBoundariesFeature[] => {
-    if (!isRecord(rawFeature) || !isRecord(rawFeature.properties)) {
+  const rawGeoJsonFeatureCount = input.features.length;
+  const shapeIds = new Set<string>();
+  let duplicateShapeIdCount = 0;
+  const features = input.features.flatMap((rawFeature, index): ParsedGeoBoundariesFeature[] => {
+    if (!isRecord(rawFeature)) {
+      incrementReason(rejectionReasons, "feature_not_object");
+      return [];
+    }
+    if (!isRecord(rawFeature.properties)) {
+      incrementReason(rejectionReasons, "missing_properties");
       return [];
     }
     const shapeId = readStringPropertyPath(rawFeature.properties, "shapeID");
     const shapeName = readStringPropertyPath(rawFeature.properties, "shapeName");
     const geometry = readGeoJsonPolygonGeometry(rawFeature.geometry);
-    if (!shapeId || !shapeName || !geometry) {
+    if (!shapeId) {
+      incrementReason(rejectionReasons, "missing_shapeID");
       return [];
     }
+    if (!shapeName) {
+      incrementReason(rejectionReasons, "missing_shapeName");
+      return [];
+    }
+    if (!geometry) {
+      incrementReason(rejectionReasons, "unsupported_or_missing_geometry");
+      return [];
+    }
+    if (shapeIds.has(shapeId)) {
+      duplicateShapeIdCount += 1;
+      incrementReason(rejectionReasons, "duplicate_shapeID");
+      return [];
+    }
+    shapeIds.add(shapeId);
     const parentShapeId =
       readStringPropertyPath(rawFeature.properties, "parentShapeID") ??
       readStringPropertyPath(rawFeature.properties, "shapeParentID") ??
       null;
     return [{ shapeId, shapeName, geometry, parentShapeId }];
   });
+  const rejectedFeatureCount = rawGeoJsonFeatureCount - features.length;
+  return {
+    rawGeoJsonFeatureCount,
+    parsedFeatureCount: features.length,
+    rejectedFeatureCount,
+    rejectionReasons,
+    duplicateShapeIdCount,
+    features
+  };
+}
+
+function readGeoBoundariesFeaturesFromCollection(input: unknown): ParsedGeoBoundariesFeature[] {
+  return analyzeGeoBoundariesFeatureCollection(input).features;
 }
 
 async function compareGeoBoundariesLevelToParent(input: {
@@ -393,15 +498,13 @@ async function compareGeoBoundariesLevelToParent(input: {
   geometry: GeoBoundariesGeometryComparisonRow;
 }> {
   const collection = JSON.parse(await readFile(input.artifactPath, "utf8")) as unknown;
-  const sourceFeatures = readGeoBoundariesFeaturesFromCollection(collection);
+  const parseReport = analyzeGeoBoundariesFeatureCollection(collection);
+  const sourceFeatures = parseReport.features;
   const sourceById = new Map<string, ParsedGeoBoundariesFeature>();
-  let duplicateSourceNativeIds = 0;
   for (const feature of sourceFeatures) {
-    if (sourceById.has(feature.shapeId)) {
-      duplicateSourceNativeIds += 1;
-    }
     sourceById.set(feature.shapeId, feature);
   }
+  const duplicateSourceNativeIds = parseReport.duplicateShapeIdCount;
 
   const repairInput = sourceFeatures.map((feature, index) => ({
     id: String(index),
@@ -418,8 +521,6 @@ async function compareGeoBoundariesLevelToParent(input: {
 
   let matchedBySourceNativeId = 0;
   let unmatchedParentZones = 0;
-  const territoryIdMatches = 0;
-  const territoryIdMismatches = 0;
   let administrativeNameMatches = 0;
   let administrativeNameMismatches = 0;
   let rawSerializedGeometryHashMatches = 0;
@@ -487,11 +588,10 @@ async function compareGeoBoundariesLevelToParent(input: {
       unmatchedParentZones,
       unmatchedSourceFeatures,
       duplicateSourceNativeIds,
-      territoryIdMatches,
-      territoryIdMismatches,
+      territoryStableIdAssessment: "NOT_ASSESSED",
+      parentRelationshipAssessment: "NOT_ASSESSED",
       administrativeNameMatches,
       administrativeNameMismatches,
-      parentRelationshipIssues: 0,
       identityMatchMethod: "shapeID-to-territory.source.sourceId"
     },
     geometry: {
@@ -505,6 +605,131 @@ async function compareGeoBoundariesLevelToParent(input: {
       geographicEquivalenceStatus: "NOT_ASSESSED",
       sampleMismatches
     }
+  };
+}
+
+function interpretSourceFeatureInventory(input: {
+  adminLevel: TurkeyV2AdmParentLevel;
+  parseReport: GeoBoundariesFeatureParseReport;
+  lockMetadataFeatureCount: number | null;
+  canonicalParentZoneCount: number;
+  unmatchedSourceFeaturesAfterParentJoin: number;
+}): string {
+  const parts: string[] = [];
+  if (
+    input.lockMetadataFeatureCount !== null &&
+    input.lockMetadataFeatureCount !== input.parseReport.rawGeoJsonFeatureCount
+  ) {
+    parts.push(
+      `source-lock sourceFeatureCount (${input.lockMetadataFeatureCount}) differs from raw GeoJSON features (${input.parseReport.rawGeoJsonFeatureCount}); lock metadata likely from geoBoundaries API admUnitCount and may not match simplified artifact bytes.`
+    );
+  }
+  if (input.parseReport.rejectedFeatureCount > 0) {
+    parts.push(
+      `${input.parseReport.rejectedFeatureCount} raw features rejected by audit parser (${JSON.stringify(input.parseReport.rejectionReasons)}).`
+    );
+  }
+  if (input.parseReport.parsedFeatureCount !== input.canonicalParentZoneCount) {
+    parts.push(
+      `parsed features (${input.parseReport.parsedFeatureCount}) vs canonical parent zones (${input.canonicalParentZoneCount}).`
+    );
+  }
+  if (input.unmatchedSourceFeaturesAfterParentJoin > 0) {
+    parts.push(
+      `${input.unmatchedSourceFeaturesAfterParentJoin} parsed source features had no matching parent zone by shapeID.`
+    );
+  }
+  if (parts.length === 0) {
+    return "Raw, parsed, and canonical parent counts align for this inspection scope.";
+  }
+  return parts.join(" ");
+}
+
+export function buildPathBEvidenceRequirements(input: {
+  missingArtifacts: string[];
+  sourceFeatureInventory: GeoBoundariesSourceFeatureInventory[];
+  geometryComparison: GeoBoundariesGeometryComparisonRow[];
+  candidates: GeoBoundariesSourceCandidate[];
+  geoBoundariesUpstreamBytesVerified: boolean;
+  parentInventoryStatus: TurkeyGeoBoundariesParentLineageInspection["parentInventoryStatus"];
+  pathBFeasibility: PathBFeasibilityClassification;
+}): PathBEvidenceRequirements {
+  const unresolvedGeometryEvidence: string[] = [];
+  for (const row of input.geometryComparison) {
+    if (row.serializedGeometryHashMismatches > 0) {
+      unresolvedGeometryEvidence.push(
+        `${row.adminLevel}: ${row.serializedGeometryHashMismatches} serialized geometry hash mismatches after geometry-repair (${row.repairedSerializedGeometryHashMatches}/${row.identityMatchedPairs} matches); geographic equivalence ${row.geographicEquivalenceStatus}.`
+      );
+    }
+    if (row.geographicEquivalenceStatus === "NOT_ASSESSED") {
+      unresolvedGeometryEvidence.push(
+        `${row.adminLevel}: geographic/topological equivalence not assessed (serialized hash only).`
+      );
+    }
+  }
+  unresolvedGeometryEvidence.push(
+    "Full country-builder pipeline replay (buildTerritoryCountryDataset) not executed in this audit — geometry-repair-only replay is insufficient for PATH_B_VERIFIED_CANDIDATE."
+  );
+
+  const unresolvedSourceInventoryEvidence: string[] = [];
+  for (const inventory of input.sourceFeatureInventory) {
+    if (
+      inventory.lockMetadataFeatureCount !== null &&
+      inventory.lockMetadataFeatureCount !== inventory.rawGeoJsonFeatureCount
+    ) {
+      unresolvedSourceInventoryEvidence.push(
+        `${inventory.adminLevel}: lock metadata feature count ${inventory.lockMetadataFeatureCount} vs raw GeoJSON ${inventory.rawGeoJsonFeatureCount} — ${inventory.inventoryInterpretation}`
+      );
+    }
+    if (inventory.rejectedFeatureCount > 0) {
+      unresolvedSourceInventoryEvidence.push(
+        `${inventory.adminLevel}: ${inventory.rejectedFeatureCount} features rejected during parse (${JSON.stringify(inventory.rejectionReasons)}).`
+      );
+    }
+    if (inventory.unmatchedSourceFeaturesAfterParentJoin > 0) {
+      unresolvedSourceInventoryEvidence.push(
+        `${inventory.adminLevel}: ${inventory.unmatchedSourceFeaturesAfterParentJoin} source features unmatched to parent zones.`
+      );
+    }
+  }
+
+  const unresolvedLicensingEvidence: string[] = [
+    "Per-level lock license strings (OSM/CC-BY-SA/ODbL) are not automatically equivalent to geoBoundaries gbOpen CC BY 4.0 adapter default — legal compatibility requires human review.",
+    "geoBoundaries data must not be represented as authoritative Turkish government boundaries."
+  ];
+  const lockLicenses = new Set(
+    input.candidates
+      .map((candidate) => candidate.lockLicense)
+      .filter((value): value is string => !!value)
+  );
+  if (lockLicenses.size > 1) {
+    unresolvedLicensingEvidence.push(
+      `ADM levels declare different upstream license strings: ${[...lockLicenses].join(" | ")}.`
+    );
+  }
+  for (const candidate of input.candidates) {
+    if (candidate.metadataUrl) {
+      unresolvedLicensingEvidence.push(
+        `${candidate.adminLevel} metadata URL (inspect upstream fields): ${candidate.metadataUrl}`
+      );
+    }
+  }
+
+  const migrationAuthorizationStatus: PathBMigrationAuthorizationStatus =
+    input.pathBFeasibility === "PATH_B_VERIFIED_CANDIDATE"
+      ? "BLOCKED_PENDING_EVIDENCE"
+      : "NOT_AUTHORIZED";
+
+  const fullPipelineReproducibilityStatus =
+    input.pathBFeasibility === "PATH_B_VERIFIED_CANDIDATE" ? "COMPLETE" : "INCOMPLETE";
+
+  return {
+    missingArtifacts: input.missingArtifacts,
+    unresolvedGeometryEvidence,
+    unresolvedSourceInventoryEvidence,
+    unresolvedLicensingEvidence,
+    migrationAuthorizationStatus,
+    fullPipelineReproducibilityStatus
   };
 }
 
@@ -540,7 +765,10 @@ export function classifyPathBFeasibility(input: {
         row.serializedGeometryHashMismatches === 0
     );
 
-  if (input.missingEvidence.length > 0 && !anyBytesAvailable) {
+  const missingArtifactsOnly = input.missingEvidence.filter(
+    (entry) => !entry.startsWith("geoboundaries-byte-verification-failed")
+  );
+  if (missingArtifactsOnly.length > 0 && !anyBytesAvailable) {
     return {
       classification: "PATH_B_BLOCKED_BY_MISSING_EVIDENCE",
       summary:
@@ -630,7 +858,17 @@ export async function inspectTurkeyGeoBoundariesParentLineage(
       pathBFeasibility: empty.classification,
       pathBFeasibilitySummary: empty.summary,
       missingEvidence,
-      licenseReviewStatus: "documented-cc-by-4.0-gbopen",
+      pathBEvidenceRequirements: buildPathBEvidenceRequirements({
+        missingArtifacts: missingEvidence,
+        sourceFeatureInventory: [],
+        geometryComparison: [],
+        candidates: [],
+        geoBoundariesUpstreamBytesVerified: false,
+        parentInventoryStatus: "MISSING_ARTIFACT",
+        pathBFeasibility: empty.classification
+      }),
+      sourceFeatureInventory: [],
+      legalReviewStatus: "PENDING_REVIEW",
       notAuthoritativeGovernmentData: true
     };
   }
@@ -708,19 +946,42 @@ export async function inspectTurkeyGeoBoundariesParentLineage(
 
   const identityComparison: GeoBoundariesIdentityComparisonRow[] = [];
   const geometryComparison: GeoBoundariesGeometryComparisonRow[] = [];
+  const sourceFeatureInventory: GeoBoundariesSourceFeatureInventory[] = [];
 
   for (const level of TURKEY_V2_ADM_PARENT_LEVELS) {
     const artifactPath = resolvedArtifactPaths[level];
     if (!artifactPath) {
       continue;
     }
+    const parentZones = zonesForLevel(parentDataset, level);
+    const collection = JSON.parse(await readFile(artifactPath, "utf8")) as unknown;
+    const parseReport = analyzeGeoBoundariesFeatureCollection(collection);
     const compared = await compareGeoBoundariesLevelToParent({
       level,
-      parentZones: zonesForLevel(parentDataset, level),
+      parentZones,
       artifactPath
     });
     identityComparison.push(compared.identity);
     geometryComparison.push(compared.geometry);
+    const lockMetadataFeatureCount = sourceLock?.levels[level]?.sourceFeatureCount ?? null;
+    sourceFeatureInventory.push({
+      adminLevel: level,
+      rawGeoJsonFeatureCount: parseReport.rawGeoJsonFeatureCount,
+      parsedFeatureCount: parseReport.parsedFeatureCount,
+      rejectedFeatureCount: parseReport.rejectedFeatureCount,
+      rejectionReasons: parseReport.rejectionReasons,
+      duplicateShapeIdCount: parseReport.duplicateShapeIdCount,
+      lockMetadataFeatureCount,
+      canonicalParentZoneCount: parentZones.length,
+      unmatchedSourceFeaturesAfterParentJoin: compared.identity.unmatchedSourceFeatures,
+      inventoryInterpretation: interpretSourceFeatureInventory({
+        adminLevel: level,
+        parseReport,
+        lockMetadataFeatureCount,
+        canonicalParentZoneCount: parentZones.length,
+        unmatchedSourceFeaturesAfterParentJoin: compared.identity.unmatchedSourceFeatures
+      })
+    });
   }
 
   const { classification, summary } = classifyPathBFeasibility({
@@ -730,6 +991,16 @@ export async function inspectTurkeyGeoBoundariesParentLineage(
     geometryComparison,
     candidates,
     missingEvidence
+  });
+
+  const pathBEvidenceRequirements = buildPathBEvidenceRequirements({
+    missingArtifacts: [...new Set(missingEvidence)],
+    sourceFeatureInventory,
+    geometryComparison,
+    candidates,
+    geoBoundariesUpstreamBytesVerified,
+    parentInventoryStatus,
+    pathBFeasibility: classification
   });
 
   return {
@@ -752,7 +1023,9 @@ export async function inspectTurkeyGeoBoundariesParentLineage(
     pathBFeasibility: classification,
     pathBFeasibilitySummary: summary,
     missingEvidence: [...new Set(missingEvidence)],
-    licenseReviewStatus: "documented-cc-by-4.0-gbopen",
+    pathBEvidenceRequirements,
+    sourceFeatureInventory,
+    legalReviewStatus: "PENDING_REVIEW",
     notAuthoritativeGovernmentData: true
   };
 }
@@ -775,4 +1048,99 @@ export function verifyTurkeyGeoBoundariesParentLineage(
 
 export function computeParentDatasetContentSha256(dataset: TerritoryDataset): string {
   return sha256Hex(serializeJsonStable(dataset));
+}
+
+function bulletList(items: string[]): string {
+  if (items.length === 0) {
+    return "- (yok — bu kategori için kayıt yok)";
+  }
+  return items.map((item) => `- ${item}`).join("\n");
+}
+
+export function renderPathBFeasibilityMarkdown(
+  inspection: TurkeyGeoBoundariesParentLineageInspection,
+  meta: { inspectedCommit: string; generatedAt: string }
+): string {
+  const requirements = inspection.pathBEvidenceRequirements;
+  const geometrySummary = inspection.geometryComparison
+    .map(
+      (row) =>
+        `${row.adminLevel}: onarım sonrası ${row.repairedSerializedGeometryHashMatches}/${row.identityMatchedPairs} serileştirilmiş hash eşleşmesi; ${row.serializedGeometryHashMismatches} uyumsuzluk`
+    )
+    .join("; ");
+
+  return `# Path B (geoBoundaries metadata realignment) feasibility
+
+**İnceleme commit:** \`${meta.inspectedCommit}\`
+**Üretim zamanı (UTC):** ${meta.generatedAt}
+**Sınıflandırma:** \`${inspection.pathBFeasibility}\`
+
+## Özet
+
+${inspection.pathBFeasibilitySummary}
+
+## Kanıt durumu
+
+| Alan | Durum |
+| --- | --- |
+| geoBoundaries bayt doğrulaması | ${inspection.geoBoundariesUpstreamBytesVerified ? "EVET" : "HAYIR"} |
+| Ebeveyn envanter | ${inspection.parentInventoryStatus} |
+| Hukuk inceleme | ${inspection.legalReviewStatus} |
+| Migrasyon yetkisi | ${requirements.migrationAuthorizationStatus} |
+| Tam pipeline yeniden üretilebilirlik | ${requirements.fullPipelineReproducibilityStatus} |
+| Resmî devlet verisi iddiası | Hayır — geoBoundaries açık veri sınırları geçerli |
+
+## Serileştirilmiş geometri özeti
+
+${geometrySummary || "Karşılaştırma çalıştırılmadı."}
+
+## Eksik artifact dosyaları
+
+${bulletList(requirements.missingArtifacts)}
+
+## Çözülmemiş geometri kanıtı
+
+${bulletList(requirements.unresolvedGeometryEvidence)}
+
+## Çözülmemiş kaynak envanter kanıtı
+
+${bulletList(requirements.unresolvedSourceInventoryEvidence)}
+
+## Çözülmemiş lisans / attribution kanıtı
+
+${bulletList(requirements.unresolvedLicensingEvidence)}
+
+## ADR-006 notu
+
+Bu rapor ADR-006 (HDX/OCHA COD-AB varsayılanı) kararını **değiştirmez**. Path B yalnızca ayrı yetkilendirilmiş bir migrasyon PR'si için ön koşul kanıtı sağlar.
+
+## Yeniden üretim
+
+\`\`\`sh
+pnpm data:tr:geoboundaries:parent:audit
+\`\`\`
+
+Yerel önbellek gerekir: \`.territory/cache/sources/geoboundaries\` ve gitignore altındaki \`datasets/generated/countries/TR/\`.
+`;
+}
+
+export function renderGeoBoundariesProvenanceReadmeMarkdown(): string {
+  return `# geoBoundaries ebeveyn soy kanıtı (Path B)
+
+Türkiye ADM0–ADM2 canonical ebeveyn poligonlarının geoBoundaries gbOpen kaynağıyla hizalanabilirliği.
+
+| Dosya | Amaç |
+| --- | --- |
+| [source-candidates.json](./source-candidates.json) | Pinlenmiş gbOpen release adayları |
+| [source-byte-verification.json](./source-byte-verification.json) | SHA-256 bayt doğrulaması |
+| [source-feature-inventory.json](./source-feature-inventory.json) | Ham/parsed özellik sayıları ve lock metadata |
+| [path-b-evidence-requirements.json](./path-b-evidence-requirements.json) | Çözülmemiş kanıt gereksinimleri |
+| [canonical-parent-inventory.json](./canonical-parent-inventory.json) | Yerel canonical artifact envanteri |
+| [identity-comparison.json](./identity-comparison.json) | shapeID ↔ zone eşleşmeleri |
+| [geometry-equivalence.json](./geometry-equivalence.json) | Onarım sonrası serileştirilmiş geometri hash |
+| [path-b-feasibility.md](./path-b-feasibility.md) | Path B sınıflandırması |
+| [migration-impact-plan.md](./migration-impact-plan.md) | Migrasyon etki planı (uygulanmadı) |
+
+HDX karşılaştırma kanıtı: [../](../) (PR #104).
+`;
 }

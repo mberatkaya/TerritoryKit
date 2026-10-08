@@ -8,7 +8,7 @@
       "originalFilename": "geoBoundaries-TUR-ADM0-fixture.geojson",
       "sha256": "af72983854237239724ecee55a93936764dc349689e1486b5f53cccd2069f9ac",
       "sizeBytes": 473,
-      "sourceFeatureCount": 1,
+      "sourceFeatureCount": 999,
       "license": "CC BY 4.0",
       "attribution": "geoBoundaries fixture"
     }

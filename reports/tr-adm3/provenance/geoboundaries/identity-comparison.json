@@ -1,7 +1,7 @@
 {
   "schemaVersion": "territorykit-tr-geoboundaries-identity-comparison@1",
-  "inspectedCommit": "aac6e86c8e29d02da9acb6ec8a5e24216815eb10",
-  "generatedAt": "2026-10-08T21:42:56.729Z",
+  "inspectedCommit": "4adc529dc6321a81daee782c7afcc1a9170071fe",
+  "generatedAt": "2026-10-08T21:50:41.394Z",
   "rows": [
     {
       "adminLevel": "ADM0",
@@ -11,11 +11,10 @@
       "unmatchedParentZones": 0,
       "unmatchedSourceFeatures": 0,
       "duplicateSourceNativeIds": 0,
-      "territoryIdMatches": 0,
-      "territoryIdMismatches": 0,
+      "territoryStableIdAssessment": "NOT_ASSESSED",
+      "parentRelationshipAssessment": "NOT_ASSESSED",
       "administrativeNameMatches": 1,
       "administrativeNameMismatches": 0,
-      "parentRelationshipIssues": 0,
       "identityMatchMethod": "shapeID-to-territory.source.sourceId"
     },
     {
@@ -26,11 +25,10 @@
       "unmatchedParentZones": 0,
       "unmatchedSourceFeatures": 0,
       "duplicateSourceNativeIds": 0,
-      "territoryIdMatches": 0,
-      "territoryIdMismatches": 0,
+      "territoryStableIdAssessment": "NOT_ASSESSED",
+      "parentRelationshipAssessment": "NOT_ASSESSED",
       "administrativeNameMatches": 81,
       "administrativeNameMismatches": 0,
-      "parentRelationshipIssues": 0,
       "identityMatchMethod": "shapeID-to-territory.source.sourceId"
     },
     {
@@ -41,11 +39,10 @@
       "unmatchedParentZones": 0,
       "unmatchedSourceFeatures": 0,
       "duplicateSourceNativeIds": 0,
-      "territoryIdMatches": 0,
-      "territoryIdMismatches": 0,
+      "territoryStableIdAssessment": "NOT_ASSESSED",
+      "parentRelationshipAssessment": "NOT_ASSESSED",
       "administrativeNameMatches": 973,
       "administrativeNameMismatches": 0,
-      "parentRelationshipIssues": 0,
       "identityMatchMethod": "shapeID-to-territory.source.sourceId"
     }
   ]
