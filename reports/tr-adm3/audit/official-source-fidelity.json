@@ -1,0 +1,237 @@
+{
+  "rawImportedArtifactPath": ".territory/build/TR/ADM3/official/levels/ADM3/dataset.json",
+  "effectiveArtifactPath": ".territory/sprint-6/final/candidate/levels/ADM3/dataset.json",
+  "caveat": "Imported raw geometry is an adapter-normalized snapshot, not an assurance of exact upstream coordinate serialization. Changes below compare parsed geometry; no legal boundary is overwritten.",
+  "rawImportedCount": 3343,
+  "effectiveCount": 3343,
+  "missingIds": [],
+  "rawToEffectiveParsedGeometryChanges": 3339,
+  "stableSerializedGeometryChanges": 3339,
+  "rawChangedIdsHash": "bc3c270351c44c3137ba730f3a742ade51a96d30706de8e23922a584fb3334ff",
+  "parentClippedMetadataCount": 1328,
+  "positiveInternalRemovalMetadataCount": 534,
+  "areaChangesAboveOneM2": 1624,
+  "originalEffectiveMetadataHashChanges": 1901,
+  "parentCorrections": [
+    {
+      "id": "tr:adm3:tr-il-27-adm2-54988432b72028378604273-30464",
+      "name": "İNÖNÜ",
+      "reportedParent": "tr:adm2:54988432b72028378604273",
+      "effectiveParent": "tr:adm2:54988432b26387222249237",
+      "rawAreaKm2": 1.2421822743048898,
+      "effectiveAreaKm2": 1.2421822743050617,
+      "retainedShare": 1.0000000000001383
+    },
+    {
+      "id": "tr:adm3:tr-il-27-adm2-54988432b72028378604273-30465",
+      "name": "ŞAHİNBEY",
+      "reportedParent": "tr:adm2:54988432b72028378604273",
+      "effectiveParent": "tr:adm2:54988432b26387222249237",
+      "rawAreaKm2": 11.536155487783807,
+      "effectiveAreaKm2": 11.536155347461893,
+      "retainedShare": 0.9999999878363365
+    },
+    {
+      "id": "tr:adm3:tr-il-27-adm2-54988432b72028378604273-30466",
+      "name": "MİMAR SİNAN",
+      "reportedParent": "tr:adm2:54988432b72028378604273",
+      "effectiveParent": "tr:adm2:54988432b26387222249237",
+      "rawAreaKm2": 6.472828647345876,
+      "effectiveAreaKm2": 6.472828647357627,
+      "retainedShare": 1.0000000000018154
+    },
+    {
+      "id": "tr:adm3:tr-il-52-adm2-54988432b98751035289582-150891",
+      "name": "GÜMÜŞKÖY",
+      "reportedParent": "tr:adm2:54988432b98751035289582",
+      "effectiveParent": "tr:adm2:54988432b3557290765638",
+      "rawAreaKm2": 4.697297790413991,
+      "effectiveAreaKm2": 4.606430045654262,
+      "retainedShare": 0.9806553152867662
+    },
+    {
+      "id": "tr:adm3:tr-il-52-adm2-54988432b98751035289582-150909",
+      "name": "KUYLU",
+      "reportedParent": "tr:adm2:54988432b98751035289582",
+      "effectiveParent": "tr:adm2:54988432b3557290765638",
+      "rawAreaKm2": 5.804776688317926,
+      "effectiveAreaKm2": 5.759945516633233,
+      "retainedShare": 0.9922768481731752
+    }
+  ],
+  "sources": [
+    {
+      "provinceCode": "16",
+      "providerId": "tr-adm3-official-16-bursa-buyuksehir-belediyesi-open-data",
+      "expectedFeatureCount": 1074,
+      "evidence": {
+        "path": ".territory/cache/tr-adm3-sources/bursa/mahalle.geojson",
+        "sha256": "515962f651521ba7b5e498d1654a19fb37b9f93ad49fdae545dd7f1943be781a",
+        "byteSize": 7813482,
+        "status": "LOCKED_BYTES_VERIFIED"
+      },
+      "sourceDate": "2025-03-19T12:59:41Z",
+      "retrievedAt": "2026-08-07T00:00:00.000Z",
+      "sourceVersion": "2025-03-19T12:59:41Z",
+      "crs": "EPSG:4326",
+      "license": "Bursa Acik Veri Lisansi",
+      "licenseUrl": "https://acikyesil.bursa.bel.tr/license",
+      "redistributionStatus": "allowed",
+      "parseReport": {
+        "adapterId": "geojson-property-map",
+        "format": "GeoJSON",
+        "rawFeatureCount": 1074,
+        "acceptedFeatureCount": 1074,
+        "rejectedFeatureCount": 0,
+        "unresolvedFeatureCount": 0,
+        "geometryTypeDistribution": {
+          "MultiPolygon": 1074
+        },
+        "duplicateStableSourceIds": [],
+        "duplicateNames": [],
+        "crsHandling": {
+          "configuredCrs": "EPSG:4326",
+          "detectedCrs": "urn:ogc:def:crs:EPSG::4326",
+          "targetCrs": "EPSG:4326",
+          "sourceCrs": "EPSG:4326",
+          "operation": "none"
+        }
+      },
+      "parseIssues": [],
+      "importedCount": 1074,
+      "effectiveCount": 1074,
+      "duplicatedEffectiveNativeIds": [],
+      "missingEffectiveNativeIds": []
+    },
+    {
+      "provinceCode": "27",
+      "providerId": "gaziantep-open-data",
+      "expectedFeatureCount": 786,
+      "evidence": {
+        "path": ".territory/cache/tr-adm3-sources/gaziantep/mahalle_sinirlari.kml",
+        "sha256": "f145ae9edd2db7a341634e14d59060a535258461794d361c3f49bdec2bcbfa9a",
+        "byteSize": 7439237,
+        "status": "LOCKED_BYTES_VERIFIED"
+      },
+      "sourceDate": "2026-02-18T13:52:03Z",
+      "retrievedAt": "2026-07-18T00:00:00.000Z",
+      "sourceVersion": "2026-02-18T13:52:03Z",
+      "crs": "EPSG:4326",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "redistributionStatus": "allowed",
+      "parseReport": {
+        "adapterId": "kml-description-table",
+        "format": "KML",
+        "rawFeatureCount": 786,
+        "acceptedFeatureCount": 786,
+        "rejectedFeatureCount": 0,
+        "unresolvedFeatureCount": 0,
+        "geometryTypeDistribution": {
+          "MultiPolygon": 14,
+          "Polygon": 772
+        },
+        "duplicateStableSourceIds": [],
+        "duplicateNames": [],
+        "crsHandling": {
+          "configuredCrs": "EPSG:4326",
+          "detectedCrs": "EPSG:4326",
+          "targetCrs": "EPSG:4326",
+          "sourceCrs": "EPSG:4326",
+          "operation": "none"
+        }
+      },
+      "parseIssues": [],
+      "importedCount": 786,
+      "effectiveCount": 786,
+      "duplicatedEffectiveNativeIds": [],
+      "missingEffectiveNativeIds": []
+    },
+    {
+      "provinceCode": "38",
+      "providerId": "tr-adm3-official-38-kayseri-buyuksehir-belediyesi-open-data-via-ulasav",
+      "expectedFeatureCount": 711,
+      "evidence": {
+        "path": ".territory/cache/tr-adm3-sources/kayseri/mahalle.geojson",
+        "sha256": "c30cf8ec3058514d51f3928c84029e2473a437a747251bd46686a65c2eb452ac",
+        "byteSize": 13507356,
+        "status": "LOCKED_BYTES_VERIFIED"
+      },
+      "sourceDate": "2026-04-15",
+      "retrievedAt": "2026-08-07T00:00:00.000Z",
+      "sourceVersion": "2026-04-15",
+      "crs": "OGC:CRS84 / EPSG:4326 axis order",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://acikveri.kayseri.bel.tr/sayfa/lisans/19",
+      "redistributionStatus": "allowed",
+      "parseReport": {
+        "adapterId": "geojson-property-map",
+        "format": "GeoJSON",
+        "rawFeatureCount": 711,
+        "acceptedFeatureCount": 711,
+        "rejectedFeatureCount": 0,
+        "unresolvedFeatureCount": 0,
+        "geometryTypeDistribution": {
+          "MultiPolygon": 711
+        },
+        "duplicateStableSourceIds": [],
+        "duplicateNames": [],
+        "crsHandling": {
+          "configuredCrs": "OGC:CRS84 / EPSG:4326 axis order",
+          "detectedCrs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+          "targetCrs": "EPSG:4326",
+          "sourceCrs": "OGC:CRS84",
+          "operation": "none"
+        }
+      },
+      "parseIssues": [],
+      "importedCount": 711,
+      "effectiveCount": 711,
+      "duplicatedEffectiveNativeIds": [],
+      "missingEffectiveNativeIds": []
+    },
+    {
+      "provinceCode": "52",
+      "providerId": "tr-adm3-official-52-ordu-buyuksehir-belediyesi-open-data",
+      "expectedFeatureCount": 772,
+      "evidence": {
+        "path": ".territory/cache/tr-adm3-sources/ordu/mahalle.geojson",
+        "sha256": "8645c30283fdc9b709a833ae72c03b5822f93aa91f88d30968a21f899554e4cb",
+        "byteSize": 17556208,
+        "status": "LOCKED_BYTES_VERIFIED"
+      },
+      "sourceDate": "2025-08-01T08:20:14Z",
+      "retrievedAt": "2026-08-07T00:00:00.000Z",
+      "sourceVersion": "2025-08-01T08:20:14Z",
+      "crs": "OGC:CRS84 / EPSG:4326 axis order",
+      "license": "Ordu Acik Veri Lisansi",
+      "licenseUrl": "https://acikveri.ordu.bel.tr/license",
+      "redistributionStatus": "allowed",
+      "parseReport": {
+        "adapterId": "geojson-property-map",
+        "format": "GeoJSON",
+        "rawFeatureCount": 772,
+        "acceptedFeatureCount": 772,
+        "rejectedFeatureCount": 0,
+        "unresolvedFeatureCount": 0,
+        "geometryTypeDistribution": {
+          "MultiPolygon": 772
+        },
+        "duplicateStableSourceIds": [],
+        "duplicateNames": [],
+        "crsHandling": {
+          "configuredCrs": "OGC:CRS84 / EPSG:4326 axis order",
+          "detectedCrs": "urn:ogc:def:crs:OGC:1.3:CRS84",
+          "targetCrs": "EPSG:4326",
+          "sourceCrs": "OGC:CRS84",
+          "operation": "none"
+        }
+      },
+      "parseIssues": [],
+      "importedCount": 772,
+      "effectiveCount": 772,
+      "duplicatedEffectiveNativeIds": [],
+      "missingEffectiveNativeIds": []
+    }
+  ]
+}

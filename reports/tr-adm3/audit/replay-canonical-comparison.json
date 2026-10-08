@@ -1,0 +1,23 @@
+{
+  "scope": "Exact stable geometry serialization hash, independent of district dataset hash and parent/id representation",
+  "districts": [
+    {
+      "district": "Fatih",
+      "canonicalCount": 30,
+      "replayCount": 30,
+      "exactGeometryMatches": 30
+    },
+    {
+      "district": "Eyüpsultan",
+      "canonicalCount": 19,
+      "replayCount": 19,
+      "exactGeometryMatches": 19
+    },
+    {
+      "district": "Prince Islands",
+      "canonicalCount": 14,
+      "replayCount": 14,
+      "exactGeometryMatches": 14
+    }
+  ]
+}

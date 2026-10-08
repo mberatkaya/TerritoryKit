@@ -1,0 +1,97 @@
+{
+  "baseCommit": "c6c8c4638228a2c14c98f6cb37af95c23f5fdf7a",
+  "startingBranch": "feature/rushclaim-cutover-support",
+  "startingCommit": "fc24527ed20a8c2bba507287815eb4aa83a80620",
+  "auditBranch": "feature/tr-adm3-quality-source-audit",
+  "openPRs": [
+    {
+      "baseRefName": "main",
+      "headRefName": "feature/rushclaim-cutover-support",
+      "number": 94,
+      "title": "Make delivery and render manifests match verified geographic artifacts",
+      "url": "https://github.com/mberatkaya/TerritoryKit/pull/94"
+    }
+  ],
+  "pr94": {
+    "baseRefName": "main",
+    "headRefName": "feature/rushclaim-cutover-support",
+    "headRefOid": "fc24527ed20a8c2bba507287815eb4aa83a80620",
+    "number": 94,
+    "state": "OPEN",
+    "statusCheckRollup": [
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-08T11:55:18Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/mberatkaya/TerritoryKit/actions/runs/37772841222/job/113296380254",
+        "name": "Node 22",
+        "startedAt": "2026-10-08T11:51:31Z",
+        "status": "COMPLETED",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-08T11:54:42Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/mberatkaya/TerritoryKit/actions/runs/37772841222/job/113296380337",
+        "name": "Node 24",
+        "startedAt": "2026-10-08T11:51:33Z",
+        "status": "COMPLETED",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "completedAt": "2026-10-08T11:53:01Z",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/mberatkaya/TerritoryKit/actions/runs/37772841222/job/113296379887",
+        "name": "Live PostGIS validation",
+        "startedAt": "2026-10-08T11:51:31Z",
+        "status": "COMPLETED",
+        "workflowName": "CI"
+      }
+    ],
+    "title": "Make delivery and render manifests match verified geographic artifacts",
+    "url": "https://github.com/mberatkaya/TerritoryKit/pull/94"
+  },
+  "mainRuns": [
+    {
+      "conclusion": "success",
+      "databaseId": 36908016101,
+      "headSha": "c6c8c4638228a2c14c98f6cb37af95c23f5fdf7a",
+      "status": "completed",
+      "url": "https://github.com/mberatkaya/TerritoryKit/actions/runs/36908016101",
+      "workflowName": "Release"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 36907963873,
+      "headSha": "c6c8c4638228a2c14c98f6cb37af95c23f5fdf7a",
+      "status": "completed",
+      "url": "https://github.com/mberatkaya/TerritoryKit/actions/runs/36907963873",
+      "workflowName": "Release"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 36907963871,
+      "headSha": "c6c8c4638228a2c14c98f6cb37af95c23f5fdf7a",
+      "status": "completed",
+      "url": "https://github.com/mberatkaya/TerritoryKit/actions/runs/36907963871",
+      "workflowName": "CI"
+    },
+    {
+      "conclusion": "success",
+      "databaseId": 36906771801,
+      "headSha": "0f1a96484a802742452246000d180d3ddc637276",
+      "status": "completed",
+      "url": "https://github.com/mberatkaya/TerritoryKit/actions/runs/36906771801",
+      "workflowName": "Release"
+    }
+  ],
+  "trackedEvidenceCommits": {
+    "reports/baselines/sprint-6-national-rc7.json": "9aee055a37aaecd6afad1cd2c9903fddbdda2530",
+    "reports/baselines/sprint-6-official-preservation-rc7.json": "9aee055a37aaecd6afad1cd2c9903fddbdda2530",
+    "reports/baselines/sprint-6-istanbul-39-rc7.json": "9aee055a37aaecd6afad1cd2c9903fddbdda2530",
+    "datasets/generated/countries/TR/dataset.json": "",
+    "datasets/sources/TR/adm3/source-registry.json": "eb4c47ca1c454ff9a6edc4074e05dc5812f18390"
+  }
+}
