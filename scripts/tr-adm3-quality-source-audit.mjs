@@ -12,6 +12,132 @@ export const parentId = (zone) =>
   zone.parentId ?? metadata(zone).parentAdm2Id ?? metadata(zone).parentId;
 const unique = (values) => [...new Set(values.filter((v) => v != null))].sort();
 
+export const DEFAULT_PARENT_REGISTRY = "datasets/registry/tr-adm3-district-fallbacks.json";
+const EXPECTED_ADM2_COUNT = 973;
+const EXPECTED_ADM1_COUNT = 81;
+
+export function adm1IdFromProvinceCode(provinceCode) {
+  return `tr:adm1:tr-${provinceCode}`;
+}
+
+export function parentInventoryFromRegistry(registry) {
+  if (
+    registry?.districtCount !== EXPECTED_ADM2_COUNT ||
+    registry?.districts?.length !== EXPECTED_ADM2_COUNT
+  ) {
+    throw new Error(
+      `Registry parent inventory must contain exactly ${EXPECTED_ADM2_COUNT} districts.`
+    );
+  }
+  const provinceByCode = new Map();
+  const districts = registry.districts.map((entry) => {
+    const provinceCode = entry.provinceCode;
+    const parentId = adm1IdFromProvinceCode(provinceCode);
+    if (!provinceByCode.has(provinceCode)) {
+      provinceByCode.set(provinceCode, {
+        id: parentId,
+        name: entry.provinceName,
+        level: 1,
+        geometry: null,
+        properties: { territory: { provinceCode } }
+      });
+    }
+    return {
+      id: entry.districtId,
+      name: entry.districtName,
+      level: 2,
+      parentId,
+      geometry: null,
+      properties: { territory: { provinceCode } }
+    };
+  });
+  if (new Set(districts.map((district) => district.id)).size !== EXPECTED_ADM2_COUNT) {
+    throw new Error(`Expected exactly ${EXPECTED_ADM2_COUNT} distinct registry ADM2 parents.`);
+  }
+  if (provinceByCode.size !== EXPECTED_ADM1_COUNT) {
+    throw new Error(`Expected exactly ${EXPECTED_ADM1_COUNT} distinct registry ADM1 parents.`);
+  }
+  return {
+    parents: { zones: districts },
+    provinces: {
+      zones: [...provinceByCode.values()].sort((a, b) =>
+        a.properties.territory.provinceCode.localeCompare(b.properties.territory.provinceCode)
+      )
+    },
+    parentInventorySource: "METADATA_REGISTRY_ONLY",
+    parentGeometryAvailable: false
+  };
+}
+
+function assertCanonicalAdm2Parents(dataset) {
+  const districts = dataset?.zones?.filter((zone) => zone.level === 2) ?? [];
+  if (
+    districts.length !== EXPECTED_ADM2_COUNT ||
+    new Set(districts.map((zone) => zone.id)).size !== EXPECTED_ADM2_COUNT
+  ) {
+    throw new Error(`Expected exactly ${EXPECTED_ADM2_COUNT} distinct canonical ADM2 parents.`);
+  }
+  return districts;
+}
+
+export async function resolveCanonicalParentInventory({
+  artifactRoot,
+  parentDataset,
+  parentRegistry = DEFAULT_PARENT_REGISTRY,
+  checksums = null
+} = {}) {
+  const resolvedChecksums =
+    checksums ?? (await jsonIfAvailable(path.join(artifactRoot, "checksums.json")));
+  const attempts = [];
+  const polygonCandidates = [
+    {
+      label: "ARTIFACT_ADM2_BYTES",
+      datasetPath: path.join(artifactRoot, "levels/ADM2/dataset.json"),
+      provincePath: path.join(artifactRoot, "levels/ADM1/dataset.json"),
+      checksum: resolvedChecksums?.files?.["levels/ADM2/dataset.json"]
+    },
+    {
+      label: "CONFIGURED_PARENT_DATASET",
+      datasetPath: parentDataset,
+      provincePath: null,
+      checksum: null
+    }
+  ];
+  for (const candidate of polygonCandidates) {
+    const fileEvidence = await inspectFile(candidate.datasetPath, candidate.checksum);
+    attempts.push({ ...candidate, fileEvidence });
+    if (fileEvidence.status === "CHECKSUM_MISMATCH") continue;
+    const dataset = await jsonIfAvailable(candidate.datasetPath);
+    if (!dataset) continue;
+    try {
+      assertCanonicalAdm2Parents(dataset);
+    } catch {
+      continue;
+    }
+    const provinceDataset =
+      (candidate.provincePath ? await jsonIfAvailable(candidate.provincePath) : null) ?? dataset;
+    const provinces = provinceDataset?.zones?.filter((zone) => zone.level === 1) ?? [];
+    if (provinces.length !== EXPECTED_ADM1_COUNT) continue;
+    return {
+      parents: dataset,
+      provinces: provinceDataset,
+      parentInventorySource: candidate.label,
+      parentGeometryAvailable: true,
+      parentFileEvidence: fileEvidence,
+      parentResolutionAttempts: attempts
+    };
+  }
+  const registry = await jsonIfAvailable(parentRegistry);
+  if (!registry) {
+    throw new Error("Canonical ADM1/ADM2 parent inventory is unavailable.");
+  }
+  return {
+    ...parentInventoryFromRegistry(registry),
+    parentFileEvidence: null,
+    parentResolutionAttempts: attempts
+  };
+}
+
 export async function inspectFile(filePath, expected) {
   try {
     const hash = createHash("sha256");
@@ -51,9 +177,9 @@ export function districtRow({ district, province, zones, available, smart, artif
     const key = sourceClass === "osm-administrative" ? "osm" : sourceClass;
     (grouped[key] ?? grouped.unknown).push(zone);
   }
-  const parentArea = computeTerritoryAreaM2(district.geometry);
+  const parentArea = district.geometry != null ? computeTerritoryAreaM2(district.geometry) : null;
   const percent = (items) =>
-    parentArea > 0
+    parentArea != null && parentArea > 0
       ? (items.reduce((sum, z) => sum + computeTerritoryAreaM2(z.geometry), 0) / parentArea) * 100
       : null;
   const source = zones.map(metadata);
@@ -113,6 +239,7 @@ export function districtRow({ district, province, zones, available, smart, artif
 export async function generateCoverage({
   artifactRoot = ".territory/sprint-6/final/candidate",
   parentDataset = "datasets/generated/countries/TR/dataset.json",
+  parentRegistry = DEFAULT_PARENT_REGISTRY,
   output = "reports/tr-adm3/audit"
 } = {}) {
   const artifactPath = path.join(artifactRoot, "levels/ADM3/dataset.json");
@@ -122,16 +249,20 @@ export async function generateCoverage({
     checksums?.files?.["levels/ADM3/dataset.json"]
   );
   const dataset = await jsonIfAvailable(artifactPath);
-  const parents =
-    (await jsonIfAvailable(path.join(artifactRoot, "levels/ADM2/dataset.json"))) ??
-    (await jsonIfAvailable(parentDataset));
-  const provinces =
-    (await jsonIfAvailable(path.join(artifactRoot, "levels/ADM1/dataset.json"))) ?? parents;
-  if (!parents || !provinces)
-    throw new Error("Canonical ADM1/ADM2 parent inventory is unavailable.");
-  const districts = parents.zones.filter((z) => z.level === 2);
-  if (districts.length !== 973 || new Set(districts.map((z) => z.id)).size !== 973)
-    throw new Error("Expected exactly 973 distinct canonical ADM2 parents.");
+  const {
+    parents,
+    provinces,
+    parentInventorySource,
+    parentGeometryAvailable,
+    parentFileEvidence,
+    parentResolutionAttempts
+  } = await resolveCanonicalParentInventory({
+    artifactRoot,
+    parentDataset,
+    parentRegistry,
+    checksums
+  });
+  const districts = assertCanonicalAdm2Parents(parents);
   const measuredGeometryHash = dataset ? createDatasetGeometryHash(dataset) : null;
   const available =
     dataset != null &&
@@ -178,6 +309,10 @@ export async function generateCoverage({
       : null,
     manifestContentHashMethod: "sha256(JSON.stringify(parsed ADM3 manifest)); not a delivery hash",
     fileEvidence,
+    parentInventorySource,
+    parentGeometryAvailable,
+    parentFileEvidence,
+    parentResolutionAttempts,
     orphanIds,
     evidenceScope: "LOCAL_RELEASE_CANDIDATE; hosted and mobile selection unobserved",
     areaMethod:
@@ -197,15 +332,16 @@ export async function generateCoverage({
           ].map((key) => [key, rows.reduce((sum, row) => sum + row[key], 0)])
         )
       : null,
-    measuredAreaPercent: available
-      ? Object.fromEntries(
-          ["officialAreaPercent", "osmAreaPercent", "estimatedAreaPercent"].map((key) => [
-            key,
-            rows.reduce((sum, row) => sum + row[key] * row.parentAreaM2, 0) /
-              rows.reduce((sum, row) => sum + row.parentAreaM2, 0)
-          ])
-        )
-      : null,
+    measuredAreaPercent:
+      available && parentGeometryAvailable
+        ? Object.fromEntries(
+            ["officialAreaPercent", "osmAreaPercent", "estimatedAreaPercent"].map((key) => [
+              key,
+              rows.reduce((sum, row) => sum + row[key] * row.parentAreaM2, 0) /
+                rows.reduce((sum, row) => sum + row.parentAreaM2, 0)
+            ])
+          )
+        : null,
     districts: rows
   };
   await mkdir(output, { recursive: true });
@@ -230,16 +366,17 @@ export async function generateCoverage({
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
-  const allowed = new Set(["--artifact-root", "--parent-dataset", "--output"]);
+  const allowed = new Set(["--artifact-root", "--parent-dataset", "--parent-registry", "--output"]);
   const options = {};
   for (let i = 0; i < args.length; i += 2) {
     if (!allowed.has(args[i]) || !args[i + 1] || args[i + 1].startsWith("--"))
       throw new Error(
-        "Usage: node scripts/tr-adm3-quality-source-audit.mjs [--artifact-root PATH] [--parent-dataset PATH] [--output PATH]"
+        "Usage: node scripts/tr-adm3-quality-source-audit.mjs [--artifact-root PATH] [--parent-dataset PATH] [--parent-registry PATH] [--output PATH]"
       );
     const key = {
       "--artifact-root": "artifactRoot",
       "--parent-dataset": "parentDataset",
+      "--parent-registry": "parentRegistry",
       "--output": "output"
     }[args[i]];
     options[key] = args[i + 1];
