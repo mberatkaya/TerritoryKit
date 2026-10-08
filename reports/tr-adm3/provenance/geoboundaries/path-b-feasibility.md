@@ -1,7 +1,7 @@
 # Path B (geoBoundaries metadata realignment) feasibility
 
-**İnceleme commit:** `4adc529dc6321a81daee782c7afcc1a9170071fe`
-**Üretim zamanı (UTC):** 2026-10-08T21:50:41.394Z
+**İnceleme commit:** `b22f3b8562cf56bfd3e4386e33beb8cd488592a3`
+**Üretim zamanı (UTC):** 2026-10-08T21:52:12.975Z
 **Sınıflandırma:** `PATH_B_PARTIALLY_VERIFIED`
 
 ## Özet
