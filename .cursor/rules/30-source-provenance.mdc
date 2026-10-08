@@ -1,0 +1,16 @@
+---
+description: Source registration, acquisition evidence, and audit reproducibility
+globs: "{datasets/**,reports/**,scripts/*tr-adm3*,scripts/*source*,scripts/generate-dataset-registry.mjs,adr/**}"
+alwaysApply: false
+---
+
+# Source provenance
+
+- Every upstream source needs identifiable URL, version/date, license, retrieval timestamp, and byte-level SHA-256 where bytes exist (`datasets/sources/`, source-lock JSON under `.territory/cache/` when present).
+- Provider registration in `datasets/registry/` is metadata only — not proof of downloaded or imported polygons.
+- Turkey national ADM0–ADM2 catalog: `datasets/sources/TR/national.json` (HDX/OCHA COD-AB). ADM3 municipal catalogs: `datasets/sources/TR/`, `datasets/registry/tr-adm3-*`.
+- Never silently replace one upstream dataset with another or rewrite historical audit evidence in `reports/tr-adm3/audit/`.
+- Distinguish: file SHA-256, geometry hash, manifest content hash, delivery content hash — see `reports/tr-adm3/audit/baseline-claims.json`.
+- Immutable snapshots and source locks: ZIP-member checksums must match extracted members, not only outer archives (`docs/source-pipeline.md`).
+- Historical GitHub snapshots and merged audit PRs are records at merge time; re-verify before production decisions.
+- Metadata-only inventories must not be described as polygon-backed coverage.

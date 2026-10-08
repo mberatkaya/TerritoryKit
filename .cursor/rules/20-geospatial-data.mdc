@@ -1,0 +1,25 @@
+---
+description: Geographic hierarchy, geometry QA, and Turkey pipeline invariants
+globs: "{datasets/**,packages/generators/**,packages/data-*/**,packages/dataset/**,reports/tr-adm3/**}"
+alwaysApply: false
+---
+
+# Geospatial data
+
+**Hierarchy:** ADM0 (country) → ADM1 (province) → ADM2 (district) → ADM3 (neighbourhood / game zone). Admin levels map to territory levels via `datasets/registry/` and country configs (`packages/generators/src/countries/configs/`).
+
+**Pipeline reference:** `docs/source-pipeline.md` — resolve → fetch → verify → parse → normalize → transform → validate → enrich → serialize → complete.
+
+**Non-negotiable invariants:**
+
+1. Licensed official polygons beat verified OSM admin boundaries; OSM admin beats estimated/generated gameplay zones.
+2. Generated zones are not legal administrative boundaries; label `sourceKind` / confidence honestly.
+3. Preserve original geometry separately from effective (clipped/transformed) geometry.
+4. Never fabricate official administrative data or weaken quality gates to force green builds.
+5. No H3 grids, arbitrary cells, or raw Voronoi as substitutes for verified official boundaries (`CONTRIBUTING.md`).
+6. Stable territory IDs: changes require migration review (`@territory-kit/migration`).
+7. Valid topology ≠ legal boundary accuracy; low confidence stays low confidence.
+
+**Key implementation areas:** `packages/generators/src/turkey-*` (ingestion, OSM, smart fallback, network faces, v2 hybrid/national), `packages/dataset/src/quality.ts`, CLI `tr adm3` / `tr v2 national` in `packages/cli`.
+
+**CRS:** Fail closed on unsupported projections; documented support includes EPSG:4326, CRS84, EPSG:3857 for municipal imports.

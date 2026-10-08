@@ -1,0 +1,21 @@
+---
+description: CI workflows, releases, changesets, and PR discipline
+globs: ".github/**"
+alwaysApply: false
+---
+
+# CI, releases, and PRs
+
+**CI (`/.github/workflows/ci.yml`):**
+
+- Node 22: runs `pnpm release:check` (not full `verify`).
+- Node 24: runs full `pnpm verify` plus Playwright visual tests for MapLibre example.
+- Separate job: live PostGIS validation (`pnpm postgis:validate`).
+
+**Local verification:** `pnpm verify` = format, security scripts, lint, package boundaries, typecheck, test, build, release benchmark tests, Turkey OSM smoke, bundle size, TR ADM3 artifact policy, audit regression test.
+
+**Releases:** Changesets (`pnpm changeset`, `version-packages`); `release.yml` and `dataset-registry-publish.yml` are separate from engineering PRs. Do not auto-merge Dependabot PRs without compatibility review.
+
+**PR rules:** Branch from `main`; isolated scope; include tests run and checklist notes (`CONTRIBUTING.md`). Do not bypass required checks. Release/version PRs are not mixed with data or foundation work unless policy requires it.
+
+**Documentation-only changes:** No changeset unless repository policy explicitly requires one for docs.

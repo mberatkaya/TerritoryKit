@@ -1,0 +1,17 @@
+---
+description: TypeScript monorepo conventions, boundaries, and tooling
+globs: "{packages/**,examples/**,docs/**,scripts/**}/*.{ts,tsx,mjs,json}"
+alwaysApply: false
+---
+
+# TypeScript monorepo
+
+**Toolchain (verify in root `package.json`):** Node `>=22`, pnpm `11.7.0`, TypeScript `6.x`, Turbo `2.x`, Vitest `4.x`, ESM (`"type": "module"`) with dual CJS/MJS builds via `tsdown`.
+
+- Respect workspace dependency rules enforced by `pnpm package:boundaries` / `scripts/check-package-boundaries.mjs`. `@territory-kit/dataset` has no workspace deps; adapters and renderers must not pull generators into browser bundles incorrectly.
+- Public API changes need types, tests, and docs. Prefer extending existing modules over parallel implementations.
+- Run targeted package tests during iteration (`pnpm --filter <pkg> test`). Before delivery, use root `pnpm verify` when feasible.
+- Keep lockfile integrity: use `pnpm install --frozen-lockfile` in CI; do not bump dependencies casually in feature PRs.
+- Error handling: propagate meaningful errors; avoid empty catches. Match surrounding patterns in each package.
+- Do not add dependencies without clear need; avoid drive-by refactors in the same PR as functional changes.
+- Examples under `examples/*` demonstrate integration; they are not the canonical data pipeline.
