@@ -77,6 +77,20 @@ export function createTurkeyV2DeliveryManifest(input: {
     if (!checksum) throw new Error(`Missing delivery checksum: ${path}`);
     artifacts[key] = { path, ...checksum };
   }
+  // Level datasets have their own IDs/hashes. Bind their bytes to the same delivery
+  // pin so consumers can discover districts without trusting an unindexed local file.
+  for (const level of [0, 1, 2]) {
+    const path = `levels/ADM${level}/dataset.json`;
+    const checksum = checksums.files[path];
+    if (checksum) artifacts[`adm${level}`] = { path, ...checksum };
+  }
+  // Pin render metadata as well as geometry. Consumers must not reconstruct
+  // layer names or zoom ranges from deployment defaults.
+  for (const level of [0, 1, 2, 3]) {
+    const path = level === 3 ? "render/manifest.json" : `map/ADM${level}/render/manifest.json`;
+    const checksum = checksums.files[path];
+    if (checksum) artifacts[`renderAdm${level}`] = { path, ...checksum };
+  }
   const orderedShards = Object.fromEntries(
     Object.entries(shards.files)
       .sort(([a], [b]) => a.localeCompare(b))
