@@ -50,7 +50,7 @@
   },
   "dependencies": {
     "@mapbox/vector-tile": "^3.0.0",
-    "@maplibre/geojson-vt": "^6.1.1",
+    "@maplibre/geojson-vt": "^6.1.2",
     "@maplibre/vt-pbf": "^4.3.2",
     "@osmix/pbf": "0.0.10",
     "@territory-kit/core": "workspace:*",
