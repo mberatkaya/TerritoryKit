@@ -1,0 +1,45 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "adm1_pcode": "TUR016",
+        "adm2_pcode": "TUR016001",
+        "adm2_name1": "Yesilyurt"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [28, 40],
+            [29, 40],
+            [29, 41],
+            [28, 41],
+            [28, 40]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "adm1_pcode": "TUR034",
+        "adm2_pcode": "TUR034001",
+        "adm2_name1": "Yesilyurt"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [28, 40],
+            [29, 40],
+            [29, 41],
+            [28, 41],
+            [28, 40]
+          ]
+        ]
+      }
+    }
+  ]
+}

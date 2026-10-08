@@ -22,8 +22,14 @@ import {
   readTurkeyOsmAdm2BarrierArtifact,
   verifyTurkeyOsmSnapshot,
   validateTurkeyV2NationalArtifactIntegrity,
-  validateTurkeyV2NationalCompleteness
+  validateTurkeyV2NationalCompleteness,
+  createTurkeyParentInputDatasetLock,
+  findHdxMemberInCacheRoot,
+  inspectTurkeyParentProvenance,
+  verifyTurkeyNationalCatalogHdxMemberBytes,
+  verifyTurkeyParentProvenance
 } from "@territory-kit/generators/turkey-adm3";
+import type { TurkeyParentHdxMemberPaths } from "@territory-kit/generators/turkey-adm3";
 import type {
   TurkeyV2NationalAdmSourceLock,
   TurkeyV2NationalBuildResult,
@@ -333,6 +339,22 @@ async function runPlan(args: string[]): Promise<number> {
   const source = await readNationalSource(
     getFlag(flags, "source-metadata") ?? DEFAULT_NATIONAL_SOURCE
   );
+  const parentProvenance = await auditParentProvenanceForCli(admDataset, source, flags, "plan");
+  if (!parentProvenance.authorizedForNationalBuild) {
+    printJson({
+      ok: false,
+      command: "tr v2 national plan",
+      issues: parentProvenance.issues.map((entry) =>
+        issue(entry.message, undefined, {
+          code: entry.code,
+          ...(entry.expected !== undefined ? { expected: entry.expected } : {}),
+          ...(entry.actual !== undefined ? { actual: entry.actual } : {})
+        })
+      ),
+      data: { parentProvenance: parentProvenance.inspection }
+    });
+    return 1;
+  }
   const counts = countLevels(admDataset);
   const officialPath = resolveOptionalArtifactPath(
     flags,
@@ -366,13 +388,15 @@ async function runPlan(args: string[]): Promise<number> {
       sourceLockHash: createSourceLockForCli({
         source,
         buildDate: getFlag(flags, "build-date") ?? DEFAULT_BUILD_DATE,
+        parentInputDataset: parentProvenance.parentInputDataset,
         officialStatus: officialPath ? "artifact-loaded" : "not-built",
         officialLoadedZoneCount: 0,
         osmStatus: osmPath && existsSync(resolve(osmPath)) ? "artifact-loaded" : "not-built",
         osmLoadedZoneCount: 0,
         officialProviders: [],
         generatedSeed: seed
-      }).contentHash
+      }).contentHash,
+      parentProvenance: parentProvenance.inspection
     }
   });
   return 0;
@@ -400,12 +424,56 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
   }
   const buildDate = getFlag(flags, "build-date") ?? DEFAULT_BUILD_DATE;
   const datasetVersion = getFlag(flags, "dataset-version") ?? DEFAULT_SMART_CANDIDATE_VERSION;
+  if (mode === "publish-ready" && flags.has("allow-parent-provenance-mismatch")) {
+    printJson({
+      ok: false,
+      command: "tr v2 national publish-ready",
+      issues: [
+        issue("Publish-ready builds cannot use --allow-parent-provenance-mismatch.", undefined, {
+          code: "PARENT_PROVENANCE_PUBLISH_BYPASS_FORBIDDEN"
+        })
+      ]
+    });
+    return 2;
+  }
+  if (mode === "publish-ready" && flags.has("allow-partial-parent-inventory")) {
+    printJson({
+      ok: false,
+      command: "tr v2 national publish-ready",
+      issues: [
+        issue("Publish-ready builds cannot use --allow-partial-parent-inventory.", undefined, {
+          code: "PARENT_PROVENANCE_PUBLISH_PARTIAL_INVENTORY_FORBIDDEN"
+        })
+      ]
+    });
+    return 2;
+  }
   const admDataset = await readDataset(
     getFlag(flags, "adm0-adm2-dataset") ?? DEFAULT_ADM0_ADM2_DATASET
   );
   const source = await readNationalSource(
     getFlag(flags, "source-metadata") ?? DEFAULT_NATIONAL_SOURCE
   );
+  const parentProvenance = await auditParentProvenanceForCli(admDataset, source, flags, mode);
+  const parentProvenanceAuthorized =
+    mode === "publish-ready"
+      ? parentProvenance.authorizedForPublishReady
+      : parentProvenance.authorizedForNationalBuild;
+  if (!parentProvenanceAuthorized) {
+    printJson({
+      ok: false,
+      command: `tr v2 national ${mode}`,
+      issues: parentProvenance.issues.map((entry) =>
+        issue(entry.message, undefined, {
+          code: entry.code,
+          ...(entry.expected !== undefined ? { expected: entry.expected } : {}),
+          ...(entry.actual !== undefined ? { actual: entry.actual } : {})
+        })
+      ),
+      data: { parentProvenance: parentProvenance.inspection }
+    });
+    return 1;
+  }
   const officialPath = resolveOptionalArtifactPath(
     flags,
     "official-artifact",
@@ -429,6 +497,7 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
     source,
     buildDate,
     datasetVersion,
+    parentInputDataset: parentProvenance.parentInputDataset,
     officialStatus,
     officialLoadedZoneCount: officialZones.length,
     osmStatus,
@@ -1617,10 +1686,93 @@ function createCliSummary(result: TurkeyV2NationalBuildResult): Record<string, u
   };
 }
 
+async function resolveHdxMemberPathsForNationalCli(
+  source: NationalSourceMetadata,
+  flags: Map<string, string | true>
+): Promise<TurkeyParentHdxMemberPaths | undefined> {
+  const hdxRoot = getFlag(flags, "hdx-member-root");
+  if (hdxRoot && existsSync(resolve(hdxRoot))) {
+    const root = resolve(hdxRoot);
+    return {
+      ADM0: join(root, source.levels.ADM0.archiveMember),
+      ADM1: join(root, source.levels.ADM1.archiveMember),
+      ADM2: join(root, source.levels.ADM2.archiveMember)
+    };
+  }
+  const cacheRoot = join(WORKSPACE_ROOT, ".territory/cache/sources/hdx-cod-ab");
+  const resolved: Partial<TurkeyParentHdxMemberPaths> = {};
+  for (const level of ["ADM0", "ADM1", "ADM2"] as const) {
+    const member = source.levels[level].archiveMember;
+    const path = await findHdxMemberInCacheRoot(cacheRoot, member);
+    if (path) {
+      resolved[level] = path;
+    }
+  }
+  return Object.keys(resolved).length > 0 ? (resolved as TurkeyParentHdxMemberPaths) : undefined;
+}
+
+async function auditParentProvenanceForCli(
+  parentDataset: TerritoryDataset,
+  source: NationalSourceMetadata,
+  flags: Map<string, string | true>,
+  mode: TurkeyV2NationalOutputMode | "plan"
+) {
+  const catalog = {
+    provider: source.provider,
+    sourceId: source.sourceId,
+    sha256: source.sha256,
+    byteSize: source.byteSize,
+    levels: source.levels
+  };
+  const hdxMemberPaths = await resolveHdxMemberPathsForNationalCli(source, flags);
+  const byteVerification = hdxMemberPaths
+    ? await verifyTurkeyNationalCatalogHdxMemberBytes(catalog, hdxMemberPaths)
+    : undefined;
+  const allowPartialParentInventory = flags.has("allow-partial-parent-inventory");
+  const purpose =
+    mode === "publish-ready"
+      ? "publish-ready"
+      : mode === "plan"
+        ? "national-build"
+        : "national-build";
+  const inspection = await inspectTurkeyParentProvenance({
+    parentDataset,
+    catalog,
+    requireFullParentInventory: true,
+    ...(byteVerification ? { verifiedHdxMembers: byteVerification.verifiedHdxMembers } : {}),
+    ...(hdxMemberPaths
+      ? {
+          hdxMemberPaths,
+          readGeoJsonFeatures: async (memberPath: string) => {
+            const parsed = JSON.parse(await readFile(memberPath, "utf8")) as {
+              features?: Array<{ properties: Record<string, unknown>; geometry: unknown }>;
+            };
+            return parsed.features ?? [];
+          }
+        }
+      : {})
+  });
+  const verification = verifyTurkeyParentProvenance(inspection, {
+    purpose,
+    allowUndeclaredParentSource: false,
+    allowPartialParentInventory,
+    allowProvenanceMismatchBypass: flags.has("allow-parent-provenance-mismatch")
+  });
+  return {
+    ...verification,
+    parentInputDataset: createTurkeyParentInputDatasetLock(inspection, {
+      ...(flags.has("allow-parent-provenance-mismatch")
+        ? { provenanceAuthorizationBypass: "allow-parent-provenance-mismatch" }
+        : {})
+    })
+  };
+}
+
 function createSourceLockForCli(input: {
   source: NationalSourceMetadata;
   buildDate: string;
   datasetVersion?: string;
+  parentInputDataset?: ReturnType<typeof createTurkeyParentInputDatasetLock>;
   officialStatus: TurkeyV2NationalSourceStatus;
   officialLoadedZoneCount: number;
   osmStatus: TurkeyV2NationalSourceStatus;
@@ -1629,6 +1781,7 @@ function createSourceLockForCli(input: {
   generatedSeed: string;
 }) {
   return createTurkeyV2NationalSourceLock({
+    ...(input.parentInputDataset ? { parentInputDataset: input.parentInputDataset } : {}),
     adm0Adm2: {
       provider: input.source.provider,
       sourceId: input.source.sourceId,
