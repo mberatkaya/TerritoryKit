@@ -1,0 +1,60 @@
+{
+  "manifest": {
+    "datasetId": "territory-kit-tr-fixture",
+    "datasetVersion": "fixture-geoboundaries-parent",
+    "schemaVersion": "territory-schema@1",
+    "sourceDate": "2026-07-15",
+    "buildDate": "2026-07-15T11:34:06.314Z",
+    "geometryHash": "fixture",
+    "adminLevels": ["ADM0", "ADM1", "ADM2"],
+    "countryCodes": ["TR"],
+    "crs": "EPSG:4326",
+    "geometryDetail": "source",
+    "license": "CC BY 4.0",
+    "attribution": "geoBoundaries fixture"
+  },
+  "zones": [
+    {
+      "id": "tr",
+      "level": 0,
+      "name": "Turkey",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[28, 40], [29, 40], [29, 41], [28, 41], [28, 40]]]
+      },
+      "properties": {
+        "territory": {
+          "source": { "provider": "geoboundaries", "sourceId": "fixture-adm0" }
+        }
+      }
+    },
+    {
+      "id": "tr:adm1:tr-01",
+      "level": 1,
+      "name": "Adana",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[28, 40], [29, 40], [29, 41], [28, 41], [28, 40]]]
+      },
+      "properties": {
+        "territory": {
+          "source": { "provider": "geoboundaries", "sourceId": "fixture-adm1" }
+        }
+      }
+    },
+    {
+      "id": "tr:adm2:fixture-district",
+      "level": 2,
+      "name": "Fixture District",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[[28, 40], [29, 40], [29, 41], [28, 41], [28, 40]]]
+      },
+      "properties": {
+        "territory": {
+          "source": { "provider": "geoboundaries", "sourceId": "fixture-adm2" }
+        }
+      }
+    }
+  ]
+}
