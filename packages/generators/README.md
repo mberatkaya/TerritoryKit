@@ -243,3 +243,19 @@ The `2.1.0-rc.2` figures above are the preserved calibration baseline. The separ
 geometry when generated gap fill fails, and evaluates Standard and Organic realism.
 The 39-district Istanbul report and final national acceptance must pass before this
 candidate can be merged. Generated territories remain estimated gameplay boundaries.
+
+Turkey V2 delivery manifests include available `levels/ADM0`, `ADM1` and `ADM2` dataset checksums as `adm0`, `adm1`, `adm2` artifacts. Level and district dataset IDs remain distinct from the whole delivery dataset ID; consumers verify version, checksum and parent membership under the delivery pin.
+
+MVT render manifests report the encoded source layer and effective zoom range, including explicit build overrides. Configure native sources from this emitted inventory.
+
+`render validate` decodes every tile and rejects absent manifest layers, zoom mismatches,
+unexpected administrative levels and corrupt geometry. Editing a manifest cannot repair an
+older tile pyramid. Rebuild the tiles and checksum inventory together. Turkey V2 delivery
+indexes pin `renderAdm3` (`render/manifest.json`) and, when present, `renderAdm0`–`renderAdm2`
+(`map/ADM*/render/manifest.json`). A metadata change produces a new delivery content hash.
+
+For the Rush&Claim hierarchy release, run `pnpm build`, then
+`node --max-old-space-size=8192 scripts/rebuild-rushclaim-hierarchy.mjs SOURCE_ROOT NEW_OUTPUT_ROOT`.
+The script preserves canonical geometry and source versions, rebuilds all four MVT tiers,
+decodes them, checks existing canonical checksums and writes updated artifact plans,
+render checksums, hierarchy inventory and delivery manifest. The new output must not exist.

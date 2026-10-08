@@ -5,6 +5,8 @@ import { basename, dirname, join, resolve } from "node:path";
 import { performance } from "node:perf_hooks";
 import { GeoJSONVT as GeoJSONVTImport } from "@maplibre/geojson-vt";
 import { fromGeojsonVt } from "@maplibre/vt-pbf";
+import { VectorTile } from "@mapbox/vector-tile";
+import { PbfReader } from "pbf";
 import {
   createTerritoryQueryArtifact,
   createTerritoryRenderArtifactManifest,
@@ -140,6 +142,24 @@ export function buildTerritoryRenderArtifacts(
     ...(format === "mvt" ? { tileTemplate: "tiles/{z}/{x}/{y}.mvt" } : {}),
     ...(policies ? { policies } : {})
   });
+  if (format === "mvt") {
+    // Describe the source layer and zooms actually encoded, including explicit
+    // CLI overrides. Default administrative policy is not the emitted inventory.
+    manifest.layers = createMvtFeatureGroups(features, {
+      ...(options.minZoom !== undefined ? { minZoom: options.minZoom } : {}),
+      ...(options.maxZoom !== undefined ? { maxZoom: options.maxZoom } : {}),
+      ...(policies ? { policies } : {})
+    }).map((group) => ({
+      id: layerId,
+      adminLevels:
+        group.level === "ALL"
+          ? (Object.keys(manifest.featureCounts) as TerritoryAdminLevel[])
+          : [group.level],
+      minZoom: group.minZoom,
+      maxZoom: group.maxZoom,
+      featureCount: group.features.features.length
+    }));
+  }
   const files = new Map<string, string | Uint8Array>([
     ["render/manifest.json", serializeJsonStable(manifest)]
   ]);
@@ -228,7 +248,53 @@ export async function validateTerritoryRenderArtifactPath(
 
     if (manifest.format === "mvt") {
       const tilesRoot = join(root, "render", "tiles");
-      const hasTiles = await directoryHasFiles(tilesRoot, ".mvt");
+      let hasTiles = false;
+      const observed = new Map<string, Set<number>>();
+      for await (const path of renderTilePaths(tilesRoot)) {
+        hasTiles = true;
+        const zoom = Number(path.slice(tilesRoot.length + 1).split("/")[0]);
+        try {
+          const tile = new VectorTile(new PbfReader(await readFile(path)));
+          if (!Object.keys(tile.layers).length) throw new Error("Tile contains no layers");
+          for (const [id, layer] of Object.entries(tile.layers)) {
+            const policy = manifest.layers.filter((entry) => entry.id === id);
+            if (!policy.length) throw new Error(`Encoded layer '${id}' is absent from manifest`);
+            if (!policy.some((entry) => zoom >= entry.minZoom && zoom <= entry.maxZoom))
+              throw new Error(`Encoded layer '${id}' zoom ${zoom} is outside manifest range`);
+            for (let index = 0; index < layer.length; index++) {
+              const feature = layer.feature(index);
+              if (
+                !policy.some((entry) =>
+                  entry.adminLevels.includes(feature.properties.adminLevel as TerritoryAdminLevel)
+                )
+              )
+                throw new Error(`Encoded layer '${id}' has an unexpected administrative level`);
+              feature.loadGeometry();
+            }
+            const zooms = observed.get(id) ?? new Set<number>();
+            zooms.add(zoom);
+            observed.set(id, zooms);
+          }
+        } catch (error) {
+          issues.push({
+            code: "RENDER_TILE_CONTRACT_INVALID",
+            severity: "error",
+            message: `${path}: ${error instanceof Error ? error.message : String(error)}`
+          });
+          if (issues.length >= 100) break;
+        }
+      }
+      for (const layer of manifest.layers) {
+        for (let zoom = layer.minZoom; zoom <= layer.maxZoom; zoom++) {
+          if (!observed.get(layer.id)?.has(zoom)) {
+            issues.push({
+              code: "RENDER_LAYER_ZOOM_MISSING",
+              severity: "error",
+              message: `Manifest layer '${layer.id}' has no matching tiles at zoom ${zoom}.`
+            });
+          }
+        }
+      }
 
       if (!hasTiles) {
         issues.push({
@@ -821,28 +887,19 @@ async function pathExists(path: string): Promise<boolean> {
   }
 }
 
-async function directoryHasFiles(root: string, extension: string): Promise<boolean> {
-  try {
-    const entries = await import("node:fs/promises").then(({ readdir }) =>
-      readdir(root, { withFileTypes: true })
-    );
-
-    for (const entry of entries) {
-      const path = join(root, entry.name);
-
-      if (entry.isDirectory() && (await directoryHasFiles(path, extension))) {
-        return true;
-      }
-
-      if (entry.isFile() && entry.name.endsWith(extension)) {
-        return true;
-      }
+async function* renderTilePaths(root: string): AsyncGenerator<string> {
+  const { readdir } = await import("node:fs/promises");
+  const entries = await readdir(root, { withFileTypes: true }).catch(
+    (error: NodeJS.ErrnoException) => {
+      if (error.code === "ENOENT") return [];
+      throw error;
     }
-  } catch {
-    return false;
+  );
+  for (const entry of entries) {
+    const path = join(root, entry.name);
+    if (entry.isDirectory()) yield* renderTilePaths(path);
+    else if (entry.isFile() && entry.name.endsWith(".mvt")) yield path;
   }
-
-  return false;
 }
 
 export async function sha256RenderFile(path: string): Promise<string> {

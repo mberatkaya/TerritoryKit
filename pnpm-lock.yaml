@@ -320,6 +320,9 @@ importers:
 
   packages/generators:
     dependencies:
+      '@mapbox/vector-tile':
+        specifier: ^3.0.0
+        version: 3.0.0
       '@maplibre/geojson-vt':
         specifier: ^6.1.1
         version: 6.1.1
@@ -338,19 +341,16 @@ importers:
       flatbush:
         specifier: ^4.6.2
         version: 4.6.2
+      pbf:
+        specifier: ^5.1.2
+        version: 5.1.2
       polygon-clipping:
         specifier: ^0.15.7
         version: 0.15.7
     devDependencies:
-      '@mapbox/vector-tile':
-        specifier: ^3.0.0
-        version: 3.0.0
       '@territory-kit/shared-testkit':
         specifier: workspace:*
         version: link:../shared-testkit
-      pbf:
-        specifier: ^5.1.2
-        version: 5.1.2
 
   packages/leaflet:
     dependencies:

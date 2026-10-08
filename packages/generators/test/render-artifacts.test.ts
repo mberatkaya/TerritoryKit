@@ -57,6 +57,40 @@ describe("render artifacts", () => {
       geometryHash: "canonical-geometry"
     });
   });
+  it("publishes the encoded custom layer and actual zoom overrides", () => {
+    const dataset = createSampleTerritoryDataset();
+    dataset.zones = dataset.zones.filter((zone) => zone.level === 2);
+    const result = buildTerritoryRenderArtifacts({
+      dataset,
+      format: "mvt",
+      layerId: "districts_custom",
+      minZoom: 0,
+      maxZoom: 1
+    });
+    expect(result.manifest.layers).toEqual([
+      {
+        id: "districts_custom",
+        adminLevels: ["ADM2"],
+        minZoom: 0,
+        maxZoom: 1,
+        featureCount: dataset.zones.length
+      }
+    ]);
+    const published = JSON.parse(result.files.get("render/manifest.json") as string);
+    expect(published.layers).toEqual(result.manifest.layers);
+    const zooms = [
+      ...new Set(
+        [...result.files.keys()]
+          .filter((path) => path.endsWith(".mvt"))
+          .map((path) => Number(path.split("/")[2]))
+      )
+    ].sort();
+    expect(zooms).toEqual([0, 1]);
+    const tile = new VectorTile(
+      new PbfReader(result.files.get("render/tiles/0/0/0.mvt") as Uint8Array)
+    );
+    expect(Object.keys(tile.layers)).toEqual([result.manifest.layers[0]!.id]);
+  });
   it("can omit the duplicate query file for national rendering", () => {
     const result = buildTerritoryRenderArtifacts({
       dataset: createSampleTerritoryDataset(),
@@ -154,4 +188,36 @@ describe("render artifacts", () => {
       await rm(tempDir, { recursive: true, force: true });
     }
   });
+  it.each(["layer", "zoom", "bytes"])(
+    "rejects stale or corrupt %s tile contracts",
+    async (change) => {
+      const root = await mkdtemp(join(tmpdir(), "territory-stale-render-"));
+      const datasetPath = join(root, "dataset.json");
+      const outputPath = join(root, "output");
+      try {
+        await writeFile(datasetPath, JSON.stringify(createSampleTerritoryDataset()));
+        await buildTerritoryRenderArtifactPath({
+          inputPath: datasetPath,
+          outputPath,
+          layerId: "territory_adm3",
+          minZoom: 0,
+          maxZoom: 0
+        });
+        const manifestPath = join(outputPath, "render/manifest.json");
+        const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+        if (change === "layer") manifest.layers[0].id = "territory-adm3";
+        if (change === "zoom") manifest.layers[0].minZoom = manifest.layers[0].maxZoom = 1;
+        await writeFile(manifestPath, JSON.stringify(manifest));
+        if (change === "bytes")
+          await writeFile(join(outputPath, "render/tiles/0/0/0.mvt"), new Uint8Array([255]));
+        const result = await validateTerritoryRenderArtifactPath(outputPath);
+        expect(result.ok).toBe(false);
+        expect(result.issues).toContainEqual(
+          expect.objectContaining({ code: "RENDER_TILE_CONTRACT_INVALID" })
+        );
+      } finally {
+        await rm(root, { recursive: true, force: true });
+      }
+    }
+  );
 });
