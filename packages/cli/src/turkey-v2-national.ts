@@ -344,7 +344,6 @@ async function runPlan(args: string[]): Promise<number> {
       issues: parentProvenance.issues.map((entry) =>
         issue(entry.message, undefined, {
           code: entry.code,
-          severity: entry.severity,
           ...(entry.expected !== undefined ? { expected: entry.expected } : {}),
           ...(entry.actual !== undefined ? { actual: entry.actual } : {})
         })
@@ -436,7 +435,6 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
       issues: parentProvenance.issues.map((entry) =>
         issue(entry.message, undefined, {
           code: entry.code,
-          severity: entry.severity,
           ...(entry.expected !== undefined ? { expected: entry.expected } : {}),
           ...(entry.actual !== undefined ? { actual: entry.actual } : {})
         })

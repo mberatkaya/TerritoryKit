@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
-import type { TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
+import type { TerritoryAdminLevel, TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
 import {
   inspectTurkeyParentProvenance,
   verifyTurkeyParentProvenance
@@ -34,7 +34,7 @@ function zone(input: {
     datasetId: "fixture-tr-parent",
     countryCode: "TR",
     level: input.level,
-    sourceAdminLevel: `ADM${input.level}` as TerritoryZone["sourceAdminLevel"],
+    sourceAdminLevel: (`ADM${input.level}` as TerritoryAdminLevel),
     semanticType: input.level === 0 ? "country" : input.level === 1 ? "province" : "district",
     name: input.name,
     neighborIds: [],

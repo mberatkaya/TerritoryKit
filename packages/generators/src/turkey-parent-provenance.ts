@@ -271,7 +271,11 @@ export async function inspectTurkeyParentProvenance(
       const matchedHdx = new Set<string>();
 
       for (const zone of parentZones) {
-        const name = normalizeAdminName(zone.name);
+        const name = normalizeAdminName(zone.name ?? "");
+        if (!name) {
+          unmatchedParentZones += 1;
+          continue;
+        }
         const feature = hdxByName.get(name);
         if (!feature) {
           unmatchedParentZones += 1;
