@@ -129,7 +129,8 @@ describe("territory cli Turkey V2 national build", () => {
         "--official-artifact",
         join(tempDir, "missing-official.json"),
         "--osm-artifact",
-        join(tempDir, "missing-osm.json")
+        join(tempDir, "missing-osm.json"),
+        "--allow-parent-provenance-mismatch"
       ]);
 
       expect(result).toMatchObject({
@@ -189,7 +190,8 @@ describe("territory cli Turkey V2 national build", () => {
         "--max-districts",
         "1",
         "--seed",
-        "cli-national-seed"
+        "cli-national-seed",
+        "--allow-parent-provenance-mismatch"
       ]);
 
       expect(build).toMatchObject({
@@ -551,6 +553,7 @@ function admZone(input: {
       territory: {
         semanticReviewStatus: "reviewed",
         coverageStatus: "verified",
+        source: { provider: "geoboundaries", sourceId: "fixture-cli-national" },
         ...input.territory
       }
     }

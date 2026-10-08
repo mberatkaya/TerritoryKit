@@ -24,29 +24,37 @@ const square = {
 };
 
 function zone(input: {
+  id: string;
   level: number;
   name: string;
+  parentId?: string;
   provider?: string;
+  provinceCode?: string;
   geometry?: TerritoryZone["geometry"];
 }): TerritoryZone {
   return {
-    id: `tr:adm${input.level}:${input.name}`,
+    id: input.id,
     datasetId: "fixture-tr-parent",
     countryCode: "TR",
     level: input.level,
     sourceAdminLevel: `ADM${input.level}` as TerritoryAdminLevel,
     semanticType: input.level === 0 ? "country" : input.level === 1 ? "province" : "district",
     name: input.name,
+    ...(input.parentId ? { parentId: input.parentId } : {}),
     neighborIds: [],
     geometry: input.geometry ?? square,
     center: [28.5, 40.5],
     bbox: [28, 40, 29, 41],
     properties: {
-      territory: input.provider
-        ? {
-            source: { provider: input.provider, sourceId: "fixture" }
-          }
-        : {}
+      territory: {
+        ...(input.provinceCode
+          ? {
+              provinceCode: input.provinceCode,
+              codes: { official: `TR-${input.provinceCode}` }
+            }
+          : {}),
+        ...(input.provider ? { source: { provider: input.provider, sourceId: "fixture" } } : {})
+      }
     }
   };
 }
@@ -99,35 +107,66 @@ describe("turkey parent provenance", () => {
   it("flags geoboundaries parent polygons against an HDX catalog lock", async () => {
     const inspection = await inspectTurkeyParentProvenance({
       parentDataset: dataset([
-        zone({ level: 0, name: "Turkey", provider: "geoboundaries" }),
-        zone({ level: 1, name: "Fixture Province", provider: "geoboundaries" })
-      ]),
-      catalog: hdxCatalog
-    });
-    expect(inspection.lineageStatus).toBe("CATALOG_LOCK_DIFFERS_FROM_PARENT_POLYGONS");
-    expect(inspection.classification).toBe("CONFIRMED_ROOT_CAUSE");
-    expect(verifyTurkeyParentProvenance(inspection).ok).toBe(false);
-  });
-
-  it("accepts matching provider metadata on parent zones", async () => {
-    const inspection = await inspectTurkeyParentProvenance({
-      parentDataset: dataset([
-        zone({ level: 0, name: "Turkey", provider: "hdx-cod-ab" }),
-        zone({ level: 1, name: "Fixture Province", provider: "hdx-cod-ab" })
-      ]),
-      catalog: hdxCatalog
-    });
-    expect(inspection.lineageStatus).toBe("VERIFIED_CATALOG_PROVIDER_MATCH");
-    expect(verifyTurkeyParentProvenance(inspection).ok).toBe(true);
-  });
-
-  it("detects HDX member geometry divergence from parent polygons", async () => {
-    const inspection = await inspectTurkeyParentProvenance({
-      parentDataset: dataset([
+        zone({ id: "tr", level: 0, name: "Turkey", provider: "geoboundaries" }),
         zone({
+          id: "tr:adm1:01",
+          level: 1,
+          name: "Adana",
+          provider: "geoboundaries",
+          provinceCode: "01"
+        })
+      ]),
+      catalog: hdxCatalog,
+      requireFullParentInventory: false
+    });
+    expect(inspection.providerMetadataStatus).toBe("CATALOG_LOCK_DIFFERS_FROM_PARENT_POLYGONS");
+    expect(inspection.classification).toBe("CONFIRMED_ROOT_CAUSE");
+    expect(inspection.geoBoundariesUpstreamBytesVerified).toBe(false);
+    expect(verifyTurkeyParentProvenance(inspection).authorizedForNationalBuild).toBe(false);
+  });
+
+  it("does not authorize national build on provider metadata match without verified bytes", async () => {
+    const inspection = await inspectTurkeyParentProvenance({
+      parentDataset: dataset([
+        zone({ id: "tr", level: 0, name: "Turkey", provider: "hdx-cod-ab" }),
+        zone({
+          id: "tr:adm1:01",
           level: 1,
           name: "Fixture Province",
           provider: "hdx-cod-ab",
+          provinceCode: "01"
+        })
+      ]),
+      catalog: hdxCatalog,
+      requireFullParentInventory: false
+    });
+    expect(inspection.providerMetadataStatus).toBe("PROVIDER_METADATA_MATCHES_CATALOG");
+    expect(inspection.sourceByteVerificationStatus).toBe("NOT_RUN");
+    expect(verifyTurkeyParentProvenance(inspection).authorizedForNationalBuild).toBe(false);
+  });
+
+  it("rejects partially undeclared parent providers", async () => {
+    const inspection = await inspectTurkeyParentProvenance({
+      parentDataset: dataset([
+        zone({ id: "tr", level: 0, name: "Turkey", provider: "hdx-cod-ab" }),
+        zone({ id: "tr:adm1:01", level: 1, name: "Mixed", provinceCode: "01" })
+      ]),
+      catalog: hdxCatalog,
+      requireFullParentInventory: false
+    });
+    expect(inspection.providerMetadataStatus).toBe("PARENT_SOURCE_PARTIALLY_UNDECLARED");
+    expect(verifyTurkeyParentProvenance(inspection).authorizedForNationalBuild).toBe(false);
+  });
+
+  it("reports serialized geometry differences without claiming geographic change", async () => {
+    const inspection = await inspectTurkeyParentProvenance({
+      parentDataset: dataset([
+        zone({
+          id: "tr:adm1:01",
+          level: 1,
+          name: "Fixture Province",
+          provider: "hdx-cod-ab",
+          provinceCode: "01",
           geometry: {
             type: "Polygon",
             coordinates: [
@@ -143,6 +182,14 @@ describe("turkey parent provenance", () => {
         })
       ]),
       catalog: hdxCatalog,
+      requireFullParentInventory: false,
+      verifiedHdxMembers: {
+        ADM1: {
+          status: "LOCKED_BYTES_VERIFIED",
+          sha256: hdxCatalog.levels.ADM1.sha256,
+          byteSize: 1
+        }
+      },
       hdxMemberPaths: { ADM1: join(FIXTURE_ROOT, "hdx-adm1-tiny.geojson") },
       readGeoJsonFeatures: async (path) => {
         const parsed = JSON.parse(await readFile(path, "utf8")) as {
@@ -151,10 +198,82 @@ describe("turkey parent provenance", () => {
         return parsed.features;
       }
     });
-    expect(inspection.catalogGeometryStatus).toBe("GEOMETRY_DIVERGENT_FROM_PARENT_DATASET");
-    expect(inspection.geometryComparisons[0]?.geometryHashMismatches).toBe(1);
-    const sample = inspection.geometryComparisons[0]?.sampleMismatches[0];
-    expect(sample?.parentHash).not.toBe(sample?.hdxHash);
-    expect(verifyTurkeyParentProvenance(inspection).ok).toBe(false);
+    expect(inspection.serializedGeometryStatus).toBe("COMPARED");
+    const adm1 = inspection.geometryComparisons.find((row) => row.level === "ADM1");
+    expect(adm1?.serializedGeometryHashMismatches).toBe(1);
+    expect(adm1?.geographicEquivalenceStatus).toBe("NOT_ASSESSED");
+  });
+
+  it("matches duplicate district names using province-scoped identity keys", async () => {
+    const inspection = await inspectTurkeyParentProvenance({
+      parentDataset: dataset([
+        zone({
+          id: "tr:adm1:16",
+          level: 1,
+          name: "Bursa",
+          provider: "hdx-cod-ab",
+          provinceCode: "16"
+        }),
+        zone({
+          id: "tr:adm1:34",
+          level: 1,
+          name: "Istanbul",
+          provider: "hdx-cod-ab",
+          provinceCode: "34"
+        }),
+        zone({
+          id: "tr:adm2:bursa-yesil",
+          level: 2,
+          name: "Yesilyurt",
+          parentId: "tr:adm1:16",
+          provider: "hdx-cod-ab",
+          provinceCode: "16"
+        }),
+        zone({
+          id: "tr:adm2:istanbul-yesil",
+          level: 2,
+          name: "Yesilyurt",
+          parentId: "tr:adm1:34",
+          provider: "hdx-cod-ab",
+          provinceCode: "34"
+        })
+      ]),
+      catalog: hdxCatalog,
+      requireFullParentInventory: false,
+      hdxMemberPaths: { ADM2: join(FIXTURE_ROOT, "hdx-adm2-duplicate-names.geojson") },
+      readGeoJsonFeatures: async (path) => {
+        const parsed = JSON.parse(await readFile(path, "utf8")) as {
+          features: Array<{ properties: Record<string, unknown>; geometry: unknown }>;
+        };
+        return parsed.features;
+      }
+    });
+    const adm2 = inspection.geometryComparisons.find((row) => row.level === "ADM2");
+    expect(adm2?.identityMatchedPairs).toBe(2);
+    expect(adm2?.identityMatchMethod).toBe("province-scoped-name");
+  });
+
+  it("allows dev bypass for provider mismatch but not publish-ready", () => {
+    const inspection = {
+      providerMetadataStatus: "CATALOG_LOCK_DIFFERS_FROM_PARENT_POLYGONS",
+      parentInventoryStatus: "COMPLETE",
+      sourceByteVerificationStatus: "NOT_RUN",
+      serializedGeometryStatus: "NOT_RUN",
+      catalogProvider: "hdx-cod-ab",
+      observedDominantProvider: "geoboundaries"
+    } as Awaited<ReturnType<typeof inspectTurkeyParentProvenance>>;
+
+    expect(
+      verifyTurkeyParentProvenance(inspection, {
+        allowProvenanceMismatchBypass: true,
+        purpose: "national-build"
+      }).authorizedForNationalBuild
+    ).toBe(true);
+    expect(
+      verifyTurkeyParentProvenance(inspection, {
+        allowProvenanceMismatchBypass: true,
+        purpose: "publish-ready"
+      }).authorizedForNationalBuild
+    ).toBe(false);
   });
 });

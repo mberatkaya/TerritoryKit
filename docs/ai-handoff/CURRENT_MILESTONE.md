@@ -31,7 +31,7 @@
 | 2   | Registry, dataset provenance, source-lock mutually consistent          | **Not done** — intentional mismatch documented; migration PR required     |
 | 3   | No silent HDX ↔ geoBoundaries swap                                     | **Done** — no geometry relabel                                            |
 | 4   | Regression tests fail on provenance drift                              | **Done** on branch                                                        |
-| 5   | `pnpm data:tr:adm3:audit:test` passes in CI                            | **Pending** merge/CI                                                      |
+| 5   | `pnpm data:tr:adm3:audit:test` passes in CI                            | **Done** on branch (audit CLI entry + v2 evidence semantics)              |
 
 ### Next authorized work (separate PR)
 

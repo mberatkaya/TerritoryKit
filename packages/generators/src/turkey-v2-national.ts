@@ -110,10 +110,16 @@ export type TurkeyV2Adm3AvailabilityReasonCode =
 export interface TurkeyV2NationalParentInputDatasetLock {
   catalogProvider: string;
   observedDominantProvider: string | null;
-  lineageStatus: string;
-  catalogGeometryStatus: string;
+  providerMetadataStatus: string;
+  sourceByteVerificationStatus: string;
+  serializedGeometryStatus: string;
+  parentInventoryStatus: string;
   zoneCounts: { ADM0: number; ADM1: number; ADM2: number };
   classification: string;
+  geoBoundariesUpstreamBytesVerified: false;
+  provenanceAuthorizationBypass?: string;
+  /** @deprecated */ lineageStatus?: string;
+  /** @deprecated */ catalogGeometryStatus?: string;
 }
 
 export interface TurkeyV2NationalSourceLock {

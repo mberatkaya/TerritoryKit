@@ -3,26 +3,45 @@ import type { TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
 import { sha256Hex, serializeJsonStable } from "./sources/utils.js";
 
 export const TURKEY_PARENT_PROVENANCE_SCHEMA_VERSION =
-  "territorykit-tr-parent-provenance@1" as const;
+  "territorykit-tr-parent-provenance@2" as const;
 
 export const TURKEY_V2_ADM_PARENT_LEVELS = ["ADM0", "ADM1", "ADM2"] as const;
 export type TurkeyV2AdmParentLevel = (typeof TURKEY_V2_ADM_PARENT_LEVELS)[number];
 
+export const TURKEY_PARENT_INVENTORY_EXPECTED = {
+  ADM0: 1,
+  ADM1: 81,
+  ADM2: 973
+} as const;
+
 export type TurkeyParentLineageClassification =
   "CONFIRMED_ROOT_CAUSE" | "PARTIALLY_VERIFIED" | "BLOCKED_BY_MISSING_EVIDENCE";
 
-export type TurkeyParentCatalogGeometryStatus =
-  | "NOT_RUN"
-  | "LOCKED_MEMBERS_VERIFIED"
-  | "GEOMETRY_DIVERGENT_FROM_PARENT_DATASET"
-  | "ARTIFACT_UNAVAILABLE"
-  | "INSUFFICIENT_PARENT_FEATURES";
-
-export type TurkeyParentDatasetLineageStatus =
-  | "VERIFIED_CATALOG_PROVIDER_MATCH"
+export type TurkeyParentProviderMetadataStatus =
   | "CATALOG_LOCK_DIFFERS_FROM_PARENT_POLYGONS"
+  | "PROVIDER_METADATA_MATCHES_CATALOG"
   | "PARENT_SOURCE_UNDECLARED"
+  | "PARENT_SOURCE_PARTIALLY_UNDECLARED"
   | "MIXED_PARENT_PROVIDERS";
+
+/** @deprecated Use providerMetadataStatus */
+export type TurkeyParentDatasetLineageStatus = TurkeyParentProviderMetadataStatus;
+
+export type TurkeyParentSourceByteVerificationStatus =
+  | "NOT_RUN"
+  | "ARTIFACT_UNAVAILABLE"
+  | "PARTIAL_MEMBERS_VERIFIED"
+  | "ALL_LOCKED_MEMBERS_VERIFIED"
+  | "CHECKSUM_MISMATCH";
+
+export type TurkeyParentSerializedGeometryStatus =
+  | "NOT_RUN"
+  | "INSUFFICIENT_EVIDENCE"
+  | "INVENTORY_INCOMPLETE"
+  | "COMPARED"
+  | "ALL_SERIALIZED_HASHES_MATCH";
+
+export type TurkeyParentInventoryStatus = "COMPLETE" | "INCOMPLETE" | "MISSING_LEVEL";
 
 export interface TurkeyNationalSourceCatalogLevels {
   ADM0?: { archiveMember: string; sha256: string; byteSize: number; actualFeatureCount: number };
@@ -43,6 +62,7 @@ export interface TurkeyParentProviderSummary {
   zoneCount: number;
   providers: string[];
   dominantProvider: string | null;
+  undeclaredZoneCount: number;
 }
 
 export interface TurkeyParentHdxGeometryComparison {
@@ -50,34 +70,52 @@ export interface TurkeyParentHdxGeometryComparison {
   catalogMemberSha256: string;
   hdxFeatureCount: number;
   parentZoneCount: number;
-  nameMatchedPairs: number;
-  exactGeometryHashMatches: number;
-  geometryHashMismatches: number;
+  identityMatchMethod: "native-admin-id" | "province-scoped-name" | "name-only" | "not-applicable";
+  identityMatchedPairs: number;
+  exactSerializedGeometryHashMatches: number;
+  serializedGeometryHashMismatches: number;
   unmatchedParentZones: number;
   unmatchedHdxFeatures: number;
-  geometryHashMethod: "sha256-json-stringify-geometry";
-  sampleMismatches: Array<{ name: string; parentHash: string; hdxHash: string }>;
+  serializedGeometryHashMethod: "sha256-json-stringify-geometry";
+  geographicEquivalenceStatus: "NOT_ASSESSED";
+  sampleSerializedMismatches: Array<{
+    matchKey: string;
+    parentHash: string;
+    hdxHash: string;
+  }>;
 }
 
 export interface TurkeyParentProvenanceInspection {
   schemaVersion: typeof TURKEY_PARENT_PROVENANCE_SCHEMA_VERSION;
   parentDatasetVersion: string | null;
+  parentInventoryStatus: TurkeyParentInventoryStatus;
   providerSummary: TurkeyParentProviderSummary[];
   catalogProvider: string;
   observedDominantProvider: string | null;
-  lineageStatus: TurkeyParentDatasetLineageStatus;
-  catalogGeometryStatus: TurkeyParentCatalogGeometryStatus;
+  providerMetadataStatus: TurkeyParentProviderMetadataStatus;
+  /** @deprecated */ lineageStatus: TurkeyParentProviderMetadataStatus;
+  sourceByteVerificationStatus: TurkeyParentSourceByteVerificationStatus;
+  serializedGeometryStatus: TurkeyParentSerializedGeometryStatus;
+  /** @deprecated */ catalogGeometryStatus: TurkeyParentSerializedGeometryStatus;
   geometryComparisons: TurkeyParentHdxGeometryComparison[];
+  geoBoundariesUpstreamBytesVerified: false;
   classification: TurkeyParentLineageClassification;
   summary: string;
 }
 
+export type TurkeyParentProvenanceIssueCode =
+  | "PARENT_PROVENANCE_PROVIDER_MISMATCH"
+  | "PARENT_PROVENANCE_MIXED_PROVIDERS"
+  | "PARENT_PROVENANCE_UNDECLARED"
+  | "PARENT_PROVENANCE_PARTIALLY_UNDECLARED"
+  | "PARENT_PROVENANCE_SOURCE_BYTES_UNVERIFIED"
+  | "PARENT_PROVENANCE_MEMBER_CHECKSUM_MISMATCH"
+  | "PARENT_PROVENANCE_INVENTORY_INCOMPLETE"
+  | "PARENT_PROVENANCE_SERIALIZED_GEOMETRY_DIFFERS"
+  | "PARENT_PROVENANCE_PUBLISH_BYPASS_FORBIDDEN";
+
 export interface TurkeyParentProvenanceIssue {
-  code:
-    | "PARENT_PROVENANCE_PROVIDER_MISMATCH"
-    | "PARENT_PROVENANCE_MIXED_PROVIDERS"
-    | "PARENT_PROVENANCE_HDX_GEOMETRY_DIVERGENT"
-    | "PARENT_PROVENANCE_UNDECLARED";
+  code: TurkeyParentProvenanceIssueCode;
   message: string;
   severity: "error" | "warning";
   level?: TurkeyV2AdmParentLevel;
@@ -87,6 +125,8 @@ export interface TurkeyParentProvenanceIssue {
 
 export interface TurkeyParentProvenanceVerification {
   ok: boolean;
+  authorizedForNationalBuild: boolean;
+  authorizedForPublishReady: boolean;
   inspection: TurkeyParentProvenanceInspection;
   issues: TurkeyParentProvenanceIssue[];
 }
@@ -97,25 +137,36 @@ export interface TurkeyParentHdxMemberPaths {
   ADM2?: string;
 }
 
+export type TurkeyParentHdxMemberByteStatus =
+  "LOCKED_BYTES_VERIFIED" | "ARTIFACT_NOT_AVAILABLE" | "CHECKSUM_MISMATCH";
+
+export interface TurkeyParentVerifiedHdxMember {
+  status: TurkeyParentHdxMemberByteStatus;
+  sha256?: string;
+  byteSize?: number;
+}
+
 export interface InspectTurkeyParentProvenanceOptions {
   parentDataset: TerritoryDataset;
   catalog: TurkeyNationalSourceCatalog;
   hdxMemberPaths?: TurkeyParentHdxMemberPaths;
+  verifiedHdxMembers?: Partial<Record<TurkeyV2AdmParentLevel, TurkeyParentVerifiedHdxMember>>;
   readGeoJsonFeatures?: (
     path: string
   ) => Promise<Array<{ properties: Record<string, unknown>; geometry: unknown }>>;
+  requireFullParentInventory?: boolean;
+}
+
+export interface VerifyTurkeyParentProvenanceOptions {
+  allowUndeclaredParentSource?: boolean;
+  allowProvenanceMismatchBypass?: boolean;
+  purpose?: "diagnostic" | "national-build" | "publish-ready" | "audit-report";
 }
 
 const LEVEL_TO_NUMBER: Record<TurkeyV2AdmParentLevel, number> = {
   ADM0: 0,
   ADM1: 1,
   ADM2: 2
-};
-
-const NAME_PROPERTY_BY_LEVEL: Record<TurkeyV2AdmParentLevel, readonly string[]> = {
-  ADM0: ["adm0_name1", "adm0_name"],
-  ADM1: ["adm1_name1", "adm1_name"],
-  ADM2: ["adm2_name1", "adm2_name"]
 };
 
 export function auditGeometryHash(geometry: unknown): string {
@@ -139,9 +190,6 @@ function readSourceProvider(zone: TerritoryZone): string | null {
   if (typeof territory.sourceProvider === "string" && territory.sourceProvider.length > 0) {
     return territory.sourceProvider;
   }
-  if (typeof territory.providerId === "string" && territory.providerId.length > 0) {
-    return territory.providerId;
-  }
   return null;
 }
 
@@ -162,8 +210,13 @@ function summarizeProviders(dataset: TerritoryDataset): TurkeyParentProviderSumm
       )
     ].sort();
     const counts = new Map<string, number>();
+    let undeclaredZoneCount = 0;
     for (const zone of zones) {
-      const provider = readSourceProvider(zone) ?? "__undeclared__";
+      const provider = readSourceProvider(zone);
+      if (!provider) {
+        undeclaredZoneCount += 1;
+        continue;
+      }
       counts.set(provider, (counts.get(provider) ?? 0) + 1);
     }
     const dominant =
@@ -174,52 +227,207 @@ function summarizeProviders(dataset: TerritoryDataset): TurkeyParentProviderSumm
       level,
       zoneCount: zones.length,
       providers,
-      dominantProvider: dominant === "__undeclared__" ? null : dominant
+      dominantProvider: dominant,
+      undeclaredZoneCount
     };
   });
 }
 
-function resolveLineageStatus(input: {
+function resolveParentInventoryStatus(
+  summaries: TurkeyParentProviderSummary[],
+  requireFull: boolean
+): TurkeyParentInventoryStatus {
+  if (summaries.some((summary) => summary.zoneCount === 0)) {
+    return "MISSING_LEVEL";
+  }
+  if (!requireFull) {
+    return "COMPLETE";
+  }
+  for (const level of TURKEY_V2_ADM_PARENT_LEVELS) {
+    const summary = summaries.find((row) => row.level === level);
+    const expected = TURKEY_PARENT_INVENTORY_EXPECTED[level];
+    if (!summary || summary.zoneCount !== expected) {
+      return "INCOMPLETE";
+    }
+  }
+  return "COMPLETE";
+}
+
+function resolveProviderMetadataStatus(input: {
   catalogProvider: string;
   summaries: TurkeyParentProviderSummary[];
-}): TurkeyParentDatasetLineageStatus {
+  requireFull: boolean;
+}): TurkeyParentProviderMetadataStatus {
+  const totalZones = input.summaries.reduce((sum, row) => sum + row.zoneCount, 0);
+  const undeclaredTotal = input.summaries.reduce((sum, row) => sum + row.undeclaredZoneCount, 0);
   const declared = input.summaries
     .flatMap((summary) => summary.providers)
     .filter((provider) => provider.length > 0);
-  if (declared.length === 0) {
+
+  if (totalZones > 0 && undeclaredTotal === totalZones) {
     return "PARENT_SOURCE_UNDECLARED";
+  }
+  if (undeclaredTotal > 0) {
+    return "PARENT_SOURCE_PARTIALLY_UNDECLARED";
   }
   const unique = [...new Set(declared)];
   if (unique.length > 1) {
     return "MIXED_PARENT_PROVIDERS";
   }
+  if (unique.length === 0) {
+    return "PARENT_SOURCE_UNDECLARED";
+  }
   if (unique[0] !== input.catalogProvider) {
     return "CATALOG_LOCK_DIFFERS_FROM_PARENT_POLYGONS";
   }
-  return "VERIFIED_CATALOG_PROVIDER_MATCH";
+  return "PROVIDER_METADATA_MATCHES_CATALOG";
 }
 
-function readHdxFeatureName(
-  level: TurkeyV2AdmParentLevel,
-  properties: Record<string, unknown>
-): string | null {
-  for (const key of NAME_PROPERTY_BY_LEVEL[level]) {
-    const value = properties[key];
-    if (typeof value === "string" && value.length > 0) {
-      return normalizeAdminName(value);
+function resolveSourceByteVerificationStatus(
+  verified?: Partial<Record<TurkeyV2AdmParentLevel, TurkeyParentVerifiedHdxMember>>
+): TurkeyParentSourceByteVerificationStatus {
+  if (!verified || Object.keys(verified).length === 0) {
+    return "NOT_RUN";
+  }
+  const levels = TURKEY_V2_ADM_PARENT_LEVELS.map((level) => verified[level]);
+  if (levels.some((entry) => entry?.status === "CHECKSUM_MISMATCH")) {
+    return "CHECKSUM_MISMATCH";
+  }
+  const verifiedCount = levels.filter((entry) => entry?.status === "LOCKED_BYTES_VERIFIED").length;
+  if (verifiedCount === 0) {
+    return "ARTIFACT_UNAVAILABLE";
+  }
+  if (verifiedCount === TURKEY_V2_ADM_PARENT_LEVELS.length) {
+    return "ALL_LOCKED_MEMBERS_VERIFIED";
+  }
+  return "PARTIAL_MEMBERS_VERIFIED";
+}
+
+function provinceCodeToAdm1Pcode(provinceCode: string): string {
+  const digits = provinceCode.replace(/\D/g, "");
+  return `TUR${digits.padStart(3, "0")}`;
+}
+
+function readCanonicalAdm1Pcode(zone: TerritoryZone): string | null {
+  const territory = readTerritory(zone);
+  const codes = territory.codes;
+  if (codes && typeof codes === "object") {
+    const official = (codes as Record<string, unknown>).official;
+    if (typeof official === "string" && /^TR-\d{1,2}$/i.test(official)) {
+      return provinceCodeToAdm1Pcode(official.slice(3));
     }
   }
+  if (typeof territory.provinceCode === "string") {
+    return provinceCodeToAdm1Pcode(territory.provinceCode);
+  }
   return null;
+}
+
+function readHdxString(properties: Record<string, unknown>, key: string): string | null {
+  const value = properties[key];
+  return typeof value === "string" && value.length > 0 ? value : null;
+}
+
+function buildHdxFeatureIndex(
+  level: TurkeyV2AdmParentLevel,
+  features: Array<{ properties: Record<string, unknown>; geometry: unknown }>
+): {
+  byNativeId: Map<string, { properties: Record<string, unknown>; geometry: unknown }>;
+  byProvinceScopedName: Map<string, { properties: Record<string, unknown>; geometry: unknown }>;
+  byName: Map<string, { properties: Record<string, unknown>; geometry: unknown }>;
+} {
+  const byNativeId = new Map<string, { properties: Record<string, unknown>; geometry: unknown }>();
+  const byProvinceScopedName = new Map<
+    string,
+    { properties: Record<string, unknown>; geometry: unknown }
+  >();
+  const byName = new Map<string, { properties: Record<string, unknown>; geometry: unknown }>();
+
+  for (const feature of features) {
+    const props = feature.properties;
+    if (level === "ADM0") {
+      const pcode = readHdxString(props, "adm0_pcode");
+      if (pcode) byNativeId.set(pcode, feature);
+      continue;
+    }
+    if (level === "ADM1") {
+      const pcode = readHdxString(props, "adm1_pcode");
+      if (pcode) byNativeId.set(pcode, feature);
+      const name = readHdxString(props, "adm1_name1") ?? readHdxString(props, "adm1_name");
+      if (name) byName.set(normalizeAdminName(name), feature);
+      continue;
+    }
+    const adm2 = readHdxString(props, "adm2_pcode");
+    const adm1 = readHdxString(props, "adm1_pcode");
+    if (adm1 && adm2) byNativeId.set(`${adm1}|${adm2}`, feature);
+    const name = readHdxString(props, "adm2_name1") ?? readHdxString(props, "adm2_name");
+    if (adm1 && name) {
+      byProvinceScopedName.set(`${adm1}|${normalizeAdminName(name)}`, feature);
+    }
+    if (name) byName.set(normalizeAdminName(name), feature);
+  }
+
+  return { byNativeId, byProvinceScopedName, byName };
+}
+
+function resolveParentMatchKey(
+  level: TurkeyV2AdmParentLevel,
+  zone: TerritoryZone,
+  adm1ById: Map<string, TerritoryZone>
+): { key: string; method: TurkeyParentHdxGeometryComparison["identityMatchMethod"] } | null {
+  if (level === "ADM0") {
+    return { key: "TUR", method: "native-admin-id" };
+  }
+  if (level === "ADM1") {
+    const pcode = readCanonicalAdm1Pcode(zone);
+    if (pcode) return { key: pcode, method: "native-admin-id" };
+    const name = normalizeAdminName(zone.name ?? "");
+    return name ? { key: name, method: "name-only" } : null;
+  }
+  const parent = zone.parentId ? adm1ById.get(zone.parentId) : undefined;
+  const adm1Pcode = parent ? readCanonicalAdm1Pcode(parent) : null;
+  const name = normalizeAdminName(zone.name ?? "");
+  if (adm1Pcode && name) {
+    return { key: `${adm1Pcode}|${name}`, method: "province-scoped-name" };
+  }
+  return name ? { key: name, method: "name-only" } : null;
+}
+
+function lookupHdxFeature(
+  level: TurkeyV2AdmParentLevel,
+  matchKey: string,
+  method: TurkeyParentHdxGeometryComparison["identityMatchMethod"],
+  indexes: ReturnType<typeof buildHdxFeatureIndex>
+): { properties: Record<string, unknown>; geometry: unknown } | undefined {
+  if (method === "native-admin-id") {
+    return indexes.byNativeId.get(matchKey);
+  }
+  if (method === "province-scoped-name") {
+    return (
+      indexes.byProvinceScopedName.get(matchKey) ?? indexes.byName.get(matchKey.split("|")[1] ?? "")
+    );
+  }
+  return indexes.byName.get(matchKey);
 }
 
 export async function inspectTurkeyParentProvenance(
   options: InspectTurkeyParentProvenanceOptions
 ): Promise<TurkeyParentProvenanceInspection> {
+  const requireFull =
+    options.requireFullParentInventory ??
+    zonesForLevel(options.parentDataset, "ADM2").length === TURKEY_PARENT_INVENTORY_EXPECTED.ADM2;
+
   const providerSummary = summarizeProviders(options.parentDataset);
-  const lineageStatus = resolveLineageStatus({
+  const parentInventoryStatus = resolveParentInventoryStatus(providerSummary, requireFull);
+  const providerMetadataStatus = resolveProviderMetadataStatus({
     catalogProvider: options.catalog.provider,
-    summaries: providerSummary
+    summaries: providerSummary,
+    requireFull
   });
+  const sourceByteVerificationStatus = resolveSourceByteVerificationStatus(
+    options.verifiedHdxMembers
+  );
+
   const dominantProviders = providerSummary
     .map((summary) => summary.dominantProvider)
     .filter((value): value is string => !!value);
@@ -231,122 +439,146 @@ export async function inspectTurkeyParentProvenance(
         : null;
 
   const geometryComparisons: TurkeyParentHdxGeometryComparison[] = [];
-  let catalogGeometryStatus: TurkeyParentCatalogGeometryStatus = "NOT_RUN";
+  let serializedGeometryStatus: TurkeyParentSerializedGeometryStatus = "NOT_RUN";
+
+  const adm1ById = new Map(
+    zonesForLevel(options.parentDataset, "ADM1").map((zone) => [zone.id, zone])
+  );
 
   if (options.hdxMemberPaths && options.readGeoJsonFeatures) {
-    let anyCompared = false;
-    let anyDivergent = false;
-    let anyUnavailable = false;
+    if (parentInventoryStatus !== "COMPLETE" && requireFull) {
+      serializedGeometryStatus = "INVENTORY_INCOMPLETE";
+    } else {
+      let comparedAny = false;
+      let allMatched = true;
+      let insufficient = false;
 
-    for (const level of TURKEY_V2_ADM_PARENT_LEVELS) {
-      const catalogLevel = options.catalog.levels[level];
-      const memberPath = options.hdxMemberPaths[level];
-      if (!catalogLevel || !memberPath) {
-        anyUnavailable = true;
-        continue;
-      }
-      let hdxFeatures: Array<{ properties: Record<string, unknown>; geometry: unknown }>;
-      try {
-        hdxFeatures = await options.readGeoJsonFeatures(memberPath);
-      } catch {
-        anyUnavailable = true;
-        continue;
-      }
-      const parentZones = zonesForLevel(options.parentDataset, level);
-      const hdxByName = new Map<
-        string,
-        { properties: Record<string, unknown>; geometry: unknown }
-      >();
-      for (const feature of hdxFeatures) {
-        const name = readHdxFeatureName(level, feature.properties);
-        if (name) {
-          hdxByName.set(name, feature);
-        }
-      }
-      let nameMatchedPairs = 0;
-      let exactGeometryHashMatches = 0;
-      let geometryHashMismatches = 0;
-      let unmatchedParentZones = 0;
-      const sampleMismatches: TurkeyParentHdxGeometryComparison["sampleMismatches"] = [];
-      const matchedHdx = new Set<string>();
-
-      for (const zone of parentZones) {
-        const name = normalizeAdminName(zone.name ?? "");
-        if (!name) {
-          unmatchedParentZones += 1;
+      for (const level of TURKEY_V2_ADM_PARENT_LEVELS) {
+        const catalogLevel = options.catalog.levels[level];
+        const memberPath = options.hdxMemberPaths[level];
+        if (!catalogLevel || !memberPath) {
+          insufficient = true;
           continue;
         }
-        const feature = hdxByName.get(name);
-        if (!feature) {
-          unmatchedParentZones += 1;
+        let hdxFeatures: Array<{ properties: Record<string, unknown>; geometry: unknown }>;
+        try {
+          hdxFeatures = await options.readGeoJsonFeatures(memberPath);
+        } catch {
+          insufficient = true;
           continue;
         }
-        matchedHdx.add(name);
-        nameMatchedPairs += 1;
-        const parentHash = auditGeometryHash(zone.geometry);
-        const hdxHash = auditGeometryHash(feature.geometry);
-        if (parentHash === hdxHash) {
-          exactGeometryHashMatches += 1;
-        } else {
-          geometryHashMismatches += 1;
-          if (sampleMismatches.length < 5) {
-            sampleMismatches.push({ name, parentHash, hdxHash });
+        const indexes = buildHdxFeatureIndex(level, hdxFeatures);
+        const parentZones = zonesForLevel(options.parentDataset, level);
+        let identityMatchedPairs = 0;
+        let exactSerializedGeometryHashMatches = 0;
+        let serializedGeometryHashMismatches = 0;
+        let unmatchedParentZones = 0;
+        const sampleSerializedMismatches: TurkeyParentHdxGeometryComparison["sampleSerializedMismatches"] =
+          [];
+        const matchedHdxKeys = new Set<string>();
+        let matchMethod: TurkeyParentHdxGeometryComparison["identityMatchMethod"] =
+          "not-applicable";
+
+        for (const zone of parentZones) {
+          const resolved = resolveParentMatchKey(level, zone, adm1ById);
+          if (!resolved) {
+            unmatchedParentZones += 1;
+            continue;
+          }
+          matchMethod = resolved.method;
+          let feature = lookupHdxFeature(level, resolved.key, resolved.method, indexes);
+          if (!feature && level === "ADM1") {
+            const fallbackName = normalizeAdminName(zone.name ?? "");
+            feature = fallbackName ? indexes.byName.get(fallbackName) : undefined;
+            if (feature) matchMethod = "name-only";
+          }
+          if (!feature) {
+            unmatchedParentZones += 1;
+            continue;
+          }
+          matchedHdxKeys.add(resolved.key);
+          identityMatchedPairs += 1;
+          const parentHash = auditGeometryHash(zone.geometry);
+          const hdxHash = auditGeometryHash(feature.geometry);
+          if (parentHash === hdxHash) {
+            exactSerializedGeometryHashMatches += 1;
+          } else {
+            serializedGeometryHashMismatches += 1;
+            allMatched = false;
+            if (sampleSerializedMismatches.length < 5) {
+              sampleSerializedMismatches.push({
+                matchKey: resolved.key,
+                parentHash,
+                hdxHash
+              });
+            }
           }
         }
+
+        const unmatchedHdxFeatures = hdxFeatures.length - matchedHdxKeys.size;
+        geometryComparisons.push({
+          level,
+          catalogMemberSha256: catalogLevel.sha256,
+          hdxFeatureCount: hdxFeatures.length,
+          parentZoneCount: parentZones.length,
+          identityMatchMethod: matchMethod,
+          identityMatchedPairs,
+          exactSerializedGeometryHashMatches,
+          serializedGeometryHashMismatches,
+          unmatchedParentZones,
+          unmatchedHdxFeatures,
+          serializedGeometryHashMethod: "sha256-json-stringify-geometry",
+          geographicEquivalenceStatus: "NOT_ASSESSED",
+          sampleSerializedMismatches
+        });
+        comparedAny = true;
+        if (unmatchedParentZones > 0 || unmatchedHdxFeatures > 0) {
+          allMatched = false;
+        }
       }
 
-      const unmatchedHdxFeatures = hdxFeatures.length - matchedHdx.size;
-      geometryComparisons.push({
-        level,
-        catalogMemberSha256: catalogLevel.sha256,
-        hdxFeatureCount: hdxFeatures.length,
-        parentZoneCount: parentZones.length,
-        nameMatchedPairs,
-        exactGeometryHashMatches,
-        geometryHashMismatches,
-        unmatchedParentZones,
-        unmatchedHdxFeatures,
-        geometryHashMethod: "sha256-json-stringify-geometry",
-        sampleMismatches
-      });
-      anyCompared = true;
-      if (geometryHashMismatches > 0 || unmatchedParentZones > 0 || unmatchedHdxFeatures > 0) {
-        anyDivergent = true;
-      }
+      serializedGeometryStatus =
+        insufficient && !comparedAny
+          ? "INSUFFICIENT_EVIDENCE"
+          : parentInventoryStatus !== "COMPLETE" && requireFull
+            ? "INVENTORY_INCOMPLETE"
+            : allMatched && comparedAny
+              ? "ALL_SERIALIZED_HASHES_MATCH"
+              : "COMPARED";
     }
-
-    catalogGeometryStatus =
-      anyUnavailable && !anyCompared
-        ? "ARTIFACT_UNAVAILABLE"
-        : anyDivergent
-          ? "GEOMETRY_DIVERGENT_FROM_PARENT_DATASET"
-          : "LOCKED_MEMBERS_VERIFIED";
   }
 
   let classification: TurkeyParentLineageClassification = "BLOCKED_BY_MISSING_EVIDENCE";
   let summary = "Parent provenance could not be fully classified.";
 
-  if (lineageStatus === "CATALOG_LOCK_DIFFERS_FROM_PARENT_POLYGONS") {
+  if (providerMetadataStatus === "CATALOG_LOCK_DIFFERS_FROM_PARENT_POLYGONS") {
     classification = "CONFIRMED_ROOT_CAUSE";
     summary =
-      "National catalog/source-lock provider does not match the provider recorded on parent polygon zones.";
-  } else if (lineageStatus === "VERIFIED_CATALOG_PROVIDER_MATCH") {
-    classification =
-      catalogGeometryStatus === "GEOMETRY_DIVERGENT_FROM_PARENT_DATASET"
-        ? "CONFIRMED_ROOT_CAUSE"
-        : catalogGeometryStatus === "LOCKED_MEMBERS_VERIFIED"
-          ? "PARTIALLY_VERIFIED"
-          : "PARTIALLY_VERIFIED";
-    summary =
-      catalogGeometryStatus === "LOCKED_MEMBERS_VERIFIED"
-        ? "Parent polygon provider matches the catalog lock and sampled HDX member geometry hashes align."
-        : "Parent polygon provider matches the catalog lock; HDX geometry comparison was not fully verified.";
-  } else if (lineageStatus === "MIXED_PARENT_PROVIDERS") {
+      "National catalog/source-lock provider metadata does not match parent polygon zone providers (e.g. geoBoundaries vs HDX).";
+  } else if (providerMetadataStatus === "MIXED_PARENT_PROVIDERS") {
     classification = "CONFIRMED_ROOT_CAUSE";
     summary = "Parent ADM0–ADM2 zones declare multiple source providers.";
-  } else if (catalogGeometryStatus === "GEOMETRY_DIVERGENT_FROM_PARENT_DATASET") {
-    classification = "CONFIRMED_ROOT_CAUSE";
-    summary = "Locked HDX member geometry does not match the parent dataset polygons.";
+  } else if (
+    providerMetadataStatus === "PARENT_SOURCE_UNDECLARED" ||
+    providerMetadataStatus === "PARENT_SOURCE_PARTIALLY_UNDECLARED"
+  ) {
+    classification = "BLOCKED_BY_MISSING_EVIDENCE";
+    summary = "Parent polygon zones lack complete source-provider metadata.";
+  } else if (providerMetadataStatus === "PROVIDER_METADATA_MATCHES_CATALOG") {
+    if (sourceByteVerificationStatus === "ALL_LOCKED_MEMBERS_VERIFIED") {
+      classification =
+        serializedGeometryStatus === "ALL_SERIALIZED_HASHES_MATCH"
+          ? "PARTIALLY_VERIFIED"
+          : "PARTIALLY_VERIFIED";
+      summary =
+        serializedGeometryStatus === "ALL_SERIALIZED_HASHES_MATCH"
+          ? "Provider metadata and locked HDX member bytes align; serialized geometry hashes match (geographic equivalence not assessed)."
+          : "Provider metadata and locked HDX member bytes align; serialized geometry hashes differ (not a geographic boundary proof).";
+    } else {
+      classification = "BLOCKED_BY_MISSING_EVIDENCE";
+      summary =
+        "Provider metadata matches the catalog lock, but locked HDX member bytes were not independently verified for this inspection.";
+    }
   }
 
   return {
@@ -355,12 +587,17 @@ export async function inspectTurkeyParentProvenance(
       typeof options.parentDataset.manifest?.datasetVersion === "string"
         ? options.parentDataset.manifest.datasetVersion
         : null,
+    parentInventoryStatus,
     providerSummary,
     catalogProvider: options.catalog.provider,
     observedDominantProvider,
-    lineageStatus,
-    catalogGeometryStatus,
+    providerMetadataStatus,
+    lineageStatus: providerMetadataStatus,
+    sourceByteVerificationStatus,
+    serializedGeometryStatus,
+    catalogGeometryStatus: serializedGeometryStatus,
     geometryComparisons,
+    geoBoundariesUpstreamBytesVerified: false,
     classification,
     summary
   };
@@ -368,22 +605,25 @@ export async function inspectTurkeyParentProvenance(
 
 export function verifyTurkeyParentProvenance(
   inspection: TurkeyParentProvenanceInspection,
-  options: { allowUndeclaredParentSource?: boolean } = {}
+  options: VerifyTurkeyParentProvenanceOptions = {}
 ): TurkeyParentProvenanceVerification {
+  const purpose = options.purpose ?? "national-build";
   const issues: TurkeyParentProvenanceIssue[] = [];
 
-  if (inspection.lineageStatus === "CATALOG_LOCK_DIFFERS_FROM_PARENT_POLYGONS") {
-    issues.push({
-      code: "PARENT_PROVENANCE_PROVIDER_MISMATCH",
-      severity: "error",
-      message:
-        "ADM0–ADM2 parent dataset source provider does not match the national catalog/source-lock provider.",
-      expected: inspection.catalogProvider,
-      actual: inspection.observedDominantProvider ?? "unknown"
-    });
+  if (inspection.providerMetadataStatus === "CATALOG_LOCK_DIFFERS_FROM_PARENT_POLYGONS") {
+    if (!options.allowProvenanceMismatchBypass || purpose === "publish-ready") {
+      issues.push({
+        code: "PARENT_PROVENANCE_PROVIDER_MISMATCH",
+        severity: "error",
+        message:
+          "ADM0–ADM2 parent dataset source provider does not match the national catalog/source-lock provider.",
+        expected: inspection.catalogProvider,
+        actual: inspection.observedDominantProvider ?? "unknown"
+      });
+    }
   }
 
-  if (inspection.lineageStatus === "MIXED_PARENT_PROVIDERS") {
+  if (inspection.providerMetadataStatus === "MIXED_PARENT_PROVIDERS") {
     issues.push({
       code: "PARENT_PROVENANCE_MIXED_PROVIDERS",
       severity: "error",
@@ -391,38 +631,102 @@ export function verifyTurkeyParentProvenance(
     });
   }
 
-  if (
-    inspection.lineageStatus === "PARENT_SOURCE_UNDECLARED" &&
-    !options.allowUndeclaredParentSource
-  ) {
+  if (inspection.providerMetadataStatus === "PARENT_SOURCE_UNDECLARED") {
+    if (!options.allowUndeclaredParentSource) {
+      issues.push({
+        code: "PARENT_PROVENANCE_UNDECLARED",
+        severity: "error",
+        message:
+          "ADM0–ADM2 parent dataset zones do not declare a source provider; catalog lock cannot be treated as polygon-backed evidence."
+      });
+    }
+  }
+
+  if (inspection.providerMetadataStatus === "PARENT_SOURCE_PARTIALLY_UNDECLARED") {
+    if (!options.allowUndeclaredParentSource) {
+      issues.push({
+        code: "PARENT_PROVENANCE_PARTIALLY_UNDECLARED",
+        severity: "error",
+        message: "Some ADM0–ADM2 parent zones omit source provider metadata."
+      });
+    }
+  }
+
+  if (inspection.parentInventoryStatus !== "COMPLETE") {
+    if (purpose === "national-build" || purpose === "publish-ready" || purpose === "audit-report") {
+      issues.push({
+        code: "PARENT_PROVENANCE_INVENTORY_INCOMPLETE",
+        severity: purpose === "audit-report" ? "warning" : "error",
+        message: `Parent inventory status is ${inspection.parentInventoryStatus}; expected ADM0=${TURKEY_PARENT_INVENTORY_EXPECTED.ADM0}, ADM1=${TURKEY_PARENT_INVENTORY_EXPECTED.ADM1}, ADM2=${TURKEY_PARENT_INVENTORY_EXPECTED.ADM2} for national scope.`
+      });
+    }
+  }
+
+  if (inspection.providerMetadataStatus === "PROVIDER_METADATA_MATCHES_CATALOG") {
+    if (inspection.sourceByteVerificationStatus !== "ALL_LOCKED_MEMBERS_VERIFIED") {
+      issues.push({
+        code: "PARENT_PROVENANCE_SOURCE_BYTES_UNVERIFIED",
+        severity: "error",
+        message:
+          "Provider metadata matches the catalog, but locked HDX member SHA-256 evidence was not fully verified for this build."
+      });
+    }
+  }
+
+  if (inspection.sourceByteVerificationStatus === "CHECKSUM_MISMATCH") {
     issues.push({
-      code: "PARENT_PROVENANCE_UNDECLARED",
-      severity: "warning",
-      message:
-        "ADM0–ADM2 parent dataset zones do not declare a source provider; catalog lock cannot be treated as polygon-backed evidence."
+      code: "PARENT_PROVENANCE_MEMBER_CHECKSUM_MISMATCH",
+      severity: "error",
+      message: "At least one HDX catalog member failed SHA-256 or byte-size verification."
     });
   }
 
-  if (inspection.catalogGeometryStatus === "GEOMETRY_DIVERGENT_FROM_PARENT_DATASET") {
+  if (
+    inspection.serializedGeometryStatus === "COMPARED" &&
+    inspection.providerMetadataStatus === "PROVIDER_METADATA_MATCHES_CATALOG" &&
+    inspection.sourceByteVerificationStatus === "ALL_LOCKED_MEMBERS_VERIFIED"
+  ) {
     issues.push({
-      code: "PARENT_PROVENANCE_HDX_GEOMETRY_DIVERGENT",
-      severity: "error",
+      code: "PARENT_PROVENANCE_SERIALIZED_GEOMETRY_DIFFERS",
+      severity: "warning",
       message:
-        "Locked HDX COD-AB member geometry does not match the configured parent dataset polygons."
+        "Serialized geometry hashes differ between verified HDX members and parent polygons; geographic boundary change was not assessed."
+    });
+  }
+
+  if (purpose === "publish-ready" && options.allowProvenanceMismatchBypass) {
+    issues.push({
+      code: "PARENT_PROVENANCE_PUBLISH_BYPASS_FORBIDDEN",
+      severity: "error",
+      message: "Publish-ready builds cannot use --allow-parent-provenance-mismatch."
     });
   }
 
   const ok = issues.every((issue) => issue.severity !== "error");
-  return { ok, inspection, issues };
+
+  return {
+    ok,
+    authorizedForNationalBuild: ok,
+    authorizedForPublishReady: ok,
+    inspection,
+    issues
+  };
 }
 
-export function createTurkeyParentInputDatasetLock(inspection: TurkeyParentProvenanceInspection): {
+export function createTurkeyParentInputDatasetLock(
+  inspection: TurkeyParentProvenanceInspection,
+  options: { provenanceAuthorizationBypass?: string } = {}
+): {
   catalogProvider: string;
   observedDominantProvider: string | null;
-  lineageStatus: TurkeyParentDatasetLineageStatus;
-  catalogGeometryStatus: TurkeyParentCatalogGeometryStatus;
+  providerMetadataStatus: TurkeyParentProviderMetadataStatus;
+  sourceByteVerificationStatus: TurkeyParentSourceByteVerificationStatus;
+  serializedGeometryStatus: TurkeyParentSerializedGeometryStatus;
+  parentInventoryStatus: TurkeyParentInventoryStatus;
   zoneCounts: Record<TurkeyV2AdmParentLevel, number>;
   classification: TurkeyParentLineageClassification;
+  geoBoundariesUpstreamBytesVerified: false;
+  provenanceAuthorizationBypass?: string;
 } {
   const zoneCounts = {
     ADM0: inspection.providerSummary.find((summary) => summary.level === "ADM0")?.zoneCount ?? 0,
@@ -433,10 +737,16 @@ export function createTurkeyParentInputDatasetLock(inspection: TurkeyParentProve
   return {
     catalogProvider: inspection.catalogProvider,
     observedDominantProvider: inspection.observedDominantProvider,
-    lineageStatus: inspection.lineageStatus,
-    catalogGeometryStatus: inspection.catalogGeometryStatus,
+    providerMetadataStatus: inspection.providerMetadataStatus,
+    sourceByteVerificationStatus: inspection.sourceByteVerificationStatus,
+    serializedGeometryStatus: inspection.serializedGeometryStatus,
+    parentInventoryStatus: inspection.parentInventoryStatus,
     zoneCounts,
-    classification: inspection.classification
+    classification: inspection.classification,
+    geoBoundariesUpstreamBytesVerified: false,
+    ...(options.provenanceAuthorizationBypass
+      ? { provenanceAuthorizationBypass: options.provenanceAuthorizationBypass }
+      : {})
   };
 }
 

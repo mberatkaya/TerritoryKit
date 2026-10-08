@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { createReadStream } from "node:fs";
 import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { execFileSync } from "node:child_process";
 import {
   inspectTurkeyParentProvenance,
@@ -10,10 +10,38 @@ import {
 } from "../packages/generators/dist/turkey-adm3.mjs";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const OUTPUT_DIR = path.join(REPO_ROOT, "reports/tr-adm3/provenance");
-const NATIONAL_CATALOG = path.join(REPO_ROOT, "datasets/sources/TR/national.json");
-const PARENT_DATASET = path.join(REPO_ROOT, "datasets/generated/countries/TR/dataset.json");
+const DEFAULT_OUTPUT_DIR = path.join(REPO_ROOT, "reports/tr-adm3/provenance");
+const DEFAULT_NATIONAL_CATALOG = path.join(REPO_ROOT, "datasets/sources/TR/national.json");
+const DEFAULT_PARENT_DATASET = path.join(REPO_ROOT, "datasets/generated/countries/TR/dataset.json");
 const HDX_CACHE_ROOT = path.join(REPO_ROOT, ".territory/cache/sources/hdx-cod-ab");
+
+export function isParentProvenanceAuditCliEntry(argv = process.argv) {
+  const entry = argv[1];
+  if (!entry) return false;
+  return import.meta.url === pathToFileURL(path.resolve(entry)).href;
+}
+
+function parseAuditCliArgs(argv) {
+  const options = {
+    outputDir: DEFAULT_OUTPUT_DIR,
+    parentDatasetPath: DEFAULT_PARENT_DATASET,
+    nationalCatalogPath: DEFAULT_NATIONAL_CATALOG,
+    requireAuditByteEvidence: true
+  };
+  for (let index = 0; index < argv.length; index += 1) {
+    const token = argv[index];
+    if (token === "--output-dir") {
+      options.outputDir = path.resolve(argv[++index] ?? DEFAULT_OUTPUT_DIR);
+    } else if (token === "--parent-dataset") {
+      options.parentDatasetPath = path.resolve(argv[++index] ?? DEFAULT_PARENT_DATASET);
+    } else if (token === "--national-catalog") {
+      options.nationalCatalogPath = path.resolve(argv[++index] ?? DEFAULT_NATIONAL_CATALOG);
+    } else if (token === "--allow-missing-byte-evidence") {
+      options.requireAuditByteEvidence = false;
+    }
+  }
+  return options;
+}
 
 async function sha256File(filePath) {
   const hash = createHash("sha256");
@@ -23,37 +51,44 @@ async function sha256File(filePath) {
   return hash.digest("hex");
 }
 
-async function findCachedMember(memberName) {
+export async function findCachedHdxMember(memberName) {
   const { readdir } = await import("node:fs/promises");
-  for (const entry of await readdir(HDX_CACHE_ROOT, { withFileTypes: true })) {
-    if (!entry.isDirectory()) continue;
-    const candidate = path.join(HDX_CACHE_ROOT, entry.name, memberName);
-    try {
-      await stat(candidate);
-      return candidate;
-    } catch {
-      // continue
+  try {
+    for (const entry of await readdir(HDX_CACHE_ROOT, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const candidate = path.join(HDX_CACHE_ROOT, entry.name, memberName);
+      try {
+        await stat(candidate);
+        return candidate;
+      } catch {
+        // continue
+      }
     }
+  } catch {
+    return null;
   }
   return null;
 }
 
-async function inspectSourceVerification(catalog) {
+export async function verifyHdxCatalogMembers(catalog) {
   const members = {};
+  const verifiedHdxMembers = {};
   for (const level of ["ADM0", "ADM1", "ADM2"]) {
     const meta = catalog.levels[level];
-    const localPath = await findCachedMember(meta.archiveMember);
+    const localPath = await findCachedHdxMember(meta.archiveMember);
     if (!localPath) {
       members[level] = { status: "ARTIFACT_NOT_AVAILABLE", archiveMember: meta.archiveMember };
+      verifiedHdxMembers[level] = { status: "ARTIFACT_NOT_AVAILABLE" };
       continue;
     }
     const sha256 = await sha256File(localPath);
     const byteSize = (await stat(localPath)).size;
+    const status =
+      sha256 === meta.sha256 && byteSize === meta.byteSize
+        ? "LOCKED_BYTES_VERIFIED"
+        : "CHECKSUM_MISMATCH";
     members[level] = {
-      status:
-        sha256 === meta.sha256 && byteSize === meta.byteSize
-          ? "LOCKED_BYTES_VERIFIED"
-          : "CHECKSUM_MISMATCH",
+      status,
       path: path.relative(REPO_ROOT, localPath),
       sha256,
       byteSize,
@@ -62,19 +97,26 @@ async function inspectSourceVerification(catalog) {
       archiveMember: meta.archiveMember,
       actualFeatureCount: meta.actualFeatureCount
     };
+    verifiedHdxMembers[level] = { status, sha256, byteSize };
   }
   const archive = {
     status: "ARTIFACT_NOT_AVAILABLE",
     expectedSha256: catalog.sha256,
     expectedByteSize: catalog.byteSize
   };
-  return { archive, members, acquisition: "local-cache-preferring-pinned-members" };
+  return {
+    archive,
+    members,
+    verifiedHdxMembers,
+    acquisition: "local-cache-preferring-pinned-members"
+  };
 }
 
 export async function generateParentProvenanceReports({
-  outputDir = OUTPUT_DIR,
-  parentDatasetPath = PARENT_DATASET,
-  nationalCatalogPath = NATIONAL_CATALOG
+  outputDir = DEFAULT_OUTPUT_DIR,
+  parentDatasetPath = DEFAULT_PARENT_DATASET,
+  nationalCatalogPath = DEFAULT_NATIONAL_CATALOG,
+  requireAuditByteEvidence = true
 } = {}) {
   const inspectedCommit = execFileSync("git", ["rev-parse", "HEAD"], {
     cwd: REPO_ROOT,
@@ -82,13 +124,16 @@ export async function generateParentProvenanceReports({
   }).trim();
   const catalog = JSON.parse(await readFile(nationalCatalogPath, "utf8"));
   const parentDataset = JSON.parse(await readFile(parentDatasetPath, "utf8"));
+  const sourceVerification = await verifyHdxCatalogMembers(catalog);
+
   const hdxMemberPaths = {};
   for (const level of ["ADM0", "ADM1", "ADM2"]) {
     const member = catalog.levels[level]?.archiveMember;
     if (!member) continue;
-    const resolved = await findCachedMember(member);
+    const resolved = await findCachedHdxMember(member);
     if (resolved) hdxMemberPaths[level] = resolved;
   }
+
   const inspection = await inspectTurkeyParentProvenance({
     parentDataset,
     catalog: {
@@ -98,7 +143,8 @@ export async function generateParentProvenanceReports({
       byteSize: catalog.byteSize,
       levels: catalog.levels
     },
-    ...(Object.keys(hdxMemberPaths).length === 3
+    verifiedHdxMembers: sourceVerification.verifiedHdxMembers,
+    ...(Object.keys(hdxMemberPaths).length > 0
       ? {
           hdxMemberPaths,
           readGeoJsonFeatures: async (filePath) => {
@@ -108,10 +154,20 @@ export async function generateParentProvenanceReports({
         }
       : {})
   });
+
   const verification = verifyTurkeyParentProvenance(inspection, {
-    allowUndeclaredParentSource: true
+    purpose: "audit-report",
+    allowUndeclaredParentSource: false
   });
-  const sourceVerification = await inspectSourceVerification(catalog);
+
+  const allBytesVerified = Object.values(sourceVerification.verifiedHdxMembers).every(
+    (entry) => entry?.status === "LOCKED_BYTES_VERIFIED"
+  );
+  const auditReportComplete =
+    verification.ok &&
+    (!requireAuditByteEvidence || allBytesVerified) &&
+    inspection.parentInventoryStatus === "COMPLETE";
+
   await mkdir(outputDir, { recursive: true });
 
   const parentLineage = {
@@ -125,6 +181,14 @@ export async function generateParentProvenanceReports({
     countryGeneratorConfigProvider: "hdx-cod-ab",
     nationalBuildDefaultParentDataset: "datasets/generated/countries/TR/dataset.json",
     nationalBuildDefaultSourceMetadata: "datasets/sources/TR/national.json",
+    geoBoundariesUpstreamBytesVerified: false,
+    evidenceSemantics: {
+      providerMetadataAgreement:
+        "Zone-level source.provider vs catalog lock only; not polygon byte proof.",
+      verifiedSourceBytes: "HDX ZIP members SHA-256 vs national.json when cache present.",
+      serializedGeometryEquality: "sha256(JSON.stringify(geometry)); not geographic equivalence.",
+      geographicEquivalence: "NOT_ASSESSED"
+    },
     cliCallChain: [
       "packages/cli/src/turkey-v2-national.ts: readDataset(DEFAULT_ADM0_ADM2_DATASET)",
       "packages/cli/src/turkey-v2-national.ts: readNationalSource(DEFAULT_NATIONAL_SOURCE)",
@@ -132,7 +196,8 @@ export async function generateParentProvenanceReports({
       "packages/generators/src/turkey-v2-national.ts: buildTurkeyV2NationalDataset(adm0Adm2Dataset)"
     ],
     inspection,
-    verification
+    verification,
+    auditReportComplete
   };
 
   await writeFile(
@@ -143,9 +208,10 @@ export async function generateParentProvenanceReports({
     path.join(outputDir, "geometry-comparison.json"),
     JSON.stringify(
       {
-        schemaVersion: "territorykit-tr-parent-geometry-comparison@1",
+        schemaVersion: "territorykit-tr-parent-geometry-comparison@2",
         inspectedCommit,
-        geometryHashMethod: "sha256-json-stringify-geometry",
+        serializedGeometryHashMethod: "sha256-json-stringify-geometry",
+        geographicEquivalenceStatus: "NOT_ASSESSED",
         comparisons: inspection.geometryComparisons
       },
       null,
@@ -167,33 +233,46 @@ export async function generateParentProvenanceReports({
     )
   );
 
+  const comparisonSummary = inspection.geometryComparisons
+    .map(
+      (row) =>
+        `${row.level}: ${row.exactSerializedGeometryHashMatches}/${row.identityMatchedPairs} serialized-hash matches (identity method ${row.identityMatchMethod})`
+    )
+    .join("; ");
+
   const resolution = `# Türkiye ADM0–ADM2 parent provenance resolution
 
 **Inspection commit:** \`${inspectedCommit}\`  
 **Classification:** \`${inspection.classification}\`  
-**Lineage status:** \`${inspection.lineageStatus}\`  
-**HDX geometry status:** \`${inspection.catalogGeometryStatus}\`
+**Provider metadata:** \`${inspection.providerMetadataStatus}\`  
+**HDX member bytes:** \`${inspection.sourceByteVerificationStatus}\`  
+**Serialized geometry:** \`${inspection.serializedGeometryStatus}\`
 
-## Root cause
+## Confirmed implementation mismatch
 
-National v2 builds load parent polygons from \`datasets/generated/countries/TR/dataset.json\`, which records \`geoboundaries\` on ADM0–ADM2 zones, while \`datasets/sources/TR/national.json\` and the emitted national \`source-lock.json\` describe HDX COD-AB checksums. The CLI copies catalog metadata into the lock without verifying that the parent dataset bytes were imported from those HDX members.
+National v2 builds load parent polygons from \`datasets/generated/countries/TR/dataset.json\`, which records \`geoboundaries\` on ADM0–ADM2 zones, while \`datasets/sources/TR/national.json\` and emitted \`source-lock.json\` describe HDX COD-AB checksums. The CLI copies catalog metadata into the lock without verifying that parent polygons were imported from those HDX members.
 
-Verified local HDX member caches match \`national.json\` SHA-256 values, but parent dataset geometry hashes do not match those members (${inspection.geometryComparisons
-    .map(
-      (row) =>
-        `${row.level}: ${row.exactGeometryHashMatches}/${row.nameMatchedPairs} exact name matches`
-    )
-    .join("; ")}).
+geoBoundaries upstream archive bytes were **not** independently verified in this repository.
 
-## Safe actions taken in this sprint
+## HDX catalog member bytes (when cached)
 
-- Added explicit parent provenance inspection and national build/plan failure on provider mismatch.
-- Recorded \`parentInputDataset\` evidence on new source locks when builds are allowed.
-- Did **not** relabel geoBoundaries polygons as HDX or migrate canonical geometry.
+Local HDX member caches were checked against \`national.json\` SHA-256 where available (\`${inspection.sourceByteVerificationStatus}\`).
 
-## Follow-up migration (separate authorization)
+## Serialized geometry comparison (not geographic proof)
 
-Re-import ADM0–ADM2 from locked HDX members **or** realign catalog/source-lock to geoBoundaries with license attribution, then replay ADM3 clipping impact.
+${comparisonSummary || "Comparison not run (insufficient member paths)."}
+
+Differing serialized hashes do **not** by themselves prove administrative boundary changes; geographic equivalence was **not** assessed.
+
+## Safe actions in PR #104
+
+- Parent provenance inspection and national \`plan|build\` fail-closed on confirmed provider mismatch.
+- \`parentInputDataset\` records observed evidence; optional dev bypass is labeled and forbidden for publish-ready.
+- No relabel of geoBoundaries polygons as HDX; no canonical geometry migration.
+
+## Follow-up (separate authorization)
+
+Path A: re-import ADM0–ADM2 from locked HDX members. Path B: realign catalog/registry to geoBoundaries with license attribution. Replay ADM3 clipping impact before promotion.
 `;
 
   await writeFile(path.join(outputDir, "resolution.md"), resolution);
@@ -206,28 +285,42 @@ Machine-readable lineage for the national parent polygon mismatch sprint.
 | File | Purpose |
 | --- | --- |
 | [parent-lineage.json](./parent-lineage.json) | Provider inspection, CLI call chain, verification |
-| [geometry-comparison.json](./geometry-comparison.json) | HDX member vs parent dataset geometry hashes |
-| [source-verification.json](./source-verification.json) | Local HDX member byte verification against \`national.json\` |
+| [geometry-comparison.json](./geometry-comparison.json) | HDX member vs parent serialized geometry hashes |
+| [source-verification.json](./source-verification.json) | HDX member byte verification against \`national.json\` |
 | [resolution.md](./resolution.md) | Human-readable conclusion |
 
 Historical ADM3 audit evidence remains under [../audit/](../audit/).
 `
   );
 
-  return { inspection, verification, outputDir };
+  return { inspection, verification, outputDir, auditReportComplete };
 }
 
-if (import.meta.url === fileURLToPath(import.meta.url)) {
-  const result = await generateParentProvenanceReports();
+async function runCli() {
+  const cliOptions = parseAuditCliArgs(process.argv.slice(2));
+  const result = await generateParentProvenanceReports(cliOptions);
+  const exitOk = result.auditReportComplete;
   console.log(
     JSON.stringify(
       {
-        ok: result.verification.ok,
+        ok: exitOk,
+        auditReportComplete: result.auditReportComplete,
+        verificationOk: result.verification.ok,
         classification: result.inspection.classification,
+        providerMetadataStatus: result.inspection.providerMetadataStatus,
+        sourceByteVerificationStatus: result.inspection.sourceByteVerificationStatus,
         outputDir: path.relative(REPO_ROOT, result.outputDir)
       },
       null,
       2
     )
   );
+  process.exitCode = exitOk ? 0 : 1;
+}
+
+if (isParentProvenanceAuditCliEntry()) {
+  runCli().catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
 }

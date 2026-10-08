@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-parent-source-verification@1",
-  "inspectedCommit": "553b4e411cf80a8979af275c4f802333d8759f3e",
+  "inspectedCommit": "2cdb37da353980151abe4f02502d427779c2cebf",
   "catalogProvider": "hdx-cod-ab",
   "catalogDownloadUrl": "https://data.humdata.org/dataset/d74086a0-f398-4474-9e12-1b9a70907bd0/resource/470bd810-2240-4ce0-b5c4-17434112ce41/download/tur_admin_boundaries.geojson.zip",
   "archive": {
@@ -38,6 +38,23 @@
       "expectedByteSize": 29223893,
       "archiveMember": "tur_admin2.geojson",
       "actualFeatureCount": 973
+    }
+  },
+  "verifiedHdxMembers": {
+    "ADM0": {
+      "status": "LOCKED_BYTES_VERIFIED",
+      "sha256": "d346d64aa96ea0ba2b4ad1a71af1db104a10649baf04958dc90b8a36b8e1b069",
+      "byteSize": 11119319
+    },
+    "ADM1": {
+      "status": "LOCKED_BYTES_VERIFIED",
+      "sha256": "56b330a4f7086b4f02f8ddac55ce480c24bf813a1da7e3fb93fe4619fb00f721",
+      "byteSize": 16671095
+    },
+    "ADM2": {
+      "status": "LOCKED_BYTES_VERIFIED",
+      "sha256": "91b0968125b7bf3e2eb1d682697c51154ff3384f78ecf4e5f6e9041a24a287f2",
+      "byteSize": 29223893
     }
   },
   "acquisition": "local-cache-preferring-pinned-members"

@@ -1,22 +1,33 @@
 # Türkiye ADM0–ADM2 parent provenance resolution
 
-**Inspection commit:** `553b4e411cf80a8979af275c4f802333d8759f3e`  
+**Inspection commit:** `2cdb37da353980151abe4f02502d427779c2cebf`  
 **Classification:** `CONFIRMED_ROOT_CAUSE`  
-**Lineage status:** `CATALOG_LOCK_DIFFERS_FROM_PARENT_POLYGONS`  
-**HDX geometry status:** `GEOMETRY_DIVERGENT_FROM_PARENT_DATASET`
+**Provider metadata:** `CATALOG_LOCK_DIFFERS_FROM_PARENT_POLYGONS`  
+**HDX member bytes:** `ALL_LOCKED_MEMBERS_VERIFIED`  
+**Serialized geometry:** `COMPARED`
 
-## Root cause
+## Confirmed implementation mismatch
 
-National v2 builds load parent polygons from `datasets/generated/countries/TR/dataset.json`, which records `geoboundaries` on ADM0–ADM2 zones, while `datasets/sources/TR/national.json` and the emitted national `source-lock.json` describe HDX COD-AB checksums. The CLI copies catalog metadata into the lock without verifying that the parent dataset bytes were imported from those HDX members.
+National v2 builds load parent polygons from `datasets/generated/countries/TR/dataset.json`, which records `geoboundaries` on ADM0–ADM2 zones, while `datasets/sources/TR/national.json` and emitted `source-lock.json` describe HDX COD-AB checksums. The CLI copies catalog metadata into the lock without verifying that parent polygons were imported from those HDX members.
 
-Verified local HDX member caches match `national.json` SHA-256 values, but parent dataset geometry hashes do not match those members (ADM0: 0/0 exact name matches; ADM1: 0/67 exact name matches; ADM2: 0/731 exact name matches).
+geoBoundaries upstream archive bytes were **not** independently verified in this repository.
 
-## Safe actions taken in this sprint
+## HDX catalog member bytes (when cached)
 
-- Added explicit parent provenance inspection and national build/plan failure on provider mismatch.
-- Recorded `parentInputDataset` evidence on new source locks when builds are allowed.
-- Did **not** relabel geoBoundaries polygons as HDX or migrate canonical geometry.
+Local HDX member caches were checked against `national.json` SHA-256 where available (`ALL_LOCKED_MEMBERS_VERIFIED`).
 
-## Follow-up migration (separate authorization)
+## Serialized geometry comparison (not geographic proof)
 
-Re-import ADM0–ADM2 from locked HDX members **or** realign catalog/source-lock to geoBoundaries with license attribution, then replay ADM3 clipping impact.
+ADM0: 0/1 serialized-hash matches (identity method native-admin-id); ADM1: 0/81 serialized-hash matches (identity method native-admin-id); ADM2: 0/731 serialized-hash matches (identity method province-scoped-name)
+
+Differing serialized hashes do **not** by themselves prove administrative boundary changes; geographic equivalence was **not** assessed.
+
+## Safe actions in PR #104
+
+- Parent provenance inspection and national `plan|build` fail-closed on confirmed provider mismatch.
+- `parentInputDataset` records observed evidence; optional dev bypass is labeled and forbidden for publish-ready.
+- No relabel of geoBoundaries polygons as HDX; no canonical geometry migration.
+
+## Follow-up (separate authorization)
+
+Path A: re-import ADM0–ADM2 from locked HDX members. Path B: realign catalog/registry to geoBoundaries with license attribution. Replay ADM3 clipping impact before promotion.

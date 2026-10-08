@@ -1,7 +1,7 @@
 {
   "schemaVersion": "territorykit-tr-parent-lineage@1",
-  "inspectedCommit": "553b4e411cf80a8979af275c4f802333d8759f3e",
-  "inspectedAt": "2026-10-08T20:01:54.585Z",
+  "inspectedCommit": "2cdb37da353980151abe4f02502d427779c2cebf",
+  "inspectedAt": "2026-10-08T20:59:36.631Z",
   "nationalCatalogPath": "datasets/sources/TR/national.json",
   "parentDatasetPath": "datasets/generated/countries/TR/dataset.json",
   "parentDatasetVersion": "0.1.0",
@@ -9,6 +9,13 @@
   "countryGeneratorConfigProvider": "hdx-cod-ab",
   "nationalBuildDefaultParentDataset": "datasets/generated/countries/TR/dataset.json",
   "nationalBuildDefaultSourceMetadata": "datasets/sources/TR/national.json",
+  "geoBoundariesUpstreamBytesVerified": false,
+  "evidenceSemantics": {
+    "providerMetadataAgreement": "Zone-level source.provider vs catalog lock only; not polygon byte proof.",
+    "verifiedSourceBytes": "HDX ZIP members SHA-256 vs national.json when cache present.",
+    "serializedGeometryEquality": "sha256(JSON.stringify(geometry)); not geographic equivalence.",
+    "geographicEquivalence": "NOT_ASSESSED"
+  },
   "cliCallChain": [
     "packages/cli/src/turkey-v2-national.ts: readDataset(DEFAULT_ADM0_ADM2_DATASET)",
     "packages/cli/src/turkey-v2-national.ts: readNationalSource(DEFAULT_NATIONAL_SOURCE)",
@@ -16,82 +23,105 @@
     "packages/generators/src/turkey-v2-national.ts: buildTurkeyV2NationalDataset(adm0Adm2Dataset)"
   ],
   "inspection": {
-    "schemaVersion": "territorykit-tr-parent-provenance@1",
+    "schemaVersion": "territorykit-tr-parent-provenance@2",
     "parentDatasetVersion": "0.1.0",
+    "parentInventoryStatus": "COMPLETE",
     "providerSummary": [
       {
         "level": "ADM0",
         "zoneCount": 1,
-        "providers": ["geoboundaries"],
-        "dominantProvider": "geoboundaries"
+        "providers": [
+          "geoboundaries"
+        ],
+        "dominantProvider": "geoboundaries",
+        "undeclaredZoneCount": 0
       },
       {
         "level": "ADM1",
         "zoneCount": 81,
-        "providers": ["geoboundaries"],
-        "dominantProvider": "geoboundaries"
+        "providers": [
+          "geoboundaries"
+        ],
+        "dominantProvider": "geoboundaries",
+        "undeclaredZoneCount": 0
       },
       {
         "level": "ADM2",
         "zoneCount": 973,
-        "providers": ["geoboundaries"],
-        "dominantProvider": "geoboundaries"
+        "providers": [
+          "geoboundaries"
+        ],
+        "dominantProvider": "geoboundaries",
+        "undeclaredZoneCount": 0
       }
     ],
     "catalogProvider": "hdx-cod-ab",
     "observedDominantProvider": "geoboundaries",
+    "providerMetadataStatus": "CATALOG_LOCK_DIFFERS_FROM_PARENT_POLYGONS",
     "lineageStatus": "CATALOG_LOCK_DIFFERS_FROM_PARENT_POLYGONS",
-    "catalogGeometryStatus": "GEOMETRY_DIVERGENT_FROM_PARENT_DATASET",
+    "sourceByteVerificationStatus": "ALL_LOCKED_MEMBERS_VERIFIED",
+    "serializedGeometryStatus": "COMPARED",
+    "catalogGeometryStatus": "COMPARED",
     "geometryComparisons": [
       {
         "level": "ADM0",
         "catalogMemberSha256": "d346d64aa96ea0ba2b4ad1a71af1db104a10649baf04958dc90b8a36b8e1b069",
         "hdxFeatureCount": 1,
         "parentZoneCount": 1,
-        "nameMatchedPairs": 0,
-        "exactGeometryHashMatches": 0,
-        "geometryHashMismatches": 0,
-        "unmatchedParentZones": 1,
-        "unmatchedHdxFeatures": 1,
-        "geometryHashMethod": "sha256-json-stringify-geometry",
-        "sampleMismatches": []
+        "identityMatchMethod": "native-admin-id",
+        "identityMatchedPairs": 1,
+        "exactSerializedGeometryHashMatches": 0,
+        "serializedGeometryHashMismatches": 1,
+        "unmatchedParentZones": 0,
+        "unmatchedHdxFeatures": 0,
+        "serializedGeometryHashMethod": "sha256-json-stringify-geometry",
+        "geographicEquivalenceStatus": "NOT_ASSESSED",
+        "sampleSerializedMismatches": [
+          {
+            "matchKey": "TUR",
+            "parentHash": "c1df7ded87d9cbfbb13b71280507fedeada7f812ca3419d7fa9283c3c6a3cdbb",
+            "hdxHash": "c099655e4e7b5769ff4dc4f631e5a6176f3d2f3d41ff72a8bc4ddfd5d05f8d84"
+          }
+        ]
       },
       {
         "level": "ADM1",
         "catalogMemberSha256": "56b330a4f7086b4f02f8ddac55ce480c24bf813a1da7e3fb93fe4619fb00f721",
         "hdxFeatureCount": 81,
         "parentZoneCount": 81,
-        "nameMatchedPairs": 67,
-        "exactGeometryHashMatches": 0,
-        "geometryHashMismatches": 67,
-        "unmatchedParentZones": 14,
-        "unmatchedHdxFeatures": 14,
-        "geometryHashMethod": "sha256-json-stringify-geometry",
-        "sampleMismatches": [
+        "identityMatchMethod": "native-admin-id",
+        "identityMatchedPairs": 81,
+        "exactSerializedGeometryHashMatches": 0,
+        "serializedGeometryHashMismatches": 81,
+        "unmatchedParentZones": 0,
+        "unmatchedHdxFeatures": 0,
+        "serializedGeometryHashMethod": "sha256-json-stringify-geometry",
+        "geographicEquivalenceStatus": "NOT_ASSESSED",
+        "sampleSerializedMismatches": [
           {
-            "name": "adana",
+            "matchKey": "TUR001",
             "parentHash": "1c3c6386562a204169717b0e7114be1f20096d72a6b9c0be47a7d165d1c139ec",
             "hdxHash": "f18cfbeb5632b8a277de8bb19f53f6193879eb8da720a1a1e572cfc22e1bbd11"
           },
           {
-            "name": "afyonkarahisar",
+            "matchKey": "TUR002",
+            "parentHash": "cd6b827f3eaaf59653b2900755a1ea6adff666a28eb9b61306d1c4553f48e323",
+            "hdxHash": "82f7023700e5025499edcb0521be6316c6c0e5b8829a4be1518d14631b89afe5"
+          },
+          {
+            "matchKey": "TUR003",
             "parentHash": "d4483c47216560f3a07f993a56ecf30fca7ca33e082aa82501a57889f15db209",
             "hdxHash": "57e948bec86db6ee12738fbf7af2a0f12ae42263d6d22f4707b9c316de6d6c2d"
           },
           {
-            "name": "amasya",
+            "matchKey": "TUR004",
+            "parentHash": "c4049c02530f32b12b6d5ce63e91bd81ae2c9fc89db3b7cf2dc8477df885784c",
+            "hdxHash": "1ccac66445af2b6c3d2a1f1fd566a22267bd41d416c12ed71f58bbefd4732b6c"
+          },
+          {
+            "matchKey": "TUR005",
             "parentHash": "73c3d9143fc3a592dedcda63f2b67da6264dde0bc4f10cf806197a2c70209664",
             "hdxHash": "ed19b612285fc51b47404ea4b511eada8ae67c870d474261a7e2241bfc9e8fad"
-          },
-          {
-            "name": "ankara",
-            "parentHash": "f9b9dfb124ed27e125fada8044d545375fb162ce3ecdcb1fe2ab49de2b08e950",
-            "hdxHash": "fdaf84c7621c6f642a184d9c91ec43c798aad97d0660556ed0184158d5e28e85"
-          },
-          {
-            "name": "antalya",
-            "parentHash": "9a3982d2e41b728624ac58c4a5fde992a7d831ddfa5cbccb97a4a183347b804e",
-            "hdxHash": "26f14f806e92fd38a8df1508804d32f01e7dce877da56fc71fd569533e93b8ea"
           }
         ]
       },
@@ -100,123 +130,151 @@
         "catalogMemberSha256": "91b0968125b7bf3e2eb1d682697c51154ff3384f78ecf4e5f6e9041a24a287f2",
         "hdxFeatureCount": 973,
         "parentZoneCount": 973,
-        "nameMatchedPairs": 731,
-        "exactGeometryHashMatches": 0,
-        "geometryHashMismatches": 731,
+        "identityMatchMethod": "province-scoped-name",
+        "identityMatchedPairs": 731,
+        "exactSerializedGeometryHashMatches": 0,
+        "serializedGeometryHashMismatches": 731,
         "unmatchedParentZones": 242,
-        "unmatchedHdxFeatures": 260,
-        "geometryHashMethod": "sha256-json-stringify-geometry",
-        "sampleMismatches": [
+        "unmatchedHdxFeatures": 242,
+        "serializedGeometryHashMethod": "sha256-json-stringify-geometry",
+        "geographicEquivalenceStatus": "NOT_ASSESSED",
+        "sampleSerializedMismatches": [
           {
-            "name": "demirci",
+            "matchKey": "TUR045|demirci",
             "parentHash": "ce19cd46534aa1a3287ccdb1aae961158f8c5918cac26dabd5d705575ede0ec8",
             "hdxHash": "e550b17dd60d491d47cb3454ce0e7fda7036efb0a1e1ca45cabe2e022cc74f7f"
           },
           {
-            "name": "seferihisar",
+            "matchKey": "TUR035|seferihisar",
             "parentHash": "276132d90d4ea5971ac380234f1ab6303083a42a2e6748a53c2e82a3995df5a7",
             "hdxHash": "4304fdcce77555fd2dd45c8553fdfc221c2957e6e4e9308e83757decf8361bbb"
           },
           {
-            "name": "yesilyurt",
+            "matchKey": "TUR060|yesilyurt",
             "parentHash": "1b711d8e0df43e1690bd92d0f4f5bfa84b39948c9ac625d4cdd16b7caad6b2f8",
             "hdxHash": "fa43dbb8aee934719ccb23ce2b3deb9782131c941f748e9ed8d4dd484c972020"
           },
           {
-            "name": "zeytinburnu",
+            "matchKey": "TUR034|zeytinburnu",
             "parentHash": "43e9bf3a83f5265bc1f6eb54855de27942909b3ee9b46d452b467baebe6ed92f",
             "hdxHash": "77a86d81be216c01bd1dd8e5a551773cfbe0db9571ce4d3b55b2c46cda741433"
           },
           {
-            "name": "akyurt",
+            "matchKey": "TUR006|akyurt",
             "parentHash": "2e54e6bd8a0c08ebf44839b5f2291e6bbb37373ff555535f38b2f196a8602717",
             "hdxHash": "3dedd1ff9301927fe4631ab2d54fec2c86710a537fcb6a1a57b7e2b02a18435e"
           }
         ]
       }
     ],
+    "geoBoundariesUpstreamBytesVerified": false,
     "classification": "CONFIRMED_ROOT_CAUSE",
-    "summary": "National catalog/source-lock provider does not match the provider recorded on parent polygon zones."
+    "summary": "National catalog/source-lock provider metadata does not match parent polygon zone providers (e.g. geoBoundaries vs HDX)."
   },
   "verification": {
     "ok": false,
+    "authorizedForNationalBuild": false,
+    "authorizedForPublishReady": false,
     "inspection": {
-      "schemaVersion": "territorykit-tr-parent-provenance@1",
+      "schemaVersion": "territorykit-tr-parent-provenance@2",
       "parentDatasetVersion": "0.1.0",
+      "parentInventoryStatus": "COMPLETE",
       "providerSummary": [
         {
           "level": "ADM0",
           "zoneCount": 1,
-          "providers": ["geoboundaries"],
-          "dominantProvider": "geoboundaries"
+          "providers": [
+            "geoboundaries"
+          ],
+          "dominantProvider": "geoboundaries",
+          "undeclaredZoneCount": 0
         },
         {
           "level": "ADM1",
           "zoneCount": 81,
-          "providers": ["geoboundaries"],
-          "dominantProvider": "geoboundaries"
+          "providers": [
+            "geoboundaries"
+          ],
+          "dominantProvider": "geoboundaries",
+          "undeclaredZoneCount": 0
         },
         {
           "level": "ADM2",
           "zoneCount": 973,
-          "providers": ["geoboundaries"],
-          "dominantProvider": "geoboundaries"
+          "providers": [
+            "geoboundaries"
+          ],
+          "dominantProvider": "geoboundaries",
+          "undeclaredZoneCount": 0
         }
       ],
       "catalogProvider": "hdx-cod-ab",
       "observedDominantProvider": "geoboundaries",
+      "providerMetadataStatus": "CATALOG_LOCK_DIFFERS_FROM_PARENT_POLYGONS",
       "lineageStatus": "CATALOG_LOCK_DIFFERS_FROM_PARENT_POLYGONS",
-      "catalogGeometryStatus": "GEOMETRY_DIVERGENT_FROM_PARENT_DATASET",
+      "sourceByteVerificationStatus": "ALL_LOCKED_MEMBERS_VERIFIED",
+      "serializedGeometryStatus": "COMPARED",
+      "catalogGeometryStatus": "COMPARED",
       "geometryComparisons": [
         {
           "level": "ADM0",
           "catalogMemberSha256": "d346d64aa96ea0ba2b4ad1a71af1db104a10649baf04958dc90b8a36b8e1b069",
           "hdxFeatureCount": 1,
           "parentZoneCount": 1,
-          "nameMatchedPairs": 0,
-          "exactGeometryHashMatches": 0,
-          "geometryHashMismatches": 0,
-          "unmatchedParentZones": 1,
-          "unmatchedHdxFeatures": 1,
-          "geometryHashMethod": "sha256-json-stringify-geometry",
-          "sampleMismatches": []
+          "identityMatchMethod": "native-admin-id",
+          "identityMatchedPairs": 1,
+          "exactSerializedGeometryHashMatches": 0,
+          "serializedGeometryHashMismatches": 1,
+          "unmatchedParentZones": 0,
+          "unmatchedHdxFeatures": 0,
+          "serializedGeometryHashMethod": "sha256-json-stringify-geometry",
+          "geographicEquivalenceStatus": "NOT_ASSESSED",
+          "sampleSerializedMismatches": [
+            {
+              "matchKey": "TUR",
+              "parentHash": "c1df7ded87d9cbfbb13b71280507fedeada7f812ca3419d7fa9283c3c6a3cdbb",
+              "hdxHash": "c099655e4e7b5769ff4dc4f631e5a6176f3d2f3d41ff72a8bc4ddfd5d05f8d84"
+            }
+          ]
         },
         {
           "level": "ADM1",
           "catalogMemberSha256": "56b330a4f7086b4f02f8ddac55ce480c24bf813a1da7e3fb93fe4619fb00f721",
           "hdxFeatureCount": 81,
           "parentZoneCount": 81,
-          "nameMatchedPairs": 67,
-          "exactGeometryHashMatches": 0,
-          "geometryHashMismatches": 67,
-          "unmatchedParentZones": 14,
-          "unmatchedHdxFeatures": 14,
-          "geometryHashMethod": "sha256-json-stringify-geometry",
-          "sampleMismatches": [
+          "identityMatchMethod": "native-admin-id",
+          "identityMatchedPairs": 81,
+          "exactSerializedGeometryHashMatches": 0,
+          "serializedGeometryHashMismatches": 81,
+          "unmatchedParentZones": 0,
+          "unmatchedHdxFeatures": 0,
+          "serializedGeometryHashMethod": "sha256-json-stringify-geometry",
+          "geographicEquivalenceStatus": "NOT_ASSESSED",
+          "sampleSerializedMismatches": [
             {
-              "name": "adana",
+              "matchKey": "TUR001",
               "parentHash": "1c3c6386562a204169717b0e7114be1f20096d72a6b9c0be47a7d165d1c139ec",
               "hdxHash": "f18cfbeb5632b8a277de8bb19f53f6193879eb8da720a1a1e572cfc22e1bbd11"
             },
             {
-              "name": "afyonkarahisar",
+              "matchKey": "TUR002",
+              "parentHash": "cd6b827f3eaaf59653b2900755a1ea6adff666a28eb9b61306d1c4553f48e323",
+              "hdxHash": "82f7023700e5025499edcb0521be6316c6c0e5b8829a4be1518d14631b89afe5"
+            },
+            {
+              "matchKey": "TUR003",
               "parentHash": "d4483c47216560f3a07f993a56ecf30fca7ca33e082aa82501a57889f15db209",
               "hdxHash": "57e948bec86db6ee12738fbf7af2a0f12ae42263d6d22f4707b9c316de6d6c2d"
             },
             {
-              "name": "amasya",
+              "matchKey": "TUR004",
+              "parentHash": "c4049c02530f32b12b6d5ce63e91bd81ae2c9fc89db3b7cf2dc8477df885784c",
+              "hdxHash": "1ccac66445af2b6c3d2a1f1fd566a22267bd41d416c12ed71f58bbefd4732b6c"
+            },
+            {
+              "matchKey": "TUR005",
               "parentHash": "73c3d9143fc3a592dedcda63f2b67da6264dde0bc4f10cf806197a2c70209664",
               "hdxHash": "ed19b612285fc51b47404ea4b511eada8ae67c870d474261a7e2241bfc9e8fad"
-            },
-            {
-              "name": "ankara",
-              "parentHash": "f9b9dfb124ed27e125fada8044d545375fb162ce3ecdcb1fe2ab49de2b08e950",
-              "hdxHash": "fdaf84c7621c6f642a184d9c91ec43c798aad97d0660556ed0184158d5e28e85"
-            },
-            {
-              "name": "antalya",
-              "parentHash": "9a3982d2e41b728624ac58c4a5fde992a7d831ddfa5cbccb97a4a183347b804e",
-              "hdxHash": "26f14f806e92fd38a8df1508804d32f01e7dce877da56fc71fd569533e93b8ea"
             }
           ]
         },
@@ -225,43 +283,46 @@
           "catalogMemberSha256": "91b0968125b7bf3e2eb1d682697c51154ff3384f78ecf4e5f6e9041a24a287f2",
           "hdxFeatureCount": 973,
           "parentZoneCount": 973,
-          "nameMatchedPairs": 731,
-          "exactGeometryHashMatches": 0,
-          "geometryHashMismatches": 731,
+          "identityMatchMethod": "province-scoped-name",
+          "identityMatchedPairs": 731,
+          "exactSerializedGeometryHashMatches": 0,
+          "serializedGeometryHashMismatches": 731,
           "unmatchedParentZones": 242,
-          "unmatchedHdxFeatures": 260,
-          "geometryHashMethod": "sha256-json-stringify-geometry",
-          "sampleMismatches": [
+          "unmatchedHdxFeatures": 242,
+          "serializedGeometryHashMethod": "sha256-json-stringify-geometry",
+          "geographicEquivalenceStatus": "NOT_ASSESSED",
+          "sampleSerializedMismatches": [
             {
-              "name": "demirci",
+              "matchKey": "TUR045|demirci",
               "parentHash": "ce19cd46534aa1a3287ccdb1aae961158f8c5918cac26dabd5d705575ede0ec8",
               "hdxHash": "e550b17dd60d491d47cb3454ce0e7fda7036efb0a1e1ca45cabe2e022cc74f7f"
             },
             {
-              "name": "seferihisar",
+              "matchKey": "TUR035|seferihisar",
               "parentHash": "276132d90d4ea5971ac380234f1ab6303083a42a2e6748a53c2e82a3995df5a7",
               "hdxHash": "4304fdcce77555fd2dd45c8553fdfc221c2957e6e4e9308e83757decf8361bbb"
             },
             {
-              "name": "yesilyurt",
+              "matchKey": "TUR060|yesilyurt",
               "parentHash": "1b711d8e0df43e1690bd92d0f4f5bfa84b39948c9ac625d4cdd16b7caad6b2f8",
               "hdxHash": "fa43dbb8aee934719ccb23ce2b3deb9782131c941f748e9ed8d4dd484c972020"
             },
             {
-              "name": "zeytinburnu",
+              "matchKey": "TUR034|zeytinburnu",
               "parentHash": "43e9bf3a83f5265bc1f6eb54855de27942909b3ee9b46d452b467baebe6ed92f",
               "hdxHash": "77a86d81be216c01bd1dd8e5a551773cfbe0db9571ce4d3b55b2c46cda741433"
             },
             {
-              "name": "akyurt",
+              "matchKey": "TUR006|akyurt",
               "parentHash": "2e54e6bd8a0c08ebf44839b5f2291e6bbb37373ff555535f38b2f196a8602717",
               "hdxHash": "3dedd1ff9301927fe4631ab2d54fec2c86710a537fcb6a1a57b7e2b02a18435e"
             }
           ]
         }
       ],
+      "geoBoundariesUpstreamBytesVerified": false,
       "classification": "CONFIRMED_ROOT_CAUSE",
-      "summary": "National catalog/source-lock provider does not match the provider recorded on parent polygon zones."
+      "summary": "National catalog/source-lock provider metadata does not match parent polygon zone providers (e.g. geoBoundaries vs HDX)."
     },
     "issues": [
       {
@@ -270,12 +331,8 @@
         "message": "ADM0–ADM2 parent dataset source provider does not match the national catalog/source-lock provider.",
         "expected": "hdx-cod-ab",
         "actual": "geoboundaries"
-      },
-      {
-        "code": "PARENT_PROVENANCE_HDX_GEOMETRY_DIVERGENT",
-        "severity": "error",
-        "message": "Locked HDX COD-AB member geometry does not match the configured parent dataset polygons."
       }
     ]
-  }
+  },
+  "auditReportComplete": false
 }

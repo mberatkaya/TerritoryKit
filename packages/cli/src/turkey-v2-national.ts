@@ -336,8 +336,8 @@ async function runPlan(args: string[]): Promise<number> {
   const source = await readNationalSource(
     getFlag(flags, "source-metadata") ?? DEFAULT_NATIONAL_SOURCE
   );
-  const parentProvenance = await auditParentProvenanceForCli(admDataset, source, flags);
-  if (!parentProvenance.ok && !flags.has("allow-parent-provenance-mismatch")) {
+  const parentProvenance = await auditParentProvenanceForCli(admDataset, source, flags, "plan");
+  if (!parentProvenance.authorizedForNationalBuild) {
     printJson({
       ok: false,
       command: "tr v2 national plan",
@@ -421,14 +421,26 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
   }
   const buildDate = getFlag(flags, "build-date") ?? DEFAULT_BUILD_DATE;
   const datasetVersion = getFlag(flags, "dataset-version") ?? DEFAULT_SMART_CANDIDATE_VERSION;
+  if (mode === "publish-ready" && flags.has("allow-parent-provenance-mismatch")) {
+    printJson({
+      ok: false,
+      command: "tr v2 national publish-ready",
+      issues: [
+        issue("Publish-ready builds cannot use --allow-parent-provenance-mismatch.", undefined, {
+          code: "PARENT_PROVENANCE_PUBLISH_BYPASS_FORBIDDEN"
+        })
+      ]
+    });
+    return 2;
+  }
   const admDataset = await readDataset(
     getFlag(flags, "adm0-adm2-dataset") ?? DEFAULT_ADM0_ADM2_DATASET
   );
   const source = await readNationalSource(
     getFlag(flags, "source-metadata") ?? DEFAULT_NATIONAL_SOURCE
   );
-  const parentProvenance = await auditParentProvenanceForCli(admDataset, source, flags);
-  if (!parentProvenance.ok && !flags.has("allow-parent-provenance-mismatch")) {
+  const parentProvenance = await auditParentProvenanceForCli(admDataset, source, flags, mode);
+  if (!parentProvenance.authorizedForNationalBuild) {
     printJson({
       ok: false,
       command: `tr v2 national ${mode}`,
@@ -1658,7 +1670,8 @@ function createCliSummary(result: TurkeyV2NationalBuildResult): Record<string, u
 async function auditParentProvenanceForCli(
   parentDataset: TerritoryDataset,
   source: NationalSourceMetadata,
-  flags: Map<string, string | true>
+  flags: Map<string, string | true>,
+  mode: TurkeyV2NationalOutputMode | "plan"
 ) {
   const hdxRoot = getFlag(flags, "hdx-member-root");
   const hdxMemberPaths =
@@ -1669,6 +1682,12 @@ async function auditParentProvenanceForCli(
           ADM2: join(resolve(hdxRoot), source.levels.ADM2.archiveMember)
         }
       : undefined;
+  const purpose =
+    mode === "publish-ready"
+      ? "publish-ready"
+      : mode === "plan"
+        ? "national-build"
+        : "national-build";
   const inspection = await inspectTurkeyParentProvenance({
     parentDataset,
     catalog: {
@@ -1678,11 +1697,12 @@ async function auditParentProvenanceForCli(
       byteSize: source.byteSize,
       levels: source.levels
     },
+    requireFullParentInventory: false,
     ...(hdxMemberPaths
       ? {
           hdxMemberPaths,
-          readGeoJsonFeatures: async (path: string) => {
-            const parsed = JSON.parse(await readFile(path, "utf8")) as {
+          readGeoJsonFeatures: async (memberPath: string) => {
+            const parsed = JSON.parse(await readFile(memberPath, "utf8")) as {
               features?: Array<{ properties: Record<string, unknown>; geometry: unknown }>;
             };
             return parsed.features ?? [];
@@ -1691,11 +1711,17 @@ async function auditParentProvenanceForCli(
       : {})
   });
   const verification = verifyTurkeyParentProvenance(inspection, {
-    allowUndeclaredParentSource: true
+    purpose,
+    allowUndeclaredParentSource: false,
+    allowProvenanceMismatchBypass: flags.has("allow-parent-provenance-mismatch")
   });
   return {
     ...verification,
-    parentInputDataset: createTurkeyParentInputDatasetLock(inspection)
+    parentInputDataset: createTurkeyParentInputDatasetLock(inspection, {
+      ...(flags.has("allow-parent-provenance-mismatch")
+        ? { provenanceAuthorizationBypass: "allow-parent-provenance-mismatch" }
+        : {})
+    })
   };
 }
 
