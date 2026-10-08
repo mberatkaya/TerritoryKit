@@ -30,27 +30,21 @@
       {
         "level": "ADM0",
         "zoneCount": 1,
-        "providers": [
-          "geoboundaries"
-        ],
+        "providers": ["geoboundaries"],
         "dominantProvider": "geoboundaries",
         "undeclaredZoneCount": 0
       },
       {
         "level": "ADM1",
         "zoneCount": 81,
-        "providers": [
-          "geoboundaries"
-        ],
+        "providers": ["geoboundaries"],
         "dominantProvider": "geoboundaries",
         "undeclaredZoneCount": 0
       },
       {
         "level": "ADM2",
         "zoneCount": 973,
-        "providers": [
-          "geoboundaries"
-        ],
+        "providers": ["geoboundaries"],
         "dominantProvider": "geoboundaries",
         "undeclaredZoneCount": 0
       }
@@ -183,27 +177,21 @@
         {
           "level": "ADM0",
           "zoneCount": 1,
-          "providers": [
-            "geoboundaries"
-          ],
+          "providers": ["geoboundaries"],
           "dominantProvider": "geoboundaries",
           "undeclaredZoneCount": 0
         },
         {
           "level": "ADM1",
           "zoneCount": 81,
-          "providers": [
-            "geoboundaries"
-          ],
+          "providers": ["geoboundaries"],
           "dominantProvider": "geoboundaries",
           "undeclaredZoneCount": 0
         },
         {
           "level": "ADM2",
           "zoneCount": 973,
-          "providers": [
-            "geoboundaries"
-          ],
+          "providers": ["geoboundaries"],
           "dominantProvider": "geoboundaries",
           "undeclaredZoneCount": 0
         }

@@ -15,6 +15,11 @@ const DEFAULT_NATIONAL_CATALOG = path.join(REPO_ROOT, "datasets/sources/TR/natio
 const DEFAULT_PARENT_DATASET = path.join(REPO_ROOT, "datasets/generated/countries/TR/dataset.json");
 const HDX_CACHE_ROOT = path.join(REPO_ROOT, ".territory/cache/sources/hdx-cod-ab");
 
+async function writeTextFile(filePath, contents) {
+  const text = contents.endsWith("\n") ? contents : `${contents}\n`;
+  await writeFile(filePath, text, "utf8");
+}
+
 export function isParentProvenanceAuditCliEntry(argv = process.argv) {
   const entry = argv[1];
   if (!entry) return false;
@@ -200,11 +205,11 @@ export async function generateParentProvenanceReports({
     auditReportComplete
   };
 
-  await writeFile(
+  await writeTextFile(
     path.join(outputDir, "parent-lineage.json"),
     JSON.stringify(parentLineage, null, 2)
   );
-  await writeFile(
+  await writeTextFile(
     path.join(outputDir, "geometry-comparison.json"),
     JSON.stringify(
       {
@@ -218,7 +223,7 @@ export async function generateParentProvenanceReports({
       2
     )
   );
-  await writeFile(
+  await writeTextFile(
     path.join(outputDir, "source-verification.json"),
     JSON.stringify(
       {
@@ -275,8 +280,8 @@ Differing serialized hashes do **not** by themselves prove administrative bounda
 Path A: re-import ADM0–ADM2 from locked HDX members. Path B: realign catalog/registry to geoBoundaries with license attribution. Replay ADM3 clipping impact before promotion.
 `;
 
-  await writeFile(path.join(outputDir, "resolution.md"), resolution);
-  await writeFile(
+  await writeTextFile(path.join(outputDir, "resolution.md"), resolution);
+  await writeTextFile(
     path.join(outputDir, "README.md"),
     `# TR ADM0–ADM2 provenance evidence
 
