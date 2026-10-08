@@ -90,15 +90,35 @@
       "passing": 5,
       "note": "Embedded in first pnpm verify on this branch; count preserved as historical evidence."
     },
-    "ciVerified": {
-      "pr": 100,
-      "headSha": "87b010d9552fde08061b596727c4d41edd5ae982",
-      "workflowRunId": 37828925320,
-      "workflowRunUrl": "https://github.com/mberatkaya/TerritoryKit/actions/runs/37828925320",
-      "command": "pnpm data:tr:adm3:audit:test",
-      "passing": 13,
-      "note": "Executed via pnpm verify on Node 24 job; Node 22 job ran release:check in the same run."
-    }
+    "timeline": [
+      {
+        "phase": "initial_local_audit",
+        "date": "2026-10-08",
+        "command": "node --test scripts/tr-adm3-quality-source-audit.test.mjs",
+        "passing": 5,
+        "source": "verifyTests.nodeAuditPassing"
+      },
+      {
+        "phase": "first_ci_hotfix",
+        "pr": 100,
+        "headSha": "87b010d9552fde08061b596727c4d41edd5ae982",
+        "workflowRunId": 37828925320,
+        "workflowRunUrl": "https://github.com/mberatkaya/TerritoryKit/actions/runs/37828925320",
+        "command": "pnpm data:tr:adm3:audit:test",
+        "passing": 11,
+        "note": "Node 24 pnpm verify job in run 37828925320; parent-registry clean-checkout fallback."
+      },
+      {
+        "phase": "final_hardening",
+        "pr": 100,
+        "headSha": "8fb43541930d441d486d333359a4a820257e005f",
+        "workflowRunId": 37830204354,
+        "workflowRunUrl": "https://github.com/mberatkaya/TerritoryKit/actions/runs/37830204354",
+        "command": "pnpm data:tr:adm3:audit:test",
+        "passing": 13,
+        "note": "Node 24 pnpm verify job in run 37830204354; ADM1 lookup-ref and parent-geometry guard tests."
+      }
+    ]
   },
   "verifyTests": {
     "vitestPassing": 663,

@@ -26,6 +26,9 @@
     "number": 100,
     "mergeableWithMain": "MERGEABLE",
     "mergeableWithPr94": "NO_FILE_OVERLAP",
+    "observedAt": "2026-10-08T19:06:06Z",
+    "snapshotNote": "Remote PR/CI inspection at first CI hotfix commit; not rewritten when later commits land.",
+    "auditRegressionTestsPassing": 11,
     "state": "OPEN",
     "statusCheckRollup": [
       {
@@ -61,6 +64,37 @@
     ],
     "title": "Audit Türkiye ADM3 coverage, source fidelity and Istanbul geometry",
     "url": "https://github.com/mberatkaya/TerritoryKit/pull/100"
+  },
+  "pr100LatestHeadEvidence": {
+    "capturedAt": "2026-10-08T22:18:00+03:00",
+    "headRefOid": "8fb43541930d441d486d333359a4a820257e005f",
+    "number": 100,
+    "workflowRunId": 37830204354,
+    "workflowRunUrl": "https://github.com/mberatkaya/TerritoryKit/actions/runs/37830204354",
+    "auditRegressionTestsPassing": 13,
+    "statusCheckRollup": [
+      {
+        "__typename": "CheckRun",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/mberatkaya/TerritoryKit/actions/runs/37830204354/job/113493272494",
+        "name": "Node 22",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/mberatkaya/TerritoryKit/actions/runs/37830204354/job/113493272688",
+        "name": "Node 24",
+        "workflowName": "CI"
+      },
+      {
+        "__typename": "CheckRun",
+        "conclusion": "SUCCESS",
+        "detailsUrl": "https://github.com/mberatkaya/TerritoryKit/actions/runs/37830204354/job/113493272289",
+        "name": "Live PostGIS validation",
+        "workflowName": "CI"
+      }
+    ]
   },
   "pr94": {
     "baseRefName": "main",
