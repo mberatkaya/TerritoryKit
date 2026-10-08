@@ -1,0 +1,284 @@
+{
+  "inspectedCommit": "c6c8c4638228a2c14c98f6cb37af95c23f5fdf7a",
+  "scope": "Local rc.7 release candidate bytes, not production/mobile selection",
+  "files": [
+    {
+      "path": ".territory/sprint-6/final/candidate/manifest.json",
+      "sha256": "74ecef62e9594e587e32b4ee4f26c649fedf931b8a367a502c5aac4038562ec4",
+      "byteSize": 1344,
+      "status": "LOCKED_BYTES_VERIFIED"
+    },
+    {
+      "path": ".territory/sprint-6/final/candidate/source-lock.json",
+      "sha256": "f629c6738bcdf81a3145e0313f2f4563d73426c71870d774428d7bc337ed4807",
+      "byteSize": 6098,
+      "status": "LOCKED_BYTES_VERIFIED"
+    },
+    {
+      "path": ".territory/sprint-6/final/candidate/levels/ADM0/dataset.json",
+      "sha256": "bebaaab263e506f9dbcbf99f92e8125a40972373a4a3093880d72e1cec6630f5",
+      "byteSize": 1566152,
+      "status": "LOCKED_BYTES_VERIFIED"
+    },
+    {
+      "path": ".territory/sprint-6/final/candidate/levels/ADM1/dataset.json",
+      "sha256": "7fbe2e3cbc513bb38d8ff90463aa8bfea72e4a8c6444d2bf811d900888e42bec",
+      "byteSize": 4617475,
+      "status": "LOCKED_BYTES_VERIFIED"
+    },
+    {
+      "path": ".territory/sprint-6/final/candidate/levels/ADM2/dataset.json",
+      "sha256": "404c5da291895b3d91dc55bf7142c2e1a110137d7efab7645faddd9b899edbd4",
+      "byteSize": 11944051,
+      "status": "LOCKED_BYTES_VERIFIED"
+    },
+    {
+      "path": ".territory/sprint-6/final/candidate/levels/ADM3/dataset.json",
+      "sha256": "9426fe8519f17ed53b3927c394eb5bbf4245237ea7a8b7094bb8f1666c10207f",
+      "byteSize": 304460469,
+      "status": "LOCKED_BYTES_VERIFIED"
+    },
+    {
+      "path": ".territory/sprint-6/final/candidate/render/manifest.json",
+      "sha256": "5413a82af6606612b04b6ad86767447ab33855198f825fa13e7ef3133dfd958b",
+      "byteSize": 807,
+      "status": "LOCKED_BYTES_VERIFIED"
+    },
+    {
+      "path": ".territory/sprint-6/final/candidate/coverage.json",
+      "sha256": "b0620aed08e7cc07f50f8c92e55f088f13a5f713a865c8bad9a85755b1f43ec3",
+      "byteSize": 893898,
+      "status": "LOCKED_BYTES_VERIFIED"
+    },
+    {
+      "path": ".territory/sprint-6/final/candidate/smart-coverage.json",
+      "sha256": "f7fbf2c131d0dc904ef7729a2423e8f4cf292672f96adfe5e37d7d9e235bb7ed",
+      "byteSize": 3955816,
+      "status": "BYTES_AVAILABLE_UNPINNED"
+    },
+    {
+      "path": ".territory/sprint-6/final/candidate/quality-report.json",
+      "sha256": "98170988bfebdeadb0f1cb6e25cf71171a80533f9c110038d35192de0dfaba5a",
+      "byteSize": 3218,
+      "status": "LOCKED_BYTES_VERIFIED"
+    },
+    {
+      "path": ".territory/sprint-6/final/candidate/delivery-manifest.json",
+      "sha256": "1086cd21fcd4cc9f1cdd5768921f29d2cd00990bdf8d4baf9b20476ac790a22a",
+      "byteSize": 189679,
+      "status": "BYTES_AVAILABLE_UNPINNED"
+    },
+    {
+      "path": ".territory/build/TR/ADM3/official/levels/ADM3/dataset.json",
+      "sha256": "33f907c83524c8bc76d96aaabe93b312020b3722626f4684f24bcf669661123a",
+      "byteSize": 85933958,
+      "status": "BYTES_AVAILABLE_UNPINNED"
+    },
+    {
+      "path": ".territory/build/TR/ADM3/official/sources.lock.json",
+      "sha256": "c4004dad024341ee2150d1d709017a2daace0ab53d8306f26207a2e18324444f",
+      "byteSize": 13352,
+      "status": "BYTES_AVAILABLE_UNPINNED"
+    },
+    {
+      "path": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf",
+      "sha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+      "byteSize": 643317882,
+      "status": "LOCKED_BYTES_VERIFIED"
+    },
+    {
+      "path": ".territory/sprint-6/final/candidate/dataset.json",
+      "sha256": "462d8441cf522f6f718350abdb0094f326adf84229adbb33d0cadfd085e7e6eb",
+      "byteSize": 312715579,
+      "status": "LOCKED_BYTES_VERIFIED"
+    },
+    {
+      "path": ".territory/sprint-6/final/istanbul39-final-current.json",
+      "sha256": "14cad24007fd7ed76f1db97f4e89d01eb5f87556e53464114cfd6eff51a240c2",
+      "byteSize": 458690,
+      "status": "BYTES_AVAILABLE_UNPINNED"
+    }
+  ],
+  "levels": {
+    "ADM0": {
+      "count": 1,
+      "geometryHash": "71a03ba87754242860ac2def89311e55e42cd4128e3edf51e8be847c28edb14a",
+      "declaredGeometryHash": "71a03ba87754242860ac2def89311e55e42cd4128e3edf51e8be847c28edb14a"
+    },
+    "ADM1": {
+      "count": 81,
+      "geometryHash": "26745178cb995756ac11b6d7a1e61ef8d7110c1b1a9a7f359d3228bd9b23d17a",
+      "declaredGeometryHash": "26745178cb995756ac11b6d7a1e61ef8d7110c1b1a9a7f359d3228bd9b23d17a"
+    },
+    "ADM2": {
+      "count": 973,
+      "geometryHash": "4b34439772834ee563b1734122508907272d1fe3ba937371348f794efe03a02f",
+      "declaredGeometryHash": "4b34439772834ee563b1734122508907272d1fe3ba937371348f794efe03a02f"
+    },
+    "ADM3": {
+      "count": 20392,
+      "geometryHash": "19f50ba312657f39f61d9ce8eb6562491fa66de106681eec5352b85ae1b6e333",
+      "declaredGeometryHash": "19f50ba312657f39f61d9ce8eb6562491fa66de106681eec5352b85ae1b6e333"
+    }
+  },
+  "fullGeometry": {
+    "count": 21447,
+    "geometryHash": "fb19b468c0555dd0e167d5937037b1609f610014d9231c80b4bc9834685dd8f3",
+    "declaredGeometryHash": "fb19b468c0555dd0e167d5937037b1609f610014d9231c80b4bc9834685dd8f3"
+  },
+  "deliveryContentHash": "0bae6c16f9e923ad191dba7e81efda3148301a7a9e239761de060ae6d6edf05f",
+  "deliveryContentHashRecomputed": "0bae6c16f9e923ad191dba7e81efda3148301a7a9e239761de060ae6d6edf05f",
+  "deliveryContentHashMatchesCurrentBody": true,
+  "mvtInventory": {
+    "tileCount": 18856,
+    "checksumMismatches": 0,
+    "decodeFailures": 0,
+    "layerMismatchTiles": 18856,
+    "unknownIdentityFeatures": 0,
+    "geometryHashMismatchFeatures": 0,
+    "missingParentFeatures": 139576,
+    "missingSourceVersionFeatures": 139576,
+    "zooms": {
+      "10": 978,
+      "11": 3676,
+      "12": 14202
+    },
+    "encodedLayers": {
+      "territory_adm3": 139576
+    },
+    "firstFailures": [],
+    "scope": "All checksum-indexed national MVTs; canonical identity/hash metadata agreement, decoded geometry readability. Not exact coordinate equality or hosted/cache validation."
+  },
+  "sourceLockContentHash": "sha256:4cea41524fefc36670b21934840e932e8d3fcc075e46059f09dc839345b6a85c",
+  "sourceLockContentHashRecomputed": "sha256:4cea41524fefc36670b21934840e932e8d3fcc075e46059f09dc839345b6a85c",
+  "sourceLockContentHashMatchesCurrentBody": true,
+  "tiles": [
+    {
+      "evidence": {
+        "path": ".territory/sprint-6/final/candidate/render/tiles/12/2377/1535.mvt",
+        "sha256": "c5118525f5b083a4098202dc156cac9bfcb08834dad344e6154fb97dcce28402",
+        "byteSize": 36239,
+        "status": "LOCKED_BYTES_VERIFIED"
+      },
+      "manifestPath": ".territory/sprint-6/final/candidate/render/manifest.json",
+      "advertisedLayers": [
+        {
+          "adminLevels": ["ADM3"],
+          "featureCount": 20392,
+          "id": "territory-adm3",
+          "maxZoom": 12,
+          "minZoom": 10
+        }
+      ],
+      "decodedLayers": [
+        {
+          "name": "territory_adm3",
+          "featureCount": 69,
+          "unknownCanonicalIds": [],
+          "sampleProperties": {
+            "territoryId": "tr:adm3:tr-il-34-ilce-54988432b10954011235531-generated-smart-derived-v1-7-1cc837942b948028d3e4",
+            "adminLevel": "ADM3",
+            "datasetId": "territory-kit-tr-v2-playable-adm3",
+            "datasetVersion": "2.1.0-rc.7",
+            "sourceAdminLevel": "ADM3",
+            "semanticType": "generated-zone",
+            "localName": "Maltepe",
+            "sourceProvider": "geofabrik-osm-extracts",
+            "sourceAttribution": "OpenStreetMap contributors, ODbL 1.0",
+            "sourceClass": "generated",
+            "boundarySourceClass": "smart-derived",
+            "administrative": false,
+            "authoritative": false,
+            "boundaryKind": "estimated",
+            "confidence": "high",
+            "generatorVersion": "smart-derived-v1.7",
+            "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+            "geometryHash": "351ecaeb3680b7b0c8ccf8158af5c23d5190b565527d6cbb9d59d1511f5a3e61",
+            "license": "ODbL-1.0"
+          },
+          "missingParentMetadataCount": 69,
+          "missingSourceVersionCount": 69
+        }
+      ],
+      "layerAgreement": false,
+      "scope": "One Fatih tile sample; not an all-zoom/all-tile identity proof"
+    },
+    {
+      "evidence": {
+        "path": ".territory/rushclaim-adm3-visibility-20261008/render/tiles/12/2377/1535.mvt",
+        "sha256": "41f5956e2d0c21889f72e6543ec1cd986089465414ab41cdad91391c76cde6e7",
+        "byteSize": 37021,
+        "status": "BYTES_AVAILABLE_UNPINNED"
+      },
+      "manifestPath": ".territory/rushclaim-adm3-visibility-20261008/render/manifest.json",
+      "advertisedLayers": [
+        {
+          "adminLevels": ["ADM3"],
+          "featureCount": 20392,
+          "id": "territory-adm3",
+          "maxZoom": 12,
+          "minZoom": 10
+        }
+      ],
+      "decodedLayers": [
+        {
+          "name": "territory-adm3",
+          "featureCount": 69,
+          "unknownCanonicalIds": [],
+          "sampleProperties": {
+            "territoryId": "tr:adm3:tr-il-34-ilce-54988432b10954011235531-generated-smart-derived-v1-7-1cc837942b948028d3e4",
+            "adminLevel": "ADM3",
+            "datasetId": "territory-kit-tr-v2-playable-adm3",
+            "datasetVersion": "2.1.0-rc.7",
+            "parentId": "tr:adm2:54988432b10954011235531",
+            "parentAdm2Id": "tr:adm2:54988432b10954011235531",
+            "sourceAdminLevel": "ADM3",
+            "semanticType": "generated-zone",
+            "localName": "Maltepe",
+            "sourceProvider": "geofabrik-osm-extracts",
+            "sourceAttribution": "OpenStreetMap contributors, ODbL 1.0",
+            "sourceClass": "generated",
+            "sourceVersion": "tr-osm-barriers-v1.3",
+            "boundarySourceClass": "smart-derived",
+            "administrative": false,
+            "authoritative": false,
+            "boundaryKind": "estimated",
+            "confidence": "high",
+            "generatorVersion": "smart-derived-v1.7",
+            "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+            "geometryHash": "351ecaeb3680b7b0c8ccf8158af5c23d5190b565527d6cbb9d59d1511f5a3e61",
+            "license": "ODbL-1.0"
+          },
+          "missingParentMetadataCount": 0,
+          "missingSourceVersionCount": 0
+        }
+      ],
+      "layerAgreement": true,
+      "scope": "One Fatih tile sample; not an all-zoom/all-tile identity proof"
+    }
+  ],
+  "recordedNationalSmartTotals": {
+    "adm2ExpectedNational": 973,
+    "adm2Total": 973,
+    "adm2Attempted": 973,
+    "adm2Successful": 973,
+    "adm2Failed": 0,
+    "officialDistricts": 0,
+    "officialContributingDistricts": 61,
+    "osmAdministrativeDistricts": 0,
+    "osmAdministrativeContributingDistricts": 0,
+    "standardSmartDistricts": 911,
+    "organicSmartDistricts": 62,
+    "legacyProductionDistricts": 0,
+    "unavailableDistricts": 0,
+    "gridThresholdViolations": 0,
+    "unsupportedStraightThresholdViolations": 577
+  },
+  "measuredSmartRows": {
+    "districts": 973,
+    "lowConfidence": 631,
+    "hardRejects": 0,
+    "realismWarnings": 577
+  },
+  "rebuildStatus": "NOT_EXECUTED; locked PBF bytes inspected, all barrier artifact checksums and national replay still require verification"
+}

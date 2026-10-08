@@ -61,11 +61,13 @@
     "turkey:v2:national:validate:publish-ready": "pnpm --filter @territory-kit/cli build && node packages/cli/dist/index.mjs tr v2 national validate --output .territory/sprint-6/final/candidate --publish-ready",
     "turkey:v2:national:benchmark": "pnpm --filter @territory-kit/generators build && pnpm --filter @territory-kit/cli build && node packages/cli/dist/index.mjs tr v2 national benchmark --dataset-version 2.1.0-rc.7 --output .territory/sprint-6/final/benchmark --reports-output .territory/sprint-6/final/benchmark-reports --force --osm-barriers .territory/sprint-6/calibration/barriers --osm-source-lock .territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json",
     "typecheck": "turbo run typecheck",
-    "verify": "pnpm format:check && pnpm security:test && pnpm lint && pnpm package:boundaries && pnpm typecheck && pnpm test && pnpm build && pnpm release:benchmark:test && pnpm turkey:osm:multipolygon:smoke && pnpm bundle:size && pnpm data:tr:adm3:artifact-policy",
+    "verify": "pnpm format:check && pnpm security:test && pnpm lint && pnpm package:boundaries && pnpm typecheck && pnpm test && pnpm build && pnpm release:benchmark:test && pnpm turkey:osm:multipolygon:smoke && pnpm bundle:size && pnpm data:tr:adm3:artifact-policy && pnpm data:tr:adm3:audit:test",
     "version-packages": "changeset version",
     "turkey:osm:multipolygon:smoke": "node scripts/turkey-osm-multipolygon-runtime-smoke.mjs",
     "security:test": "node --test scripts/validate-workflow-inputs.test.mjs scripts/security-audit-exceptions.test.mjs",
-    "release:benchmark:test": "node --test scripts/release-benchmark-dataset.test.mjs"
+    "release:benchmark:test": "node --test scripts/release-benchmark-dataset.test.mjs",
+    "data:tr:adm3:audit": "node --max-old-space-size=8192 scripts/tr-adm3-quality-source-audit.mjs",
+    "data:tr:adm3:audit:test": "node --test scripts/tr-adm3-quality-source-audit.test.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",

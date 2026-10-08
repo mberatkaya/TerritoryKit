@@ -1,0 +1,16 @@
+{
+  "fields": [
+    "geometryHash",
+    "sourceTier",
+    "confidence",
+    "zoneCount",
+    "acceptanceStatus",
+    "reasonCodes",
+    "syntheticConnectorEvidence"
+  ],
+  "districtCount": 3,
+  "differences": [],
+  "firstReport": "reports/tr-adm3/audit/istanbul-replay.json",
+  "secondReport": ".territory/quality-source-audit/istanbul-replay-second.json",
+  "secondReportSha256": "05a828da8b460ef8ed38a15332b17462c029f5c53961bf4addbb2565bc6f32ba"
+}

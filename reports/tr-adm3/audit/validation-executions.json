@@ -1,0 +1,276 @@
+{
+  "environment": {
+    "node": "v24.14.0",
+    "pnpm": "11.7.0",
+    "timezone": "Europe/Istanbul",
+    "date": "2026-10-08"
+  },
+  "executions": [
+    {
+      "command": "pnpm --filter @territory-kit/cli exec vitest run test/turkey-adm3-ingestion.test.ts test/turkey-v2-national.test.ts test/turkey-osm.test.ts",
+      "exitCode": 0,
+      "durationSeconds": 1.534,
+      "logPath": ".territory/quality-source-audit/scoped-cli.log",
+      "logSha256": "4f8e369d76bb0b04b3edda748fd23be36a28ae6573db2d721213a4623ff11c60",
+      "logBytes": 610
+    },
+    {
+      "command": "node --max-old-space-size=8192 packages/cli/dist/index.mjs tr v2 national validate --output .territory/sprint-6/final/candidate --publish-ready",
+      "exitCode": 0,
+      "durationSeconds": 7.186,
+      "logPath": ".territory/quality-source-audit/national-validation.log",
+      "logSha256": "b5fe1d5259e22f58cdc7584cd068fa2716f88d694fc3fb8e9ed64be56d097a18",
+      "logBytes": 616
+    },
+    {
+      "command": "node --max-old-space-size=8192 scripts/tr-adm3-quality-source-audit.mjs",
+      "exitCode": 0,
+      "durationSeconds": 3.004,
+      "logPath": ".territory/quality-source-audit/coverage.log",
+      "logSha256": "fd5846bccaf9f5971d526e87b24c89f6b5e846a3bff225288b2bf29619606de7",
+      "logBytes": 368
+    },
+    {
+      "command": "node --max-old-space-size=8192 scripts/tr-adm3-audit-evidence.mjs",
+      "exitCode": 0,
+      "durationSeconds": 10.223,
+      "logPath": ".territory/quality-source-audit/evidence.log",
+      "logSha256": "24f1b35eff1a674a92361f206f09571112f82074306eb91b1578302d1c3a1388",
+      "logBytes": 1033
+    },
+    {
+      "command": "ISTANBUL_QA_DISTRICT=\"Fatih,Ey\u00fcpsultan,Prince Islands\" ISTANBUL_QA_ARTIFACT_ROOT=.territory/quality-source-audit/istanbul-replay ISTANBUL_QA_REPORT=reports/tr-adm3/audit/istanbul-replay.json node --max-old-space-size=8192 scripts/sprint-6-istanbul-qa.mjs",
+      "exitCode": 0,
+      "durationSeconds": 19.913,
+      "logPath": ".territory/quality-source-audit/istanbul-replay.log",
+      "logSha256": "e50add4314c9449023c3f902b0b058ba35c027729592d0f6f3cc60cde3a27d45",
+      "logBytes": 85
+    },
+    {
+      "command": "ISTANBUL_QA_DISTRICT=\"Fatih,Ey\u00fcpsultan,Prince Islands\" ISTANBUL_QA_ARTIFACT_ROOT=.territory/quality-source-audit/istanbul-replay-second ISTANBUL_QA_REPORT=.territory/quality-source-audit/istanbul-replay-second.json node --max-old-space-size=8192 scripts/sprint-6-istanbul-qa.mjs",
+      "exitCode": 0,
+      "durationSeconds": 19.872,
+      "logPath": ".territory/quality-source-audit/istanbul-replay-second.log",
+      "logSha256": "2a606a8ceb94db54504041b41b54d41df5dbad6e48b710653f09cb67ccb0ff3a",
+      "logBytes": 85
+    },
+    {
+      "command": "pnpm verify",
+      "exitCode": 0,
+      "durationSeconds": 41.765,
+      "logPath": ".territory/quality-source-audit/verify.log",
+      "logSha256": "924bd65151f371300943d7a33465a669fadd72424fce49afa386a4bd781a90ea",
+      "logBytes": 189807
+    },
+    {
+      "command": "pnpm --filter @territory-kit/generators exec vitest run test/turkey-adm3-ingestion.test.ts test/turkey-adm3-osm.test.ts test/turkey-smart-fallback.test.ts test/turkey-smart-precision.test.ts test/turkey-organic-routing.test.ts test/turkey-organic-smart.test.ts test/turkey-network-faces.test.ts test/turkey-v2-national.test.ts test/turkey-v2-hybrid.test.ts test/turkey-v2-delivery.test.ts test/render-artifacts.test.ts",
+      "exitCode": 0,
+      "vitestDurationSeconds": 1.55,
+      "processDurationSeconds": null,
+      "passingTests": 122,
+      "failingTests": 0,
+      "logPath": ".territory/quality-source-audit/scoped-generators.log",
+      "logSha256": "d147935e169cfa9b71b7153d54b51b43272ca44a24104f45cd36a46e45a31172"
+    },
+    {
+      "command": "pnpm --filter @territory-kit/dataset exec vitest run test/geometry-quality.test.ts test/turkey-v2.test.ts",
+      "exitCode": 0,
+      "vitestDurationSeconds": 0.228,
+      "processDurationSeconds": null,
+      "passingTests": 17,
+      "failingTests": 0,
+      "logPath": ".territory/quality-source-audit/scoped-dataset.log",
+      "logSha256": "2379632892e2f741203510508df4392384f407e474a5de719121a9a3ea632278"
+    }
+  ],
+  "auditRegressionTests": {
+    "localVerifySnapshot": {
+      "date": "2026-10-08",
+      "command": "node --test scripts/tr-adm3-quality-source-audit.test.mjs",
+      "passing": 5,
+      "note": "Embedded in first pnpm verify on this branch; count preserved as historical evidence."
+    },
+    "timeline": [
+      {
+        "phase": "initial_local_audit",
+        "date": "2026-10-08",
+        "command": "node --test scripts/tr-adm3-quality-source-audit.test.mjs",
+        "passing": 5,
+        "source": "verifyTests.nodeAuditPassing"
+      },
+      {
+        "phase": "first_ci_hotfix",
+        "pr": 100,
+        "headSha": "87b010d9552fde08061b596727c4d41edd5ae982",
+        "workflowRunId": 37828925320,
+        "workflowRunUrl": "https://github.com/mberatkaya/TerritoryKit/actions/runs/37828925320",
+        "command": "pnpm data:tr:adm3:audit:test",
+        "passing": 11,
+        "note": "Node 24 pnpm verify job in run 37828925320; parent-registry clean-checkout fallback."
+      },
+      {
+        "phase": "final_hardening",
+        "pr": 100,
+        "headSha": "8fb43541930d441d486d333359a4a820257e005f",
+        "workflowRunId": 37830204354,
+        "workflowRunUrl": "https://github.com/mberatkaya/TerritoryKit/actions/runs/37830204354",
+        "command": "pnpm data:tr:adm3:audit:test",
+        "passing": 13,
+        "note": "Node 24 pnpm verify job in run 37830204354; ADM1 lookup-ref and parent-geometry guard tests."
+      }
+    ]
+  },
+  "verifyTests": {
+    "vitestPassing": 663,
+    "vitestSkipped": 3,
+    "nodeSecurityPassing": 10,
+    "nodeReleaseBenchmarkPassing": 3,
+    "nodeAuditPassing": 5,
+    "failing": 0,
+    "cachedTestTasks": [],
+    "turboCacheNote": "14 cached dependency/build tasks; no test tasks replayed from cache",
+    "packages": [
+      {
+        "package": "@territory-kit/shared-testkit",
+        "passed": 1,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/adapter-core",
+        "passed": 13,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/data-jp",
+        "passed": 1,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/game",
+        "passed": 14,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/data-id",
+        "passed": 1,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/registry",
+        "passed": 12,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/dataset",
+        "passed": 70,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/nestjs",
+        "passed": 9,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/core",
+        "passed": 69,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/data-us",
+        "passed": 1,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/data-de",
+        "passed": 1,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/migration",
+        "passed": 4,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/data-tr",
+        "passed": 5,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/runtime",
+        "passed": 79,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/react-native",
+        "passed": 10,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/maplibre",
+        "passed": 16,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/openlayers",
+        "passed": 8,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/leaflet",
+        "passed": 8,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/example-web-maplibre-turkey",
+        "passed": 16,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/cli",
+        "passed": 56,
+        "skipped": 0
+      },
+      {
+        "package": "@territory-kit/generators",
+        "passed": 269,
+        "skipped": 3
+      }
+    ]
+  },
+  "initialFailures": [
+    {
+      "command": "first node scripts/tr-adm3-audit-evidence.mjs development run",
+      "exitCode": 130,
+      "reason": "Interrupted quadratic ring-canonicalization helper; replaced in reporting only and rerun",
+      "durationSeconds": null
+    },
+    {
+      "command": "node scripts/tr-adm3-quality-source-audit.mjs --artifact-root .territory/quality-source-audit/missing-candidate --output .territory/quality-source-audit/missing-report",
+      "exitCode": 1,
+      "reason": "Missing provinceCode fallback from canonical parent; fixed and end-to-end regression passed",
+      "durationSeconds": null
+    },
+    {
+      "command": "development inline replay geometry comparison",
+      "exitCode": 1,
+      "reason": "Existing QA slug normalizes Prince Islands to prince-slands; corrected input path and rerun",
+      "durationSeconds": null
+    }
+  ],
+  "finalChecks": [
+    {
+      "command": "pnpm exec prettier --check package.json scripts/tr-adm3-quality-source-audit.mjs scripts/tr-adm3-quality-source-audit.test.mjs scripts/tr-adm3-audit-evidence.mjs reports/tr-adm3/audit",
+      "exitCode": 0,
+      "durationSeconds": 1.751,
+      "logPath": ".territory/quality-source-audit/final-format.log",
+      "logSha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "git diff --cached --check",
+      "exitCode": 0,
+      "durationSeconds": 0.012,
+      "logPath": ".territory/quality-source-audit/final-diff.log",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

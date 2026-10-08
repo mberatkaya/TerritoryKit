@@ -1,0 +1,46 @@
+[
+  {
+    "url": "https://acikveri.kadikoy.bel.tr/dataset/1f49bf03-cea5-40b9-9604-5f71c6f71e22/resource/c7a8a9dc-c78f-417a-9e2c-42ec4d3436e7/download/mahalle_sinir.shp",
+    "curlExitCode": 0,
+    "response": "200 application/x-qgis",
+    "stderr": "",
+    "byteSize": 103260,
+    "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+    "shpRecordCount": 21,
+    "shapeType": 5,
+    "bbox": [417104.4508999996, 4535415.4835, 425179.8920999998, 4542385.7568],
+    "parsedEnd": 103260
+  },
+  {
+    "url": "https://acikveri.kadikoy.bel.tr/dataset/1f49bf03-cea5-40b9-9604-5f71c6f71e22/resource/c7a8a9dc-c78f-417a-9e2c-42ec4d3436e7/download/mahalle_sinir.shx",
+    "curlExitCode": 0,
+    "response": "200 application/x-qgis",
+    "stderr": "",
+    "byteSize": 103260,
+    "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946"
+  },
+  {
+    "url": "https://acikveri.kadikoy.bel.tr/dataset/1f49bf03-cea5-40b9-9604-5f71c6f71e22/resource/c7a8a9dc-c78f-417a-9e2c-42ec4d3436e7/download/mahalle_sinir.dbf",
+    "curlExitCode": 0,
+    "response": "200 application/x-qgis",
+    "stderr": "",
+    "byteSize": 103260,
+    "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946"
+  },
+  {
+    "url": "https://acikveri.kadikoy.bel.tr/dataset/1f49bf03-cea5-40b9-9604-5f71c6f71e22/resource/c7a8a9dc-c78f-417a-9e2c-42ec4d3436e7/download/mahalle_sinir.prj",
+    "curlExitCode": 0,
+    "response": "200 application/x-qgis",
+    "stderr": "",
+    "byteSize": 103260,
+    "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946"
+  },
+  {
+    "url": "https://acikveri.kadikoy.bel.tr/dataset/1f49bf03-cea5-40b9-9604-5f71c6f71e22/resource/c7a8a9dc-c78f-417a-9e2c-42ec4d3436e7/download/mahalle_sinir.cpg",
+    "curlExitCode": 0,
+    "response": "200 application/x-qgis",
+    "stderr": "",
+    "byteSize": 103260,
+    "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946"
+  }
+]
