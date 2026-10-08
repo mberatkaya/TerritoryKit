@@ -438,7 +438,7 @@ export function analyzeGeoBoundariesFeatureCollection(
   const rawGeoJsonFeatureCount = input.features.length;
   const shapeIds = new Set<string>();
   let duplicateShapeIdCount = 0;
-  const features = input.features.flatMap((rawFeature, index): ParsedGeoBoundariesFeature[] => {
+  const features = input.features.flatMap((rawFeature): ParsedGeoBoundariesFeature[] => {
     if (!isRecord(rawFeature)) {
       incrementReason(rejectionReasons, "feature_not_object");
       return [];
@@ -483,10 +483,6 @@ export function analyzeGeoBoundariesFeatureCollection(
     duplicateShapeIdCount,
     features
   };
-}
-
-function readGeoBoundariesFeaturesFromCollection(input: unknown): ParsedGeoBoundariesFeature[] {
-  return analyzeGeoBoundariesFeatureCollection(input).features;
 }
 
 async function compareGeoBoundariesLevelToParent(input: {
