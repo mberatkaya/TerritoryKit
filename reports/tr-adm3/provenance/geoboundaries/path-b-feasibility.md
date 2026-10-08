@@ -1,7 +1,7 @@
 # Path B (geoBoundaries metadata realignment) feasibility
 
-**İnceleme commit:** `5dfcd996c03bf9582ed33031a8ede40456a500be`  
-**Üretim zamanı (UTC):** 2026-10-08T21:39:31.356Z  
+**İnceleme commit:** `aac6e86c8e29d02da9acb6ec8a5e24216815eb10`  
+**Üretim zamanı (UTC):** 2026-10-08T21:42:56.729Z  
 **Sınıflandırma:** `PATH_B_PARTIALLY_VERIFIED`
 
 ## Özet
@@ -10,12 +10,12 @@ Source-native identities align and bytes are pinned, but serialized geometry has
 
 ## Kanıt durumu
 
-| Alan                           | Durum                                             |
-| ------------------------------ | ------------------------------------------------- |
-| geoBoundaries bayt doğrulaması | EVET                                              |
-| Ebeveyn envanter               | COMPLETE                                          |
-| Lisans inceleme                | documented-cc-by-4.0-gbopen                       |
-| Resmî devlet verisi iddiası    | Hayır — geoBoundaries açık veri sınırları geçerli |
+| Alan | Durum |
+| --- | --- |
+| geoBoundaries bayt doğrulaması | EVET |
+| Ebeveyn envanter | COMPLETE |
+| Lisans inceleme | documented-cc-by-4.0-gbopen |
+| Resmî devlet verisi iddiası | Hayır — geoBoundaries açık veri sınırları geçerli |
 
 ## Eksik kanıt
 
