@@ -98,6 +98,25 @@ export {
   createTurkeyV2ZoneMigrationPlan
 } from "./turkey-v2-hybrid.js";
 export {
+  TURKEY_PARENT_PROVENANCE_SCHEMA_VERSION,
+  TURKEY_V2_ADM_PARENT_LEVELS,
+  auditGeometryHash,
+  createTurkeyParentInputDatasetLock,
+  inspectTurkeyParentProvenance,
+  verifyTurkeyParentProvenance
+} from "./turkey-parent-provenance.js";
+export type {
+  InspectTurkeyParentProvenanceOptions,
+  TurkeyNationalSourceCatalog,
+  TurkeyParentHdxGeometryComparison,
+  TurkeyParentHdxMemberPaths,
+  TurkeyParentLineageClassification,
+  TurkeyParentProvenanceInspection,
+  TurkeyParentProvenanceIssue,
+  TurkeyParentProvenanceVerification,
+  TurkeyV2AdmParentLevel
+} from "./turkey-parent-provenance.js";
+export {
   TURKEY_V2_ADM0_EXPECTED_COUNT,
   TURKEY_V2_ADM1_EXPECTED_COUNT,
   TURKEY_V2_ADM2_EXPECTED_COUNT,

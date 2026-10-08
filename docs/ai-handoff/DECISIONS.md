@@ -39,11 +39,11 @@ Lightweight ADR companion. Full ADRs remain in `adr/` and `docs/adr/`. Status me
 
 ### DEC-003: Parent geometry provenance on canonical dataset vs source-lock
 
-- **Status:** Open
+- **Status:** Open (root cause confirmed 2026-10-08; migration decision pending)
 - **Context:** Audit #100 recorded ADM0–ADM2 canonical records with `geoboundaries` provenance while source-lock/national catalog describe HDX COD-AB.
-- **Decision:** Unresolved — must determine actual input bytes and align metadata or re-import parents.
-- **Evidence:** `reports/tr-adm3/audit/current-state.md` (§ Confirmed differences), `datasets/registry/countries.json` (TR `defaultProvider`), `datasets/sources/TR/national.json`
-- **Consequences:** Replay builds cannot claim clean HDX lineage until resolved (`CURRENT_MILESTONE.md`).
+- **Decision:** Canonical parent polygons in `datasets/generated/countries/TR/dataset.json` are geoBoundaries-sourced bytes. HDX COD-AB members in `national.json` are verified locally but **do not** match those parent geometries. National v2 builds copied HDX catalog into `source-lock` without ingesting those members for ADM0–ADM2.
+- **Evidence:** `reports/tr-adm3/provenance/parent-lineage.json`, `geometry-comparison.json`, `source-verification.json`; `packages/cli/src/turkey-v2-national.ts` (`DEFAULT_ADM0_ADM2_DATASET` vs `DEFAULT_NATIONAL_SOURCE`)
+- **Consequences:** Replay builds cannot claim HDX lineage until Path A/B migration in `CURRENT_MILESTONE.md`. CLI now fails closed on provider mismatch unless `--allow-parent-provenance-mismatch`.
 
 ### DEC-004: No H3 / hex grid as admin substitute
 

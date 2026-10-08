@@ -107,6 +107,15 @@ export type TurkeyV2Adm3AvailabilityReasonCode =
   | "no-adm3-zones-built"
   | "quality-gate-failed";
 
+export interface TurkeyV2NationalParentInputDatasetLock {
+  catalogProvider: string;
+  observedDominantProvider: string | null;
+  lineageStatus: string;
+  catalogGeometryStatus: string;
+  zoneCounts: { ADM0: number; ADM1: number; ADM2: number };
+  classification: string;
+}
+
 export interface TurkeyV2NationalSourceLock {
   schemaVersion: typeof TURKEY_V2_NATIONAL_SOURCE_LOCK_SCHEMA_VERSION;
   datasetId: string;
@@ -114,6 +123,7 @@ export interface TurkeyV2NationalSourceLock {
   buildDate: string;
   sourceLockVersion: "1";
   adm0Adm2: TurkeyV2NationalAdmSourceLock;
+  parentInputDataset?: TurkeyV2NationalParentInputDatasetLock;
   officialAdm3: TurkeyV2NationalRealSourceLock;
   osm: TurkeyV2NationalOsmSourceLock;
   generated: TurkeyV2NationalGeneratedSourceLock;
@@ -536,6 +546,7 @@ export function createTurkeyV2NationalSourceLock(input: {
   adm0Adm2: Omit<TurkeyV2NationalAdmSourceLock, "levels"> & {
     levels: TurkeyV2NationalAdmSourceLock["levels"];
   };
+  parentInputDataset?: TurkeyV2NationalParentInputDatasetLock;
   buildDate: string;
   datasetVersion?: string;
   officialAdm3?: Omit<TurkeyV2NationalRealSourceLock, "status" | "loadedZoneCount"> & {
@@ -566,6 +577,7 @@ export function createTurkeyV2NationalSourceLock(input: {
     buildDate: input.buildDate,
     sourceLockVersion: "1" as const,
     adm0Adm2: input.adm0Adm2,
+    ...(input.parentInputDataset ? { parentInputDataset: input.parentInputDataset } : {}),
     officialAdm3: {
       status: input.officialAdm3?.status ?? "not-built",
       approvedProviderCount: input.officialAdm3?.approvedProviderCount ?? 0,

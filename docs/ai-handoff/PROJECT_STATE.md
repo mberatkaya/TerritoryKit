@@ -1,46 +1,40 @@
 # Project state snapshot
 
-**Observation time (UTC):** 2026-10-08 (session establishing this handoff)  
-**Verified `origin/main` commit:** `9a04a91` — _Audit Türkiye ADM3 coverage, source fidelity and Istanbul geometry (#100)_  
-**Package versions on main:** `3.1.0` (workspace packages, e.g. `@territory-kit/core`)
+**Observation time (UTC):** 2026-10-08 (TR ADM0–ADM2 parent provenance sprint)  
+**Verified `origin/main` base:** `553b4e4` — _chore(cursor): establish persistent engineering rules and handoff (#102)_  
+**Sprint branch:** `fix/tr-parent-provenance-lineage` (in progress; not merged)
 
-> This file does not auto-sync with GitHub. Re-run `git fetch origin main && git log -1 origin/main` before relying on it.
+> Re-run `git fetch origin main && git log -1 origin/main` before production decisions.
 
 ## Recent merged work (GitHub-verified)
 
 | PR   | Title                                                                  | Merged (UTC) |
 | ---- | ---------------------------------------------------------------------- | ------------ |
+| #102 | chore(cursor): establish persistent engineering rules and handoff      | 2026-10-08   |
 | #100 | Audit Türkiye ADM3 coverage, source fidelity and Istanbul geometry     | 2026-10-08   |
 | #94  | Make delivery and render manifests match verified geographic artifacts | 2026-10-08   |
 
-**Intentionally closed without merge (not active work):** #95–#99 (Dependabot), #101 (Version Packages / release).
+## Türkiye ADM0–ADM2 parent lineage (byte-verified on sprint branch)
 
-**Open PRs:** none at observation time.
+| Evidence                                                                    | Finding                                                                                                              |
+| --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `datasets/generated/countries/TR/dataset.json` (v0.1.0)                     | ADM0–ADM2 zones declare `geoboundaries` on `properties.territory.source.provider`                                    |
+| `datasets/sources/TR/national.json` + rc.7 `source-lock.json`               | Catalog/lock provider `hdx-cod-ab` with pinned ZIP member SHA-256                                                    |
+| Local HDX member cache (`.territory/cache/sources/hdx-cod-ab/…`)            | Members `tur_admin{0,1,2}.geojson` **LOCKED_BYTES_VERIFIED** against `national.json`                                 |
+| Geometry comparison (`reports/tr-adm3/provenance/geometry-comparison.json`) | **0** exact hash matches on name-paired features; ADM1 67/67 mismatches among 67 pairs; ADM2 731/731 among 731 pairs |
+| National v2 CLI default path                                                | Loads geoBoundaries parent dataset, writes HDX catalog into `source-lock` without polygon-byte verification          |
+
+**Classification:** `CONFIRMED_ROOT_CAUSE` — metadata/source-lock describes HDX; canonical parent polygons are geoBoundaries-derived bytes, not locked HDX members.
+
+**Not changed in sprint:** canonical geometry bytes, stable territory IDs, ADM3 polygons, or `national.json` checksums.
 
 ## Engineering maturity
 
-- TypeScript monorepo with enforced package boundaries, Turbo tasks, Vitest, Changesets release path.
-- Turkey ADM3: national pipeline, audit evidence, regression test `pnpm data:tr:adm3:audit:test`; full audit script `pnpm data:tr:adm3:audit` (heavy, local artifacts).
-- Delivery/render manifest alignment landed in #94; audit documentation and checks in #100.
+- Parent provenance inspection module: `packages/generators/src/turkey-parent-provenance.ts`
+- National `tr v2 national plan|build` fails closed on provider mismatch (escape hatch: `--allow-parent-provenance-mismatch`)
+- Audit evidence: `reports/tr-adm3/provenance/`
+- Regression: `pnpm data:tr:adm3:audit:test` includes `scripts/tr-parent-provenance-audit.test.mjs`
 
-## Quality limitations (evidence-scoped)
+## Quality limitations (unchanged)
 
-From `reports/tr-adm3/audit/current-state.md` (local **release candidate** `2.1.0-rc.7`, scope `LOCAL_RELEASE_CANDIDATE_NOT_PRODUCTION`):
-
-- ADM3 counts (candidate): 20,392 zones — official 3,343, OSM admin 0, generated 17,049.
-- Official polygons concentrated in 61 districts (Bursa, Gaziantep, Kayseri, Ordu).
-- Effective official area share ~4.997% of national ADM3 area (spherical sum; not union coverage).
-- Parent metadata mismatch: canonical ADM0–ADM2 records use `geoboundaries` provenance while national source-lock/catalog describes HDX COD-AB — **unresolved lineage** (see `CURRENT_MILESTONE.md`).
-- Mobile/hosted consumer artifact selection: **NOT_OBSERVED** in audit.
-
-## External prerequisites
-
-- Full national rebuilds may require `.territory/` caches, OSM PBF locks, and HDX ZIP source locks (not all committed to Git).
-- PostGIS live validation needs Docker/PostGIS or `TERRITORYKIT_POSTGIS_URL` for local `pnpm postgis:validate`.
-
-## Production blockers (documented, not closed)
-
-- ADM0–ADM2 parent byte lineage vs metadata attribution.
-- Incomplete official ADM3 nationwide coverage; Kadıköy official bundle gaps (SHP-only records insufficient per audit).
-- Istanbul geometry realism (e.g. Eyüpsultan `NO_ROUTE` / unsupported seam evidence in audit JSON).
-- Consumer/deployed artifact verification outside this repository.
+ADM3 nationwide official coverage, Istanbul geometry defects, and consumer artifact verification remain as documented in `reports/tr-adm3/audit/current-state.md`.
