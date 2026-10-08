@@ -1,4 +1,7 @@
 import { createHash } from "node:crypto";
+import { createReadStream } from "node:fs";
+import { readdir, stat } from "node:fs/promises";
+import path from "node:path";
 import type { TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
 import { sha256Hex, serializeJsonStable } from "./sources/utils.js";
 
@@ -112,7 +115,8 @@ export type TurkeyParentProvenanceIssueCode =
   | "PARENT_PROVENANCE_MEMBER_CHECKSUM_MISMATCH"
   | "PARENT_PROVENANCE_INVENTORY_INCOMPLETE"
   | "PARENT_PROVENANCE_SERIALIZED_GEOMETRY_DIFFERS"
-  | "PARENT_PROVENANCE_PUBLISH_BYPASS_FORBIDDEN";
+  | "PARENT_PROVENANCE_PUBLISH_BYPASS_FORBIDDEN"
+  | "PARENT_PROVENANCE_PUBLISH_LINEAGE_INSUFFICIENT";
 
 export interface TurkeyParentProvenanceIssue {
   code: TurkeyParentProvenanceIssueCode;
@@ -160,7 +164,24 @@ export interface InspectTurkeyParentProvenanceOptions {
 export interface VerifyTurkeyParentProvenanceOptions {
   allowUndeclaredParentSource?: boolean;
   allowProvenanceMismatchBypass?: boolean;
+  /** Development-only: do not treat partial ADM0–ADM2 inventory as blocking national build. */
+  allowPartialParentInventory?: boolean;
   purpose?: "diagnostic" | "national-build" | "publish-ready" | "audit-report";
+}
+
+export interface TurkeyHdxCatalogMemberByteReport {
+  status: TurkeyParentHdxMemberByteStatus;
+  path?: string;
+  sha256?: string;
+  byteSize?: number;
+  expectedSha256: string;
+  expectedByteSize: number;
+  archiveMember: string;
+}
+
+export interface VerifyTurkeyNationalCatalogHdxMemberBytesResult {
+  verifiedHdxMembers: Partial<Record<TurkeyV2AdmParentLevel, TurkeyParentVerifiedHdxMember>>;
+  members: Partial<Record<TurkeyV2AdmParentLevel, TurkeyHdxCatalogMemberByteReport>>;
 }
 
 const LEVEL_TO_NUMBER: Record<TurkeyV2AdmParentLevel, number> = {
@@ -233,12 +254,106 @@ function summarizeProviders(dataset: TerritoryDataset): TurkeyParentProviderSumm
   });
 }
 
+async function sha256FilePath(filePath: string): Promise<string> {
+  const hash = createHash("sha256");
+  for await (const chunk of createReadStream(filePath)) {
+    hash.update(chunk);
+  }
+  return hash.digest("hex");
+}
+
+export async function findHdxMemberInCacheRoot(
+  cacheRoot: string,
+  memberName: string
+): Promise<string | null> {
+  try {
+    for (const entry of await readdir(cacheRoot, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const candidate = path.join(cacheRoot, entry.name, memberName);
+      try {
+        await stat(candidate);
+        return candidate;
+      } catch {
+        // continue
+      }
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
+export async function verifyTurkeyNationalCatalogHdxMemberBytes(
+  catalog: TurkeyNationalSourceCatalog,
+  memberPaths: Partial<TurkeyParentHdxMemberPaths>
+): Promise<VerifyTurkeyNationalCatalogHdxMemberBytesResult> {
+  const verifiedHdxMembers: Partial<Record<TurkeyV2AdmParentLevel, TurkeyParentVerifiedHdxMember>> =
+    {};
+  const members: Partial<Record<TurkeyV2AdmParentLevel, TurkeyHdxCatalogMemberByteReport>> = {};
+
+  for (const level of TURKEY_V2_ADM_PARENT_LEVELS) {
+    const meta = catalog.levels[level];
+    if (!meta) {
+      continue;
+    }
+    const localPath = memberPaths[level];
+    if (!localPath) {
+      members[level] = {
+        status: "ARTIFACT_NOT_AVAILABLE",
+        expectedSha256: meta.sha256,
+        expectedByteSize: meta.byteSize,
+        archiveMember: meta.archiveMember
+      };
+      verifiedHdxMembers[level] = { status: "ARTIFACT_NOT_AVAILABLE" };
+      continue;
+    }
+    const sha256 = await sha256FilePath(localPath);
+    const byteSize = (await stat(localPath)).size;
+    const status: TurkeyParentHdxMemberByteStatus =
+      sha256 === meta.sha256 && byteSize === meta.byteSize
+        ? "LOCKED_BYTES_VERIFIED"
+        : "CHECKSUM_MISMATCH";
+    members[level] = {
+      status,
+      path: localPath,
+      sha256,
+      byteSize,
+      expectedSha256: meta.sha256,
+      expectedByteSize: meta.byteSize,
+      archiveMember: meta.archiveMember
+    };
+    verifiedHdxMembers[level] = { status, sha256, byteSize };
+  }
+
+  return { verifiedHdxMembers, members };
+}
+
 function resolveParentInventoryStatus(
+  dataset: TerritoryDataset,
   summaries: TurkeyParentProviderSummary[],
   requireFull: boolean
 ): TurkeyParentInventoryStatus {
   if (summaries.some((summary) => summary.zoneCount === 0)) {
     return "MISSING_LEVEL";
+  }
+  for (const level of TURKEY_V2_ADM_PARENT_LEVELS) {
+    const zones = zonesForLevel(dataset, level);
+    const ids = zones.map((zone) => zone.id);
+    if (new Set(ids).size !== ids.length) {
+      return "INCOMPLETE";
+    }
+  }
+  const adm1Ids = new Set(zonesForLevel(dataset, "ADM1").map((zone) => zone.id));
+  const adm0Ids = new Set(zonesForLevel(dataset, "ADM0").map((zone) => zone.id));
+  for (const zone of zonesForLevel(dataset, "ADM2")) {
+    if (!zone.parentId || !adm1Ids.has(zone.parentId)) {
+      return "INCOMPLETE";
+    }
+  }
+  for (const zone of zonesForLevel(dataset, "ADM1")) {
+    if (zone.parentId && !adm0Ids.has(zone.parentId)) {
+      return "INCOMPLETE";
+    }
   }
   if (!requireFull) {
     return "COMPLETE";
@@ -418,7 +533,11 @@ export async function inspectTurkeyParentProvenance(
     zonesForLevel(options.parentDataset, "ADM2").length === TURKEY_PARENT_INVENTORY_EXPECTED.ADM2;
 
   const providerSummary = summarizeProviders(options.parentDataset);
-  const parentInventoryStatus = resolveParentInventoryStatus(providerSummary, requireFull);
+  const parentInventoryStatus = resolveParentInventoryStatus(
+    options.parentDataset,
+    providerSummary,
+    requireFull
+  );
   const providerMetadataStatus = resolveProviderMetadataStatus({
     catalogProvider: options.catalog.provider,
     summaries: providerSummary,
@@ -653,7 +772,10 @@ export function verifyTurkeyParentProvenance(
   }
 
   if (inspection.parentInventoryStatus !== "COMPLETE") {
-    if (purpose === "national-build" || purpose === "publish-ready" || purpose === "audit-report") {
+    if (
+      (purpose === "national-build" || purpose === "publish-ready" || purpose === "audit-report") &&
+      !options.allowPartialParentInventory
+    ) {
       issues.push({
         code: "PARENT_PROVENANCE_INVENTORY_INCOMPLETE",
         severity: purpose === "audit-report" ? "warning" : "error",
@@ -702,15 +824,120 @@ export function verifyTurkeyParentProvenance(
     });
   }
 
-  const ok = issues.every((issue) => issue.severity !== "error");
+  const authorizedForNationalBuild = computeAuthorizedForNationalBuild(inspection, issues, options);
+  const authorizedForPublishReady = computeAuthorizedForPublishReady(inspection, issues, options);
+
+  if (purpose === "publish-ready" && !authorizedForPublishReady) {
+    const hasOtherPublishBlockingError = issues.some(
+      (issue) =>
+        issue.severity === "error" &&
+        issue.code !== "PARENT_PROVENANCE_PUBLISH_LINEAGE_INSUFFICIENT"
+    );
+    if (!hasOtherPublishBlockingError) {
+      issues.push({
+        code: "PARENT_PROVENANCE_PUBLISH_LINEAGE_INSUFFICIENT",
+        severity: "error",
+        message:
+          "Publish-ready builds require verified parent lineage: matching provider metadata, all locked HDX member bytes, complete national inventory, and exact serialized geometry agreement between verified members and parent polygons."
+      });
+    }
+  }
+
+  const ok =
+    purpose === "diagnostic"
+      ? issues.every((issue) => issue.severity !== "error")
+      : purpose === "publish-ready"
+        ? authorizedForPublishReady
+        : authorizedForNationalBuild;
 
   return {
     ok,
-    authorizedForNationalBuild: ok,
-    authorizedForPublishReady: ok,
+    authorizedForNationalBuild,
+    authorizedForPublishReady,
     inspection,
     issues
   };
+}
+
+function computeAuthorizedForNationalBuild(
+  inspection: TurkeyParentProvenanceInspection,
+  issues: TurkeyParentProvenanceIssue[],
+  options: VerifyTurkeyParentProvenanceOptions
+): boolean {
+  if (purposeBlocksNationalBuild(options)) {
+    return false;
+  }
+
+  const blockingErrors = issues.filter((issue) => {
+    if (issue.severity !== "error") {
+      return false;
+    }
+    if (
+      issue.code === "PARENT_PROVENANCE_PROVIDER_MISMATCH" &&
+      options.allowProvenanceMismatchBypass
+    ) {
+      return false;
+    }
+    if (
+      issue.code === "PARENT_PROVENANCE_INVENTORY_INCOMPLETE" &&
+      options.allowPartialParentInventory
+    ) {
+      return false;
+    }
+    if (issue.code === "PARENT_PROVENANCE_PUBLISH_LINEAGE_INSUFFICIENT") {
+      return false;
+    }
+    return true;
+  });
+  if (blockingErrors.length > 0) {
+    return false;
+  }
+
+  if (inspection.providerMetadataStatus === "CATALOG_LOCK_DIFFERS_FROM_PARENT_POLYGONS") {
+    return options.allowProvenanceMismatchBypass === true;
+  }
+
+  if (inspection.providerMetadataStatus === "PROVIDER_METADATA_MATCHES_CATALOG") {
+    if (inspection.sourceByteVerificationStatus !== "ALL_LOCKED_MEMBERS_VERIFIED") {
+      return false;
+    }
+  }
+
+  if (!options.allowPartialParentInventory && inspection.parentInventoryStatus !== "COMPLETE") {
+    return false;
+  }
+
+  return true;
+}
+
+function computeAuthorizedForPublishReady(
+  inspection: TurkeyParentProvenanceInspection,
+  issues: TurkeyParentProvenanceIssue[],
+  options: VerifyTurkeyParentProvenanceOptions
+): boolean {
+  if (options.allowProvenanceMismatchBypass) {
+    return false;
+  }
+  if (issues.some((issue) => issue.severity === "error")) {
+    return false;
+  }
+  if (inspection.parentInventoryStatus !== "COMPLETE") {
+    return false;
+  }
+  if (inspection.providerMetadataStatus !== "PROVIDER_METADATA_MATCHES_CATALOG") {
+    return false;
+  }
+  if (inspection.sourceByteVerificationStatus !== "ALL_LOCKED_MEMBERS_VERIFIED") {
+    return false;
+  }
+  if (inspection.serializedGeometryStatus !== "ALL_SERIALIZED_HASHES_MATCH") {
+    return false;
+  }
+  return true;
+}
+
+function purposeBlocksNationalBuild(options: VerifyTurkeyParentProvenanceOptions): boolean {
+  return options.purpose === "publish-ready" && options.allowProvenanceMismatchBypass === true;
 }
 
 export function createTurkeyParentInputDatasetLock(

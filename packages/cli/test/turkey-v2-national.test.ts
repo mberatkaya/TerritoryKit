@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { access, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -130,7 +131,8 @@ describe("territory cli Turkey V2 national build", () => {
         join(tempDir, "missing-official.json"),
         "--osm-artifact",
         join(tempDir, "missing-osm.json"),
-        "--allow-parent-provenance-mismatch"
+        "--allow-parent-provenance-mismatch",
+        "--allow-partial-parent-inventory"
       ]);
 
       expect(result).toMatchObject({
@@ -191,7 +193,8 @@ describe("territory cli Turkey V2 national build", () => {
         "1",
         "--seed",
         "cli-national-seed",
-        "--allow-parent-provenance-mismatch"
+        "--allow-parent-provenance-mismatch",
+        "--allow-partial-parent-inventory"
       ]);
 
       expect(build).toMatchObject({
@@ -333,6 +336,152 @@ describe("territory cli Turkey V2 national build", () => {
     });
   });
 
+  it("rejects geoBoundaries parent polygons on default national plan", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-prov-mismatch-"));
+    try {
+      await writeFile(join(tempDir, "adm0-adm2.json"), JSON.stringify(nationalFixture()), "utf8");
+      await writeFile(
+        join(tempDir, "national-source.json"),
+        JSON.stringify(nationalSourceMetadata()),
+        "utf8"
+      );
+      const result = await captureCli([
+        "tr",
+        "v2",
+        "national",
+        "plan",
+        "--adm0-adm2-dataset",
+        join(tempDir, "adm0-adm2.json"),
+        "--source-metadata",
+        join(tempDir, "national-source.json"),
+        "--official-artifact",
+        join(tempDir, "missing-official.json"),
+        "--osm-artifact",
+        join(tempDir, "missing-osm.json")
+      ]);
+      expect(result.code).not.toBe(0);
+      expect(result.payload).toMatchObject({
+        ok: false,
+        issues: expect.arrayContaining([
+          expect.objectContaining({ code: "PARENT_PROVENANCE_PROVIDER_MISMATCH" })
+        ])
+      });
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it("forwards pinned HDX member bytes from --hdx-member-root", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-prov-bytes-"));
+    try {
+      const { hdxRoot, sourceMeta } = await writePinnedHdxMembersForCli(tempDir);
+      const dataset = nationalFixtureWithHdxProvider();
+      await writeFile(join(tempDir, "adm0-adm2.json"), JSON.stringify(dataset), "utf8");
+      await writeFile(join(tempDir, "national-source.json"), JSON.stringify(sourceMeta), "utf8");
+      const result = await captureCli([
+        "tr",
+        "v2",
+        "national",
+        "plan",
+        "--adm0-adm2-dataset",
+        join(tempDir, "adm0-adm2.json"),
+        "--source-metadata",
+        join(tempDir, "national-source.json"),
+        "--hdx-member-root",
+        hdxRoot,
+        "--allow-partial-parent-inventory",
+        "--official-artifact",
+        join(tempDir, "missing-official.json"),
+        "--osm-artifact",
+        join(tempDir, "missing-osm.json")
+      ]);
+      expect(result).toMatchObject({ code: 0, payload: { ok: true } });
+      expect(
+        (
+          result.payload as {
+            data?: { parentProvenance?: { sourceByteVerificationStatus?: string } };
+          }
+        ).data?.parentProvenance?.sourceByteVerificationStatus
+      ).toBe("ALL_LOCKED_MEMBERS_VERIFIED");
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it("rejects corrupted HDX member bytes from --hdx-member-root", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-prov-bad-bytes-"));
+    try {
+      const { hdxRoot, sourceMeta } = await writePinnedHdxMembersForCli(tempDir);
+      const adm0Path = join(hdxRoot, sourceMeta.levels.ADM0.archiveMember);
+      await writeFile(adm0Path, "tampered", "utf8");
+      const dataset = nationalFixtureWithHdxProvider();
+      await writeFile(join(tempDir, "adm0-adm2.json"), JSON.stringify(dataset), "utf8");
+      await writeFile(join(tempDir, "national-source.json"), JSON.stringify(sourceMeta), "utf8");
+      const result = await captureCli([
+        "tr",
+        "v2",
+        "national",
+        "plan",
+        "--adm0-adm2-dataset",
+        join(tempDir, "adm0-adm2.json"),
+        "--source-metadata",
+        join(tempDir, "national-source.json"),
+        "--hdx-member-root",
+        hdxRoot,
+        "--allow-partial-parent-inventory",
+        "--official-artifact",
+        join(tempDir, "missing-official.json"),
+        "--osm-artifact",
+        join(tempDir, "missing-osm.json")
+      ]);
+      expect(result.code).not.toBe(0);
+      expect(result.payload).toMatchObject({
+        ok: false,
+        issues: expect.arrayContaining([
+          expect.objectContaining({ code: "PARENT_PROVENANCE_MEMBER_CHECKSUM_MISMATCH" })
+        ])
+      });
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it("rejects partial parent inventory without --allow-partial-parent-inventory", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-prov-partial-"));
+    try {
+      await writeFile(join(tempDir, "adm0-adm2.json"), JSON.stringify(nationalFixture()), "utf8");
+      await writeFile(
+        join(tempDir, "national-source.json"),
+        JSON.stringify(nationalSourceMetadata()),
+        "utf8"
+      );
+      const result = await captureCli([
+        "tr",
+        "v2",
+        "national",
+        "plan",
+        "--adm0-adm2-dataset",
+        join(tempDir, "adm0-adm2.json"),
+        "--source-metadata",
+        join(tempDir, "national-source.json"),
+        "--allow-parent-provenance-mismatch",
+        "--official-artifact",
+        join(tempDir, "missing-official.json"),
+        "--osm-artifact",
+        join(tempDir, "missing-osm.json")
+      ]);
+      expect(result.code).not.toBe(0);
+      expect(result.payload).toMatchObject({
+        ok: false,
+        issues: expect.arrayContaining([
+          expect.objectContaining({ code: "PARENT_PROVENANCE_INVENTORY_INCOMPLETE" })
+        ])
+      });
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
   it("reports missing and malformed validation JSON with machine-readable issues", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-cli-tr-v2-invalid-"));
     const outputPath = join(tempDir, "national");
@@ -378,6 +527,41 @@ async function captureCli(args: string[]): Promise<{ code: number; payload: unkn
   } finally {
     spy.mockRestore();
   }
+}
+
+async function writePinnedHdxMembersForCli(tempDir: string) {
+  const hdxRoot = join(tempDir, "hdx-members");
+  await mkdir(hdxRoot, { recursive: true });
+  const sourceMeta = nationalSourceMetadata();
+  for (const level of ["ADM0", "ADM1", "ADM2"] as const) {
+    const archiveMember = sourceMeta.levels[level].archiveMember;
+    const payload = `fixture-${level}-${archiveMember}`;
+    const memberPath = join(hdxRoot, archiveMember);
+    await writeFile(memberPath, payload, "utf8");
+    sourceMeta.levels[level] = {
+      ...sourceMeta.levels[level],
+      sha256: createHash("sha256").update(payload).digest("hex"),
+      byteSize: Buffer.byteLength(payload, "utf8")
+    };
+  }
+  return { hdxRoot, sourceMeta };
+}
+
+function nationalFixtureWithHdxProvider(): TerritoryDataset {
+  const fixture = nationalFixture();
+  return {
+    ...fixture,
+    zones: fixture.zones.map((entry) => ({
+      ...entry,
+      properties: {
+        ...entry.properties,
+        territory: {
+          ...(entry.properties?.territory as Record<string, unknown>),
+          source: { provider: "hdx-cod-ab", sourceId: "cli-byte-test" }
+        }
+      }
+    }))
+  };
 }
 
 function nationalSourceMetadata() {

@@ -24,9 +24,12 @@ import {
   validateTurkeyV2NationalArtifactIntegrity,
   validateTurkeyV2NationalCompleteness,
   createTurkeyParentInputDatasetLock,
+  findHdxMemberInCacheRoot,
   inspectTurkeyParentProvenance,
+  verifyTurkeyNationalCatalogHdxMemberBytes,
   verifyTurkeyParentProvenance
 } from "@territory-kit/generators/turkey-adm3";
+import type { TurkeyParentHdxMemberPaths } from "@territory-kit/generators/turkey-adm3";
 import type {
   TurkeyV2NationalAdmSourceLock,
   TurkeyV2NationalBuildResult,
@@ -1667,21 +1670,49 @@ function createCliSummary(result: TurkeyV2NationalBuildResult): Record<string, u
   };
 }
 
+async function resolveHdxMemberPathsForNationalCli(
+  source: NationalSourceMetadata,
+  flags: Map<string, string | true>
+): Promise<TurkeyParentHdxMemberPaths | undefined> {
+  const hdxRoot = getFlag(flags, "hdx-member-root");
+  if (hdxRoot && existsSync(resolve(hdxRoot))) {
+    const root = resolve(hdxRoot);
+    return {
+      ADM0: join(root, source.levels.ADM0.archiveMember),
+      ADM1: join(root, source.levels.ADM1.archiveMember),
+      ADM2: join(root, source.levels.ADM2.archiveMember)
+    };
+  }
+  const cacheRoot = join(WORKSPACE_ROOT, ".territory/cache/sources/hdx-cod-ab");
+  const resolved: Partial<TurkeyParentHdxMemberPaths> = {};
+  for (const level of ["ADM0", "ADM1", "ADM2"] as const) {
+    const member = source.levels[level].archiveMember;
+    const path = await findHdxMemberInCacheRoot(cacheRoot, member);
+    if (path) {
+      resolved[level] = path;
+    }
+  }
+  return Object.keys(resolved).length > 0 ? (resolved as TurkeyParentHdxMemberPaths) : undefined;
+}
+
 async function auditParentProvenanceForCli(
   parentDataset: TerritoryDataset,
   source: NationalSourceMetadata,
   flags: Map<string, string | true>,
   mode: TurkeyV2NationalOutputMode | "plan"
 ) {
-  const hdxRoot = getFlag(flags, "hdx-member-root");
-  const hdxMemberPaths =
-    hdxRoot && existsSync(resolve(hdxRoot))
-      ? {
-          ADM0: join(resolve(hdxRoot), source.levels.ADM0.archiveMember),
-          ADM1: join(resolve(hdxRoot), source.levels.ADM1.archiveMember),
-          ADM2: join(resolve(hdxRoot), source.levels.ADM2.archiveMember)
-        }
-      : undefined;
+  const catalog = {
+    provider: source.provider,
+    sourceId: source.sourceId,
+    sha256: source.sha256,
+    byteSize: source.byteSize,
+    levels: source.levels
+  };
+  const hdxMemberPaths = await resolveHdxMemberPathsForNationalCli(source, flags);
+  const byteVerification = hdxMemberPaths
+    ? await verifyTurkeyNationalCatalogHdxMemberBytes(catalog, hdxMemberPaths)
+    : undefined;
+  const allowPartialParentInventory = flags.has("allow-partial-parent-inventory");
   const purpose =
     mode === "publish-ready"
       ? "publish-ready"
@@ -1690,14 +1721,9 @@ async function auditParentProvenanceForCli(
         : "national-build";
   const inspection = await inspectTurkeyParentProvenance({
     parentDataset,
-    catalog: {
-      provider: source.provider,
-      sourceId: source.sourceId,
-      sha256: source.sha256,
-      byteSize: source.byteSize,
-      levels: source.levels
-    },
-    requireFullParentInventory: false,
+    catalog,
+    requireFullParentInventory: !allowPartialParentInventory,
+    ...(byteVerification ? { verifiedHdxMembers: byteVerification.verifiedHdxMembers } : {}),
     ...(hdxMemberPaths
       ? {
           hdxMemberPaths,
@@ -1713,6 +1739,7 @@ async function auditParentProvenanceForCli(
   const verification = verifyTurkeyParentProvenance(inspection, {
     purpose,
     allowUndeclaredParentSource: false,
+    allowPartialParentInventory,
     allowProvenanceMismatchBypass: flags.has("allow-parent-provenance-mismatch")
   });
   return {

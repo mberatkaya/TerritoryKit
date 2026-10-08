@@ -3,8 +3,12 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
 import type { TerritoryAdminLevel, TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
+import { createHash } from "node:crypto";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import {
   inspectTurkeyParentProvenance,
+  verifyTurkeyNationalCatalogHdxMemberBytes,
   verifyTurkeyParentProvenance
 } from "../src/turkey-parent-provenance.js";
 
@@ -263,17 +267,200 @@ describe("turkey parent provenance", () => {
       observedDominantProvider: "geoboundaries"
     } as Awaited<ReturnType<typeof inspectTurkeyParentProvenance>>;
 
+    const national = verifyTurkeyParentProvenance(inspection, {
+      allowProvenanceMismatchBypass: true,
+      purpose: "national-build"
+    });
+    expect(national.authorizedForNationalBuild).toBe(true);
+    expect(national.authorizedForPublishReady).toBe(false);
+
+    const publish = verifyTurkeyParentProvenance(inspection, {
+      allowProvenanceMismatchBypass: true,
+      purpose: "publish-ready"
+    });
+    expect(publish.authorizedForNationalBuild).toBe(false);
+    expect(publish.authorizedForPublishReady).toBe(false);
+  });
+
+  it("never authorizes publish-ready when only provider metadata and bytes match", () => {
+    const inspection = {
+      providerMetadataStatus: "PROVIDER_METADATA_MATCHES_CATALOG",
+      parentInventoryStatus: "COMPLETE",
+      sourceByteVerificationStatus: "ALL_LOCKED_MEMBERS_VERIFIED",
+      serializedGeometryStatus: "COMPARED",
+      catalogProvider: "hdx-cod-ab",
+      observedDominantProvider: "hdx-cod-ab"
+    } as Awaited<ReturnType<typeof inspectTurkeyParentProvenance>>;
+
+    const result = verifyTurkeyParentProvenance(inspection, { purpose: "publish-ready" });
+    expect(result.authorizedForPublishReady).toBe(false);
+    expect(result.authorizedForNationalBuild).toBe(true);
+  });
+
+  it("rejects partial national inventory unless explicitly allowed", async () => {
+    const zones = [
+      zone({ id: "tr", level: 0, name: "Turkey", provider: "hdx-cod-ab" }),
+      zone({
+        id: "tr:adm1:01",
+        level: 1,
+        name: "Only",
+        provider: "hdx-cod-ab",
+        provinceCode: "01"
+      }),
+      zone({
+        id: "tr:adm2:01-a",
+        level: 2,
+        name: "District",
+        parentId: "tr:adm1:01",
+        provider: "hdx-cod-ab",
+        provinceCode: "01"
+      })
+    ];
+    const inspection = await inspectTurkeyParentProvenance({
+      parentDataset: dataset(zones),
+      catalog: hdxCatalog,
+      requireFullParentInventory: true
+    });
+    expect(inspection.parentInventoryStatus).toBe("INCOMPLETE");
+    expect(
+      verifyTurkeyParentProvenance(inspection, { purpose: "national-build" })
+        .authorizedForNationalBuild
+    ).toBe(false);
     expect(
       verifyTurkeyParentProvenance(inspection, {
-        allowProvenanceMismatchBypass: true,
-        purpose: "national-build"
-      }).authorizedForNationalBuild
-    ).toBe(true);
-    expect(
-      verifyTurkeyParentProvenance(inspection, {
-        allowProvenanceMismatchBypass: true,
-        purpose: "publish-ready"
+        purpose: "national-build",
+        allowPartialParentInventory: true
       }).authorizedForNationalBuild
     ).toBe(false);
+  });
+
+  it("flags duplicate zone ids as incomplete inventory", async () => {
+    const inspection = await inspectTurkeyParentProvenance({
+      parentDataset: dataset([
+        zone({ id: "tr", level: 0, name: "Turkey", provider: "hdx-cod-ab" }),
+        zone({ id: "dup", level: 1, name: "A", provider: "hdx-cod-ab", provinceCode: "01" }),
+        zone({ id: "dup", level: 1, name: "B", provider: "hdx-cod-ab", provinceCode: "02" }),
+        zone({
+          id: "tr:adm2:01-a",
+          level: 2,
+          name: "District",
+          parentId: "dup",
+          provider: "hdx-cod-ab",
+          provinceCode: "01"
+        })
+      ]),
+      catalog: hdxCatalog,
+      requireFullParentInventory: false
+    });
+    expect(inspection.parentInventoryStatus).toBe("INCOMPLETE");
+  });
+
+  it("verifies HDX member bytes against catalog pins", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-hdx-bytes-"));
+    const memberPath = join(tempDir, "tur_admin0.geojson");
+    const payload = '{"type":"FeatureCollection","features":[]}';
+    await writeFile(memberPath, payload, "utf8");
+    const sha256 = createHash("sha256").update(payload).digest("hex");
+    const byteSize = Buffer.byteLength(payload, "utf8");
+    try {
+      const catalog = {
+        ...hdxCatalog,
+        levels: {
+          ...hdxCatalog.levels,
+          ADM0: {
+            ...hdxCatalog.levels.ADM0,
+            archiveMember: "tur_admin0.geojson",
+            sha256,
+            byteSize
+          }
+        }
+      };
+      const verified = await verifyTurkeyNationalCatalogHdxMemberBytes(catalog, {
+        ADM0: memberPath
+      });
+      expect(verified.verifiedHdxMembers.ADM0?.status).toBe("LOCKED_BYTES_VERIFIED");
+      await writeFile(memberPath, `${payload}x`, "utf8");
+      const corrupted = await verifyTurkeyNationalCatalogHdxMemberBytes(catalog, {
+        ADM0: memberPath
+      });
+      expect(corrupted.verifiedHdxMembers.ADM0?.status).toBe("CHECKSUM_MISMATCH");
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
+  });
+
+  it("authorizes national build when bytes are verified and metadata matches", async () => {
+    const tempDir = await mkdtemp(join(tmpdir(), "territory-hdx-auth-"));
+    try {
+      const writeMember = async (name: string) => {
+        const memberPath = join(tempDir, name);
+        const payload = `{"type":"FeatureCollection","features":[],"member":"${name}"}`;
+        await writeFile(memberPath, payload, "utf8");
+        return {
+          memberPath,
+          sha256: createHash("sha256").update(payload).digest("hex"),
+          byteSize: Buffer.byteLength(payload, "utf8")
+        };
+      };
+      const adm0 = await writeMember("tur_admin0.geojson");
+      const adm1 = await writeMember(hdxCatalog.levels.ADM1.archiveMember);
+      const adm2 = await writeMember("tur_admin2.geojson");
+      const catalog = {
+        ...hdxCatalog,
+        levels: {
+          ADM0: {
+            ...hdxCatalog.levels.ADM0,
+            archiveMember: "tur_admin0.geojson",
+            sha256: adm0.sha256,
+            byteSize: adm0.byteSize
+          },
+          ADM1: {
+            ...hdxCatalog.levels.ADM1,
+            sha256: adm1.sha256,
+            byteSize: adm1.byteSize
+          },
+          ADM2: {
+            ...hdxCatalog.levels.ADM2,
+            archiveMember: "tur_admin2.geojson",
+            sha256: adm2.sha256,
+            byteSize: adm2.byteSize
+          }
+        }
+      };
+      const byteVerification = await verifyTurkeyNationalCatalogHdxMemberBytes(catalog, {
+        ADM0: adm0.memberPath,
+        ADM1: adm1.memberPath,
+        ADM2: adm2.memberPath
+      });
+      const inspection = await inspectTurkeyParentProvenance({
+        parentDataset: dataset([
+          zone({ id: "tr", level: 0, name: "Turkey", provider: "hdx-cod-ab" }),
+          zone({
+            id: "tr:adm1:01",
+            level: 1,
+            name: "Fixture Province",
+            provider: "hdx-cod-ab",
+            provinceCode: "01"
+          })
+        ]),
+        catalog,
+        requireFullParentInventory: false,
+        verifiedHdxMembers: byteVerification.verifiedHdxMembers
+      });
+      expect(inspection.sourceByteVerificationStatus).toBe("ALL_LOCKED_MEMBERS_VERIFIED");
+      const verification = verifyTurkeyParentProvenance(inspection, {
+        purpose: "national-build",
+        allowPartialParentInventory: true
+      });
+      expect(
+        verification.issues.some(
+          (issue) => issue.code === "PARENT_PROVENANCE_SOURCE_BYTES_UNVERIFIED"
+        )
+      ).toBe(false);
+      expect(verification.authorizedForNationalBuild).toBe(true);
+      expect(verification.authorizedForPublishReady).toBe(false);
+    } finally {
+      await rm(tempDir, { recursive: true, force: true });
+    }
   });
 });

@@ -1,11 +1,11 @@
-import { createHash } from "node:crypto";
-import { createReadStream } from "node:fs";
-import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { execFileSync } from "node:child_process";
 import {
+  findHdxMemberInCacheRoot,
   inspectTurkeyParentProvenance,
+  verifyTurkeyNationalCatalogHdxMemberBytes,
   verifyTurkeyParentProvenance
 } from "../packages/generators/dist/turkey-adm3.mjs";
 
@@ -48,61 +48,40 @@ function parseAuditCliArgs(argv) {
   return options;
 }
 
-async function sha256File(filePath) {
-  const hash = createHash("sha256");
-  for await (const chunk of createReadStream(filePath)) {
-    hash.update(chunk);
-  }
-  return hash.digest("hex");
-}
-
 export async function findCachedHdxMember(memberName) {
-  const { readdir } = await import("node:fs/promises");
-  try {
-    for (const entry of await readdir(HDX_CACHE_ROOT, { withFileTypes: true })) {
-      if (!entry.isDirectory()) continue;
-      const candidate = path.join(HDX_CACHE_ROOT, entry.name, memberName);
-      try {
-        await stat(candidate);
-        return candidate;
-      } catch {
-        // continue
-      }
-    }
-  } catch {
-    return null;
-  }
-  return null;
+  return findHdxMemberInCacheRoot(HDX_CACHE_ROOT, memberName);
 }
 
 export async function verifyHdxCatalogMembers(catalog) {
-  const members = {};
-  const verifiedHdxMembers = {};
+  const memberPaths = {};
   for (const level of ["ADM0", "ADM1", "ADM2"]) {
     const meta = catalog.levels[level];
     const localPath = await findCachedHdxMember(meta.archiveMember);
-    if (!localPath) {
-      members[level] = { status: "ARTIFACT_NOT_AVAILABLE", archiveMember: meta.archiveMember };
-      verifiedHdxMembers[level] = { status: "ARTIFACT_NOT_AVAILABLE" };
-      continue;
+    if (localPath) {
+      memberPaths[level] = localPath;
     }
-    const sha256 = await sha256File(localPath);
-    const byteSize = (await stat(localPath)).size;
-    const status =
-      sha256 === meta.sha256 && byteSize === meta.byteSize
-        ? "LOCKED_BYTES_VERIFIED"
-        : "CHECKSUM_MISMATCH";
-    members[level] = {
-      status,
-      path: path.relative(REPO_ROOT, localPath),
-      sha256,
-      byteSize,
-      expectedSha256: meta.sha256,
-      expectedByteSize: meta.byteSize,
-      archiveMember: meta.archiveMember,
-      actualFeatureCount: meta.actualFeatureCount
-    };
-    verifiedHdxMembers[level] = { status, sha256, byteSize };
+  }
+  const { verifiedHdxMembers, members } = await verifyTurkeyNationalCatalogHdxMemberBytes(
+    catalog,
+    memberPaths
+  );
+  for (const level of ["ADM0", "ADM1", "ADM2"]) {
+    const meta = catalog.levels[level];
+    if (!members[level]) {
+      members[level] = {
+        status: "ARTIFACT_NOT_AVAILABLE",
+        archiveMember: meta.archiveMember,
+        expectedSha256: meta.sha256,
+        expectedByteSize: meta.byteSize
+      };
+      verifiedHdxMembers[level] = { status: "ARTIFACT_NOT_AVAILABLE" };
+    } else if (members[level].path) {
+      members[level] = {
+        ...members[level],
+        path: path.relative(REPO_ROOT, members[level].path),
+        actualFeatureCount: meta.actualFeatureCount
+      };
+    }
   }
   const archive = {
     status: "ARTIFACT_NOT_AVAILABLE",
