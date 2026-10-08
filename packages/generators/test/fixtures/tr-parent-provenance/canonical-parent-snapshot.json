@@ -20,7 +20,15 @@
       "name": "Turkey",
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[[28, 40], [29, 40], [29, 41], [28, 41], [28, 40]]]
+        "coordinates": [
+          [
+            [28, 40],
+            [29, 40],
+            [29, 41],
+            [28, 41],
+            [28, 40]
+          ]
+        ]
       },
       "properties": {
         "territory": {
@@ -34,7 +42,15 @@
       "name": "Adana",
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[[28, 40], [29, 40], [29, 41], [28, 41], [28, 40]]]
+        "coordinates": [
+          [
+            [28, 40],
+            [29, 40],
+            [29, 41],
+            [28, 41],
+            [28, 40]
+          ]
+        ]
       },
       "properties": {
         "territory": {
@@ -48,7 +64,15 @@
       "name": "Fixture District",
       "geometry": {
         "type": "Polygon",
-        "coordinates": [[[28, 40], [29, 40], [29, 41], [28, 41], [28, 40]]]
+        "coordinates": [
+          [
+            [28, 40],
+            [29, 40],
+            [29, 41],
+            [28, 41],
+            [28, 40]
+          ]
+        ]
       },
       "properties": {
         "territory": {
