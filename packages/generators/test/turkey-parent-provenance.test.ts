@@ -34,7 +34,7 @@ function zone(input: {
     datasetId: "fixture-tr-parent",
     countryCode: "TR",
     level: input.level,
-    sourceAdminLevel: (`ADM${input.level}` as TerritoryAdminLevel),
+    sourceAdminLevel: `ADM${input.level}` as TerritoryAdminLevel,
     semanticType: input.level === 0 ? "country" : input.level === 1 ? "province" : "district",
     name: input.name,
     neighborIds: [],
