@@ -1,0 +1,17 @@
+---
+description: Universal TerritoryKit engineering policy for all agent sessions
+alwaysApply: true
+---
+
+# TerritoryKit core policy
+
+- Before substantive changes: read `git status`, current branch, and `docs/ai-handoff/README.md`.
+- Follow established package boundaries (`scripts/check-package-boundaries.mjs`, `CONTRIBUTING.md`). Do not invent APIs or packages.
+- Prefer repository evidence (code, tests, `reports/`, ADRs) over assumptions. Mark unverified claims explicitly.
+- Keep diffs small and reviewable. Do not modify unrelated files or dirty working-tree content owned by the user.
+- Never claim tests or CI passed unless you executed them in this session and report the command output.
+- Preserve stable territory IDs, source provenance, and geometry hashes unless an explicit migration review authorizes change.
+- Distinguish: registered providers, downloaded bytes, imported geometry, effective gameplay geometry, built artifacts, hosted delivery, and consumer cache state.
+- Do not merge, deploy, publish to npm, or promote datasets without explicit user permission.
+- Untracked local files (e.g. root `AGENTS.md` from Turbo) must not be staged or overwritten without authorization.
+- For geospatial or release work, read `docs/ai-handoff/CURRENT_MILESTONE.md` and `NEXT_ACTIONS.md` before implementing.
