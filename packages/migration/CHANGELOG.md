@@ -1,5 +1,12 @@
 # @territory-kit/migration
 
+## 2.1.3
+
+### Patch Changes
+
+- @territory-kit/core@3.1.1
+- @territory-kit/dataset@3.1.1
+
 ## 2.1.2
 
 ### Patch Changes
