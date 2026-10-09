@@ -1,7 +1,7 @@
 {
   "schemaVersion": "territorykit-tr-geoboundaries-full-builder-replay@1",
-  "inspectedCommit": "d5e2fe62889fb15871f2c485f4a2c531f1667d04",
-  "generatedAt": "2026-10-09T08:26:58.819Z",
+  "inspectedCommit": "cc0d018d13e5dfb410d716a1f80386173fb160e9",
+  "generatedAt": "2026-10-09T08:41:13.218Z",
   "classification": "GEOGRAPHICALLY_EQUIVALENT_WITH_DIFFERENCES",
   "pathBTechnicalRecommendation": "PARTIAL",
   "verification": {
@@ -29,7 +29,9 @@
     "firstRunDatasetSha256": "9c93a6cdc705042592e4c99697019c47d5587e0853018a35305ff93cc06c5b13",
     "secondRunDatasetSha256": "9c93a6cdc705042592e4c99697019c47d5587e0853018a35305ff93cc06c5b13",
     "byteIdentical": true,
-    "skipped": false
+    "skipped": false,
+    "canonicalParentDatasetSha256": "648981940b96ac18f8e729b31d551e2922f1d76a5f33cdd99b92982e90eaf992",
+    "note": "Replay dataset.json SHA-256 is not expected to equal canonical parent dataset SHA-256; compare only across replay runs for determinism."
   },
   "inputChecksums": {
     "canonicalParentDatasetSha256": "648981940b96ac18f8e729b31d551e2922f1d76a5f33cdd99b92982e90eaf992",

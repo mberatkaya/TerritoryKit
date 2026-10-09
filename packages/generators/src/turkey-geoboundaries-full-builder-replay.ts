@@ -15,7 +15,12 @@ import type {
   TerritoryCountrySourceLock
 } from "./countries/types.js";
 import { repairTerritoryGeometries } from "./geometry-repair.js";
-import { computeTurkeyAdm3GeometryAreaKm2 } from "./turkey-adm3-full-coverage.js";
+import {
+  clippingMultiPolygonToTerritoryGeometry,
+  computeTurkeyAdm3GeometryAreaKm2,
+  geometryToClippingMultiPolygon
+} from "./turkey-adm3-full-coverage.js";
+import type { MultiPolygon as ClippingMultiPolygon } from "polygon-clipping";
 import {
   TURKEY_GEOBOUNDARIES_GIT_RELEASE_COMMIT,
   analyzeGeoBoundariesFeatureCollection,
@@ -29,7 +34,7 @@ import {
   auditGeometryHash,
   type TurkeyV2AdmParentLevel
 } from "./turkey-parent-provenance.js";
-import { serializeJsonStable, sha256Hex } from "./sources/utils.js";
+import { serializeJsonStable } from "./sources/utils.js";
 
 export const TURKEY_GEOBOUNDARIES_FULL_BUILDER_REPLAY_SCHEMA_VERSION =
   "territorykit-tr-geoboundaries-full-builder-replay@1" as const;
@@ -66,11 +71,38 @@ export type GeometryMismatchRootCause =
   | "geometry-repair"
   | "simplification"
   | "topology-operations"
-  | "dependency-version"
   | "historical-build-configuration"
   | "source-input-mismatch"
   | "genuine-geographic-boundary-difference"
   | "missing-evidence";
+
+export type RootCauseEvidenceTier = "confirmed" | "probable" | "unresolved";
+
+export interface MismatchRootCauseAssessment {
+  /** Earliest pipeline stage whose audit hash differs from canonical — not a proven causal origin. */
+  firstObservedHashMismatchStage: GeometryPipelineStage;
+  confirmedRootCause: GeometryMismatchRootCause | null;
+  probableExplanation: string | null;
+  unresolvedReason: string | null;
+  evidenceTier: RootCauseEvidenceTier;
+}
+
+export interface ReplayCoverageGate {
+  complete: boolean;
+  issues: string[];
+  expectedParentZoneCount: number;
+  canonicalParentZoneCount: number;
+  replayParentZoneCount: number;
+  missingReplayZones: number;
+  missingCanonicalSourceIds: number;
+  duplicateReplaySourceNativeIds: number;
+  geometryComparisonsExpected: number;
+  geometryComparisonsPerformed: number;
+  geographicComparisonSkipped: boolean;
+  buildDatasetAvailable: boolean;
+  determinismSkipped: boolean;
+  determinismByteIdentical: boolean;
+}
 
 const CLIPPER =
   (polygonClipping as unknown as { default?: typeof polygonClipping }).default ?? polygonClipping;
@@ -115,6 +147,8 @@ export interface TurkeyGeoBoundariesFullBuilderReplayResult {
     secondRunDatasetSha256: string | null;
     byteIdentical: boolean;
     skipped: boolean;
+    canonicalParentDatasetSha256?: string | null;
+    note?: string;
   };
   reportPaths: Record<string, string>;
 }
@@ -181,26 +215,24 @@ function indexZonesBySourceId(zones: TerritoryZone[]): Map<string, TerritoryZone
   return map;
 }
 
-type ClippingMultiPolygon = polygonClipping.MultiPolygon;
-
-function geometryToClipping(geometry: TerritoryGeometry): ClippingMultiPolygon {
-  if (geometry.type === "Polygon") {
-    return [geometry.coordinates];
+function countDuplicateReplaySourceIds(zones: TerritoryZone[]): number {
+  const seen = new Set<string>();
+  let duplicates = 0;
+  for (const zone of zones) {
+    const sourceId = readZoneSourceNativeId(zone);
+    if (!sourceId) {
+      continue;
+    }
+    if (seen.has(sourceId)) {
+      duplicates += 1;
+    } else {
+      seen.add(sourceId);
+    }
   }
-  return geometry.coordinates;
+  return duplicates;
 }
 
-function clippingToGeometry(geometry: ClippingMultiPolygon): TerritoryGeometry | null {
-  if (geometry.length === 0) {
-    return null;
-  }
-  if (geometry.length === 1) {
-    return { type: "Polygon", coordinates: geometry[0]! };
-  }
-  return { type: "MultiPolygon", coordinates: geometry };
-}
-
-function assessGeographicPair(
+export function assessGeographicPair(
   left: TerritoryGeometry,
   right: TerritoryGeometry
 ): {
@@ -210,7 +242,17 @@ function assessGeographicPair(
   relativeAreaDifference: number | null;
   leftAreaKm2: number;
   rightAreaKm2: number;
+  measurementMethod: string;
+  measurementLimitations: string[];
+  clippingConversionOk: boolean;
 } {
+  const measurementMethod =
+    "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.";
+  const measurementLimitations = [
+    "High IoU does not prove topological equivalence.",
+    "Relative area similarity alone is not used for equivalence classification.",
+    "Invalid or non-area geometries yield NOT_ASSESSABLE."
+  ];
   const leftHash = auditGeometryHash(left);
   const rightHash = auditGeometryHash(right);
   const leftAreaKm2 = computeTurkeyAdm3GeometryAreaKm2(left);
@@ -222,19 +264,39 @@ function assessGeographicPair(
       symmetricDifferenceAreaKm2: 0,
       relativeAreaDifference: 0,
       leftAreaKm2,
-      rightAreaKm2
+      rightAreaKm2,
+      measurementMethod,
+      measurementLimitations,
+      clippingConversionOk: true
+    };
+  }
+
+  const leftClip = geometryToClippingMultiPolygon(left);
+  const rightClip = geometryToClippingMultiPolygon(right);
+  if (leftClip.length === 0 || rightClip.length === 0) {
+    return {
+      equivalenceClass: "NOT_ASSESSABLE",
+      intersectionOverUnion: null,
+      symmetricDifferenceAreaKm2: null,
+      relativeAreaDifference: null,
+      leftAreaKm2,
+      rightAreaKm2,
+      measurementMethod,
+      measurementLimitations: [
+        ...measurementLimitations,
+        "Clipping conversion produced no valid polygon rings (check coordinate dimensionality)."
+      ],
+      clippingConversionOk: false
     };
   }
 
   try {
-    const leftClip = geometryToClipping(left);
-    const rightClip = geometryToClipping(right);
     const intersection = CLIPPER.intersection(leftClip, rightClip) as ClippingMultiPolygon;
     const union = CLIPPER.union(leftClip, rightClip) as ClippingMultiPolygon;
-    const intersectionGeom = clippingToGeometry(intersection);
-    const unionGeom = clippingToGeometry(union);
-    const symDiffGeom = clippingToGeometry(
-      CLIPPER.difference(CLIPPER.union(leftClip, rightClip), intersection) as ClippingMultiPolygon
+    const intersectionGeom = clippingMultiPolygonToTerritoryGeometry(intersection);
+    const unionGeom = clippingMultiPolygonToTerritoryGeometry(union);
+    const symDiffGeom = clippingMultiPolygonToTerritoryGeometry(
+      CLIPPER.difference(union, intersection) as ClippingMultiPolygon
     );
     const intersectionAreaKm2 = intersectionGeom
       ? computeTurkeyAdm3GeometryAreaKm2(intersectionGeom)
@@ -248,8 +310,6 @@ function assessGeographicPair(
     let equivalenceClass: GeographicEquivalenceClass = "MATERIALLY_DIFFERENT";
     if (iou >= GEOGRAPHIC_IOU_EQUIVALENCE_THRESHOLD && symDiffKm2 <= AREA_TOLERANCE_KM2(maxArea)) {
       equivalenceClass = "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE";
-    } else if (iou >= 0.999 && relativeAreaDifference <= GEOGRAPHIC_RELATIVE_AREA_TOLERANCE) {
-      equivalenceClass = "TOPOLOGICALLY_EQUIVALENT";
     }
 
     return {
@@ -258,7 +318,10 @@ function assessGeographicPair(
       symmetricDifferenceAreaKm2: symDiffKm2,
       relativeAreaDifference,
       leftAreaKm2,
-      rightAreaKm2
+      rightAreaKm2,
+      measurementMethod,
+      measurementLimitations,
+      clippingConversionOk: true
     };
   } catch {
     return {
@@ -267,7 +330,10 @@ function assessGeographicPair(
       symmetricDifferenceAreaKm2: null,
       relativeAreaDifference: null,
       leftAreaKm2,
-      rightAreaKm2
+      rightAreaKm2,
+      measurementMethod,
+      measurementLimitations: [...measurementLimitations, "polygon-clipping operation failed."],
+      clippingConversionOk: true
     };
   }
 }
@@ -276,64 +342,119 @@ function AREA_TOLERANCE_KM2(featureAreaKm2: number): number {
   return Math.max(0.000001, featureAreaKm2 * GEOGRAPHIC_RELATIVE_AREA_TOLERANCE);
 }
 
-function inferRootCause(input: {
-  firstDivergingStage: GeometryPipelineStage;
+export function assessMismatchRootCause(input: {
+  firstObservedHashMismatchStage: GeometryPipelineStage;
   geographic: GeographicEquivalenceClass;
   parsedMatchesCanonical: boolean;
   adapterMatchesCanonical: boolean;
   repairMatchesCanonical: boolean;
   builderMatchesCanonical: boolean;
   replayPipelineSelfConsistent: boolean;
-}): GeometryMismatchRootCause {
-  if (input.builderMatchesCanonical) {
-    return "missing-evidence";
+  missingReplayZone: boolean;
+}): MismatchRootCauseAssessment {
+  if (input.builderMatchesCanonical || input.missingReplayZone) {
+    return {
+      firstObservedHashMismatchStage: input.firstObservedHashMismatchStage,
+      confirmedRootCause: input.missingReplayZone ? "missing-evidence" : null,
+      probableExplanation: null,
+      unresolvedReason: input.missingReplayZone
+        ? "Canonical zone had no replay counterpart for geometry comparison."
+        : null,
+      evidenceTier: input.missingReplayZone ? "confirmed" : "unresolved"
+    };
   }
+
   if (!input.adapterMatchesCanonical && input.repairMatchesCanonical) {
-    return "polygon-multipolygon-representation";
+    return {
+      firstObservedHashMismatchStage: input.firstObservedHashMismatchStage,
+      confirmedRootCause: "polygon-multipolygon-representation",
+      probableExplanation: null,
+      unresolvedReason: null,
+      evidenceTier: "confirmed"
+    };
   }
+
   if (!input.repairMatchesCanonical && input.builderMatchesCanonical) {
-    return "geometry-normalization";
+    return {
+      firstObservedHashMismatchStage: input.firstObservedHashMismatchStage,
+      confirmedRootCause: "geometry-normalization",
+      probableExplanation: null,
+      unresolvedReason: null,
+      evidenceTier: "confirmed"
+    };
   }
-  if (
-    input.replayPipelineSelfConsistent &&
-    !input.repairMatchesCanonical &&
-    input.geographic === "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE"
-  ) {
-    return "dependency-version";
-  }
-  if (
-    input.replayPipelineSelfConsistent &&
-    !input.repairMatchesCanonical &&
-    input.geographic === "TOPOLOGICALLY_EQUIVALENT"
-  ) {
-    return "geometry-repair";
-  }
-  if (
-    !input.parsedMatchesCanonical &&
-    !input.repairMatchesCanonical &&
-    input.replayPipelineSelfConsistent
-  ) {
-    if (input.geographic === "MATERIALLY_DIFFERENT") {
-      return "genuine-geographic-boundary-difference";
-    }
-    return "dependency-version";
-  }
-  if (!input.parsedMatchesCanonical) {
-    return "source-input-mismatch";
-  }
-  if (input.firstDivergingStage === "geometry-repair") {
-    return "geometry-repair";
-  }
-  if (input.geographic === "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE") {
-    return "ring-direction-or-start-vertex";
-  }
+
   if (input.geographic === "MATERIALLY_DIFFERENT") {
-    return "genuine-geographic-boundary-difference";
+    return {
+      firstObservedHashMismatchStage: input.firstObservedHashMismatchStage,
+      confirmedRootCause: "genuine-geographic-boundary-difference",
+      probableExplanation: null,
+      unresolvedReason: null,
+      evidenceTier: "confirmed"
+    };
   }
-  return "historical-build-configuration";
+
+  if (
+    input.firstObservedHashMismatchStage === "geometry-repair" &&
+    input.replayPipelineSelfConsistent &&
+    !input.repairMatchesCanonical
+  ) {
+    return {
+      firstObservedHashMismatchStage: input.firstObservedHashMismatchStage,
+      confirmedRootCause: "geometry-repair",
+      probableExplanation: null,
+      unresolvedReason: null,
+      evidenceTier: "confirmed"
+    };
+  }
+
+  if (
+    input.geographic === "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE" ||
+    input.geographic === "SERIALIZED_IDENTICAL"
+  ) {
+    return {
+      firstObservedHashMismatchStage: input.firstObservedHashMismatchStage,
+      confirmedRootCause: null,
+      probableExplanation:
+        "Serialized audit geometry hashes differ while geographic IoU/symmetric-difference metrics remain within documented tolerance (not a topological equality proof).",
+      unresolvedReason:
+        "Cannot confirm ring winding, repair-engine drift, or other historical pipeline causes without additional controlled evidence.",
+      evidenceTier: "probable"
+    };
+  }
+
+  if (!input.parsedMatchesCanonical && input.replayPipelineSelfConsistent) {
+    return {
+      firstObservedHashMismatchStage: input.firstObservedHashMismatchStage,
+      confirmedRootCause: null,
+      probableExplanation:
+        "Pinned upstream bytes match the lock, but canonical serialized geometry differs from the current pipeline output at the earliest observed stage.",
+      unresolvedReason:
+        "Historical repair/runtime versions (e.g. GEOS/Shapely) were not reproduced; no A/B evidence pins dependency drift as the cause.",
+      evidenceTier: "unresolved"
+    };
+  }
+
+  if (!input.parsedMatchesCanonical) {
+    return {
+      firstObservedHashMismatchStage: input.firstObservedHashMismatchStage,
+      confirmedRootCause: "source-input-mismatch",
+      probableExplanation: null,
+      unresolvedReason: null,
+      evidenceTier: "confirmed"
+    };
+  }
+
+  return {
+    firstObservedHashMismatchStage: input.firstObservedHashMismatchStage,
+    confirmedRootCause: null,
+    probableExplanation: null,
+    unresolvedReason: "Insufficient evidence to confirm a single root-cause category.",
+    evidenceTier: "unresolved"
+  };
 }
 
-function findFirstDivergingStage(
+export function findFirstObservedHashMismatchStage(
   stageHashes: Record<GeometryPipelineStage, string>,
   canonicalHash: string
 ): GeometryPipelineStage {
@@ -354,6 +475,94 @@ function findFirstDivergingStage(
     }
   }
   return "canonical-parent";
+}
+
+export function validateReplayCoverageGate(input: {
+  replaySummary: TurkeyGeoBoundariesFullBuilderReplayResult["replaySummary"];
+  canonicalParentZoneCount: number;
+  replayParentZoneCount: number;
+  missingReplayZones: number;
+  missingCanonicalSourceIds: number;
+  duplicateReplaySourceNativeIds: number;
+  geometryComparisonsExpected: number;
+  geometryComparisonsPerformed: number;
+  geographicComparisonSkipped: boolean;
+  buildDatasetAvailable: boolean;
+  determinismSkipped: boolean;
+  determinismByteIdentical: boolean;
+  allBytesVerified: boolean;
+}): ReplayCoverageGate {
+  const issues: string[] = [];
+  const expectedParentZoneCount =
+    TURKEY_PARENT_INVENTORY_EXPECTED.ADM0 +
+    TURKEY_PARENT_INVENTORY_EXPECTED.ADM1 +
+    TURKEY_PARENT_INVENTORY_EXPECTED.ADM2;
+
+  for (const level of TURKEY_V2_ADM_PARENT_LEVELS) {
+    const expected = TURKEY_PARENT_INVENTORY_EXPECTED[level];
+    const matched = input.replaySummary[level].identityMatched;
+    if (matched !== expected) {
+      issues.push(`${level}: identityMatched ${matched} != expected ${expected}`);
+    }
+  }
+
+  if (input.canonicalParentZoneCount !== expectedParentZoneCount) {
+    issues.push(
+      `canonical parent zone count ${input.canonicalParentZoneCount} != expected ${expectedParentZoneCount}`
+    );
+  }
+  if (input.replayParentZoneCount !== expectedParentZoneCount) {
+    issues.push(
+      `replay parent zone count ${input.replayParentZoneCount} != expected ${expectedParentZoneCount}`
+    );
+  }
+  if (input.missingReplayZones > 0) {
+    issues.push(`missing replay zones for ${input.missingReplayZones} canonical source IDs`);
+  }
+  if (input.missingCanonicalSourceIds > 0) {
+    issues.push(`replay zones without canonical parent: ${input.missingCanonicalSourceIds}`);
+  }
+  if (input.duplicateReplaySourceNativeIds > 0) {
+    issues.push(`duplicate replay source-native IDs: ${input.duplicateReplaySourceNativeIds}`);
+  }
+  if (!input.buildDatasetAvailable) {
+    issues.push("buildTerritoryCountryDataset did not produce combinedDataset zones");
+  }
+  if (!input.allBytesVerified) {
+    issues.push("geoBoundaries source bytes were not fully verified");
+  }
+  if (input.geographicComparisonSkipped) {
+    issues.push("geographic equivalence analysis was skipped");
+  } else if (input.geometryComparisonsPerformed !== input.geometryComparisonsExpected) {
+    issues.push(
+      `geographic comparisons performed ${input.geometryComparisonsPerformed} != expected mismatches ${input.geometryComparisonsExpected}`
+    );
+  }
+  if (input.geometryComparisonsExpected > 0 && input.geometryComparisonsPerformed === 0) {
+    issues.push("geometry hash mismatches exist but no geographic comparisons were recorded");
+  }
+  if (input.determinismSkipped) {
+    issues.push("determinism second run was skipped");
+  } else if (!input.determinismByteIdentical) {
+    issues.push("determinism check failed: replay runs were not byte-identical");
+  }
+
+  return {
+    complete: issues.length === 0,
+    issues,
+    expectedParentZoneCount,
+    canonicalParentZoneCount: input.canonicalParentZoneCount,
+    replayParentZoneCount: input.replayParentZoneCount,
+    missingReplayZones: input.missingReplayZones,
+    missingCanonicalSourceIds: input.missingCanonicalSourceIds,
+    duplicateReplaySourceNativeIds: input.duplicateReplaySourceNativeIds,
+    geometryComparisonsExpected: input.geometryComparisonsExpected,
+    geometryComparisonsPerformed: input.geometryComparisonsPerformed,
+    geographicComparisonSkipped: input.geographicComparisonSkipped,
+    buildDatasetAvailable: input.buildDatasetAvailable,
+    determinismSkipped: input.determinismSkipped,
+    determinismByteIdentical: input.determinismByteIdentical
+  };
 }
 
 export async function runTurkeyGeoBoundariesFullBuilderReplay(
@@ -466,25 +675,78 @@ export async function runTurkeyGeoBoundariesFullBuilderReplay(
     outputPath: firstRunDir
   });
 
+  const replayCombinedDataset = firstBuild.combinedDataset;
+  if (!replayCombinedDataset?.zones?.length) {
+    const blocked = buildBlockedResult({
+      outputReportDir,
+      parentDatasetPath,
+      sourceLockPath,
+      parentDatasetSha256,
+      sourceLockSha256,
+      buildDate,
+      reason: "country-builder-replay-produced-no-combined-dataset"
+    });
+    await mkdir(outputReportDir, { recursive: true });
+    await writeReplayReports(blocked, outputReportDir, cwd);
+    return blocked;
+  }
+
   let secondDatasetSha256: string | null = null;
   const determinismSkipped = Boolean(options.skipSecondDeterminismRun);
-  const firstDatasetSha256 = await (async () => {
-    try {
-      return await sha256File(path.join(firstRunDir, "dataset.json"));
-    } catch {
-      return sha256Hex(
-        serializeJsonStable(firstBuild.combinedDataset as unknown as Record<string, unknown>)
-      );
-    }
-  })();
+  let firstDatasetSha256: string | null = null;
+  try {
+    firstDatasetSha256 = await sha256File(path.join(firstRunDir, "dataset.json"));
+  } catch {
+    const blocked = buildBlockedResult({
+      outputReportDir,
+      parentDatasetPath,
+      sourceLockPath,
+      parentDatasetSha256,
+      sourceLockSha256,
+      buildDate,
+      reason: "replay-dataset-json-missing-after-build"
+    });
+    await mkdir(outputReportDir, { recursive: true });
+    await writeReplayReports(blocked, outputReportDir, cwd);
+    return blocked;
+  }
 
   if (!options.skipSecondDeterminismRun) {
     await mkdir(secondRunDir, { recursive: true });
-    await buildTerritoryCountryDataset({
+    const secondBuild = await buildTerritoryCountryDataset({
       ...buildCommon,
       outputPath: secondRunDir
     });
-    secondDatasetSha256 = await sha256File(path.join(secondRunDir, "dataset.json"));
+    if (!secondBuild.combinedDataset?.zones?.length) {
+      const blocked = buildBlockedResult({
+        outputReportDir,
+        parentDatasetPath,
+        sourceLockPath,
+        parentDatasetSha256,
+        sourceLockSha256,
+        buildDate,
+        reason: "country-builder-determinism-run-produced-no-combined-dataset"
+      });
+      await mkdir(outputReportDir, { recursive: true });
+      await writeReplayReports(blocked, outputReportDir, cwd);
+      return blocked;
+    }
+    try {
+      secondDatasetSha256 = await sha256File(path.join(secondRunDir, "dataset.json"));
+    } catch {
+      const blocked = buildBlockedResult({
+        outputReportDir,
+        parentDatasetPath,
+        sourceLockPath,
+        parentDatasetSha256,
+        sourceLockSha256,
+        buildDate,
+        reason: "replay-determinism-dataset-json-missing"
+      });
+      await mkdir(outputReportDir, { recursive: true });
+      await writeReplayReports(blocked, outputReportDir, cwd);
+      return blocked;
+    }
   }
 
   const replaySummary = {
@@ -496,10 +758,25 @@ export async function runTurkeyGeoBoundariesFullBuilderReplay(
   const geometryDifferences: Array<Record<string, unknown>> = [];
   const geographicEquivalence: Array<Record<string, unknown>> = [];
   const stableIdComparison: Array<Record<string, unknown>> = [];
+  let missingReplayZones = 0;
+  let missingCanonicalSourceIds = 0;
+  const geographicComparisonSkipped = Boolean(options.skipGeographicEquivalence);
+
+  const canonicalParentZones = TURKEY_V2_ADM_PARENT_LEVELS.flatMap((level) =>
+    zonesForLevel(canonical, level)
+  );
+  const replayParentZones = TURKEY_V2_ADM_PARENT_LEVELS.flatMap((level) =>
+    zonesForLevel(replayCombinedDataset, level)
+  );
+  const duplicateReplaySourceNativeIds = TURKEY_V2_ADM_PARENT_LEVELS.reduce(
+    (sum, level) =>
+      sum + countDuplicateReplaySourceIds(zonesForLevel(replayCombinedDataset, level)),
+    0
+  );
 
   for (const level of TURKEY_V2_ADM_PARENT_LEVELS) {
     const canonicalZones = zonesForLevel(canonical, level);
-    const replayZones = zonesForLevel(firstBuild.combinedDataset, level);
+    const replayZones = zonesForLevel(replayCombinedDataset, level);
     const replayBySource = indexZonesBySourceId(replayZones);
     const artifactPath = artifactPaths[level]!;
     const collection = JSON.parse(await readFile(artifactPath, "utf8")) as unknown;
@@ -535,6 +812,9 @@ export async function runTurkeyGeoBoundariesFullBuilderReplay(
       }
       replaySummary[level].identityMatched += 1;
       const replayZone = replayBySource.get(sourceNativeId);
+      if (!replayZone) {
+        missingReplayZones += 1;
+      }
       const canonicalHash = auditGeometryHash(canonicalZone.geometry);
       const replayHash = replayZone ? auditGeometryHash(replayZone.geometry) : null;
       const parsedFeature = sourceById.get(sourceNativeId);
@@ -575,9 +855,12 @@ export async function runTurkeyGeoBoundariesFullBuilderReplay(
       });
 
       if (!builderMatchesCanonical) {
-        const firstDivergingStage = findFirstDivergingStage(stageHashes, canonicalHash);
+        const firstObservedHashMismatchStage = findFirstObservedHashMismatchStage(
+          stageHashes,
+          canonicalHash
+        );
         const geo =
-          replayZone && !options.skipGeographicEquivalence
+          replayZone && !geographicComparisonSkipped
             ? assessGeographicPair(canonicalZone.geometry, replayZone.geometry)
             : {
                 equivalenceClass: "NOT_ASSESSABLE" as GeographicEquivalenceClass,
@@ -585,19 +868,27 @@ export async function runTurkeyGeoBoundariesFullBuilderReplay(
                 symmetricDifferenceAreaKm2: null,
                 relativeAreaDifference: null,
                 leftAreaKm2: computeTurkeyAdm3GeometryAreaKm2(canonicalZone.geometry),
-                rightAreaKm2: replayZone ? computeTurkeyAdm3GeometryAreaKm2(replayZone.geometry) : 0
+                rightAreaKm2: replayZone
+                  ? computeTurkeyAdm3GeometryAreaKm2(replayZone.geometry)
+                  : 0,
+                measurementMethod: "skipped",
+                measurementLimitations: [
+                  "Geographic equivalence analysis skipped or replay zone missing."
+                ],
+                clippingConversionOk: false
               };
         const replayPipelineSelfConsistent =
           stageHashes["geometry-repair"] === stageHashes["country-builder-output"] &&
           stageHashes["adapter-output"] === stageHashes["parsed-upstream"];
-        const rootCause = inferRootCause({
-          firstDivergingStage,
+        const rootCauseAssessment = assessMismatchRootCause({
+          firstObservedHashMismatchStage,
           geographic: geo.equivalenceClass,
           parsedMatchesCanonical,
           adapterMatchesCanonical,
           repairMatchesCanonical,
           builderMatchesCanonical,
-          replayPipelineSelfConsistent
+          replayPipelineSelfConsistent,
+          missingReplayZone: !replayZone
         });
         geometryDifferences.push({
           adminLevel: level,
@@ -606,8 +897,12 @@ export async function runTurkeyGeoBoundariesFullBuilderReplay(
           canonicalGeometryHash: canonicalHash,
           replayGeometryHash: replayHash,
           stageGeometryHashes: stageHashes,
-          firstDivergingPipelineStage: firstDivergingStage,
-          rootCauseCategory: rootCause,
+          firstObservedHashMismatchStage,
+          rootCauseAssessment,
+          confirmedRootCause: rootCauseAssessment.confirmedRootCause,
+          probableExplanation: rootCauseAssessment.probableExplanation,
+          unresolvedReason: rootCauseAssessment.unresolvedReason,
+          rootCauseEvidenceTier: rootCauseAssessment.evidenceTier,
           supportingEvidence: {
             parsedMatchesCanonical,
             adapterMatchesCanonical,
@@ -616,38 +911,72 @@ export async function runTurkeyGeoBoundariesFullBuilderReplay(
             replayPipelineSelfConsistent,
             repairEngine: repairReport.engine,
             repairEngineVersion: repairReport.engineVersion,
-            repairMode: repairReport.mode
+            repairMode: repairReport.mode,
+            stageMismatchNote:
+              "firstObservedHashMismatchStage is the earliest stage whose audit hash differs from canonical; it is not proof of where the transformation error originated."
           },
           geographicEquivalenceAssessment: geo.equivalenceClass,
           confidence:
-            geo.equivalenceClass === "NOT_ASSESSABLE"
-              ? "low"
-              : geo.equivalenceClass === "MATERIALLY_DIFFERENT"
-                ? "high"
-                : "medium",
-          remainingUncertainty:
-            geo.equivalenceClass === "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE"
-              ? "Serialized bytes differ; geographic equivalence within IoU tolerance only."
-              : null
+            rootCauseAssessment.evidenceTier === "confirmed"
+              ? "high"
+              : rootCauseAssessment.evidenceTier === "probable"
+                ? "medium"
+                : "low",
+          remainingUncertainty: rootCauseAssessment.unresolvedReason
         });
-        geographicEquivalence.push({
-          adminLevel: level,
-          territoryId: canonicalZone.id,
-          sourceShapeId: sourceNativeId,
-          ...geo,
-          crs: "EPSG:4326",
-          measurementNote:
-            "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates."
-        });
+        if (!geographicComparisonSkipped && replayZone) {
+          geographicEquivalence.push({
+            adminLevel: level,
+            territoryId: canonicalZone.id,
+            sourceShapeId: sourceNativeId,
+            ...geo,
+            crs: "EPSG:4326"
+          });
+        }
+      }
+    }
+
+    const canonicalSourceIds = new Set(
+      canonicalZones
+        .map((zone) => readZoneSourceNativeId(zone))
+        .filter((value): value is string => Boolean(value))
+    );
+    for (const replayZone of replayZones) {
+      const sourceId = readZoneSourceNativeId(replayZone);
+      if (sourceId && !canonicalSourceIds.has(sourceId)) {
+        missingCanonicalSourceIds += 1;
       }
     }
   }
 
+  const determinismByteIdentical =
+    firstDatasetSha256 !== null &&
+    secondDatasetSha256 !== null &&
+    firstDatasetSha256 === secondDatasetSha256;
+
+  const coverageGate = validateReplayCoverageGate({
+    replaySummary,
+    canonicalParentZoneCount: canonicalParentZones.length,
+    replayParentZoneCount: replayParentZones.length,
+    missingReplayZones,
+    missingCanonicalSourceIds,
+    duplicateReplaySourceNativeIds,
+    geometryComparisonsExpected:
+      replaySummary.ADM0.geometryHashMismatches +
+      replaySummary.ADM1.geometryHashMismatches +
+      replaySummary.ADM2.geometryHashMismatches,
+    geometryComparisonsPerformed: geographicEquivalence.length,
+    geographicComparisonSkipped,
+    buildDatasetAvailable: true,
+    determinismSkipped,
+    determinismByteIdentical,
+    allBytesVerified
+  });
+
   const classification = classifyFullBuilderReplay({
     replaySummary,
     geometryDifferenceCount: geometryDifferences.length,
-    allBytesVerified,
-    replayZoneCount: firstBuild.combinedDataset.zones.length,
+    coverageGate,
     geographicEquivalence
   });
 
@@ -691,11 +1020,10 @@ export async function runTurkeyGeoBoundariesFullBuilderReplay(
     determinism: {
       firstRunDatasetSha256: firstDatasetSha256,
       secondRunDatasetSha256: secondDatasetSha256,
-      byteIdentical:
-        firstDatasetSha256 !== null &&
-        secondDatasetSha256 !== null &&
-        firstDatasetSha256 === secondDatasetSha256,
-      skipped: determinismSkipped
+      byteIdentical: determinismByteIdentical,
+      skipped: determinismSkipped,
+      canonicalParentDatasetSha256: parentDatasetSha256,
+      note: "Replay dataset.json SHA-256 is not expected to equal canonical parent dataset SHA-256; compare only across replay runs for determinism."
     },
     reportPaths: {}
   };
@@ -726,7 +1054,10 @@ export async function runTurkeyGeoBoundariesFullBuilderReplay(
         "country-builder-output",
         "serialized-final",
         "canonical-parent"
-      ]
+      ],
+      stageSemantics:
+        "firstObservedHashMismatchStage reports the earliest stage whose audit hash differs from canonical; it does not prove causal origin of divergence.",
+      coverageGate
     },
     geometryDifferences,
     geographicEquivalence,
@@ -743,20 +1074,16 @@ export async function runTurkeyGeoBoundariesFullBuilderReplay(
   return result;
 }
 
-function classifyFullBuilderReplay(input: {
+export function classifyFullBuilderReplay(input: {
   replaySummary: TurkeyGeoBoundariesFullBuilderReplayResult["replaySummary"];
   geometryDifferenceCount: number;
-  allBytesVerified: boolean;
-  replayZoneCount: number;
+  coverageGate: ReplayCoverageGate;
   geographicEquivalence: Array<Record<string, unknown>>;
 }): FullBuilderReplayClassification {
-  if (!input.allBytesVerified || input.replayZoneCount === 0) {
+  if (!input.coverageGate.buildDatasetAvailable || !input.coverageGate.complete) {
     return "BLOCKED_BY_MISSING_EVIDENCE";
   }
-  const totalExpected =
-    TURKEY_PARENT_INVENTORY_EXPECTED.ADM0 +
-    TURKEY_PARENT_INVENTORY_EXPECTED.ADM1 +
-    TURKEY_PARENT_INVENTORY_EXPECTED.ADM2;
+  const totalExpected = input.coverageGate.expectedParentZoneCount;
   const totalMatches =
     input.replaySummary.ADM0.geometryHashMatches +
     input.replaySummary.ADM1.geometryHashMatches +
@@ -764,19 +1091,25 @@ function classifyFullBuilderReplay(input: {
   if (totalMatches === totalExpected && input.geometryDifferenceCount === 0) {
     return "FULL_REPLAY_VERIFIED";
   }
-  const allGeoEquivalent = input.geographicEquivalence.every(
-    (row) =>
-      row.equivalenceClass === "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE" ||
-      row.equivalenceClass === "SERIALIZED_IDENTICAL" ||
-      row.equivalenceClass === "TOPOLOGICALLY_EQUIVALENT"
-  );
-  if (input.geometryDifferenceCount > 0 && allGeoEquivalent) {
-    return "GEOGRAPHICALLY_EQUIVALENT_WITH_DIFFERENCES";
+  if (input.coverageGate.geographicComparisonSkipped) {
+    return input.geometryDifferenceCount > 0 ? "PARTIALLY_REPRODUCED" : "PARTIALLY_REPRODUCED";
   }
-  if (totalMatches > 0 && totalMatches < totalExpected) {
+  if (input.geometryDifferenceCount === 0) {
     return "PARTIALLY_REPRODUCED";
   }
-  if (input.geometryDifferenceCount > 0) {
+  if (input.geographicEquivalence.length !== input.geometryDifferenceCount) {
+    return "BLOCKED_BY_MISSING_EVIDENCE";
+  }
+  const allGeoEquivalent = input.geographicEquivalence.every(
+    (row) => row.equivalenceClass === "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE"
+  );
+  if (allGeoEquivalent) {
+    return "GEOGRAPHICALLY_EQUIVALENT_WITH_DIFFERENCES";
+  }
+  const anyMaterial = input.geographicEquivalence.some(
+    (row) => row.equivalenceClass === "MATERIALLY_DIFFERENT"
+  );
+  if (anyMaterial) {
     return "MATERIAL_GEOMETRY_DIFFERENCES_FOUND";
   }
   return "PARTIALLY_REPRODUCED";
@@ -957,7 +1290,9 @@ function renderReplayConclusionMarkdown(
         : "iki koşu farklı — nondeterminism araştırılmalı"
   }
 
-Canonical \`datasets/generated/countries/TR/dataset.json\` üzerine yazılmadı. geoBoundaries ADM2 source-lock \`sourceFeatureCount: 999\` ile simplified GeoJSON 973 özelliği farkı dokümante edildi; bu sprint lock metadata'yı sessizce düzeltmedi.
+Canonical \`datasets/generated/countries/TR/dataset.json\` üzerine yazılmadı. Replay \`dataset.json\` SHA-256 canonical ile aynı olması beklenmez.
+
+Kök neden: onaylanmış \`dependency-version\` iddiası yok; çoğu uyuşmazlık \`unresolved\` + olası açıklama (tarihsel repair/runtime kanıtı eksik). geoBoundaries ADM2 source-lock \`sourceFeatureCount: 999\` vs simplified GeoJSON 973 farkı korunur.
 `;
 }
 
@@ -982,6 +1317,13 @@ export function verifyTurkeyGeoBoundariesFullBuilderReplay(
     result.classification !== "FULL_REPLAY_VERIFIED"
   ) {
     issues.push("pathBTechnicalRecommendation GO requires FULL_REPLAY_VERIFIED classification.");
+  }
+  if (
+    result.classification === "FULL_REPLAY_VERIFIED" &&
+    (result.replaySummary.ADM1.identityMatched !== TURKEY_PARENT_INVENTORY_EXPECTED.ADM1 ||
+      result.replaySummary.ADM2.identityMatched !== TURKEY_PARENT_INVENTORY_EXPECTED.ADM2)
+  ) {
+    issues.push("FULL_REPLAY_VERIFIED requires complete ADM inventory coverage.");
   }
   if (options.strict && result.classification === "BLOCKED_BY_MISSING_EVIDENCE") {
     issues.push("Replay blocked by missing evidence.");

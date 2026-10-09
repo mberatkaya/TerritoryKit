@@ -2,11 +2,17 @@
   "rows": [
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.999999998933143,
       "leftAreaKm2": 5623.995311,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 1.0668570955233555e-9,
       "rightAreaKm2": 5623.995305,
       "sourceShapeId": "25984515B32583172380009",
@@ -15,11 +21,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999997658204,
       "leftAreaKm2": 25621.368718,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 2.3417960598643983e-10,
       "rightAreaKm2": 25621.368712,
       "sourceShapeId": "25984515B47806653651907",
@@ -28,11 +40,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999970108824,
       "leftAreaKm2": 7360.03119,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 2.989117667357917e-9,
       "rightAreaKm2": 7360.031168,
       "sourceShapeId": "25984515B1602304411378",
@@ -41,11 +59,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999904772964,
       "leftAreaKm2": 8085.938866,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 4.575844724472326e-9,
       "rightAreaKm2": 8085.938829,
       "sourceShapeId": "25984515B63739470532168",
@@ -54,11 +78,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999998626582,
       "leftAreaKm2": 14562.217073,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 1.3734177060889004e-10,
       "rightAreaKm2": 14562.217075,
       "sourceShapeId": "25984515B55384476443375",
@@ -67,11 +97,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999927759375,
       "leftAreaKm2": 4152.788063,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 7.2240624121710585e-9,
       "rightAreaKm2": 4152.788033,
       "sourceShapeId": "25984515B39892287187022",
@@ -80,11 +116,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999992681378,
       "leftAreaKm2": 8198.264909,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 7.318622018723985e-10,
       "rightAreaKm2": 8198.264915,
       "sourceShapeId": "25984515B96039700866385",
@@ -93,11 +135,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999998635757,
       "leftAreaKm2": 7330.076264,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 1.3642427479875342e-10,
       "rightAreaKm2": 7330.076263,
       "sourceShapeId": "25984515B90474549897215",
@@ -106,11 +154,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.999999998061424,
       "leftAreaKm2": 9801.009449,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 1.938575922944017e-9,
       "rightAreaKm2": 9801.009468,
       "sourceShapeId": "25984515B45885295326030",
@@ -119,11 +173,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999992463761,
       "leftAreaKm2": 11942.294631,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 7.53623962575671e-10,
       "rightAreaKm2": 11942.29464,
       "sourceShapeId": "25984515B90258821264291",
@@ -132,11 +192,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999969421395,
       "leftAreaKm2": 6213.494585,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 3.057860565547825e-9,
       "rightAreaKm2": 6213.494566,
       "sourceShapeId": "25984515B68163725002210",
@@ -145,11 +211,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999978516961,
       "leftAreaKm2": 13964.505215,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 2.148303898691089e-9,
       "rightAreaKm2": 13964.505245,
       "sourceShapeId": "25984515B12971548112787",
@@ -158,11 +230,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999991380445,
       "leftAreaKm2": 6960.915165,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 8.619555267283159e-10,
       "rightAreaKm2": 6960.915171,
       "sourceShapeId": "25984515B57211123653900",
@@ -171,11 +249,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.999999997995361,
       "leftAreaKm2": 11972.229666,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 1.5870060527669496e-9,
       "rightAreaKm2": 11972.229685,
       "sourceShapeId": "25984515B59477790330217",
@@ -184,11 +268,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999997090008,
       "leftAreaKm2": 17182.168762,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 2.9099924011356167e-10,
       "rightAreaKm2": 17182.168767,
       "sourceShapeId": "25984515B43172796860329",
@@ -197,11 +287,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999994156223,
       "leftAreaKm2": 3422.444149,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 5.843776203509962e-10,
       "rightAreaKm2": 3422.444147,
       "sourceShapeId": "25984515B86381770870747",
@@ -210,11 +306,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999984123707,
       "leftAreaKm2": 13227.269862,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 1.5876291972860682e-9,
       "rightAreaKm2": 13227.269841,
       "sourceShapeId": "25984515B19932594956901",
@@ -223,11 +325,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999937917639,
       "leftAreaKm2": 12563.954786,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 2.2285976667835335e-9,
       "rightAreaKm2": 12563.954814,
       "sourceShapeId": "25984515B57226385500606",
@@ -236,11 +344,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999993130473,
       "leftAreaKm2": 7278.520781,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 6.869527509959823e-10,
       "rightAreaKm2": 7278.520776,
       "sourceShapeId": "25984515B59741408878569",
@@ -249,11 +363,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999982698273,
       "leftAreaKm2": 5779.770318,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 3.460344715339621e-10,
       "rightAreaKm2": 5779.770316,
       "sourceShapeId": "25984515B15602000155844",
@@ -262,11 +382,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999919125813,
       "leftAreaKm2": 3833.114268,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 8.087418706563684e-9,
       "rightAreaKm2": 3833.114237,
       "sourceShapeId": "25984515B47778459062669",
@@ -275,11 +401,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999995846233,
       "leftAreaKm2": 4814.908076,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 4.1537671014111344e-10,
       "rightAreaKm2": 4814.908078,
       "sourceShapeId": "25984515B30494634933389",
@@ -288,11 +420,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999988587229,
       "leftAreaKm2": 9638.325798,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 2.075049877512453e-10,
       "rightAreaKm2": 9638.3258,
       "sourceShapeId": "25984515B31080883995775",
@@ -301,11 +439,17 @@
     },
     {
       "adminLevel": "ADM1",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999955359037,
       "leftAreaKm2": 4928.209052,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 4.464096356604577e-9,
       "rightAreaKm2": 4928.209074,
       "sourceShapeId": "25984515B60965754972902",
@@ -314,11 +458,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 1,
       "leftAreaKm2": 1715.90488,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 0,
       "rightAreaKm2": 1715.90488,
       "sourceShapeId": "54988432B18155993888482",
@@ -327,11 +477,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999784119482,
       "leftAreaKm2": 2455.061727,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 2.1588051807261558e-8,
       "rightAreaKm2": 2455.061674,
       "sourceShapeId": "54988432B19462176511596",
@@ -340,11 +496,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999878735706,
       "leftAreaKm2": 1566.825604,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 1.2126429397892612e-8,
       "rightAreaKm2": 1566.825585,
       "sourceShapeId": "54988432B271913105949",
@@ -353,11 +515,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999996763946759,
       "leftAreaKm2": 185.411041,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 3.2360532412438594e-7,
       "rightAreaKm2": 185.410981,
       "sourceShapeId": "54988432B28558182878988",
@@ -366,11 +534,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999998802941821,
       "leftAreaKm2": 1202.948907,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 1.1970581794089822e-7,
       "rightAreaKm2": 1202.949051,
       "sourceShapeId": "54988432B31268227976167",
@@ -379,11 +553,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999992257897833,
       "leftAreaKm2": 399.116407,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 7.742102167170854e-7,
       "rightAreaKm2": 399.116098,
       "sourceShapeId": "54988432B43283240341511",
@@ -392,11 +572,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.99999997598707,
       "leftAreaKm2": 1332.615363,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 2.4012929962122674e-8,
       "rightAreaKm2": 1332.615395,
       "sourceShapeId": "54988432B4854228242513",
@@ -405,11 +591,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999735838534,
       "leftAreaKm2": 984.246505,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 2.6416146567222317e-8,
       "rightAreaKm2": 984.246479,
       "sourceShapeId": "54988432B55023919833047",
@@ -418,11 +610,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999787612291,
       "leftAreaKm2": 894.590353,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 2.123877089080678e-8,
       "rightAreaKm2": 894.590372,
       "sourceShapeId": "54988432B55907978535703",
@@ -431,11 +629,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999462993994,
       "leftAreaKm2": 1042.818873,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 5.37006006589733e-8,
       "rightAreaKm2": 1042.818817,
       "sourceShapeId": "54988432B58587024435654",
@@ -444,11 +648,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999998904608627,
       "leftAreaKm2": 885.528148,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 1.0953913726656141e-7,
       "rightAreaKm2": 885.528245,
       "sourceShapeId": "54988432B59996123139029",
@@ -457,11 +667,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999986437335,
       "leftAreaKm2": 1474.636403,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 1.3562665265614987e-9,
       "rightAreaKm2": 1474.636405,
       "sourceShapeId": "54988432B60831632759044",
@@ -470,11 +686,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999915998975,
       "leftAreaKm2": 2023.784789,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 8.400102517318874e-9,
       "rightAreaKm2": 2023.784806,
       "sourceShapeId": "54988432B62353974928440",
@@ -483,11 +705,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.999999288076823,
       "leftAreaKm2": 491.625729,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 7.119231769351065e-7,
       "rightAreaKm2": 491.626079,
       "sourceShapeId": "54988432B65769294434717",
@@ -496,11 +724,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999067189097,
       "leftAreaKm2": 1843.889083,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 9.328109025749981e-8,
       "rightAreaKm2": 1843.889255,
       "sourceShapeId": "54988432B72902905976460",
@@ -509,11 +743,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999718961469,
       "leftAreaKm2": 1565.621624,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 2.8103853090550027e-8,
       "rightAreaKm2": 1565.62158,
       "sourceShapeId": "54988432B80891618089015",
@@ -522,11 +762,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999784818782,
       "leftAreaKm2": 929.449152,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 2.1518121803818365e-8,
       "rightAreaKm2": 929.449132,
       "sourceShapeId": "54988432B85224967015288",
@@ -535,11 +781,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999672673696,
       "leftAreaKm2": 947.067183,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 3.2732630368651854e-8,
       "rightAreaKm2": 947.067152,
       "sourceShapeId": "54988432B86957506981644",
@@ -548,11 +800,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999678119207,
       "leftAreaKm2": 714.550226,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 3.2188079267770877e-8,
       "rightAreaKm2": 714.550249,
       "sourceShapeId": "54988432B9289353120970",
@@ -561,11 +819,17 @@
     },
     {
       "adminLevel": "ADM2",
+      "clippingConversionOk": true,
       "crs": "EPSG:4326",
       "equivalenceClass": "GEOGRAPHICALLY_EQUIVALENT_WITHIN_TOLERANCE",
       "intersectionOverUnion": 0.9999999541118416,
       "leftAreaKm2": 261.505362,
-      "measurementNote": "Areas and IoU from geodesic-ish km² helper (computeTurkeyAdm3GeometryAreaKm2) and polygon-clipping boolean ops in WGS84 coordinates.",
+      "measurementLimitations": [
+        "High IoU does not prove topological equivalence.",
+        "Relative area similarity alone is not used for equivalence classification.",
+        "Invalid or non-area geometries yield NOT_ASSESSABLE."
+      ],
+      "measurementMethod": "EPSG:4326 polygon-clipping boolean ops; areas via computeTurkeyAdm3GeometryAreaKm2 (geodesic ring integration). IoU threshold 0.9999 with symmetric-difference area tolerance; no topological equality test.",
       "relativeAreaDifference": 4.588815840758336e-8,
       "rightAreaKm2": 261.505374,
       "sourceShapeId": "54988432B95701093255845",

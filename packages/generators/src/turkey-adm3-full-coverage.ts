@@ -1421,7 +1421,7 @@ function differenceClippingGeometries(
   }
 }
 
-function geometryToClippingMultiPolygon(geometry: TerritoryGeometry): ClippingMultiPolygon {
+export function geometryToClippingMultiPolygon(geometry: TerritoryGeometry): ClippingMultiPolygon {
   return geometryToPolygons(geometry)
     .map((polygon) => {
       const rings = polygon
@@ -1432,7 +1432,7 @@ function geometryToClippingMultiPolygon(geometry: TerritoryGeometry): ClippingMu
     .filter((polygon): polygon is ClippingPolygon => Boolean(polygon));
 }
 
-function clippingMultiPolygonToTerritoryGeometry(
+export function clippingMultiPolygonToTerritoryGeometry(
   geometry: ClippingMultiPolygon
 ): TerritoryGeometry | undefined {
   const polygons = geometry
