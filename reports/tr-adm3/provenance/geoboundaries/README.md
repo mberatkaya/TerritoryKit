@@ -13,5 +13,8 @@ Türkiye ADM0–ADM2 canonical ebeveyn poligonlarının geoBoundaries gbOpen kay
 | [geometry-equivalence.json](./geometry-equivalence.json)                 | Onarım sonrası serileştirilmiş geometri hash |
 | [path-b-feasibility.md](./path-b-feasibility.md)                         | Path B sınıflandırması                       |
 | [migration-impact-plan.md](./migration-impact-plan.md)                   | Migrasyon etki planı (uygulanmadı)           |
+| [replay/](./replay/)                                                     | Tam `buildTerritoryCountryDataset` replay    |
+
+Tam ülke builder replay: `pnpm data:tr:geoboundaries:parent:replay` (yerel canonical + geoBoundaries önbelleği gerekir).
 
 HDX karşılaştırma kanıtı: [../](../) (PR #104).

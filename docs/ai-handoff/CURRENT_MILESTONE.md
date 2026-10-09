@@ -1,49 +1,44 @@
 # Current milestone
 
-## Türkiye ADM0–ADM2 geoBoundaries Path B lineage verification
+## Türkiye ADM0–ADM2 geoBoundaries full country-builder replay
 
-**Status:** Path B investigation tooling and evidence landed on research branch. **Catalog migration not authorized.**
+**Status:** Research PR in progress on `research/tr-geoboundaries-full-builder-replay`. **Path B catalog migration not authorized.**
 
-**Observation time:** 2026-10-08
+**Observation time:** 2026-10-09
 
 ### Verified conclusions
 
-1. Canonical parent `datasets/generated/countries/TR/dataset.json` is **not Git-tracked**; reproducible only with local `datasets/generated/countries/TR/sources.lock.json` + geoBoundaries cache/build.
-2. Historical country build lock pins **gbOpen** simplified members at git commit `9469f09592ced973a3448cf66b6100b741b64c0d` (see `sources.lock.json` and `reports/tr-adm3/provenance/geoboundaries/source-byte-verification.json`).
-3. shapeID ↔ `territory.source.sourceId` coverage is **complete** for ADM0–ADM2 (1 / 81 / 973).
-4. Geometry-repair + serialized hash replay matches **partially** (ADM0 100%, ADM1 57/81, ADM2 953/973) — geographic equivalence **not** assessed.
-5. ADR-006 (HDX default catalog) remains **Accepted**; Path B metadata realignment requires separate approval (see `DECISIONS.md` DEC-008).
+1. Pinned gbOpen simplified bytes verify against `sources.lock.json` (local cache).
+2. Full `buildTerritoryCountryDataset` replay (historical pilot geoBoundaries field map) reproduces **deterministic** output; replay `dataset.json` hash ≠ canonical artifact hash (expected — canonical is reference evidence, not overwritten).
+3. Serialized geometry vs canonical: ADM0 **1/1**, ADM1 **57/81**, ADM2 **953/973** (same counts as repair-only audit #105).
+4. All **44** mismatches: replay pipeline self-consistent; coğrafi IoU ≥ 0.9999 toleransı; kök neden sınıfı **`dependency-version`** (GEOS/Shapely repair engine vs July 2026 canonical bytes).
+5. `legalReviewStatus` remains **PENDING_REVIEW**; replay does not authorize Path B metadata migration.
 
-### Sprint branch deliverables
+### Sprint deliverables
 
-| Item                             | Location                                                                                                                 |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Path B inspection API            | `packages/generators/src/turkey-geoboundaries-parent-lineage.ts`                                                         |
-| Reproducible geoBoundaries audit | `scripts/tr-geoboundaries-parent-audit.mjs`                                                                              |
-| Evidence pack                    | `reports/tr-adm3/provenance/geoboundaries/`                                                                              |
-| Regression tests                 | `packages/generators/test/turkey-geoboundaries-parent-lineage.test.ts`, `scripts/tr-geoboundaries-parent-audit.test.mjs` |
+| Item         | Location                                                              |
+| ------------ | --------------------------------------------------------------------- |
+| Replay API   | `packages/generators/src/turkey-geoboundaries-full-builder-replay.ts` |
+| CLI          | `pnpm data:tr:geoboundaries:parent:replay`                            |
+| Evidence     | `reports/tr-adm3/provenance/geoboundaries/replay/`                    |
+| Builder hook | optional `countryConfig` on `buildTerritoryCountryDataset`            |
 
 ### Acceptance criteria
 
-| #   | Criterion                                               | Status                                 |
-| --- | ------------------------------------------------------- | -------------------------------------- |
-| 1   | Identify historical geoBoundaries release + byte hashes | **Done** (local lock + cache)          |
-| 2   | Canonical artifact storage status documented            | **Done** (gitignored local generation) |
-| 3   | Deterministic comparison tooling                        | **Done**                               |
-| 4   | Path B feasibility classification with limitations      | **Done** — `PATH_B_PARTIALLY_VERIFIED` |
-| 5   | No production migration in this PR                      | **Done**                               |
-| 6   | `pnpm data:tr:adm3:audit:test` passes                   | Pending CI on PR                       |
-
-### Next authorized work (separate PR)
-
-- **Path B migration (metadata only):** realign `national.json`, registry, national v2 default locks to pinned geoBoundaries gbOpen members; legal review on mixed OSM/ODbL attribution strings in geoBoundaries metadata; ADR-006 amendment.
-- **Path A (geometry):** re-import from HDX locked members if policy chooses official COD-AB polygons over current bytes.
-- **Geometry replay hardening:** reproduce remaining ADM1/ADM2 mismatches via full `buildTerritoryCountryDataset` pipeline diff (out of scope for this research PR).
+| #   | Criterion                                       | Status                                 |
+| --- | ----------------------------------------------- | -------------------------------------- |
+| 1   | Trace real builder pipeline                     | **Done**                               |
+| 2   | Preserve canonical baseline (read-only)         | **Done**                               |
+| 3   | Account for all 44 mismatches individually      | **Done** (`geometry-differences.json`) |
+| 4   | Geographic equivalence assessment               | **Done** (IoU / sym diff)              |
+| 5   | Determinism validation                          | **Done**                               |
+| 6   | No Path B migration / no canonical byte changes | **Done**                               |
+| 7   | CI tests for replay harness                     | Pending PR CI                          |
 
 ### Verification commands
 
 ```sh
 pnpm --filter @territory-kit/generators build
-pnpm data:tr:geoboundaries:parent:audit -- --diagnostic
+pnpm data:tr:geoboundaries:parent:replay -- --allow-incomplete-evidence
 pnpm data:tr:adm3:audit:test
 ```

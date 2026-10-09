@@ -609,6 +609,8 @@ export interface TerritoryCountryBuildResult {
 export interface TerritoryCountryBuildOptions {
   country: string;
   sourceLock: TerritoryCountrySourceLock;
+  /** Overrides registry config for reproducibility harnesses (does not change default country registry). */
+  countryConfig?: TerritoryCountryDatasetConfig;
   levels?: readonly TerritoryAdminLevel[];
   outputPath?: string;
   buildAdjacency?: boolean;

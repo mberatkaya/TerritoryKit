@@ -649,6 +649,7 @@ export function buildPathBEvidenceRequirements(input: {
   geoBoundariesUpstreamBytesVerified: boolean;
   parentInventoryStatus: TurkeyGeoBoundariesParentLineageInspection["parentInventoryStatus"];
   pathBFeasibility: PathBFeasibilityClassification;
+  fullBuilderReplayClassification?: string | null;
 }): PathBEvidenceRequirements {
   const unresolvedGeometryEvidence: string[] = [];
   for (const row of input.geometryComparison) {
@@ -663,9 +664,15 @@ export function buildPathBEvidenceRequirements(input: {
       );
     }
   }
-  unresolvedGeometryEvidence.push(
-    "Full country-builder pipeline replay (buildTerritoryCountryDataset) not executed in this audit — geometry-repair-only replay is insufficient for PATH_B_VERIFIED_CANDIDATE."
-  );
+  if (!input.fullBuilderReplayClassification) {
+    unresolvedGeometryEvidence.push(
+      "Full country-builder pipeline replay (buildTerritoryCountryDataset) not executed in this audit — geometry-repair-only replay is insufficient for PATH_B_VERIFIED_CANDIDATE."
+    );
+  } else {
+    unresolvedGeometryEvidence.push(
+      `Full country-builder replay classification: ${input.fullBuilderReplayClassification} (see reports/tr-adm3/provenance/geoboundaries/replay/).`
+    );
+  }
 
   const unresolvedSourceInventoryEvidence: string[] = [];
   for (const inventory of input.sourceFeatureInventory) {
@@ -717,7 +724,13 @@ export function buildPathBEvidenceRequirements(input: {
       : "NOT_AUTHORIZED";
 
   const fullPipelineReproducibilityStatus =
-    input.pathBFeasibility === "PATH_B_VERIFIED_CANDIDATE" ? "COMPLETE" : "INCOMPLETE";
+    input.pathBFeasibility === "PATH_B_VERIFIED_CANDIDATE"
+      ? "COMPLETE"
+      : input.fullBuilderReplayClassification === "FULL_REPLAY_VERIFIED"
+        ? "COMPLETE"
+        : input.fullBuilderReplayClassification
+          ? "INCOMPLETE"
+          : "NOT_ASSESSED";
 
   return {
     missingArtifacts: input.missingArtifacts,

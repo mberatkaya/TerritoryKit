@@ -1,0 +1,19 @@
+{
+  "pipeline": [
+    "acquireBoundarySourceArtifact (SHA-256 pinned)",
+    "parseTerritoryCountrySourceFeatures",
+    "repairTerritoryGeometries",
+    "buildLevelZones + createTerritoryCountryIdentity",
+    "resolveTerritoryCountryHierarchy",
+    "createCombinedDataset / serialization"
+  ],
+  "schemaVersion": "territorykit-tr-geoboundaries-full-builder-replay@1",
+  "stageLabels": [
+    "parsed-upstream",
+    "adapter-output",
+    "geometry-repair",
+    "country-builder-output",
+    "serialized-final",
+    "canonical-parent"
+  ]
+}

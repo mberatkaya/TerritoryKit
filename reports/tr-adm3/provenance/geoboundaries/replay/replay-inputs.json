@@ -1,0 +1,30 @@
+{
+  "byteVerification": [
+    {
+      "expectedSha256": "263ed2d7855f4cd23a8314a12c0a2bec773dc0dbe62a4e40d3a6a687939f7379",
+      "level": "ADM0",
+      "status": "LOCKED_BYTES_VERIFIED"
+    },
+    {
+      "expectedSha256": "94f64008c50e1953a56eb9dc1fb7367944d2290c6da5976a4f31e7eca35b3117",
+      "level": "ADM1",
+      "status": "LOCKED_BYTES_VERIFIED"
+    },
+    {
+      "expectedSha256": "17af9a6bff9bed53390e49cbbf66569e0d296f134cd4528e1dc3c0d204e358f3",
+      "level": "ADM2",
+      "status": "LOCKED_BYTES_VERIFIED"
+    }
+  ],
+  "canonicalDatasetVersion": "0.1.0",
+  "canonicalFeatureCounts": {
+    "ADM0": 1,
+    "ADM1": 81,
+    "ADM2": 973
+  },
+  "classification": "GEOGRAPHICALLY_EQUIVALENT_WITH_DIFFERENCES",
+  "geoBoundariesCacheRoot": ".territory/cache/sources/geoboundaries",
+  "parentDatasetPath": "datasets/generated/countries/TR/dataset.json",
+  "schemaVersion": "territorykit-tr-geoboundaries-full-builder-replay@1",
+  "sourceLockPath": "datasets/generated/countries/TR/sources.lock.json"
+}

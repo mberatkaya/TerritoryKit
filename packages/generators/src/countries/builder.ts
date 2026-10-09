@@ -76,6 +76,7 @@ import type {
   TerritoryCountryBuildReport,
   TerritoryCountryBuildResult,
   TerritoryCountryBuildStatistics,
+  TerritoryCountryDatasetConfig,
   TerritoryCountryDatasetManifest,
   TerritoryCountryGeometryRepairSummary,
   TerritoryCountryInspectSummary,
@@ -90,7 +91,7 @@ export async function buildTerritoryCountryDataset(
   options: TerritoryCountryBuildOptions
 ): Promise<TerritoryCountryBuildResult> {
   const cwd = options.cwd ?? process.cwd();
-  const config = getTerritoryCountryConfig(options.country);
+  const config = options.countryConfig ?? getTerritoryCountryConfig(options.country);
   const buildDate = resolveBuildTimestamp(options.buildDate);
   const requestedLevels = normalizeLevels(options.levels ?? config.requestedLevels);
   const issues: TerritoryCountryBuildIssue[] = [];
@@ -589,6 +590,7 @@ export async function buildTerritoryCountryDatasetPath(options: {
   country: string;
   sourceLockPath: string;
   outputPath: string;
+  countryConfig?: TerritoryCountryDatasetConfig;
   levels?: readonly TerritoryAdminLevel[];
   buildAdjacency?: boolean;
   buildQueryArtifacts?: boolean;
@@ -615,6 +617,7 @@ export async function buildTerritoryCountryDatasetPath(options: {
     country: options.country,
     sourceLock: lock,
     outputPath: options.outputPath,
+    ...(options.countryConfig ? { countryConfig: options.countryConfig } : {}),
     ...(options.levels ? { levels: options.levels } : {}),
     ...(options.buildAdjacency ? { buildAdjacency: true } : {}),
     ...(options.buildQueryArtifacts ? { buildQueryArtifacts: true } : {}),
@@ -899,10 +902,23 @@ export async function inspectTerritoryCountryDatasetPath(
   };
 }
 
+export function parseTerritoryCountrySourceFeatures(
+  input: unknown,
+  context: {
+    config: TerritoryCountryDatasetConfig;
+    level: TerritoryAdminLevel;
+    sourceDatasetVersion?: string;
+    issues?: TerritoryCountryBuildIssue[];
+  }
+): ParsedCountryFeature[] {
+  const issues = context.issues ?? [];
+  return readCountryFeatures(input, { ...context, issues });
+}
+
 function readCountryFeatures(
   input: unknown,
   context: {
-    config: ReturnType<typeof getTerritoryCountryConfig>;
+    config: TerritoryCountryDatasetConfig;
     level: TerritoryAdminLevel;
     sourceDatasetVersion?: string;
     issues: TerritoryCountryBuildIssue[];

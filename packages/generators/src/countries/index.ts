@@ -4,6 +4,7 @@ export {
   buildTerritoryCountryDataset,
   buildTerritoryCountryDatasetPath,
   inspectTerritoryCountryDatasetPath,
+  parseTerritoryCountrySourceFeatures,
   validateTerritoryCountryDatasetPath
 } from "./builder.js";
 export {
