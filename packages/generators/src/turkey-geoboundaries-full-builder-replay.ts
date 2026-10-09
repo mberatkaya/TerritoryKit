@@ -693,7 +693,7 @@ export async function runTurkeyGeoBoundariesFullBuilderReplay(
 
   let secondDatasetSha256: string | null = null;
   const determinismSkipped = Boolean(options.skipSecondDeterminismRun);
-  let firstDatasetSha256: string | null = null;
+  let firstDatasetSha256: string;
   try {
     firstDatasetSha256 = await sha256File(path.join(firstRunDir, "dataset.json"));
   } catch {
