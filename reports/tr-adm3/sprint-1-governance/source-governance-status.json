@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-1-governance@1/source-governance-status",
+  "generatedAt": "2026-10-09T09:16:13.595Z",
+  "inspectedCommit": "dd3ab8eea31e0f1bce1cbb664105f53d150d7ca9",
+  "originMainVerifiedAtSprintStart": "dd3ab8eea31e0f1bce1cbb664105f53d150d7ca9",
+  "mergedResearchPrs": [
+    {
+      "number": 104,
+      "title": "fix(tr): verify and reconcile national parent source provenance"
+    },
+    {
+      "number": 105,
+      "title": "research(tr): verify geoBoundaries parent source lineage for Path B"
+    },
+    {
+      "number": 106,
+      "title": "research(tr): reproduce geoBoundaries parent geometry through full country builder"
+    }
+  ],
+  "nationalDatasetCandidate": {
+    "package": "territory-kit-tr-v2-playable",
+    "version": "2.1.0-rc.7",
+    "scope": "LOCAL_RELEASE_CANDIDATE_NOT_PRODUCTION",
+    "evidence": "reports/tr-adm3/audit/baseline-claims.json",
+    "renderableAreaCoverageNote": "Renderable coverage (e.g. 99.999979%) measures gameplay polygon completeness, not official administrative accuracy.",
+    "officialAreaCoverageNote": "Official effective area share (~4.997459%) is distinct from renderable coverage; see audit current-state.md."
+  },
+  "parentProvenance": {
+    "canonicalParentProvider": "geoboundaries",
+    "nationalCatalogProvider": "hdx-cod-ab",
+    "classification": "CATALOG_LOCK_DIFFERS_FROM_PARENT_POLYGONS",
+    "geoBoundariesBytesVerified": true,
+    "identityMatch": {
+      "ADM0": 1,
+      "ADM1": 81,
+      "ADM2": 973
+    },
+    "fullBuilderReplay": {
+      "classification": "GEOGRAPHICALLY_EQUIVALENT_WITH_DIFFERENCES",
+      "pathBTechnicalRecommendation": "PARTIAL",
+      "geometryHashMismatches": 44,
+      "determinismByteIdentical": true,
+      "legalReviewStatus": "PENDING_REVIEW",
+      "productionApproved": false
+    },
+    "evidenceIndex": [
+      "reports/tr-adm3/provenance/resolution.md",
+      "reports/tr-adm3/provenance/geoboundaries/",
+      "reports/tr-adm3/provenance/geoboundaries/replay/"
+    ]
+  },
+  "implementationRoadmap": {
+    "sprint1": "Source and governance closeout",
+    "sprint2": "Istanbul ADM3 geometry quality",
+    "sprint3": "National RC and delivery validation",
+    "sprint4": "Rush&Claim integration"
+  }
+}

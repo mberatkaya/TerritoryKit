@@ -39,15 +39,15 @@ Lightweight ADR companion. Full ADRs remain in `adr/` and `docs/adr/`. Status me
 
 ### DEC-008: Path B — geoBoundaries gbOpen metadata realignment (proposed)
 
-- **Status:** Proposed (evidence on `research/tr-geoboundaries-parent-lineage`; not accepted)
-- **Context:** PR #104 confirmed HDX catalog vs geoBoundaries parent polygons. Path B sprint pinned historical gbOpen simplified members via `datasets/generated/countries/TR/sources.lock.json` and verified SHA-256 in local cache.
+- **Status:** Proposed (not accepted; Sprint 1 documents evidence only)
+- **Context:** PR #104 confirmed HDX catalog vs geoBoundaries parent polygons. PR #105 verified gbOpen bytes; PR #106 executed full `buildTerritoryCountryDataset` replay with geographic equivalence assessment.
 - **Decision (proposed):** Allow **metadata-only** realignment of `national.json` / national v2 locks to the pinned geoBoundaries release **without** changing canonical parent polygon bytes, if legal review accepts attribution and ADR-006 is amended.
-- **Evidence:** `reports/tr-adm3/provenance/geoboundaries/`, `PATH_B_PARTIALLY_VERIFIED` (geometry replay incomplete for 24 ADM1 + 20 ADM2 zones under repair-only replay).
-- **Consequences:** Does not supersede ADR-006 until explicitly accepted; does not authorize npm publish or dataset promotion.
+- **Evidence:** `reports/tr-adm3/provenance/geoboundaries/`, `reports/tr-adm3/provenance/geoboundaries/replay/replay-summary.json` — Path B technical **`PARTIAL`**; 44 serialized hash mismatches with documented IoU tolerance; `legalReviewStatus: PENDING_REVIEW`.
+- **Consequences:** Does not supersede ADR-006 until explicitly accepted; does not authorize npm publish or dataset promotion. See `reports/tr-adm3/sprint-1-governance/path-a-vs-path-b-matrix.md`.
 
 ### DEC-003: Parent geometry provenance on canonical dataset vs source-lock
 
-- **Status:** Open (root cause confirmed 2026-10-08; Path B partially verified 2026-10-08)
+- **Status:** Open (root cause confirmed 2026-10-08; Path B partially verified through PR #106 full builder replay 2026-10-09)
 - **Context:** Audit #100 recorded ADM0–ADM2 canonical records with `geoboundaries` provenance while source-lock/national catalog describe HDX COD-AB.
 - **Decision:** Canonical parent polygons in `datasets/generated/countries/TR/dataset.json` are geoBoundaries-sourced bytes. HDX COD-AB members in `national.json` are verified locally but **do not** match those parent geometries. National v2 builds copied HDX catalog into `source-lock` without ingesting those members for ADM0–ADM2.
 - **Evidence:** `reports/tr-adm3/provenance/parent-lineage.json`, `geometry-comparison.json`, `source-verification.json`; `packages/cli/src/turkey-v2-national.ts` (`DEFAULT_ADM0_ADM2_DATASET` vs `DEFAULT_NATIONAL_SOURCE`)
@@ -83,6 +83,6 @@ Lightweight ADR companion. Full ADRs remain in `adr/` and `docs/adr/`. Status me
 
 ## Open technical questions
 
-1. ~~Which byte source actually produced tracked/canonical TR ADM0–ADM2 parent geometries?~~ **Partially answered:** gbOpen simplified geoBoundaries `9469f095…` per `sources.lock.json`; full builder replay still leaves ADM1/ADM2 geometry hash gaps (see `geometry-equivalence.json`).
+1. ~~Which byte source actually produced tracked/canonical TR ADM0–ADM2 parent geometries?~~ **Partially answered:** gbOpen simplified geoBoundaries `9469f095…` per `sources.lock.json`; full builder replay documents 44 serialized hash gaps with geographic equivalence under IoU tolerance (#106); repair-engine root cause not conclusively proven.
 2. What is the authoritative path to full official Kadıköy neighbourhood polygons (CRS + complete bundle)?
 3. Hosted registry version vs mobile offline cache — requires external consumer tests (Priority 6 in `NEXT_ACTIONS.md`).

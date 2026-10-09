@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-1-governance@1/path-decision-matrix",
+  "generatedAt": "2026-10-09T09:16:13.644Z",
+  "inspectedCommit": "dd3ab8eea31e0f1bce1cbb664105f53d150d7ca9",
+  "adr006Status": "ACCEPTED_UNCHANGED",
+  "dec008Status": "PROPOSED_NOT_ACCEPTED",
+  "pathBTechnicalStatus": "PARTIAL",
+  "legalReviewStatus": "PENDING_REVIEW",
+  "migrationAuthorized": false,
+  "options": [
+    {
+      "id": "PATH_A",
+      "title": "Migrate parent polygons to HDX COD-AB",
+      "technicalConsequences": "Re-import ADM0–ADM2 from locked HDX ZIP members; rebuild canonical parent dataset.json bytes.",
+      "geometryAndIdImpact": "Serialized geometry hashes and possibly stable IDs if field mapping differs; ADM3 parent clip replay required.",
+      "licensingUncertainties": "HDX CC BY-IGO catalog is documented; verify gameplay derivative obligations separately.",
+      "adm3ClippingImpact": "High — all ADM3 zones clipped to new parent boundaries must be regression-tested.",
+      "registryImpact": "Aligns national.json with polygons; reduces catalog/polygon mismatch.",
+      "consumerImpact": "Breaking geometry change unless versioned migration; MVT/tile regeneration.",
+      "requiredApprovals": [
+        "ADR amendment or superseding decision",
+        "Legal review",
+        "National rebuild authorization"
+      ],
+      "rollbackPrerequisites": "Retain geoBoundaries canonical snapshot SHA-256 and prior dataset version pin."
+    },
+    {
+      "id": "PATH_B",
+      "title": "Align catalog/metadata with geoBoundaries-derived canonical parent",
+      "technicalConsequences": "Metadata-only realignment of national.json and source-lock strings without changing canonical polygon bytes.",
+      "geometryAndIdImpact": "No intended parent byte change; 44 serialized hash gaps vs full-builder replay remain documented (geographically equivalent under IoU tolerance per #106).",
+      "licensingUncertainties": "CC BY-SA 2.0 / ODbL 1.0 / CC BY 4.0 adapter mismatch unresolved; not production-approved.",
+      "adm3ClippingImpact": "Low if parent bytes unchanged; verify no accidental geometry refresh.",
+      "registryImpact": "national.json provider switches from hdx-cod-ab to geoBoundaries pins.",
+      "consumerImpact": "Attribution text changes; geometry unchanged if migration is strictly metadata.",
+      "requiredApprovals": [
+        "DEC-008 acceptance",
+        "ADR-006 amendment",
+        "Legal review accepting geoBoundaries attribution chain",
+        "Explicit acceptance of 44 hash gaps or mitigation plan"
+      ],
+      "rollbackPrerequisites": "Preserve HDX catalog lock checksums and pre-migration national.json."
+    }
+  ],
+  "recommendation": {
+    "preferredOption": "DEFER_MIGRATION",
+    "rationale": "Existing evidence supports documenting the catalog/polygon mismatch and completing legal review before either Path A geometry migration or Path B metadata realignment. Path B is technically PARTIAL, not production-approved.",
+    "evidence": [
+      "reports/tr-adm3/provenance/resolution.md",
+      "reports/tr-adm3/provenance/geoboundaries/path-b-feasibility.md",
+      "reports/tr-adm3/provenance/geoboundaries/replay/replay-summary.json",
+      "adr/ADR-006-turkey-national-administrative-sources.md"
+    ]
+  }
+}

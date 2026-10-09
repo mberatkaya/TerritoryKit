@@ -10,3 +10,5 @@ Machine-readable lineage for the national parent polygon mismatch sprint.
 | [resolution.md](./resolution.md)                       | Human-readable conclusion                            |
 
 Historical ADM3 audit evidence remains under [../audit/](../audit/).
+
+Sprint 1 consolidated governance (licensing, Path A/B, ADM3 readiness): [../sprint-1-governance/](../sprint-1-governance/).

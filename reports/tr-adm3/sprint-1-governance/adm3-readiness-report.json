@@ -1,0 +1,671 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-1-governance@1/adm3-readiness",
+  "generatedAt": "2026-10-09T09:16:13.595Z",
+  "inspectedCommit": "dd3ab8eea31e0f1bce1cbb664105f53d150d7ca9",
+  "registryPath": "datasets/sources/TR/adm3/source-registry.json",
+  "catalogSidecarPath": "datasets/sources/TR/adm3-catalog.json",
+  "provinceSummary": {
+    "provinceCount": 81,
+    "byStatus": {
+      "official-restricted": 62,
+      "partial-official": 6,
+      "official-service-only": 2,
+      "official-ready": 4,
+      "official-license-review": 7
+    },
+    "blockers": [
+      {
+        "provinceCode": "01",
+        "provinceName": "Adana",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "02",
+        "provinceName": "Adıyaman",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "03",
+        "provinceName": "Afyonkarahisar",
+        "status": "partial-official",
+        "primaryBlocker": "partial-official-coverage",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "04",
+        "provinceName": "Ağrı",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "05",
+        "provinceName": "Amasya",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "06",
+        "provinceName": "Ankara",
+        "status": "official-service-only",
+        "primaryBlocker": "access-blocked-service-only",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "07",
+        "provinceName": "Antalya",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "08",
+        "provinceName": "Artvin",
+        "status": "official-service-only",
+        "primaryBlocker": "access-blocked-service-only",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "09",
+        "provinceName": "Aydın",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "10",
+        "provinceName": "Balıkesir",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "11",
+        "provinceName": "Bilecik",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "12",
+        "provinceName": "Bingöl",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "13",
+        "provinceName": "Bitlis",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "14",
+        "provinceName": "Bolu",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "15",
+        "provinceName": "Burdur",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "17",
+        "provinceName": "Çanakkale",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "18",
+        "provinceName": "Çankırı",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "19",
+        "provinceName": "Çorum",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "20",
+        "provinceName": "Denizli",
+        "status": "official-license-review",
+        "primaryBlocker": "license-pending",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "21",
+        "provinceName": "Diyarbakır",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "22",
+        "provinceName": "Edirne",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "23",
+        "provinceName": "Elazığ",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "24",
+        "provinceName": "Erzincan",
+        "status": "partial-official",
+        "primaryBlocker": "partial-official-coverage",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "25",
+        "provinceName": "Erzurum",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "26",
+        "provinceName": "Eskişehir",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "28",
+        "provinceName": "Giresun",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "29",
+        "provinceName": "Gümüşhane",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "30",
+        "provinceName": "Hakkari",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "31",
+        "provinceName": "Hatay",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "32",
+        "provinceName": "Isparta",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "33",
+        "provinceName": "Mersin",
+        "status": "partial-official",
+        "primaryBlocker": "partial-official-coverage",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "34",
+        "provinceName": "İstanbul",
+        "status": "official-license-review",
+        "primaryBlocker": "license-pending",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "35",
+        "provinceName": "İzmir",
+        "status": "official-license-review",
+        "primaryBlocker": "license-pending",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "36",
+        "provinceName": "Kars",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "37",
+        "provinceName": "Kastamonu",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "39",
+        "provinceName": "Kırklareli",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "40",
+        "provinceName": "Kırşehir",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "41",
+        "provinceName": "Kocaeli",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "42",
+        "provinceName": "Konya",
+        "status": "official-license-review",
+        "primaryBlocker": "license-pending",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "43",
+        "provinceName": "Kütahya",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "44",
+        "provinceName": "Malatya",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "45",
+        "provinceName": "Manisa",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "46",
+        "provinceName": "Kahramanmaraş",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "47",
+        "provinceName": "Mardin",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "48",
+        "provinceName": "Muğla",
+        "status": "official-license-review",
+        "primaryBlocker": "license-pending",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "49",
+        "provinceName": "Muş",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "50",
+        "provinceName": "Nevşehir",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "51",
+        "provinceName": "Niğde",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "53",
+        "provinceName": "Rize",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "54",
+        "provinceName": "Sakarya",
+        "status": "official-license-review",
+        "primaryBlocker": "license-pending",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "55",
+        "provinceName": "Samsun",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "56",
+        "provinceName": "Siirt",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "57",
+        "provinceName": "Sinop",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "58",
+        "provinceName": "Sivas",
+        "status": "official-license-review",
+        "primaryBlocker": "license-pending",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "59",
+        "provinceName": "Tekirdağ",
+        "status": "partial-official",
+        "primaryBlocker": "partial-official-coverage",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "60",
+        "provinceName": "Tokat",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "61",
+        "provinceName": "Trabzon",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "62",
+        "provinceName": "Tunceli",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "63",
+        "provinceName": "Şanlıurfa",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "64",
+        "provinceName": "Uşak",
+        "status": "partial-official",
+        "primaryBlocker": "partial-official-coverage",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "65",
+        "provinceName": "Van",
+        "status": "partial-official",
+        "primaryBlocker": "partial-official-coverage",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "66",
+        "provinceName": "Yozgat",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "67",
+        "provinceName": "Zonguldak",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "68",
+        "provinceName": "Aksaray",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "69",
+        "provinceName": "Bayburt",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "70",
+        "provinceName": "Karaman",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "71",
+        "provinceName": "Kırıkkale",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "72",
+        "provinceName": "Batman",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "73",
+        "provinceName": "Şırnak",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "74",
+        "provinceName": "Bartın",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "75",
+        "provinceName": "Ardahan",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "76",
+        "provinceName": "Iğdır",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "77",
+        "provinceName": "Yalova",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "78",
+        "provinceName": "Karabük",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "79",
+        "provinceName": "Kilis",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "80",
+        "provinceName": "Osmaniye",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      },
+      {
+        "provinceCode": "81",
+        "provinceName": "Düzce",
+        "status": "official-restricted",
+        "primaryBlocker": "access-blocked-restricted",
+        "productionEligibleSources": 0,
+        "candidateSourceCount": 2
+      }
+    ]
+  },
+  "nationalSourcesAssessment": [
+    {
+      "provider": "NVI Mekansal Adres Kayit Sistemi (MAKS)",
+      "licenseState": "restricted",
+      "productionEligible": false,
+      "access": "restricted"
+    },
+    {
+      "provider": "TUCBS Ulusal Cografi Bilgi Platformu",
+      "licenseState": "review-required",
+      "productionEligible": false,
+      "access": "request-required"
+    },
+    {
+      "provider": "NVI Adres Kayit Sistemi / UAVT",
+      "licenseState": "restricted",
+      "productionEligible": false,
+      "access": "restricted"
+    },
+    {
+      "provider": "Harita Genel Mudurlugu Turkiye Mulki Idare Sinirlari",
+      "licenseState": "review-required",
+      "productionEligible": false,
+      "access": "public-download"
+    }
+  ],
+  "statusLegend": {
+    "official-ready": "Approved source path documented; production eligibility still requires locked polygons",
+    "official-license-review": "License pending",
+    "official-restricted": "Access blocked / no redistributable package",
+    "official-service-only": "Service/API without redistributable export",
+    "partial-official": "Partial municipal official coverage only",
+    "osm-candidate": "OSM candidate — not approved official substitute",
+    "research-required": "Research required",
+    "unavailable": "Geometry unavailable"
+  }
+}

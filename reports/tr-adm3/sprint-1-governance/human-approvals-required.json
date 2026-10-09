@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-1-governance@1/human-approvals",
+  "generatedAt": "2026-10-09T09:16:13.653Z",
+  "inspectedCommit": "dd3ab8eea31e0f1bce1cbb664105f53d150d7ca9",
+  "items": [
+    {
+      "id": "LEGAL_ADM0_ADM2_GEOBOUNDARIES",
+      "status": "PENDING_REVIEW",
+      "summary": "geoBoundaries gbOpen license chain vs per-level lock strings for TR ADM0–ADM2"
+    },
+    {
+      "id": "PATH_A_OR_B_MIGRATION",
+      "status": "NOT_AUTHORIZED",
+      "summary": "Parent polygon migration (Path A) or metadata realignment (Path B)"
+    },
+    {
+      "id": "DEC_008_ACCEPTANCE",
+      "status": "OPEN",
+      "summary": "Accept proposed DEC-008 after legal and replay evidence review"
+    },
+    {
+      "id": "ADR_006_AMENDMENT",
+      "status": "OPEN",
+      "summary": "Amend ADR-006 only if Path B is chosen"
+    },
+    {
+      "id": "NATIONAL_DATASET_PROMOTION",
+      "status": "NOT_AUTHORIZED",
+      "summary": "Promote territory-kit-tr-v2-playable@2.1.0-rc.7 to production/hosted delivery"
+    },
+    {
+      "id": "ADM3_OFFICIAL_SOURCE_EXPANSION",
+      "status": "PENDING_PER_PROVINCE",
+      "summary": "Municipal/national official ADM3 licenses (81-province registry blockers)"
+    },
+    {
+      "id": "VERSION_PACKAGES_PR_103",
+      "status": "OBSERVE_ONLY",
+      "summary": "PR #103 Version Packages — do not merge without explicit authorization"
+    }
+  ]
+}
