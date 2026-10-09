@@ -24,6 +24,24 @@ export {
   resolveTurkeySmartFallbackConfiguration
 } from "./turkey-smart-fallback.js";
 export {
+  DEFAULT_TURKEY_GENERATED_ZONE_PATHOLOGY_THRESHOLDS,
+  TURKEY_GENERATED_ZONE_PATHOLOGY_SCHEMA_VERSION,
+  inspectTurkeyGeneratedZonePathology,
+  isTurkeyGeneratedGameplayZone
+} from "./turkey-generated-zone-pathology.js";
+export {
+  TURKEY_MUNICIPAL_SHAPEFILE_BUNDLE_SCHEMA_VERSION,
+  inspectTurkeyMunicipalShapefileCompanionBundle
+} from "./turkey-municipal-shapefile-bundle.js";
+export {
+  TURKEY_ISTANBUL_GEOMETRY_DIAGNOSTICS_SCHEMA_VERSION,
+  classifyTurkeyRuralGeneratorQuality,
+  geometryComponentCount,
+  inspectTurkeyGeneratedCoastlineSpill,
+  inspectTurkeyIslandMultipolygonSafety,
+  summarizeTurkeyNetworkRouteRootCause
+} from "./turkey-istanbul-geometry-diagnostics.js";
+export {
   TURKEY_V2_ADM3_STABLE_ID_STANDARD,
   createTurkeyV2Adm3StableKey,
   createTurkeyV2Adm3TerritoryId

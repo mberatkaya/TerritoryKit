@@ -4,8 +4,8 @@
 
 | Sprint | Task                                                                                            | Status                                                |
 | ------ | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| 1      | Source governance closeout — consolidated reports, licensing matrix, Path A/B, Sprint 2 handoff | **in progress** (`fix/tr-source-governance-closeout`) |
-| 2      | Istanbul geometry quality — Fatih, Kadıköy, Üsküdar, Adalar, Eyüpsultan/Çatalca pilots          | **next**                                              |
+| 1      | Source governance closeout — consolidated reports, licensing matrix, Path A/B, Sprint 2 handoff | **done** (#107, `70aab395`) |
+| 2      | Istanbul geometry quality — Fatih, Kadıköy, Üsküdar, Adalar, Eyüpsultan/Çatalca pilots          | **in progress** (`feat/tr-adm3-istanbul-quality`) |
 | 3      | National RC and delivery validation                                                             | planned                                               |
 | 4      | Rush&Claim integration                                                                          | planned                                               |
 

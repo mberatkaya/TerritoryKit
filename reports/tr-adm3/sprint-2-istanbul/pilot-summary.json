@@ -1,0 +1,223 @@
+{
+  "schemaVersion": "territorykit-tr-adm3-sprint-2-istanbul@1",
+  "generatedAt": "2026-10-09T10:49:47.737Z",
+  "baselineMainSha": "70aab395b0ed5eb7d0d9870a81362524c365827d",
+  "headSha": null,
+  "sourceArtifacts": {
+    "istanbulDistrictDiagnostics": "reports/tr-adm3/audit/istanbul-district-diagnostics.json",
+    "istanbulReplay": "reports/tr-adm3/audit/istanbul-replay.json",
+    "istanbulDeterminism": "reports/tr-adm3/audit/istanbul-determinism.json",
+    "kadikoyAcquisition": "reports/tr-adm3/audit/kadikoy-acquisition.json"
+  },
+  "kadikoyOfficialPilot": {
+    "acquisitionEvidencePath": "reports/tr-adm3/audit/kadikoy-acquisition.json",
+    "localBundleDir": "/Users/mbkaya/Repo/TerritoryKit/.territory/quality-source-audit/kadikoy",
+    "bundle": {
+      "schemaVersion": "territorykit-tr-adm3-municipal-shapefile-bundle@1",
+      "status": "BLOCKED_DUPLICATE_RESPONSE",
+      "reasonCodes": [
+        "DBF_PARSE_FAILED",
+        "IDENTICAL_COMPANION_BYTES",
+        "INVALID_DBF_SIGNATURE",
+        "SHP_SHX_RECORD_COUNT_MISMATCH"
+      ],
+      "companions": [
+        {
+          "role": "cpg",
+          "fileName": "mahalle_sinir.cpg",
+          "byteSize": 103260,
+          "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+          "detectedKind": "codepage-sidecar"
+        },
+        {
+          "role": "dbf",
+          "fileName": "mahalle_sinir.dbf",
+          "byteSize": 103260,
+          "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+          "detectedKind": "invalid-dbf-header"
+        },
+        {
+          "role": "prj",
+          "fileName": "mahalle_sinir.prj",
+          "byteSize": 103260,
+          "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+          "detectedKind": "non-wkt-prj"
+        },
+        {
+          "role": "shp",
+          "fileName": "mahalle_sinir.shp",
+          "byteSize": 103260,
+          "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+          "detectedKind": "esri-shapefile-main"
+        },
+        {
+          "role": "shx",
+          "fileName": "mahalle_sinir.shx",
+          "byteSize": 103260,
+          "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+          "detectedKind": "esri-shapefile-index"
+        }
+      ],
+      "shpRecordCount": 21,
+      "shxRecordCount": 12895,
+      "dbfRecordCount": null,
+      "uniqueSha256Count": 1,
+      "notes": [
+        "Tüm companion dosyalar aynı SHA-256 ve boyuta sahip; bağımsız SHP bundle doğrulanamaz.",
+        "Kadıköy CKAN companion URL'leri aynı SHP baytlarını döndürüyor; pilot BLOCKED_BY_SOURCE."
+      ]
+    },
+    "pilotStatus": "BLOCKED_BY_SOURCE"
+  },
+  "pilotDistricts": [
+    {
+      "district": "Fatih",
+      "canonicalAdm2Name": "Fatih",
+      "baseline": {
+        "zoneCount": 30,
+        "confidence": null,
+        "geometryHash": "ba17816e271180fc823ef372388bf7d31aa09904d6e035ece7a0a759027ebef9",
+        "longestUnsupportedStraightChainMeters": 0,
+        "topologyPass": true
+      },
+      "current": {
+        "sourceVersion": "smart-derived-v1.7",
+        "replayAvailable": true,
+        "pathologySchema": "territorykit-tr-adm3-generated-pathology@1",
+        "ruralQuality": null,
+        "routeRootCause": null
+      },
+      "stableIdDelta": "NONE_OBSERVED_IN_AUDIT_REPLAY",
+      "determinism": null
+    },
+    {
+      "district": "Kadıköy",
+      "canonicalAdm2Name": "Kadıköy",
+      "baseline": {
+        "zoneCount": null,
+        "confidence": null,
+        "geometryHash": "92f0a2b812ecbd773e4e77e369e4df6ac8685fee7d378c41dd01a3cb41c0c332",
+        "longestUnsupportedStraightChainMeters": null,
+        "topologyPass": true
+      },
+      "current": {
+        "sourceVersion": "smart-derived-v1.7",
+        "replayAvailable": false,
+        "pathologySchema": "territorykit-tr-adm3-generated-pathology@1",
+        "ruralQuality": null,
+        "routeRootCause": null
+      },
+      "stableIdDelta": "NONE_OBSERVED_IN_AUDIT_REPLAY",
+      "determinism": null
+    },
+    {
+      "district": "Üsküdar",
+      "canonicalAdm2Name": "Üsküdar",
+      "baseline": {
+        "zoneCount": null,
+        "confidence": null,
+        "geometryHash": "c149ffbb98f26aefa4889d2a92abe6f0b9e36ea1f873062961b41cc06d6f2257",
+        "longestUnsupportedStraightChainMeters": null,
+        "topologyPass": true
+      },
+      "current": {
+        "sourceVersion": "smart-derived-v1.7",
+        "replayAvailable": false,
+        "pathologySchema": "territorykit-tr-adm3-generated-pathology@1",
+        "ruralQuality": null,
+        "routeRootCause": null
+      },
+      "stableIdDelta": "NONE_OBSERVED_IN_AUDIT_REPLAY",
+      "determinism": null
+    },
+    {
+      "district": "Adalar",
+      "canonicalAdm2Name": "Prince Islands",
+      "baseline": {
+        "zoneCount": 14,
+        "confidence": null,
+        "geometryHash": "386e90a65a03b481f3e96cb47770f7b8b0ab49caf4b3d04398c19a9e95a6a962",
+        "longestUnsupportedStraightChainMeters": 0,
+        "topologyPass": true
+      },
+      "current": {
+        "sourceVersion": "smart-derived-v1.7",
+        "replayAvailable": true,
+        "pathologySchema": "territorykit-tr-adm3-generated-pathology@1",
+        "ruralQuality": null,
+        "routeRootCause": null
+      },
+      "stableIdDelta": "NONE_OBSERVED_IN_AUDIT_REPLAY",
+      "determinism": null
+    },
+    {
+      "district": "Eyüpsultan",
+      "canonicalAdm2Name": "Eyüpsultan",
+      "baseline": {
+        "zoneCount": 19,
+        "confidence": null,
+        "geometryHash": "9522f0a4e0ef3e23e488864972a4b8399a79114e7ce71688f729d084480c15f2",
+        "longestUnsupportedStraightChainMeters": 3611.46062,
+        "topologyPass": true
+      },
+      "current": {
+        "sourceVersion": "smart-derived-v1.7",
+        "replayAvailable": true,
+        "pathologySchema": "territorykit-tr-adm3-generated-pathology@1",
+        "ruralQuality": null,
+        "routeRootCause": {
+          "primaryReasonCode": "ORGANIC_ROUTE_NO_PATH",
+          "reasonCodes": [
+            "HIGH_RESIDUAL_AREA",
+            "LONG_UNSUPPORTED_SEAM_REMAINS",
+            "LOW_NETWORK_FACE_COVERAGE",
+            "NETWORK_GRAPH_FRAGMENTED",
+            "ORGANIC_ROUTE_NO_PATH"
+          ],
+          "summaryTr": "Koridor içinde bağlı bariyer grafiği yolu bulunamadı; OSM ağ bileşenleri parçalı ve yüzey kapsamı düşük.",
+          "routeFailureReason": "NO_ROUTE",
+          "graphComponentCount": 368,
+          "networkCoveragePercent": 23.807664,
+          "residualAreaPercent": 76.192341
+        }
+      },
+      "stableIdDelta": "NONE_OBSERVED_IN_AUDIT_REPLAY",
+      "determinism": null
+    },
+    {
+      "district": "Çatalca",
+      "canonicalAdm2Name": "Çatalca",
+      "baseline": {
+        "zoneCount": null,
+        "confidence": null,
+        "geometryHash": "ab4df0c68a194a66a787f638e6cf8f7dbe445f0c03e98f112dabecad1f27757d",
+        "longestUnsupportedStraightChainMeters": null,
+        "topologyPass": true
+      },
+      "current": {
+        "sourceVersion": "smart-derived-v1.7",
+        "replayAvailable": false,
+        "pathologySchema": "territorykit-tr-adm3-generated-pathology@1",
+        "ruralQuality": {
+          "confidenceTier": "low",
+          "reasonCodes": [
+            "LOW_ROAD_DENSITY",
+            "LONG_UNSUPPORTED_CHAIN",
+            "LOW_NETWORK_FACE_COVERAGE",
+            "SEED_DENSITY_INSUFFICIENT_FOR_RESIDUAL"
+          ],
+          "longestUnsupportedChainMeters": 7802,
+          "localitySeedCount": 248,
+          "roadDensityKmPerKm2": 2.4
+        },
+        "routeRootCause": null
+      },
+      "stableIdDelta": "NONE_OBSERVED_IN_AUDIT_REPLAY",
+      "determinism": null
+    }
+  ],
+  "limitations": [
+    ".territory/sprint-6 barrier bundle bu ortamda yok; tam canlı İstanbul replay fixture dışı doğrulamaya kapalı.",
+    "rc.7 ulusal artifact'leri değiştirilmedi; karşılaştırma audit replay kanıtına dayanır."
+  ]
+}
