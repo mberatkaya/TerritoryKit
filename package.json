@@ -67,9 +67,10 @@
     "security:test": "node --test scripts/validate-workflow-inputs.test.mjs scripts/security-audit-exceptions.test.mjs",
     "release:benchmark:test": "node --test scripts/release-benchmark-dataset.test.mjs",
     "data:tr:adm3:audit": "node --max-old-space-size=8192 scripts/tr-adm3-quality-source-audit.mjs",
-    "data:tr:adm3:audit:test": "node --test scripts/tr-adm3-quality-source-audit.test.mjs scripts/tr-parent-provenance-audit.test.mjs scripts/tr-geoboundaries-parent-audit.test.mjs",
+    "data:tr:adm3:audit:test": "node --test scripts/tr-adm3-quality-source-audit.test.mjs scripts/tr-parent-provenance-audit.test.mjs scripts/tr-geoboundaries-parent-audit.test.mjs scripts/tr-geoboundaries-parent-replay.test.mjs",
     "data:tr:parent-provenance:audit": "pnpm --filter @territory-kit/generators build && node scripts/tr-parent-provenance-audit.mjs",
-    "data:tr:geoboundaries:parent:audit": "pnpm --filter @territory-kit/generators build && node scripts/tr-geoboundaries-parent-audit.mjs"
+    "data:tr:geoboundaries:parent:audit": "pnpm --filter @territory-kit/generators build && node scripts/tr-geoboundaries-parent-audit.mjs",
+    "data:tr:geoboundaries:parent:replay": "pnpm --filter @territory-kit/generators build && node scripts/tr-geoboundaries-parent-replay.mjs"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",

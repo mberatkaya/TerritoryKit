@@ -1,0 +1,36 @@
+{
+  "coverageGate": {
+    "buildDatasetAvailable": true,
+    "canonicalParentZoneCount": 1055,
+    "complete": true,
+    "determinismByteIdentical": true,
+    "determinismSkipped": false,
+    "duplicateReplaySourceNativeIds": 0,
+    "expectedParentZoneCount": 1055,
+    "geographicComparisonSkipped": false,
+    "geometryComparisonsExpected": 44,
+    "geometryComparisonsPerformed": 44,
+    "issues": [],
+    "missingCanonicalSourceIds": 0,
+    "missingReplayZones": 0,
+    "replayParentZoneCount": 1055
+  },
+  "pipeline": [
+    "acquireBoundarySourceArtifact (SHA-256 pinned)",
+    "parseTerritoryCountrySourceFeatures",
+    "repairTerritoryGeometries",
+    "buildLevelZones + createTerritoryCountryIdentity",
+    "resolveTerritoryCountryHierarchy",
+    "createCombinedDataset / serialization"
+  ],
+  "schemaVersion": "territorykit-tr-geoboundaries-full-builder-replay@1",
+  "stageLabels": [
+    "parsed-upstream",
+    "adapter-output",
+    "geometry-repair",
+    "country-builder-output",
+    "serialized-final",
+    "canonical-parent"
+  ],
+  "stageSemantics": "firstObservedHashMismatchStage reports the earliest stage whose audit hash differs from canonical; it does not prove causal origin of divergence."
+}

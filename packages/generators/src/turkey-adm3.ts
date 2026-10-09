@@ -136,6 +136,28 @@ export {
   verifyGeoBoundariesSourceArtifactBytes,
   verifyTurkeyGeoBoundariesParentLineage
 } from "./turkey-geoboundaries-parent-lineage.js";
+export {
+  TURKEY_GEOBOUNDARIES_FULL_BUILDER_REPLAY_SCHEMA_VERSION,
+  assessGeographicPair,
+  assessMismatchRootCause,
+  classifyFullBuilderReplay,
+  createTurkeyGeoBoundariesHistoricalCountryConfig,
+  findFirstObservedHashMismatchStage,
+  runTurkeyGeoBoundariesFullBuilderReplay,
+  validateReplayCoverageGate,
+  verifyTurkeyGeoBoundariesFullBuilderReplay
+} from "./turkey-geoboundaries-full-builder-replay.js";
+export type {
+  FullBuilderReplayClassification,
+  GeographicEquivalenceClass,
+  GeometryMismatchRootCause,
+  GeometryPipelineStage,
+  MismatchRootCauseAssessment,
+  ReplayCoverageGate,
+  RootCauseEvidenceTier,
+  TurkeyGeoBoundariesFullBuilderReplayOptions,
+  TurkeyGeoBoundariesFullBuilderReplayResult
+} from "./turkey-geoboundaries-full-builder-replay.js";
 export type {
   ComparisonAssessmentStatus,
   GeoBoundariesByteVerificationEntry,
