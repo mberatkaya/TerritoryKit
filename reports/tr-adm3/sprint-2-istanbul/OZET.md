@@ -8,12 +8,12 @@
 
 | İlçe | Zone | Güven | En uzun desteklenmeyen (m) | Replay | Not |
 | --- | ---: | --- | ---: | --- | --- |
-| Fatih | 30 | — | 0 | audit | — |
-| Kadıköy | — | — | — | eksik | BLOCKED_BY_SOURCE |
-| Üsküdar | — | — | — | eksik | — |
-| Adalar | 14 | — | 0 | audit | — |
-| Eyüpsultan | 19 | — | 3611.46062 | audit | ORGANIC_ROUTE_NO_PATH |
-| Çatalca | — | — | — | eksik | — |
+| Fatih | 30 | high | 0 | audit | — |
+| Kadıköy | 28 | high | — | eksik | BLOCKED_BY_SOURCE |
+| Üsküdar | 40 | high | — | eksik | — |
+| Adalar | 14 | low | 0 | audit | — |
+| Eyüpsultan | 19 | low | 3611.46062 | audit | ORGANIC_ROUTE_NO_PATH |
+| Çatalca | 19 | low | — | eksik | — |
 
 ## Eyüpsultan NO_ROUTE
 

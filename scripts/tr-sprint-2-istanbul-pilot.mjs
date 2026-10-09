@@ -27,11 +27,24 @@ async function readJson(relativePath) {
 }
 
 function districtRow(diagnostics, replay, districtName) {
-  const recorded =
-    diagnostics.districts?.find((row) => row.districtName === districtName) ??
-    diagnostics.results?.find((row) => row.districtName === districtName);
+  const recorded = diagnostics.districts?.find((row) => row.districtName === districtName);
+  const smart = recorded?.recordedSmartQuality;
   const replayed = replay.results?.find((row) => row.district === districtName);
-  return { recorded, replayed };
+  return {
+    recorded: recorded
+      ? {
+          generatedZoneCount: smart?.zoneCount ?? null,
+          confidence: smart?.confidence ?? null,
+          geometryHash: recorded.geometryHash ?? null,
+          longestUnsupportedStraightChainMeters:
+            smart?.longestUnsupportedStraightChainMeters ?? null,
+          localitySeedCount: smart?.localitySeedCount ?? null,
+          roadDensityKmPerKm2: smart?.roadDensityKmPerKm2 ?? null,
+          topologyPass: recorded.executedGeometryQuality?.ok ?? true
+        }
+      : undefined,
+    replayed
+  };
 }
 
 async function kadikoyBundleReport() {
@@ -105,7 +118,7 @@ async function main() {
           recorded?.longestUnsupportedStraightChainMeters ??
           replayed?.longestUnsupportedStraightChainMeters ??
           null,
-        topologyPass: recorded?.topology?.ok ?? true
+        topologyPass: recorded?.topologyPass ?? true
       },
       current: {
         sourceVersion: replay.algorithmVersion ?? "smart-derived-v1.7",
@@ -115,7 +128,7 @@ async function main() {
         routeRootCause
       },
       stableIdDelta: "NONE_OBSERVED_IN_AUDIT_REPLAY",
-      determinism: determinism.ok ?? determinism.identical ?? null
+      determinism: determinism.differences?.length === 0 ? true : null
     };
   });
 
