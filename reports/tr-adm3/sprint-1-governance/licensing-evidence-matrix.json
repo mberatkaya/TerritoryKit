@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-1-governance@1/licensing-matrix",
+  "generatedAt": "2026-10-09T09:16:13.622Z",
+  "inspectedCommit": "dd3ab8eea31e0f1bce1cbb664105f53d150d7ca9",
+  "legalDisclaimer": "Technical metadata compilation only. This matrix is not legal advice and does not constitute redistribution authorization.",
+  "nationalCatalogHdx": {
+    "provider": "hdx-cod-ab",
+    "license": "CC BY-IGO",
+    "licenseUrl": "https://data.humdata.org/dataset/cod-ab-tur",
+    "redistributionAllowed": true,
+    "commercialUseAllowed": true,
+    "legalReviewStatus": "ACCEPTED_FOR_CATALOG_METADATA_ONLY",
+    "note": "HDX COD-AB describes downloadable ZIP members used by the national catalog lock; canonical parent polygons in local dataset.json are geoBoundaries-sourced per PR #104–#106."
+  },
+  "geoBoundariesPinnedParent": [
+    {
+      "adminLevel": "ADM0",
+      "originalDataSourceLicense": "Creative Commons Attribution-ShareAlike 2.0",
+      "originalDataSourceLicenseUrl": "www.openstreetmap.org/copyright",
+      "geoBoundariesDistributionLicense": "CC BY 4.0",
+      "geoBoundariesDistributionNote": "gbOpen distribution is commonly described as CC BY 4.0; per-feature lock strings may cite upstream OSM/ODbL or other terms — not legal equivalence.",
+      "metadataApiUrl": "https://www.geoboundaries.org/api/current/gbOpen/TUR/ADM0/",
+      "pinnedReleaseCommit": "9469f09592ced973a3448cf66b6100b741b64c0d",
+      "lockAttribution": "Open Street Map",
+      "commercialUseAllowed": "requires-legal-review",
+      "modificationAndDerivedData": "requires-legal-review",
+      "databaseRedistributionObligations": "requires-legal-review",
+      "turkeyGovernmentAuthorityClaim": false,
+      "legalReviewStatus": "PENDING_REVIEW"
+    },
+    {
+      "adminLevel": "ADM1",
+      "originalDataSourceLicense": "Creative Commons Attribution-ShareAlike 2.0",
+      "originalDataSourceLicenseUrl": "www.openstreetmap.org/copyright",
+      "geoBoundariesDistributionLicense": "CC BY 4.0",
+      "geoBoundariesDistributionNote": "gbOpen distribution is commonly described as CC BY 4.0; per-feature lock strings may cite upstream OSM/ODbL or other terms — not legal equivalence.",
+      "metadataApiUrl": "https://www.geoboundaries.org/api/current/gbOpen/TUR/ADM1/",
+      "pinnedReleaseCommit": "9469f09592ced973a3448cf66b6100b741b64c0d",
+      "lockAttribution": "Open Street Map",
+      "commercialUseAllowed": "requires-legal-review",
+      "modificationAndDerivedData": "requires-legal-review",
+      "databaseRedistributionObligations": "requires-legal-review",
+      "turkeyGovernmentAuthorityClaim": false,
+      "legalReviewStatus": "PENDING_REVIEW"
+    },
+    {
+      "adminLevel": "ADM2",
+      "originalDataSourceLicense": "Open Data Commons Open Database License 1.0",
+      "originalDataSourceLicenseUrl": "www.openstreetmap.org/copyright",
+      "geoBoundariesDistributionLicense": "CC BY 4.0",
+      "geoBoundariesDistributionNote": "gbOpen distribution is commonly described as CC BY 4.0; per-feature lock strings may cite upstream OSM/ODbL or other terms — not legal equivalence.",
+      "metadataApiUrl": "https://www.geoboundaries.org/api/current/gbOpen/TUR/ADM2/",
+      "pinnedReleaseCommit": "9469f09592ced973a3448cf66b6100b741b64c0d",
+      "lockAttribution": "OpenStreetMap, OSM Boundaries",
+      "commercialUseAllowed": "requires-legal-review",
+      "modificationAndDerivedData": "requires-legal-review",
+      "databaseRedistributionObligations": "requires-legal-review",
+      "turkeyGovernmentAuthorityClaim": false,
+      "legalReviewStatus": "PENDING_REVIEW"
+    }
+  ],
+  "unresolvedQuestions": [
+    "Are per-level lock license strings (CC BY-SA 2.0 / ODbL 1.0) compatible with geoBoundaries gbOpen CC BY 4.0 distribution terms for TerritoryKit redistribution?",
+    "Does ODbL on ADM2 impose share-alike obligations on produced derivative datasets beyond attribution?",
+    "Is commercial use permitted under all cited upstream terms for a gameplay dataset product?",
+    "Do Türkiye government data policies require separate permission for MAKS/TUCBS-derived or official municipal exports used in ADM3?",
+    "Does public GIS endpoint access imply redistribution rights for locked polygon artifacts?"
+  ]
+}

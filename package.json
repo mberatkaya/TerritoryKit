@@ -28,6 +28,7 @@
     "data:tr:adm3:validate": "pnpm --filter @territory-kit/generators build && node scripts/data-tr-adm3.mjs validate",
     "data:tr:adm3:national:build": "pnpm --filter @territory-kit/generators build && pnpm --filter @territory-kit/cli build && node packages/cli/dist/index.mjs tr adm3 build --official --osm --generated --fill-gaps --official-artifact .territory/build/TR/ADM3/official/levels/ADM3/dataset.json --output .territory/build/TR/ADM3 --force",
     "data:tr:adm3:sources": "node scripts/generate-tr-adm3-source-registry.mjs",
+    "data:tr:sprint1:governance": "node scripts/generate-tr-sprint-1-governance-reports.mjs",
     "docs:build": "pnpm --filter @territory-kit/docs build",
     "docs:dev": "pnpm --filter @territory-kit/docs dev",
     "docs:links": "node scripts/check-doc-links.mjs",
@@ -67,7 +68,7 @@
     "security:test": "node --test scripts/validate-workflow-inputs.test.mjs scripts/security-audit-exceptions.test.mjs",
     "release:benchmark:test": "node --test scripts/release-benchmark-dataset.test.mjs",
     "data:tr:adm3:audit": "node --max-old-space-size=8192 scripts/tr-adm3-quality-source-audit.mjs",
-    "data:tr:adm3:audit:test": "node --test scripts/tr-adm3-quality-source-audit.test.mjs scripts/tr-parent-provenance-audit.test.mjs scripts/tr-geoboundaries-parent-audit.test.mjs scripts/tr-geoboundaries-parent-replay.test.mjs",
+    "data:tr:adm3:audit:test": "node --test scripts/tr-adm3-quality-source-audit.test.mjs scripts/tr-parent-provenance-audit.test.mjs scripts/tr-geoboundaries-parent-audit.test.mjs scripts/tr-geoboundaries-parent-replay.test.mjs scripts/tr-sprint-1-governance-report.test.mjs",
     "data:tr:parent-provenance:audit": "pnpm --filter @territory-kit/generators build && node scripts/tr-parent-provenance-audit.mjs",
     "data:tr:geoboundaries:parent:audit": "pnpm --filter @territory-kit/generators build && node scripts/tr-geoboundaries-parent-audit.mjs",
     "data:tr:geoboundaries:parent:replay": "pnpm --filter @territory-kit/generators build && node scripts/tr-geoboundaries-parent-replay.mjs"

@@ -1,44 +1,48 @@
 # Current milestone
 
-## Türkiye ADM0–ADM2 geoBoundaries full country-builder replay
+## Sprint 1 — Türkiye kaynak yönetişimi ve kapanış
 
-**Status:** Research PR in progress on `research/tr-geoboundaries-full-builder-replay`. **Path B catalog migration not authorized.**
-
+**Status:** Implementation on `fix/tr-source-governance-closeout` (PR pending).  
 **Observation time:** 2026-10-09
 
-### Verified conclusions
+### Completed research (on `main`, do not recreate)
 
-1. Pinned gbOpen simplified bytes verify against `sources.lock.json` (local cache).
-2. Full `buildTerritoryCountryDataset` replay (historical pilot geoBoundaries field map) reproduces **deterministic** output; replay `dataset.json` hash ≠ canonical artifact hash (expected — canonical is reference evidence, not overwritten).
-3. Serialized geometry vs canonical: ADM0 **1/1**, ADM1 **57/81**, ADM2 **953/973** (same counts as repair-only audit #105).
-4. All **44** mismatches: replay pipeline self-consistent; coğrafi IoU ≥ 0.9999 toleransı; kök neden sınıfı **`dependency-version`** (GEOS/Shapely repair engine vs July 2026 canonical bytes).
-5. `legalReviewStatus` remains **PENDING_REVIEW**; replay does not authorize Path B metadata migration.
+- PR #104 — parent provenance guardrails
+- PR #105 — geoBoundaries lineage and byte verification
+- PR #106 — full country builder replay and geographic equivalence evidence
 
-### Sprint deliverables
+### Sprint 1 acceptance criteria
 
-| Item         | Location                                                              |
-| ------------ | --------------------------------------------------------------------- |
-| Replay API   | `packages/generators/src/turkey-geoboundaries-full-builder-replay.ts` |
-| CLI          | `pnpm data:tr:geoboundaries:parent:replay`                            |
-| Evidence     | `reports/tr-adm3/provenance/geoboundaries/replay/`                    |
-| Builder hook | optional `countryConfig` on `buildTerritoryCountryDataset`            |
+| #   | Criterion                                                      | Status                                  |
+| --- | -------------------------------------------------------------- | --------------------------------------- |
+| 1   | Handoff reflects merged PRs #104–#106                          | **Done** (this branch)                  |
+| 2   | rc.7 candidate documented with scope labels                    | **Done**                                |
+| 3   | 81-province ADM3 registry consistent with evidence             | **Done** (`adm3-readiness-report.json`) |
+| 4   | License evidence separated (source vs distribution vs catalog) | **Done**                                |
+| 5   | Unknown legal permissions remain `PENDING_REVIEW`              | **Done**                                |
+| 6   | Path A/B matrix and human approvals documented                 | **Done**                                |
+| 7   | No unauthorized migration or publication                       | **Done** (docs/reports only)            |
+| 8   | Sprint 2 Istanbul handoff with pilots and tests                | **Done**                                |
+| 9   | `pnpm data:tr:adm3:audit:test`, format, docs:links, verify     | **Pending CI / local run**              |
+| 10  | One reviewable PR against `main`                               | **Pending**                             |
 
-### Acceptance criteria
+### Explicitly not in Sprint 1
 
-| #   | Criterion                                       | Status                                 |
-| --- | ----------------------------------------------- | -------------------------------------- |
-| 1   | Trace real builder pipeline                     | **Done**                               |
-| 2   | Preserve canonical baseline (read-only)         | **Done**                               |
-| 3   | Account for all 44 mismatches individually      | **Done** (`geometry-differences.json`) |
-| 4   | Geographic equivalence assessment               | **Done** (IoU / sym diff)              |
-| 5   | Determinism validation                          | **Done**                               |
-| 6   | No Path B migration / no canonical byte changes | **Done**                               |
-| 7   | CI tests for replay harness                     | Pending PR CI                          |
+- Path A HDX geometry migration
+- Path B metadata/catalog realignment (DEC-008 not accepted)
+- Istanbul geometry fixes (Sprint 2)
+- Merge of PR #103
 
 ### Verification commands
 
 ```sh
-pnpm --filter @territory-kit/generators build
-pnpm data:tr:geoboundaries:parent:replay -- --allow-incomplete-evidence
+pnpm data:tr:sprint1:governance
 pnpm data:tr:adm3:audit:test
+CI=true pnpm format:check
+pnpm docs:links
+pnpm verify
 ```
+
+### Next milestone
+
+**Sprint 2 — Istanbul ADM3 geometry quality** — see `reports/tr-adm3/sprint-1-governance/sprint-2-istanbul-handoff.md`

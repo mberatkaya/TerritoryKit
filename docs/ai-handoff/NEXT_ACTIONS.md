@@ -1,27 +1,45 @@
 # Next actions (prioritized backlog)
 
-| P   | Task                                                    | Depends  | Key paths                                          | Expected output                   | Acceptance                      | Status             |
-| --- | ------------------------------------------------------- | -------- | -------------------------------------------------- | --------------------------------- | ------------------------------- | ------------------ |
-| 1   | Path B geoBoundaries parent lineage evidence            | —        | `reports/tr-adm3/provenance/geoboundaries/`        | Feasibility class + tooling       | PR #105                         | **done**           |
-| 2   | Full country-build geometry replay for ADM1/ADM2 gaps   | P1       | `reports/tr-adm3/provenance/geoboundaries/replay/` | 44 mismatch root-cause inventory  | Replay PR merged                | **done on branch** |
-| 1a  | Authorized Path B catalog/registry realignment          | P1, P2   | `datasets/sources/TR/national.json`, ADR-006       | Metadata consistent with polygons | Legal + ADR + replay acceptance | blocked (auth)     |
-| 1b  | Authorized ADM0–ADM2 parent geometry migration (Path A) | —        | HDX import pipeline                                | Polygon bytes = HDX members       | ADM3 clip replay                | blocked (auth)     |
-| 3   | Official Kadıköy neighbourhood data                     | —        | `reports/tr-adm3/audit/kadikoy-acquisition.json`   | Complete official bundle          | Ingestion succeeds              | pending            |
-| 4   | Eyüpsultan geometry regression                          | —        | `reports/tr-adm3/audit/istanbul-replay.json`       | Root-cause note + fixture         | Reproducible diagnostic         | pending            |
-| 5   | Nationwide ADM3 licensed polygon expansion              | —        | `datasets/sources/TR/`                             | New official sources              | Increased official count/area   | pending            |
-| 6   | Consumer artifact validation                            | external | hosted manifests                                   | Integration test report           | Deployed version match          | pending            |
+## Active program (four sprints)
 
-## Path B metadata migration prerequisites (unchanged + replay)
+| Sprint | Task                                                                                            | Status                                                |
+| ------ | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| 1      | Source governance closeout — consolidated reports, licensing matrix, Path A/B, Sprint 2 handoff | **in progress** (`fix/tr-source-governance-closeout`) |
+| 2      | Istanbul geometry quality — Fatih, Kadıköy, Üsküdar, Adalar, Eyüpsultan/Çatalca pilots          | **next**                                              |
+| 3      | National RC and delivery validation                                                             | planned                                               |
+| 4      | Rush&Claim integration                                                                          | planned                                               |
 
-1. Legal review: CC BY-SA 2.0 / ODbL 1.0 lock strings vs geoBoundaries adapter CC BY 4.0.
-2. ADR-006 amendment or DEC-008 acceptance with explicit gbOpen pins.
-3. Accept or mitigate **44** canonical vs replay serialized-hash gaps (geographically equivalent under documented IoU tolerance; likely repair-engine drift).
-4. ADM3 national clip regression plan (metadata-only Path B should not change parent geometry bytes).
+## Blocked until human authorization
+
+| P   | Task                                            | Key paths                             | Status                        |
+| --- | ----------------------------------------------- | ------------------------------------- | ----------------------------- |
+| 1a  | Authorized Path B catalog/registry realignment  | `national.json`, DEC-008, ADR-006     | blocked — legal + DEC-008     |
+| 1b  | Authorized Path A HDX parent geometry migration | HDX import, ADM3 clip replay          | blocked — ADR + legal         |
+| —   | Promote rc.7 to production/hosted delivery      | `.territory/sprint-6/final/candidate` | blocked                       |
+| —   | Merge PR #103 Version Packages                  | GitHub #103                           | observe only — not authorized |
+
+## Sprint 2 executable backlog (from handoff)
+
+| P   | Task                                                  | Key paths                           | Expected output                |
+| --- | ----------------------------------------------------- | ----------------------------------- | ------------------------------ |
+| 1   | Kadıköy complete official bundle                      | `kadikoy-acquisition.json`          | 21-record ingestion comparison |
+| 2   | Eyüpsultan NO_ROUTE / seam regression                 | `istanbul-replay.json`              | Fixture + root-cause note      |
+| 3   | Generated-only shape pathology (Fatih spikes/slivers) | geometry QA tools                   | Export thresholds              |
+| 4   | Üsküdar / Adalar coast-water policy                   | audit roadmap §4                    | Policy fixture                 |
+| 5   | Çatalca rural realism classification                  | `district-quality-diagnostics.json` | Classified improvement plan    |
+
+## Completed (merged on `main`)
+
+- Path B geoBoundaries parent lineage (#105)
+- Full country-build geometry replay (#106)
+- Parent provenance fail-closed (#104)
+
+## Path B / Path A prerequisites (unchanged)
+
+1. Legal review: CC BY-SA 2.0 / ODbL 1.0 vs geoBoundaries CC BY 4.0 vs HDX CC BY-IGO.
+2. DEC-008 acceptance and/or ADR-006 amendment with explicit pins.
+3. Accept or mitigate **44** canonical vs replay serialized-hash gaps (#106 geographic equivalence).
+4. ADM3 national clip regression plan for Path A; byte-freeze verification for Path B.
 5. rc.7 consumer replay after any registry/catalog change.
 
-## Completed (full builder replay branch)
-
-- `pnpm data:tr:geoboundaries:parent:replay`
-- Stage-level transformation graph + per-zone mismatch JSON
-- Deterministic double-run evidence
-- Read-only downstream impact note
+Evidence index: `reports/tr-adm3/sprint-1-governance/`

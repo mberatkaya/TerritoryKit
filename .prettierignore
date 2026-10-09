@@ -1,6 +1,7 @@
 dist
 coverage
 node_modules
+.pnpm-store
 .kiro
 .territory
 .turbo
