@@ -12,12 +12,14 @@ function zone(
 ): TerritoryZone {
   return {
     id,
+    datasetId: "fixture",
     level: 3,
     parentId: "tr:adm2:parent",
     name: id,
     geometry,
     bbox: [0, 0, 1, 1],
     center: [0.5, 0.5],
+    neighborIds: [],
     properties: { territory: { sourceClass: "generated", administrative: false, ...territory } }
   };
 }

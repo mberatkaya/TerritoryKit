@@ -22,9 +22,11 @@ describe("Istanbul pilot geometry diagnostics", () => {
   it("flags artificial cross-island connectors but allows valid multipolygons", () => {
     const validIslands: TerritoryZone = {
       id: "island-valid",
+      datasetId: "fixture",
       level: 3,
       parentId: "tr:adm2:adalar",
       name: "valid",
+      neighborIds: [],
       geometry: {
         type: "MultiPolygon",
         coordinates: [

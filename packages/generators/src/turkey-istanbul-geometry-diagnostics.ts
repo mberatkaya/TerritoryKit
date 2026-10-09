@@ -70,8 +70,8 @@ export function inspectTurkeyGeneratedCoastlineSpill(input: {
           if (!zShell || !wShell) {
             continue;
           }
-          const zCentroid = componentCentroid(zShell);
-          const wCentroid = componentCentroid(wShell);
+          const zCentroid = componentCentroid(zShell as LngLat[]);
+          const wCentroid = componentCentroid(wShell as LngLat[]);
           if (haversineMeters(zCentroid, wCentroid) < 30) {
             overlapKm2 += Math.min(zoneAreaKm2, computeTurkeyAdm3GeometryAreaKm2(water)) * 0.05;
           }
@@ -127,8 +127,8 @@ export function inspectTurkeyIslandMultipolygonSafety(
           continue;
         }
         const distance = haversineMeters(
-          componentCentroid(leftShell),
-          componentCentroid(rightShell)
+          componentCentroid(leftShell as LngLat[]),
+          componentCentroid(rightShell as LngLat[])
         );
         const leftArea = computeTurkeyAdm3GeometryAreaKm2({
           type: "Polygon",
