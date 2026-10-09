@@ -2,13 +2,13 @@
 
 **Kaynak:** `istanbul-district-diagnostics.json`
 
-| Metrik | Değer |
-| --- | ---: |
-| Zone | 19 |
-| Güven | low |
+| Metrik                            | Değer |
+| --------------------------------- | ----: |
+| Zone                              |    19 |
+| Güven                             |   low |
 | En uzun desteklenmeyen zincir (m) | ~7802 |
-| Locality seed | 248 |
-| Sentetik oran | ~0.20 |
+| Locality seed                     |   248 |
+| Sentetik oran                     | ~0.20 |
 
 `classifyTurkeyRuralGeneratorQuality` gerekçe kodları:
 

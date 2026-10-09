@@ -9,15 +9,15 @@ Yalnızca `sourceClass: generated` veya `boundarySourceClass: smart-derived` ve 
 
 ## Tespit kategorileri
 
-| Kod | Açıklama |
-| --- | --- |
-| SLIVER | Alan eşiği altı |
-| EXCESSIVE_ASPECT_RATIO | Bbox en-boy oranı |
-| THIN_CORRIDOR | Tahmini minimum genişlik |
-| SPIKE | Dar iç açı + kısa kenarlar |
-| DETACHED_MICRO_COMPONENT | MultiPolygon mikro parça |
-| UNSUPPORTED_STRAIGHT_BOUNDARY | Bariyer hizası diagnostik |
-| LOW_BARRIER_ADHERENCE | Düşük bariyer takibi |
+| Kod                           | Açıklama                   |
+| ----------------------------- | -------------------------- |
+| SLIVER                        | Alan eşiği altı            |
+| EXCESSIVE_ASPECT_RATIO        | Bbox en-boy oranı          |
+| THIN_CORRIDOR                 | Tahmini minimum genişlik   |
+| SPIKE                         | Dar iç açı + kısa kenarlar |
+| DETACHED_MICRO_COMPONENT      | MultiPolygon mikro parça   |
+| UNSUPPORTED_STRAIGHT_BOUNDARY | Bariyer hizası diagnostik  |
+| LOW_BARRIER_ADHERENCE         | Düşük bariyer takibi       |
 
 ## Fatih
 

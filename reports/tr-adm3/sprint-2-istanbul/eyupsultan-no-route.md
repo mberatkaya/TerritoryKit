@@ -4,15 +4,15 @@
 
 ## Ölçülen durum (baseline = güncel replay)
 
-| Metrik | Değer |
-| --- | ---: |
-| Zone sayısı | 19 |
-| Güven | low |
-| En uzun desteklenmeyen dikiş (m) | 3611.46 |
+| Metrik                               |    Değer |
+| ------------------------------------ | -------: |
+| Zone sayısı                          |       19 |
+| Güven                                |      low |
+| En uzun desteklenmeyen dikiş (m)     |  3611.46 |
 | `finalRouting.longestUnroutedReason` | NO_ROUTE |
-| Graf bileşen sayısı | 368 |
-| Ağ yüz kapsamı (%) | 23.81 |
-| Residual alan (%) | 76.19 |
+| Graf bileşen sayısı                  |      368 |
+| Ağ yüz kapsamı (%)                   |    23.81 |
+| Residual alan (%)                    |    76.19 |
 
 ## Kök neden sınıflandırması
 

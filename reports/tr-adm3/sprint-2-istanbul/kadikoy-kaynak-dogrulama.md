@@ -8,12 +8,12 @@
 
 ## Bağımsız doğrulama
 
-| Kontrol | Sonuç |
-| --- | --- |
-| `.shp` tek başına 21 kayıt (audit) | Kayıtlı |
-| `.shx/.dbf/.prj/.cpg` ayrı bayt imzası | **BAŞARISIZ** — tüm companion URL'ler aynı SHA-256 ve boyut (`kadikoy-acquisition.json`) |
-| `inspectTurkeyMunicipalShapefileCompanionBundle` | `BLOCKED_DUPLICATE_RESPONSE` |
-| Ingestion / resmî gameplay ID değişimi | **Yapılmadı** |
+| Kontrol                                          | Sonuç                                                                                    |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| `.shp` tek başına 21 kayıt (audit)               | Kayıtlı                                                                                  |
+| `.shx/.dbf/.prj/.cpg` ayrı bayt imzası           | **BAŞARISIZ** — tüm companion URL'ler aynı SHA-256 ve boyut (`kadikoy-acquisition.json`) |
+| `inspectTurkeyMunicipalShapefileCompanionBundle` | `BLOCKED_DUPLICATE_RESPONSE`                                                             |
+| Ingestion / resmî gameplay ID değişimi           | **Yapılmadı**                                                                            |
 
 ## Pilot durumu
 
