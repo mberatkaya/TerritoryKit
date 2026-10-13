@@ -2,12 +2,12 @@
 
 ## Active program (four sprints)
 
-| Sprint | Task                                                                                            | Status                                                      |
-| ------ | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| 1      | Source governance closeout — consolidated reports, licensing matrix, Path A/B, Sprint 2 handoff | **done** (#107, `70aab395`)                                 |
-| 2      | Istanbul geometry quality — Fatih, Kadıköy, Üsküdar, Adalar, Eyüpsultan/Çatalca pilots          | **review** (PR #108 — diagnostik/kanıt düzeltmesi)          |
-| 3      | National RC and delivery validation                                                             | planned (`reports/tr-adm3/sprint-3-national-rc-handoff.md`) |
-| 4      | Rush&Claim integration                                                                          | planned                                                     |
+| Sprint | Task                                                                                            | Status                                                                         |
+| ------ | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| 1      | Source governance closeout — consolidated reports, licensing matrix, Path A/B, Sprint 2 handoff | **done** (#107)                                                                |
+| 2      | Istanbul geometry quality — Fatih, Kadıköy, Üsküdar, Adalar, Eyüpsultan/Çatalca pilots          | **done** (#108)                                                                |
+| 3      | National RC and delivery validation                                                             | **review** (PR pending — `feat/tr-national-rc-delivery-validation`)            |
+| 4      | Rush&Claim integration                                                                          | planned (`reports/tr-adm3/sprint-3-national-rc/rushclaim-sprint-4-handoff.md`) |
 
 ## Blocked until human authorization
 
@@ -18,28 +18,21 @@
 | —   | Promote rc.7 to production/hosted delivery      | `.territory/sprint-6/final/candidate` | blocked                       |
 | —   | Merge PR #103 Version Packages                  | GitHub #103                           | observe only — not authorized |
 
-## Sprint 2 executable backlog (from handoff)
+## Sprint 4 prerequisites (from Sprint 3 handoff)
 
-| P   | Task                                                  | Key paths                           | Expected output                |
-| --- | ----------------------------------------------------- | ----------------------------------- | ------------------------------ |
-| 1   | Kadıköy complete official bundle                      | `kadikoy-acquisition.json`          | 21-record ingestion comparison |
-| 2   | Eyüpsultan NO_ROUTE / seam regression                 | `istanbul-replay.json`              | Fixture + root-cause note      |
-| 3   | Generated-only shape pathology (Fatih spikes/slivers) | geometry QA tools                   | Export thresholds              |
-| 4   | Üsküdar / Adalar coast-water policy                   | audit roadmap §4                    | Policy fixture                 |
-| 5   | Çatalca rural realism classification                  | `district-quality-diagnostics.json` | Classified improvement plan    |
+| P   | Task                                      | Key paths                        | Expected output           |
+| --- | ----------------------------------------- | -------------------------------- | ------------------------- |
+| 1   | Manifest + MVT + shard integration in R&C | `rushclaim-sprint-4-handoff.md`  | Consumer wiring PR in R&C |
+| 2   | Kadıköy official source acquisition       | `kadikoy-acquisition.json`       | Ingestion path or blocker |
+| 3   | Hosted delivery read-only verification    | production CDN (when authorized) | HOSTED_DELIVERY_VERIFIED  |
+| 4   | Legal ADM0–ADM2 + municipal licenses      | `human-approvals-required.json`  | PENDING_REVIEW → accepted |
 
 ## Completed (merged on `main`)
 
+- Sprint 2 Istanbul pilots and diagnostic fixes (#108)
+- Sprint 1 governance closeout (#107)
 - Path B geoBoundaries parent lineage (#105)
 - Full country-build geometry replay (#106)
 - Parent provenance fail-closed (#104)
 
-## Path B / Path A prerequisites (unchanged)
-
-1. Legal review: CC BY-SA 2.0 / ODbL 1.0 vs geoBoundaries CC BY 4.0 vs HDX CC BY-IGO.
-2. DEC-008 acceptance and/or ADR-006 amendment with explicit pins.
-3. Accept or mitigate **44** canonical vs replay serialized-hash gaps (#106 geographic equivalence).
-4. ADM3 national clip regression plan for Path A; byte-freeze verification for Path B.
-5. rc.7 consumer replay after any registry/catalog change.
-
-Evidence index: `reports/tr-adm3/sprint-1-governance/`
+Evidence index: `reports/tr-adm3/sprint-1-governance/`, `reports/tr-adm3/sprint-2-istanbul/`, `reports/tr-adm3/sprint-3-national-rc/`

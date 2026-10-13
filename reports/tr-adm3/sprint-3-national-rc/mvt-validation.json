@@ -1,0 +1,129 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-3-national-rc@1",
+  "generatedAt": "2026-10-13T10:49:39.146Z",
+  "inspectedCommit": "2c03e1b870272191cf8ddddf3313fe9d3cb147ba",
+  "originMainSha": "2c03e1b870272191cf8ddddf3313fe9d3cb147ba",
+  "evidenceProducer": "scripts/generate-tr-sprint-3-national-rc-reports.mjs",
+  "candidateRoot": "/Users/mbkaya/Repo/TerritoryKit/.territory/sprint-6/final/candidate",
+  "candidateRelativeDefault": ".territory/sprint-6/final/candidate",
+  "datasetVersion": "2.1.0-rc.7",
+  "historicalBaselinePath": "reports/baselines/sprint-6-national-rc7.json",
+  "classification": "REAL_ARTIFACT_VERIFIED",
+  "validationCommand": "render manifest + @mapbox/vector-tile örnekleme",
+  "policyFromRenderManifest": {
+    "adminLevels": ["ADM3"],
+    "featureCount": 20392,
+    "id": "territory-adm3",
+    "maxZoom": 12,
+    "minZoom": 10
+  },
+  "policyFromDeliveryManifest": {
+    "tileTemplate": "render/tiles/{z}/{x}/{y}.mvt",
+    "minZoom": 10,
+    "maxZoom": 12,
+    "extent": 4096,
+    "buffer": 64,
+    "tolerance": 3,
+    "tileCount": 18856,
+    "checksumIndexHash": "721fa2f7ca900bd8cbfe5142f0ee24fb41e5c4bb33740425025c248373274f4c"
+  },
+  "tileInventory": {
+    "present": true,
+    "count": 18856
+  },
+  "historicalBaseline": {
+    "ok": true,
+    "candidateTileCount": 19219,
+    "corruptTileCount": 0,
+    "duplicateTileCount": 135246,
+    "emptyTileCount": 363,
+    "generatedTileCount": 18856,
+    "maximumFeaturesPerTile": 497,
+    "maximumTileBytes": 155465,
+    "skippedTileCount": 0,
+    "totalBytes": 71529102
+  },
+  "representativeSamples": [
+    {
+      "label": "Fatih",
+      "tilePath": "render/tiles/10/594/383.mvt",
+      "byteSize": 124228,
+      "layerIds": ["territory_adm3"],
+      "territoryAdm3FeatureCount": 0,
+      "sampleProperties": {},
+      "classification": "LAYER_NAME_MISMATCH",
+      "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
+    },
+    {
+      "label": "Kadıköy",
+      "tilePath": "render/tiles/10/594/383.mvt",
+      "byteSize": 124228,
+      "layerIds": ["territory_adm3"],
+      "territoryAdm3FeatureCount": 0,
+      "sampleProperties": {},
+      "classification": "LAYER_NAME_MISMATCH",
+      "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
+    },
+    {
+      "label": "Üsküdar",
+      "tilePath": "render/tiles/10/594/383.mvt",
+      "byteSize": 124228,
+      "layerIds": ["territory_adm3"],
+      "territoryAdm3FeatureCount": 0,
+      "sampleProperties": {},
+      "classification": "LAYER_NAME_MISMATCH",
+      "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
+    },
+    {
+      "label": "Adalar",
+      "tilePath": "render/tiles/10/594/384.mvt",
+      "byteSize": 26538,
+      "layerIds": ["territory_adm3"],
+      "territoryAdm3FeatureCount": 0,
+      "sampleProperties": {},
+      "classification": "LAYER_NAME_MISMATCH",
+      "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
+    },
+    {
+      "label": "Eyüpsultan",
+      "tilePath": "render/tiles/10/594/383.mvt",
+      "byteSize": 124228,
+      "layerIds": ["territory_adm3"],
+      "territoryAdm3FeatureCount": 0,
+      "sampleProperties": {},
+      "classification": "LAYER_NAME_MISMATCH",
+      "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
+    },
+    {
+      "label": "Çatalca",
+      "tilePath": "render/tiles/10/592/383.mvt",
+      "byteSize": 10527,
+      "layerIds": ["territory_adm3"],
+      "territoryAdm3FeatureCount": 0,
+      "sampleProperties": {},
+      "classification": "LAYER_NAME_MISMATCH",
+      "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
+    },
+    {
+      "label": "Bursa-Osmangazi",
+      "tilePath": "render/tiles/10/594/386.mvt",
+      "byteSize": 121739,
+      "layerIds": ["territory_adm3"],
+      "territoryAdm3FeatureCount": 0,
+      "sampleProperties": {},
+      "classification": "LAYER_NAME_MISMATCH",
+      "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
+    },
+    {
+      "label": "Manisa-Demirci-rural",
+      "tilePath": "render/tiles/10/593/391.mvt",
+      "byteSize": 11490,
+      "layerIds": ["territory_adm3"],
+      "territoryAdm3FeatureCount": 0,
+      "sampleProperties": {},
+      "classification": "LAYER_NAME_MISMATCH",
+      "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
+    }
+  ],
+  "limitations": ["Tam tile envanteri checksums.json ile doğrulanır; tüm tile decode edilmedi."]
+}

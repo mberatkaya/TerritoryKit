@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-3-national-rc@1",
+  "generatedAt": "2026-10-13T10:49:39.146Z",
+  "inspectedCommit": "2c03e1b870272191cf8ddddf3313fe9d3cb147ba",
+  "originMainSha": "2c03e1b870272191cf8ddddf3313fe9d3cb147ba",
+  "evidenceProducer": "scripts/generate-tr-sprint-3-national-rc-reports.mjs",
+  "candidateRoot": "/Users/mbkaya/Repo/TerritoryKit/.territory/sprint-6/final/candidate",
+  "candidateRelativeDefault": ".territory/sprint-6/final/candidate",
+  "datasetVersion": "2.1.0-rc.7",
+  "historicalBaselinePath": "reports/baselines/sprint-6-national-rc7.json",
+  "classification": "REAL_ARTIFACT_VERIFIED",
+  "validationCommand": "pnpm turkey:v2:national:validate",
+  "mandatoryArtifacts": [
+    {
+      "path": "manifest.json",
+      "present": true,
+      "byteSize": 1344,
+      "sha256": "74ecef62e9594e587e32b4ee4f26c649fedf931b8a367a502c5aac4038562ec4"
+    },
+    {
+      "path": "dataset.json",
+      "present": true,
+      "byteSize": 312715579,
+      "sha256": "462d8441cf522f6f718350abdb0094f326adf84229adbb33d0cadfd085e7e6eb"
+    },
+    {
+      "path": "coverage.json",
+      "present": true,
+      "byteSize": 893898,
+      "sha256": "b0620aed08e7cc07f50f8c92e55f088f13a5f713a865c8bad9a85755b1f43ec3"
+    },
+    {
+      "path": "quality-report.json",
+      "present": true,
+      "byteSize": 3218,
+      "sha256": "98170988bfebdeadb0f1cb6e25cf71171a80533f9c110038d35192de0dfaba5a"
+    },
+    {
+      "path": "source-lock.json",
+      "present": true,
+      "byteSize": 6098,
+      "sha256": "f629c6738bcdf81a3145e0313f2f4563d73426c71870d774428d7bc337ed4807"
+    },
+    {
+      "path": "checksums.json",
+      "present": true,
+      "byteSize": 2882476,
+      "sha256": "373e5bcb5ee14283f7a59fee753014f3180522316294b82482f328f6d0b81e02"
+    },
+    {
+      "path": "levels/ADM3/dataset.json",
+      "present": true,
+      "byteSize": 304460469,
+      "sha256": "9426fe8519f17ed53b3927c394eb5bbf4245237ea7a8b7094bb8f1666c10207f"
+    },
+    {
+      "path": "delivery-manifest.json",
+      "present": true,
+      "byteSize": 189679,
+      "sha256": "1086cd21fcd4cc9f1cdd5768921f29d2cd00990bdf8d4baf9b20476ac790a22a"
+    },
+    {
+      "path": "render/manifest.json",
+      "present": true,
+      "byteSize": 807,
+      "sha256": "5413a82af6606612b04b6ad86767447ab33855198f825fa13e7ef3133dfd958b"
+    }
+  ],
+  "levelsChecksumSpotCheck": {
+    "verified": 6,
+    "checked": 6,
+    "totalListed": 6,
+    "mismatches": []
+  },
+  "shardManifest": {
+    "provinceShardCount": 81,
+    "districtShardCount": 973,
+    "shardsContentHash": "04c1098b6ae1e6177edda7e3f57ed710a2df0c9f9cbfcb4346fe27a14ac08ae3",
+    "shardByteVerification": {
+      "verified": 1054,
+      "checked": 1054,
+      "totalListed": 1054,
+      "mismatches": []
+    }
+  },
+  "observedIdentity": {
+    "datasetVersion": "2.1.0-rc.7",
+    "geometryHash": "fb19b468c0555dd0e167d5937037b1609f610014d9231c80b4bc9834685dd8f3",
+    "deterministicHash": "9c6e455ff216172d1d4f1516a5b351241767b5db7dfb1d967e851a043a9893c0",
+    "sourceLockHash": "sha256:4cea41524fefc36670b21934840e932e8d3fcc075e46059f09dc839345b6a85c",
+    "adm3DatasetSha256": "9426fe8519f17ed53b3927c394eb5bbf4245237ea7a8b7094bb8f1666c10207f"
+  },
+  "historicalComparison": {
+    "baselinePath": "reports/baselines/sprint-6-national-rc7.json",
+    "geometryHashMatches": true,
+    "sourceLockMatchesBaseline": true,
+    "mvtTileCountObserved": 18856,
+    "mvtTileCountBaseline": 18856
+  },
+  "limitations": [
+    "Tam MVT envanteri (18k+ tile) her CI koşusunda bayt bayt doğrulanmaz; checksums.json ve örnekleme kullanılır.",
+    "Candidate .gitignore altında; GitHub Actions varsayılan olarak national baytları içermez."
+  ]
+}

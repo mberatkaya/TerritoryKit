@@ -1,0 +1,210 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-3-national-rc@1",
+  "generatedAt": "2026-10-13T10:49:39.146Z",
+  "inspectedCommit": "2c03e1b870272191cf8ddddf3313fe9d3cb147ba",
+  "originMainSha": "2c03e1b870272191cf8ddddf3313fe9d3cb147ba",
+  "evidenceProducer": "scripts/generate-tr-sprint-3-national-rc-reports.mjs",
+  "candidateRoot": "/Users/mbkaya/Repo/TerritoryKit/.territory/sprint-6/final/candidate",
+  "candidateRelativeDefault": ".territory/sprint-6/final/candidate",
+  "datasetVersion": "2.1.0-rc.7",
+  "historicalBaselinePath": "reports/baselines/sprint-6-national-rc7.json",
+  "manifestContentHash": "4c1d42a082a63f5170a63ce150a1e3c5abbe4486ec4dbf1ed3c43789088a31cb",
+  "manifestSelfHashValid": true,
+  "districts": [
+    {
+      "label": "Fatih",
+      "adm2Id": "tr:adm2:54988432b39641834885080",
+      "datasetVersion": "2.1.0-rc.7",
+      "officialZoneCount": 0,
+      "totalZoneCount": 30,
+      "estimatedZoneCount": 30,
+      "sourceComposition": {
+        "smart-derived": 30
+      },
+      "cacheIdentity": "2.1.0-rc.7:fb19b468c0555dd0e167d5937037b1609f610014d9231c80b4bc9834685dd8f3:4c1d42a082a63f5170a63ce150a1e3c5abbe4486ec4dbf1ed3c43789088a31cb:districts/tr_adm2_54988432b39641834885080/dataset.json:785fcf74574d3905e1c235cc295378df103edac0f19200ebb773957356ff245a",
+      "artifactPath": "districts/tr_adm2_54988432b39641834885080/dataset.json",
+      "attributionSample": [
+        {
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "license": "ODbL-1.0"
+        }
+      ],
+      "neighborSampleCount": 6,
+      "classification": "LOCAL_CONSUMER_VERIFIED",
+      "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
+    },
+    {
+      "label": "Kadıköy",
+      "adm2Id": "tr:adm2:54988432b89638439219394",
+      "datasetVersion": "2.1.0-rc.7",
+      "officialZoneCount": 0,
+      "totalZoneCount": 28,
+      "estimatedZoneCount": 28,
+      "sourceComposition": {
+        "smart-derived": 28
+      },
+      "cacheIdentity": "2.1.0-rc.7:fb19b468c0555dd0e167d5937037b1609f610014d9231c80b4bc9834685dd8f3:4c1d42a082a63f5170a63ce150a1e3c5abbe4486ec4dbf1ed3c43789088a31cb:districts/tr_adm2_54988432b89638439219394/dataset.json:e10ce97bd07c3aa735066443a80ad33dae53207271bca751d25ada11d27fcdaa",
+      "artifactPath": "districts/tr_adm2_54988432b89638439219394/dataset.json",
+      "attributionSample": [
+        {
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "license": "ODbL-1.0"
+        }
+      ],
+      "neighborSampleCount": 0,
+      "classification": "LOCAL_CONSUMER_VERIFIED",
+      "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
+    },
+    {
+      "label": "Üsküdar",
+      "adm2Id": "tr:adm2:54988432b79162079631621",
+      "datasetVersion": "2.1.0-rc.7",
+      "officialZoneCount": 0,
+      "totalZoneCount": 40,
+      "estimatedZoneCount": 40,
+      "sourceComposition": {
+        "smart-derived": 40
+      },
+      "cacheIdentity": "2.1.0-rc.7:fb19b468c0555dd0e167d5937037b1609f610014d9231c80b4bc9834685dd8f3:4c1d42a082a63f5170a63ce150a1e3c5abbe4486ec4dbf1ed3c43789088a31cb:districts/tr_adm2_54988432b79162079631621/dataset.json:4d4b43aabc06d573903d002ddee395b107a3b8d92263f42317db2860668fa402",
+      "artifactPath": "districts/tr_adm2_54988432b79162079631621/dataset.json",
+      "attributionSample": [
+        {
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "license": "ODbL-1.0"
+        }
+      ],
+      "neighborSampleCount": 7,
+      "classification": "LOCAL_CONSUMER_VERIFIED",
+      "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
+    },
+    {
+      "label": "Adalar",
+      "adm2Id": "tr:adm2:54988432b94516152709384",
+      "datasetVersion": "2.1.0-rc.7",
+      "officialZoneCount": 0,
+      "totalZoneCount": 14,
+      "estimatedZoneCount": 14,
+      "sourceComposition": {
+        "smart-derived": 14
+      },
+      "cacheIdentity": "2.1.0-rc.7:fb19b468c0555dd0e167d5937037b1609f610014d9231c80b4bc9834685dd8f3:4c1d42a082a63f5170a63ce150a1e3c5abbe4486ec4dbf1ed3c43789088a31cb:districts/tr_adm2_54988432b94516152709384/dataset.json:2de466d49aaaa1d60b2a2a220e51475cf4891e4f39a81f7e0bfe938383c9a390",
+      "artifactPath": "districts/tr_adm2_54988432b94516152709384/dataset.json",
+      "attributionSample": [
+        {
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "license": "ODbL-1.0"
+        }
+      ],
+      "neighborSampleCount": 3,
+      "classification": "LOCAL_CONSUMER_VERIFIED",
+      "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
+    },
+    {
+      "label": "Eyüpsultan",
+      "adm2Id": "tr:adm2:54988432b93840376788897",
+      "datasetVersion": "2.1.0-rc.7",
+      "officialZoneCount": 0,
+      "totalZoneCount": 19,
+      "estimatedZoneCount": 19,
+      "sourceComposition": {
+        "smart-derived": 19
+      },
+      "cacheIdentity": "2.1.0-rc.7:fb19b468c0555dd0e167d5937037b1609f610014d9231c80b4bc9834685dd8f3:4c1d42a082a63f5170a63ce150a1e3c5abbe4486ec4dbf1ed3c43789088a31cb:districts/tr_adm2_54988432b93840376788897/dataset.json:8b677ce505550afeb662a9ad6caa8c4fff69bfcdc7f95d844db253dec0441ce6",
+      "artifactPath": "districts/tr_adm2_54988432b93840376788897/dataset.json",
+      "attributionSample": [
+        {
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "license": "ODbL-1.0"
+        }
+      ],
+      "neighborSampleCount": 5,
+      "classification": "LOCAL_CONSUMER_VERIFIED",
+      "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
+    },
+    {
+      "label": "Çatalca",
+      "adm2Id": "tr:adm2:54988432b71345383711908",
+      "datasetVersion": "2.1.0-rc.7",
+      "officialZoneCount": 0,
+      "totalZoneCount": 19,
+      "estimatedZoneCount": 19,
+      "sourceComposition": {
+        "smart-derived": 19
+      },
+      "cacheIdentity": "2.1.0-rc.7:fb19b468c0555dd0e167d5937037b1609f610014d9231c80b4bc9834685dd8f3:4c1d42a082a63f5170a63ce150a1e3c5abbe4486ec4dbf1ed3c43789088a31cb:districts/tr_adm2_54988432b71345383711908/dataset.json:e2f337e15a0437ccf04c3edcfb373f09f01a23576a5cfff15a9e700c6ed26840",
+      "artifactPath": "districts/tr_adm2_54988432b71345383711908/dataset.json",
+      "attributionSample": [
+        {
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "license": "ODbL-1.0"
+        }
+      ],
+      "neighborSampleCount": 0,
+      "classification": "LOCAL_CONSUMER_VERIFIED",
+      "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
+    },
+    {
+      "label": "Bursa-Osmangazi",
+      "adm2Id": "tr:adm2:54988432b50709390359139",
+      "datasetVersion": "2.1.0-rc.7",
+      "officialZoneCount": 137,
+      "totalZoneCount": 228,
+      "estimatedZoneCount": 91,
+      "sourceComposition": {
+        "official-local": 137,
+        "smart-derived": 91
+      },
+      "cacheIdentity": "2.1.0-rc.7:fb19b468c0555dd0e167d5937037b1609f610014d9231c80b4bc9834685dd8f3:4c1d42a082a63f5170a63ce150a1e3c5abbe4486ec4dbf1ed3c43789088a31cb:districts/tr_adm2_54988432b50709390359139/dataset.json:f00d2f2796d5969b87b2772bef19b11f2420194a764f6dee52c845c9a9ee2728",
+      "artifactPath": "districts/tr_adm2_54988432b50709390359139/dataset.json",
+      "attributionSample": [
+        {
+          "attribution": "Bursa Büyükşehir Belediyesi Open Data, Mahalle Sınırları",
+          "license": "Bursa Acik Veri Lisansi"
+        }
+      ],
+      "neighborSampleCount": 7,
+      "classification": "LOCAL_CONSUMER_VERIFIED",
+      "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
+    },
+    {
+      "label": "Manisa-Demirci-rural",
+      "adm2Id": "tr:adm2:54988432b10253984912437",
+      "datasetVersion": "2.1.0-rc.7",
+      "officialZoneCount": 0,
+      "totalZoneCount": 19,
+      "estimatedZoneCount": 19,
+      "sourceComposition": {
+        "smart-derived": 19
+      },
+      "cacheIdentity": "2.1.0-rc.7:fb19b468c0555dd0e167d5937037b1609f610014d9231c80b4bc9834685dd8f3:4c1d42a082a63f5170a63ce150a1e3c5abbe4486ec4dbf1ed3c43789088a31cb:districts/tr_adm2_54988432b10253984912437/dataset.json:344b75857c9c3719ece389437b9c5579a162639935785de358d47300e6a04b62",
+      "artifactPath": "districts/tr_adm2_54988432b10253984912437/dataset.json",
+      "attributionSample": [
+        {
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "license": "ODbL-1.0"
+        }
+      ],
+      "neighborSampleCount": 8,
+      "classification": "LOCAL_CONSUMER_VERIFIED",
+      "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
+    }
+  ],
+  "failureCases": [
+    {
+      "case": "corrupt-bytes",
+      "expected": "reject",
+      "actual": "rejected",
+      "message": "District shard byteSize mismatch: districts/tr_adm2_54988432b39641834885080/dataset.json"
+    },
+    {
+      "case": "version-mismatch",
+      "expected": "reject",
+      "actual": "rejected",
+      "message": "Delivery manifest contentHash mismatch"
+    }
+  ],
+  "scope": "LOCAL_CONSUMER_VERIFIED_NOT_HOSTED",
+  "validationCommand": "packages/runtime resolveTurkeyV2Boundaries (yerel bayt)",
+  "kadikoyNote": "Kadıköy resmi kaynak BLOCKED_BY_SOURCE (Sprint 2); consumer replay generated zonları allowEstimated ile gösterir.",
+  "istanbulCarryover": "reports/tr-adm3/sprint-2-istanbul/pilot-summary.json"
+}
