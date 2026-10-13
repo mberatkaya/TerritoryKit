@@ -10,6 +10,7 @@ export interface TurkeyV2DeliveryManifest {
   generatorVersion: string;
   mvt: {
     tileTemplate: string;
+    sourceLayer: string;
     minZoom: number;
     maxZoom: number;
     extent: 4096;
@@ -40,7 +41,13 @@ export function createTurkeyV2DeliveryManifest(input: {
   render: {
     datasetVersion: string;
     tileTemplate: string;
-    layers: readonly { minZoom: number; maxZoom: number }[];
+    layers: readonly {
+      id?: string;
+      sourceLayer?: string;
+      adminLevels?: readonly string[];
+      minZoom: number;
+      maxZoom: number;
+    }[];
   };
   checksums: { files: Record<string, Checksum> };
   adm2Ids?: readonly string[];
@@ -60,6 +67,7 @@ export function createTurkeyV2DeliveryManifest(input: {
     throw new Error("Delivery inputs have mismatched dataset versions or source locks.");
   }
   if (render.layers.length === 0) throw new Error("MVT render policy has no layers.");
+  const sourceLayer = resolveTurkeyV2MvtSourceLayer(render.layers);
   const tiles = Object.entries(checksums.files)
     .filter(([path]) => /^render\/tiles\/\d+\/\d+\/\d+\.mvt$/.test(path))
     .sort(([a], [b]) => a.localeCompare(b));
@@ -115,6 +123,7 @@ export function createTurkeyV2DeliveryManifest(input: {
     generatorVersion: sourceLock.generated.algorithmVersion,
     mvt: {
       tileTemplate: `render/${render.tileTemplate}`,
+      sourceLayer,
       minZoom: Math.min(...render.layers.map((layer) => layer.minZoom)),
       maxZoom: Math.max(...render.layers.map((layer) => layer.maxZoom)),
       extent: 4096 as const,
@@ -133,4 +142,21 @@ export function createTurkeyV2DeliveryManifest(input: {
 
 function sha256(value: string): string {
   return createHash("sha256").update(value).digest("hex");
+}
+
+/** Resolve the MapLibre / protobuf source-layer from render manifest metadata. */
+export function resolveTurkeyV2MvtSourceLayer(
+  layers: readonly {
+    id?: string;
+    sourceLayer?: string;
+    adminLevels?: readonly string[];
+  }[]
+): string {
+  const adm3 =
+    layers.find((layer) => layer.adminLevels?.includes("ADM3")) ??
+    (layers.length === 1 ? layers[0] : undefined);
+  if (!adm3) throw new Error("MVT render policy has no ADM3 layer entry.");
+  if (typeof adm3.sourceLayer === "string" && adm3.sourceLayer.length > 0) return adm3.sourceLayer;
+  if (adm3.id === "territory-adm3" || adm3.id === "territory_adm3") return "territory_adm3";
+  throw new Error(`MVT render policy missing sourceLayer for layer id ${adm3.id ?? "unknown"}.`);
 }

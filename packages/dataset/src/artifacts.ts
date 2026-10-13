@@ -28,7 +28,10 @@ export interface TerritoryRenderLevelPolicy {
 }
 
 export interface TerritoryRenderLayerManifest {
+  /** Stable render-artifact slot identifier (may use kebab-case; not the MapLibre source-layer). */
   id: string;
+  /** Encoded MVT protobuf layer name; MapLibre `source-layer` must match this exactly. */
+  sourceLayer?: string;
   adminLevels: readonly TerritoryAdminLevel[];
   minZoom: number;
   maxZoom: number;

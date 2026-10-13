@@ -328,6 +328,11 @@ export async function validateTurkeyV2DeliveryManifest(
       !/^[a-f0-9]{64}$/.test(String(manifest.mvt.checksumIndexHash))
     )
       throw new Error("Invalid delivery MVT policy");
+    const declaredSourceLayer = manifest.mvt.sourceLayer;
+    if (declaredSourceLayer !== undefined) {
+      if (typeof declaredSourceLayer !== "string" || !/^[a-zA-Z0-9_]+$/.test(declaredSourceLayer))
+        throw new Error("Invalid delivery MVT sourceLayer");
+    }
     const body = { ...manifest } as Record<string, unknown>;
     delete body.contentHash;
     const computed = await sha256Text(JSON.stringify(body));

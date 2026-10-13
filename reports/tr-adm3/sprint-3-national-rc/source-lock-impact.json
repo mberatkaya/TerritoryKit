@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-3-national-rc@1",
+  "generatedAt": "2026-10-13T12:21:44.078Z",
+  "inspectedCommit": "a0c71d88341de2207a5f5e886b97e408f815b70f",
+  "originMainSha": "2c03e1b870272191cf8ddddf3313fe9d3cb147ba",
+  "evidenceProducer": "scripts/generate-tr-sprint-3-national-rc-reports.mjs",
+  "candidateRoot": ".territory/sprint-6/final/candidate",
+  "candidateRootRequested": null,
+  "candidateRelativeDefault": ".territory/sprint-6/final/candidate",
+  "candidateEnvVar": "TERRITORY_TR_RC7_CANDIDATE",
+  "datasetVersion": "2.1.0-rc.7",
+  "historicalBaselinePath": "reports/baselines/sprint-6-national-rc7.json",
+  "classification": "UNCHANGED_FROM_RC7",
+  "validationCommand": "SHA-256 source-lock.json identity",
+  "observedSourceLockHash": "sha256:4cea41524fefc36670b21934840e932e8d3fcc075e46059f09dc839345b6a85c",
+  "baselineSourceLockHash": "sha256:4cea41524fefc36670b21934840e932e8d3fcc075e46059f09dc839345b6a85c",
+  "geometryHashMatches": true,
+  "rebuildAttempted": false,
+  "rebuildNote": "Tam ulusal rebuild bu sprintte çalıştırılmadı; salt okuma doğrulama ve kimlik karşılaştırması.",
+  "limitations": ["Source lock değişmezliği lisans onayı değildir."]
+}
