@@ -2,7 +2,7 @@
   "schemaVersion": "territorykit-tr-adm3-sprint-2-istanbul@2",
   "generatedAt": "2026-10-13T00:00:00.000Z",
   "baselineMainSha": "70aab395b0ed5eb7d0d9870a81362524c365827d",
-  "headSha": "8e664af28d7bcaeccd55aafecc69971de89346cd",
+  "headSha": "dcaf93a88c0fdc629f024d53f46daeab71664449",
   "determinismScope": {
     "assessedDistrictCount": 3,
     "note": "Determinizm kanıtı yalnızca replay edilen 3 ilçe için geçerlidir; 6 pilot ilçe deterministik değildir."
