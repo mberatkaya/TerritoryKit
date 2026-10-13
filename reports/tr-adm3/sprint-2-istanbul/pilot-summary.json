@@ -1,0 +1,1818 @@
+{
+  "schemaVersion": "territorykit-tr-adm3-sprint-2-istanbul@2",
+  "generatedAt": "2026-10-13T00:00:00.000Z",
+  "baselineMainSha": "70aab395b0ed5eb7d0d9870a81362524c365827d",
+  "headSha": "dcaf93a88c0fdc629f024d53f46daeab71664449",
+  "determinismScope": {
+    "assessedDistrictCount": 3,
+    "note": "Determinizm kanıtı yalnızca replay edilen 3 ilçe için geçerlidir; 6 pilot ilçe deterministik değildir."
+  },
+  "sourceArtifacts": {
+    "istanbulDistrictDiagnostics": "reports/tr-adm3/audit/istanbul-district-diagnostics.json",
+    "istanbulReplay": "reports/tr-adm3/audit/istanbul-replay.json",
+    "istanbulDeterminism": "reports/tr-adm3/audit/istanbul-determinism.json",
+    "kadikoyAcquisition": "reports/tr-adm3/audit/kadikoy-acquisition.json"
+  },
+  "kadikoyOfficialPilot": {
+    "acquisitionEvidencePath": "reports/tr-adm3/audit/kadikoy-acquisition.json",
+    "acquisitionEvidenceClass": "HISTORICAL_AUDIT_ONLY",
+    "localBundleDir": ".territory/quality-source-audit/kadikoy",
+    "companionStates": [
+      {
+        "fileName": "mahalle_sinir.shp",
+        "localPath": ".territory/quality-source-audit/kadikoy/mahalle_sinir.shp",
+        "state": "LOCAL_FILE_PRESENT",
+        "acquisitionSha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+        "byteSize": 103260
+      },
+      {
+        "fileName": "mahalle_sinir.shx",
+        "localPath": ".territory/quality-source-audit/kadikoy/mahalle_sinir.shx",
+        "state": "LOCAL_FILE_PRESENT",
+        "acquisitionSha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+        "byteSize": 103260
+      },
+      {
+        "fileName": "mahalle_sinir.dbf",
+        "localPath": ".territory/quality-source-audit/kadikoy/mahalle_sinir.dbf",
+        "state": "LOCAL_FILE_PRESENT",
+        "acquisitionSha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+        "byteSize": 103260
+      },
+      {
+        "fileName": "mahalle_sinir.prj",
+        "localPath": ".territory/quality-source-audit/kadikoy/mahalle_sinir.prj",
+        "state": "LOCAL_FILE_PRESENT",
+        "acquisitionSha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+        "byteSize": 103260
+      },
+      {
+        "fileName": "mahalle_sinir.cpg",
+        "localPath": ".territory/quality-source-audit/kadikoy/mahalle_sinir.cpg",
+        "state": "LOCAL_FILE_PRESENT",
+        "acquisitionSha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+        "byteSize": 103260
+      }
+    ],
+    "bundle": {
+      "schemaVersion": "territorykit-tr-adm3-municipal-shapefile-bundle@1",
+      "status": "BLOCKED_DUPLICATE_RESPONSE",
+      "structuralStatus": "STRUCTURALLY_INVALID",
+      "productionEligibility": "NOT_ELIGIBLE",
+      "reasonCodes": [
+        "DBF_PARSE_FAILED",
+        "IDENTICAL_COMPANION_BYTES",
+        "INVALID_DBF_SIGNATURE",
+        "INVALID_PRJ_SYNTAX",
+        "SHP_SHX_OFFSET_MISMATCH",
+        "SHP_SHX_RECORD_COUNT_MISMATCH",
+        "HISTORICAL_IDENTICAL_DOWNLOAD_BYTES"
+      ],
+      "companions": [
+        {
+          "role": "cpg",
+          "fileName": "mahalle_sinir.cpg",
+          "byteSize": 103260,
+          "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+          "detectedKind": "codepage-sidecar"
+        },
+        {
+          "role": "dbf",
+          "fileName": "mahalle_sinir.dbf",
+          "byteSize": 103260,
+          "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+          "detectedKind": "invalid-dbf-header"
+        },
+        {
+          "role": "prj",
+          "fileName": "mahalle_sinir.prj",
+          "byteSize": 103260,
+          "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+          "detectedKind": "non-wkt-prj"
+        },
+        {
+          "role": "shp",
+          "fileName": "mahalle_sinir.shp",
+          "byteSize": 103260,
+          "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+          "detectedKind": "esri-shapefile-main"
+        },
+        {
+          "role": "shx",
+          "fileName": "mahalle_sinir.shx",
+          "byteSize": 103260,
+          "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+          "detectedKind": "esri-shapefile-index"
+        }
+      ],
+      "shpRecordCount": 21,
+      "shxRecordCount": 12895,
+      "dbfRecordCount": null,
+      "uniqueSha256Count": 1,
+      "notes": [
+        "Tüm companion dosyalar aynı SHA-256 ve boyuta sahip; bağımsız SHP bundle doğrulanamaz.",
+        "Acquisition kaydı: beş indirme URL'si aynı SHP baytlarını döndürdü (bağımsız companion doğrulaması yapılmadı)."
+      ]
+    },
+    "pilotStatus": "BLOCKED_BY_SOURCE",
+    "verificationClass": "FIXTURE_TESTED"
+  },
+  "pilotDistricts": [
+    {
+      "district": "Fatih",
+      "canonicalAdm2Name": "Fatih",
+      "scope": {
+        "replayEvidence": "HISTORICAL_RECORDED_REPLAY",
+        "geometryChange": "NO_GEOMETRY_CHANGE",
+        "pathologyEvidence": "READONLY_STORED_GEOMETRY",
+        "coastlineEvidence": "NOT_ASSESSED",
+        "islandSafetyEvidence": "SUSPECTED",
+        "islandSafetyScopes": {
+          "narrowNeckBboxApprox": "SUSPECTED",
+          "crossWaterComponentSeparation": "NOT_ASSESSED"
+        },
+        "determinismEvidence": "HISTORICAL_AUDIT_ONLY",
+        "stableIdEvidence": "NOT_ASSESSED"
+      },
+      "baseline": {
+        "zoneCount": 30,
+        "confidence": "high",
+        "geometryHash": "ba17816e271180fc823ef372388bf7d31aa09904d6e035ece7a0a759027ebef9",
+        "longestUnsupportedStraightChainMeters": 0,
+        "topologyPass": true,
+        "topologyEvidence": "HISTORICAL_AUDIT_ONLY"
+      },
+      "current": {
+        "sourceVersion": "smart-derived-v1.7",
+        "replayAvailable": true,
+        "replayProcessedDistrictCount": 3,
+        "geometrySource": ".territory/rushclaim-adm3-visibility/provinces/34/dataset.json",
+        "generatedZoneCountLoaded": 30,
+        "pathology": {
+          "schemaVersion": "territorykit-tr-adm3-generated-pathology@1",
+          "generatedZoneCount": 30,
+          "skippedOfficialZoneCount": 0,
+          "findings": [
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-290699f58ea199c88a63",
+              "parentId": "tr:adm2:54988432b39641834885080",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 10.232,
+                "edge1Meters": 26.911,
+                "edge2Meters": 27.891,
+                "vertexIndex": "42"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-57c6546b8d8c52e3ca2f",
+              "parentId": "tr:adm2:54988432b39641834885080",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 0,
+                "edge1Meters": 80.834,
+                "edge2Meters": 54.956,
+                "vertexIndex": "1"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-57c6546b8d8c52e3ca2f",
+              "parentId": "tr:adm2:54988432b39641834885080",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 0,
+                "edge1Meters": 54.956,
+                "edge2Meters": 118.412,
+                "vertexIndex": "2"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-57c6546b8d8c52e3ca2f",
+              "parentId": "tr:adm2:54988432b39641834885080",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 0,
+                "edge1Meters": 1.304,
+                "edge2Meters": 65.159,
+                "vertexIndex": "7"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-59f9cd89af41c5776554",
+              "parentId": "tr:adm2:54988432b39641834885080",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 6.285,
+                "edge1Meters": 56.001,
+                "edge2Meters": 6.352,
+                "vertexIndex": "82"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-701b712ba93c285dfee4",
+              "parentId": "tr:adm2:54988432b39641834885080",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 7.761,
+                "edge1Meters": 16.724,
+                "edge2Meters": 18.988,
+                "vertexIndex": "39"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-701b712ba93c285dfee4",
+              "parentId": "tr:adm2:54988432b39641834885080",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 12.273,
+                "edge1Meters": 23.096,
+                "edge2Meters": 33.171,
+                "vertexIndex": "82"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ae51c43e7a16247111a1",
+              "parentId": "tr:adm2:54988432b39641834885080",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 9.997,
+                "edge1Meters": 21.898,
+                "edge2Meters": 24.926,
+                "vertexIndex": "24"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-bf7df56ae203fd5afe33",
+              "parentId": "tr:adm2:54988432b39641834885080",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 3.118,
+                "edge1Meters": 8.519,
+                "edge2Meters": 8.555,
+                "vertexIndex": "109"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-bf7df56ae203fd5afe33",
+              "parentId": "tr:adm2:54988432b39641834885080",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 12.273,
+                "edge1Meters": 33.171,
+                "edge2Meters": 23.096,
+                "vertexIndex": "376"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-bf7df56ae203fd5afe33",
+              "parentId": "tr:adm2:54988432b39641834885080",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 7.761,
+                "edge1Meters": 18.988,
+                "edge2Meters": 16.724,
+                "vertexIndex": "419"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-c760995c457452ed71a1",
+              "parentId": "tr:adm2:54988432b39641834885080",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 10.232,
+                "edge1Meters": 27.891,
+                "edge2Meters": 26.911,
+                "vertexIndex": "237"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-cbeb5278a71425ce7202",
+              "parentId": "tr:adm2:54988432b39641834885080",
+              "code": "THIN_CORRIDOR",
+              "severity": "warning",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 11.510607105249125,
+                "minWidthMeters": 11.510607105249125,
+                "areaKm2": 1.752805,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            }
+          ]
+        },
+        "coastline": {
+          "ok": false,
+          "assessmentStatus": "NOT_ASSESSED",
+          "verifiedWaterPolygonCount": 0,
+          "unclosedCoastlineBarrierCount": 0,
+          "intersectionFailureCount": 0,
+          "excludedInvalidWaterAreaCount": 0,
+          "spillFindings": []
+        },
+        "islandSafety": {
+          "ok": false,
+          "assessmentStatus": "SUSPECTED",
+          "assessmentScopes": {
+            "narrowNeckBboxApprox": "SUSPECTED",
+            "crossWaterComponentSeparation": "NOT_ASSESSED"
+          },
+          "zoneCount": 30,
+          "multiComponentZoneCount": 1,
+          "artificialConnectorFindings": [],
+          "findings": [
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-cbeb5278a71425ce7202",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 11.514,
+                "areaKm2": 0.000212,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            }
+          ]
+        },
+        "ruralQuality": null,
+        "routeRootCause": null
+      }
+    },
+    {
+      "district": "Kadıköy",
+      "canonicalAdm2Name": "Kadıköy",
+      "scope": {
+        "replayEvidence": "NOT_ASSESSED",
+        "geometryChange": "NO_GEOMETRY_CHANGE",
+        "pathologyEvidence": "READONLY_STORED_GEOMETRY",
+        "coastlineEvidence": "NOT_ASSESSED",
+        "islandSafetyEvidence": "NOT_ASSESSED",
+        "islandSafetyScopes": {
+          "narrowNeckBboxApprox": "ASSESSED_CLEAR",
+          "crossWaterComponentSeparation": "NOT_ASSESSED"
+        },
+        "determinismEvidence": "NOT_ASSESSED",
+        "stableIdEvidence": "NOT_ASSESSED"
+      },
+      "baseline": {
+        "zoneCount": 28,
+        "confidence": "high",
+        "geometryHash": "92f0a2b812ecbd773e4e77e369e4df6ac8685fee7d378c41dd01a3cb41c0c332",
+        "longestUnsupportedStraightChainMeters": null,
+        "topologyPass": true,
+        "topologyEvidence": "HISTORICAL_AUDIT_ONLY"
+      },
+      "current": {
+        "sourceVersion": "smart-derived-v1.7",
+        "replayAvailable": false,
+        "replayProcessedDistrictCount": 3,
+        "geometrySource": ".territory/rushclaim-adm3-visibility/provinces/34/dataset.json",
+        "generatedZoneCountLoaded": 28,
+        "pathology": {
+          "schemaVersion": "territorykit-tr-adm3-generated-pathology@1",
+          "generatedZoneCount": 28,
+          "skippedOfficialZoneCount": 0,
+          "findings": [
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-224c490771df1e5a4d73",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 5.78,
+                "edge1Meters": 113.198,
+                "edge2Meters": 43.636,
+                "vertexIndex": "16"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-2e988670db48d1aeaa6b",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 9.602,
+                "edge1Meters": 102.789,
+                "edge2Meters": 83.664,
+                "vertexIndex": "0"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-4edd239ad3dca5e04f19",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 3.631,
+                "edge1Meters": 0.992,
+                "edge2Meters": 35.028,
+                "vertexIndex": "52"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-4edd239ad3dca5e04f19",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 5.679,
+                "edge1Meters": 35.028,
+                "edge2Meters": 34.101,
+                "vertexIndex": "53"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-4edd239ad3dca5e04f19",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 4.418,
+                "edge1Meters": 11.649,
+                "edge2Meters": 5.239,
+                "vertexIndex": "204"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-5f9796264134a4736792",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 13.765,
+                "edge1Meters": 41.446,
+                "edge2Meters": 49.035,
+                "vertexIndex": "0"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-79f94365e3c1a63eb5d8",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 9.469,
+                "edge1Meters": 35.844,
+                "edge2Meters": 56.626,
+                "vertexIndex": "104"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-7f5d92bf6789fc51f33c",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 12.324,
+                "edge1Meters": 25.773,
+                "edge2Meters": 27.029,
+                "vertexIndex": "12"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-7f5d92bf6789fc51f33c",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 2.16,
+                "edge1Meters": 20.28,
+                "edge2Meters": 69.834,
+                "vertexIndex": "169"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-a98323faed17374016fe",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 9.602,
+                "edge1Meters": 83.664,
+                "edge2Meters": 102.789,
+                "vertexIndex": "134"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-a98323faed17374016fe",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 10.817,
+                "edge1Meters": 51.002,
+                "edge2Meters": 107.936,
+                "vertexIndex": "139"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-cc1df6d1ad7ffdc673ac",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 8.392,
+                "edge1Meters": 10.93,
+                "edge2Meters": 1.284,
+                "vertexIndex": "120"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-d51af18e6c9d8f5e1138",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 5.679,
+                "edge1Meters": 34.101,
+                "edge2Meters": 35.028,
+                "vertexIndex": "9"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-d51af18e6c9d8f5e1138",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 3.631,
+                "edge1Meters": 35.028,
+                "edge2Meters": 0.992,
+                "vertexIndex": "10"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-ecbdb91c554c25de6b7e",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 9.469,
+                "edge1Meters": 56.626,
+                "edge2Meters": 35.844,
+                "vertexIndex": "650"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-ecbdb91c554c25de6b7e",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 11.406,
+                "edge1Meters": 17.404,
+                "edge2Meters": 0.429,
+                "vertexIndex": "719"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-ecbdb91c554c25de6b7e",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 5.78,
+                "edge1Meters": 43.636,
+                "edge2Meters": 113.197,
+                "vertexIndex": "1376"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-f20089831bfe1f7a796a",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 12.324,
+                "edge1Meters": 27.029,
+                "edge2Meters": 25.773,
+                "vertexIndex": "176"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-fd09018ef3c5e3521d89",
+              "parentId": "tr:adm2:54988432b89638439219394",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 8.392,
+                "edge1Meters": 1.284,
+                "edge2Meters": 10.93,
+                "vertexIndex": "220"
+              }
+            }
+          ]
+        },
+        "coastline": {
+          "ok": false,
+          "assessmentStatus": "NOT_ASSESSED",
+          "verifiedWaterPolygonCount": 0,
+          "unclosedCoastlineBarrierCount": 0,
+          "intersectionFailureCount": 0,
+          "excludedInvalidWaterAreaCount": 0,
+          "spillFindings": []
+        },
+        "islandSafety": {
+          "ok": false,
+          "assessmentStatus": "NOT_ASSESSED",
+          "assessmentScopes": {
+            "narrowNeckBboxApprox": "ASSESSED_CLEAR",
+            "crossWaterComponentSeparation": "NOT_ASSESSED"
+          },
+          "zoneCount": 28,
+          "multiComponentZoneCount": 0,
+          "artificialConnectorFindings": [],
+          "findings": []
+        },
+        "ruralQuality": null,
+        "routeRootCause": null
+      }
+    },
+    {
+      "district": "Üsküdar",
+      "canonicalAdm2Name": "Üsküdar",
+      "scope": {
+        "replayEvidence": "NOT_ASSESSED",
+        "geometryChange": "NO_GEOMETRY_CHANGE",
+        "pathologyEvidence": "READONLY_STORED_GEOMETRY",
+        "coastlineEvidence": "NOT_ASSESSED",
+        "islandSafetyEvidence": "NOT_ASSESSED",
+        "islandSafetyScopes": {
+          "narrowNeckBboxApprox": "ASSESSED_CLEAR",
+          "crossWaterComponentSeparation": "NOT_ASSESSED"
+        },
+        "determinismEvidence": "NOT_ASSESSED",
+        "stableIdEvidence": "NOT_ASSESSED"
+      },
+      "baseline": {
+        "zoneCount": 40,
+        "confidence": "high",
+        "geometryHash": "c149ffbb98f26aefa4889d2a92abe6f0b9e36ea1f873062961b41cc06d6f2257",
+        "longestUnsupportedStraightChainMeters": null,
+        "topologyPass": true,
+        "topologyEvidence": "HISTORICAL_AUDIT_ONLY"
+      },
+      "current": {
+        "sourceVersion": "smart-derived-v1.7",
+        "replayAvailable": false,
+        "replayProcessedDistrictCount": 3,
+        "geometrySource": ".territory/rushclaim-adm3-visibility/provinces/34/dataset.json",
+        "generatedZoneCountLoaded": 40,
+        "pathology": {
+          "schemaVersion": "territorykit-tr-adm3-generated-pathology@1",
+          "generatedZoneCount": 40,
+          "skippedOfficialZoneCount": 0,
+          "findings": [
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-11f1c421c10e9ed20e9d",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 9.37,
+                "edge1Meters": 106.414,
+                "edge2Meters": 3.349,
+                "vertexIndex": "90"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-11f1c421c10e9ed20e9d",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 6.818,
+                "edge1Meters": 36.536,
+                "edge2Meters": 71.66,
+                "vertexIndex": "139"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-11f1c421c10e9ed20e9d",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 7.772,
+                "edge1Meters": 76.631,
+                "edge2Meters": 45.199,
+                "vertexIndex": "146"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-198eb1ef59dea3c67e13",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 8.792,
+                "edge1Meters": 28.633,
+                "edge2Meters": 19.48,
+                "vertexIndex": "49"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-1bfc817f71619b7b98cd",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 13.997,
+                "edge1Meters": 66.716,
+                "edge2Meters": 24.501,
+                "vertexIndex": "52"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-21676a0e5b509c977ffc",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 0,
+                "edge1Meters": 3.995,
+                "edge2Meters": 3.692,
+                "vertexIndex": "175"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-3a3aa6e5d62308de12c2",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 9.37,
+                "edge1Meters": 3.349,
+                "edge2Meters": 106.414,
+                "vertexIndex": "0"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-3a3aa6e5d62308de12c2",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 8.792,
+                "edge1Meters": 19.48,
+                "edge2Meters": 28.633,
+                "vertexIndex": "205"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-3a3aa6e5d62308de12c2",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 12.537,
+                "edge1Meters": 22.151,
+                "edge2Meters": 32.657,
+                "vertexIndex": "222"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-3a3aa6e5d62308de12c2",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 7.772,
+                "edge1Meters": 45.199,
+                "edge2Meters": 76.631,
+                "vertexIndex": "255"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-3a3aa6e5d62308de12c2",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 6.818,
+                "edge1Meters": 71.659,
+                "edge2Meters": 36.536,
+                "vertexIndex": "262"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-7670d3be2ce6b6a2f977",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 3.14,
+                "edge1Meters": 21.805,
+                "edge2Meters": 4.164,
+                "vertexIndex": "58"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-801533e1369e957676d8",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 13.35,
+                "edge1Meters": 63.35,
+                "edge2Meters": 27.297,
+                "vertexIndex": "35"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-81a1da51790457911fbe",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 7.608,
+                "edge1Meters": 70.159,
+                "edge2Meters": 102.037,
+                "vertexIndex": "96"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-81a1da51790457911fbe",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 10.847,
+                "edge1Meters": 26.554,
+                "edge2Meters": 49.496,
+                "vertexIndex": "144"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-81a1da51790457911fbe",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 6.244,
+                "edge1Meters": 80.217,
+                "edge2Meters": 80.939,
+                "vertexIndex": "228"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-81a1da51790457911fbe",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 6.035,
+                "edge1Meters": 71.815,
+                "edge2Meters": 63.332,
+                "vertexIndex": "247"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-81a1da51790457911fbe",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 9.719,
+                "edge1Meters": 28.239,
+                "edge2Meters": 79.305,
+                "vertexIndex": "253"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-85803860d2086c304546",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 7.991,
+                "edge1Meters": 32.669,
+                "edge2Meters": 64.033,
+                "vertexIndex": "54"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-c0bd0759bbeab72851cc",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 10.847,
+                "edge1Meters": 49.496,
+                "edge2Meters": 26.554,
+                "vertexIndex": "128"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-c0bd0759bbeab72851cc",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 7.608,
+                "edge1Meters": 102.038,
+                "edge2Meters": 70.158,
+                "vertexIndex": "176"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-ca926e8d182628a3d786",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 0,
+                "edge1Meters": 29.32,
+                "edge2Meters": 7.934,
+                "vertexIndex": "2"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-ca926e8d182628a3d786",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 0,
+                "edge1Meters": 7.934,
+                "edge2Meters": 17.864,
+                "vertexIndex": "3"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-e0644e4288379aa3ab84",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 13.35,
+                "edge1Meters": 27.297,
+                "edge2Meters": 63.35,
+                "vertexIndex": "98"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-f6bee9e9fc6d80176160",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 9.719,
+                "edge1Meters": 79.305,
+                "edge2Meters": 28.239,
+                "vertexIndex": "117"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-f6bee9e9fc6d80176160",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 6.035,
+                "edge1Meters": 63.332,
+                "edge2Meters": 71.815,
+                "vertexIndex": "123"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-f6bee9e9fc6d80176160",
+              "parentId": "tr:adm2:54988432b79162079631621",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 6.244,
+                "edge1Meters": 80.939,
+                "edge2Meters": 80.217,
+                "vertexIndex": "142"
+              }
+            }
+          ]
+        },
+        "coastline": {
+          "ok": false,
+          "assessmentStatus": "NOT_ASSESSED",
+          "verifiedWaterPolygonCount": 0,
+          "unclosedCoastlineBarrierCount": 0,
+          "intersectionFailureCount": 0,
+          "excludedInvalidWaterAreaCount": 0,
+          "spillFindings": []
+        },
+        "islandSafety": {
+          "ok": false,
+          "assessmentStatus": "NOT_ASSESSED",
+          "assessmentScopes": {
+            "narrowNeckBboxApprox": "ASSESSED_CLEAR",
+            "crossWaterComponentSeparation": "NOT_ASSESSED"
+          },
+          "zoneCount": 40,
+          "multiComponentZoneCount": 0,
+          "artificialConnectorFindings": [],
+          "findings": []
+        },
+        "ruralQuality": null,
+        "routeRootCause": null
+      }
+    },
+    {
+      "district": "Adalar",
+      "canonicalAdm2Name": "Prince Islands",
+      "scope": {
+        "replayEvidence": "HISTORICAL_RECORDED_REPLAY",
+        "geometryChange": "NO_GEOMETRY_CHANGE",
+        "pathologyEvidence": "READONLY_STORED_GEOMETRY",
+        "coastlineEvidence": "NOT_ASSESSED",
+        "islandSafetyEvidence": "NOT_ASSESSED",
+        "islandSafetyScopes": {
+          "narrowNeckBboxApprox": "ASSESSED_CLEAR",
+          "crossWaterComponentSeparation": "NOT_ASSESSED"
+        },
+        "determinismEvidence": "HISTORICAL_AUDIT_ONLY",
+        "stableIdEvidence": "NOT_ASSESSED"
+      },
+      "baseline": {
+        "zoneCount": 14,
+        "confidence": "low",
+        "geometryHash": "386e90a65a03b481f3e96cb47770f7b8b0ab49caf4b3d04398c19a9e95a6a962",
+        "longestUnsupportedStraightChainMeters": 0,
+        "topologyPass": true,
+        "topologyEvidence": "HISTORICAL_AUDIT_ONLY"
+      },
+      "current": {
+        "sourceVersion": "smart-derived-v1.7",
+        "replayAvailable": true,
+        "replayProcessedDistrictCount": 3,
+        "geometrySource": ".territory/rushclaim-adm3-visibility/provinces/34/dataset.json",
+        "generatedZoneCountLoaded": 14,
+        "pathology": {
+          "schemaVersion": "territorykit-tr-adm3-generated-pathology@1",
+          "generatedZoneCount": 14,
+          "skippedOfficialZoneCount": 0,
+          "findings": [
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-2c554a5f5c64beb7bddd",
+              "parentId": "tr:adm2:54988432b94516152709384",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 0,
+                "edge1Meters": 10.225,
+                "edge2Meters": 10.225,
+                "vertexIndex": "21"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-3d296a3d496146978d33",
+              "parentId": "tr:adm2:54988432b94516152709384",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 0,
+                "edge1Meters": 43.571,
+                "edge2Meters": 43.571,
+                "vertexIndex": "15"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-96ee849e174e02b8360c",
+              "parentId": "tr:adm2:54988432b94516152709384",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 1.006,
+                "edge1Meters": 41.792,
+                "edge2Meters": 42.053,
+                "vertexIndex": "0"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-f4741f736b67e740169d",
+              "parentId": "tr:adm2:54988432b94516152709384",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 1.006,
+                "edge1Meters": 42.053,
+                "edge2Meters": 41.792,
+                "vertexIndex": "113"
+              }
+            }
+          ]
+        },
+        "coastline": {
+          "ok": false,
+          "assessmentStatus": "NOT_ASSESSED",
+          "verifiedWaterPolygonCount": 0,
+          "unclosedCoastlineBarrierCount": 0,
+          "intersectionFailureCount": 0,
+          "excludedInvalidWaterAreaCount": 0,
+          "spillFindings": []
+        },
+        "islandSafety": {
+          "ok": false,
+          "assessmentStatus": "NOT_ASSESSED",
+          "assessmentScopes": {
+            "narrowNeckBboxApprox": "ASSESSED_CLEAR",
+            "crossWaterComponentSeparation": "NOT_ASSESSED"
+          },
+          "zoneCount": 14,
+          "multiComponentZoneCount": 0,
+          "artificialConnectorFindings": [],
+          "findings": []
+        },
+        "ruralQuality": null,
+        "routeRootCause": null
+      }
+    },
+    {
+      "district": "Eyüpsultan",
+      "canonicalAdm2Name": "Eyüpsultan",
+      "scope": {
+        "replayEvidence": "HISTORICAL_RECORDED_REPLAY",
+        "geometryChange": "NO_GEOMETRY_CHANGE",
+        "pathologyEvidence": "READONLY_STORED_GEOMETRY",
+        "coastlineEvidence": "NOT_ASSESSED",
+        "islandSafetyEvidence": "SUSPECTED",
+        "islandSafetyScopes": {
+          "narrowNeckBboxApprox": "SUSPECTED",
+          "crossWaterComponentSeparation": "NOT_ASSESSED"
+        },
+        "determinismEvidence": "HISTORICAL_AUDIT_ONLY",
+        "stableIdEvidence": "NOT_ASSESSED"
+      },
+      "baseline": {
+        "zoneCount": 19,
+        "confidence": "low",
+        "geometryHash": "9522f0a4e0ef3e23e488864972a4b8399a79114e7ce71688f729d084480c15f2",
+        "longestUnsupportedStraightChainMeters": 3611.46062,
+        "topologyPass": true,
+        "topologyEvidence": "HISTORICAL_AUDIT_ONLY"
+      },
+      "current": {
+        "sourceVersion": "smart-derived-v1.7",
+        "replayAvailable": true,
+        "replayProcessedDistrictCount": 3,
+        "geometrySource": ".territory/rushclaim-adm3-visibility/provinces/34/dataset.json",
+        "generatedZoneCountLoaded": 19,
+        "pathology": {
+          "schemaVersion": "territorykit-tr-adm3-generated-pathology@1",
+          "generatedZoneCount": 19,
+          "skippedOfficialZoneCount": 0,
+          "findings": [
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-0200d0465d99bdafe32c",
+              "parentId": "tr:adm2:54988432b93840376788897",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 8.783,
+                "edge1Meters": 10.418,
+                "edge2Meters": 17.821,
+                "vertexIndex": "234"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+              "parentId": "tr:adm2:54988432b93840376788897",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 13.369,
+                "edge1Meters": 36.029,
+                "edge2Meters": 21.427,
+                "vertexIndex": "396"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+              "parentId": "tr:adm2:54988432b93840376788897",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 13.316,
+                "edge1Meters": 50.791,
+                "edge2Meters": 81.075,
+                "vertexIndex": "94"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-44f790b175299bd7face",
+              "parentId": "tr:adm2:54988432b93840376788897",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 0,
+                "edge1Meters": 61.598,
+                "edge2Meters": 61.598,
+                "vertexIndex": "194"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-4d7ea5909868e1f3a49a",
+              "parentId": "tr:adm2:54988432b93840376788897",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 13.959,
+                "edge1Meters": 5.638,
+                "edge2Meters": 16.259,
+                "vertexIndex": "309"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-600e3b9388f8b2b2b2ce",
+              "parentId": "tr:adm2:54988432b93840376788897",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 13.316,
+                "edge1Meters": 81.075,
+                "edge2Meters": 50.791,
+                "vertexIndex": "0"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-600e3b9388f8b2b2b2ce",
+              "parentId": "tr:adm2:54988432b93840376788897",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 8.772,
+                "edge1Meters": 20.49,
+                "edge2Meters": 13.942,
+                "vertexIndex": "352"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "parentId": "tr:adm2:54988432b93840376788897",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 0.001,
+                "edge1Meters": 2.023,
+                "edge2Meters": 0.084,
+                "vertexIndex": "161"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "parentId": "tr:adm2:54988432b93840376788897",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 8.783,
+                "edge1Meters": 17.821,
+                "edge2Meters": 10.418,
+                "vertexIndex": "275"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "parentId": "tr:adm2:54988432b93840376788897",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 13.369,
+                "edge1Meters": 21.427,
+                "edge2Meters": 36.029,
+                "vertexIndex": "911"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "parentId": "tr:adm2:54988432b93840376788897",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 13.959,
+                "edge1Meters": 16.259,
+                "edge2Meters": 5.638,
+                "vertexIndex": "35"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "parentId": "tr:adm2:54988432b93840376788897",
+              "code": "THIN_CORRIDOR",
+              "severity": "warning",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 3.460579747215677,
+                "minWidthMeters": 3.460579747215677,
+                "areaKm2": 25.488452,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            }
+          ]
+        },
+        "coastline": {
+          "ok": false,
+          "assessmentStatus": "NOT_ASSESSED",
+          "verifiedWaterPolygonCount": 0,
+          "unclosedCoastlineBarrierCount": 0,
+          "intersectionFailureCount": 0,
+          "excludedInvalidWaterAreaCount": 0,
+          "spillFindings": []
+        },
+        "islandSafety": {
+          "ok": false,
+          "assessmentStatus": "SUSPECTED",
+          "assessmentScopes": {
+            "narrowNeckBboxApprox": "SUSPECTED",
+            "crossWaterComponentSeparation": "NOT_ASSESSED"
+          },
+          "zoneCount": 19,
+          "multiComponentZoneCount": 2,
+          "artificialConnectorFindings": [],
+          "findings": [
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 11.733,
+                "areaKm2": 0.000242,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 7.679,
+                "areaKm2": 0.000148,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 7.01,
+                "areaKm2": 0.000135,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 15.778,
+                "areaKm2": 0.000548,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 16.527,
+                "areaKm2": 0.000299,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 6.818,
+                "areaKm2": 0.000073,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 15.256,
+                "areaKm2": 0.00035,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 11.956,
+                "areaKm2": 0.000474,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 14.106,
+                "areaKm2": 0.000689,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 16.687,
+                "areaKm2": 0.000514,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 16.413,
+                "areaKm2": 0.000393,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 12.235,
+                "areaKm2": 0.000179,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 15.958,
+                "areaKm2": 0.00258,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 11.096,
+                "areaKm2": 0.000344,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 15.579,
+                "areaKm2": 0.000715,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 21.964,
+                "areaKm2": 0.001181,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 17.233,
+                "areaKm2": 0.000781,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 13.522,
+                "areaKm2": 0.000822,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 22.112,
+                "areaKm2": 0.001453,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 14.602,
+                "areaKm2": 0.000249,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 21.554,
+                "areaKm2": 0.001211,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 21.69,
+                "areaKm2": 0.00219,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 13.968,
+                "areaKm2": 0.000226,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 11.43,
+                "areaKm2": 0.000206,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+              "classification": "SUSPECTED",
+              "code": "NARROW_NECK_BBOX_APPROX",
+              "measurement": {
+                "bboxApproxMinWidthMeters": 18.015,
+                "areaKm2": 0.001859,
+                "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+              }
+            }
+          ]
+        },
+        "ruralQuality": null,
+        "routeRootCause": {
+          "primaryReasonCode": "ORGANIC_ROUTE_NO_PATH",
+          "reasonCodes": [
+            "HIGH_RESIDUAL_AREA",
+            "LONG_UNSUPPORTED_SEAM_REMAINS",
+            "LOW_NETWORK_FACE_COVERAGE",
+            "NETWORK_GRAPH_FRAGMENTED",
+            "ORGANIC_ROUTE_NO_PATH"
+          ],
+          "summaryTr": "Koridor içinde bağlı bariyer grafiği yolu bulunamadı; OSM ağ bileşenleri parçalı ve yüzey kapsamı düşük.",
+          "routeFailureReason": "NO_ROUTE",
+          "graphComponentCount": 368,
+          "networkCoveragePercent": 23.807664,
+          "residualAreaPercent": 76.192341
+        }
+      }
+    },
+    {
+      "district": "Çatalca",
+      "canonicalAdm2Name": "Çatalca",
+      "scope": {
+        "replayEvidence": "NOT_ASSESSED",
+        "geometryChange": "NO_GEOMETRY_CHANGE",
+        "pathologyEvidence": "READONLY_STORED_GEOMETRY",
+        "coastlineEvidence": "NOT_ASSESSED",
+        "islandSafetyEvidence": "NOT_ASSESSED",
+        "islandSafetyScopes": {
+          "narrowNeckBboxApprox": "ASSESSED_CLEAR",
+          "crossWaterComponentSeparation": "NOT_ASSESSED"
+        },
+        "determinismEvidence": "NOT_ASSESSED",
+        "stableIdEvidence": "NOT_ASSESSED"
+      },
+      "baseline": {
+        "zoneCount": 19,
+        "confidence": "low",
+        "geometryHash": "ab4df0c68a194a66a787f638e6cf8f7dbe445f0c03e98f112dabecad1f27757d",
+        "longestUnsupportedStraightChainMeters": null,
+        "topologyPass": true,
+        "topologyEvidence": "HISTORICAL_AUDIT_ONLY"
+      },
+      "current": {
+        "sourceVersion": "smart-derived-v1.7",
+        "replayAvailable": false,
+        "replayProcessedDistrictCount": 3,
+        "geometrySource": ".territory/rushclaim-adm3-visibility/provinces/34/dataset.json",
+        "generatedZoneCountLoaded": 19,
+        "pathology": {
+          "schemaVersion": "territorykit-tr-adm3-generated-pathology@1",
+          "generatedZoneCount": 19,
+          "skippedOfficialZoneCount": 0,
+          "findings": [
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-36a45f899f55bdf8ebda",
+              "parentId": "tr:adm2:54988432b71345383711908",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 10.262,
+                "edge1Meters": 55.387,
+                "edge2Meters": 17.526,
+                "vertexIndex": "344"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-7b7982eeb05133f46f5b",
+              "parentId": "tr:adm2:54988432b71345383711908",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 4.829,
+                "edge1Meters": 24.397,
+                "edge2Meters": 21.576,
+                "vertexIndex": "410"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-7b7982eeb05133f46f5b",
+              "parentId": "tr:adm2:54988432b71345383711908",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 11.773,
+                "edge1Meters": 35.536,
+                "edge2Meters": 33.627,
+                "vertexIndex": "421"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-7b7982eeb05133f46f5b",
+              "parentId": "tr:adm2:54988432b71345383711908",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 13.031,
+                "edge1Meters": 5.546,
+                "edge2Meters": 28.706,
+                "vertexIndex": "456"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-a9269419e42397df8d3e",
+              "parentId": "tr:adm2:54988432b71345383711908",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 0.679,
+                "edge1Meters": 41.925,
+                "edge2Meters": 11.141,
+                "vertexIndex": "287"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-a9269419e42397df8d3e",
+              "parentId": "tr:adm2:54988432b71345383711908",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 12.422,
+                "edge1Meters": 35.872,
+                "edge2Meters": 30.426,
+                "vertexIndex": "317"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-a9269419e42397df8d3e",
+              "parentId": "tr:adm2:54988432b71345383711908",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 10.262,
+                "edge1Meters": 17.526,
+                "edge2Meters": 55.387,
+                "vertexIndex": "502"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-caeafe27aa91134c45a9",
+              "parentId": "tr:adm2:54988432b71345383711908",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 10.752,
+                "edge1Meters": 23.655,
+                "edge2Meters": 46.31,
+                "vertexIndex": "306"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-caeafe27aa91134c45a9",
+              "parentId": "tr:adm2:54988432b71345383711908",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 8.704,
+                "edge1Meters": 69.478,
+                "edge2Meters": 18.89,
+                "vertexIndex": "313"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-f855fa0e92eb0fd05f1c",
+              "parentId": "tr:adm2:54988432b71345383711908",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 12.422,
+                "edge1Meters": 30.426,
+                "edge2Meters": 35.872,
+                "vertexIndex": "1117"
+              }
+            },
+            {
+              "zoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-f855fa0e92eb0fd05f1c",
+              "parentId": "tr:adm2:54988432b71345383711908",
+              "code": "SPIKE",
+              "severity": "info",
+              "measurement": {
+                "interiorAngleDegrees": 0.679,
+                "edge1Meters": 11.141,
+                "edge2Meters": 41.925,
+                "vertexIndex": "1147"
+              }
+            }
+          ]
+        },
+        "coastline": {
+          "ok": false,
+          "assessmentStatus": "NOT_ASSESSED",
+          "verifiedWaterPolygonCount": 0,
+          "unclosedCoastlineBarrierCount": 0,
+          "intersectionFailureCount": 0,
+          "excludedInvalidWaterAreaCount": 0,
+          "spillFindings": []
+        },
+        "islandSafety": {
+          "ok": false,
+          "assessmentStatus": "NOT_ASSESSED",
+          "assessmentScopes": {
+            "narrowNeckBboxApprox": "ASSESSED_CLEAR",
+            "crossWaterComponentSeparation": "NOT_ASSESSED"
+          },
+          "zoneCount": 19,
+          "multiComponentZoneCount": 0,
+          "artificialConnectorFindings": [],
+          "findings": []
+        },
+        "ruralQuality": {
+          "confidenceTier": "low",
+          "reasonCodes": [
+            "LOW_ROAD_DENSITY",
+            "LONG_UNSUPPORTED_CHAIN",
+            "LOW_NETWORK_FACE_COVERAGE",
+            "SEED_DENSITY_INSUFFICIENT_FOR_RESIDUAL"
+          ],
+          "longestUnsupportedChainMeters": 7802,
+          "localitySeedCount": 248,
+          "roadDensityKmPerKm2": 2.4
+        },
+        "routeRootCause": null
+      }
+    }
+  ],
+  "limitations": [
+    "Canlı İstanbul bariyer replay (.territory/sprint-6/calibration/barriers) CI ortamında genelde yok; kıyı/su diagnostikleri verified water polygon olmadan NOT_ASSESSED.",
+    "rc.7 ulusal artifact'leri değiştirilmedi; geometri karşılaştırması yalnızca mevcut yerel replay artifact'lerine dayanır.",
+    "Sprint 2 çıktısı diagnostik ve kanıt düzeltmesidir; üretim poligon onayı veya rc.7 promote içermez."
+  ]
+}

@@ -2,12 +2,12 @@
 
 ## Active program (four sprints)
 
-| Sprint | Task                                                                                            | Status                                                |
-| ------ | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| 1      | Source governance closeout — consolidated reports, licensing matrix, Path A/B, Sprint 2 handoff | **in progress** (`fix/tr-source-governance-closeout`) |
-| 2      | Istanbul geometry quality — Fatih, Kadıköy, Üsküdar, Adalar, Eyüpsultan/Çatalca pilots          | **next**                                              |
-| 3      | National RC and delivery validation                                                             | planned                                               |
-| 4      | Rush&Claim integration                                                                          | planned                                               |
+| Sprint | Task                                                                                            | Status                                                      |
+| ------ | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| 1      | Source governance closeout — consolidated reports, licensing matrix, Path A/B, Sprint 2 handoff | **done** (#107, `70aab395`)                                 |
+| 2      | Istanbul geometry quality — Fatih, Kadıköy, Üsküdar, Adalar, Eyüpsultan/Çatalca pilots          | **review** (PR #108 — diagnostik/kanıt düzeltmesi)          |
+| 3      | National RC and delivery validation                                                             | planned (`reports/tr-adm3/sprint-3-national-rc-handoff.md`) |
+| 4      | Rush&Claim integration                                                                          | planned                                                     |
 
 ## Blocked until human authorization
 
