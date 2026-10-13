@@ -149,16 +149,22 @@ export function buildTerritoryRenderArtifacts(
       ...(options.minZoom !== undefined ? { minZoom: options.minZoom } : {}),
       ...(options.maxZoom !== undefined ? { maxZoom: options.maxZoom } : {}),
       ...(policies ? { policies } : {})
-    }).map((group) => ({
-      id: layerId,
-      adminLevels:
+    }).map((group) => {
+      const adminLevels =
         group.level === "ALL"
           ? (Object.keys(manifest.featureCounts) as TerritoryAdminLevel[])
-          : [group.level],
-      minZoom: group.minZoom,
-      maxZoom: group.maxZoom,
-      featureCount: group.features.features.length
-    }));
+          : [group.level];
+      const artifactId =
+        adminLevels.length === 1 ? `territory-${adminLevels[0]!.toLowerCase()}` : "territory-all";
+      return {
+        id: artifactId,
+        sourceLayer: layerId,
+        adminLevels,
+        minZoom: group.minZoom,
+        maxZoom: group.maxZoom,
+        featureCount: group.features.features.length
+      };
+    });
   }
   const files = new Map<string, string | Uint8Array>([
     ["render/manifest.json", serializeJsonStable(manifest)]
@@ -257,7 +263,9 @@ export async function validateTerritoryRenderArtifactPath(
           const tile = new VectorTile(new PbfReader(await readFile(path)));
           if (!Object.keys(tile.layers).length) throw new Error("Tile contains no layers");
           for (const [id, layer] of Object.entries(tile.layers)) {
-            const policy = manifest.layers.filter((entry) => entry.id === id);
+            const policy = manifest.layers.filter(
+              (entry) => (entry.sourceLayer ?? entry.id) === id
+            );
             if (!policy.length) throw new Error(`Encoded layer '${id}' is absent from manifest`);
             if (!policy.some((entry) => zoom >= entry.minZoom && zoom <= entry.maxZoom))
               throw new Error(`Encoded layer '${id}' zoom ${zoom} is outside manifest range`);
@@ -285,12 +293,13 @@ export async function validateTerritoryRenderArtifactPath(
         }
       }
       for (const layer of manifest.layers) {
+        const encodedLayerName = layer.sourceLayer ?? layer.id;
         for (let zoom = layer.minZoom; zoom <= layer.maxZoom; zoom++) {
-          if (!observed.get(layer.id)?.has(zoom)) {
+          if (!observed.get(encodedLayerName)?.has(zoom)) {
             issues.push({
               code: "RENDER_LAYER_ZOOM_MISSING",
               severity: "error",
-              message: `Manifest layer '${layer.id}' has no matching tiles at zoom ${zoom}.`
+              message: `Manifest layer '${encodedLayerName}' has no matching tiles at zoom ${zoom}.`
             });
           }
         }

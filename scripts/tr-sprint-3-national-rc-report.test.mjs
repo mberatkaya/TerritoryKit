@@ -59,4 +59,18 @@ test("generate-tr-sprint-3-national-rc-reports produces sprint-3 deliverables", 
   const gates = JSON.parse(await readFile(resolve(OUT_DIR, "authorization-gates.json"), "utf8"));
   assert.equal(gates.classification, "BLOCKED_BY_AUTHORIZATION");
   assert.ok(gates.items.some((item) => item.id === "NATIONAL_DATASET_PROMOTION"));
+
+  const mvt = JSON.parse(await readFile(resolve(OUT_DIR, "mvt-validation.json"), "utf8"));
+  assert.equal(mvt.consumerSourceLayerContract, "territory_adm3");
+  if (existsSync(CANDIDATE)) {
+    assert.ok(mvt.deliveryReadinessGate);
+    for (const sample of mvt.representativeSamples) {
+      assert.notEqual(sample.classification, "PASS");
+      if (sample.classification === "ACTUAL_LAYER_MATCH") {
+        assert.equal(sample.encodedProtobufLayer, "territory_adm3");
+      }
+    }
+    const handoff = await readFile(resolve(OUT_DIR, "rushclaim-sprint-4-handoff.md"), "utf8");
+    assert.ok(handoff.includes("territory_adm3"));
+  }
 });

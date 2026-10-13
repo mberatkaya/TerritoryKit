@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { createTurkeyV2DeliveryManifest } from "../src/turkey-v2-delivery.js";
+import {
+  createTurkeyV2DeliveryManifest,
+  resolveTurkeyV2MvtSourceLayer
+} from "../src/turkey-v2-delivery.js";
 
 const input = {
   canonical: {
@@ -13,7 +16,7 @@ const input = {
   render: {
     datasetVersion: "2.1.0-rc.7",
     tileTemplate: "tiles/{z}/{x}/{y}.mvt",
-    layers: [{ minZoom: 10, maxZoom: 12 }]
+    layers: [{ id: "territory-adm3", sourceLayer: "territory_adm3", minZoom: 10, maxZoom: 12 }]
   },
   checksums: {
     files: Object.fromEntries(
@@ -41,7 +44,7 @@ describe("Turkey V2 delivery manifest", () => {
     expect(first).toMatchObject({
       datasetVersion: "2.1.0-rc.7",
       canonicalGeometryHash: "geometry",
-      mvt: { tileCount: 1, minZoom: 10, maxZoom: 12 },
+      mvt: { tileCount: 1, minZoom: 10, maxZoom: 12, sourceLayer: "territory_adm3" },
       shards: { "districts/example/dataset.json": { sha256: "shard" } }
     });
     expect(createTurkeyV2DeliveryManifest(input)).toEqual(first);
@@ -60,6 +63,17 @@ describe("Turkey V2 delivery manifest", () => {
     });
     expect(manifest.contentHash).not.toBe(createTurkeyV2DeliveryManifest(input).contentHash);
     expect(manifest.artifacts.adm0).toBeUndefined();
+  });
+
+  it("resolves national ADM3 protobuf source-layer from render metadata", () => {
+    expect(resolveTurkeyV2MvtSourceLayer([{ id: "territory-adm3", adminLevels: ["ADM3"] }])).toBe(
+      "territory_adm3"
+    );
+    expect(
+      resolveTurkeyV2MvtSourceLayer([
+        { id: "territory-adm3", sourceLayer: "territory_adm3", adminLevels: ["ADM3"] }
+      ])
+    ).toBe("territory_adm3");
   });
 
   it("refuses mixed source locks", () => {

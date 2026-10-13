@@ -10,6 +10,13 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
 import { format as formatPrettier } from "prettier";
+import {
+  TURKEY_V2_MVT_CONSUMER_SOURCE_LAYER,
+  aggregateMvtReadiness,
+  classifyMvtDistrictSample,
+  resolveCandidateRoot,
+  resolveDeclaredMvtSourceLayer
+} from "./lib/tr-mvt-delivery-contract.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const requireFromGenerators = createRequire(resolve(ROOT, "packages/generators/package.json"));
@@ -100,6 +107,11 @@ function tileCoords(lat, lon, zoom) {
   return { z: zoom, x, y };
 }
 
+function portableCandidatePath(absolutePath) {
+  if (absolutePath.startsWith(`${ROOT}/`)) return absolutePath.slice(ROOT.length + 1);
+  return absolutePath;
+}
+
 function parseCliJson(stdout) {
   const start = stdout.indexOf("{");
   const end = stdout.lastIndexOf("}");
@@ -107,9 +119,9 @@ function parseCliJson(stdout) {
   return JSON.parse(stdout.slice(start, end + 1));
 }
 
-function runNationalValidate(publishReady) {
+function runNationalValidate(candidateRoot, publishReady) {
   const args = publishReady ? " --publish-ready" : "";
-  const cmd = `node packages/cli/dist/index.mjs tr v2 national validate --output "${DEFAULT_CANDIDATE}"${args}`;
+  const cmd = `node packages/cli/dist/index.mjs tr v2 national validate --output "${candidateRoot}"${args}`;
   const label = `pnpm turkey:v2:national:validate${publishReady ? ":publish-ready" : ""}`;
   try {
     const stdout = execSync(cmd, { cwd: ROOT, encoding: "utf8", stdio: ["pipe", "pipe", "pipe"] });
@@ -207,7 +219,12 @@ async function countMvtTiles(candidateRoot) {
   return { present: true, count };
 }
 
-async function sampleMvtTiles(candidateRoot, samples) {
+function decodeMvtTile(bytes) {
+  return new VectorTile(new PbfReader(bytes));
+}
+
+async function sampleMvtTiles(candidateRoot, samples, renderManifest, deliveryManifest) {
+  const declared = resolveDeclaredMvtSourceLayer(renderManifest, deliveryManifest);
   const results = [];
   for (const sample of samples) {
     const coords = tileCoords(sample.lat, sample.lon, 10);
@@ -216,61 +233,39 @@ async function sampleMvtTiles(candidateRoot, samples) {
     if (!existsSync(absolute)) {
       results.push({
         label: sample.label,
+        adm2Id: sample.adm2Id,
         tilePath: relative,
-        classification: "MISSING_TILE",
+        classification: "INSUFFICIENT_EVIDENCE",
+        districtClassification: "INSUFFICIENT_EVIDENCE",
         evidenceStatus: "REAL_ARTIFACT_VERIFIED"
       });
       continue;
     }
-    try {
-      const bytes = await readFile(absolute);
-      const tile = new VectorTile(new PbfReader(bytes));
-      const layerIds = Object.keys(tile.layers);
-      const layerKey =
-        tile.layers["territory-adm3"] !== undefined
-          ? "territory-adm3"
-          : tile.layers.territory_adm3 !== undefined
-            ? "territory_adm3"
-            : layerIds[0];
-      const layer = layerKey ? tile.layers[layerKey] : undefined;
-      const featureCount = layer?.length ?? 0;
-      let props = {};
-      if (layer && featureCount > 0) {
-        const feature = layer.feature(0);
-        props = feature.properties ?? {};
-        feature.loadGeometry();
-      }
-      const layerOk = layerIds.includes("territory-adm3") || layerIds.includes("territory_adm3");
-      results.push({
-        label: sample.label,
-        tilePath: relative,
-        byteSize: bytes.byteLength,
-        layerIds,
-        encodedLayerKey: layerKey,
-        territoryAdm3FeatureCount: featureCount,
-        sampleProperties: {
-          territoryId: props.territoryId ?? props.id,
-          parentAdm2Id: props.parentAdm2Id,
-          sourceClass: props.sourceClass,
-          boundaryKind: props.boundaryKind,
-          confidence: props.confidence,
-          administrative: props.administrative
-        },
-        manifestLayerId: "territory-adm3",
-        manifestTileLayerDrift:
-          layerIds.includes("territory_adm3") && !layerIds.includes("territory-adm3"),
-        classification: layerOk ? "PASS" : "LAYER_NAME_MISMATCH",
-        evidenceStatus: "REAL_ARTIFACT_VERIFIED"
-      });
-    } catch (error) {
-      results.push({
-        label: sample.label,
-        tilePath: relative,
-        classification: "CORRUPT_OR_INVALID",
-        message: error instanceof Error ? error.message : String(error),
-        evidenceStatus: "REAL_ARTIFACT_VERIFIED"
-      });
-    }
+    const bytes = await readFile(absolute);
+    const verdict = classifyMvtDistrictSample({
+      bytes,
+      expectedAdm2Id: sample.adm2Id,
+      consumerSourceLayer: TURKEY_V2_MVT_CONSUMER_SOURCE_LAYER,
+      deliveryManifestSourceLayer: declared.deliveryManifestSourceLayer,
+      renderManifestSourceLayer: declared.renderManifestSourceLayer,
+      renderArtifactLayerId: declared.renderArtifactLayerId,
+      decodeTile: decodeMvtTile
+    });
+    const layer =
+      verdict.encodedProtobufLayer && verdict.layerIds?.includes(verdict.encodedProtobufLayer)
+        ? decodeMvtTile(bytes).layers[verdict.encodedProtobufLayer]
+        : undefined;
+    results.push({
+      label: sample.label,
+      adm2Id: sample.adm2Id,
+      tilePath: relative,
+      byteSize: bytes.byteLength,
+      consumerSourceLayerContract: TURKEY_V2_MVT_CONSUMER_SOURCE_LAYER,
+      ...declared,
+      territoryAdm3FeatureCount: layer?.length ?? 0,
+      ...verdict,
+      evidenceStatus: "REAL_ARTIFACT_VERIFIED"
+    });
   }
   return results;
 }
@@ -431,9 +426,11 @@ async function main() {
   const generatedAt = new Date().toISOString();
   const commit = inspectedCommit();
   const mainSha = originMainSha();
-  const candidateRoot = process.env.TERRITORY_TR_RC7_CANDIDATE
-    ? resolve(process.env.TERRITORY_TR_RC7_CANDIDATE)
-    : DEFAULT_CANDIDATE;
+  const { candidateRoot, requestedExplicit } = resolveCandidateRoot(
+    process.env,
+    DEFAULT_CANDIDATE,
+    resolve
+  );
   const candidatePresent = existsSync(candidateRoot);
   const baseline = await readJson(BASELINE_PATH);
 
@@ -443,8 +440,10 @@ async function main() {
     inspectedCommit: commit,
     originMainSha: mainSha,
     evidenceProducer: "scripts/generate-tr-sprint-3-national-rc-reports.mjs",
-    candidateRoot: candidatePresent ? candidateRoot : null,
+    candidateRoot: candidatePresent ? portableCandidatePath(candidateRoot) : null,
+    candidateRootRequested: requestedExplicit ? portableCandidatePath(candidateRoot) : null,
     candidateRelativeDefault: ".territory/sprint-6/final/candidate",
+    candidateEnvVar: "TERRITORY_TR_RC7_CANDIDATE",
     datasetVersion: "2.1.0-rc.7",
     historicalBaselinePath: BASELINE_PATH
   };
@@ -455,8 +454,9 @@ async function main() {
     const blocked = {
       ...meta,
       classification: "BLOCKED_BY_MISSING_ARTIFACT",
-      message:
-        "Ulusal rc.7 candidate dizini yerelde yok. CI raporları fixture ve tarihsel kanıtla sınırlıdır."
+      message: requestedExplicit
+        ? `İstenen candidate bulunamadı: ${candidateRoot}`
+        : "Ulusal rc.7 candidate dizini yerelde yok. CI raporları fixture ve tarihsel kanıtla sınırlıdır."
     };
     await mkdir(OUT_DIR, { recursive: true });
     await writeJson(resolve(OUT_DIR, "artifact-inventory.json"), blocked);
@@ -533,10 +533,17 @@ async function main() {
     )
   );
   const mvtCount = await countMvtTiles(candidateRoot);
-  const mvtSamples = await sampleMvtTiles(candidateRoot, REPRESENTATIVE_ADM2);
+  const mvtSamples = await sampleMvtTiles(
+    candidateRoot,
+    REPRESENTATIVE_ADM2,
+    renderManifest,
+    deliveryManifest
+  );
+  const mvtReadiness = aggregateMvtReadiness(mvtSamples);
+  const mvtSourceLayerContract = resolveDeclaredMvtSourceLayer(renderManifest, deliveryManifest);
 
-  const validateStandard = runNationalValidate(false);
-  const validatePublishReady = runNationalValidate(true);
+  const validateStandard = runNationalValidate(candidateRoot, false);
+  const validatePublishReady = runNationalValidate(candidateRoot, true);
 
   const sourceLockIdentity = stableHashIdentity(sourceLock);
   const sourceLockMatchesBaseline =
@@ -675,14 +682,21 @@ async function main() {
 
   const mvtValidation = {
     ...meta,
-    classification: "REAL_ARTIFACT_VERIFIED",
+    classification: mvtReadiness.pass ? "REAL_ARTIFACT_VERIFIED" : "MVT_DELIVERY_CONTRACT_FAIL",
     validationCommand: "render manifest + @mapbox/vector-tile örnekleme",
+    consumerSourceLayerContract: TURKEY_V2_MVT_CONSUMER_SOURCE_LAYER,
+    sourceLayerContract: mvtSourceLayerContract,
+    deliveryReadinessGate: mvtReadiness,
     policyFromRenderManifest: renderManifest.layers?.[0],
     policyFromDeliveryManifest: deliveryManifest.mvt,
     tileInventory: mvtCount,
     historicalBaseline: baseline.mvt,
     representativeSamples: mvtSamples,
-    limitations: ["Tam tile envanteri checksums.json ile doğrulanır; tüm tile decode edilmedi."]
+    limitations: [
+      "Tam tile envanteri checksums.json ile doğrulanır; tüm tile decode edilmedi.",
+      "render/manifest.json `id` render artifact tanımlayıcısıdır; MapLibre source-layer encoded protobuf adıdır (territory_adm3).",
+      "rc.7 delivery manifest sourceLayer alanı yoksa tüketici sözleşmesi kod sabiti + tile baytı ile doğrulanır."
+    ]
   };
 
   const deliveryManifestValidation = {
@@ -741,7 +755,11 @@ async function main() {
 
 - Manifest: \`delivery-manifest-hardened.json\` (contentHash: \`${deliveryManifest.contentHash}\`)
 - MVT şablonu: \`${deliveryManifest.mvt.tileTemplate}\`, zoom ${deliveryManifest.mvt.minZoom}–${deliveryManifest.mvt.maxZoom}
-- Katman: \`territory-adm3\` (render/manifest.json ile uyumlu)
+- MapLibre source-layer (protobuf): \`${TURKEY_V2_MVT_CONSUMER_SOURCE_LAYER}\`
+- Render artifact layer id: \`${mvtSourceLayerContract.renderArtifactLayerId ?? "unknown"}\` (manifest \`layers[].id\`, source-layer değildir)
+- Delivery manifest sourceLayer: \`${mvtSourceLayerContract.deliveryManifestSourceLayer ?? "UNDECLARED_IN_RC7"}\`
+- MVT source-layer gate: \`${mvtReadiness.sourceLayerGate}\`
+- İlçe örnekleme (parentAdm2Id): \`${mvtReadiness.districtRepresentativeGate}\` (rc.7 tile özelliklerinde parentAdm2Id yok — #94)
 
 ## Hosted doğrulama durumu
 
@@ -777,7 +795,8 @@ Bu sprintte yetkili bir production CDN/URL üzerinde salt okuma doğrulaması **
 
 - Kök: \`.territory/sprint-6/final/candidate\` (gitignore; CI'da yok)
 - Teslimat manifesti: \`delivery-manifest-hardened.json\` (adm2Shards ile)
-- MVT: \`render/tiles/{z}/{x}/{y}.mvt\`, katman \`territory-adm3\`, zoom 10–12
+- MVT: \`render/tiles/{z}/{x}/{y}.mvt\`, MapLibre source-layer \`${TURKEY_V2_MVT_CONSUMER_SOURCE_LAYER}\`, render artifact id \`${mvtSourceLayerContract.renderArtifactLayerId ?? "territory-adm3"}\`, zoom 10–12
+- Registry artifact \`layer\` alanı: \`territory_adm3\` (MapLibre adapter)
 
 ## Tüketici API
 
@@ -809,6 +828,7 @@ Bu sprintte yetkili bir production CDN/URL üzerinde salt okuma doğrulaması **
     validateStandard.ok &&
     shardChecksumVerify.mismatches.length === 0 &&
     geometryHashMatches &&
+    mvtReadiness.pass &&
     consumer.districts.every((row) => row.classification === "LOCAL_CONSUMER_VERIFIED");
   const productionGo = false;
 
@@ -825,7 +845,7 @@ Bu sprintte yetkili bir production CDN/URL üzerinde salt okuma doğrulaması **
 | Artifact envanteri | ${artifactInventory.classification} |
 | Ulusal kapsam (973 ilçe) | ${nationalCoverage.classification} |
 | Shard bütünlüğü | ${shardIntegrity.classification} |
-| MVT örnekleme | ${mvtValidation.classification} |
+| MVT örnekleme | ${mvtValidation.classification} (gate: ${mvtReadiness.gate}) |
 | Consumer replay (yerel) | LOCAL_CONSUMER_VERIFIED |
 | Hosted teslimat | NOT_ASSESSED / BLOCKED |
 | Kaynak kilidi rc.7 | ${sourceLockImpact.classification} |

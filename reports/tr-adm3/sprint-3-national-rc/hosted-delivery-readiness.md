@@ -6,7 +6,11 @@
 
 - Manifest: `delivery-manifest-hardened.json` (contentHash: `4c1d42a082a63f5170a63ce150a1e3c5abbe4486ec4dbf1ed3c43789088a31cb`)
 - MVT şablonu: `render/tiles/{z}/{x}/{y}.mvt`, zoom 10–12
-- Katman: `territory-adm3` (render/manifest.json ile uyumlu)
+- MapLibre source-layer (protobuf): `territory_adm3`
+- Render artifact layer id: `territory-adm3` (manifest `layers[].id`, source-layer değildir)
+- Delivery manifest sourceLayer: `UNDECLARED_IN_RC7`
+- MVT source-layer gate: `PASS`
+- İlçe örnekleme (parentAdm2Id): `FAIL` (rc.7 tile özelliklerinde parentAdm2Id yok — #94)
 
 ## Hosted doğrulama durumu
 

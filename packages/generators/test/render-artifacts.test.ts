@@ -69,7 +69,8 @@ describe("render artifacts", () => {
     });
     expect(result.manifest.layers).toEqual([
       {
-        id: "districts_custom",
+        id: "territory-adm2",
+        sourceLayer: "districts_custom",
         adminLevels: ["ADM2"],
         minZoom: 0,
         maxZoom: 1,
@@ -89,7 +90,7 @@ describe("render artifacts", () => {
     const tile = new VectorTile(
       new PbfReader(result.files.get("render/tiles/0/0/0.mvt") as Uint8Array)
     );
-    expect(Object.keys(tile.layers)).toEqual([result.manifest.layers[0]!.id]);
+    expect(Object.keys(tile.layers)).toEqual([result.manifest.layers[0]!.sourceLayer]);
   });
   it("can omit the duplicate query file for national rendering", () => {
     const result = buildTerritoryRenderArtifacts({
@@ -205,7 +206,7 @@ describe("render artifacts", () => {
         });
         const manifestPath = join(outputPath, "render/manifest.json");
         const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
-        if (change === "layer") manifest.layers[0].id = "territory-adm3";
+        if (change === "layer") manifest.layers[0].sourceLayer = "wrong_layer";
         if (change === "zoom") manifest.layers[0].minZoom = manifest.layers[0].maxZoom = 1;
         await writeFile(manifestPath, JSON.stringify(manifest));
         if (change === "bytes")
