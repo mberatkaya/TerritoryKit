@@ -375,6 +375,11 @@ Companion yerel durumu: **${kadikoy.companionStates.filter((row) => row.state ==
 ${summary.limitations.map((item) => `- ${item}`).join("\n")}
 `;
   await fs.writeFile(mdPath, md);
+  try {
+    execSync(`pnpm exec prettier --write "${mdPath}"`, { cwd: REPO_ROOT, stdio: "pipe" });
+  } catch {
+    // Prettier is optional in minimal environments; CI will enforce formatting separately.
+  }
   const digest = sha256OfUtf8FileContents(serialized);
   await fs.writeFile(
     path.join(REPORT_ROOT, "pilot-summary.sha256"),

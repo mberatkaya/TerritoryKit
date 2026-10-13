@@ -7,14 +7,14 @@
 
 ## Pilot ilçe tablosu
 
-| İlçe | Zone | Güven | Replay | Patoloji | Kıyı/su | Ada güvenliği | Geometri |
-| --- | ---: | --- | --- | --- | --- | --- | --- |
-| Fatih | 30 | high | REAL_REPLAY_VERIFIED | REAL_REPLAY_VERIFIED | NOT_ASSESSED | SUSPECTED | NO_GEOMETRY_CHANGE |
-| Kadıköy | 28 | high | NOT_ASSESSED | REAL_REPLAY_VERIFIED | NOT_ASSESSED | ASSESSED_CLEAR | NO_GEOMETRY_CHANGE |
-| Üsküdar | 40 | high | NOT_ASSESSED | REAL_REPLAY_VERIFIED | NOT_ASSESSED | ASSESSED_CLEAR | NO_GEOMETRY_CHANGE |
-| Adalar | 14 | low | REAL_REPLAY_VERIFIED | REAL_REPLAY_VERIFIED | NOT_ASSESSED | ASSESSED_CLEAR | NO_GEOMETRY_CHANGE |
-| Eyüpsultan | 19 | low | REAL_REPLAY_VERIFIED | REAL_REPLAY_VERIFIED | NOT_ASSESSED | SUSPECTED | NO_GEOMETRY_CHANGE |
-| Çatalca | 19 | low | NOT_ASSESSED | REAL_REPLAY_VERIFIED | NOT_ASSESSED | ASSESSED_CLEAR | NO_GEOMETRY_CHANGE |
+| İlçe       | Zone | Güven | Replay               | Patoloji             | Kıyı/su      | Ada güvenliği  | Geometri           |
+| ---------- | ---: | ----- | -------------------- | -------------------- | ------------ | -------------- | ------------------ |
+| Fatih      |   30 | high  | REAL_REPLAY_VERIFIED | REAL_REPLAY_VERIFIED | NOT_ASSESSED | SUSPECTED      | NO_GEOMETRY_CHANGE |
+| Kadıköy    |   28 | high  | NOT_ASSESSED         | REAL_REPLAY_VERIFIED | NOT_ASSESSED | ASSESSED_CLEAR | NO_GEOMETRY_CHANGE |
+| Üsküdar    |   40 | high  | NOT_ASSESSED         | REAL_REPLAY_VERIFIED | NOT_ASSESSED | ASSESSED_CLEAR | NO_GEOMETRY_CHANGE |
+| Adalar     |   14 | low   | REAL_REPLAY_VERIFIED | REAL_REPLAY_VERIFIED | NOT_ASSESSED | ASSESSED_CLEAR | NO_GEOMETRY_CHANGE |
+| Eyüpsultan |   19 | low   | REAL_REPLAY_VERIFIED | REAL_REPLAY_VERIFIED | NOT_ASSESSED | SUSPECTED      | NO_GEOMETRY_CHANGE |
+| Çatalca    |   19 | low   | NOT_ASSESSED         | REAL_REPLAY_VERIFIED | NOT_ASSESSED | ASSESSED_CLEAR | NO_GEOMETRY_CHANGE |
 
 ## Eyüpsultan NO_ROUTE
 
