@@ -6,15 +6,15 @@
 
 ## Özet
 
-| Alan | Sonuç |
-|------|-------|
-| Artifact envanteri | REAL_ARTIFACT_VERIFIED |
-| Ulusal kapsam (973 ilçe) | REAL_ARTIFACT_VERIFIED |
-| Shard bütünlüğü | REAL_ARTIFACT_VERIFIED |
-| MVT örnekleme | REAL_ARTIFACT_VERIFIED |
-| Consumer replay (yerel) | LOCAL_CONSUMER_VERIFIED |
-| Hosted teslimat | NOT_ASSESSED / BLOCKED |
-| Kaynak kilidi rc.7 | UNCHANGED_FROM_RC7 |
+| Alan                     | Sonuç                   |
+| ------------------------ | ----------------------- |
+| Artifact envanteri       | REAL_ARTIFACT_VERIFIED  |
+| Ulusal kapsam (973 ilçe) | REAL_ARTIFACT_VERIFIED  |
+| Shard bütünlüğü          | REAL_ARTIFACT_VERIFIED  |
+| MVT örnekleme            | REAL_ARTIFACT_VERIFIED  |
+| Consumer replay (yerel)  | LOCAL_CONSUMER_VERIFIED |
+| Hosted teslimat          | NOT_ASSESSED / BLOCKED  |
+| Kaynak kilidi rc.7       | UNCHANGED_FROM_RC7      |
 
 ## GO / NO-GO
 
