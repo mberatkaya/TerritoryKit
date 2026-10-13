@@ -1,20 +1,20 @@
 # Sprint 3 — nihai karar
 
-**İncelenen commit:** bca26c1d957a502c7d0d89ebff0927570e775481  
+**İncelenen commit:** a0c71d88341de2207a5f5e886b97e408f815b70f  
 **origin/main:** 2c03e1b870272191cf8ddddf3313fe9d3cb147ba  
 **Candidate:** .territory/sprint-6/final/candidate
 
 ## Özet
 
-| Alan | Sonuç |
-|------|-------|
-| Artifact envanteri | REAL_ARTIFACT_VERIFIED |
-| Ulusal kapsam (973 ilçe) | REAL_ARTIFACT_VERIFIED |
-| Shard bütünlüğü | REAL_ARTIFACT_VERIFIED |
-| MVT örnekleme | MVT_SOURCE_LAYER_VERIFIED_DISTRICT_EVIDENCE_LIMITED (sourceLayer: PASS, fullDelivery: FAIL) |
-| Consumer replay (yerel) | LOCAL_CONSUMER_VERIFIED |
-| Hosted teslimat | NOT_ASSESSED / BLOCKED |
-| Kaynak kilidi rc.7 | UNCHANGED_FROM_RC7 |
+| Alan                     | Sonuç                                                                                       |
+| ------------------------ | ------------------------------------------------------------------------------------------- |
+| Artifact envanteri       | REAL_ARTIFACT_VERIFIED                                                                      |
+| Ulusal kapsam (973 ilçe) | REAL_ARTIFACT_VERIFIED                                                                      |
+| Shard bütünlüğü          | REAL_ARTIFACT_VERIFIED                                                                      |
+| MVT örnekleme            | MVT_SOURCE_LAYER_VERIFIED_DISTRICT_EVIDENCE_LIMITED (sourceLayer: PASS, fullDelivery: FAIL) |
+| Consumer replay (yerel)  | LOCAL_CONSUMER_VERIFIED                                                                     |
+| Hosted teslimat          | NOT_ASSESSED / BLOCKED                                                                      |
+| Kaynak kilidi rc.7       | UNCHANGED_FROM_RC7                                                                          |
 
 ## GO / NO-GO
 

@@ -67,9 +67,13 @@ async function writeJson(path, value) {
   await writeFile(path, formatted, "utf8");
 }
 
-async function writeText(path, text) {
+async function writeText(path, text, options = {}) {
+  const { parser = "markdown" } = options;
+  const body = text.endsWith("\n") ? text : `${text}\n`;
+  const formatted =
+    parser === "markdown" ? await formatPrettier(body, { parser: "markdown" }) : body;
   await mkdir(dirname(path), { recursive: true });
-  await writeFile(path, text.endsWith("\n") ? text : `${text}\n`, "utf8");
+  await writeFile(path, formatted, "utf8");
 }
 
 async function readJson(relativeOrAbsolute) {
@@ -909,7 +913,8 @@ Bu sprintte yetkili bir production CDN/URL üzerinde salt okuma doğrulaması **
 - **geometryHash uyumu:** ${geometryHashMatches ? "evet" : "hayır"}
 
 Tam ulusal rebuild bu sprintte çalıştırılmadı. Makine okunur detay: \`source-lock-impact.json\`.
-`
+`,
+    { parser: "markdown" }
   );
   await writeJson(resolve(OUT_DIR, "authorization-gates.json"), authorizationGates);
   await writeText(resolve(OUT_DIR, "rushclaim-sprint-4-handoff.md"), rushclaimHandoff);
@@ -925,7 +930,8 @@ Tam ulusal rebuild bu sprintte çalıştırılmadı. Makine okunur detay: \`sour
 - **origin/main (üretim anı):** ${mainSha ?? "?"}
 
 Raporlar Türkçe/İngilizce karışık alan adlarıyla makine okunur JSON ve özet MD içerir. Tarihsel metrikler \`${BASELINE_PATH}\` ile karşılaştırılır; yeniden doğrulanmış sonuçlar \`classification\` alanında işaretlenir.
-`
+`,
+    { parser: "markdown" }
   );
 
   console.log(`[sprint-3-national-rc] Wrote reports to ${OUT_DIR}`);

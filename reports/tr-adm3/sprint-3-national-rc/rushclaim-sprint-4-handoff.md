@@ -2,14 +2,14 @@
 
 ## Dataset kimliği
 
-| Alan | Değer | Kanıt |
-|------|-------|-------|
-| datasetId | territory-kit-tr-v2-playable | manifest.json |
-| datasetVersion | 2.1.0-rc.7 | manifest.json |
-| canonicalGeometryHash | fb19b468c0555dd0e167d5937037b1609f610014d9231c80b4bc9834685dd8f3 | REAL_ARTIFACT_VERIFIED |
-| sourceLockHash | sha256:4cea41524fefc36670b21934840e932e8d3fcc075e46059f09dc839345b6a85c | REAL_ARTIFACT_VERIFIED |
-| deliveryManifestContentHash | 4c1d42a082a63f5170a63ce150a1e3c5abbe4486ec4dbf1ed3c43789088a31cb | REAL_ARTIFACT_VERIFIED |
-| adm3DatasetSha256 | 9426fe8519f17ed53b3927c394eb5bbf4245237ea7a8b7094bb8f1666c10207f | REAL_ARTIFACT_VERIFIED |
+| Alan                        | Değer                                                                   | Kanıt                  |
+| --------------------------- | ----------------------------------------------------------------------- | ---------------------- |
+| datasetId                   | territory-kit-tr-v2-playable                                            | manifest.json          |
+| datasetVersion              | 2.1.0-rc.7                                                              | manifest.json          |
+| canonicalGeometryHash       | fb19b468c0555dd0e167d5937037b1609f610014d9231c80b4bc9834685dd8f3        | REAL_ARTIFACT_VERIFIED |
+| sourceLockHash              | sha256:4cea41524fefc36670b21934840e932e8d3fcc075e46059f09dc839345b6a85c | REAL_ARTIFACT_VERIFIED |
+| deliveryManifestContentHash | 4c1d42a082a63f5170a63ce150a1e3c5abbe4486ec4dbf1ed3c43789088a31cb        | REAL_ARTIFACT_VERIFIED |
+| adm3DatasetSha256           | 9426fe8519f17ed53b3927c394eb5bbf4245237ea7a8b7094bb8f1666c10207f        | REAL_ARTIFACT_VERIFIED |
 
 ## Artifact yolları (yerel)
 
@@ -37,11 +37,11 @@
 
 ## MVT teslimat kapıları (rc.7)
 
-| Kapı | Durum | Not |
-|------|-------|-----|
-| sourceLayerReady | PASS | MapLibre `territory_adm3` protobuf katmanı |
-| fullMvtDeliveryReady | FAIL | parentAdm2Id tile metadata gerekir |
-| districtRepresentativeGate | FAIL | 8 örnek FEATURE_METADATA_ABSENT |
+| Kapı                       | Durum | Not                                        |
+| -------------------------- | ----- | ------------------------------------------ |
+| sourceLayerReady           | PASS  | MapLibre `territory_adm3` protobuf katmanı |
+| fullMvtDeliveryReady       | FAIL  | parentAdm2Id tile metadata gerekir         |
+| districtRepresentativeGate | FAIL  | 8 örnek FEATURE_METADATA_ABSENT            |
 
 **Rush&Claim:** Ulusal harita katmanı için MVT + `territory_adm3` kullanılabilir; ilçe sınırları ve gameplay zonları için district shard API (`resolveTurkeyV2Boundaries`) kullanın — MVT üzerinden ilçe seçmeyin.
 
