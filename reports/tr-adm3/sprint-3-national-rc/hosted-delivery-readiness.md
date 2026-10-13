@@ -9,8 +9,14 @@
 - MapLibre source-layer (protobuf): `territory_adm3`
 - Render artifact layer id: `territory-adm3` (manifest `layers[].id`, source-layer değildir)
 - Delivery manifest sourceLayer: `UNDECLARED_IN_RC7`
-- MVT source-layer gate: `PASS`
-- İlçe örnekleme (parentAdm2Id): `FAIL` (rc.7 tile özelliklerinde parentAdm2Id yok — #94)
+- MVT source-layer gate (`sourceLayerReady`): `PASS`
+- Tam MVT teslimat gate (`fullMvtDeliveryReady`): `FAIL` — `deliveryReadinessGate.pass` = `false`
+- İlçe örnekleme (parentAdm2Id): `FAIL` (rc.7 tile özelliklerinde parentAdm2Id yok — #94; başarı uydurulmaz)
+
+## Rush&Claim — mevcut rc.7 ile güvenli kullanım
+
+- **Güvenli:** MapLibre/Mapbox vector source; `source-layer: territory_adm3`; zoom 10–12; ulusal ADM3 poligon görselleştirme; `resolveTurkeyV2Boundaries` + district shard ile oyun mantığı (manifest adm2Shards).
+- **Güvenli değil / eksik:** MVT tile içinden ilçe (`parentAdm2Id`) filtreleme veya tile-only district seçimi; tile feature(0) ile ilçe varsayımı; hosted production CDN doğrulaması olmadan yayın.
 
 ## Hosted doğrulama durumu
 
@@ -25,5 +31,6 @@ Bu sprintte yetkili bir production CDN/URL üzerinde salt okuma doğrulaması **
 
 ## Üretim engelleri
 
+- `fullMvtDeliveryReady` = false (ilçe MVT metadata kanıtı yok)
 - `human-approvals-required.json`: NATIONAL_DATASET_PROMOTION = NOT_AUTHORIZED
 - PR #103 merge/publish yetkisi yok

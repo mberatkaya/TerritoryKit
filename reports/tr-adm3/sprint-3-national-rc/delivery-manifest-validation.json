@@ -1,7 +1,7 @@
 {
   "schemaVersion": "territorykit-tr-sprint-3-national-rc@1",
-  "generatedAt": "2026-10-13T12:01:57.210Z",
-  "inspectedCommit": "2660dfabc5752f40d3d17f385977d8fd928d7adc",
+  "generatedAt": "2026-10-13T12:18:33.545Z",
+  "inspectedCommit": "bca26c1d957a502c7d0d89ebff0927570e775481",
   "originMainSha": "2c03e1b870272191cf8ddddf3313fe9d3cb147ba",
   "evidenceProducer": "scripts/generate-tr-sprint-3-national-rc-reports.mjs",
   "candidateRoot": ".territory/sprint-6/final/candidate",

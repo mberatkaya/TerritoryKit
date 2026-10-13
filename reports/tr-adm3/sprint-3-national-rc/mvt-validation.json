@@ -1,7 +1,7 @@
 {
   "schemaVersion": "territorykit-tr-sprint-3-national-rc@1",
-  "generatedAt": "2026-10-13T12:01:57.210Z",
-  "inspectedCommit": "2660dfabc5752f40d3d17f385977d8fd928d7adc",
+  "generatedAt": "2026-10-13T12:18:33.545Z",
+  "inspectedCommit": "bca26c1d957a502c7d0d89ebff0927570e775481",
   "originMainSha": "2c03e1b870272191cf8ddddf3313fe9d3cb147ba",
   "evidenceProducer": "scripts/generate-tr-sprint-3-national-rc-reports.mjs",
   "candidateRoot": ".territory/sprint-6/final/candidate",
@@ -10,7 +10,7 @@
   "candidateEnvVar": "TERRITORY_TR_RC7_CANDIDATE",
   "datasetVersion": "2.1.0-rc.7",
   "historicalBaselinePath": "reports/baselines/sprint-6-national-rc7.json",
-  "classification": "REAL_ARTIFACT_VERIFIED",
+  "classification": "MVT_SOURCE_LAYER_VERIFIED_DISTRICT_EVIDENCE_LIMITED",
   "validationCommand": "render manifest + @mapbox/vector-tile örnekleme",
   "consumerSourceLayerContract": "territory_adm3",
   "sourceLayerContract": {
@@ -20,14 +20,17 @@
     "consumerSourceLayerContract": "territory_adm3"
   },
   "deliveryReadinessGate": {
-    "pass": true,
-    "gate": "PASS",
+    "pass": false,
+    "gate": "FAIL",
+    "sourceLayerReady": true,
+    "fullMvtDeliveryReady": false,
     "sourceLayerGate": "PASS",
     "districtRepresentativeGate": "FAIL",
     "layerOk": true,
     "districtVerifiedCount": 0,
     "districtMetadataAbsentCount": 8,
-    "manifestMismatchCount": 0
+    "manifestMismatchCount": 0,
+    "insufficientEvidenceCount": 0
   },
   "policyFromRenderManifest": {
     "adminLevels": ["ADM3"],
@@ -243,6 +246,7 @@
   "limitations": [
     "Tam tile envanteri checksums.json ile doğrulanır; tüm tile decode edilmedi.",
     "render/manifest.json `id` render artifact tanımlayıcısıdır; MapLibre source-layer encoded protobuf adıdır (territory_adm3).",
-    "rc.7 delivery manifest sourceLayer alanı yoksa tüketici sözleşmesi kod sabiti + tile baytı ile doğrulanır."
+    "rc.7 delivery manifest sourceLayer alanı yoksa tüketici sözleşmesi kod sabiti + tile baytı ile doğrulanır.",
+    "rc.7 MVT özelliklerinde parentAdm2Id yoksa ilçe örnekleme başarısız sayılır; bu üretim MVT teslimatını engeller, kaynak katmanı doğrulamasını geçersiz kılmaz."
   ]
 }

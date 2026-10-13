@@ -237,7 +237,7 @@ async function sampleMvtTiles(candidateRoot, samples, renderManifest, deliveryMa
         tilePath: relative,
         classification: "INSUFFICIENT_EVIDENCE",
         districtClassification: "INSUFFICIENT_EVIDENCE",
-        evidenceStatus: "REAL_ARTIFACT_VERIFIED"
+        evidenceStatus: "INSUFFICIENT_EVIDENCE"
       });
       continue;
     }
@@ -680,9 +680,15 @@ async function main() {
     deliveryManifestShardCount: Object.keys(deliveryManifest.shards ?? {}).length
   };
 
+  const mvtReportClassification = mvtReadiness.fullMvtDeliveryReady
+    ? "REAL_ARTIFACT_VERIFIED"
+    : mvtReadiness.sourceLayerReady
+      ? "MVT_SOURCE_LAYER_VERIFIED_DISTRICT_EVIDENCE_LIMITED"
+      : "MVT_DELIVERY_CONTRACT_FAIL";
+
   const mvtValidation = {
     ...meta,
-    classification: mvtReadiness.pass ? "REAL_ARTIFACT_VERIFIED" : "MVT_DELIVERY_CONTRACT_FAIL",
+    classification: mvtReportClassification,
     validationCommand: "render manifest + @mapbox/vector-tile örnekleme",
     consumerSourceLayerContract: TURKEY_V2_MVT_CONSUMER_SOURCE_LAYER,
     sourceLayerContract: mvtSourceLayerContract,
@@ -695,7 +701,8 @@ async function main() {
     limitations: [
       "Tam tile envanteri checksums.json ile doğrulanır; tüm tile decode edilmedi.",
       "render/manifest.json `id` render artifact tanımlayıcısıdır; MapLibre source-layer encoded protobuf adıdır (territory_adm3).",
-      "rc.7 delivery manifest sourceLayer alanı yoksa tüketici sözleşmesi kod sabiti + tile baytı ile doğrulanır."
+      "rc.7 delivery manifest sourceLayer alanı yoksa tüketici sözleşmesi kod sabiti + tile baytı ile doğrulanır.",
+      "rc.7 MVT özelliklerinde parentAdm2Id yoksa ilçe örnekleme başarısız sayılır; bu üretim MVT teslimatını engeller, kaynak katmanı doğrulamasını geçersiz kılmaz."
     ]
   };
 
@@ -758,8 +765,14 @@ async function main() {
 - MapLibre source-layer (protobuf): \`${TURKEY_V2_MVT_CONSUMER_SOURCE_LAYER}\`
 - Render artifact layer id: \`${mvtSourceLayerContract.renderArtifactLayerId ?? "unknown"}\` (manifest \`layers[].id\`, source-layer değildir)
 - Delivery manifest sourceLayer: \`${mvtSourceLayerContract.deliveryManifestSourceLayer ?? "UNDECLARED_IN_RC7"}\`
-- MVT source-layer gate: \`${mvtReadiness.sourceLayerGate}\`
-- İlçe örnekleme (parentAdm2Id): \`${mvtReadiness.districtRepresentativeGate}\` (rc.7 tile özelliklerinde parentAdm2Id yok — #94)
+- MVT source-layer gate (\`sourceLayerReady\`): \`${mvtReadiness.sourceLayerGate}\`
+- Tam MVT teslimat gate (\`fullMvtDeliveryReady\`): \`${mvtReadiness.fullMvtDeliveryReady ? "PASS" : "FAIL"}\` — \`deliveryReadinessGate.pass\` = \`${mvtReadiness.pass}\`
+- İlçe örnekleme (parentAdm2Id): \`${mvtReadiness.districtRepresentativeGate}\` (rc.7 tile özelliklerinde parentAdm2Id yok — #94; başarı uydurulmaz)
+
+## Rush&Claim — mevcut rc.7 ile güvenli kullanım
+
+- **Güvenli:** MapLibre/Mapbox vector source; \`source-layer: territory_adm3\`; zoom 10–12; ulusal ADM3 poligon görselleştirme; \`resolveTurkeyV2Boundaries\` + district shard ile oyun mantığı (manifest adm2Shards).
+- **Güvenli değil / eksik:** MVT tile içinden ilçe (\`parentAdm2Id\`) filtreleme veya tile-only district seçimi; tile feature(0) ile ilçe varsayımı; hosted production CDN doğrulaması olmadan yayın.
 
 ## Hosted doğrulama durumu
 
@@ -774,6 +787,7 @@ Bu sprintte yetkili bir production CDN/URL üzerinde salt okuma doğrulaması **
 
 ## Üretim engelleri
 
+- \`fullMvtDeliveryReady\` = false (ilçe MVT metadata kanıtı yok)
 - \`human-approvals-required.json\`: NATIONAL_DATASET_PROMOTION = NOT_AUTHORIZED
 - PR #103 merge/publish yetkisi yok
 `;
@@ -815,6 +829,16 @@ Bu sprintte yetkili bir production CDN/URL üzerinde salt okuma doğrulaması **
 - Path A/B: **NOT_AUTHORIZED**
 - H3 silme veya ownership migrasyonu: reviewed mapping + production validation gerekir
 
+## MVT teslimat kapıları (rc.7)
+
+| Kapı | Durum | Not |
+|------|-------|-----|
+| sourceLayerReady | ${mvtReadiness.sourceLayerGate} | MapLibre \`territory_adm3\` protobuf katmanı |
+| fullMvtDeliveryReady | ${mvtReadiness.fullMvtDeliveryReady ? "PASS" : "FAIL"} | parentAdm2Id tile metadata gerekir |
+| districtRepresentativeGate | ${mvtReadiness.districtRepresentativeGate} | ${mvtReadiness.districtMetadataAbsentCount} örnek FEATURE_METADATA_ABSENT |
+
+**Rush&Claim:** Ulusal harita katmanı için MVT + \`territory_adm3\` kullanılabilir; ilçe sınırları ve gameplay zonları için district shard API (\`resolveTurkeyV2Boundaries\`) kullanın — MVT üzerinden ilçe seçmeyin.
+
 ## Sprint 4 minimum doğrulama
 
 1. Manifest pin ve shard checksum
@@ -828,9 +852,9 @@ Bu sprintte yetkili bir production CDN/URL üzerinde salt okuma doğrulaması **
     validateStandard.ok &&
     shardChecksumVerify.mismatches.length === 0 &&
     geometryHashMatches &&
-    mvtReadiness.pass &&
+    mvtReadiness.sourceLayerReady &&
     consumer.districts.every((row) => row.classification === "LOCAL_CONSUMER_VERIFIED");
-  const productionGo = false;
+  const productionGo = mergeGo && mvtReadiness.fullMvtDeliveryReady && validatePublishReady.ok;
 
   const finalDecision = `# Sprint 3 — nihai karar
 
@@ -845,7 +869,7 @@ Bu sprintte yetkili bir production CDN/URL üzerinde salt okuma doğrulaması **
 | Artifact envanteri | ${artifactInventory.classification} |
 | Ulusal kapsam (973 ilçe) | ${nationalCoverage.classification} |
 | Shard bütünlüğü | ${shardIntegrity.classification} |
-| MVT örnekleme | ${mvtValidation.classification} (gate: ${mvtReadiness.gate}) |
+| MVT örnekleme | ${mvtValidation.classification} (sourceLayer: ${mvtReadiness.sourceLayerGate}, fullDelivery: ${mvtReadiness.fullMvtDeliveryReady ? "PASS" : "FAIL"}) |
 | Consumer replay (yerel) | LOCAL_CONSUMER_VERIFIED |
 | Hosted teslimat | NOT_ASSESSED / BLOCKED |
 | Kaynak kilidi rc.7 | ${sourceLockImpact.classification} |
@@ -853,7 +877,7 @@ Bu sprintte yetkili bir production CDN/URL üzerinde salt okuma doğrulaması **
 ## GO / NO-GO
 
 - **Araştırma/validation PR merge:** ${mergeGo ? "GO" : "NO-GO — bulguları inceleyin"}
-- **Production dataset yayını:** NO-GO (insan onayı ve hosted doğrulama eksik)
+- **Production dataset yayını:** ${productionGo ? "GO" : "NO-GO"} (fullMvtDeliveryReady, insan onayı ve hosted doğrulama gerekir)
 
 ## Komutlar (bu oturum)
 

@@ -110,7 +110,122 @@ test("MANIFEST_LAYER_MISMATCH when declared sourceLayer disagrees with bytes", (
     decodeTile
   });
   assert.equal(verdict.classification, "MANIFEST_LAYER_MISMATCH");
-  assert.equal(aggregateMvtReadiness([verdict]).pass, false);
+  const mismatchReadiness = aggregateMvtReadiness([verdict]);
+  assert.equal(mismatchReadiness.pass, false);
+  assert.equal(mismatchReadiness.fullMvtDeliveryReady, false);
+  assert.equal(mismatchReadiness.sourceLayerGate, "FAIL");
+});
+
+function fixtureVerdict(bytes, expectedAdm2Id, extra = {}) {
+  return classifyMvtDistrictSample({
+    bytes,
+    expectedAdm2Id,
+    consumerSourceLayer: TURKEY_V2_MVT_CONSUMER_SOURCE_LAYER,
+    decodeTile,
+    ...extra
+  });
+}
+
+function minimalPolygonFeature(properties) {
+  return {
+    type: "Feature",
+    geometry: {
+      type: "Polygon",
+      coordinates: [
+        [
+          [0, 0],
+          [0, 0.01],
+          [0.01, 0.01],
+          [0.01, 0],
+          [0, 0]
+        ]
+      ]
+    },
+    properties
+  };
+}
+
+test("sourceLayer PASS when district parentAdm2Id metadata absent on all samples", () => {
+  const bytes = buildFixtureTile([
+    minimalPolygonFeature({ territoryId: "z", adminLevel: "ADM3", sourceClass: "official" })
+  ]);
+  const verdict = fixtureVerdict(bytes, "tr:adm2:expected");
+  assert.equal(verdict.districtClassification, "FEATURE_METADATA_ABSENT");
+  const readiness = aggregateMvtReadiness([verdict]);
+  assert.equal(readiness.sourceLayerGate, "PASS");
+  assert.equal(readiness.sourceLayerReady, true);
+  assert.equal(readiness.districtRepresentativeGate, "FAIL");
+  assert.equal(readiness.fullMvtDeliveryReady, false);
+  assert.equal(readiness.pass, false);
+});
+
+test("missing tile (INSUFFICIENT_EVIDENCE) cannot yield full delivery PASS", () => {
+  const readiness = aggregateMvtReadiness([
+    {
+      classification: "INSUFFICIENT_EVIDENCE",
+      districtClassification: "INSUFFICIENT_EVIDENCE"
+    }
+  ]);
+  assert.equal(readiness.sourceLayerGate, "INSUFFICIENT_EVIDENCE");
+  assert.equal(readiness.sourceLayerReady, false);
+  assert.equal(readiness.fullMvtDeliveryReady, false);
+  assert.equal(readiness.pass, false);
+  assert.equal(readiness.gate, "FAIL");
+});
+
+test("valid source-layer and district evidence yields full MVT delivery PASS", () => {
+  const bytes = buildFixtureTile([
+    minimalPolygonFeature({
+      territoryId: "z",
+      parentAdm2Id: "tr:adm2:expected",
+      adminLevel: "ADM3",
+      sourceClass: "official"
+    })
+  ]);
+  const verdict = fixtureVerdict(bytes, "tr:adm2:expected");
+  const readiness = aggregateMvtReadiness([verdict]);
+  assert.equal(readiness.sourceLayerGate, "PASS");
+  assert.equal(readiness.districtRepresentativeGate, "PASS");
+  assert.equal(readiness.fullMvtDeliveryReady, true);
+  assert.equal(readiness.pass, true);
+  assert.equal(readiness.gate, "PASS");
+});
+
+test("encoded layer mismatch fails source layer and full delivery", () => {
+  const bytes = buildFixtureTile(
+    [minimalPolygonFeature({ territoryId: "z", parentAdm2Id: "tr:adm2:a", adminLevel: "ADM3" })],
+    "wrong-layer-name"
+  );
+  const verdict = classifyMvtDistrictSample({
+    bytes,
+    expectedAdm2Id: "tr:adm2:a",
+    consumerSourceLayer: TURKEY_V2_MVT_CONSUMER_SOURCE_LAYER,
+    decodeTile
+  });
+  assert.equal(verdict.classification, "MISSING_LAYER");
+  const readiness = aggregateMvtReadiness([verdict]);
+  assert.equal(readiness.sourceLayerGate, "FAIL");
+  assert.equal(readiness.fullMvtDeliveryReady, false);
+});
+
+test("all mandatory checks passing across multiple representative samples", () => {
+  const polygon = minimalPolygonFeature({
+    territoryId: "z",
+    parentAdm2Id: "tr:adm2:a",
+    adminLevel: "ADM3"
+  });
+  const bytesA = buildFixtureTile([polygon]);
+  const bytesB = buildFixtureTile([
+    {
+      ...polygon,
+      properties: { ...polygon.properties, parentAdm2Id: "tr:adm2:b", territoryId: "z2" }
+    }
+  ]);
+  const samples = [fixtureVerdict(bytesA, "tr:adm2:a"), fixtureVerdict(bytesB, "tr:adm2:b")];
+  const readiness = aggregateMvtReadiness(samples);
+  assert.equal(readiness.sourceLayerGate, "PASS");
+  assert.equal(readiness.districtRepresentativeGate, "PASS");
+  assert.equal(readiness.fullMvtDeliveryReady, true);
 });
 
 test("multi-district tile selects matching parentAdm2Id, not feature(0)", () => {

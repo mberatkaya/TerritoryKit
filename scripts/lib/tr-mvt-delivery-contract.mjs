@@ -187,46 +187,62 @@ function readFirstFeatureParent(tile, layerKey) {
 }
 
 export function aggregateMvtReadiness(samples) {
+  const baseCounts = (rows) => ({
+    districtVerifiedCount: rows.filter((row) => row.districtClassification === "DISTRICT_VERIFIED")
+      .length,
+    districtMetadataAbsentCount: rows.filter(
+      (row) => row.districtClassification === "FEATURE_METADATA_ABSENT"
+    ).length,
+    manifestMismatchCount: rows.filter((row) => row.classification === "MANIFEST_LAYER_MISMATCH")
+      .length,
+    insufficientEvidenceCount: rows.filter((row) => row.classification === "INSUFFICIENT_EVIDENCE")
+      .length
+  });
+
   if (!samples.length) {
     return {
       gate: "INSUFFICIENT_EVIDENCE",
       pass: false,
+      sourceLayerReady: false,
+      fullMvtDeliveryReady: false,
       sourceLayerGate: "INSUFFICIENT_EVIDENCE",
-      districtRepresentativeGate: "INSUFFICIENT_EVIDENCE"
+      districtRepresentativeGate: "INSUFFICIENT_EVIDENCE",
+      layerOk: false,
+      ...baseCounts([])
     };
   }
-  const layerOk = samples.every(
+
+  const counts = baseCounts(samples);
+  const sourceLayerPass = samples.every((row) => row.classification === "ACTUAL_LAYER_MATCH");
+  const sourceLayerGate = sourceLayerPass
+    ? "PASS"
+    : counts.insufficientEvidenceCount === samples.length
+      ? "INSUFFICIENT_EVIDENCE"
+      : "FAIL";
+
+  const districtRepresentativePass = samples.every(
     (row) =>
-      row.classification === "ACTUAL_LAYER_MATCH" || row.classification === "INSUFFICIENT_EVIDENCE"
+      row.classification === "ACTUAL_LAYER_MATCH" &&
+      row.districtClassification === "DISTRICT_VERIFIED"
   );
-  const sourceLayerPass =
-    layerOk &&
-    !samples.some(
-      (row) =>
-        row.classification === "MANIFEST_LAYER_MISMATCH" ||
-        row.classification === "MISSING_LAYER" ||
-        row.classification === "INVALID_MVT"
-    );
-  const districtVerifiedCount = samples.filter(
-    (row) => row.districtClassification === "DISTRICT_VERIFIED"
-  ).length;
-  const districtMetadataAbsentCount = samples.filter(
-    (row) => row.districtClassification === "FEATURE_METADATA_ABSENT"
-  ).length;
-  const districtRepresentativePass = samples.every((row) => {
-    if (row.classification === "INSUFFICIENT_EVIDENCE") return true;
-    return row.districtClassification === "DISTRICT_VERIFIED";
-  });
+  const districtRepresentativeGate = districtRepresentativePass
+    ? "PASS"
+    : counts.insufficientEvidenceCount === samples.length
+      ? "INSUFFICIENT_EVIDENCE"
+      : "FAIL";
+
+  const sourceLayerReady = sourceLayerPass;
+  const fullMvtDeliveryReady = sourceLayerReady && districtRepresentativePass;
+
   return {
-    pass: sourceLayerPass,
-    gate: sourceLayerPass ? "PASS" : "FAIL",
-    sourceLayerGate: sourceLayerPass ? "PASS" : "FAIL",
-    districtRepresentativeGate: districtRepresentativePass ? "PASS" : "FAIL",
-    layerOk,
-    districtVerifiedCount,
-    districtMetadataAbsentCount,
-    manifestMismatchCount: samples.filter((row) => row.classification === "MANIFEST_LAYER_MISMATCH")
-      .length
+    pass: fullMvtDeliveryReady,
+    gate: fullMvtDeliveryReady ? "PASS" : "FAIL",
+    sourceLayerReady,
+    fullMvtDeliveryReady,
+    sourceLayerGate,
+    districtRepresentativeGate,
+    layerOk: sourceLayerPass,
+    ...counts
   };
 }
 

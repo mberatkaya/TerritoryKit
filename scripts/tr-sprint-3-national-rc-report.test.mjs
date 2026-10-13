@@ -64,6 +64,10 @@ test("generate-tr-sprint-3-national-rc-reports produces sprint-3 deliverables", 
   assert.equal(mvt.consumerSourceLayerContract, "territory_adm3");
   if (existsSync(CANDIDATE)) {
     assert.ok(mvt.deliveryReadinessGate);
+    assert.equal(mvt.deliveryReadinessGate.sourceLayerGate, "PASS");
+    assert.equal(mvt.deliveryReadinessGate.fullMvtDeliveryReady, false);
+    assert.equal(mvt.deliveryReadinessGate.pass, false);
+    assert.equal(mvt.classification, "MVT_SOURCE_LAYER_VERIFIED_DISTRICT_EVIDENCE_LIMITED");
     for (const sample of mvt.representativeSamples) {
       assert.notEqual(sample.classification, "PASS");
       if (sample.classification === "ACTUAL_LAYER_MATCH") {
