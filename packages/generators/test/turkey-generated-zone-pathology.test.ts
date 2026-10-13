@@ -66,6 +66,64 @@ describe("generated-only zone pathology", () => {
     expect(report.findings.some((finding) => finding.zoneId === "official-1")).toBe(false);
   });
 
+  it("counts only official administrative zones in skippedOfficialZoneCount", () => {
+    const official = zone(
+      "official-1",
+      {
+        type: "Polygon",
+        coordinates: [
+          [
+            [28, 40],
+            [28.01, 40],
+            [28.01, 40.01],
+            [28, 40.01],
+            [28, 40]
+          ]
+        ]
+      },
+      { sourceClass: "official", administrative: true, authoritative: true }
+    );
+    const osm = zone(
+      "osm-1",
+      {
+        type: "Polygon",
+        coordinates: [
+          [
+            [28.02, 40.02],
+            [28.03, 40.02],
+            [28.03, 40.03],
+            [28.02, 40.03],
+            [28.02, 40.02]
+          ]
+        ]
+      },
+      { sourceClass: "osm", administrative: false }
+    );
+    const report = inspectTurkeyGeneratedZonePathology({ zones: [official, osm] });
+    expect(report.generatedZoneCount).toBe(0);
+    expect(report.skippedOfficialZoneCount).toBe(1);
+  });
+
+  it("evaluates the first ring vertex for spike detection", () => {
+    const spikeAtStart = zone("spike-start", {
+      type: "Polygon",
+      coordinates: [
+        [
+          [29, 41],
+          [29.0004, 41.00001],
+          [29.0008, 41],
+          [29.0004, 40.99999],
+          [29, 41]
+        ]
+      ]
+    });
+    const report = inspectTurkeyGeneratedZonePathology({
+      zones: [spikeAtStart],
+      thresholds: { spikeMaxInteriorAngleDegrees: 20 }
+    });
+    expect(report.findings.some((finding) => finding.code === "SPIKE")).toBe(true);
+  });
+
   it("detects acute spikes on generated rings", () => {
     const spike = zone("spike", {
       type: "Polygon",

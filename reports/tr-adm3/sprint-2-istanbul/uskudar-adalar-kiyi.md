@@ -7,9 +7,13 @@
 | Zone                              |    40 |
 | Güven                             |  high |
 | En uzun desteklenmeyen zincir (m) |     0 |
-| Topoloji                          |  PASS |
+| Topoloji (audit)                  |  PASS |
 
-**Sonuç:** Audit replay ve mevcut geometri QA ile kıyıya taşma veya açık su üstü poligon **doğrulanmadı**. `inspectTurkeyGeneratedCoastlineSpill` fixture testleri CI'da çalışır; tam İstanbul bariyer replay bu ortamda eksik (`.territory/sprint-6` yok).
+**Doğrulama sınıfı:** `HISTORICAL_AUDIT_ONLY` (10 ilçe diagnostik) + canlı replay yalnızca 3 ilçe (`istanbul-replay.json`).
+
+**Kıyı/su:** `inspectTurkeyGeneratedCoastlineSpill` yalnızca **kapalı `water` bariyer poligonları** ile gerçek `polygon-clipping` kesişim alanı ölçer. Coastline çizgileri su poligonuna dönüştürülmez. Verified water olmadan durum **`NOT_ASSESSED`**; `ok=true` kıyı güvenliği kanıtı değildir.
+
+**Fixture:** `FIXTURE_TESTED` — gerçek overlap, ayrık su, delikli poligon, eksik coastline ve eksik water senaryoları CI'da.
 
 ## Adalar (Prince Islands)
 
@@ -20,4 +24,6 @@
 | En uzun desteklenmeyen zincir (m) |                    0 |
 | Canonical geometry eşleşmesi      |        14/14 (audit) |
 
-**Sonuç:** Cross-island sentetik köprü audit'te **reprodüklenmedi**. `inspectTurkeyIslandMultipolygonSafety` geçerli çok bileşenli adaları korur; dar yapay köprü fixture'ı reddeder.
+**Ada güvenliği:** `inspectTurkeyIslandMultipolygonSafety` uzak `MultiPolygon` bileşenlerini **korur** (centroid/alan köprü heuristiği kaldırıldı). Dar boyun yalnızca ölçülebilir bbox yaklaşık genişlik ile **`SUSPECTED`** olarak işaretlenir; verified water maskesi olmadan connector iddiası **`NOT_ASSESSED`**.
+
+**Sonuç:** Audit'te cross-island sentetik köprü **reprodüklenmedi** (`HISTORICAL_AUDIT_ONLY`). Sprint 2'de üretim poligonları değiştirilmedi — **`NO_GEOMETRY_CHANGE`**.

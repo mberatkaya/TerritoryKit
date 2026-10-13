@@ -161,7 +161,17 @@ export function inspectTurkeyGeneratedZonePathology(input: {
   };
   const findings: TurkeyGeneratedZonePathologyFinding[] = [];
   const generated = input.zones.filter(isTurkeyGeneratedGameplayZone);
-  const skippedOfficialZoneCount = input.zones.length - generated.length;
+  const skippedOfficialZoneCount = input.zones.filter((zone) => {
+    const territory = zone.properties?.territory;
+    if (!isRecord(territory)) {
+      return false;
+    }
+    return (
+      territory.administrative === true ||
+      territory.authoritative === true ||
+      territory.sourceClass === "official"
+    );
+  }).length;
 
   for (const zone of generated) {
     const areaKm2 = computeTurkeyAdm3GeometryAreaKm2(zone.geometry);
@@ -196,7 +206,12 @@ export function inspectTurkeyGeneratedZonePathology(input: {
         ...(zone.parentId ? { parentId: zone.parentId } : {}),
         code: "THIN_CORRIDOR",
         severity: "warning",
-        measurement: { minWidthMeters, areaKm2 }
+        measurement: {
+          bboxApproxMinWidthMeters: minWidthMeters,
+          minWidthMeters,
+          areaKm2,
+          measurementNote: "Bounding-box width estimate; not a proven minimum corridor width."
+        }
       });
     }
 
@@ -205,10 +220,14 @@ export function inspectTurkeyGeneratedZonePathology(input: {
       if (!ring || ring.length < 5) {
         continue;
       }
-      for (let index = 1; index < ring.length - 1; index += 1) {
-        const prev = ring[index - 1]!;
+      const vertexCount =
+        ring.length >= 2 && ring[0]![0] === ring.at(-1)![0] && ring[0]![1] === ring.at(-1)![1]
+          ? ring.length - 1
+          : ring.length;
+      for (let index = 0; index < vertexCount; index += 1) {
+        const prev = ring[(index - 1 + vertexCount) % vertexCount]!;
         const vertex = ring[index]!;
-        const next = ring[index + 1]!;
+        const next = ring[(index + 1) % vertexCount]!;
         const angle = ringInteriorAngleDegrees(prev, vertex, next);
         const edge1 = haversineMeters(prev, vertex);
         const edge2 = haversineMeters(vertex, next);

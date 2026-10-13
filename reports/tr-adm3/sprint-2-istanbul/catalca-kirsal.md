@@ -1,19 +1,13 @@
-# Çatalca — kırsal üretim kalitesi
+# Çatalca — kırsal üretici kalitesi
 
-**Kaynak:** `istanbul-district-diagnostics.json`
-
-| Metrik                            | Değer |
+| Metrik (audit)                    | Değer |
 | --------------------------------- | ----: |
-| Zone                              |    19 |
+| Zone                              |    40 |
 | Güven                             |   low |
 | En uzun desteklenmeyen zincir (m) | ~7802 |
-| Locality seed                     |   248 |
-| Sentetik oran                     | ~0.20 |
+| Yerleşim seed                     |   248 |
+| Yol yoğunluğu (km/km²)            |  ~2.4 |
 
-`classifyTurkeyRuralGeneratorQuality` gerekçe kodları:
+**Sınıflandırma:** `classifyTurkeyRuralGeneratorQuality` → **low** (`LONG_UNSUPPORTED_CHAIN`, `LOW_ROAD_DENSITY`, `LOW_NETWORK_FACE_COVERAGE`).
 
-- `LOW_ROAD_DENSITY` (kırsal ağ)
-- `LONG_UNSUPPORTED_CHAIN`
-- `LOW_NETWORK_FACE_COVERAGE` (replay benzeri profil)
-
-**Karar:** Semantik `estimated` / `administrative: false` korunur; resmî mahalle icat edilmedi. Yeterli coğrafi ayrıcı olmadığı için düşük güven bilinçli olarak kalır.
+**Doğrulama:** Audit metrikleri `HISTORICAL_AUDIT_ONLY`. Sprint 2'de kırsal realism için üretim geometrisi değiştirilmedi — **`NO_GEOMETRY_CHANGE`**.

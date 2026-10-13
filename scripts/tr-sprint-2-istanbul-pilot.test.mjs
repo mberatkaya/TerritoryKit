@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { execSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -7,8 +9,10 @@ import {
   inspectTurkeyMunicipalShapefileCompanionBundle,
   summarizeTurkeyNetworkRouteRootCause
 } from "../packages/generators/dist/turkey-adm3.mjs";
+import { sha256OfUtf8FileContents } from "./tr-sprint-2-istanbul-pilot.mjs";
 
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const REPORT_DIR = path.join(REPO_ROOT, "reports/tr-adm3/sprint-2-istanbul");
 
 test("Kadıköy acquisition evidence is classified as duplicate companion response", async () => {
   const acquisition = JSON.parse(
@@ -39,4 +43,35 @@ test("Eyüpsultan replay fixture exposes NO_ROUTE classification", async () => {
   });
   assert.equal(rootCause.routeFailureReason, "NO_ROUTE");
   assert.ok(rootCause.reasonCodes.includes("ORGANIC_ROUTE_NO_PATH"));
+});
+
+test("pilot summary sha256 matches on-disk JSON bytes", async () => {
+  execSync("node scripts/tr-sprint-2-istanbul-pilot.mjs", {
+    cwd: REPO_ROOT,
+    stdio: "pipe",
+    env: {
+      ...process.env,
+      SPRINT2_PILOT_GENERATED_AT: "2026-10-13T00:00:00.000Z"
+    }
+  });
+  const jsonBytes = await readFile(path.join(REPORT_DIR, "pilot-summary.json"));
+  const shaLine = (await readFile(path.join(REPORT_DIR, "pilot-summary.sha256"), "utf8")).trim();
+  const digest = sha256OfUtf8FileContents(jsonBytes.toString("utf8"));
+  assert.equal(shaLine, `${digest}  pilot-summary.json`);
+  assert.equal(digest, createHash("sha256").update(jsonBytes).digest("hex"));
+
+  const summary = JSON.parse(jsonBytes.toString("utf8"));
+  assert.equal(summary.schemaVersion, "territorykit-tr-adm3-sprint-2-istanbul@2");
+  assert.equal(summary.determinismScope.assessedDistrictCount, 3);
+  assert.ok(
+    summary.pilotDistricts.every(
+      (row) => row.scope.stableIdEvidence === "NOT_ASSESSED" || row.scope.stableIdEvidence
+    )
+  );
+  const kadikoy = summary.kadikoyOfficialPilot;
+  assert.equal(kadikoy.pilotStatus, "BLOCKED_BY_SOURCE");
+  assert.ok(
+    kadikoy.companionStates.some((row) => row.state === "MISSING_LOCAL_FILE") ||
+      kadikoy.bundle.status === "BLOCKED_DUPLICATE_RESPONSE"
+  );
 });
