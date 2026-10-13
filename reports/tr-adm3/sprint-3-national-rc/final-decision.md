@@ -1,20 +1,20 @@
 # Sprint 3 — nihai karar
 
-**İncelenen commit:** ac65679fac41ed9dcb3886c37aa098ff0b03b17d  
+**İncelenen commit:** 2660dfabc5752f40d3d17f385977d8fd928d7adc  
 **origin/main:** 2c03e1b870272191cf8ddddf3313fe9d3cb147ba  
-**Candidate:** /Users/mbkaya/Repo/TerritoryKit/.territory/sprint-6/final/candidate
+**Candidate:** .territory/sprint-6/final/candidate
 
 ## Özet
 
-| Alan | Sonuç |
-|------|-------|
-| Artifact envanteri | REAL_ARTIFACT_VERIFIED |
-| Ulusal kapsam (973 ilçe) | REAL_ARTIFACT_VERIFIED |
-| Shard bütünlüğü | REAL_ARTIFACT_VERIFIED |
-| MVT örnekleme | REAL_ARTIFACT_VERIFIED (gate: PASS) |
-| Consumer replay (yerel) | LOCAL_CONSUMER_VERIFIED |
-| Hosted teslimat | NOT_ASSESSED / BLOCKED |
-| Kaynak kilidi rc.7 | UNCHANGED_FROM_RC7 |
+| Alan                     | Sonuç                               |
+| ------------------------ | ----------------------------------- |
+| Artifact envanteri       | REAL_ARTIFACT_VERIFIED              |
+| Ulusal kapsam (973 ilçe) | REAL_ARTIFACT_VERIFIED              |
+| Shard bütünlüğü          | REAL_ARTIFACT_VERIFIED              |
+| MVT örnekleme            | REAL_ARTIFACT_VERIFIED (gate: PASS) |
+| Consumer replay (yerel)  | LOCAL_CONSUMER_VERIFIED             |
+| Hosted teslimat          | NOT_ASSESSED / BLOCKED              |
+| Kaynak kilidi rc.7       | UNCHANGED_FROM_RC7                  |
 
 ## GO / NO-GO
 

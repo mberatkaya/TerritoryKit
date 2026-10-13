@@ -836,7 +836,7 @@ Bu sprintte yetkili bir production CDN/URL üzerinde salt okuma doğrulaması **
 
 **İncelenen commit:** ${commit ?? "unknown"}  
 **origin/main:** ${mainSha ?? "unknown"}  
-**Candidate:** ${candidateRoot}
+**Candidate:** ${portableCandidatePath(candidateRoot)}
 
 ## Özet
 
