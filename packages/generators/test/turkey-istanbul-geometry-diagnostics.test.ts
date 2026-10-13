@@ -1,8 +1,14 @@
-import type { TerritoryZone } from "@territory-kit/dataset";
+import {
+  hasRingSelfIntersection,
+  type TerritoryGeometry,
+  type TerritoryZone
+} from "@territory-kit/dataset";
+import type { FeatureCollection } from "geojson";
 import { describe, expect, it } from "vitest";
 import type { TurkeySmartFallbackBarrier } from "../src/turkey-smart-fallback.js";
 import {
   classifyTurkeyRuralGeneratorQuality,
+  collectVerifiedWaterAreaGeometries,
   inspectTurkeyGeneratedCoastlineSpill,
   inspectTurkeyIslandMultipolygonSafety,
   summarizeTurkeyNetworkRouteRootCause
@@ -21,6 +27,10 @@ function generatedZone(id: string, geometry: TerritoryZone["geometry"]): Territo
     center: [29.155, 40.855],
     properties: { territory: { sourceClass: "generated", administrative: false } }
   };
+}
+
+function waterPolygonGeometry(coordinates: [number, number][][]): TerritoryGeometry {
+  return { type: "Polygon", coordinates };
 }
 
 function waterBarrier(coordinates: [number, number][]): TurkeySmartFallbackBarrier {
@@ -62,16 +72,18 @@ describe("Istanbul pilot geometry diagnostics", () => {
         ]
       ]
     });
-    const water = waterBarrier([
-      [28.995, 40.995],
-      [29.015, 40.995],
-      [29.015, 41.015],
-      [28.995, 41.015],
-      [28.995, 40.995]
+    const water = waterPolygonGeometry([
+      [
+        [28.995, 40.995],
+        [29.015, 40.995],
+        [29.015, 41.015],
+        [28.995, 41.015],
+        [28.995, 40.995]
+      ]
     ]);
     const overlap = inspectTurkeyGeneratedCoastlineSpill({
       zones: [land],
-      waterBarriers: [water]
+      verifiedWaterAreas: [water]
     });
     expect(overlap.assessmentStatus).toBe("VERIFIED_FINDING");
     expect(overlap.ok).toBe(false);
@@ -79,13 +91,15 @@ describe("Istanbul pilot geometry diagnostics", () => {
 
     const disjoint = inspectTurkeyGeneratedCoastlineSpill({
       zones: [land],
-      waterBarriers: [
-        waterBarrier([
-          [30.0, 41.0],
-          [30.01, 41.0],
-          [30.01, 41.01],
-          [30.0, 41.01],
-          [30.0, 41.0]
+      verifiedWaterAreas: [
+        waterPolygonGeometry([
+          [
+            [30.0, 41.0],
+            [30.01, 41.0],
+            [30.01, 41.01],
+            [30.0, 41.01],
+            [30.0, 41.0]
+          ]
         ])
       ]
     });
@@ -96,13 +110,12 @@ describe("Istanbul pilot geometry diagnostics", () => {
       zones: [land],
       waterBarriers: [
         {
-          ...water,
-          id: "coast-1",
-          barrierClass: "coastline",
-          coordinates: [
+          ...waterBarrier([
             [29.0, 41.0],
             [29.02, 41.0]
-          ]
+          ]),
+          id: "coast-1",
+          barrierClass: "coastline"
         }
       ]
     });
@@ -113,6 +126,207 @@ describe("Istanbul pilot geometry diagnostics", () => {
     const missingWater = inspectTurkeyGeneratedCoastlineSpill({ zones: [land], waterBarriers: [] });
     expect(missingWater.assessmentStatus).toBe("NOT_ASSESSED");
     expect(missingWater.ok).toBe(false);
+  });
+
+  it("does not treat open waterway polylines as verified water polygons", () => {
+    const land = generatedZone("land", {
+      type: "Polygon",
+      coordinates: [
+        [
+          [29.0, 41.0],
+          [29.01, 41.0],
+          [29.01, 41.01],
+          [29.0, 41.01],
+          [29.0, 41.0]
+        ]
+      ]
+    });
+    const riverLine: FeatureCollection = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: { waterway: "river", natural: "water" },
+          geometry: {
+            type: "LineString",
+            coordinates: [
+              [28.995, 40.995],
+              [29.015, 41.015],
+              [29.02, 41.02]
+            ]
+          }
+        }
+      ]
+    };
+    const fromBarrier = inspectTurkeyGeneratedCoastlineSpill({
+      zones: [land],
+      waterBarriers: [
+        waterBarrier([
+          [28.995, 40.995],
+          [29.015, 41.015],
+          [29.02, 41.02]
+        ])
+      ]
+    });
+    expect(fromBarrier.assessmentStatus).toBe("NOT_ASSESSED");
+    expect(fromBarrier.verifiedWaterPolygonCount).toBe(0);
+
+    const fromFeature = inspectTurkeyGeneratedCoastlineSpill({
+      zones: [land],
+      waterSourceFeatures: riverLine
+    });
+    expect(fromFeature.assessmentStatus).toBe("NOT_ASSESSED");
+    expect(
+      collectVerifiedWaterAreaGeometries({ waterSourceFeatures: riverLine }).geometries
+    ).toHaveLength(0);
+  });
+
+  it("preserves multipart water with holes and unions overlapping sources", () => {
+    const land = generatedZone("land-hole", {
+      type: "Polygon",
+      coordinates: [
+        [
+          [29.0, 41.0],
+          [29.02, 41.0],
+          [29.02, 41.02],
+          [29.0, 41.02],
+          [29.0, 41.0]
+        ],
+        [
+          [29.005, 41.005],
+          [29.015, 41.005],
+          [29.015, 41.015],
+          [29.005, 41.015],
+          [29.005, 41.005]
+        ]
+      ]
+    });
+    const waterInHole = waterPolygonGeometry([
+      [
+        [29.006, 41.006],
+        [29.014, 41.006],
+        [29.014, 41.014],
+        [29.006, 41.014],
+        [29.006, 41.006]
+      ]
+    ]);
+    const report = inspectTurkeyGeneratedCoastlineSpill({
+      zones: [land],
+      verifiedWaterAreas: [waterInHole]
+    });
+    expect(report.assessmentStatus).toBe("ASSESSED_CLEAR");
+    expect(report.spillFindings).toHaveLength(0);
+
+    const multipart: TerritoryGeometry = {
+      type: "MultiPolygon",
+      coordinates: [
+        [
+          [
+            [30.0, 41.0],
+            [30.01, 41.0],
+            [30.01, 41.01],
+            [30.0, 41.01],
+            [30.0, 41.0]
+          ]
+        ],
+        [
+          [
+            [30.02, 41.0],
+            [30.03, 41.0],
+            [30.03, 41.01],
+            [30.02, 41.01],
+            [30.02, 41.0]
+          ]
+        ]
+      ]
+    };
+    const overlapA = waterPolygonGeometry([
+      [
+        [29.0, 41.0],
+        [29.005, 41.0],
+        [29.005, 41.005],
+        [29.0, 41.005],
+        [29.0, 41.0]
+      ]
+    ]);
+    const single = inspectTurkeyGeneratedCoastlineSpill({
+      zones: [land],
+      verifiedWaterAreas: [overlapA]
+    });
+    const duplicated = inspectTurkeyGeneratedCoastlineSpill({
+      zones: [land],
+      verifiedWaterAreas: [overlapA, overlapA]
+    });
+    expect(duplicated.spillFindings[0]?.waterOverlapAreaKm2).toBeCloseTo(
+      single.spillFindings[0]?.waterOverlapAreaKm2 ?? 0,
+      8
+    );
+    expect(
+      collectVerifiedWaterAreaGeometries({ verifiedWaterAreas: [multipart] }).geometries
+    ).toHaveLength(1);
+  });
+
+  it("excludes self-intersecting water polygons and fails closed on clipping errors", () => {
+    const land = generatedZone("land", {
+      type: "Polygon",
+      coordinates: [
+        [
+          [29.0, 41.0],
+          [29.01, 41.0],
+          [29.01, 41.01],
+          [29.0, 41.01],
+          [29.0, 41.0]
+        ]
+      ]
+    });
+    const bowtieRing: [number, number][] = [
+      [28.99, 40.99],
+      [29.02, 41.02],
+      [29.02, 40.99],
+      [28.99, 41.02],
+      [28.99, 40.99]
+    ];
+    expect(hasRingSelfIntersection(bowtieRing)).toBe(true);
+    const invalid = inspectTurkeyGeneratedCoastlineSpill({
+      zones: [land],
+      verifiedWaterAreas: [waterPolygonGeometry([bowtieRing])]
+    });
+    expect(invalid.assessmentStatus).toBe("NOT_ASSESSED");
+    expect(invalid.excludedInvalidWaterAreaCount).toBeGreaterThan(0);
+  });
+
+  it("flags missing polygon source geometry type as not assessed", () => {
+    const collection: FeatureCollection = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: { natural: "water" },
+          geometry: { type: "Point", coordinates: [29.0, 41.0] }
+        }
+      ]
+    };
+    const collected = collectVerifiedWaterAreaGeometries({ waterSourceFeatures: collection });
+    expect(collected.geometries).toHaveLength(0);
+    expect(collected.excludedNonPolygonGeometryCount).toBe(1);
+    const report = inspectTurkeyGeneratedCoastlineSpill({
+      zones: [
+        generatedZone("z", {
+          type: "Polygon",
+          coordinates: [
+            [
+              [29.0, 41.0],
+              [29.01, 41.0],
+              [29.01, 41.01],
+              [29.0, 41.01],
+              [29.0, 41.0]
+            ]
+          ]
+        })
+      ],
+      waterSourceFeatures: collection
+    });
+    expect(report.assessmentStatus).toBe("NOT_ASSESSED");
   });
 
   it("preserves distant island multipolygons and flags bbox-narrow necks as suspected", () => {
@@ -151,9 +365,11 @@ describe("Istanbul pilot geometry diagnostics", () => {
         ]
       ]
     });
-    expect(inspectTurkeyIslandMultipolygonSafety([validIslands]).assessmentStatus).toBe(
-      "ASSESSED_CLEAR"
-    );
+    const islandReport = inspectTurkeyIslandMultipolygonSafety([validIslands]);
+    expect(islandReport.assessmentScopes.narrowNeckBboxApprox).toBe("ASSESSED_CLEAR");
+    expect(islandReport.assessmentScopes.crossWaterComponentSeparation).toBe("NOT_ASSESSED");
+    expect(islandReport.assessmentStatus).toBe("NOT_ASSESSED");
+    expect(islandReport.ok).toBe(false);
     const narrowReport = inspectTurkeyIslandMultipolygonSafety([narrowNeck]);
     expect(narrowReport.assessmentStatus).toBe("SUSPECTED");
     expect(narrowReport.ok).toBe(false);
@@ -161,41 +377,6 @@ describe("Istanbul pilot geometry diagnostics", () => {
       narrowReport.findings.some((finding) => finding.code === "NARROW_NECK_BBOX_APPROX")
     ).toBe(true);
     expect(narrowReport.artificialConnectorFindings).toHaveLength(0);
-  });
-
-  it("handles polygon holes without treating coastline barriers as water bodies", () => {
-    const zoneWithHole = generatedZone("zone-hole", {
-      type: "Polygon",
-      coordinates: [
-        [
-          [29.0, 41.0],
-          [29.02, 41.0],
-          [29.02, 41.02],
-          [29.0, 41.02],
-          [29.0, 41.0]
-        ],
-        [
-          [29.005, 41.005],
-          [29.015, 41.005],
-          [29.015, 41.015],
-          [29.005, 41.015],
-          [29.005, 41.005]
-        ]
-      ]
-    });
-    const waterInHole = waterBarrier([
-      [29.006, 41.006],
-      [29.014, 41.006],
-      [29.014, 41.014],
-      [29.006, 41.014],
-      [29.006, 41.006]
-    ]);
-    const report = inspectTurkeyGeneratedCoastlineSpill({
-      zones: [zoneWithHole],
-      waterBarriers: [waterInHole]
-    });
-    expect(report.assessmentStatus).toBe("ASSESSED_CLEAR");
-    expect(report.spillFindings).toHaveLength(0);
   });
 
   it("summarizes Eyüpsultan NO_ROUTE root cause from network diagnostics", () => {

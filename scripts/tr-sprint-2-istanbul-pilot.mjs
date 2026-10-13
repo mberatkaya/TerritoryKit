@@ -91,7 +91,7 @@ async function loadPilotZones(parentAdm2Id) {
     if (zones.length > 0) {
       return {
         zones,
-        geometryEvidence: "REAL_REPLAY_VERIFIED",
+        geometryEvidence: "READONLY_STORED_GEOMETRY",
         geometrySource: candidate
       };
     }
@@ -140,7 +140,7 @@ async function kadikoyBundleReport() {
       files.push({ fileName, bytes: new Uint8Array(bytes) });
       companionStates.push({
         fileName,
-        localPath,
+        localPath: path.relative(REPO_ROOT, localPath),
         state: "LOCAL_FILE_PRESENT",
         acquisitionSha256: entry.sha256,
         byteSize: entry.byteSize
@@ -148,7 +148,7 @@ async function kadikoyBundleReport() {
     } catch {
       companionStates.push({
         fileName,
-        localPath,
+        localPath: path.relative(REPO_ROOT, localPath),
         state: "MISSING_LOCAL_FILE",
         acquisitionSha256: entry.sha256,
         byteSize: entry.byteSize,
@@ -195,7 +195,7 @@ async function kadikoyBundleReport() {
   return {
     acquisitionEvidencePath: "reports/tr-adm3/audit/kadikoy-acquisition.json",
     acquisitionEvidenceClass: "HISTORICAL_AUDIT_ONLY",
-    localBundleDir: localDir,
+    localBundleDir: path.relative(REPO_ROOT, localDir),
     companionStates,
     bundle: report,
     pilotStatus: "BLOCKED_BY_SOURCE",
@@ -265,7 +265,7 @@ async function main() {
         : null;
 
     const replayEvidence = replayed
-      ? "REAL_REPLAY_VERIFIED"
+      ? "HISTORICAL_RECORDED_REPLAY"
       : replayDistrictNames.has(canonicalName)
         ? "HISTORICAL_AUDIT_ONLY"
         : "NOT_ASSESSED";
@@ -280,6 +280,7 @@ async function main() {
           geometryLoad.zones.length > 0 ? geometryLoad.geometryEvidence : "NOT_ASSESSED",
         coastlineEvidence: coastline.assessmentStatus,
         islandSafetyEvidence: islandSafety.assessmentStatus,
+        islandSafetyScopes: islandSafety.assessmentScopes ?? null,
         determinismEvidence:
           replayDistrictNames.has(canonicalName) && determinismDistrictCount === 3
             ? determinism.differences?.length === 0

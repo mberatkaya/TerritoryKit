@@ -36,6 +36,7 @@ export {
 export {
   TURKEY_ISTANBUL_GEOMETRY_DIAGNOSTICS_SCHEMA_VERSION,
   classifyTurkeyRuralGeneratorQuality,
+  collectVerifiedWaterAreaGeometries,
   geometryComponentCount,
   inspectTurkeyGeneratedCoastlineSpill,
   inspectTurkeyIslandMultipolygonSafety,

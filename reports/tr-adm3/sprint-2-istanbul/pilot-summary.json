@@ -2,7 +2,7 @@
   "schemaVersion": "territorykit-tr-adm3-sprint-2-istanbul@2",
   "generatedAt": "2026-10-13T00:00:00.000Z",
   "baselineMainSha": "70aab395b0ed5eb7d0d9870a81362524c365827d",
-  "headSha": "8623082248ee0f599db717270736b140f74942ca",
+  "headSha": "ce219b1dcce06304f9d704be564dccc0f0d7e97c",
   "determinismScope": {
     "assessedDistrictCount": 3,
     "note": "Determinizm kanıtı yalnızca replay edilen 3 ilçe için geçerlidir; 6 pilot ilçe deterministik değildir."
@@ -16,39 +16,39 @@
   "kadikoyOfficialPilot": {
     "acquisitionEvidencePath": "reports/tr-adm3/audit/kadikoy-acquisition.json",
     "acquisitionEvidenceClass": "HISTORICAL_AUDIT_ONLY",
-    "localBundleDir": "/Users/mbkaya/Repo/TerritoryKit/.territory/quality-source-audit/kadikoy",
+    "localBundleDir": ".territory/quality-source-audit/kadikoy",
     "companionStates": [
       {
         "fileName": "mahalle_sinir.shp",
-        "localPath": "/Users/mbkaya/Repo/TerritoryKit/.territory/quality-source-audit/kadikoy/mahalle_sinir.shp",
+        "localPath": ".territory/quality-source-audit/kadikoy/mahalle_sinir.shp",
         "state": "LOCAL_FILE_PRESENT",
         "acquisitionSha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
         "byteSize": 103260
       },
       {
         "fileName": "mahalle_sinir.shx",
-        "localPath": "/Users/mbkaya/Repo/TerritoryKit/.territory/quality-source-audit/kadikoy/mahalle_sinir.shx",
+        "localPath": ".territory/quality-source-audit/kadikoy/mahalle_sinir.shx",
         "state": "LOCAL_FILE_PRESENT",
         "acquisitionSha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
         "byteSize": 103260
       },
       {
         "fileName": "mahalle_sinir.dbf",
-        "localPath": "/Users/mbkaya/Repo/TerritoryKit/.territory/quality-source-audit/kadikoy/mahalle_sinir.dbf",
+        "localPath": ".territory/quality-source-audit/kadikoy/mahalle_sinir.dbf",
         "state": "LOCAL_FILE_PRESENT",
         "acquisitionSha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
         "byteSize": 103260
       },
       {
         "fileName": "mahalle_sinir.prj",
-        "localPath": "/Users/mbkaya/Repo/TerritoryKit/.territory/quality-source-audit/kadikoy/mahalle_sinir.prj",
+        "localPath": ".territory/quality-source-audit/kadikoy/mahalle_sinir.prj",
         "state": "LOCAL_FILE_PRESENT",
         "acquisitionSha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
         "byteSize": 103260
       },
       {
         "fileName": "mahalle_sinir.cpg",
-        "localPath": "/Users/mbkaya/Repo/TerritoryKit/.territory/quality-source-audit/kadikoy/mahalle_sinir.cpg",
+        "localPath": ".territory/quality-source-audit/kadikoy/mahalle_sinir.cpg",
         "state": "LOCAL_FILE_PRESENT",
         "acquisitionSha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
         "byteSize": 103260
@@ -122,11 +122,15 @@
       "district": "Fatih",
       "canonicalAdm2Name": "Fatih",
       "scope": {
-        "replayEvidence": "REAL_REPLAY_VERIFIED",
+        "replayEvidence": "HISTORICAL_RECORDED_REPLAY",
         "geometryChange": "NO_GEOMETRY_CHANGE",
-        "pathologyEvidence": "REAL_REPLAY_VERIFIED",
+        "pathologyEvidence": "READONLY_STORED_GEOMETRY",
         "coastlineEvidence": "NOT_ASSESSED",
         "islandSafetyEvidence": "SUSPECTED",
+        "islandSafetyScopes": {
+          "narrowNeckBboxApprox": "SUSPECTED",
+          "crossWaterComponentSeparation": "NOT_ASSESSED"
+        },
         "determinismEvidence": "HISTORICAL_AUDIT_ONLY",
         "stableIdEvidence": "NOT_ASSESSED"
       },
@@ -312,11 +316,17 @@
           "assessmentStatus": "NOT_ASSESSED",
           "verifiedWaterPolygonCount": 0,
           "unclosedCoastlineBarrierCount": 0,
+          "intersectionFailureCount": 0,
+          "excludedInvalidWaterAreaCount": 0,
           "spillFindings": []
         },
         "islandSafety": {
           "ok": false,
           "assessmentStatus": "SUSPECTED",
+          "assessmentScopes": {
+            "narrowNeckBboxApprox": "SUSPECTED",
+            "crossWaterComponentSeparation": "NOT_ASSESSED"
+          },
           "zoneCount": 30,
           "multiComponentZoneCount": 1,
           "artificialConnectorFindings": [],
@@ -343,9 +353,13 @@
       "scope": {
         "replayEvidence": "NOT_ASSESSED",
         "geometryChange": "NO_GEOMETRY_CHANGE",
-        "pathologyEvidence": "REAL_REPLAY_VERIFIED",
+        "pathologyEvidence": "READONLY_STORED_GEOMETRY",
         "coastlineEvidence": "NOT_ASSESSED",
-        "islandSafetyEvidence": "ASSESSED_CLEAR",
+        "islandSafetyEvidence": "NOT_ASSESSED",
+        "islandSafetyScopes": {
+          "narrowNeckBboxApprox": "ASSESSED_CLEAR",
+          "crossWaterComponentSeparation": "NOT_ASSESSED"
+        },
         "determinismEvidence": "NOT_ASSESSED",
         "stableIdEvidence": "NOT_ASSESSED"
       },
@@ -603,11 +617,17 @@
           "assessmentStatus": "NOT_ASSESSED",
           "verifiedWaterPolygonCount": 0,
           "unclosedCoastlineBarrierCount": 0,
+          "intersectionFailureCount": 0,
+          "excludedInvalidWaterAreaCount": 0,
           "spillFindings": []
         },
         "islandSafety": {
-          "ok": true,
-          "assessmentStatus": "ASSESSED_CLEAR",
+          "ok": false,
+          "assessmentStatus": "NOT_ASSESSED",
+          "assessmentScopes": {
+            "narrowNeckBboxApprox": "ASSESSED_CLEAR",
+            "crossWaterComponentSeparation": "NOT_ASSESSED"
+          },
           "zoneCount": 28,
           "multiComponentZoneCount": 0,
           "artificialConnectorFindings": [],
@@ -623,9 +643,13 @@
       "scope": {
         "replayEvidence": "NOT_ASSESSED",
         "geometryChange": "NO_GEOMETRY_CHANGE",
-        "pathologyEvidence": "REAL_REPLAY_VERIFIED",
+        "pathologyEvidence": "READONLY_STORED_GEOMETRY",
         "coastlineEvidence": "NOT_ASSESSED",
-        "islandSafetyEvidence": "ASSESSED_CLEAR",
+        "islandSafetyEvidence": "NOT_ASSESSED",
+        "islandSafetyScopes": {
+          "narrowNeckBboxApprox": "ASSESSED_CLEAR",
+          "crossWaterComponentSeparation": "NOT_ASSESSED"
+        },
         "determinismEvidence": "NOT_ASSESSED",
         "stableIdEvidence": "NOT_ASSESSED"
       },
@@ -979,11 +1003,17 @@
           "assessmentStatus": "NOT_ASSESSED",
           "verifiedWaterPolygonCount": 0,
           "unclosedCoastlineBarrierCount": 0,
+          "intersectionFailureCount": 0,
+          "excludedInvalidWaterAreaCount": 0,
           "spillFindings": []
         },
         "islandSafety": {
-          "ok": true,
-          "assessmentStatus": "ASSESSED_CLEAR",
+          "ok": false,
+          "assessmentStatus": "NOT_ASSESSED",
+          "assessmentScopes": {
+            "narrowNeckBboxApprox": "ASSESSED_CLEAR",
+            "crossWaterComponentSeparation": "NOT_ASSESSED"
+          },
           "zoneCount": 40,
           "multiComponentZoneCount": 0,
           "artificialConnectorFindings": [],
@@ -997,11 +1027,15 @@
       "district": "Adalar",
       "canonicalAdm2Name": "Prince Islands",
       "scope": {
-        "replayEvidence": "REAL_REPLAY_VERIFIED",
+        "replayEvidence": "HISTORICAL_RECORDED_REPLAY",
         "geometryChange": "NO_GEOMETRY_CHANGE",
-        "pathologyEvidence": "REAL_REPLAY_VERIFIED",
+        "pathologyEvidence": "READONLY_STORED_GEOMETRY",
         "coastlineEvidence": "NOT_ASSESSED",
-        "islandSafetyEvidence": "ASSESSED_CLEAR",
+        "islandSafetyEvidence": "NOT_ASSESSED",
+        "islandSafetyScopes": {
+          "narrowNeckBboxApprox": "ASSESSED_CLEAR",
+          "crossWaterComponentSeparation": "NOT_ASSESSED"
+        },
         "determinismEvidence": "HISTORICAL_AUDIT_ONLY",
         "stableIdEvidence": "NOT_ASSESSED"
       },
@@ -1079,11 +1113,17 @@
           "assessmentStatus": "NOT_ASSESSED",
           "verifiedWaterPolygonCount": 0,
           "unclosedCoastlineBarrierCount": 0,
+          "intersectionFailureCount": 0,
+          "excludedInvalidWaterAreaCount": 0,
           "spillFindings": []
         },
         "islandSafety": {
-          "ok": true,
-          "assessmentStatus": "ASSESSED_CLEAR",
+          "ok": false,
+          "assessmentStatus": "NOT_ASSESSED",
+          "assessmentScopes": {
+            "narrowNeckBboxApprox": "ASSESSED_CLEAR",
+            "crossWaterComponentSeparation": "NOT_ASSESSED"
+          },
           "zoneCount": 14,
           "multiComponentZoneCount": 0,
           "artificialConnectorFindings": [],
@@ -1097,11 +1137,15 @@
       "district": "Eyüpsultan",
       "canonicalAdm2Name": "Eyüpsultan",
       "scope": {
-        "replayEvidence": "REAL_REPLAY_VERIFIED",
+        "replayEvidence": "HISTORICAL_RECORDED_REPLAY",
         "geometryChange": "NO_GEOMETRY_CHANGE",
-        "pathologyEvidence": "REAL_REPLAY_VERIFIED",
+        "pathologyEvidence": "READONLY_STORED_GEOMETRY",
         "coastlineEvidence": "NOT_ASSESSED",
         "islandSafetyEvidence": "SUSPECTED",
+        "islandSafetyScopes": {
+          "narrowNeckBboxApprox": "SUSPECTED",
+          "crossWaterComponentSeparation": "NOT_ASSESSED"
+        },
         "determinismEvidence": "HISTORICAL_AUDIT_ONLY",
         "stableIdEvidence": "NOT_ASSESSED"
       },
@@ -1275,11 +1319,17 @@
           "assessmentStatus": "NOT_ASSESSED",
           "verifiedWaterPolygonCount": 0,
           "unclosedCoastlineBarrierCount": 0,
+          "intersectionFailureCount": 0,
+          "excludedInvalidWaterAreaCount": 0,
           "spillFindings": []
         },
         "islandSafety": {
           "ok": false,
           "assessmentStatus": "SUSPECTED",
+          "assessmentScopes": {
+            "narrowNeckBboxApprox": "SUSPECTED",
+            "crossWaterComponentSeparation": "NOT_ASSESSED"
+          },
           "zoneCount": 19,
           "multiComponentZoneCount": 2,
           "artificialConnectorFindings": [],
@@ -1560,9 +1610,13 @@
       "scope": {
         "replayEvidence": "NOT_ASSESSED",
         "geometryChange": "NO_GEOMETRY_CHANGE",
-        "pathologyEvidence": "REAL_REPLAY_VERIFIED",
+        "pathologyEvidence": "READONLY_STORED_GEOMETRY",
         "coastlineEvidence": "NOT_ASSESSED",
-        "islandSafetyEvidence": "ASSESSED_CLEAR",
+        "islandSafetyEvidence": "NOT_ASSESSED",
+        "islandSafetyScopes": {
+          "narrowNeckBboxApprox": "ASSESSED_CLEAR",
+          "crossWaterComponentSeparation": "NOT_ASSESSED"
+        },
         "determinismEvidence": "NOT_ASSESSED",
         "stableIdEvidence": "NOT_ASSESSED"
       },
@@ -1724,11 +1778,17 @@
           "assessmentStatus": "NOT_ASSESSED",
           "verifiedWaterPolygonCount": 0,
           "unclosedCoastlineBarrierCount": 0,
+          "intersectionFailureCount": 0,
+          "excludedInvalidWaterAreaCount": 0,
           "spillFindings": []
         },
         "islandSafety": {
-          "ok": true,
-          "assessmentStatus": "ASSESSED_CLEAR",
+          "ok": false,
+          "assessmentStatus": "NOT_ASSESSED",
+          "assessmentScopes": {
+            "narrowNeckBboxApprox": "ASSESSED_CLEAR",
+            "crossWaterComponentSeparation": "NOT_ASSESSED"
+          },
           "zoneCount": 19,
           "multiComponentZoneCount": 0,
           "artificialConnectorFindings": [],

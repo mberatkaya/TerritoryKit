@@ -22,4 +22,4 @@ Yalnızca `sourceClass: generated` veya `boundarySourceClass: smart-derived` ve 
 ## Fatih
 
 Audit replay: **30 zone, high confidence, 0 m** desteklenmeyen zincir; topoloji PASS (`HISTORICAL_AUDIT_ONLY`).  
-Canlı zone geometrisi yerel artifact'te varsa patoloji **`REAL_REPLAY_VERIFIED`**; aksi halde **`NOT_ASSESSED`**. Kozmetik repair uygulanmaz; **`NO_GEOMETRY_CHANGE`**.
+Yerel dataset artifact'inden salt okunur yükleme varsa patoloji **`READONLY_STORED_GEOMETRY`**; aksi halde **`NOT_ASSESSED`**. Kozmetik repair uygulanmaz; **`NO_GEOMETRY_CHANGE`**.

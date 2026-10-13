@@ -17,7 +17,7 @@
 1. **rc.7 consumer replay** — hosted delivery ve cache state doğrulama (`reports/tr-adm3/audit/baseline-claims.json`).
 2. **81 il ADM3 registry tutarlılığı** — `adm3-readiness-report.json` ile canlı artifact karşılaştırması.
 3. **Path A/B** — yalnızca insan onayı + DEC-008 / ADR-006 sonrası (`human-approvals-required.json`).
-4. **İstanbul canlı replay** — `.territory/sprint-6` bariyer bundle ile 6 pilot için `REAL_REPLAY_VERIFIED` coastline/island.
+4. **İstanbul stored geometry** — yerel dataset artifact ile 6 pilot için `READONLY_STORED_GEOMETRY` patoloji; kıyı/su verified water polygon olmadan `NOT_ASSESSED`.
 5. **Kadıköy** — bağımsız SHP+SHX+DBF+PRJ edinimi; ingestion smoke (`pnpm turkey:adm3:ingestion:smoke`).
 
 ## Doğrulama komutları
