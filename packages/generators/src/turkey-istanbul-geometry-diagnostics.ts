@@ -24,6 +24,19 @@ export type TurkeySpatialAssessmentStatus =
 type IntersectionAreaResult =
   { status: "ok"; areaKm2: number } | { status: "failed"; reason: string };
 
+function territoryGeometryClipConversionFailed(geometry: TerritoryGeometry): boolean {
+  if (geometryToClippingMultiPolygon(geometry).length > 0) {
+    return false;
+  }
+  for (const polygon of geometryToPolygons(geometry)) {
+    const shell = polygon[0];
+    if (shell && shell.length >= 3) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function ringIsClosed(ring: LngLat[]): boolean {
   if (ring.length < 3) {
     return false;
@@ -126,6 +139,10 @@ export function collectVerifiedWaterAreaGeometries(input: {
       excludedInvalidGeometryCount += 1;
       continue;
     }
+    if (territoryGeometryClipConversionFailed(area)) {
+      excludedInvalidGeometryCount += 1;
+      continue;
+    }
     geometries.push(area);
   }
 
@@ -148,6 +165,10 @@ export function collectVerifiedWaterAreaGeometries(input: {
       excludedInvalidGeometryCount += 1;
       continue;
     }
+    if (territoryGeometryClipConversionFailed(geometry)) {
+      excludedInvalidGeometryCount += 1;
+      continue;
+    }
     geometries.push(geometry);
   }
 
@@ -167,7 +188,10 @@ function unionVerifiedWaterAreas(
   for (const geometry of geometries) {
     const clip = geometryToClippingMultiPolygon(geometry);
     if (clip.length === 0) {
-      continue;
+      return {
+        status: "failed",
+        reason: "water_clip_conversion_empty"
+      };
     }
     try {
       acc = acc.length === 0 ? clip : (CLIPPER.union(acc, clip) as ClippingMultiPolygon);
@@ -188,6 +212,9 @@ function intersectionAreaKm2(
   left: TerritoryGeometry,
   right: TerritoryGeometry
 ): IntersectionAreaResult {
+  if (territoryGeometryClipConversionFailed(left) || territoryGeometryClipConversionFailed(right)) {
+    return { status: "failed", reason: "clip_conversion_empty" };
+  }
   const leftClip = geometryToClippingMultiPolygon(left);
   const rightClip = geometryToClippingMultiPolygon(right);
   if (leftClip.length === 0 || rightClip.length === 0) {
@@ -292,10 +319,7 @@ export function inspectTurkeyGeneratedCoastlineSpill(input: {
       verifiedWaterPolygonCount: 0,
       unclosedCoastlineBarrierCount,
       intersectionFailureCount: 0,
-      excludedInvalidWaterAreaCount:
-        waterCollection.excludedInvalidGeometryCount +
-        waterCollection.excludedLineLikeFeatureCount +
-        waterCollection.excludedNonPolygonGeometryCount,
+      excludedInvalidWaterAreaCount: waterCollection.excludedInvalidGeometryCount,
       spillFindings
     };
   }
@@ -338,6 +362,19 @@ export function inspectTurkeyGeneratedCoastlineSpill(input: {
       unclosedCoastlineBarrierCount,
       intersectionFailureCount,
       excludedInvalidWaterAreaCount: waterCollection.excludedInvalidGeometryCount,
+      spillFindings
+    };
+  }
+
+  const suppliedInvalidWaterAreaCount = waterCollection.excludedInvalidGeometryCount;
+  if (suppliedInvalidWaterAreaCount > 0) {
+    return {
+      ok: false,
+      assessmentStatus: "NOT_ASSESSED",
+      verifiedWaterPolygonCount: waterCollection.geometries.length,
+      unclosedCoastlineBarrierCount,
+      intersectionFailureCount: 0,
+      excludedInvalidWaterAreaCount: suppliedInvalidWaterAreaCount,
       spillFindings
     };
   }

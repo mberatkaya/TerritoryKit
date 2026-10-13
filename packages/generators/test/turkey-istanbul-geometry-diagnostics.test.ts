@@ -266,6 +266,179 @@ describe("Istanbul pilot geometry diagnostics", () => {
     ).toHaveLength(1);
   });
 
+  it("fails closed when valid disjoint water coexists with invalid overlapping water", () => {
+    const land = generatedZone("land", {
+      type: "Polygon",
+      coordinates: [
+        [
+          [29.0, 41.0],
+          [29.01, 41.0],
+          [29.01, 41.01],
+          [29.0, 41.01],
+          [29.0, 41.0]
+        ]
+      ]
+    });
+    const bowtieRing: [number, number][] = [
+      [28.99, 40.99],
+      [29.02, 41.02],
+      [29.02, 40.99],
+      [28.99, 41.02],
+      [28.99, 40.99]
+    ];
+    const disjointValid = waterPolygonGeometry([
+      [
+        [30.0, 41.0],
+        [30.01, 41.0],
+        [30.01, 41.01],
+        [30.0, 41.01],
+        [30.0, 41.0]
+      ]
+    ]);
+    const report = inspectTurkeyGeneratedCoastlineSpill({
+      zones: [land],
+      verifiedWaterAreas: [disjointValid, waterPolygonGeometry([bowtieRing])]
+    });
+    expect(report.assessmentStatus).toBe("NOT_ASSESSED");
+    expect(report.ok).toBe(false);
+    expect(report.excludedInvalidWaterAreaCount).toBe(1);
+    expect(report.spillFindings).toHaveLength(0);
+  });
+
+  it("returns NOT_ASSESSED for degenerate generated-zone geometry with valid water", () => {
+    const degenerateLand = generatedZone("degenerate-land", {
+      type: "Polygon",
+      coordinates: [
+        [
+          [29.0, 41.0],
+          [29.001, 41.0],
+          [29.002, 41.0],
+          [29.0, 41.0]
+        ]
+      ]
+    });
+    const water = waterPolygonGeometry([
+      [
+        [28.995, 40.995],
+        [29.015, 40.995],
+        [29.015, 41.015],
+        [28.995, 41.015],
+        [28.995, 40.995]
+      ]
+    ]);
+    const report = inspectTurkeyGeneratedCoastlineSpill({
+      zones: [degenerateLand],
+      verifiedWaterAreas: [water]
+    });
+    expect(report.assessmentStatus).toBe("NOT_ASSESSED");
+    expect(report.intersectionFailureCount).toBeGreaterThan(0);
+    expect(report.ok).toBe(false);
+  });
+
+  it("still reports ASSESSED_CLEAR for valid disjoint water polygons only", () => {
+    const land = generatedZone("land-clear", {
+      type: "Polygon",
+      coordinates: [
+        [
+          [29.0, 41.0],
+          [29.01, 41.0],
+          [29.01, 41.01],
+          [29.0, 41.01],
+          [29.0, 41.0]
+        ]
+      ]
+    });
+    const report = inspectTurkeyGeneratedCoastlineSpill({
+      zones: [land],
+      verifiedWaterAreas: [
+        waterPolygonGeometry([
+          [
+            [30.0, 41.0],
+            [30.01, 41.0],
+            [30.01, 41.01],
+            [30.0, 41.01],
+            [30.0, 41.0]
+          ]
+        ])
+      ]
+    });
+    expect(report.assessmentStatus).toBe("ASSESSED_CLEAR");
+    expect(report.ok).toBe(true);
+    expect(report.excludedInvalidWaterAreaCount).toBe(0);
+  });
+
+  it("still reports VERIFIED_FINDING for valid overlapping water polygons only", () => {
+    const land = generatedZone("land-overlap", {
+      type: "Polygon",
+      coordinates: [
+        [
+          [29.0, 41.0],
+          [29.01, 41.0],
+          [29.01, 41.01],
+          [29.0, 41.01],
+          [29.0, 41.0]
+        ]
+      ]
+    });
+    const report = inspectTurkeyGeneratedCoastlineSpill({
+      zones: [land],
+      verifiedWaterAreas: [
+        waterPolygonGeometry([
+          [
+            [28.995, 40.995],
+            [29.015, 40.995],
+            [29.015, 41.015],
+            [28.995, 41.015],
+            [28.995, 40.995]
+          ]
+        ])
+      ]
+    });
+    expect(report.assessmentStatus).toBe("VERIFIED_FINDING");
+    expect(report.ok).toBe(false);
+    expect(report.spillFindings).toHaveLength(1);
+  });
+
+  it("keeps waterway line exclusions separate from invalid water-area counts", () => {
+    const land = generatedZone("land", {
+      type: "Polygon",
+      coordinates: [
+        [
+          [29.0, 41.0],
+          [29.01, 41.0],
+          [29.01, 41.01],
+          [29.0, 41.01],
+          [29.0, 41.0]
+        ]
+      ]
+    });
+    const riverLine: FeatureCollection = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: { waterway: "river" },
+          geometry: {
+            type: "LineString",
+            coordinates: [
+              [28.995, 40.995],
+              [29.015, 41.015]
+            ]
+          }
+        }
+      ]
+    };
+    const collected = collectVerifiedWaterAreaGeometries({ waterSourceFeatures: riverLine });
+    expect(collected.excludedLineLikeFeatureCount).toBe(1);
+    expect(collected.excludedInvalidGeometryCount).toBe(0);
+    const report = inspectTurkeyGeneratedCoastlineSpill({
+      zones: [land],
+      waterSourceFeatures: riverLine
+    });
+    expect(report.assessmentStatus).toBe("NOT_ASSESSED");
+    expect(report.excludedInvalidWaterAreaCount).toBe(0);
+  });
+
   it("excludes self-intersecting water polygons and fails closed on clipping errors", () => {
     const land = generatedZone("land", {
       type: "Polygon",

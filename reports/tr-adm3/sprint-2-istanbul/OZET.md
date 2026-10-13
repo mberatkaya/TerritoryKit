@@ -1,7 +1,7 @@
 # Sprint 2 — İstanbul ADM3 pilot özeti
 
 - **Baseline main SHA:** `70aab395b0ed5eb7d0d9870a81362524c365827d`
-- **HEAD SHA:** `ce219b1dcce06304f9d704be564dccc0f0d7e97c`
+- **HEAD SHA:** `39d6ff045a9ae8a94af466e1dc26d10e5ee650f6`
 - **Kadıköy resmî bundle:** BLOCKED_BY_SOURCE (`BLOCKED_DUPLICATE_RESPONSE`, FIXTURE_TESTED)
 - **Determinizm kapsamı:** 3 ilçe replay (audit); 6 pilot ilçe için genel determinizm iddiası yok
 
