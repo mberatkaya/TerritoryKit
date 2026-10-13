@@ -1,7 +1,7 @@
 {
   "schemaVersion": "territorykit-tr-sprint-3-national-rc@1",
-  "generatedAt": "2026-10-13T10:51:45.803Z",
-  "inspectedCommit": "f5b0c56c2bd93cfb64fec32bf268458e1030613c",
+  "generatedAt": "2026-10-13T10:52:12.709Z",
+  "inspectedCommit": "53fbaba3a9cdadd88414a14d8457f8e7ebef2738",
   "originMainSha": "2c03e1b870272191cf8ddddf3313fe9d3cb147ba",
   "evidenceProducer": "scripts/generate-tr-sprint-3-national-rc-reports.mjs",
   "candidateRoot": "/Users/mbkaya/Repo/TerritoryKit/.territory/sprint-6/final/candidate",
@@ -49,9 +49,18 @@
       "tilePath": "render/tiles/10/594/383.mvt",
       "byteSize": 124228,
       "layerIds": ["territory_adm3"],
-      "territoryAdm3FeatureCount": 0,
-      "sampleProperties": {},
-      "classification": "LAYER_NAME_MISMATCH",
+      "encodedLayerKey": "territory_adm3",
+      "territoryAdm3FeatureCount": 414,
+      "sampleProperties": {
+        "territoryId": "tr:adm3:tr-il-34-ilce-54988432b10954011235531-generated-smart-derived-v1-7-05d430c98ba47dbed6cf",
+        "sourceClass": "generated",
+        "boundaryKind": "estimated",
+        "confidence": "high",
+        "administrative": false
+      },
+      "manifestLayerId": "territory-adm3",
+      "manifestTileLayerDrift": true,
+      "classification": "PASS",
       "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
     },
     {
@@ -59,9 +68,18 @@
       "tilePath": "render/tiles/10/594/383.mvt",
       "byteSize": 124228,
       "layerIds": ["territory_adm3"],
-      "territoryAdm3FeatureCount": 0,
-      "sampleProperties": {},
-      "classification": "LAYER_NAME_MISMATCH",
+      "encodedLayerKey": "territory_adm3",
+      "territoryAdm3FeatureCount": 414,
+      "sampleProperties": {
+        "territoryId": "tr:adm3:tr-il-34-ilce-54988432b10954011235531-generated-smart-derived-v1-7-05d430c98ba47dbed6cf",
+        "sourceClass": "generated",
+        "boundaryKind": "estimated",
+        "confidence": "high",
+        "administrative": false
+      },
+      "manifestLayerId": "territory-adm3",
+      "manifestTileLayerDrift": true,
+      "classification": "PASS",
       "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
     },
     {
@@ -69,9 +87,18 @@
       "tilePath": "render/tiles/10/594/383.mvt",
       "byteSize": 124228,
       "layerIds": ["territory_adm3"],
-      "territoryAdm3FeatureCount": 0,
-      "sampleProperties": {},
-      "classification": "LAYER_NAME_MISMATCH",
+      "encodedLayerKey": "territory_adm3",
+      "territoryAdm3FeatureCount": 414,
+      "sampleProperties": {
+        "territoryId": "tr:adm3:tr-il-34-ilce-54988432b10954011235531-generated-smart-derived-v1-7-05d430c98ba47dbed6cf",
+        "sourceClass": "generated",
+        "boundaryKind": "estimated",
+        "confidence": "high",
+        "administrative": false
+      },
+      "manifestLayerId": "territory-adm3",
+      "manifestTileLayerDrift": true,
+      "classification": "PASS",
       "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
     },
     {
@@ -79,9 +106,18 @@
       "tilePath": "render/tiles/10/594/384.mvt",
       "byteSize": 26538,
       "layerIds": ["territory_adm3"],
-      "territoryAdm3FeatureCount": 0,
-      "sampleProperties": {},
-      "classification": "LAYER_NAME_MISMATCH",
+      "encodedLayerKey": "territory_adm3",
+      "territoryAdm3FeatureCount": 90,
+      "sampleProperties": {
+        "territoryId": "tr:adm3:tr-il-34-ilce-54988432b10954011235531-generated-smart-derived-v1-7-6e419de98e6bcca59a04",
+        "sourceClass": "generated",
+        "boundaryKind": "estimated",
+        "confidence": "high",
+        "administrative": false
+      },
+      "manifestLayerId": "territory-adm3",
+      "manifestTileLayerDrift": true,
+      "classification": "PASS",
       "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
     },
     {
@@ -89,9 +125,18 @@
       "tilePath": "render/tiles/10/594/383.mvt",
       "byteSize": 124228,
       "layerIds": ["territory_adm3"],
-      "territoryAdm3FeatureCount": 0,
-      "sampleProperties": {},
-      "classification": "LAYER_NAME_MISMATCH",
+      "encodedLayerKey": "territory_adm3",
+      "territoryAdm3FeatureCount": 414,
+      "sampleProperties": {
+        "territoryId": "tr:adm3:tr-il-34-ilce-54988432b10954011235531-generated-smart-derived-v1-7-05d430c98ba47dbed6cf",
+        "sourceClass": "generated",
+        "boundaryKind": "estimated",
+        "confidence": "high",
+        "administrative": false
+      },
+      "manifestLayerId": "territory-adm3",
+      "manifestTileLayerDrift": true,
+      "classification": "PASS",
       "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
     },
     {
@@ -99,9 +144,18 @@
       "tilePath": "render/tiles/10/592/383.mvt",
       "byteSize": 10527,
       "layerIds": ["territory_adm3"],
-      "territoryAdm3FeatureCount": 0,
-      "sampleProperties": {},
-      "classification": "LAYER_NAME_MISMATCH",
+      "encodedLayerKey": "territory_adm3",
+      "territoryAdm3FeatureCount": 26,
+      "sampleProperties": {
+        "territoryId": "tr:adm3:tr-il-34-ilce-54988432b26216305629532-generated-smart-derived-v1-7-2ea5a0fb82ea217d9c89",
+        "sourceClass": "generated",
+        "boundaryKind": "estimated",
+        "confidence": "low",
+        "administrative": false
+      },
+      "manifestLayerId": "territory-adm3",
+      "manifestTileLayerDrift": true,
+      "classification": "PASS",
       "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
     },
     {
@@ -109,9 +163,17 @@
       "tilePath": "render/tiles/10/594/386.mvt",
       "byteSize": 121739,
       "layerIds": ["territory_adm3"],
-      "territoryAdm3FeatureCount": 0,
-      "sampleProperties": {},
-      "classification": "LAYER_NAME_MISMATCH",
+      "encodedLayerKey": "territory_adm3",
+      "territoryAdm3FeatureCount": 419,
+      "sampleProperties": {
+        "territoryId": "tr:adm3:tr-il-16-adm2-54988432b29894117930942-11264",
+        "sourceClass": "official",
+        "confidence": "authoritative",
+        "administrative": true
+      },
+      "manifestLayerId": "territory-adm3",
+      "manifestTileLayerDrift": true,
+      "classification": "PASS",
       "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
     },
     {
@@ -119,9 +181,18 @@
       "tilePath": "render/tiles/10/593/391.mvt",
       "byteSize": 11490,
       "layerIds": ["territory_adm3"],
-      "territoryAdm3FeatureCount": 0,
-      "sampleProperties": {},
-      "classification": "LAYER_NAME_MISMATCH",
+      "encodedLayerKey": "territory_adm3",
+      "territoryAdm3FeatureCount": 25,
+      "sampleProperties": {
+        "territoryId": "tr:adm3:tr-il-43-ilce-54988432b94880790490903-generated-smart-derived-v1-7-ad4cdeeec11b7be36c01",
+        "sourceClass": "generated",
+        "boundaryKind": "estimated",
+        "confidence": "low",
+        "administrative": false
+      },
+      "manifestLayerId": "territory-adm3",
+      "manifestTileLayerDrift": true,
+      "classification": "PASS",
       "evidenceStatus": "REAL_ARTIFACT_VERIFIED"
     }
   ],
