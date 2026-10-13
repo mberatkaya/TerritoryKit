@@ -1,6 +1,6 @@
 # Sprint 3 — nihai karar
 
-**İncelenen commit:** 2c03e1b870272191cf8ddddf3313fe9d3cb147ba  
+**İncelenen commit:** f5b0c56c2bd93cfb64fec32bf268458e1030613c  
 **origin/main:** 2c03e1b870272191cf8ddddf3313fe9d3cb147ba  
 **Candidate:** /Users/mbkaya/Repo/TerritoryKit/.territory/sprint-6/final/candidate
 

@@ -226,7 +226,13 @@ async function sampleMvtTiles(candidateRoot, samples) {
       const bytes = await readFile(absolute);
       const tile = new VectorTile(new PbfReader(bytes));
       const layerIds = Object.keys(tile.layers);
-      const layer = tile.layers["territory-adm3"];
+      const layerKey =
+        tile.layers["territory-adm3"] !== undefined
+          ? "territory-adm3"
+          : tile.layers.territory_adm3 !== undefined
+            ? "territory_adm3"
+            : layerIds[0];
+      const layer = layerKey ? tile.layers[layerKey] : undefined;
       const featureCount = layer?.length ?? 0;
       let props = {};
       if (layer && featureCount > 0) {
@@ -234,11 +240,13 @@ async function sampleMvtTiles(candidateRoot, samples) {
         props = feature.properties ?? {};
         feature.loadGeometry();
       }
+      const layerOk = layerIds.includes("territory-adm3") || layerIds.includes("territory_adm3");
       results.push({
         label: sample.label,
         tilePath: relative,
         byteSize: bytes.byteLength,
         layerIds,
+        encodedLayerKey: layerKey,
         territoryAdm3FeatureCount: featureCount,
         sampleProperties: {
           territoryId: props.territoryId ?? props.id,
@@ -248,7 +256,10 @@ async function sampleMvtTiles(candidateRoot, samples) {
           confidence: props.confidence,
           administrative: props.administrative
         },
-        classification: layerIds.includes("territory-adm3") ? "PASS" : "LAYER_NAME_MISMATCH",
+        manifestLayerId: "territory-adm3",
+        manifestTileLayerDrift:
+          layerIds.includes("territory_adm3") && !layerIds.includes("territory-adm3"),
+        classification: layerOk ? "PASS" : "LAYER_NAME_MISMATCH",
         evidenceStatus: "REAL_ARTIFACT_VERIFIED"
       });
     } catch (error) {
