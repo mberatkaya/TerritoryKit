@@ -1,20 +1,22 @@
 # National geometry remediation — interim decision
 
 **Dataset baseline:** `territory-kit-tr-v2-playable@2.1.0-rc.7` (`.territory/sprint-6/final/candidate`, unchanged)  
-**Candidate target:** `2.1.0-rc.8` → `.territory/national-geometry-remediation/candidate-rc8`  
-**Git base:** `bd2b1e6b0a2092af694603363cba2fb5ee191798` (PR #110 merged)  
+**Candidate target:** `2.1.0-rc.8` → `.territory/national-geometry-remediation/candidate-rc8-impl-rev1` (clean; not started)  
+**Git HEAD:** `9366fdd` (checkpoint @5 + implementation revision)  
 **Branch:** `feat/tr-national-geometry-remediation`
 
 ## Decision matrix (interim)
 
-| Gate                                                 | Verdict            | Notes                                                                       |
-| ---------------------------------------------------- | ------------------ | --------------------------------------------------------------------------- |
-| Three-overlap remediation (code + rc.7 smart replay) | **PASS**           | Regresyon testleri; `three-district-overlap-results.json`                   |
-| National geometry improvement (rc.8 vs rc.7)         | **PENDING**        | Ulusal build devam ediyor / tamamlanınca `national-quality-comparison.json` |
-| New candidate integrity                              | **PENDING**        | rc.8 artefakt doğrulaması build sonrası                                     |
-| Stable ID and migration readiness                    | **PENDING**        | `stable-id-diff.json` build + migration planner sonrası                     |
-| Rush&Claim Sprint 4 technical readiness              | **CONDITIONAL GO** | Geometri motoru düzeltmesi; rc.8 ve migration kanıtı eksik                  |
-| Production dataset promotion                         | **NO-GO**          | Yetkisiz                                                                    |
+| Gate                                                   | Verdict            | Notes                                                                                                |
+| ------------------------------------------------------ | ------------------ | ---------------------------------------------------------------------------------------------------- |
+| Three-overlap remediation (Vitest / rc.7 smart replay) | **PASS**           | `turkey-national-blocker-districts-hybrid.test.ts` (TS source)                                       |
+| Three-overlap remediation (CLI real hybrid preflight)  | **FAIL**           | `preflight-real-hybrid-rc8-impl-rev1.json` — `SIBLING_GEOMETRY_OVERLAP` ×3                           |
+| Checkpoint @5 / implementation revision                | **PASS**           | `9366fdd`; CI run [38568299623](https://github.com/mberatkaya/TerritoryKit/actions/runs/38568299623) |
+| National geometry improvement (rc.8 vs rc.7)           | **BLOCKED**        | FAZ B failed; FAZ C not started                                                                      |
+| New candidate integrity                                | **PENDING**        | rc.8 artefakt doğrulaması build sonrası                                                              |
+| Stable ID and migration readiness                      | **PENDING**        | `stable-id-diff.json` build + migration planner sonrası                                              |
+| Rush&Claim Sprint 4 technical readiness                | **CONDITIONAL GO** | Geometri motoru düzeltmesi; rc.8 ve migration kanıtı eksik                                           |
+| Production dataset promotion                           | **NO-GO**          | Yetkisiz                                                                                             |
 
 ## Kök neden (üç overlap)
 
@@ -22,7 +24,8 @@ Smart-derived bölümlerde ham kardeş çakışması `topologyNoiseToleranceKm2`
 
 ## Kalan engeller
 
-- rc.8 tam ulusal build ve karşılaştırma metrikleri
+- **FAZ B:** CLI `tr adm3 hybrid build` gerçek veri preflight — üç ilçede `validateGeometryDataset` sibling overlap hâlâ 1 (rc.7 ile aynı zone çiftleri); ulusal build başlatılmadı
+- rc.8 tam ulusal build ve karşılaştırma metrikleri (FAZ C, FAZ B sonrası)
 - 631 düşük güvenli ilçe: motor düzeltmesi sonrası yeniden ölçüm (closeout matrisi referans)
 - Hukuki / kaynak: PR #110 `blockers.json` (geoBoundaries, Kadıköy SHP, Path A/B)
 - CI: PR açıldıktan sonra GitHub Actions
