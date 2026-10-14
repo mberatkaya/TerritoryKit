@@ -5,7 +5,7 @@
 import { execFileSync, execSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { format as formatPrettier } from "prettier";
 import { generateCoverage, metadata, parentId } from "./tr-adm3-quality-source-audit.mjs";
@@ -13,6 +13,7 @@ import {
   BASELINE_PATH,
   EVIDENCE,
   SCHEMA,
+  assessNationalQaCloseout,
   buildBaselineComparison,
   buildBlockers,
   buildDistrictQualityMatrix,
@@ -20,6 +21,7 @@ import {
   buildNationalInventory,
   buildNeighborhoodIdentityAudit,
   buildProvinceSummary,
+  buildQualityMetricsSummary,
   buildReplacementMap,
   buildSourceAvailabilityMatrix,
   validateAdm2Layer,
@@ -27,12 +29,13 @@ import {
 } from "./lib/tr-national-quality-closeout.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const OUT_DIR = resolve(ROOT, "reports/tr-adm3/national-quality-closeout");
+const DEFAULT_OUT_DIR = resolve(ROOT, "reports/tr-adm3/national-quality-closeout");
 const DEFAULT_CANDIDATE = resolve(ROOT, ".territory/sprint-6/final/candidate");
 
 function parseArgs(argv) {
   const options = {
     artifactRoot: DEFAULT_CANDIDATE,
+    outDir: DEFAULT_OUT_DIR,
     skipGeometryRerun: false,
     skipCoverageRefresh: false,
     skipValidate: false
@@ -43,6 +46,7 @@ function parseArgs(argv) {
     else if (arg === "--skip-coverage-refresh") options.skipCoverageRefresh = true;
     else if (arg === "--skip-validate") options.skipValidate = true;
     else if (arg === "--artifact-root") options.artifactRoot = resolve(ROOT, argv[++i]);
+    else if (arg === "--out-dir") options.outDir = resolve(argv[++i]);
     else throw new Error(`Unknown argument: ${arg}`);
   }
   return options;
@@ -82,7 +86,7 @@ function originMainSha() {
   }
 }
 
-async function writeMapIndex(geojson, matrix) {
+async function writeMapIndex(outDir, geojson, matrix) {
   const legend = `
 <ul>
 <li><span style="background:#1a5fb4"></span> Official</li>
@@ -108,8 +112,8 @@ async function writeMapIndex(geojson, matrix) {
 </head>
 <body>
   <div class="panel">
-    <h1>ADM2 öncelik haritası</h1>
-    <p>rc.7 ilçe merkezleri; renk kaynak sınıfı / güven.</p>
+    <h1>ADM2 kalite indeksi</h1>
+    <p>ADM1 il sınırları (soluk) + rc.7 ilçe merkez noktaları. Mahalle (ADM3) polygon haritası değildir.</p>
     ${legend}
     <pre id="detail">Bir ilçe noktasına tıklayın.</pre>
   </div>
@@ -157,12 +161,35 @@ async function writeMapIndex(geojson, matrix) {
   </script>
 </body>
 </html>`;
-  await writeFile(resolve(OUT_DIR, "map-index.html"), html, "utf8");
-  await writeJson("reports/tr-adm3/national-quality-closeout/map-features.geojson", geojson);
+  await writeFile(resolve(outDir, "map-index.html"), html, "utf8");
+  const geojsonAbsolute = resolve(outDir, "map-features.geojson");
+  const geojsonRelative = relative(ROOT, geojsonAbsolute);
+  if (!geojsonRelative.startsWith("..")) {
+    await writeJson(geojsonRelative, geojson);
+  } else {
+    const formatted = await formatPrettier(JSON.stringify(geojson, null, 2) + "\n", {
+      parser: "json"
+    });
+    await mkdir(outDir, { recursive: true });
+    await writeFile(resolve(outDir, "map-features.geojson"), formatted, "utf8");
+  }
+}
+
+async function writeOutJson(outDir, fileName, value) {
+  const absolute = resolve(outDir, fileName);
+  const pathUnderRoot = relative(ROOT, absolute);
+  if (!pathUnderRoot.startsWith("..")) {
+    await writeJson(pathUnderRoot, value);
+    return;
+  }
+  const formatted = await formatPrettier(JSON.stringify(value, null, 2) + "\n", { parser: "json" });
+  await mkdir(dirname(absolute), { recursive: true });
+  await writeFile(absolute, formatted, "utf8");
 }
 
 async function main() {
   const options = parseArgs(process.argv.slice(2));
+  const outDir = options.outDir;
   const artifactRoot = options.artifactRoot;
   const artifactExists = existsSync(resolve(artifactRoot, "levels/ADM3/dataset.json"));
   const artifactClassification = artifactExists
@@ -201,8 +228,8 @@ async function main() {
   const humanGates = await readJsonOptional(
     "reports/tr-adm3/sprint-1-governance/human-approvals-required.json"
   );
-  const kadikoyAcquisition = await readJsonOptional(
-    "reports/tr-adm3/audit/kadikoy-acquisition.json"
+  const istanbulPilotSummary = await readJsonOptional(
+    "reports/tr-adm3/sprint-2-istanbul/pilot-summary.json"
   );
 
   const smartByAdm2 = new Map((smart?.districts ?? []).map((d) => [d.adm2Id, d]));
@@ -277,11 +304,18 @@ async function main() {
     coverageReport,
     adm3ZoneCount: adm3?.zones?.length ?? baseline?.adm3Zones ?? 0
   });
+  const qualityMetrics = buildQualityMetricsSummary(matrix);
+  const closeoutAssessment = assessNationalQaCloseout({
+    artifactExists,
+    matrix,
+    adm2Validation
+  });
   const blockers = buildBlockers({
     matrix,
     sourceMatrix: sourceAvailabilityMatrix,
     humanGates,
-    kadikoyAcquisition
+    kadikoyPilot: istanbulPilotSummary,
+    qualityMetrics
   });
 
   const header = {
@@ -296,46 +330,49 @@ async function main() {
     adm2Validation
   };
 
-  await mkdir(OUT_DIR, { recursive: true });
-  await writeJson("reports/tr-adm3/national-quality-closeout/national-inventory.json", {
+  await mkdir(outDir, { recursive: true });
+  await writeOutJson(outDir, "national-inventory.json", {
     ...header,
+    qualityMetrics,
+    closeoutAssessment,
     ...nationalInventory
   });
-  await writeJson("reports/tr-adm3/national-quality-closeout/province-summary.json", {
+  await writeOutJson(outDir, "province-summary.json", {
     ...header,
     provinces: provinceSummary
   });
-  await writeJson("reports/tr-adm3/national-quality-closeout/district-quality-matrix.json", {
+  await writeOutJson(outDir, "district-quality-matrix.json", {
     ...header,
     districts: matrix
   });
-  await writeJson("reports/tr-adm3/national-quality-closeout/neighborhood-identity-audit.json", {
+  await writeOutJson(outDir, "neighborhood-identity-audit.json", {
     ...header,
     ...neighborhoodIdentityAudit
   });
-  await writeJson("reports/tr-adm3/national-quality-closeout/source-availability-matrix.json", {
+  await writeOutJson(outDir, "source-availability-matrix.json", {
     ...header,
     provinces: sourceAvailabilityMatrix
   });
-  await writeJson("reports/tr-adm3/national-quality-closeout/baseline-comparison.json", {
+  await writeOutJson(outDir, "baseline-comparison.json", {
     ...header,
     ...baselineComparison
   });
-  await writeJson("reports/tr-adm3/national-quality-closeout/blockers.json", {
+  await writeOutJson(outDir, "blockers.json", {
     ...header,
+    closeoutAssessment,
     ...blockers
   });
-  await writeJson("reports/tr-adm3/national-quality-closeout/replacement-map.json", {
+  await writeOutJson(outDir, "replacement-map.json", {
     ...header,
     ...replacementMap
   });
 
   if (artifactExists && adm1 && adm2) {
     const geojson = buildMapIndexPayload({ matrix, adm1Zones: adm1.zones, adm2Zones: adm2.zones });
-    await writeMapIndex(geojson, matrix);
+    await writeMapIndex(outDir, geojson, matrix);
   } else {
     await writeFile(
-      resolve(OUT_DIR, "map-index.html"),
+      resolve(outDir, "map-index.html"),
       "<!-- BLOCKED_BY_MISSING_ARTIFACT: run with local rc.7 candidate -->\n",
       "utf8"
     );
@@ -374,9 +411,11 @@ async function main() {
     }
   }
 
-  const lowCount = matrix.filter((r) => r.confidence === "low").length;
-  const warningCount = matrix.filter((r) => r.qualityStatus === "WARNING_REVIEW_REQUIRED").length;
+  const lowCount = qualityMetrics.lowConfidenceDistrictCount;
+  const warningCount = qualityMetrics.warningReviewDistrictCount;
+  const geometryBlockedCount = qualityMetrics.geometryBlockedDistrictCount;
   const officialDistricts = matrix.filter((r) => (r.officialPolygonCount ?? 0) > 0).length;
+  const closeoutVerdict = closeoutAssessment.nationalQaCloseoutVerdict;
 
   const decision = `# Ulusal ADM2–ADM3 kalite kapanışı — nihai karar
 
@@ -395,7 +434,7 @@ async function main() {
 | 4 | Tahmini geometri bölgeleri | ${coverageReport?.totals?.generatedFeatureCount ?? "n/a"} zone |
 | 5 | Mahalle kimlik eşleşmesi | Yalnız lisanslı resmî illerde; ayrıntı \`neighborhood-identity-audit.json\` |
 | 6 | Düşük güven düzeltilen ilçe | 0 (rc.7 baytları yeniden üretilmedi; #108 kodu rebuild gerektirir) |
-| 7 | Düşük güven devam | ${lowCount} ilçe |
+| 7 | Düşük güven devam (smart/coverage) | ${lowCount} ilçe — **bu PR ile düzeltilmedi** |
 | 8 | 577 gerçekçilik uyarısı kapatıldı | 0 (kayıtlı smart-coverage; yeniden üretim yok) |
 | 9 | Yeni uyarı | Hayır (ölçüm yenilenmedi) |
 | 10 | Kaynak yetersizliği | ${sourceAvailabilityMatrix.filter((p) => p.inventoryStatus === "requires-authority-request").length} il metadata engelli |
@@ -417,15 +456,18 @@ async function main() {
 | ADM3 zone | ${baseline?.adm3Zones ?? "—"} | ${coverageReport?.totals ? coverageReport.totals.officialFeatureCount + coverageReport.totals.generatedFeatureCount : "—"} |
 | Resmî zone | ${baseline?.sourceClassZones?.official ?? "—"} | ${coverageReport?.totals?.officialFeatureCount ?? "—"} |
 | Smart-generated zone | ${baseline?.sourceClassZones?.generated ?? "—"} | ${coverageReport?.totals?.generatedFeatureCount ?? "—"} |
-| Düşük güven ilçe | ${baseline?.confidenceDistricts?.low ?? "—"} | ${lowCount} |
-| Uyarı ilçe (closeout sınıfı) | — | ${warningCount} |
+| Düşük güven ilçe (confidence=low) | ${baseline?.confidenceDistricts?.low ?? "—"} | ${lowCount} |
+| Uyarı ilçe (qualityStatus=WARNING_REVIEW_REQUIRED) | — | ${warningCount} |
+| Geometri engelli ilçe (BLOCKED_BY_GEOMETRY) | — | ${geometryBlockedCount} |
 | Resmî polygon içeren ilçe | — | ${officialDistricts} |
+
+Metrik ilişkisi: ${qualityMetrics.metricsRelationship}
 
 ## GO / NO-GO
 
 | Karar | Sonuç |
 | --- | --- |
-| National QA closeout | ${artifactExists && matrix.length === 973 ? "**CONDITIONAL GO**" : "**NO-GO**"} |
+| National QA closeout | **${closeoutVerdict}**${closeoutAssessment.failures.length ? ` (${closeoutAssessment.failures.join(", ")})` : ""} |
 | Release candidate technical readiness | **CONDITIONAL GO** (rc.7 yerel doğrulama) |
 | Rush&Claim integration preparation | **CONDITIONAL GO** |
 | Production dataset promotion | **NO-GO** |
@@ -439,9 +481,9 @@ pnpm data:tr:adm3:audit:test
 \`\`\`
 `;
 
-  await writeFile(resolve(OUT_DIR, "final-decision.md"), decision, "utf8");
+  await writeFile(resolve(outDir, "final-decision.md"), decision, "utf8");
   await writeFile(
-    resolve(OUT_DIR, "README.md"),
+    resolve(outDir, "README.md"),
     `# National quality closeout
 
 Salt okuma ulusal envanter ve QA çıktıları. rc.7 candidate üzerine yazmaz.
@@ -452,7 +494,7 @@ Yeniden üretim:
 pnpm data:tr:national-quality-closeout
 \`\`\`
 
-Harita: \`map-index.html\` (yerel candidate gerekir).
+Harita: \`map-index.html\` — ADM2 kalite indeksi (ADM3 mahalle polygon değil; yerel candidate gerekir).
 `,
     "utf8"
   );
@@ -464,7 +506,8 @@ Harita: \`map-index.html\` (yerel candidate gerekir).
       lowConfidenceDistricts: lowCount,
       validateStandard: validateStandard.ok,
       validatePublishReady: validatePublish.ok,
-      output: "reports/tr-adm3/national-quality-closeout"
+      output: outDir.startsWith(ROOT) ? outDir.slice(ROOT.length + 1) : outDir,
+      closeoutVerdict
     })
   );
 }

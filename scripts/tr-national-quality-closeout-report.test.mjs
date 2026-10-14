@@ -1,16 +1,22 @@
 import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
-import { readFile } from "node:fs/promises";
+import { readFile, rm } from "node:fs/promises";
 import { execSync } from "node:child_process";
-import { resolve } from "node:path";
+import { mkdtempSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
 import test from "node:test";
 import {
   EVIDENCE,
   QUALITY_STATUS,
+  assessNationalQaCloseout,
+  buildBlockers,
   buildDistrictQualityMatrix,
   buildReplacementMap,
   deriveDistrictQualityStatus,
-  resolveBaselineAdm3GeometryHash
+  resolveAdm2ParentAdm1Id,
+  resolveBaselineAdm3GeometryHash,
+  validateAdm2Layer
 } from "./lib/tr-national-quality-closeout.mjs";
 
 const ROOT = resolve(new URL("..", import.meta.url).pathname);
@@ -47,10 +53,62 @@ test("resolveBaselineAdm3GeometryHash reads baseline-claims", () => {
   );
 });
 
+test("resolveAdm2ParentAdm1Id uses provinceCode when parentId absent (rc.7)", () => {
+  const parent = resolveAdm2ParentAdm1Id({
+    id: "tr:adm2:test",
+    properties: { territory: { provinceCode: "34" } }
+  });
+  assert.equal(parent, "tr:adm1:tr-34");
+});
+
+test("validateAdm2Layer does not false-positive orphan parents on rc.7 ADM2", async () => {
+  if (!existsSync(CANDIDATE)) return;
+  const adm1 = JSON.parse(await readFile(resolve(CANDIDATE, "levels/ADM1/dataset.json"), "utf8"));
+  const adm2 = JSON.parse(await readFile(resolve(CANDIDATE, "levels/ADM2/dataset.json"), "utf8"));
+  const validation = validateAdm2Layer({ adm1, adm2, manifest: adm2.manifest });
+  assert.equal(validation.orphanParentCount, 0);
+  assert.equal(validation.adm2ParentLinkageOk, true);
+  assert.equal(validation.rawParentIdFieldOrphanCount, 973);
+});
+
+test("buildBlockers reads human-approvals items and Kadıköy pilot", () => {
+  const blockers = buildBlockers({
+    matrix: [],
+    sourceMatrix: [],
+    humanGates: {
+      items: [{ id: "LEGAL", status: "PENDING_REVIEW", summary: "test" }]
+    },
+    kadikoyPilot: {
+      kadikoyOfficialPilot: {
+        pilotStatus: "BLOCKED_BY_SOURCE",
+        bundle: { status: "BLOCKED_DUPLICATE_RESPONSE", productionEligibility: "NOT_ELIGIBLE" }
+      }
+    },
+    qualityMetrics: {
+      lowConfidenceDistrictCount: 0,
+      warningReviewDistrictCount: 0,
+      geometryBlockedDistrictCount: 0
+    }
+  });
+  assert.ok(blockers.blockers.some((b) => b.code === "LEGAL"));
+  assert.ok(blockers.blockers.some((b) => b.code === "KADIKOY_SHP_BUNDLE_INVALID"));
+});
+
+test("assessNationalQaCloseout fails when ADM2 parent linkage broken", () => {
+  const bad = assessNationalQaCloseout({
+    artifactExists: true,
+    matrix: new Array(973),
+    adm2Validation: { orphanParentCount: 973, adm2ParentLinkageOk: false }
+  });
+  assert.equal(bad.ok, false);
+  assert.ok(bad.failures.includes("ADM2_PARENT_LINKAGE"));
+});
+
 test("generate-tr-national-quality-closeout-reports produces deliverables", async () => {
   const skipGeometry = existsSync(CANDIDATE) ? [] : ["--skip-geometry-rerun"];
+  const tempOut = mkdtempSync(join(tmpdir(), "tk-national-closeout-"));
   execSync(
-    `node scripts/generate-tr-national-quality-closeout-reports.mjs --skip-coverage-refresh --skip-validate ${skipGeometry.join(" ")}`,
+    `node scripts/generate-tr-national-quality-closeout-reports.mjs --skip-coverage-refresh --skip-validate --out-dir ${tempOut} ${skipGeometry.join(" ")}`,
     {
       cwd: ROOT,
       stdio: "pipe",
@@ -70,11 +128,11 @@ test("generate-tr-national-quality-closeout-reports produces deliverables", asyn
     "final-decision.md",
     "README.md"
   ]) {
-    assert.ok(existsSync(resolve(OUT_DIR, name)), `missing ${name}`);
+    assert.ok(existsSync(resolve(tempOut, name)), `missing ${name}`);
   }
 
   const matrix = JSON.parse(
-    await readFile(resolve(OUT_DIR, "district-quality-matrix.json"), "utf8")
+    await readFile(resolve(tempOut, "district-quality-matrix.json"), "utf8")
   );
   if (existsSync(CANDIDATE)) {
     assert.equal(matrix.districts.length, 973);
@@ -85,10 +143,20 @@ test("generate-tr-national-quality-closeout-reports produces deliverables", asyn
     assert.equal(matrix.districts.length, 973);
   }
 
-  const replacement = JSON.parse(await readFile(resolve(OUT_DIR, "replacement-map.json"), "utf8"));
+  const replacement = JSON.parse(await readFile(resolve(tempOut, "replacement-map.json"), "utf8"));
   if (existsSync(CANDIDATE)) {
     assert.equal(replacement.reasonCode, "RC7_BASELINE_UNCHANGED");
+    const blockers = JSON.parse(await readFile(resolve(tempOut, "blockers.json"), "utf8"));
+    assert.equal(blockers.adm2Validation.orphanParentCount, 0);
+    assert.ok(blockers.blockers.some((b) => b.code === "KADIKOY_SHP_BUNDLE_INVALID"));
+    const geometry = blockers.blockers.find(
+      (b) => b.code === "DISTRICT_GEOMETRY_VALIDATION_ERRORS"
+    );
+    assert.ok(geometry?.count === 3);
+    assert.equal(blockers.closeoutAssessment.nationalQaCloseoutVerdict, "CONDITIONAL_GO");
   }
+
+  await rm(tempOut, { recursive: true, force: true });
 });
 
 test("district matrix fixture row counts zones", () => {

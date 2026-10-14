@@ -5,6 +5,7 @@ import {
 } from "../../packages/dataset/dist/index.mjs";
 import { createDatasetGeometryHash } from "../../packages/generators/dist/turkey-adm3.mjs";
 import {
+  adm1LookupRefFromProvinceCode,
   adm2ParentGeometryIsUsable,
   metadata,
   parentId
@@ -118,11 +119,69 @@ export function deriveDistrictQualityStatus({
 
 export function summarizeGeometryReport(report) {
   const issues = report?.issues ?? [];
+  const errors = issues.filter((i) => i.severity === "error");
   return {
     ok: report?.ok ?? false,
-    errorCount: issues.filter((i) => i.severity === "error").length,
+    errorCount: errors.length,
     warningCount: issues.filter((i) => i.severity === "warning").length,
-    issueCodes: [...new Set(issues.map((i) => i.code))].sort()
+    issueCodes: [...new Set(issues.map((i) => i.code))].sort(),
+    errorIssues: errors.slice(0, 12).map((issue) => ({
+      code: issue.code,
+      zoneId: issue.zoneId ?? issue.featureId ?? null,
+      otherZoneId: issue.otherZoneId ?? null,
+      message: issue.message ?? null
+    }))
+  };
+}
+
+/** rc.7 ADM2 zones omit top-level parentId; parent is provinceCode → ADM1 lookup ref. */
+export function resolveAdm2ParentAdm1Id(zone) {
+  const territory = metadata(zone);
+  const explicit = zone.parentId ?? territory.parentId ?? territory.parentAdm1Id;
+  if (explicit) return explicit;
+  const rawProvince = territory.provinceCode ?? zone.provinceCode;
+  if (rawProvince == null || rawProvince === "") return null;
+  const provinceCode = String(rawProvince).padStart(2, "0").slice(-2);
+  return adm1LookupRefFromProvinceCode(provinceCode);
+}
+
+export function buildQualityMetricsSummary(matrix) {
+  const lowConfidenceDistrictCount = matrix.filter((row) => row.confidence === "low").length;
+  const warningReviewDistrictCount = matrix.filter(
+    (row) => row.qualityStatus === QUALITY_STATUS.WARNING_REVIEW_REQUIRED
+  ).length;
+  const geometryBlockedDistrictCount = matrix.filter(
+    (row) => row.qualityStatus === QUALITY_STATUS.BLOCKED_BY_GEOMETRY
+  ).length;
+  const lowConfidenceExcludingGeometryBlocked = matrix.filter(
+    (row) => row.confidence === "low" && row.qualityStatus !== QUALITY_STATUS.BLOCKED_BY_GEOMETRY
+  ).length;
+  return {
+    lowConfidenceDistrictCount,
+    warningReviewDistrictCount,
+    geometryBlockedDistrictCount,
+    lowConfidenceExcludingGeometryBlocked,
+    metricsRelationship:
+      "lowConfidenceDistrictCount is the smart/coverage confidence field (631 on rc.7). warningReviewDistrictCount is the closeout qualityStatus WARNING_REVIEW_REQUIRED (628). geometryBlockedDistrictCount uses BLOCKED_BY_GEOMETRY (3); those districts remain low-confidence in source metrics but are not counted in warningReviewDistrictCount."
+  };
+}
+
+export function assessNationalQaCloseout({ artifactExists, matrix, adm2Validation }) {
+  const failures = [];
+  if (!artifactExists) failures.push("BLOCKED_BY_MISSING_ARTIFACT");
+  if (matrix.length !== EXPECTED_ADM2) {
+    failures.push(`DISTRICT_ROW_COUNT_${matrix.length}`);
+  }
+  if (
+    adm2Validation?.adm2ParentLinkageOk === false ||
+    (adm2Validation?.orphanParentCount ?? 0) > 0
+  ) {
+    failures.push("ADM2_PARENT_LINKAGE");
+  }
+  return {
+    ok: failures.length === 0,
+    failures,
+    nationalQaCloseoutVerdict: failures.length === 0 ? "CONDITIONAL_GO" : "NO_GO"
   };
 }
 
@@ -140,14 +199,20 @@ export function validateDistrictGeometry({ district, zones, manifest }) {
 export function validateAdm2Layer({ adm1, adm2, manifest }) {
   const adm1Zones = adm1?.zones ?? [];
   const adm2Zones = adm2?.zones ?? [];
+  const adm1IdSet = new Set(adm1Zones.map((zone) => zone.id));
   const adm2ByParent = new Map();
   for (const zone of adm2Zones) {
-    const list = adm2ByParent.get(zone.parentId) ?? [];
+    const resolvedParentId = resolveAdm2ParentAdm1Id(zone);
+    const list = adm2ByParent.get(resolvedParentId) ?? [];
     list.push(zone);
-    adm2ByParent.set(zone.parentId, list);
+    adm2ByParent.set(resolvedParentId, list);
   }
   const invalidPolygons = adm2Zones.filter((z) => !adm2ParentGeometryIsUsable(z));
   const parentMismatches = adm2Zones.filter((z) => {
+    const resolvedParentId = resolveAdm2ParentAdm1Id(z);
+    return !resolvedParentId || !adm1IdSet.has(resolvedParentId);
+  });
+  const rawParentIdOrphans = adm2Zones.filter((z) => {
     const parent = adm1Zones.find((p) => p.id === z.parentId);
     return !parent;
   });
@@ -169,6 +234,9 @@ export function validateAdm2Layer({ adm1, adm2, manifest }) {
     invalidAdm2PolygonCount: invalidPolygons.length,
     invalidAdm2Ids: invalidPolygons.map((z) => z.id).slice(0, 20),
     orphanParentCount: parentMismatches.length,
+    rawParentIdFieldOrphanCount: rawParentIdOrphans.length,
+    parentLinkageMethod: "provinceCode_to_adm1_lookup_ref",
+    adm2ParentLinkageOk: parentMismatches.length === 0,
     adm2GeometryHash: adm2 ? createDatasetGeometryHash(adm2) : null,
     declaredAdm2GeometryHash: adm2?.manifest?.geometryHash ?? null,
     siblingOverlapSummary: siblingSummary,
@@ -228,6 +296,9 @@ export function buildDistrictQualityMatrix({
       reasonCode: row.reasonCode,
       lowConfidenceRootCauses: classifyLowConfidenceRootCauses(smart),
       recordedReasonCodes: row.recordedReasonCodes ?? smart?.reasonCodes ?? [],
+      ...(geometrySummary?.errorIssues?.length
+        ? { geometryErrorIssues: geometrySummary.errorIssues }
+        : {}),
       blocker:
         qualityStatus === QUALITY_STATUS.BLOCKED_BY_GEOMETRY
           ? "GEOMETRY_VALIDATION"
@@ -477,25 +548,32 @@ export function buildReplacementMap({ baseline, baselineClaims, coverageReport, 
   };
 }
 
-export function buildBlockers({ matrix, sourceMatrix, humanGates, kadikoyAcquisition }) {
+export function buildBlockers({ matrix, sourceMatrix, humanGates, kadikoyPilot, qualityMetrics }) {
   const blockers = [];
-  if (humanGates?.gates) {
-    for (const gate of humanGates.gates) {
-      if (gate.status !== "APPROVED" && gate.status !== "ACCEPTED") {
-        blockers.push({
-          kind: "AUTHORIZATION",
-          code: gate.id ?? gate.topic,
-          status: gate.status,
-          evidenceClass: EVIDENCE.BLOCKED_BY_AUTHORIZATION
-        });
-      }
+  const gateItems = humanGates?.items ?? humanGates?.gates ?? [];
+  for (const gate of gateItems) {
+    if (gate.status !== "APPROVED" && gate.status !== "ACCEPTED") {
+      blockers.push({
+        kind: "AUTHORIZATION",
+        code: gate.id ?? gate.topic,
+        status: gate.status,
+        summary: gate.summary ?? null,
+        evidenceClass: EVIDENCE.BLOCKED_BY_AUTHORIZATION
+      });
     }
   }
-  if (kadikoyAcquisition?.status === "BLOCKED_BY_SOURCE" || kadikoyAcquisition?.bundleInvalid) {
+  const kadikoy = kadikoyPilot?.kadikoyOfficialPilot ?? kadikoyPilot;
+  if (
+    kadikoy?.pilotStatus === "BLOCKED_BY_SOURCE" ||
+    kadikoy?.bundle?.productionEligibility === "NOT_ELIGIBLE" ||
+    kadikoy?.bundle?.structuralStatus === "STRUCTURALLY_INVALID"
+  ) {
     blockers.push({
       kind: "SOURCE",
       code: "KADIKOY_SHP_BUNDLE_INVALID",
-      status: "BLOCKED_BY_SOURCE",
+      status: kadikoy.pilotStatus ?? kadikoy.bundle?.status ?? "BLOCKED_BY_SOURCE",
+      bundleStatus: kadikoy.bundle?.status ?? null,
+      reasonCodes: kadikoy.bundle?.reasonCodes ?? [],
       evidenceClass: EVIDENCE.BLOCKED_BY_SOURCE
     });
   }
@@ -508,10 +586,19 @@ export function buildBlockers({ matrix, sourceMatrix, humanGates, kadikoyAcquisi
     count: sourceBlockedProvinces,
     evidenceClass: EVIDENCE.HISTORICAL_RECORDED
   });
+  const metrics = qualityMetrics ?? buildQualityMetricsSummary(matrix);
   blockers.push({
     kind: "LOW_CONFIDENCE",
     code: "SMART_LOW_CONFIDENCE_DISTRICTS",
-    count: matrix.filter((r) => r.confidence === "low").length,
+    count: metrics.lowConfidenceDistrictCount,
+    note: "Recorded smart/coverage metric; not remediated in this PR (no rc.8 rebuild).",
+    evidenceClass: EVIDENCE.REAL_ARTIFACT_VERIFIED
+  });
+  blockers.push({
+    kind: "QUALITY_WARNING",
+    code: "WARNING_REVIEW_REQUIRED_DISTRICTS",
+    count: metrics.warningReviewDistrictCount,
+    note: "Closeout qualityStatus WARNING_REVIEW_REQUIRED (excludes geometry-blocked districts).",
     evidenceClass: EVIDENCE.REAL_ARTIFACT_VERIFIED
   });
   const geometryBlocked = matrix.filter(
@@ -525,12 +612,14 @@ export function buildBlockers({ matrix, sourceMatrix, humanGates, kadikoyAcquisi
       districts: geometryBlocked.map((r) => ({
         adm2Id: r.adm2Id,
         districtName: r.districtName,
-        provinceCode: r.provinceCode
+        provinceCode: r.provinceCode,
+        issueCodes: r.geometryErrorIssues?.map((i) => i.code) ?? [],
+        errorIssues: r.geometryErrorIssues ?? []
       })),
       evidenceClass: EVIDENCE.REAL_ARTIFACT_VERIFIED
     });
   }
-  return { blockers, generatedAt: new Date().toISOString() };
+  return { blockers, qualityMetrics: metrics, generatedAt: new Date().toISOString() };
 }
 
 export function buildMapIndexPayload({ matrix, adm1Zones, adm2Zones }) {
@@ -570,6 +659,12 @@ export function buildMapIndexPayload({ matrix, adm1Zones, adm2Zones }) {
   });
   return {
     type: "FeatureCollection",
+    mapKind: "ADM2_QUALITY_INDEX",
+    mapScope:
+      "ADM1 province polygons (context) and ADM2 district centroids colored by source/confidence. Not an ADM3 mahalle boundary map.",
+    adm3PolygonVisualization: "NOT_INCLUDED",
+    adm3PolygonVisualizationBlocker:
+      "ADM3 full-national polygon layer omitted (payload size and scope); use district matrix and rc.7 candidate for zone geometry.",
     features: [...adm1Features, ...adm2Features.filter((f) => f.geometry)]
   };
 }

@@ -8,4 +8,4 @@ Yeniden üretim:
 pnpm data:tr:national-quality-closeout
 ```
 
-Harita: `map-index.html` (yerel candidate gerekir).
+Harita: `map-index.html` — ADM2 kalite indeksi (ADM3 mahalle polygon değil; yerel candidate gerekir).

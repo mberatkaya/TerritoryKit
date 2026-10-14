@@ -1,5 +1,9 @@
 {
   "type": "FeatureCollection",
+  "mapKind": "ADM2_QUALITY_INDEX",
+  "mapScope": "ADM1 province polygons (context) and ADM2 district centroids colored by source/confidence. Not an ADM3 mahalle boundary map.",
+  "adm3PolygonVisualization": "NOT_INCLUDED",
+  "adm3PolygonVisualizationBlocker": "ADM3 full-national polygon layer omitted (payload size and scope); use district matrix and rc.7 candidate for zone geometry.",
   "features": [
     {
       "type": "Feature",
@@ -58764,9 +58768,9 @@
         "parentAdm2Id": "tr:adm2:54988432b81567150601582",
         "name": "Ağrı merkez",
         "provinceCode": "04",
-        "sourceClass": "low-confidence",
+        "sourceClass": "blocked",
         "confidence": "low",
-        "qualityStatus": "WARNING_REVIEW_REQUIRED",
+        "qualityStatus": "BLOCKED_BY_GEOMETRY",
         "reasonCode": "ESTIMATED_GAMEPLAY_BOUNDARIES"
       },
       "geometry": {
@@ -64612,9 +64616,9 @@
         "parentAdm2Id": "tr:adm2:54988432b95277821649488",
         "name": "İskenderun",
         "provinceCode": "31",
-        "sourceClass": "low-confidence",
+        "sourceClass": "blocked",
         "confidence": "low",
-        "qualityStatus": "WARNING_REVIEW_REQUIRED",
+        "qualityStatus": "BLOCKED_BY_GEOMETRY",
         "reasonCode": "ESTIMATED_GAMEPLAY_BOUNDARIES"
       },
       "geometry": {
@@ -71599,9 +71603,9 @@
         "parentAdm2Id": "tr:adm2:54988432b28913521474336",
         "name": "Erbaa",
         "provinceCode": "60",
-        "sourceClass": "low-confidence",
+        "sourceClass": "blocked",
         "confidence": "low",
-        "qualityStatus": "WARNING_REVIEW_REQUIRED",
+        "qualityStatus": "BLOCKED_BY_GEOMETRY",
         "reasonCode": "ESTIMATED_GAMEPLAY_BOUNDARIES"
       },
       "geometry": {
