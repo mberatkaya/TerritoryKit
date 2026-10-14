@@ -1698,7 +1698,7 @@ export function buildTurkeySmartFallback(
     );
   }
   const sourceMetadata = resolveSourceMetadata(input, barriers, configuration);
-  const zones = candidates.map((candidate, index) =>
+  let zones = candidates.map((candidate, index) =>
     createSmartFallbackZone({
       candidate,
       displayIndex: index,
@@ -1710,6 +1710,10 @@ export function buildTurkeySmartFallback(
       sourceSnapshotChecksum: sourceMetadata.sourceSnapshotChecksum
     })
   );
+  const rawSiblingOverlapKm2 = collectOverlapArea(zones);
+  if (rawSiblingOverlapKm2 > configuration.overlapToleranceKm2) {
+    zones = enforceDisjointSmartFallbackZones(zones, parentGeometry);
+  }
   const quality = inspectSmartFallbackQuality({
     parent: input.parent,
     parentGeometry,
@@ -4081,7 +4085,7 @@ function inspectSmartFallbackQuality(input: {
     inputSufficiency: barrierSufficient,
     coverage: coveragePercent >= input.configuration.minCoveragePercent,
     invalidGeometry: invalidGeometryCount === 0,
-    overlap: overlapAreaKm2 <= input.configuration.overlapToleranceKm2,
+    overlap: rawOverlapAreaKm2 <= input.configuration.overlapToleranceKm2,
     spill: spillAreaKm2 <= input.configuration.spillToleranceKm2,
     barrierSufficiency: barrierSufficient,
     qualityScore: meanQualityScore >= input.configuration.minMeanQualityScore,
@@ -5842,6 +5846,43 @@ function compactness(geometry: TerritoryGeometry): number {
   }
 
   return roundMetric(clamp01((4 * Math.PI * areaM2) / (perimeterM * perimeterM)));
+}
+
+export function enforceDisjointSmartFallbackZones(
+  zones: readonly TerritoryZone[],
+  parentGeometry: ClippingMultiPolygon
+): TerritoryZone[] {
+  let localMask: ClippingMultiPolygon = [];
+  const output: TerritoryZone[] = [];
+
+  for (const zone of [...zones].sort((left, right) => left.id.localeCompare(right.id))) {
+    const clipped = intersectClippingGeometries(
+      parentGeometry,
+      toClippingMultiPolygon(zone.geometry)
+    );
+    const difference = tryDifferenceClippingGeometries(clipped, localMask);
+    if (!difference.ok) {
+      continue;
+    }
+    const effective = difference.geometry;
+    const areaKm2 = clippingAreaKm2(effective);
+    if (areaKm2 <= AREA_TOLERANCE_KM2) {
+      continue;
+    }
+    const geometry = clippingMultiPolygonToTerritoryGeometry(effective);
+    if (!geometry) {
+      continue;
+    }
+    output.push({
+      ...zone,
+      geometry,
+      bbox: computeGeometryBBox(geometry),
+      center: computeSafeGeometryCenter(geometry)
+    });
+    localMask = unionClippingGeometries([localMask, effective]);
+  }
+
+  return output;
 }
 
 function collectOverlapArea(zones: readonly TerritoryZone[]): number {

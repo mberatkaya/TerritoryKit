@@ -21,6 +21,7 @@ export {
   createTurkeySmartFallbackDataset,
   normalizeTurkeySmartFallbackBarriers,
   inspectTurkeySmartBoundaryAlignment,
+  enforceDisjointSmartFallbackZones,
   resolveTurkeySmartFallbackConfiguration
 } from "./turkey-smart-fallback.js";
 export {

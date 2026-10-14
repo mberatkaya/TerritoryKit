@@ -1831,7 +1831,58 @@ function buildEffectiveRealZones(input: {
   };
 }
 
+/** Matches national ADM3 sibling overlap evidence (area strictly above 1 m²). */
+const NATIONAL_SIBLING_OVERLAP_AREA_KM2 = 1 / 1_000_000;
+
+function hasNationalSiblingOverlapAmongGenerated(zones: readonly TerritoryZone[]): boolean {
+  const sorted = sortZones(zones);
+  for (let index = 0; index < sorted.length; index += 1) {
+    const left = sorted[index];
+    if (!left) continue;
+    for (let nextIndex = index + 1; nextIndex < sorted.length; nextIndex += 1) {
+      const right = sorted[nextIndex];
+      if (!right) continue;
+      const overlapKm2 = clippingAreaKm2(
+        intersectClippingGeometries(
+          toClippingMultiPolygon(left.geometry),
+          toClippingMultiPolygon(right.geometry)
+        )
+      );
+      if (overlapKm2 > NATIONAL_SIBLING_OVERLAP_AREA_KM2) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 function buildEffectiveGeneratedZones(input: {
+  prevalidatedPartition?: boolean;
+  district: TerritoryZone;
+  provinceCode: string;
+  districtCode: string;
+  districtGeometry: ClippingMultiPolygon;
+  realMask: ClippingMultiPolygon;
+  zones: readonly TerritoryZone[];
+  minimumEffectiveAreaKm2: number;
+  buildDate: string;
+  configurationHash: string;
+}): { zones: TerritoryZone[]; sliverAreaKm2: number } {
+  const built = buildEffectiveGeneratedZonesInternal(input);
+  if (
+    input.prevalidatedPartition &&
+    built.zones.length > 1 &&
+    hasNationalSiblingOverlapAmongGenerated(built.zones)
+  ) {
+    return buildEffectiveGeneratedZonesInternal({
+      ...input,
+      prevalidatedPartition: false
+    });
+  }
+  return built;
+}
+
+function buildEffectiveGeneratedZonesInternal(input: {
   prevalidatedPartition?: boolean;
   district: TerritoryZone;
   provinceCode: string;

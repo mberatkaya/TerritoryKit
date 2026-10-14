@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "territorykit-tr-national-geometry-remediation@1",
+  "datasetVersion": "2.1.0-rc.7",
+  "gitCommit": "bd2b1e6b0a2092af694603363cba2fb5ee191798",
+  "candidatePath": ".territory/sprint-6/final/candidate",
+  "generatedAt": "2026-10-14T10:36:26.255Z",
+  "sha256": {
+    "manifest": "74ecef62e9594e587e32b4ee4f26c649fedf931b8a367a502c5aac4038562ec4",
+    "dataset": "462d8441cf522f6f718350abdb0094f326adf84229adbb33d0cadfd085e7e6eb"
+  },
+  "metricsFromCloseout": {
+    "adm1": 81,
+    "adm2": 973,
+    "adm3Zones": 20392,
+    "lowConfidenceDistricts": 631,
+    "realismWarnings": 577,
+    "geometryBlockers": 3
+  },
+  "evidenceClass": "REAL_ARTIFACT_VERIFIED"
+}

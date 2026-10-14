@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "territorykit-tr-national-geometry-remediation@1",
+  "gitCommit": "bd2b1e6b0a2092af694603363cba2fb5ee191798",
+  "generatedAt": "2026-10-14T10:36:00.000Z",
+  "modulesChanged": [
+    "packages/generators/src/turkey-smart-fallback.ts",
+    "packages/generators/src/turkey-v2-hybrid.ts",
+    "packages/generators/src/turkey-adm3.ts"
+  ],
+  "fixes": [
+    {
+      "id": "smart-sibling-enforcement",
+      "summary": "Material smart sibling overlap triggers deterministic disjoint partition enforcement before quality inspection."
+    },
+    {
+      "id": "smart-overlap-gate-raw",
+      "summary": "Overlap quality gate compares raw intersection area to overlapToleranceKm2 (1 m²), not topology-noise-normalized overlap."
+    },
+    {
+      "id": "hybrid-prevalidated-fallback",
+      "summary": "If prevalidated smart partition still has >1 m² sibling overlap, hybrid re-carves generated zones with the local mask."
+    }
+  ],
+  "tests": [
+    "pnpm --filter @territory-kit/generators test turkey-national-sibling-overlap-regression.test.ts",
+    "pnpm --filter @territory-kit/generators test turkey-smart-fallback.test.ts"
+  ],
+  "rc8NationalBuild": {
+    "status": "IN_PROGRESS",
+    "datasetVersion": "2.1.0-rc.8",
+    "output": ".territory/national-geometry-remediation/candidate-rc8",
+    "reportsOutput": ".territory/national-geometry-remediation/reports",
+    "log": ".territory/national-geometry-remediation/build.log",
+    "cliFlags": [
+      "--allow-parent-provenance-mismatch",
+      "--dataset-version 2.1.0-rc.8",
+      "--no-resume"
+    ]
+  },
+  "evidenceClass": "REAL_CODE_AND_LOCAL_ARTIFACT"
+}

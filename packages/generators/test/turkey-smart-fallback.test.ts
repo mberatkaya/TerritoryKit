@@ -13,11 +13,13 @@ import {
 } from "../src/turkey-adm3.js";
 import {
   assessTurkeySmartPartitionAdequacy,
+  enforceDisjointSmartFallbackZones,
   inspectTurkeySmartBoundaryAlignment,
   isTurkeyResidualSeamMergeEligible,
   normalizeTurkeySmartFallbackCoveragePercent,
   passesTurkeySmartGridLikeness
 } from "../src/turkey-smart-fallback.js";
+import { validateGeometryDataset } from "@territory-kit/dataset";
 
 describe("unsupported seam diagnostics", () => {
   it("keeps a source-verified inland lake residual unsplit and estimated", () => {
@@ -789,6 +791,60 @@ function districtZone(idSuffix: string, geometry: TerritoryGeometry): TerritoryZ
         districtCode: idSuffix,
         semanticReviewStatus: "reviewed",
         coverageStatus: "verified"
+      }
+    }
+  };
+}
+
+describe("sibling overlap remediation", () => {
+  it("enforces disjoint smart zones when rectangles overlap materially", () => {
+    const parent = districtZone("overlap-fixture", rectangle(0, 0, 1, 1));
+    const left = smartZone("left", parent.id, rectangle(0, 0, 0.62, 1));
+    const right = smartZone("right", parent.id, rectangle(0.38, 0, 1, 1));
+    const repaired = enforceDisjointSmartFallbackZones(
+      [left, right],
+      [[rectangleRing(0, 0, 1, 1)]]
+    );
+    const siblingValidation = validateGeometryDataset(
+      {
+        schemaVersion: "territorykit-dataset@1",
+        datasetId: "test",
+        countryCode: "TR",
+        zones: repaired
+      },
+      { checks: { siblingOverlaps: true } }
+    );
+
+    expect(repaired).toHaveLength(2);
+    expect(
+      siblingValidation.issues.filter(
+        (issue) => issue.code === "SIBLING_GEOMETRY_OVERLAP" && issue.severity === "error"
+      )
+    ).toEqual([]);
+  });
+});
+
+function smartZone(idSuffix: string, parentId: string, geometry: TerritoryGeometry): TerritoryZone {
+  return {
+    id: `tr:adm3:test-${idSuffix}`,
+    datasetId: "test-tr-adm3",
+    countryCode: "TR",
+    level: 3,
+    sourceAdminLevel: "ADM3",
+    semanticType: "generated-zone",
+    name: idSuffix,
+    parentId,
+    neighborIds: [],
+    geometry,
+    center: computeGeometryCenter(geometry),
+    bbox: computeGeometryBBox(geometry),
+    properties: {
+      territory: {
+        adminLevel: "ADM3",
+        sourceAdminLevel: "ADM3",
+        semanticType: "generated-zone",
+        countryCode: "TR",
+        sourceClass: "generated"
       }
     }
   };
