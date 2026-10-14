@@ -27,7 +27,12 @@ import {
   findHdxMemberInCacheRoot,
   inspectTurkeyParentProvenance,
   verifyTurkeyNationalCatalogHdxMemberBytes,
-  verifyTurkeyParentProvenance
+  verifyTurkeyParentProvenance,
+  createTurkeyV2NationalDistrictCheckpointEnvelope,
+  createTurkeyV2NationalDistrictCheckpointKey,
+  evaluateTurkeyV2NationalDistrictCheckpointRestore,
+  resolveTurkeyV2NationalOfficialNationalPriorityPolicy,
+  stableNationalCheckpointHash
 } from "@territory-kit/generators/turkey-adm3";
 import type { TurkeyParentHdxMemberPaths } from "@territory-kit/generators/turkey-adm3";
 import type {
@@ -60,7 +65,6 @@ const DEFAULT_OUTPUT = workspacePath(".territory/sprint-6/candidate");
 const DEFAULT_REPORTS_OUTPUT = workspacePath("reports/tr-v2-smart-candidate");
 const DEFAULT_BUILD_DATE = "2026-09-27T00:00:00.000Z";
 const DEFAULT_SMART_CANDIDATE_VERSION = "2.1.0-rc.7";
-const DISTRICT_CHECKPOINT_SCHEMA = "territorykit-tr-smart-district-checkpoint@4";
 
 export async function runTurkeyV2(args: string[]): Promise<number> {
   const [subcommand] = args;
@@ -581,24 +585,18 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
   const checkpointRoot = join(outputRoot, "districts");
   const checkpointPath = (id: string) =>
     join(checkpointRoot, `${id.replace(/[^a-zA-Z0-9_-]/g, "_")}.json`);
-  const checkpointKey = (options: TurkeyV2HybridDistrictBuildOptions) =>
-    stableHash({
+  const checkpointKey = (options: TurkeyV2HybridDistrictBuildOptions) => {
+    const officialNationalPriorityPolicy = resolveTurkeyV2NationalOfficialNationalPriorityPolicy(
+      options.officialZones
+    );
+    return createTurkeyV2NationalDistrictCheckpointKey({
       options,
-      officialNationalPriorityPolicy: options.officialZones?.some((zone) => {
-        const t = isRecord(zone.properties.territory) ? zone.properties.territory : {};
-        return (
-          (t.boundarySourceClass ??
-            (isRecord(t.source) ? t.source.boundarySourceClass : undefined)) === "official-national"
-        );
-      })
-        ? "national-before-local-v1"
-        : undefined,
+      ...(officialNationalPriorityPolicy ? { officialNationalPriorityPolicy } : {}),
       snapshotChecksum,
       datasetVersion,
-      checkpointSchema: DISTRICT_CHECKPOINT_SCHEMA,
-      sourceLockHash: sourceLock.contentHash,
-      algorithm: TURKEY_SMART_FALLBACK_ALGORITHM_VERSION
+      sourceLockHash: sourceLock.contentHash
     });
+  };
   const districtLimit = readPositiveIntegerFlag(flags, "max-districts");
   const districtOffset = readNonNegativeIntegerFlag(flags, "district-offset");
   const result = await buildTurkeyV2NationalDataset({
@@ -644,13 +642,11 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
       if (flags.has("no-resume")) return undefined;
       try {
         const stored = JSON.parse(await readFile(checkpointPath(options.district.id), "utf8"));
-        if (
-          stored.schemaVersion !== DISTRICT_CHECKPOINT_SCHEMA ||
-          stored.result?.quality?.ok !== true ||
-          stored.key !== checkpointKey(options) ||
-          stableHash(stored.result) !== stored.resultHash
-        )
-          return undefined;
+        const restoreDecision = evaluateTurkeyV2NationalDistrictCheckpointRestore(
+          stored,
+          checkpointKey(options)
+        );
+        if (!restoreDecision.ok) return undefined;
         resumedDistricts.add(options.district.id);
         if (
           typeof stored.generationDurationMs === "number" &&
@@ -678,15 +674,17 @@ async function runBuild(args: string[], mode: TurkeyV2NationalOutputMode): Promi
         originalGenerationDurations.set(result.district.id, generationDurationMs);
       await mkdir(checkpointRoot, { recursive: true });
       const target = checkpointPath(result.district.id);
+      const resultHash = stableNationalCheckpointHash(result);
       await writeFile(
         `${target}.pending`,
-        JSON.stringify({
-          schemaVersion: DISTRICT_CHECKPOINT_SCHEMA,
-          generationDurationMs,
-          key: checkpointKey(options),
-          resultHash: stableHash(result),
-          result
-        })
+        JSON.stringify(
+          createTurkeyV2NationalDistrictCheckpointEnvelope({
+            ...(generationDurationMs !== undefined ? { generationDurationMs } : {}),
+            key: checkpointKey(options),
+            resultHash,
+            result
+          })
+        )
       );
       await rename(`${target}.pending`, target);
     },

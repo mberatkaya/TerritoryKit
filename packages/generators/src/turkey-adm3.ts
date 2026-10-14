@@ -211,6 +211,21 @@ export {
   createTurkeyV2NationalSourceLock
 } from "./turkey-v2-national.js";
 export {
+  TURKEY_V2_NATIONAL_CHECKPOINT_IMPLEMENTATION_REVISION,
+  TURKEY_V2_NATIONAL_CHECKPOINT_PRODUCTION_BEHAVIOR_DIGESTS,
+  TURKEY_V2_NATIONAL_DISTRICT_CHECKPOINT_SCHEMA_VERSION,
+  createTurkeyV2NationalDistrictCheckpointEnvelope,
+  createTurkeyV2NationalDistrictCheckpointKey,
+  evaluateTurkeyV2NationalDistrictCheckpointRestore,
+  resolveTurkeyV2NationalOfficialNationalPriorityPolicy,
+  stableNationalCheckpointHash
+} from "./turkey-v2-national-checkpoint.js";
+export type {
+  TurkeyV2NationalDistrictCheckpointEnvelope,
+  TurkeyV2NationalDistrictCheckpointKeyInput,
+  TurkeyV2NationalDistrictCheckpointRestoreDecision
+} from "./turkey-v2-national-checkpoint.js";
+export {
   TURKEY_V2_NATIONAL_EXPECTED_COUNTS,
   computeFileSha256,
   validateTurkeyV2NationalArtifactIntegrity,

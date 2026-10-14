@@ -8,7 +8,7 @@
 | 2      | Istanbul geometry quality — Fatih, Kadıköy, Üsküdar, Adalar, Eyüpsultan/Çatalca pilots          | **done** (#108)                                                                |
 | 3      | National RC and delivery validation                                                             | **done** (#109)                                                                |
 | 3.5    | National ADM2–ADM3 quality closeout (973 ilçe envanter + QA raporları)                          | **done** (#110)                                                                |
-| 3.6    | National ADM3 geometry remediation + rc.8 candidate                                              | **active** (`feat/tr-national-geometry-remediation`)                           |
+| 3.6    | National ADM3 geometry remediation + rc.8 candidate                                             | **active** (`feat/tr-national-geometry-remediation`)                           |
 | 4      | Rush&Claim integration                                                                          | planned (`reports/tr-adm3/sprint-3-national-rc/rushclaim-sprint-4-handoff.md`) |
 
 ## Blocked until human authorization

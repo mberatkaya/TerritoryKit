@@ -1,7 +1,7 @@
 {
   "schemaVersion": "territorykit-tr-national-geometry-remediation@1",
-  "gitCommit": "bd2b1e6b0a2092af694603363cba2fb5ee191798",
-  "generatedAt": "2026-10-14T10:36:00.000Z",
+  "gitCommit": "a1e5de424d427e29bd4d06373e57635e034cb6f2",
+  "generatedAt": "2026-10-14T11:58:00.000Z",
   "modulesChanged": [
     "packages/generators/src/turkey-smart-fallback.ts",
     "packages/generators/src/turkey-v2-hybrid.ts",
@@ -26,15 +26,29 @@
     "pnpm --filter @territory-kit/generators test turkey-smart-fallback.test.ts"
   ],
   "rc8NationalBuild": {
-    "status": "IN_PROGRESS",
+    "status": "BLOCKED_MIXED_IMPLEMENTATION",
+    "districtCheckpointsCompleted": 408,
+    "districtCheckpointsExpected": 973,
+    "manifestPresent": false,
+    "abortedAt": "2026-10-14T11:46:30.631Z",
+    "stoppedAt": "2026-10-14T12:28:00.000Z",
+    "checkpointSchemaObserved": "territorykit-tr-smart-district-checkpoint@4",
+    "checkpointImplementationRevisionRequired": "national-hybrid-sibling-gate-v1",
+    "plannedCleanOutput": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+    "note": "408 mixed @4 checkpoints preserved under candidate-rc8; resume halted after implementation-revision guard; clean national build must use new @5 checkpoints only.",
     "datasetVersion": "2.1.0-rc.8",
     "output": ".territory/national-geometry-remediation/candidate-rc8",
     "reportsOutput": ".territory/national-geometry-remediation/reports",
     "log": ".territory/national-geometry-remediation/build.log",
+    "resumeLog": ".territory/national-geometry-remediation/build-resume.log",
+    "sourceLockHash": "sha256:86968115e4fc7ee03ba56780bf0c78a8ef1465450d23b08db55f7abcd1c138dd",
     "cliFlags": [
       "--allow-parent-provenance-mismatch",
       "--dataset-version 2.1.0-rc.8",
-      "--no-resume"
+      "--build-date 2026-10-14T00:00:00.000Z",
+      "--force",
+      "--osm-barriers .territory/sprint-6/calibration/barriers",
+      "--osm-source-lock .territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json"
     ]
   },
   "evidenceClass": "REAL_CODE_AND_LOCAL_ARTIFACT"

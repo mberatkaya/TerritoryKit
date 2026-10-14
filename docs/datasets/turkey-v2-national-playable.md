@@ -140,6 +140,19 @@ pnpm turkey:v2:national:smoke
 pnpm turkey:v2:national:benchmark
 ```
 
+## District build checkpoints
+
+Long national builds write per-district resume files under `<output>/districts/*.json`. The envelope
+schema is `territorykit-tr-smart-district-checkpoint@5` and includes an
+`implementationRevision` distinct from the smart-fallback `algorithmVersion`. Legacy `@4`
+checkpoints (no implementation revision) are never restored.
+
+When hybrid or smart-fallback production code changes district geometry without an algorithm bump,
+increment `TURKEY_V2_NATIONAL_CHECKPOINT_IMPLEMENTATION_REVISION` and refresh
+`TURKEY_V2_NATIONAL_CHECKPOINT_PRODUCTION_BEHAVIOR_DIGESTS` in
+`packages/generators/src/turkey-v2-national-checkpoint.ts`. The digest guard test fails until both
+are updated together, so stale checkpoints cannot silently resume against new geometry logic.
+
 ## Artifacts
 
 The local artifact directory includes:

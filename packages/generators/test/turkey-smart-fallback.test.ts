@@ -807,9 +807,13 @@ describe("sibling overlap remediation", () => {
     );
     const siblingValidation = validateGeometryDataset(
       {
-        schemaVersion: "territorykit-dataset@1",
-        datasetId: "test",
-        countryCode: "TR",
+        manifest: {
+          datasetId: "test",
+          datasetVersion: "0",
+          schemaVersion: "territory-schema@1",
+          sourceDate: "2026-01-01",
+          geometryHash: "00"
+        },
         zones: repaired
       },
       { checks: { siblingOverlaps: true } }

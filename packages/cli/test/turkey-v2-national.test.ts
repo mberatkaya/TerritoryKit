@@ -17,8 +17,28 @@ import {
   isSmartNationalCoverageComplete
 } from "../src/turkey-v2-national.js";
 import type { TurkeyV2NationalBuildResult } from "@territory-kit/generators/turkey-adm3";
+import {
+  TURKEY_V2_NATIONAL_CHECKPOINT_IMPLEMENTATION_REVISION,
+  TURKEY_V2_NATIONAL_DISTRICT_CHECKPOINT_SCHEMA_VERSION,
+  evaluateTurkeyV2NationalDistrictCheckpointRestore
+} from "@territory-kit/generators/turkey-adm3";
 
 describe("territory cli Turkey V2 national build", () => {
+  it("fail-closed rejects legacy district checkpoints missing implementation revision", () => {
+    const legacy = {
+      schemaVersion: "territorykit-tr-smart-district-checkpoint@4",
+      key: "legacy-key",
+      resultHash: "legacy-hash",
+      result: { quality: { ok: true } }
+    };
+    expect(evaluateTurkeyV2NationalDistrictCheckpointRestore(legacy, "legacy-key")).toEqual({
+      ok: false,
+      reason: "schema-mismatch"
+    });
+    expect(TURKEY_V2_NATIONAL_DISTRICT_CHECKPOINT_SCHEMA_VERSION).toContain("@5");
+    expect(TURKEY_V2_NATIONAL_CHECKPOINT_IMPLEMENTATION_REVISION).toMatch(/^national-/);
+  });
+
   it("treats unsupported straight boundaries as confidence evidence while keeping grid and coverage hard", () => {
     const totals = {
       adm2Total: 973,

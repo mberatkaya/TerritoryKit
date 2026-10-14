@@ -7,14 +7,14 @@
 
 ## Decision matrix (interim)
 
-| Gate | Verdict | Notes |
-| --- | --- | --- |
-| Three-overlap remediation (code + rc.7 smart replay) | **PASS** | Regresyon testleri; `three-district-overlap-results.json` |
-| National geometry improvement (rc.8 vs rc.7) | **PENDING** | Ulusal build devam ediyor / tamamlanınca `national-quality-comparison.json` |
-| New candidate integrity | **PENDING** | rc.8 artefakt doğrulaması build sonrası |
-| Stable ID and migration readiness | **PENDING** | `stable-id-diff.json` build + migration planner sonrası |
-| Rush&Claim Sprint 4 technical readiness | **CONDITIONAL GO** | Geometri motoru düzeltmesi; rc.8 ve migration kanıtı eksik |
-| Production dataset promotion | **NO-GO** | Yetkisiz |
+| Gate                                                 | Verdict            | Notes                                                                       |
+| ---------------------------------------------------- | ------------------ | --------------------------------------------------------------------------- |
+| Three-overlap remediation (code + rc.7 smart replay) | **PASS**           | Regresyon testleri; `three-district-overlap-results.json`                   |
+| National geometry improvement (rc.8 vs rc.7)         | **PENDING**        | Ulusal build devam ediyor / tamamlanınca `national-quality-comparison.json` |
+| New candidate integrity                              | **PENDING**        | rc.8 artefakt doğrulaması build sonrası                                     |
+| Stable ID and migration readiness                    | **PENDING**        | `stable-id-diff.json` build + migration planner sonrası                     |
+| Rush&Claim Sprint 4 technical readiness              | **CONDITIONAL GO** | Geometri motoru düzeltmesi; rc.8 ve migration kanıtı eksik                  |
+| Production dataset promotion                         | **NO-GO**          | Yetkisiz                                                                    |
 
 ## Kök neden (üç overlap)
 

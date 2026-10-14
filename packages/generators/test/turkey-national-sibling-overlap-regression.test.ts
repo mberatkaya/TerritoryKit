@@ -2,7 +2,8 @@ import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { validateGeometryDataset } from "@territory-kit/dataset";
-import type { TerritoryGeometry, TerritoryZone } from "@territory-kit/dataset";
+import type { TerritoryDataset, TerritoryGeometry, TerritoryZone } from "@territory-kit/dataset";
+import type { MultiPolygon as ClippingMultiPolygon } from "polygon-clipping";
 import { describe, expect, it } from "vitest";
 import { enforceDisjointSmartFallbackZones } from "../src/turkey-smart-fallback.js";
 
@@ -26,20 +27,28 @@ const RC7_BLOCKER_DISTRICTS = [
   }
 ] as const;
 
-function toClippingParent(geometry: TerritoryGeometry) {
-  return geometry.type === "Polygon" ? [geometry.coordinates] : geometry.coordinates;
+function toClippingParent(geometry: TerritoryGeometry): ClippingMultiPolygon {
+  return (
+    geometry.type === "Polygon" ? [geometry.coordinates] : geometry.coordinates
+  ) as ClippingMultiPolygon;
 }
 
 function siblingOverlapErrors(zones: readonly TerritoryZone[]) {
   return validateGeometryDataset(
     {
-      schemaVersion: "territorykit-dataset@1",
-      datasetId: "regression",
-      countryCode: "TR",
+      manifest: {
+        datasetId: "regression",
+        datasetVersion: "0",
+        schemaVersion: "territory-schema@1",
+        sourceDate: "2026-01-01",
+        geometryHash: "00"
+      },
       zones: [...zones]
-    },
+    } satisfies TerritoryDataset,
     { checks: { siblingOverlaps: true } }
-  ).issues.filter((issue) => issue.code === "SIBLING_GEOMETRY_OVERLAP" && issue.severity === "error");
+  ).issues.filter(
+    (issue) => issue.code === "SIBLING_GEOMETRY_OVERLAP" && issue.severity === "error"
+  );
 }
 
 describe("rc.7 national sibling overlap blockers", () => {
