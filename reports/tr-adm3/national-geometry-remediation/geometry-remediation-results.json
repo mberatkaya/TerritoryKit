@@ -1,81 +1,27 @@
 {
   "schemaVersion": "territorykit-tr-national-geometry-remediation@1",
-  "gitCommit": "9366fddf0f126c868af1f99b9ae8aaa8ccde1dc7",
-  "generatedAt": "2026-10-14T13:10:00.000Z",
-  "modulesChanged": [
-    "packages/generators/src/turkey-smart-fallback.ts",
-    "packages/generators/src/turkey-v2-hybrid.ts",
-    "packages/generators/src/turkey-adm3.ts",
-    "packages/generators/src/turkey-v2-national-checkpoint.ts",
-    "packages/cli/src/turkey-v2-national.ts"
-  ],
-  "fixes": [
-    {
-      "id": "smart-sibling-enforcement",
-      "summary": "Material smart sibling overlap triggers deterministic disjoint partition enforcement before quality inspection."
-    },
-    {
-      "id": "smart-overlap-gate-raw",
-      "summary": "Overlap quality gate compares raw intersection area to overlapToleranceKm2 (1 m²), not topology-noise-normalized overlap."
-    },
-    {
-      "id": "hybrid-prevalidated-fallback",
-      "summary": "If prevalidated smart partition still has >1 m² sibling overlap, hybrid re-carves generated zones with the local mask."
-    },
-    {
-      "id": "checkpoint-impl-rev5",
-      "summary": "District checkpoints @5 with implementationRevision national-hybrid-sibling-gate-v1; legacy @4 fail-closed; production-behavior digest guard."
-    }
-  ],
-  "tests": [
-    "pnpm format:check",
-    "pnpm verify",
-    "pnpm release:check",
-    "pnpm --filter @territory-kit/generators test turkey-v2-national-checkpoint.test.ts",
-    "pnpm --filter @territory-kit/generators test turkey-national-blocker-districts-hybrid.test.ts",
-    "pnpm --filter @territory-kit/generators test turkey-national-sibling-overlap-regression.test.ts",
-    "pnpm --filter @territory-kit/cli test turkey-v2-national.test.ts"
-  ],
-  "fazA": {
-    "status": "PASS",
-    "commit": "9366fddf0f126c868af1f99b9ae8aaa8ccde1dc7",
-    "ciRun": "https://github.com/mberatkaya/TerritoryKit/actions/runs/38568299623",
-    "node22": "pass",
-    "node24": "pass",
-    "livePostgis": "pass"
-  },
-  "fazB": {
-    "status": "FAIL",
-    "command": "node scripts/tr-rc8-three-district-preflight.mjs",
-    "evidence": "reports/tr-adm3/national-geometry-remediation/preflight-real-hybrid-rc8-impl-rev1.json",
-    "summary": "CLI dist hybrid rebuild (locked rc.8 source lock / build date) still reports SIBLING_GEOMETRY_OVERLAP=1 per blocker district on smart-derived ADM3 siblings; quality gates report effectiveSiblingOverlap=true.",
-    "note": "Vitest hybrid regression (TypeScript source import) passes; production CLI dataset.json disagrees with validateGeometryDataset sibling check — national build blocked until aligned."
-  },
-  "fazC": {
-    "status": "NOT_STARTED",
-    "reason": "FAZ B failed; clean output .territory/national-geometry-remediation/candidate-rc8-impl-rev1 not started"
-  },
-  "rc8NationalBuild": {
-    "status": "BLOCKED_PREFLIGHT_AND_CHECKPOINT",
-    "districtCheckpointsCompleted": 408,
-    "districtCheckpointsExpected": 973,
-    "manifestPresent": false,
-    "checkpointSchemaObserved": "territorykit-tr-smart-district-checkpoint@4",
-    "checkpointSchemaRequired": "territorykit-tr-smart-district-checkpoint@5",
-    "checkpointImplementationRevisionRequired": "national-hybrid-sibling-gate-v1",
-    "plannedCleanOutput": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
-    "note": "408 legacy @4 checkpoints remain under candidate-rc8 (not deleted). New build must use @5 only in candidate-rc8-impl-rev1.",
-    "datasetVersion": "2.1.0-rc.8",
-    "output": ".territory/national-geometry-remediation/candidate-rc8",
-    "sourceLockHash": "sha256:86968115e4fc7ee03ba56780bf0c78a8ef1465450d23b08db55f7abcd1c138dd",
-    "cliFlags": [
-      "--allow-parent-provenance-mismatch",
-      "--dataset-version 2.1.0-rc.8",
-      "--build-date 2026-10-14T00:00:00.000Z",
-      "--force",
-      "--osm-barriers .territory/sprint-6/calibration/barriers",
-      "--osm-source-lock .territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json"
+  "gitCommit": "pending-commit",
+  "generatedAt": "2026-10-14T14:00:00.000Z",
+  "rootCause": {
+    "summary": "Hybrid quality gate filtered SIBLING_GEOMETRY_OVERLAP using polygon-clipping area > overlapToleranceKm2 while national evidence uses validateGeometryDataset sibling checks; sub-threshold overlaps still failed independent validation. CLI hybrid OSM options diverged from national (missing maxTerritories, legacy smart fallback default true).",
+    "fixes": [
+      "countStrictSiblingGeometryOverlaps for effectiveSiblingOverlap gate and prevalidated re-carve trigger",
+      "CLI resolveOsmBarrierGeneratedOptions aligned with national maxTerritories and fallbackToLegacyOnSmartFailure false"
     ]
   },
-  "evidenceClass": "REAL_CODE_AND_LOCAL_ARTIFACT"
+  "implementationRevision": "national-hybrid-sibling-gate-v2",
+  "preflight": {
+    "status": "PASS",
+    "evidence": "reports/tr-adm3/national-geometry-remediation/preflight-real-hybrid-rc8-impl-rev1.json",
+    "command": "node scripts/tr-rc8-three-district-preflight.mjs"
+  },
+  "rc8NationalBuild": {
+    "status": "IN_PROGRESS",
+    "output": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+    "log": ".territory/national-geometry-remediation/build-impl-rev1.log",
+    "checkpointSchemaRequired": "territorykit-tr-smart-district-checkpoint@5",
+    "checkpointImplementationRevisionRequired": "national-hybrid-sibling-gate-v2",
+    "experimentalFlags": ["--allow-parent-provenance-mismatch"],
+    "note": "Clean directory; no restore from candidate-rc8 @4 checkpoints."
+  }
 }

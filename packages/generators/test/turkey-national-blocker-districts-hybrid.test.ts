@@ -44,6 +44,10 @@ describe("rc.8 national blocker districts (current hybrid production)", () => {
   for (const spec of BLOCKER_DISTRICTS) {
     it(`builds ${spec.name} without material sibling overlap on effective generated zones`, async () => {
       if (!hasLocalInputs) {
+        expect(
+          process.env.CI,
+          "TR real-data fixtures are required in CI for national blocker district regression"
+        ).not.toBe("true");
         return;
       }
 
@@ -72,6 +76,8 @@ describe("rc.8 national blocker districts (current hybrid production)", () => {
 
       expect(result.quality.gates.effectiveSiblingOverlap).toBe(true);
       expect(siblingOverlapErrors(result.effective.generated)).toEqual([]);
+      const adm3Zones = result.dataset.zones.filter((zone) => zone.level === 3);
+      expect(siblingOverlapErrors(adm3Zones)).toEqual([]);
     }, 180_000);
   }
 });

@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { performance } from "node:perf_hooks";
+import { computeTerritoryAreaM2 } from "@territory-kit/dataset";
 import type { TerritoryDataset, TerritoryZone } from "@territory-kit/dataset";
 import {
   buildTurkeyV2HybridBatch,
@@ -797,8 +798,12 @@ async function resolveOsmBarrierGeneratedOptions(input: {
       return input.generated;
     }
 
+    const districtAreaM2 = computeTerritoryAreaM2(input.district.geometry);
     const osmGenerated = createTurkeyOsmSmartFallbackGeneratedOptions(artifact, {
-      fallbackToLegacyOnSmartFailure: input.generated.fallbackToLegacyOnSmartFailure ?? true
+      fallbackToLegacyOnSmartFailure: input.generated.fallbackToLegacyOnSmartFailure ?? false,
+      smartFallbackOptions: {
+        maxTerritories: districtAreaM2 > 100_000_000 ? 32 : 128
+      }
     });
     const osmSmartFallback = osmGenerated.smartFallback;
 

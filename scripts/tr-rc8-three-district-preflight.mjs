@@ -1,4 +1,9 @@
 #!/usr/bin/env node
+/**
+ * Three-district real-data preflight via production CLI (`tr adm3 hybrid build`), aligned
+ * with national OSM barrier options (maxTerritories + no legacy smart fallback).
+ */
+import { createHash } from "node:crypto";
 import { execFile } from "node:child_process";
 import fs from "node:fs/promises";
 import { existsSync } from "node:fs";
@@ -12,7 +17,7 @@ const execFileAsync = promisify(execFile);
 const LOCK = {
   datasetVersion: "2.1.0-rc.8",
   buildDate: "2026-10-14T00:00:00.000Z",
-  implementationRevision: "national-hybrid-sibling-gate-v1",
+  implementationRevision: "national-hybrid-sibling-gate-v2",
   barrierRoot: ".territory/sprint-6/calibration/barriers",
   osmSourceLockPath: ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json",
   adm0Adm2Dataset: "datasets/generated/countries/TR/dataset.json",
@@ -31,36 +36,35 @@ function adm2OutputSlug(adm2Id) {
   return adm2Id.replace(/[^a-zA-Z0-9_-]/g, "_");
 }
 
-function siblingOverlapErrorCount(zones) {
-  return validateGeometryDataset(
-    {
-      manifest: {
-        datasetId: "preflight",
-        datasetVersion: LOCK.datasetVersion,
-        schemaVersion: "territory-schema@1",
-        sourceDate: LOCK.buildDate.slice(0, 10),
-        geometryHash: "00"
-      },
-      zones: [...zones]
-    },
-    { checks: { siblingOverlaps: true, parentContainment: true } }
-  ).issues.filter((issue) => issue.severity === "error").length;
+function isGeneratedGameplayZone(zone) {
+  const territory = zone.properties?.territory ?? {};
+  return (
+    territory.semanticType === "generated-zone" ||
+    territory.boundarySourceClass === "generated-zone" ||
+    territory.boundarySourceClass === "smart-derived" ||
+    territory.sourceKind === "generated"
+  );
 }
 
-function siblingOverlapErrors(zones) {
+function validationManifest() {
+  return {
+    datasetId: "preflight",
+    datasetVersion: LOCK.datasetVersion,
+    schemaVersion: "territory-schema@1",
+    sourceDate: LOCK.buildDate.slice(0, 10),
+    geometryHash: "00"
+  };
+}
+
+function geometryIssues(zones, checks) {
   return validateGeometryDataset(
-    {
-      manifest: {
-        datasetId: "preflight",
-        datasetVersion: LOCK.datasetVersion,
-        schemaVersion: "territory-schema@1",
-        sourceDate: LOCK.buildDate.slice(0, 10),
-        geometryHash: "00"
-      },
-      zones: [...zones]
-    },
-    { checks: { siblingOverlaps: true, parentContainment: true } }
+    { manifest: validationManifest(), zones: [...zones] },
+    { checks }
   ).issues.filter((issue) => issue.severity === "error");
+}
+
+function geometryHash(geometry) {
+  return createHash("sha256").update(JSON.stringify(geometry)).digest("hex");
 }
 
 async function gitHead() {
@@ -74,7 +78,6 @@ async function gitHead() {
 
 if (!existsSync(LOCK.cliEntry)) {
   console.error(`Missing CLI build at ${LOCK.cliEntry}. Run pnpm build first.`);
-  process.exitCode = 1;
   process.exit(1);
 }
 
@@ -110,39 +113,63 @@ for (const spec of DISTRICTS) {
     { maxBuffer: 64 * 1024 * 1024 }
   );
   const cliPayload = JSON.parse(stdout);
-  const durationMs = performance.now() - districtStarted;
   const quality = JSON.parse(await fs.readFile(join(outputDir, "quality-report.json"), "utf8"));
   const dataset = JSON.parse(await fs.readFile(join(outputDir, "dataset.json"), "utf8"));
-  const generatedZones = dataset.zones.filter((zone) => {
-    const territory = zone.properties?.territory ?? {};
-    return (
-      territory.sourceKind === "generated" || territory.boundarySourceClass === "generated-zone"
-    );
+  const adm2ParentIncluded = dataset.zones.some((zone) => zone.level === 2);
+  const adm3Zones = dataset.zones.filter((zone) => zone.level === 3);
+  const generatedZones = adm3Zones.filter(isGeneratedGameplayZone);
+  const siblingIssues = geometryIssues(adm3Zones, { siblingOverlaps: true });
+  const parentIssues = geometryIssues(adm3Zones, { parentContainment: true });
+  const invalidPolygonIssues = geometryIssues(adm3Zones, {
+    coordinates: true,
+    rings: true,
+    selfIntersections: true,
+    holes: true
   });
-  const overlapIssues = siblingOverlapErrors(dataset.zones);
+  const summary = JSON.parse(
+    await fs.readFile(join(outputDir, "build-summary.json"), "utf8").catch(() => "{}")
+  );
 
   districts.push({
     adm2Id: spec.id,
     districtName: spec.name,
     outputDir,
     cliOk: cliPayload.ok === true,
-    durationMs: Math.round(durationMs),
-    adm3ZoneCount: dataset.zones.length,
+    durationMs: Math.round(performance.now() - districtStarted),
+    adm2ParentInDataset: adm2ParentIncluded,
+    adm3ZoneCount: adm3Zones.length,
     generatedZoneCount: generatedZones.length,
+    generatedBoundaryClasses: [
+      ...new Set(
+        generatedZones
+          .map((zone) => zone.properties?.territory?.boundarySourceClass)
+          .filter(Boolean)
+      )
+    ],
     qualityOk: quality.ok === true,
     gates: quality.gates,
     parentContainmentErrorCount: quality.summary.parentContainmentErrorCount,
-    siblingOverlapErrors: overlapIssues.length,
-    siblingOverlapIssueCodes: [...new Set(overlapIssues.map((issue) => issue.code))],
-    geometryValidationErrors: siblingOverlapErrorCount(dataset.zones)
+    siblingOverlapErrors: siblingIssues.length,
+    siblingOverlapPairs: siblingIssues.map((issue) => ({
+      zoneId: issue.zoneId,
+      otherZoneId: issue.otherZoneId,
+      message: issue.message
+    })),
+    parentContainmentErrors: parentIssues.length,
+    invalidPolygonErrors: invalidPolygonIssues.length,
+    deterministicHash: summary.deterministicHash ?? quality.deterministicHash,
+    geometryHashes: generatedZones.map((zone) => ({
+      id: zone.id,
+      hash: geometryHash(zone.geometry)
+    }))
   });
 }
 
 const report = {
-  schemaVersion: "territorykit-tr-national-preflight-three-district@1",
+  schemaVersion: "territorykit-tr-national-preflight-three-district@2",
   generatedAt: new Date().toISOString(),
   gitCommit: await gitHead(),
-  evidencePath: "territory tr adm3 hybrid build (CLI dist)",
+  evidencePath: "territory tr adm3 hybrid build (CLI dist, national-aligned OSM options)",
   lock: {
     ...LOCK,
     sourceLockHash: sourceLock.contentHash ?? sourceLock.sha256 ?? null,
@@ -152,8 +179,10 @@ const report = {
   ok:
     districts.every((row) => row.cliOk) &&
     districts.every((row) => row.siblingOverlapErrors === 0) &&
+    districts.every((row) => row.parentContainmentErrors === 0) &&
+    districts.every((row) => row.invalidPolygonErrors === 0) &&
     districts.every((row) => row.gates?.effectiveSiblingOverlap === true) &&
-    districts.every((row) => row.parentContainmentErrorCount === 0) &&
+    districts.every((row) => row.qualityOk === true) &&
     districts.every((row) => row.adm3ZoneCount > 0)
 };
 
@@ -167,12 +196,13 @@ console.log(
     {
       ok: report.ok,
       outPath,
+      implementationRevision: LOCK.implementationRevision,
       durationMs: Math.round(performance.now() - startedAt),
       districts: districts.map((d) => ({
         id: d.adm2Id,
-        adm3ZoneCount: d.adm3ZoneCount,
-        siblingOverlapErrors: d.siblingOverlapErrors,
-        qualityOk: d.qualityOk
+        adm3: d.adm3ZoneCount,
+        generated: d.generatedZoneCount,
+        siblingOverlapErrors: d.siblingOverlapErrors
       }))
     },
     null,
