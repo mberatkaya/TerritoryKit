@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "territorykit-tr-national-quality-closeout@1",
+  "inspectedCommit": "26d5a746ee235b03c412f134848890bc8577a597",
+  "originMainSha": "26d5a746ee235b03c412f134848890bc8577a597",
+  "artifactRoot": ".territory/sprint-6/final/candidate",
+  "artifactClassification": "REAL_ARTIFACT_VERIFIED",
+  "generatedAt": "2026-10-14T09:27:05.569Z",
+  "adm2Validation": {
+    "adm1Count": 81,
+    "adm2Count": 973,
+    "adm1Expected": 81,
+    "adm2Expected": 973,
+    "adm1Complete": true,
+    "adm2Complete": true,
+    "invalidAdm2PolygonCount": 0,
+    "invalidAdm2Ids": [],
+    "orphanParentCount": 973,
+    "adm2GeometryHash": "4b34439772834ee563b1734122508907272d1fe3ba937371348f794efe03a02f",
+    "declaredAdm2GeometryHash": "4b34439772834ee563b1734122508907272d1fe3ba937371348f794efe03a02f",
+    "siblingOverlapSummary": {
+      "ok": true,
+      "errorCount": 0,
+      "warningCount": 0,
+      "issueCodes": []
+    },
+    "evidenceClass": "REAL_ARTIFACT_VERIFIED"
+  },
+  "baselinePath": "reports/baselines/sprint-6-national-rc7.json",
+  "evidenceClass": "HISTORICAL_RECORDED",
+  "candidateEvidenceClass": "REAL_ARTIFACT_VERIFIED",
+  "metrics": [
+    {
+      "metric": "adm3Zones",
+      "baseline": 20392,
+      "observed": 20392
+    },
+    {
+      "metric": "officialZones",
+      "baseline": 3343,
+      "observed": 3343
+    },
+    {
+      "metric": "generatedZones",
+      "baseline": 17049,
+      "observed": 17049
+    },
+    {
+      "metric": "lowConfidenceDistricts",
+      "baseline": 631,
+      "observed": 631
+    },
+    {
+      "metric": "softGeographicRealismWarnings",
+      "baseline": 577,
+      "observed": 577,
+      "note": "Recorded smart-coverage diagnostics; not regenerated in closeout unless national rebuild runs."
+    },
+    {
+      "metric": "adm3GeometryHash",
+      "baseline": "19f50ba312657f39f61d9ce8eb6562491fa66de106681eec5352b85ae1b6e333",
+      "observed": "19f50ba312657f39f61d9ce8eb6562491fa66de106681eec5352b85ae1b6e333",
+      "unchanged": true
+    },
+    {
+      "metric": "fullDatasetGeometryHash",
+      "baseline": "fb19b468c0555dd0e167d5937037b1609f610014d9231c80b4bc9834685dd8f3",
+      "observed": null,
+      "note": "National combined hash; compare via candidate dataset.json when needed."
+    }
+  ],
+  "newCandidateBuilt": false,
+  "newCandidateVersion": null,
+  "sprint108CodeMergedAfterRc7Build": "Istanbul geometry fixes (#108) are on main but rc.7 bytes predate merge; national rebuild required for geometry delta."
+}

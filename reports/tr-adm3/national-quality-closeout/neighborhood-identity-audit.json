@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "territorykit-tr-national-quality-closeout@1",
+  "inspectedCommit": "26d5a746ee235b03c412f134848890bc8577a597",
+  "originMainSha": "26d5a746ee235b03c412f134848890bc8577a597",
+  "artifactRoot": ".territory/sprint-6/final/candidate",
+  "artifactClassification": "REAL_ARTIFACT_VERIFIED",
+  "generatedAt": "2026-10-14T09:27:05.569Z",
+  "adm2Validation": {
+    "adm1Count": 81,
+    "adm2Count": 973,
+    "adm1Expected": 81,
+    "adm2Expected": 973,
+    "adm1Complete": true,
+    "adm2Complete": true,
+    "invalidAdm2PolygonCount": 0,
+    "invalidAdm2Ids": [],
+    "orphanParentCount": 973,
+    "adm2GeometryHash": "4b34439772834ee563b1734122508907272d1fe3ba937371348f794efe03a02f",
+    "declaredAdm2GeometryHash": "4b34439772834ee563b1734122508907272d1fe3ba937371348f794efe03a02f",
+    "siblingOverlapSummary": {
+      "ok": true,
+      "errorCount": 0,
+      "warningCount": 0,
+      "issueCodes": []
+    },
+    "evidenceClass": "REAL_ARTIFACT_VERIFIED"
+  },
+  "evidenceClass": "REAL_ARTIFACT_VERIFIED",
+  "scope": "Compares official import cohort to effective rc.7 polygons for licensed provinces only; ADM3 zones are gameplay regions, not legal mahalle census.",
+  "effectiveOfficialZoneCount": 3343,
+  "rawToEffectiveGeometryChanges": 3339,
+  "parentCorrections": 5,
+  "provinces": [
+    {
+      "provinceCode": "16",
+      "providerId": "tr-adm3-official-16-bursa-buyuksehir-belediyesi-open-data",
+      "parseIssues": [],
+      "importedCount": 1074,
+      "effectiveCount": 1074,
+      "duplicatedEffectiveNativeIds": [],
+      "missingEffectiveNativeIds": [],
+      "bundleEvidenceStatus": "LOCKED_BYTES_VERIFIED"
+    },
+    {
+      "provinceCode": "27",
+      "providerId": "gaziantep-open-data",
+      "parseIssues": [],
+      "importedCount": 786,
+      "effectiveCount": 786,
+      "duplicatedEffectiveNativeIds": [],
+      "missingEffectiveNativeIds": [],
+      "bundleEvidenceStatus": "LOCKED_BYTES_VERIFIED"
+    },
+    {
+      "provinceCode": "38",
+      "providerId": "tr-adm3-official-38-kayseri-buyuksehir-belediyesi-open-data-via-ulasav",
+      "parseIssues": [],
+      "importedCount": 711,
+      "effectiveCount": 711,
+      "duplicatedEffectiveNativeIds": [],
+      "missingEffectiveNativeIds": [],
+      "bundleEvidenceStatus": "LOCKED_BYTES_VERIFIED"
+    },
+    {
+      "provinceCode": "52",
+      "providerId": "tr-adm3-official-52-ordu-buyuksehir-belediyesi-open-data",
+      "parseIssues": [],
+      "importedCount": 772,
+      "effectiveCount": 772,
+      "duplicatedEffectiveNativeIds": [],
+      "missingEffectiveNativeIds": [],
+      "bundleEvidenceStatus": "LOCKED_BYTES_VERIFIED"
+    }
+  ]
+}

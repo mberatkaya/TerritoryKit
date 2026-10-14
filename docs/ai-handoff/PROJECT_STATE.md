@@ -1,8 +1,8 @@
 # Project state snapshot
 
-**Observation time (UTC):** 2026-10-13 (Sprint 3 — TR national RC delivery validation)  
-**Verified `origin/main` base:** `2c03e1b870272191cf8ddddf3313fe9d3cb147ba` — _feat(tr): improve Istanbul ADM3 geometry quality and pilot source validation (#108)_  
-**Active sprint branch:** `feat/tr-national-rc-delivery-validation`
+**Observation time (UTC):** 2026-10-14 (Sprint 3.5 — national ADM2–ADM3 quality closeout)  
+**Verified `origin/main` base:** `26d5a746ee235b03c412f134848890bc8577a597` — _feat(tr): validate national rc.7 delivery integrity and consumer contract (#109)_  
+**Active sprint branch:** `feat/tr-national-adm2-adm3-quality-closeout`
 
 > Re-run `git fetch origin main && git log -1 origin/main` before production decisions.
 
@@ -10,6 +10,7 @@
 
 | PR   | Title                                                                              | Merged (UTC) |
 | ---- | ---------------------------------------------------------------------------------- | ------------ |
+| #109 | feat(tr): validate national rc.7 delivery integrity and consumer contract          | 2026-10-13   |
 | #108 | feat(tr): improve Istanbul ADM3 geometry quality and pilot source validation       | 2026-10-13   |
 | #107 | fix(tr): close source governance gaps and prepare ADM3 delivery roadmap            | 2026-10-09   |
 | #106 | research(tr): reproduce geoBoundaries parent geometry through full country builder | 2026-10-09   |
@@ -26,7 +27,8 @@
 | ------ | ----------------------------------- | --------------------------------------------------------- |
 | 1      | Source and governance closeout      | **done** (#107)                                           |
 | 2      | Istanbul ADM3 geometry quality      | **done** (#108)                                           |
-| 3      | National RC and delivery validation | **in review** (`feat/tr-national-rc-delivery-validation`) |
+| 3      | National RC and delivery validation | **done** (#109)                                           |
+| 3.5    | National ADM2–ADM3 quality closeout | **active** (`feat/tr-national-adm2-adm3-quality-closeout`) |
 | 4      | Rush&Claim integration              | planned                                                   |
 
 Sprint 3 evidence: `reports/tr-adm3/sprint-3-national-rc/`
@@ -38,6 +40,7 @@ Sprint 3 evidence: `reports/tr-adm3/sprint-3-national-rc/`
 ## Engineering entry points
 
 - Sprint 3 reports: `pnpm data:tr:sprint3:national-rc`
+- National quality closeout: `pnpm data:tr:national-quality-closeout` → `reports/tr-adm3/national-quality-closeout/`
 - National validate: `pnpm turkey:v2:national:validate`, `pnpm turkey:v2:national:validate:publish-ready`
 - Consumer resolver: `@territory-kit/runtime/turkey-v2-delivery`
 - ADM3 registry: `datasets/sources/TR/adm3/source-registry.json` (81 provinces)
