@@ -7,7 +7,7 @@
 | 1      | Source governance closeout — consolidated reports, licensing matrix, Path A/B, Sprint 2 handoff | **done** (#107)                                                                |
 | 2      | Istanbul geometry quality — Fatih, Kadıköy, Üsküdar, Adalar, Eyüpsultan/Çatalca pilots          | **done** (#108)                                                                |
 | 3      | National RC and delivery validation                                                             | **done** (#109)                                                                |
-| 3.5    | National ADM2–ADM3 quality closeout (973 ilçe envanter + QA raporları)                         | **active** (`feat/tr-national-adm2-adm3-quality-closeout`)                     |
+| 3.5    | National ADM2–ADM3 quality closeout (973 ilçe envanter + QA raporları)                          | **active** (`feat/tr-national-adm2-adm3-quality-closeout`)                     |
 | 4      | Rush&Claim integration                                                                          | planned (`reports/tr-adm3/sprint-3-national-rc/rushclaim-sprint-4-handoff.md`) |
 
 ## Blocked until human authorization
@@ -21,11 +21,11 @@
 
 ## Sprint 3.5 (quality closeout)
 
-| P   | Task                         | Command / path                                      |
-| --- | ---------------------------- | --------------------------------------------------- |
-| 1   | Ulusal envanter + QA raporu  | `pnpm data:tr:national-quality-closeout`            |
-| 2   | rc.8 ulusal rebuild (#108)   | `pnpm turkey:v2:national:build` — **onay gerekir** |
-| 3   | PR merge + CI                | `feat/tr-national-adm2-adm3-quality-closeout`       |
+| P   | Task                        | Command / path                                     |
+| --- | --------------------------- | -------------------------------------------------- |
+| 1   | Ulusal envanter + QA raporu | `pnpm data:tr:national-quality-closeout`           |
+| 2   | rc.8 ulusal rebuild (#108)  | `pnpm turkey:v2:national:build` — **onay gerekir** |
+| 3   | PR merge + CI               | `feat/tr-national-adm2-adm3-quality-closeout`      |
 
 Evidence: `reports/tr-adm3/national-quality-closeout/`
 

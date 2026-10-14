@@ -23,13 +23,13 @@
 
 ## Four-sprint implementation roadmap
 
-| Sprint | Focus                               | Status                                                    |
-| ------ | ----------------------------------- | --------------------------------------------------------- |
-| 1      | Source and governance closeout      | **done** (#107)                                           |
-| 2      | Istanbul ADM3 geometry quality      | **done** (#108)                                           |
-| 3      | National RC and delivery validation | **done** (#109)                                           |
+| Sprint | Focus                               | Status                                                     |
+| ------ | ----------------------------------- | ---------------------------------------------------------- |
+| 1      | Source and governance closeout      | **done** (#107)                                            |
+| 2      | Istanbul ADM3 geometry quality      | **done** (#108)                                            |
+| 3      | National RC and delivery validation | **done** (#109)                                            |
 | 3.5    | National ADM2–ADM3 quality closeout | **active** (`feat/tr-national-adm2-adm3-quality-closeout`) |
-| 4      | Rush&Claim integration              | planned                                                   |
+| 4      | Rush&Claim integration              | planned                                                    |
 
 Sprint 3 evidence: `reports/tr-adm3/sprint-3-national-rc/`
 

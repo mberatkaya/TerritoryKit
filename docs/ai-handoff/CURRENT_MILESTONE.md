@@ -29,14 +29,14 @@
 
 ### Sprint 3.5 acceptance (national quality closeout)
 
-| #   | Criterion                                        | Status |
-| --- | ------------------------------------------------ | ------ |
-| 1   | 973 ilçe `district-quality-matrix.json`          | **Done** (local rc.7) |
-| 2   | ADM2 doğrulama + ilçe geometri QA rerun          | **Done** (3 ilçe `BLOCKED_BY_GEOMETRY`) |
-| 3   | Kaynak / kimlik / baseline raporları             | **Done** (`reports/tr-adm3/national-quality-closeout/`) |
-| 4   | Replacement-map (rc.7 değişmedi)                 | **Done** |
-| 5   | Harita indeksi                                   | **Done** (`map-index.html`) |
-| 6   | Yeni rc.8 build (#108 geometri kodu)             | **Out of scope** — ayrı onaylı rebuild |
+| #   | Criterion                               | Status                                                  |
+| --- | --------------------------------------- | ------------------------------------------------------- |
+| 1   | 973 ilçe `district-quality-matrix.json` | **Done** (local rc.7)                                   |
+| 2   | ADM2 doğrulama + ilçe geometri QA rerun | **Done** (3 ilçe `BLOCKED_BY_GEOMETRY`)                 |
+| 3   | Kaynak / kimlik / baseline raporları    | **Done** (`reports/tr-adm3/national-quality-closeout/`) |
+| 4   | Replacement-map (rc.7 değişmedi)        | **Done**                                                |
+| 5   | Harita indeksi                          | **Done** (`map-index.html`)                             |
+| 6   | Yeni rc.8 build (#108 geometri kodu)    | **Out of scope** — ayrı onaylı rebuild                  |
 
 ### Explicitly not in Sprint 3
 
