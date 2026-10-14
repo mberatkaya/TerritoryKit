@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "territorykit-tr-national-quality-closeout@1",
+  "inspectedCommit": "24717ba03aee1d7e50ea220ae2fe19117df1b7dc",
+  "originMainSha": "26d5a746ee235b03c412f134848890bc8577a597",
+  "artifactRoot": ".territory/sprint-6/final/candidate",
+  "artifactClassification": "REAL_ARTIFACT_VERIFIED",
+  "generatedAt": "2026-10-14T09:46:23.376Z",
+  "adm2Validation": {
+    "adm1Count": 81,
+    "adm2Count": 973,
+    "adm1Expected": 81,
+    "adm2Expected": 973,
+    "adm1Complete": true,
+    "adm2Complete": true,
+    "invalidAdm2PolygonCount": 0,
+    "invalidAdm2Ids": [],
+    "orphanParentCount": 0,
+    "rawParentIdFieldOrphanCount": 973,
+    "parentLinkageMethod": "provinceCode_to_adm1_lookup_ref",
+    "adm2ParentLinkageOk": true,
+    "adm2GeometryHash": "4b34439772834ee563b1734122508907272d1fe3ba937371348f794efe03a02f",
+    "declaredAdm2GeometryHash": "4b34439772834ee563b1734122508907272d1fe3ba937371348f794efe03a02f",
+    "siblingOverlapSummary": {
+      "ok": true,
+      "errorCount": 0,
+      "warningCount": 0,
+      "issueCodes": [],
+      "errorIssues": []
+    },
+    "evidenceClass": "REAL_ARTIFACT_VERIFIED"
+  },
+  "evidenceClass": "REAL_ARTIFACT_VERIFIED",
+  "baselineAdm3GeometryHash": "19f50ba312657f39f61d9ce8eb6562491fa66de106681eec5352b85ae1b6e333",
+  "observedAdm3GeometryHash": "19f50ba312657f39f61d9ce8eb6562491fa66de106681eec5352b85ae1b6e333",
+  "entryCount": 20392,
+  "entries": [],
+  "summary": {
+    "matchType": "IDENTITY_ALL",
+    "matchConfidence": 1,
+    "parentChangeCount": 0,
+    "geometryChangeCount": 0,
+    "sourceChangeCount": 0,
+    "deletedTerritoryCount": 0,
+    "newTerritoryCount": 0
+  },
+  "migrationEligibility": "DRY_RUN_IDENTITY",
+  "requiredReview": false,
+  "reasonCode": "RC7_BASELINE_UNCHANGED",
+  "note": "Per-zone rows omitted when geometry hash unchanged; expand via dataset diff when a new candidate exists."
+}
