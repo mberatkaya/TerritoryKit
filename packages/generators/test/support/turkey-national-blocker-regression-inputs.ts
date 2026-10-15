@@ -1,11 +1,7 @@
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 
-export type TurkeyNationalBlockerRegressionInputPick =
-  | "env"
-  | "local"
-  | "fixture"
-  | "missing";
+export type TurkeyNationalBlockerRegressionInputPick = "env" | "local" | "fixture" | "missing";
 
 export type TurkeyNationalBlockerRegressionInputs =
   | {
@@ -45,10 +41,7 @@ export function resolveTurkeyNationalBlockerRegressionInputs(options: {
   repoRoot: string;
   fixtureRoot: string;
 }): TurkeyNationalBlockerRegressionInputs {
-  const localBarrierRoot = resolve(
-    options.repoRoot,
-    ".territory/sprint-6/calibration/barriers"
-  );
+  const localBarrierRoot = resolve(options.repoRoot, ".territory/sprint-6/calibration/barriers");
   const localDatasetPath = resolve(
     options.repoRoot,
     "datasets/generated/countries/TR/dataset.json"

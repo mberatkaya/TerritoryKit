@@ -50,20 +50,19 @@ describe("rc.8 national blocker districts (hybrid regression inputs)", () => {
     }
 
     expect(regressionInputs.status).toBe("NOT_RUN_MISSING_REAL_ARTIFACT");
-    expect(regressionInputs.barrierPick === "missing" || regressionInputs.datasetPick === "missing").toBe(
-      true
-    );
+    expect(
+      regressionInputs.barrierPick === "missing" || regressionInputs.datasetPick === "missing"
+    ).toBe(true);
   });
 });
 
 describe.skipIf(regressionInputs.status !== "ready")(
   "rc.8 national blocker districts (real hybrid regression — not skipped)",
   () => {
-    const { barrierRoot, datasetPath, barrierPick, datasetPick } =
-      regressionInputs as Extract<
-        typeof regressionInputs,
-        { status: "ready" }
-      >;
+    const { barrierRoot, datasetPath, barrierPick, datasetPick } = regressionInputs as Extract<
+      typeof regressionInputs,
+      { status: "ready" }
+    >;
 
     it("documents which artifact roots are used (fixture/local/env — not a national-build PASS claim)", () => {
       expect({ barrierPick, datasetPick }).toEqual({
