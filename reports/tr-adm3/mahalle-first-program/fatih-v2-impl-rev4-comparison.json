@@ -1,0 +1,277 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-first-fatih-sprint-2b4-comparison@1",
+  "generatedAt": "2026-10-15T17:12:00.197Z",
+  "district": "Fatih",
+  "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+  "implRev3Historical": {
+    "implementationRevision": "impl-rev3",
+    "adm3ZoneCount": 47,
+    "weightedInternalBarrierAlignment": 0.7521,
+    "seedCoverageRatio": 0.5352,
+    "pathologyFindingCount": 25
+  },
+  "v17Replay": {
+    "adm3ZoneCount": 30,
+    "validMahalleSeedCount": 71,
+    "seedNamedZoneCount": 10,
+    "seedNamedShare": 0.3333,
+    "seedNameMatchCount": 10,
+    "seedCoverageRatio": 0.1408,
+    "meanBarrierAlignment": 0.8907,
+    "meanZoneBarrierAlignment": 0.8954,
+    "weightedInternalBarrierAlignment": 0.8907,
+    "geographicRealism": true,
+    "pathologyFindingCount": 13,
+    "seedCoverageDetail": {
+      "validSeedCount": 71,
+      "distinctMahalleSeedsRepresented": 25,
+      "seedsInOwnPolygonCount": 10,
+      "seedNameCollisionCount": 0,
+      "zonesWithoutSeedCount": 5
+    },
+    "v17AnchoredWatershedMerge": null,
+    "deterministicHash": "9845cbb6d3efc94ee1343c7c7814de8b19661ab1bc4b4475e5c0951d9cbb7456",
+    "validationOk": true
+  },
+  "implRev4Hybrid": {
+    "implementationRevision": "impl-rev4",
+    "adm3ZoneCount": 48,
+    "validMahalleSeedCount": 71,
+    "seedNamedZoneCount": 17,
+    "seedNamedShare": 0.3542,
+    "seedNameMatchCount": 17,
+    "seedCoverageRatio": 0.2394,
+    "meanBarrierAlignment": 0.5047,
+    "meanZoneBarrierAlignment": 0.5099,
+    "weightedInternalBarrierAlignment": 0.5047,
+    "geographicRealism": true,
+    "pathologyFindingCount": 12,
+    "seedCoverageDetail": {
+      "validSeedCount": 71,
+      "distinctMahalleSeedsRepresented": 34,
+      "seedsInOwnPolygonCount": 17,
+      "seedNameCollisionCount": 0,
+      "zonesWithoutSeedCount": 14
+    },
+    "v17AnchoredWatershedMerge": {
+      "crossSeedWeakMergeCount": 47,
+      "strongBlockedAdjacencyCount": 238,
+      "maxAreaBlockedMergeCount": 0
+    },
+    "deterministicHash": "f736ac90982d7622b62e88c28a33c8d26ae5ae291cfaf7a5fb5a187c0f5f6be3",
+    "determinismVerified": true,
+    "validationOk": true,
+    "qualityOk": true,
+    "buildDurationMs": 3641
+  },
+  "qualityGates": {
+    "weightedBarrierTarget": 0.8907,
+    "seedCoverageFloor": 0.5352,
+    "weightedMet": false,
+    "seedCoverageMet": false
+  },
+  "boundaryInventoryQa": {
+    "schemaVersion": "territorykit-tr-mahalle-first-boundary-inventory-qa@1",
+    "method": "Length-weighted internal edges counted once when shared by two zones (segment key rounding); independent of smart-fallback quality gate JSON.",
+    "edgeKeyPrecision": 6,
+    "sharedInternalBoundaryMeters": 26752.39,
+    "v17OnlyInternalBoundaryMeters": 31959.91,
+    "rev3OnlyInternalBoundaryMeters": 41543.23,
+    "v17OnlyShareOfUniqueInternal": 0.3188,
+    "rev3OnlyShareOfUniqueInternal": 0.4144,
+    "sharedShareOfUniqueInternal": 0.2668,
+    "v17OnlySampleEdges": [
+      {
+        "edgeKey": "28.937618,41.001991|28.937823,41.002112",
+        "lengthMeters": 21.87
+      },
+      {
+        "edgeKey": "28.937823,41.002112|28.937887,41.002166",
+        "lengthMeters": 7.98
+      },
+      {
+        "edgeKey": "28.937887,41.002166|28.937895,41.002193",
+        "lengthMeters": 3.17
+      },
+      {
+        "edgeKey": "28.937871,41.002237|28.937895,41.002193",
+        "lengthMeters": 5.22
+      },
+      {
+        "edgeKey": "28.93783,41.002275|28.937871,41.002237",
+        "lengthMeters": 5.45
+      },
+      {
+        "edgeKey": "28.937768,41.00228|28.93783,41.002275",
+        "lengthMeters": 5.21
+      },
+      {
+        "edgeKey": "28.93763,41.002261|28.937768,41.00228",
+        "lengthMeters": 11.76
+      },
+      {
+        "edgeKey": "28.93746,41.002202|28.93763,41.002261",
+        "lengthMeters": 15.7
+      },
+      {
+        "edgeKey": "28.937385,41.002183|28.93746,41.002202",
+        "lengthMeters": 6.67
+      },
+      {
+        "edgeKey": "28.937243,41.002172|28.937385,41.002183",
+        "lengthMeters": 11.96
+      },
+      {
+        "edgeKey": "28.937162,41.002183|28.937243,41.002172",
+        "lengthMeters": 6.95
+      },
+      {
+        "edgeKey": "28.937115,41.002189|28.937162,41.002183",
+        "lengthMeters": 3.95
+      }
+    ],
+    "rev3OnlySampleEdges": [
+      {
+        "edgeKey": "28.939276,41.002776|28.939442,41.00278",
+        "lengthMeters": 13.94
+      },
+      {
+        "edgeKey": "28.938998,41.002739|28.939276,41.002776",
+        "lengthMeters": 23.7
+      },
+      {
+        "edgeKey": "28.938772,41.002711|28.938998,41.002739",
+        "lengthMeters": 19.16
+      },
+      {
+        "edgeKey": "28.938668,41.002706|28.938772,41.002711",
+        "lengthMeters": 8.77
+      },
+      {
+        "edgeKey": "28.938613,41.002708|28.938668,41.002706",
+        "lengthMeters": 4.62
+      },
+      {
+        "edgeKey": "28.938544,41.002712|28.938613,41.002708",
+        "lengthMeters": 5.8
+      },
+      {
+        "edgeKey": "28.938509,41.002714|28.938544,41.002712",
+        "lengthMeters": 2.94
+      },
+      {
+        "edgeKey": "28.938434,41.002712|28.938509,41.002714",
+        "lengthMeters": 6.31
+      },
+      {
+        "edgeKey": "28.938356,41.002708|28.938434,41.002712",
+        "lengthMeters": 6.52
+      },
+      {
+        "edgeKey": "28.938179,41.002672|28.938356,41.002708",
+        "lengthMeters": 15.42
+      },
+      {
+        "edgeKey": "28.93807,41.002637|28.938179,41.002672",
+        "lengthMeters": 9.95
+      },
+      {
+        "edgeKey": "28.937921,41.002594|28.93807,41.002637",
+        "lengthMeters": 13.34
+      }
+    ],
+    "interpretation": {
+      "v17Only": "Barrier-backed v1.7 internal boundaries absent from impl-rev3 (watershed splits / weak-barrier cuts).",
+      "rev3Only": "Additional impl-rev3 internal boundaries not present in v1.7 replay (explains +17 zone cardinality).",
+      "edgeMatchToleranceMeters": 1.5
+    }
+  },
+  "boundaryAlignmentIndependent": {
+    "totalInternalBoundaryKm": {
+      "v17Replay": 58.605008,
+      "implRev3": null,
+      "implRev4Hybrid": 56.993719
+    },
+    "realBarrierRatio": {
+      "v17Replay": null,
+      "implRev3": null,
+      "implRev4Hybrid": null
+    }
+  },
+  "pathologyRootCauses": {
+    "implRev3": {
+      "weightedAlignmentDeltaVsV17Replay": -0.1386,
+      "v17ReplayWeightedInternalBarrierAlignment": 0.8907,
+      "v2WeightedInternalBarrierAlignment": 0.7521,
+      "rev2HistoricalWeighted": 0.6562,
+      "seedSemantics": {
+        "validSeedCount": 71,
+        "distinctRepresentedSeeds": 47,
+        "seedNamedZoneCount": 38,
+        "seedsInOwnPolygonCount": 38,
+        "zonesWithoutSeedCount": 0,
+        "seedNameCollisionCount": 0,
+        "note": "47 distinct represented seeds vs 37 seed-named zones: extra represented seeds can share a name with a primary zone or sit in multi-face watershed components without a dedicated named polygon."
+      },
+      "watershedBarrierAudit": {
+        "watershedBoundaryEdgeCount": 904,
+        "watershedBoundaryLengthMeters": 70682.77148550269,
+        "strongBarrierWatershedLengthMeters": 35953.4268672037,
+        "mediumBarrierWatershedLengthMeters": 15721.773305195095,
+        "weakBarrierWatershedLengthMeters": 19007.571313103817,
+        "unseededFaceCount": 129,
+        "multiFacePerSeedLabelFaceCount": 1947,
+        "distinctLabeledSeedCount": 61,
+        "weakDifferentSeedBoundaryLengthMeters": 19007.571313103817,
+        "strongDifferentSeedBoundaryLengthMeters": 35953.4268672037,
+        "weakBarrierReassignedFaceCount": 177,
+        "weakBarrierReassignmentBlockedBySeedAnchor": 0
+      },
+      "seedFaceSemantics": {
+        "multiFacePerSeedLabelFaceCount": 1947,
+        "distinctLabeledSeedCount": 61,
+        "unseededFaceCount": 129,
+        "weakDifferentSeedBoundaryLengthMeters": 19007.571313103817,
+        "strongDifferentSeedBoundaryLengthMeters": 35953.4268672037,
+        "weakBarrierReassignedFaceCount": 177,
+        "legacyMisnamedMetric": "seedCollisionFaceCount was retired; multi-face-per-seed is normal watershed behavior, not a seed conflict."
+      },
+      "networkResidual": {
+        "networkCoveragePercent": 98.642108,
+        "residualAreaPercent": 1.35813,
+        "areaRejectedGroupCount": 74,
+        "topologyRejectedGroupCount": 71,
+        "maxAreaBlockedMergeCount": 0,
+        "residualGapAttachedCount": 12,
+        "residualUnattachedAreaKm2": 0.000018,
+        "preMergePieceCount": 151,
+        "postMergePieceCount": 47
+      },
+      "pathologyDistribution": {
+        "totalFindings": 25,
+        "byKind": {
+          "SPIKE": 25
+        }
+      },
+      "groundTruthIoU": "NOT_ASSESSED"
+    },
+    "implRev4": {
+      "pathologyByKind": {
+        "SPIKE": 12
+      },
+      "note": "SPIKE findings often follow dense watershed face corners; compare counts vs rev3 before treating as new regression."
+    }
+  },
+  "alternativeBPreview": {
+    "ambiguousZoneCount": 15,
+    "distinctSeedsRepresented": 71,
+    "gameplayPolygonChange": false
+  },
+  "decision": {
+    "status": "NO-GO",
+    "reason": "Hybrid Pareto miss: weighted barrier 0.5047 (target 0.8907), seed coverage 0.2394 (floor 0.5352).",
+    "paretoTradeOff": true,
+    "nationalExpansion": "NO-GO",
+    "missingEvidence": "Barrier alignment still below v1.7 replay — v17 anchor merge insufficient; need official mahalle geometry or accept Alternative B."
+  }
+}

@@ -18,12 +18,19 @@ export {
   buildTurkeySmartFallbackWithAdjacency,
   buildTurkeyOrganicSmartFallbackWithAdjacency,
   buildTurkeyNetworkFirstSmartFallbackWithAdjacency,
+  TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION,
+  TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION,
+  TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION_REV4,
   createTurkeySmartFallbackDataset,
   normalizeTurkeySmartFallbackBarriers,
   inspectTurkeySmartBoundaryAlignment,
   enforceDisjointSmartFallbackZones,
   resolveTurkeySmartFallbackConfiguration
 } from "./turkey-smart-fallback.js";
+export {
+  buildTurkeySmartFallbackV2PilotRev4HybridWithAdjacency,
+  buildTurkeySmartFallbackV2PilotWithAdjacency
+} from "./turkey-smart-derived-v2-pilot.js";
 export {
   DEFAULT_TURKEY_GENERATED_ZONE_PATHOLOGY_THRESHOLDS,
   TURKEY_GENERATED_ZONE_PATHOLOGY_SCHEMA_VERSION,
