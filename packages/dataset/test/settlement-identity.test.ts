@@ -97,10 +97,11 @@ describe("buildSettlementIdentityLayer", () => {
     generatedAt: "2026-10-15T00:00:00.000Z",
     defaultProvenance: {
       providerId: "openstreetmap",
-      licenseState: "approved" as const,
-      permissionStatus: "redistribution-approved" as const,
+      licenseState: "pending" as const,
+      permissionStatus: "redistribution-unknown" as const,
       license: "ODbL-1.0",
-      attribution: "OpenStreetMap contributors"
+      attribution: "OpenStreetMap contributors",
+      sourceLockState: "unknown" as const
     }
   };
 
@@ -123,6 +124,19 @@ describe("buildSettlementIdentityLayer", () => {
     expect(rejected[0]?.reasonCode).toBe("OUTSIDE_PARENT_ADM2");
   });
 
+  it("keeps review pending and blocks auto display naming for single-seed zones", () => {
+    const seeds: SettlementIdentitySeedInput[] = [
+      { name: "Yedikule", coordinate: [1, 1], sourceId: "osm:node:10", type: "quarter" }
+    ];
+    const layer = buildSettlementIdentityLayer({ ...baseOptions, seeds });
+    const summary = layer.zoneSummaries.find((row) => row.zoneId === "z-a");
+    expect(summary?.associationStatus).toBe("single-candidate");
+    expect(summary?.autoDisplayNameAllowed).toBe(false);
+    expect(summary?.consumerNameSemantics).toBe("seed-locality-label");
+    expect(layer.associations.every((row) => row.reviewDecision === "pending")).toBe(true);
+    expect(layer.settlements[0]?.polygonEvidenceState).toBe("none");
+  });
+
   it("is deterministic for identical inputs", () => {
     const seeds: SettlementIdentitySeedInput[] = [
       { name: "Yedikule", coordinate: [1, 1], sourceId: "osm:node:10", type: "quarter" }
@@ -130,5 +144,92 @@ describe("buildSettlementIdentityLayer", () => {
     const first = buildSettlementIdentityLayer({ ...baseOptions, seeds });
     const second = buildSettlementIdentityLayer({ ...baseOptions, seeds });
     expect(first.contentChecksum).toBe(second.contentChecksum);
+  });
+
+  it("associates seeds through polygon holes and multipolygon zones", () => {
+    const holeZone: TerritoryZone = {
+      ...squareZone("z-hole", 0, 0, 5),
+      geometry: {
+        type: "Polygon",
+        coordinates: [
+          [
+            [0, 0],
+            [5, 0],
+            [5, 5],
+            [0, 5],
+            [0, 0]
+          ],
+          [
+            [1, 1],
+            [2, 1],
+            [2, 2],
+            [1, 2],
+            [1, 1]
+          ]
+        ]
+      }
+    };
+    const multiZone: TerritoryZone = {
+      ...squareZone("z-multi", 5, 0, 5),
+      geometry: {
+        type: "MultiPolygon",
+        coordinates: [
+          [
+            [
+              [5, 0],
+              [7, 0],
+              [7, 2],
+              [5, 2],
+              [5, 0]
+            ]
+          ],
+          [
+            [
+              [5, 3],
+              [7, 3],
+              [7, 5],
+              [5, 5],
+              [5, 3]
+            ]
+          ]
+        ]
+      }
+    };
+    const seeds: SettlementIdentitySeedInput[] = [
+      { name: "Inside", coordinate: [3, 3], sourceId: "osm:node:in", type: "quarter" },
+      { name: "Island", coordinate: [6, 1], sourceId: "osm:node:mp", type: "quarter" }
+    ];
+    const layer = buildSettlementIdentityLayer({
+      ...baseOptions,
+      gameplayZones: [holeZone, multiZone],
+      seeds
+    });
+    expect(layer.zoneSummaries.find((row) => row.zoneId === "z-hole")?.associationStatus).toBe(
+      "single-candidate"
+    );
+    expect(layer.zoneSummaries.find((row) => row.zoneId === "z-multi")?.associationStatus).toBe(
+      "single-candidate"
+    );
+  });
+
+  it("discards near-duplicate seeds inside parent ADM2", () => {
+    const seeds: SettlementIdentitySeedInput[] = [
+      { name: "Dup", coordinate: [1, 1], sourceId: "osm:node:dup-a", type: "quarter" },
+      { name: "Dup", coordinate: [1.0001, 1.0001], sourceId: "osm:node:dup-b", type: "quarter" }
+    ];
+    const { rejected, accepted } = dedupeSettlementSeeds(seeds, parent.geometry);
+    expect(accepted).toHaveLength(1);
+    expect(rejected.length).toBeGreaterThan(0);
+  });
+
+  it("flags cross-zone seed conflicts under covers", () => {
+    const overlapA = squareZone("z-overlap-a", 0, 0, 5);
+    const overlapB = squareZone("z-overlap-b", 4, 0, 5);
+    const layer = buildSettlementIdentityLayer({
+      ...baseOptions,
+      gameplayZones: [overlapA, overlapB],
+      seeds: [{ name: "Span", coordinate: [4.5, 2.5], sourceId: "osm:node:span", type: "quarter" }]
+    });
+    expect(layer.associations.some((row) => row.status === "conflict")).toBe(true);
   });
 });

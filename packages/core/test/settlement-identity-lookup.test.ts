@@ -67,8 +67,9 @@ describe("createSettlementIdentityLookup", () => {
     generatedAt: "2026-10-15T00:00:00.000Z",
     defaultProvenance: {
       providerId: "openstreetmap",
-      licenseState: "approved",
-      permissionStatus: "redistribution-approved"
+      licenseState: "pending",
+      permissionStatus: "redistribution-unknown",
+      sourceLockState: "unknown"
     }
   });
 
@@ -77,7 +78,8 @@ describe("createSettlementIdentityLookup", () => {
     const lookup = createSettlementIdentityLookup({ layer });
     const zoneView = lookup.listSettlementsForZone("z-a");
     expect(zoneView.settlements).toHaveLength(1);
-    expect(zoneView.autoDisplayNameAllowed).toBe(true);
+    expect(zoneView.autoDisplayNameAllowed).toBe(false);
+    expect(zoneView.associations.every((row) => row.reviewDecision === "pending")).toBe(true);
     expect(zoneView.isAmbiguous).toBe(false);
 
     const settlementId = zoneView.settlements[0]!.settlementId;

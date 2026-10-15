@@ -133,6 +133,22 @@ async function main() {
   );
   const sourceLock = await readJson(OSM_SOURCE_LOCK).catch(() => null);
   const generatedAt = new Date().toISOString();
+  const osmSourceLockState = sourceLock?.contentHash ? "verified" : "unknown";
+  const osmLicenseEvidenceState = artifact.manifest?.source?.license ? "pending" : "unknown";
+  const seedProvenanceDefaults = {
+    providerId: artifact.manifest?.source?.providerId ?? "openstreetmap",
+    providerName: artifact.manifest?.source?.providerName ?? "OpenStreetMap",
+    sourceDatasetId: artifact.manifest?.source?.sourceDatasetId ?? "openstreetmap",
+    sourceUrl: artifact.manifest?.source?.sourceUrl,
+    snapshotDate: artifact.manifest?.source?.snapshotDate,
+    snapshotChecksum: artifact.manifest?.source?.snapshotSha256,
+    license: artifact.manifest?.source?.license ?? "ODbL-1.0",
+    attribution: artifact.manifest?.source?.attribution ?? "OpenStreetMap contributors",
+    licenseState: "pending",
+    permissionStatus: "redistribution-unknown",
+    sourceLockState: osmSourceLockState,
+    redistributionEvidenceState: osmLicenseEvidenceState
+  };
 
   const layer = buildSettlementIdentityLayer({
     gameplayZones,
@@ -144,18 +160,7 @@ async function main() {
     identityLayerVersion: IDENTITY_LAYER_VERSION,
     generatedAt,
     boundaryMode: "covers",
-    defaultProvenance: {
-      providerId: artifact.manifest?.source?.providerId ?? "openstreetmap",
-      providerName: artifact.manifest?.source?.providerName ?? "OpenStreetMap",
-      sourceDatasetId: artifact.manifest?.source?.sourceDatasetId ?? "openstreetmap",
-      sourceUrl: artifact.manifest?.source?.sourceUrl,
-      snapshotDate: artifact.manifest?.source?.snapshotDate,
-      snapshotChecksum: artifact.manifest?.source?.snapshotSha256,
-      license: artifact.manifest?.source?.license ?? "ODbL-1.0",
-      attribution: artifact.manifest?.source?.attribution ?? "OpenStreetMap contributors",
-      licenseState: "approved",
-      permissionStatus: "redistribution-approved"
-    }
+    defaultProvenance: seedProvenanceDefaults
   });
 
   const lookup = createSettlementIdentityLookup({ layer });
@@ -238,11 +243,16 @@ async function main() {
       rc8Root: RC8_ROOT,
       barrierRoot: BARRIER_ROOT,
       osmSourceLock: sourceLock?.contentHash ?? null,
-      barrierManifestChecksum: artifact.manifest?.artifactChecksum ?? null
+      osmSourceLockState,
+      barrierManifestChecksum: artifact.manifest?.artifactChecksum ?? null,
+      missingSourceReasonCode: sourceLock?.contentHash ? undefined : "SOURCE_LOCK_MISSING"
     },
     licenseChecks: {
       osmLicense: artifact.manifest?.source?.license ?? "ODbL-1.0",
-      redistributionApproved: true,
+      licenseState: "pending",
+      permissionStatus: "redistribution-unknown",
+      redistributionApproved: false,
+      redistributionEvidenceState: osmLicenseEvidenceState,
       commercialUseRequiresSeparateReview: true,
       hostedTileDeliveryRequiresSeparateReview: true
     }
@@ -282,18 +292,7 @@ async function main() {
     identityLayerVersion: IDENTITY_LAYER_VERSION,
     generatedAt,
     boundaryMode: "covers",
-    defaultProvenance: {
-      providerId: artifact.manifest?.source?.providerId ?? "openstreetmap",
-      providerName: artifact.manifest?.source?.providerName ?? "OpenStreetMap",
-      sourceDatasetId: artifact.manifest?.source?.sourceDatasetId ?? "openstreetmap",
-      sourceUrl: artifact.manifest?.source?.sourceUrl,
-      snapshotDate: artifact.manifest?.source?.snapshotDate,
-      snapshotChecksum: artifact.manifest?.source?.snapshotSha256,
-      license: artifact.manifest?.source?.license ?? "ODbL-1.0",
-      attribution: artifact.manifest?.source?.attribution ?? "OpenStreetMap contributors",
-      licenseState: "approved",
-      permissionStatus: "redistribution-approved"
-    }
+    defaultProvenance: seedProvenanceDefaults
   });
   immutability.determinismVerified = repeatLayer.contentChecksum === layer.contentChecksum;
 
@@ -361,7 +360,9 @@ async function main() {
     },
     consumerContract: {
       lookup: "createSettlementIdentityLookup (@territory-kit/core)",
-      autoDisplayNameAllowedOnlyWhen: "zone summary associationStatus === single-candidate"
+      autoDisplayNameAllowedOnlyWhen:
+        "never for automatic seed associations; use consumerNameSemantics seed-locality-label with verificationState locality-seed",
+      reviewApprovalRequires: "explicit human review evidence (association method reviewed)"
     },
     nextIstanbulPilots: [
       {

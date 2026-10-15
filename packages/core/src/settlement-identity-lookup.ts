@@ -1,5 +1,6 @@
 import {
   resolveSettlementGeometryAvailability,
+  settlementHasLawfulPolygonEvidence,
   type GameplayTerritoryAssociation,
   type SettlementIdentity,
   type SettlementIdentityLayer
@@ -94,9 +95,7 @@ export function createSettlementIdentityLookup(
       const associations = associationsBySettlement.get(settlementId) ?? [];
       const zoneIds = [...new Set(associations.map((row) => row.zoneId))];
       const geometryAvailability = resolveSettlementGeometryAvailability(settlement);
-      const lawfulPolygonExists =
-        geometryAvailability === "official-polygon" ||
-        geometryAvailability === "osm-administrative-polygon";
+      const lawfulPolygonExists = settlementHasLawfulPolygonEvidence(settlement);
 
       return {
         settlement,

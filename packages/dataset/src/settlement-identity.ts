@@ -51,12 +51,30 @@ export const SETTLEMENT_PERMISSION_STATUSES = [
   "use-restricted"
 ] as const;
 
+export const SETTLEMENT_POLYGON_EVIDENCE_STATES = [
+  "verified-official-polygon",
+  "verified-osm-admin-polygon",
+  "none",
+  "unknown"
+] as const;
+
+export const SETTLEMENT_SOURCE_LOCK_STATES = ["verified", "pending", "unknown"] as const;
+
+export const SETTLEMENT_CONSUMER_NAME_SEMANTICS = [
+  "seed-locality-label",
+  "ambiguous-seed-labels",
+  "none"
+] as const;
+
 export type SettlementLocalityType = (typeof SETTLEMENT_LOCALITY_TYPES)[number];
 export type SettlementGeometryAvailability = (typeof SETTLEMENT_GEOMETRY_AVAILABILITY)[number];
 export type SettlementAssociationMethod = (typeof SETTLEMENT_ASSOCIATION_METHODS)[number];
 export type SettlementAssociationStatus = (typeof SETTLEMENT_ASSOCIATION_STATUSES)[number];
 export type SettlementVerificationState = (typeof SETTLEMENT_VERIFICATION_STATES)[number];
 export type SettlementPermissionStatus = (typeof SETTLEMENT_PERMISSION_STATUSES)[number];
+export type SettlementPolygonEvidenceState = (typeof SETTLEMENT_POLYGON_EVIDENCE_STATES)[number];
+export type SettlementSourceLockState = (typeof SETTLEMENT_SOURCE_LOCK_STATES)[number];
+export type SettlementConsumerNameSemantics = (typeof SETTLEMENT_CONSUMER_NAME_SEMANTICS)[number];
 
 export interface SettlementIdentitySourceProvenance {
   providerId: string;
@@ -70,6 +88,9 @@ export interface SettlementIdentitySourceProvenance {
   attribution?: string;
   licenseState: TerritoryLicenseState;
   permissionStatus: SettlementPermissionStatus;
+  /** Byte/source-lock evidence for the upstream snapshot; not inferred from license text alone. */
+  sourceLockState?: SettlementSourceLockState;
+  redistributionEvidenceState?: SettlementSourceLockState;
 }
 
 export interface SettlementIdentity {
@@ -88,6 +109,8 @@ export interface SettlementIdentity {
   administrativeStatus: "active" | "unknown";
   geometryAvailability: SettlementGeometryAvailability;
   geometryAvailabilityReasonCode?: string;
+  /** Independent polygon evidence; never inferred from verificationState alone. */
+  polygonEvidenceState: SettlementPolygonEvidenceState;
   confidence?: number;
 }
 
@@ -119,8 +142,12 @@ export interface SettlementIdentityZoneSummary {
   distinctSettlementIds: readonly string[];
   distinctNormalizedNames: readonly string[];
   associationStatus: SettlementAssociationStatus;
-  /** Consumer must not auto-apply a single mahalle display name when false. */
+  /**
+   * When true, a consumer may surface a single seed locality label with explicit seed semantics.
+   * Never implies official mahalle verification or human review approval.
+   */
   autoDisplayNameAllowed: boolean;
+  consumerNameSemantics: SettlementConsumerNameSemantics;
 }
 
 export interface SettlementIdentityLayer {
@@ -263,25 +290,18 @@ export function dedupeSettlementSeeds(
 }
 
 export function resolveSettlementGeometryAvailability(
-  settlement: Pick<SettlementIdentity, "verificationState" | "geometryAvailability">
+  settlement: Pick<SettlementIdentity, "geometryAvailability">
 ): SettlementGeometryAvailability {
-  if (settlement.geometryAvailability !== "unknown") {
-    return settlement.geometryAvailability;
-  }
+  return settlement.geometryAvailability;
+}
 
-  if (settlement.verificationState === "official-verified") {
-    return "official-polygon";
-  }
-
-  if (settlement.verificationState === "osm-sourced") {
-    return "osm-administrative-polygon";
-  }
-
-  if (settlement.verificationState === "locality-seed") {
-    return "seed-only";
-  }
-
-  return "unknown";
+export function settlementHasLawfulPolygonEvidence(
+  settlement: Pick<SettlementIdentity, "polygonEvidenceState">
+): boolean {
+  return (
+    settlement.polygonEvidenceState === "verified-official-polygon" ||
+    settlement.polygonEvidenceState === "verified-osm-admin-polygon"
+  );
 }
 
 export function buildSettlementIdentityLayer(
@@ -337,6 +357,7 @@ export function buildSettlementIdentityLayer(
       administrativeStatus: "unknown",
       geometryAvailability: "seed-only",
       geometryAvailabilityReasonCode: "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      polygonEvidenceState: "none",
       ...(seed.confidence === undefined ? {} : { confidence: seed.confidence })
     };
   });
@@ -364,6 +385,13 @@ export function buildSettlementIdentityLayer(
     }
 
     const zoneName = zone.name ?? zone.id;
+    const consumerNameSemantics: SettlementConsumerNameSemantics =
+      associationStatus === "single-candidate"
+        ? "seed-locality-label"
+        : associationStatus === "multiple-candidates"
+          ? "ambiguous-seed-labels"
+          : "none";
+
     zoneSummaries.push({
       zoneId: zone.id,
       zoneName,
@@ -371,7 +399,8 @@ export function buildSettlementIdentityLayer(
       distinctSettlementIds,
       distinctNormalizedNames,
       associationStatus,
-      autoDisplayNameAllowed: associationStatus === "single-candidate"
+      autoDisplayNameAllowed: false,
+      consumerNameSemantics
     });
 
     for (const seed of contained) {
@@ -428,7 +457,7 @@ export function buildSettlementIdentityLayer(
         gameplayDatasetVersion: options.gameplayDatasetVersion,
         gameplayGeometryHash: geometryHashes.get(zone.id) ?? hashTerritoryGeometry(zone.geometry),
         identityLayerVersion: options.identityLayerVersion,
-        reviewDecision: status === "single-candidate" ? "approved" : "pending",
+        reviewDecision: "pending",
         ...(reviewReasonCode ? { reviewReasonCode } : {})
       });
     }

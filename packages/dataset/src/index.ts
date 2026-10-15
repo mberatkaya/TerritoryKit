@@ -17,12 +17,16 @@ export {
   SETTLEMENT_IDENTITY_LAYER_SCHEMA_VERSION,
   SETTLEMENT_LOCALITY_TYPES,
   SETTLEMENT_PERMISSION_STATUSES,
+  SETTLEMENT_POLYGON_EVIDENCE_STATES,
+  SETTLEMENT_SOURCE_LOCK_STATES,
+  SETTLEMENT_CONSUMER_NAME_SEMANTICS,
   SETTLEMENT_VERIFICATION_STATES,
   buildSettlementIdentityLayer,
   createSettlementIdFromSeed,
   dedupeSettlementSeeds,
   normalizeTurkishSettlementName,
-  resolveSettlementGeometryAvailability
+  resolveSettlementGeometryAvailability,
+  settlementHasLawfulPolygonEvidence
 } from "./settlement-identity.js";
 export {
   applyTerritoryAdjacencyOverrides,

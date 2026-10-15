@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-identity-sprint-2c-decision@1",
-  "generatedAt": "2026-10-15T18:54:16.018Z",
+  "generatedAt": "2026-10-15T19:55:32.901Z",
   "district": "Fatih",
   "parentAdm2Id": "tr:adm2:54988432b39641834885080",
   "technicalPilotDecision": "GO_WITH_REVIEW",
@@ -22,11 +22,12 @@
     "determinismVerified": true,
     "zoneIdSetSha256": "334ba60d9e4bf65c2acfce7d3724e7bf430ec082ad897459a902c19d3660852f",
     "geometryHashSetSha256": "3b4c2dd9214f6aa1023277a3426e100bd9c2902f5c06e4a49b2478e462866645",
-    "identityLayerContentChecksum": "fnv1a32:39d43195"
+    "identityLayerContentChecksum": "fnv1a32:59928ca0"
   },
   "consumerContract": {
     "lookup": "createSettlementIdentityLookup (@territory-kit/core)",
-    "autoDisplayNameAllowedOnlyWhen": "zone summary associationStatus === single-candidate"
+    "autoDisplayNameAllowedOnlyWhen": "never for automatic seed associations; use consumerNameSemantics seed-locality-label with verificationState locality-seed",
+    "reviewApprovalRequires": "explicit human review evidence (association method reviewed)"
   },
   "nextIstanbulPilots": [
     {
@@ -62,7 +63,7 @@
           "gameplayDatasetVersion": "2.1.0-rc.8",
           "gameplayGeometryHash": "fnv1a32:2aba73f2",
           "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-          "reviewDecision": "approved"
+          "reviewDecision": "pending"
         }
       ],
       "settlements": [
@@ -85,8 +86,10 @@
             "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
             "license": "ODbL-1.0",
             "attribution": "OpenStreetMap contributors, ODbL 1.0",
-            "licenseState": "approved",
-            "permissionStatus": "redistribution-approved",
+            "licenseState": "pending",
+            "permissionStatus": "redistribution-unknown",
+            "sourceLockState": "unknown",
+            "redistributionEvidenceState": "pending",
             "sourceNativeId": "osm:node:4996909359"
           },
           "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -95,18 +98,19 @@
           "administrativeStatus": "unknown",
           "geometryAvailability": "seed-only",
           "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+          "polygonEvidenceState": "none",
           "confidence": 0.58
         }
       ],
       "associationStatus": "single-candidate",
       "isAmbiguous": false,
-      "autoDisplayNameAllowed": true
+      "autoDisplayNameAllowed": false
     },
     "layerVersion": {
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
       "gameplayDatasetVersion": "2.1.0-rc.8",
-      "contentChecksum": "fnv1a32:39d43195",
-      "generatedAt": "2026-10-15T18:54:16.018Z"
+      "contentChecksum": "fnv1a32:59928ca0",
+      "generatedAt": "2026-10-15T19:55:32.901Z"
     }
   }
 }

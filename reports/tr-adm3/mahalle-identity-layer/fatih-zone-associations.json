@@ -1,9 +1,9 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-zone-associations@1",
-  "generatedAt": "2026-10-15T18:54:16.018Z",
+  "generatedAt": "2026-10-15T19:55:32.901Z",
   "parentAdm2Id": "tr:adm2:54988432b39641834885080",
   "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-  "contentChecksum": "fnv1a32:39d43195",
+  "contentChecksum": "fnv1a32:59928ca0",
   "boundaryMode": "covers",
   "associations": [
     {
@@ -22,7 +22,7 @@
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "gameplayGeometryHash": "fnv1a32:2aba73f2",
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "reviewDecision": "approved"
+      "reviewDecision": "pending"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-073b672500565ae4fb3e",
@@ -78,7 +78,7 @@
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "gameplayGeometryHash": "fnv1a32:47998679",
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "reviewDecision": "approved"
+      "reviewDecision": "pending"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-290699f58ea199c88a63",
@@ -210,7 +210,7 @@
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "gameplayGeometryHash": "fnv1a32:34e63b2c",
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "reviewDecision": "approved"
+      "reviewDecision": "pending"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-59f9cd89af41c5776554",
@@ -684,7 +684,7 @@
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "gameplayGeometryHash": "fnv1a32:d8189e3a",
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "reviewDecision": "approved"
+      "reviewDecision": "pending"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-9f83a09e877b09576ca7",
@@ -797,7 +797,7 @@
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "gameplayGeometryHash": "fnv1a32:622c0258",
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "reviewDecision": "approved"
+      "reviewDecision": "pending"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b3e509aaad7fa40c97c0",
@@ -853,7 +853,7 @@
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "gameplayGeometryHash": "fnv1a32:9ee3bbf3",
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "reviewDecision": "approved"
+      "reviewDecision": "pending"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b699d521a866aa6875c3",
@@ -871,7 +871,7 @@
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "gameplayGeometryHash": "fnv1a32:3e0cc4f2",
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "reviewDecision": "approved"
+      "reviewDecision": "pending"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-bf7df56ae203fd5afe33",
@@ -1231,7 +1231,7 @@
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "gameplayGeometryHash": "fnv1a32:6a3e4ef0",
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "reviewDecision": "approved"
+      "reviewDecision": "pending"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dacb79746e8604409768",
@@ -1249,7 +1249,7 @@
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "gameplayGeometryHash": "fnv1a32:21dea086",
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "reviewDecision": "approved"
+      "reviewDecision": "pending"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dc4135f5abb73435480a",
@@ -1305,7 +1305,7 @@
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "gameplayGeometryHash": "fnv1a32:2da59a32",
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "reviewDecision": "approved"
+      "reviewDecision": "pending"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-f24cd8558fe73d01e2b4",
@@ -1354,7 +1354,8 @@
       "distinctSettlementIds": ["tr:settlement:osm:node:4996909359"],
       "distinctNormalizedNames": ["topkapı"],
       "associationStatus": "single-candidate",
-      "autoDisplayNameAllowed": true
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "seed-locality-label"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-073b672500565ae4fb3e",
@@ -1366,7 +1367,8 @@
       ],
       "distinctNormalizedNames": ["koca mustafapaşa", "samatya"],
       "associationStatus": "multiple-candidates",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-08c523104fbe1e7feb3d",
@@ -1375,7 +1377,8 @@
       "distinctSettlementIds": ["tr:settlement:osm:node:4999341426"],
       "distinctNormalizedNames": ["akşemsettin"],
       "associationStatus": "single-candidate",
-      "autoDisplayNameAllowed": true
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "seed-locality-label"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-13d94a01ceafb0ce5169",
@@ -1384,7 +1387,8 @@
       "distinctSettlementIds": [],
       "distinctNormalizedNames": [],
       "associationStatus": "unseeded",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-290699f58ea199c88a63",
@@ -1397,7 +1401,8 @@
       ],
       "distinctNormalizedNames": ["cibali", "küçükmustafapaşa", "zeyrek"],
       "associationStatus": "multiple-candidates",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-2b5978834366688ae645",
@@ -1410,7 +1415,8 @@
       ],
       "distinctNormalizedNames": ["ali kuşçu", "fatih", "yavuz sultan selim"],
       "associationStatus": "multiple-candidates",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-34d0c14106436af5f5a6",
@@ -1419,7 +1425,8 @@
       "distinctSettlementIds": ["tr:settlement:osm:node:4947158636"],
       "distinctNormalizedNames": ["seyyid ömer"],
       "associationStatus": "single-candidate",
-      "autoDisplayNameAllowed": true
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "seed-locality-label"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-57c6546b8d8c52e3ca2f",
@@ -1428,7 +1435,8 @@
       "distinctSettlementIds": [],
       "distinctNormalizedNames": [],
       "associationStatus": "unseeded",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-59f9cd89af41c5776554",
@@ -1440,7 +1448,8 @@
       ],
       "distinctNormalizedNames": ["binbirdirek", "küçük ayasofya"],
       "associationStatus": "multiple-candidates",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-67991e44ab1c9e28442b",
@@ -1454,7 +1463,8 @@
       ],
       "distinctNormalizedNames": ["katip kasım", "kemalpaşa", "laleli", "mesihpaşa"],
       "associationStatus": "multiple-candidates",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-701b712ba93c285dfee4",
@@ -1463,7 +1473,8 @@
       "distinctSettlementIds": [],
       "distinctNormalizedNames": [],
       "associationStatus": "unseeded",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-78efecad6d2ae4ccd2ec",
@@ -1498,7 +1509,8 @@
         "taya hatun"
       ],
       "associationStatus": "multiple-candidates",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-88ec65114d7d0e51d713",
@@ -1521,7 +1533,8 @@
         "şehsuvar bey"
       ],
       "associationStatus": "multiple-candidates",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-8eebe5599fbf67d5bc23",
@@ -1530,7 +1543,8 @@
       "distinctSettlementIds": ["tr:settlement:osm:node:4999341452"],
       "distinctNormalizedNames": ["yedikule"],
       "associationStatus": "single-candidate",
-      "autoDisplayNameAllowed": true
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "seed-locality-label"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-9f83a09e877b09576ca7",
@@ -1542,7 +1556,8 @@
       ],
       "distinctNormalizedNames": ["silivrikapı", "sümbül efendi"],
       "associationStatus": "multiple-candidates",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ae51c43e7a16247111a1",
@@ -1555,7 +1570,8 @@
       ],
       "distinctNormalizedNames": ["aksaray", "cerrahpaşa", "haseki sultan"],
       "associationStatus": "multiple-candidates",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b0035a2eaa3b83222d33",
@@ -1564,7 +1580,8 @@
       "distinctSettlementIds": [],
       "distinctNormalizedNames": [],
       "associationStatus": "unseeded",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b05a48a15e5125cdf298",
@@ -1573,7 +1590,8 @@
       "distinctSettlementIds": ["tr:settlement:osm:node:6318210483"],
       "distinctNormalizedNames": ["akdeniz"],
       "associationStatus": "single-candidate",
-      "autoDisplayNameAllowed": true
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "seed-locality-label"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b3e509aaad7fa40c97c0",
@@ -1585,7 +1603,8 @@
       ],
       "distinctNormalizedNames": ["hırka-i şerif", "karagümrük"],
       "associationStatus": "multiple-candidates",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b5ae85dbcb276cc5da0b",
@@ -1594,7 +1613,8 @@
       "distinctSettlementIds": ["tr:settlement:osm:node:4999341447"],
       "distinctNormalizedNames": ["molla gürani"],
       "associationStatus": "single-candidate",
-      "autoDisplayNameAllowed": true
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "seed-locality-label"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b699d521a866aa6875c3",
@@ -1603,7 +1623,8 @@
       "distinctSettlementIds": ["tr:settlement:osm:node:4999341446"],
       "distinctNormalizedNames": ["atikali"],
       "associationStatus": "single-candidate",
-      "autoDisplayNameAllowed": true
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "seed-locality-label"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b869ea01a2bad0439ea4",
@@ -1612,7 +1633,8 @@
       "distinctSettlementIds": [],
       "distinctNormalizedNames": [],
       "associationStatus": "unseeded",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-bf7df56ae203fd5afe33",
@@ -1626,7 +1648,8 @@
       ],
       "distinctNormalizedNames": ["kumkapı", "muhsine hatun", "sultan ahmet", "yenikapı"],
       "associationStatus": "multiple-candidates",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-c760995c457452ed71a1",
@@ -1659,7 +1682,8 @@
         "yavuz sinan"
       ],
       "associationStatus": "multiple-candidates",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-cbeb5278a71425ce7202",
@@ -1672,7 +1696,8 @@
       ],
       "distinctNormalizedNames": ["alemdar", "cankurtaran", "hocapaşa"],
       "associationStatus": "multiple-candidates",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ce3a6d0f0ea5c4667c87",
@@ -1681,7 +1706,8 @@
       "distinctSettlementIds": ["tr:settlement:osm:node:4947158632"],
       "distinctNormalizedNames": ["iskenderpaşa"],
       "associationStatus": "single-candidate",
-      "autoDisplayNameAllowed": true
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "seed-locality-label"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dacb79746e8604409768",
@@ -1690,7 +1716,8 @@
       "distinctSettlementIds": ["tr:settlement:osm:node:4947158668"],
       "distinctNormalizedNames": ["şehremini"],
       "associationStatus": "single-candidate",
-      "autoDisplayNameAllowed": true
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "seed-locality-label"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dc4135f5abb73435480a",
@@ -1702,7 +1729,8 @@
       ],
       "distinctNormalizedNames": ["balat", "fener"],
       "associationStatus": "multiple-candidates",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-de3555218fb370c42fd2",
@@ -1711,7 +1739,8 @@
       "distinctSettlementIds": ["tr:settlement:osm:node:4999341453"],
       "distinctNormalizedNames": ["mevlanakapı"],
       "associationStatus": "single-candidate",
-      "autoDisplayNameAllowed": true
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "seed-locality-label"
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-f24cd8558fe73d01e2b4",
@@ -1723,7 +1752,8 @@
       ],
       "distinctNormalizedNames": ["ayvansaray", "derviş ali"],
       "associationStatus": "multiple-candidates",
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
     }
   ]
 }

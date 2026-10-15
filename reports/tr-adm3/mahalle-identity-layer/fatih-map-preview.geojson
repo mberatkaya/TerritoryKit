@@ -8,7 +8,7 @@
         "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-01eda0ae60d28fc3a2c7",
         "zoneName": "Topkapı",
         "associationStatus": "single-candidate",
-        "autoDisplayNameAllowed": true,
+        "autoDisplayNameAllowed": false,
         "geometryHash": "fnv1a32:2aba73f2"
       },
       "geometry": {
@@ -261,7 +261,7 @@
         "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-08c523104fbe1e7feb3d",
         "zoneName": "Akşemsettin",
         "associationStatus": "single-candidate",
-        "autoDisplayNameAllowed": true,
+        "autoDisplayNameAllowed": false,
         "geometryHash": "fnv1a32:47998679"
       },
       "geometry": {
@@ -886,7 +886,7 @@
         "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-34d0c14106436af5f5a6",
         "zoneName": "Seyyid Ömer",
         "associationStatus": "single-candidate",
-        "autoDisplayNameAllowed": true,
+        "autoDisplayNameAllowed": false,
         "geometryHash": "fnv1a32:34e63b2c"
       },
       "geometry": {
@@ -2124,7 +2124,7 @@
         "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-8eebe5599fbf67d5bc23",
         "zoneName": "Yedikule",
         "associationStatus": "single-candidate",
-        "autoDisplayNameAllowed": true,
+        "autoDisplayNameAllowed": false,
         "geometryHash": "fnv1a32:d8189e3a"
       },
       "geometry": {
@@ -2832,7 +2832,7 @@
         "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b05a48a15e5125cdf298",
         "zoneName": "Akdeniz",
         "associationStatus": "single-candidate",
-        "autoDisplayNameAllowed": true,
+        "autoDisplayNameAllowed": false,
         "geometryHash": "fnv1a32:622c0258"
       },
       "geometry": {
@@ -3079,7 +3079,7 @@
         "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b5ae85dbcb276cc5da0b",
         "zoneName": "Molla Gürani",
         "associationStatus": "single-candidate",
-        "autoDisplayNameAllowed": true,
+        "autoDisplayNameAllowed": false,
         "geometryHash": "fnv1a32:9ee3bbf3"
       },
       "geometry": {
@@ -3209,7 +3209,7 @@
         "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b699d521a866aa6875c3",
         "zoneName": "Atikali",
         "associationStatus": "single-candidate",
-        "autoDisplayNameAllowed": true,
+        "autoDisplayNameAllowed": false,
         "geometryHash": "fnv1a32:3e0cc4f2"
       },
       "geometry": {
@@ -4851,7 +4851,7 @@
         "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ce3a6d0f0ea5c4667c87",
         "zoneName": "İskenderpaşa",
         "associationStatus": "single-candidate",
-        "autoDisplayNameAllowed": true,
+        "autoDisplayNameAllowed": false,
         "geometryHash": "fnv1a32:6a3e4ef0"
       },
       "geometry": {
@@ -5076,7 +5076,7 @@
         "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dacb79746e8604409768",
         "zoneName": "Şehremini",
         "associationStatus": "single-candidate",
-        "autoDisplayNameAllowed": true,
+        "autoDisplayNameAllowed": false,
         "geometryHash": "fnv1a32:21dea086"
       },
       "geometry": {
@@ -5442,7 +5442,7 @@
         "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-de3555218fb370c42fd2",
         "zoneName": "Mevlanakapı",
         "associationStatus": "single-candidate",
-        "autoDisplayNameAllowed": true,
+        "autoDisplayNameAllowed": false,
         "geometryHash": "fnv1a32:2da59a32"
       },
       "geometry": {

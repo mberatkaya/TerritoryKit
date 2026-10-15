@@ -1,9 +1,9 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-settlement-identities@1",
-  "generatedAt": "2026-10-15T18:54:16.018Z",
+  "generatedAt": "2026-10-15T19:55:32.901Z",
   "parentAdm2Id": "tr:adm2:54988432b39641834885080",
   "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-  "contentChecksum": "fnv1a32:39d43195",
+  "contentChecksum": "fnv1a32:59928ca0",
   "settlements": [
     {
       "settlementId": "tr:settlement:osm:node:6318210483",
@@ -24,8 +24,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:6318210483"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -34,6 +36,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.72
     },
     {
@@ -55,8 +58,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999339820"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -65,6 +70,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -86,8 +92,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341426"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -96,6 +104,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -117,8 +126,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341435"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -127,6 +138,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -148,8 +160,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341428"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -158,6 +172,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -179,8 +194,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341446"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -189,6 +206,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -210,8 +228,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4947158624"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -220,6 +240,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -241,8 +262,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341431"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -251,6 +274,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -272,8 +296,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341422"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -282,6 +308,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -303,8 +330,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341436"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -313,6 +342,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -334,8 +364,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341455"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -344,6 +376,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -365,8 +398,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:14067649003"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -375,6 +410,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.72
     },
     {
@@ -396,8 +432,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999339815"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -406,6 +444,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -427,8 +466,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4996909326"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -437,6 +478,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -458,8 +500,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999339819"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -468,6 +512,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -489,8 +534,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341432"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -499,6 +546,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -520,8 +568,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4947158665"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -530,6 +580,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -551,8 +602,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341434"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -561,6 +614,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -582,8 +636,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:6310508017"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -592,6 +648,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.72
     },
     {
@@ -613,8 +670,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:26504810"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -623,6 +682,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -644,8 +704,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:6093191297"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -654,6 +716,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.72
     },
     {
@@ -675,8 +738,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4947158666"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -685,6 +750,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -706,8 +772,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4996909325"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -716,6 +784,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -737,8 +806,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999339818"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -747,6 +818,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -768,8 +840,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999339816"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -778,6 +852,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -799,8 +874,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999339805"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -809,6 +886,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -830,8 +908,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999339808"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -840,6 +920,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -861,8 +942,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4947158632"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -871,6 +954,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -892,8 +976,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4996909339"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -902,6 +988,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -923,8 +1010,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341427"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -933,6 +1022,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -954,8 +1044,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999339811"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -964,6 +1056,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -985,8 +1078,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341438"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -995,6 +1090,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1016,8 +1112,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999339810"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1026,6 +1124,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1047,8 +1146,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:6315573196"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1057,6 +1158,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.72
     },
     {
@@ -1078,8 +1180,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341441"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1088,6 +1192,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1109,8 +1214,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:6320765720"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1119,6 +1226,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.72
     },
     {
@@ -1140,8 +1248,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:6315581139"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1150,6 +1260,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.72
     },
     {
@@ -1171,8 +1282,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:6311605509"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1181,6 +1294,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.72
     },
     {
@@ -1202,8 +1316,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4947158637"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1212,6 +1328,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1233,8 +1350,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999339813"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1243,6 +1362,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1264,8 +1384,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341453"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1274,6 +1396,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1295,8 +1418,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999339806"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1305,6 +1430,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1326,8 +1452,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341442"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1336,6 +1464,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1357,8 +1486,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999339807"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1367,6 +1498,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1388,8 +1520,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341447"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1398,6 +1532,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1419,8 +1554,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4996909340"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1429,6 +1566,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1450,8 +1588,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341444"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1460,6 +1600,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1481,8 +1622,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341445"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1491,6 +1634,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1512,8 +1656,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4996909348"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1522,6 +1668,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1543,8 +1690,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:6318171354"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1553,6 +1702,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.72
     },
     {
@@ -1574,8 +1724,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999339812"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1584,6 +1736,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1605,8 +1758,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999339809"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1615,6 +1770,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1636,8 +1792,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4947158636"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1646,6 +1804,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1667,8 +1826,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341450"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1677,6 +1838,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1698,8 +1860,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:7863036213"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1708,6 +1872,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.72
     },
     {
@@ -1729,8 +1894,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999339814"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1739,6 +1906,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1760,8 +1928,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341456"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1770,6 +1940,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1791,8 +1962,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341449"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1801,6 +1974,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1822,8 +1996,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4947158661"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1832,6 +2008,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1853,8 +2030,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4947158668"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1863,6 +2042,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1884,8 +2064,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341443"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1894,6 +2076,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1915,8 +2098,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4947158644"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1925,6 +2110,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1946,8 +2132,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4947158664"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1956,6 +2144,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -1977,8 +2166,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4996909359"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -1987,6 +2178,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -2008,8 +2200,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:269753710"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -2018,6 +2212,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.72
     },
     {
@@ -2039,8 +2234,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:6315827801"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -2049,6 +2246,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.72
     },
     {
@@ -2070,8 +2268,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4947158640"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -2080,6 +2280,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -2101,8 +2302,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341423"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -2111,6 +2314,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -2132,8 +2336,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4999341452"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -2142,6 +2348,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     },
     {
@@ -2163,8 +2370,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:7863036212"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -2173,6 +2382,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.72
     },
     {
@@ -2194,8 +2404,10 @@
         "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
         "license": "ODbL-1.0",
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
-        "licenseState": "approved",
-        "permissionStatus": "redistribution-approved",
+        "licenseState": "pending",
+        "permissionStatus": "redistribution-unknown",
+        "sourceLockState": "unknown",
+        "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4947158667"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
@@ -2204,6 +2416,7 @@
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
       "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+      "polygonEvidenceState": "none",
       "confidence": 0.58
     }
   ]
