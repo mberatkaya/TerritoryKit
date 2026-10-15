@@ -79,6 +79,7 @@ describe("createSettlementIdentityLookup", () => {
     const zoneView = lookup.listSettlementsForZone("z-a");
     expect(zoneView.settlements).toHaveLength(1);
     expect(zoneView.autoDisplayNameAllowed).toBe(false);
+    expect(zoneView.zoneResolution).toBe("associated");
     expect(zoneView.associations.every((row) => row.reviewDecision === "pending")).toBe(true);
     expect(zoneView.isAmbiguous).toBe(false);
 

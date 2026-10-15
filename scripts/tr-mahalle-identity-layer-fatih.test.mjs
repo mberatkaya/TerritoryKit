@@ -53,4 +53,13 @@ test("Fatih mahalle identity committed reports preserve geometry immutability co
     coverage.officialPolygonCoverage.settlementCountSeedOnly,
     EXPECTED_IMMUTABILITY.distinctSeedsRepresented
   );
+
+  const consumerPin = JSON.parse(await readFile(`${REPORT_DIR}/fatih-consumer-pin.json`, "utf8"));
+  assert.equal(consumerPin.zoneIdSetSha256, EXPECTED_IMMUTABILITY.zoneIdSetSha256);
+  assert.equal(consumerPin.geometryHashSetSha256, EXPECTED_IMMUTABILITY.geometryHashSetSha256);
+  assert.equal(consumerPin.associationCounts.zoneCount, EXPECTED_IMMUTABILITY.zoneCount);
+  assert.equal(
+    consumerPin.associationCounts.settlementCount,
+    EXPECTED_IMMUTABILITY.distinctSeedsRepresented
+  );
 });

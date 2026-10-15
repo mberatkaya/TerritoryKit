@@ -1,9 +1,9 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-zone-associations@1",
-  "generatedAt": "2026-10-15T19:55:32.901Z",
+  "generatedAt": "2026-10-15T21:59:26.873Z",
   "parentAdm2Id": "tr:adm2:54988432b39641834885080",
   "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-  "contentChecksum": "fnv1a32:59928ca0",
+  "contentChecksum": "fnv1a32:c85fa5eb",
   "boundaryMode": "covers",
   "associations": [
     {

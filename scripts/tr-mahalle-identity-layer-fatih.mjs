@@ -317,6 +317,28 @@ async function main() {
   };
 
   const mapPreview = buildMapPreviewGeoJson(layer, gameplayZones);
+  const consumerPin = {
+    schemaVersion: "territorykit-tr-mahalle-identity-consumer-pin@1",
+    district: "Fatih",
+    parentAdm2Id: PARENT_ADM2_ID,
+    gameplayDatasetId: baselineDataset.manifest?.datasetId ?? "territory-kit-tr-v2-playable",
+    gameplayDatasetVersion: layer.gameplayDatasetVersion,
+    zoneIdSetSha256: immutability.zoneIdSetSha256,
+    geometryHashSetSha256: immutability.geometryHashSetSha256,
+    identityLayerContentChecksum: layer.contentChecksum,
+    associationCounts: {
+      zoneCount: metrics.zoneCount,
+      settlementCount: layer.settlements.length,
+      ambiguousZoneCount: metrics.ambiguousZoneCount,
+      singleCandidateZoneCount: metrics.singleSeedZoneCount,
+      unseededZoneCount: metrics.unseededZoneCount
+    },
+    sourceExpectations: {
+      requireSourceLockVerified: false,
+      missingSourceReasonCode: sourceLock?.contentHash ? undefined : "SOURCE_LOCK_MISSING",
+      osmSnapshotChecksum: artifact.manifest?.source?.snapshotSha256 ?? null
+    }
+  };
 
   await mkdir(join(REPO_ROOT, REPORT_ROOT), { recursive: true });
   const outputs = [
@@ -326,7 +348,8 @@ async function main() {
     ["fatih-coverage-and-provenance.json", coverage],
     ["fatih-geometry-immutability.json", immutability],
     ["fatih-map-preview.geojson", mapPreview],
-    ["fatih-identity-layer.json", layer]
+    ["fatih-identity-layer.json", layer],
+    ["fatih-consumer-pin.json", consumerPin]
   ];
 
   for (const [name, payload] of outputs) {
@@ -359,7 +382,7 @@ async function main() {
       identityLayerContentChecksum: layer.contentChecksum
     },
     consumerContract: {
-      lookup: "createSettlementIdentityLookup (@territory-kit/core)",
+      lookup: "loadSettlementIdentityConsumer (@territory-kit/core)",
       autoDisplayNameAllowedOnlyWhen:
         "never for automatic seed associations; use consumerNameSemantics seed-locality-label with verificationState locality-seed",
       reviewApprovalRequires: "explicit human review evidence (association method reviewed)"

@@ -19,7 +19,7 @@
 
 - Zone ID set SHA-256: `334ba60d9e4bf65c2acfce7d3724e7bf430ec082ad897459a902c19d3660852f`
 - Geometry hash set SHA-256: `3b4c2dd9214f6aa1023277a3426e100bd9c2902f5c06e4a49b2478e462866645`
-- Identity layer checksum: `fnv1a32:59928ca0`
+- Identity layer checksum: `fnv1a32:c85fa5eb`
 - Determinism verified: **true**
 
 ## Alternative B preview comparison

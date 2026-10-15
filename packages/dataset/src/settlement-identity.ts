@@ -76,6 +76,13 @@ export type SettlementPolygonEvidenceState = (typeof SETTLEMENT_POLYGON_EVIDENCE
 export type SettlementSourceLockState = (typeof SETTLEMENT_SOURCE_LOCK_STATES)[number];
 export type SettlementConsumerNameSemantics = (typeof SETTLEMENT_CONSUMER_NAME_SEMANTICS)[number];
 
+export interface SettlementPolygonEvidence {
+  geometryFingerprint: string;
+  sourceNativeId: string;
+  rightsEvidenceState: SettlementSourceLockState;
+  providerId: string;
+}
+
 export interface SettlementIdentitySourceProvenance {
   providerId: string;
   providerName?: string;
@@ -95,6 +102,10 @@ export interface SettlementIdentitySourceProvenance {
 
 export interface SettlementIdentity {
   settlementId: string;
+  /** Provider-qualified upstream reference; names alone are never identities. */
+  sourceReferenceId: string;
+  /** Stable cross-snapshot identity key (provider + native id + snapshot + parent). */
+  canonicalIdentityKey: string;
   displayName: string;
   normalizedName: string;
   localityType: SettlementLocalityType;
@@ -111,6 +122,7 @@ export interface SettlementIdentity {
   geometryAvailabilityReasonCode?: string;
   /** Independent polygon evidence; never inferred from verificationState alone. */
   polygonEvidenceState: SettlementPolygonEvidenceState;
+  polygonEvidence?: SettlementPolygonEvidence;
   confidence?: number;
 }
 
@@ -296,12 +308,40 @@ export function resolveSettlementGeometryAvailability(
 }
 
 export function settlementHasLawfulPolygonEvidence(
-  settlement: Pick<SettlementIdentity, "polygonEvidenceState">
+  settlement: Pick<SettlementIdentity, "polygonEvidenceState" | "polygonEvidence">
 ): boolean {
-  return (
-    settlement.polygonEvidenceState === "verified-official-polygon" ||
-    settlement.polygonEvidenceState === "verified-osm-admin-polygon"
-  );
+  if (
+    settlement.polygonEvidenceState !== "verified-official-polygon" &&
+    settlement.polygonEvidenceState !== "verified-osm-admin-polygon"
+  ) {
+    return false;
+  }
+
+  const evidence = settlement.polygonEvidence;
+  if (!evidence) {
+    return false;
+  }
+
+  if (!evidence.geometryFingerprint.trim() || !evidence.sourceNativeId.trim()) {
+    return false;
+  }
+
+  if (evidence.rightsEvidenceState !== "verified") {
+    return false;
+  }
+
+  if (!evidence.providerId.trim()) {
+    return false;
+  }
+
+  return true;
+}
+
+export function computeSettlementIdentityLayerContentChecksum(
+  layer: SettlementIdentityLayer
+): string {
+  const { contentChecksum: _ignored, ...layerWithoutChecksum } = layer;
+  return `fnv1a32:${fnv1a32Hex(stableStringify(layerWithoutChecksum))}`;
 }
 
 export function buildSettlementIdentityLayer(
@@ -329,8 +369,20 @@ export function buildSettlementIdentityLayer(
     const settlementId = createSettlementIdFromSeed(seed);
     const normalizedName = normalizeTurkishSettlementName(seed.name);
     const sourceNativeId = seed.sourceId?.trim() || seed.id?.trim() || settlementId;
+    const providerId = options.defaultProvenance.providerId;
+    const sourceReferenceId = `${providerId}:${sourceNativeId}`;
+    const canonicalIdentityKey = `fnv1a32:${fnv1a32Hex(
+      stableStringify({
+        providerId,
+        sourceNativeId,
+        snapshotChecksum: options.defaultProvenance.snapshotChecksum ?? null,
+        parentAdm2Id: options.parentAdm2Zone.id
+      })
+    )}`;
     const identityPayload = {
       settlementId,
+      sourceReferenceId,
+      canonicalIdentityKey,
       displayName: seed.name.trim(),
       normalizedName,
       localityType: seed.type ?? "unknown",
@@ -476,10 +528,12 @@ export function buildSettlementIdentityLayer(
     zoneSummaries
   };
 
-  return {
+  const built: SettlementIdentityLayer = {
     ...layerWithoutChecksum,
-    contentChecksum: `fnv1a32:${fnv1a32Hex(stableStringify(layerWithoutChecksum))}`
+    contentChecksum: ""
   };
+  built.contentChecksum = computeSettlementIdentityLayerContentChecksum(built);
+  return built;
 }
 
 function compareSeeds(

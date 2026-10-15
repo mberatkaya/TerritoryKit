@@ -1,7 +1,7 @@
 {
   "schemaVersion": "territorykit-settlement-identity-layer@1",
   "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-  "generatedAt": "2026-10-15T19:55:32.901Z",
+  "generatedAt": "2026-10-15T21:59:26.873Z",
   "parentAdm2Id": "tr:adm2:54988432b39641834885080",
   "gameplayDatasetVersion": "2.1.0-rc.8",
   "gameplayZoneCount": 30,
@@ -9,6 +9,8 @@
   "settlements": [
     {
       "settlementId": "tr:settlement:osm:node:6318210483",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:6318210483",
+      "canonicalIdentityKey": "fnv1a32:2e8a9b53",
       "displayName": "Akdeniz",
       "normalizedName": "akdeniz",
       "localityType": "quarter",
@@ -33,7 +35,7 @@
         "sourceNativeId": "osm:node:6318210483"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:24dad9e6",
+      "identityChecksum": "fnv1a32:c9521f7e",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -43,6 +45,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999339820",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999339820",
+      "canonicalIdentityKey": "fnv1a32:697eceb9",
       "displayName": "Aksaray",
       "normalizedName": "aksaray",
       "localityType": "suburb",
@@ -67,7 +71,7 @@
         "sourceNativeId": "osm:node:4999339820"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:c76f5e52",
+      "identityChecksum": "fnv1a32:c1d86b87",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -77,6 +81,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341426",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341426",
+      "canonicalIdentityKey": "fnv1a32:c01b646a",
       "displayName": "Akşemsettin",
       "normalizedName": "akşemsettin",
       "localityType": "suburb",
@@ -101,7 +107,7 @@
         "sourceNativeId": "osm:node:4999341426"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:05f1a51f",
+      "identityChecksum": "fnv1a32:ae851c70",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -111,6 +117,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341435",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341435",
+      "canonicalIdentityKey": "fnv1a32:76bf347a",
       "displayName": "Alemdar",
       "normalizedName": "alemdar",
       "localityType": "suburb",
@@ -135,7 +143,7 @@
         "sourceNativeId": "osm:node:4999341435"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:0f851b90",
+      "identityChecksum": "fnv1a32:05415974",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -145,6 +153,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341428",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341428",
+      "canonicalIdentityKey": "fnv1a32:b0c2f660",
       "displayName": "Ali Kuşçu",
       "normalizedName": "ali kuşçu",
       "localityType": "suburb",
@@ -169,7 +179,7 @@
         "sourceNativeId": "osm:node:4999341428"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:68dca2e2",
+      "identityChecksum": "fnv1a32:81e26fff",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -179,6 +189,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341446",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341446",
+      "canonicalIdentityKey": "fnv1a32:28f0bcd8",
       "displayName": "Atikali",
       "normalizedName": "atikali",
       "localityType": "suburb",
@@ -203,7 +215,7 @@
         "sourceNativeId": "osm:node:4999341446"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:7d520108",
+      "identityChecksum": "fnv1a32:f6be9583",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -213,6 +225,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4947158624",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4947158624",
+      "canonicalIdentityKey": "fnv1a32:408ef2d5",
       "displayName": "Ayvansaray",
       "normalizedName": "ayvansaray",
       "localityType": "suburb",
@@ -237,7 +251,7 @@
         "sourceNativeId": "osm:node:4947158624"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:fdfd6548",
+      "identityChecksum": "fnv1a32:f42cf81d",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -247,6 +261,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341431",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341431",
+      "canonicalIdentityKey": "fnv1a32:2a59904e",
       "displayName": "Balabanağa",
       "normalizedName": "balabanağa",
       "localityType": "suburb",
@@ -271,7 +287,7 @@
         "sourceNativeId": "osm:node:4999341431"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:bdf93daa",
+      "identityChecksum": "fnv1a32:050ac2b5",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -281,6 +297,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341422",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341422",
+      "canonicalIdentityKey": "fnv1a32:73b5c03e",
       "displayName": "Balat",
       "normalizedName": "balat",
       "localityType": "suburb",
@@ -305,7 +323,7 @@
         "sourceNativeId": "osm:node:4999341422"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:b40236ec",
+      "identityChecksum": "fnv1a32:d330bb72",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -315,6 +333,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341436",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341436",
+      "canonicalIdentityKey": "fnv1a32:df06c623",
       "displayName": "Beyazıt",
       "normalizedName": "beyazıt",
       "localityType": "suburb",
@@ -339,7 +359,7 @@
         "sourceNativeId": "osm:node:4999341436"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:91b6a270",
+      "identityChecksum": "fnv1a32:a2a5ef65",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -349,6 +369,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341455",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341455",
+      "canonicalIdentityKey": "fnv1a32:d4542ccc",
       "displayName": "Binbirdirek",
       "normalizedName": "binbirdirek",
       "localityType": "suburb",
@@ -373,7 +395,7 @@
         "sourceNativeId": "osm:node:4999341455"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:459fd48c",
+      "identityChecksum": "fnv1a32:ef1970d8",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -383,6 +405,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:14067649003",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:14067649003",
+      "canonicalIdentityKey": "fnv1a32:5c4791f3",
       "displayName": "Cağaloğlu",
       "normalizedName": "cağaloğlu",
       "localityType": "quarter",
@@ -407,7 +431,7 @@
         "sourceNativeId": "osm:node:14067649003"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:ca6bc2fb",
+      "identityChecksum": "fnv1a32:8af5fafc",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -417,6 +441,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999339815",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999339815",
+      "canonicalIdentityKey": "fnv1a32:df56b165",
       "displayName": "Cankurtaran",
       "normalizedName": "cankurtaran",
       "localityType": "suburb",
@@ -441,7 +467,7 @@
         "sourceNativeId": "osm:node:4999339815"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:31407965",
+      "identityChecksum": "fnv1a32:455f0e4f",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -451,6 +477,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4996909326",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4996909326",
+      "canonicalIdentityKey": "fnv1a32:19da67c0",
       "displayName": "Cerrahpaşa",
       "normalizedName": "cerrahpaşa",
       "localityType": "suburb",
@@ -475,7 +503,7 @@
         "sourceNativeId": "osm:node:4996909326"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:d3130815",
+      "identityChecksum": "fnv1a32:71219d2c",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -485,6 +513,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999339819",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999339819",
+      "canonicalIdentityKey": "fnv1a32:92533c79",
       "displayName": "Cibali",
       "normalizedName": "cibali",
       "localityType": "suburb",
@@ -509,7 +539,7 @@
         "sourceNativeId": "osm:node:4999339819"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:6dfb522b",
+      "identityChecksum": "fnv1a32:8c89a325",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -519,6 +549,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341432",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341432",
+      "canonicalIdentityKey": "fnv1a32:92a121f7",
       "displayName": "Demirtaş",
       "normalizedName": "demirtaş",
       "localityType": "suburb",
@@ -543,7 +575,7 @@
         "sourceNativeId": "osm:node:4999341432"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:9114c876",
+      "identityChecksum": "fnv1a32:240d9a1a",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -553,6 +585,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4947158665",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4947158665",
+      "canonicalIdentityKey": "fnv1a32:2f84ec02",
       "displayName": "Derviş Ali",
       "normalizedName": "derviş ali",
       "localityType": "suburb",
@@ -577,7 +611,7 @@
         "sourceNativeId": "osm:node:4947158665"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:ed93b7df",
+      "identityChecksum": "fnv1a32:25d49c09",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -587,6 +621,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341434",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341434",
+      "canonicalIdentityKey": "fnv1a32:09e2c621",
       "displayName": "Emin Sinan",
       "normalizedName": "emin sinan",
       "localityType": "suburb",
@@ -611,7 +647,7 @@
         "sourceNativeId": "osm:node:4999341434"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:a8c8ade4",
+      "identityChecksum": "fnv1a32:d4480dd5",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -621,6 +657,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:6310508017",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:6310508017",
+      "canonicalIdentityKey": "fnv1a32:451bfb0a",
       "displayName": "Eminönü",
       "normalizedName": "eminönü",
       "localityType": "quarter",
@@ -645,7 +683,7 @@
         "sourceNativeId": "osm:node:6310508017"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:2fd67964",
+      "identityChecksum": "fnv1a32:1eff6909",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -655,6 +693,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:26504810",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:26504810",
+      "canonicalIdentityKey": "fnv1a32:5dd18a1d",
       "displayName": "Fatih",
       "normalizedName": "fatih",
       "localityType": "locality",
@@ -679,7 +719,7 @@
         "sourceNativeId": "osm:node:26504810"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:e4b2abb8",
+      "identityChecksum": "fnv1a32:f8c5ee7d",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -689,6 +729,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:6093191297",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:6093191297",
+      "canonicalIdentityKey": "fnv1a32:513acf66",
       "displayName": "Fener",
       "normalizedName": "fener",
       "localityType": "quarter",
@@ -713,7 +755,7 @@
         "sourceNativeId": "osm:node:6093191297"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:b0330f7f",
+      "identityChecksum": "fnv1a32:5e77bade",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -723,6 +765,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4947158666",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4947158666",
+      "canonicalIdentityKey": "fnv1a32:986be16b",
       "displayName": "Hacı Kadın",
       "normalizedName": "hacı kadın",
       "localityType": "suburb",
@@ -747,7 +791,7 @@
         "sourceNativeId": "osm:node:4947158666"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:b0d12cc5",
+      "identityChecksum": "fnv1a32:f52bd47f",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -757,6 +801,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4996909325",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4996909325",
+      "canonicalIdentityKey": "fnv1a32:d7270ded",
       "displayName": "Haseki Sultan",
       "normalizedName": "haseki sultan",
       "localityType": "suburb",
@@ -781,7 +827,7 @@
         "sourceNativeId": "osm:node:4996909325"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:86ad02a6",
+      "identityChecksum": "fnv1a32:c620b104",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -791,6 +837,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999339818",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999339818",
+      "canonicalIdentityKey": "fnv1a32:ff2faad2",
       "displayName": "Hırka-i Şerif",
       "normalizedName": "hırka-i şerif",
       "localityType": "suburb",
@@ -815,7 +863,7 @@
         "sourceNativeId": "osm:node:4999339818"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:b05c0968",
+      "identityChecksum": "fnv1a32:74d1a1f6",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -825,6 +873,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999339816",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999339816",
+      "canonicalIdentityKey": "fnv1a32:220b9e38",
       "displayName": "Hobyar",
       "normalizedName": "hobyar",
       "localityType": "suburb",
@@ -849,7 +899,7 @@
         "sourceNativeId": "osm:node:4999339816"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:76923e49",
+      "identityChecksum": "fnv1a32:e36ed7bc",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -859,6 +909,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999339805",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999339805",
+      "canonicalIdentityKey": "fnv1a32:5a1568ac",
       "displayName": "Hoca Gıyasettin",
       "normalizedName": "hoca gıyasettin",
       "localityType": "suburb",
@@ -883,7 +935,7 @@
         "sourceNativeId": "osm:node:4999339805"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:cd6b677c",
+      "identityChecksum": "fnv1a32:8d46557e",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -893,6 +945,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999339808",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999339808",
+      "canonicalIdentityKey": "fnv1a32:38ebb307",
       "displayName": "Hocapaşa",
       "normalizedName": "hocapaşa",
       "localityType": "suburb",
@@ -917,7 +971,7 @@
         "sourceNativeId": "osm:node:4999339808"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:f84684fb",
+      "identityChecksum": "fnv1a32:e8dcae18",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -927,6 +981,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4947158632",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4947158632",
+      "canonicalIdentityKey": "fnv1a32:d110c44a",
       "displayName": "İskenderpaşa",
       "normalizedName": "iskenderpaşa",
       "localityType": "suburb",
@@ -951,7 +1007,7 @@
         "sourceNativeId": "osm:node:4947158632"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:8d31b65b",
+      "identityChecksum": "fnv1a32:a42bba99",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -961,6 +1017,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4996909339",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4996909339",
+      "canonicalIdentityKey": "fnv1a32:429aa8d0",
       "displayName": "Kalenderhane",
       "normalizedName": "kalenderhane",
       "localityType": "suburb",
@@ -985,7 +1043,7 @@
         "sourceNativeId": "osm:node:4996909339"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:ef8a8e43",
+      "identityChecksum": "fnv1a32:e1a89b68",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -995,6 +1053,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341427",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341427",
+      "canonicalIdentityKey": "fnv1a32:53dcc6d1",
       "displayName": "Karagümrük",
       "normalizedName": "karagümrük",
       "localityType": "suburb",
@@ -1019,7 +1079,7 @@
         "sourceNativeId": "osm:node:4999341427"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:65d4dab9",
+      "identityChecksum": "fnv1a32:5ad86391",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1029,6 +1089,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999339811",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999339811",
+      "canonicalIdentityKey": "fnv1a32:2bbc5591",
       "displayName": "Katip Kasım",
       "normalizedName": "katip kasım",
       "localityType": "suburb",
@@ -1053,7 +1115,7 @@
         "sourceNativeId": "osm:node:4999339811"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:ad4c8f84",
+      "identityChecksum": "fnv1a32:758af01a",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1063,6 +1125,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341438",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341438",
+      "canonicalIdentityKey": "fnv1a32:241408dd",
       "displayName": "Kemalpaşa",
       "normalizedName": "kemalpaşa",
       "localityType": "suburb",
@@ -1087,7 +1151,7 @@
         "sourceNativeId": "osm:node:4999341438"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:fd9ee3b6",
+      "identityChecksum": "fnv1a32:2e84eb68",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1097,6 +1161,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999339810",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999339810",
+      "canonicalIdentityKey": "fnv1a32:97faf32a",
       "displayName": "Koca Mustafapaşa",
       "normalizedName": "koca mustafapaşa",
       "localityType": "suburb",
@@ -1121,7 +1187,7 @@
         "sourceNativeId": "osm:node:4999339810"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:8ffca803",
+      "identityChecksum": "fnv1a32:47db1d34",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1131,6 +1197,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:6315573196",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:6315573196",
+      "canonicalIdentityKey": "fnv1a32:1a439f2f",
       "displayName": "Kumkapı",
       "normalizedName": "kumkapı",
       "localityType": "quarter",
@@ -1155,7 +1223,7 @@
         "sourceNativeId": "osm:node:6315573196"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:b9b2a44c",
+      "identityChecksum": "fnv1a32:3674835b",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1165,6 +1233,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341441",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341441",
+      "canonicalIdentityKey": "fnv1a32:32a17431",
       "displayName": "Küçük Ayasofya",
       "normalizedName": "küçük ayasofya",
       "localityType": "suburb",
@@ -1189,7 +1259,7 @@
         "sourceNativeId": "osm:node:4999341441"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:7c025f1e",
+      "identityChecksum": "fnv1a32:154bc3df",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1199,6 +1269,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:6320765720",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:6320765720",
+      "canonicalIdentityKey": "fnv1a32:2d9c371f",
       "displayName": "Küçükmustafapaşa",
       "normalizedName": "küçükmustafapaşa",
       "localityType": "quarter",
@@ -1223,7 +1295,7 @@
         "sourceNativeId": "osm:node:6320765720"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:be5fc448",
+      "identityChecksum": "fnv1a32:94a90f6a",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1233,6 +1305,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:6315581139",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:6315581139",
+      "canonicalIdentityKey": "fnv1a32:a36e58b7",
       "displayName": "Laleli",
       "normalizedName": "laleli",
       "localityType": "quarter",
@@ -1257,7 +1331,7 @@
         "sourceNativeId": "osm:node:6315581139"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:04ab30fc",
+      "identityChecksum": "fnv1a32:758ed2c6",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1267,6 +1341,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:6311605509",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:6311605509",
+      "canonicalIdentityKey": "fnv1a32:2982767b",
       "displayName": "Mahmutpaşa",
       "normalizedName": "mahmutpaşa",
       "localityType": "quarter",
@@ -1291,7 +1367,7 @@
         "sourceNativeId": "osm:node:6311605509"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:1c79fd6f",
+      "identityChecksum": "fnv1a32:aa58c17f",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1301,6 +1377,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4947158637",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4947158637",
+      "canonicalIdentityKey": "fnv1a32:172f4e05",
       "displayName": "Mercan",
       "normalizedName": "mercan",
       "localityType": "suburb",
@@ -1325,7 +1403,7 @@
         "sourceNativeId": "osm:node:4947158637"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:63d50ff4",
+      "identityChecksum": "fnv1a32:fc150995",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1335,6 +1413,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999339813",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999339813",
+      "canonicalIdentityKey": "fnv1a32:00e05593",
       "displayName": "Mesihpaşa",
       "normalizedName": "mesihpaşa",
       "localityType": "suburb",
@@ -1359,7 +1439,7 @@
         "sourceNativeId": "osm:node:4999339813"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:86415c27",
+      "identityChecksum": "fnv1a32:aaf8736d",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1369,6 +1449,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341453",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341453",
+      "canonicalIdentityKey": "fnv1a32:b2b700e6",
       "displayName": "Mevlanakapı",
       "normalizedName": "mevlanakapı",
       "localityType": "suburb",
@@ -1393,7 +1475,7 @@
         "sourceNativeId": "osm:node:4999341453"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:01325dff",
+      "identityChecksum": "fnv1a32:aaa77cbb",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1403,6 +1485,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999339806",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999339806",
+      "canonicalIdentityKey": "fnv1a32:17620ed9",
       "displayName": "Mimar Hayrettin",
       "normalizedName": "mimar hayrettin",
       "localityType": "suburb",
@@ -1427,7 +1511,7 @@
         "sourceNativeId": "osm:node:4999339806"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:879f30a0",
+      "identityChecksum": "fnv1a32:6788266d",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1437,6 +1521,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341442",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341442",
+      "canonicalIdentityKey": "fnv1a32:75566104",
       "displayName": "Mimar Kemalettin",
       "normalizedName": "mimar kemalettin",
       "localityType": "suburb",
@@ -1461,7 +1547,7 @@
         "sourceNativeId": "osm:node:4999341442"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:df1b55b6",
+      "identityChecksum": "fnv1a32:fa77fa20",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1471,6 +1557,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999339807",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999339807",
+      "canonicalIdentityKey": "fnv1a32:843e7d32",
       "displayName": "Molla Fenari",
       "normalizedName": "molla fenari",
       "localityType": "suburb",
@@ -1495,7 +1583,7 @@
         "sourceNativeId": "osm:node:4999339807"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:51d41347",
+      "identityChecksum": "fnv1a32:c7946f11",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1505,6 +1593,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341447",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341447",
+      "canonicalIdentityKey": "fnv1a32:bc00c6c7",
       "displayName": "Molla Gürani",
       "normalizedName": "molla gürani",
       "localityType": "suburb",
@@ -1529,7 +1619,7 @@
         "sourceNativeId": "osm:node:4999341447"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:762c090f",
+      "identityChecksum": "fnv1a32:97a5af9a",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1539,6 +1629,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4996909340",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4996909340",
+      "canonicalIdentityKey": "fnv1a32:39d885e0",
       "displayName": "Molla Hüsrev",
       "normalizedName": "molla hüsrev",
       "localityType": "suburb",
@@ -1563,7 +1655,7 @@
         "sourceNativeId": "osm:node:4996909340"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:ddbf72b3",
+      "identityChecksum": "fnv1a32:2bf59fcb",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1573,6 +1665,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341444",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341444",
+      "canonicalIdentityKey": "fnv1a32:53b7a21e",
       "displayName": "Muhsine Hatun",
       "normalizedName": "muhsine hatun",
       "localityType": "suburb",
@@ -1597,7 +1691,7 @@
         "sourceNativeId": "osm:node:4999341444"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:f7032b91",
+      "identityChecksum": "fnv1a32:9941f893",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1607,6 +1701,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341445",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341445",
+      "canonicalIdentityKey": "fnv1a32:e63bd005",
       "displayName": "Nişanca",
       "normalizedName": "nişanca",
       "localityType": "suburb",
@@ -1631,7 +1727,7 @@
         "sourceNativeId": "osm:node:4999341445"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:6171510c",
+      "identityChecksum": "fnv1a32:a5b0c054",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1641,6 +1737,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4996909348",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4996909348",
+      "canonicalIdentityKey": "fnv1a32:d3419ef8",
       "displayName": "Rüstempaşa",
       "normalizedName": "rüstempaşa",
       "localityType": "suburb",
@@ -1665,7 +1763,7 @@
         "sourceNativeId": "osm:node:4996909348"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:54592aa8",
+      "identityChecksum": "fnv1a32:62d42d36",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1675,6 +1773,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:6318171354",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:6318171354",
+      "canonicalIdentityKey": "fnv1a32:046a212a",
       "displayName": "Samatya",
       "normalizedName": "samatya",
       "localityType": "quarter",
@@ -1699,7 +1799,7 @@
         "sourceNativeId": "osm:node:6318171354"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:8f30b086",
+      "identityChecksum": "fnv1a32:6d46b435",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1709,6 +1809,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999339812",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999339812",
+      "canonicalIdentityKey": "fnv1a32:6e6faf64",
       "displayName": "Saraç İshak",
       "normalizedName": "saraç ishak",
       "localityType": "suburb",
@@ -1733,7 +1835,7 @@
         "sourceNativeId": "osm:node:4999339812"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:20993486",
+      "identityChecksum": "fnv1a32:7f60dd2a",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1743,6 +1845,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999339809",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999339809",
+      "canonicalIdentityKey": "fnv1a32:a5dba918",
       "displayName": "Sarıdemir",
       "normalizedName": "sarıdemir",
       "localityType": "suburb",
@@ -1767,7 +1871,7 @@
         "sourceNativeId": "osm:node:4999339809"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:898396b8",
+      "identityChecksum": "fnv1a32:1a1adcd3",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1777,6 +1881,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4947158636",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4947158636",
+      "canonicalIdentityKey": "fnv1a32:84ab201e",
       "displayName": "Seyyid Ömer",
       "normalizedName": "seyyid ömer",
       "localityType": "suburb",
@@ -1801,7 +1907,7 @@
         "sourceNativeId": "osm:node:4947158636"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:923ebca2",
+      "identityChecksum": "fnv1a32:bb7eeac7",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1811,6 +1917,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341450",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341450",
+      "canonicalIdentityKey": "fnv1a32:1b9df64f",
       "displayName": "Silivrikapı",
       "normalizedName": "silivrikapı",
       "localityType": "suburb",
@@ -1835,7 +1943,7 @@
         "sourceNativeId": "osm:node:4999341450"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:90c57241",
+      "identityChecksum": "fnv1a32:77e61968",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1845,6 +1953,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:7863036213",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:7863036213",
+      "canonicalIdentityKey": "fnv1a32:53bd1bdc",
       "displayName": "Sirkeci",
       "normalizedName": "sirkeci",
       "localityType": "quarter",
@@ -1869,7 +1979,7 @@
         "sourceNativeId": "osm:node:7863036213"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:4d4700d8",
+      "identityChecksum": "fnv1a32:2e22f574",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1879,6 +1989,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999339814",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999339814",
+      "canonicalIdentityKey": "fnv1a32:4b954efe",
       "displayName": "Sultan Ahmet",
       "normalizedName": "sultan ahmet",
       "localityType": "suburb",
@@ -1903,7 +2015,7 @@
         "sourceNativeId": "osm:node:4999339814"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:06efc585",
+      "identityChecksum": "fnv1a32:bffbe0bf",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1913,6 +2025,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341456",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341456",
+      "canonicalIdentityKey": "fnv1a32:91a0d2f9",
       "displayName": "Sururi",
       "normalizedName": "sururi",
       "localityType": "suburb",
@@ -1937,7 +2051,7 @@
         "sourceNativeId": "osm:node:4999341456"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:d2bd8171",
+      "identityChecksum": "fnv1a32:09818bbe",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1947,6 +2061,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341449",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341449",
+      "canonicalIdentityKey": "fnv1a32:9a758f99",
       "displayName": "Süleymaniye",
       "normalizedName": "süleymaniye",
       "localityType": "suburb",
@@ -1971,7 +2087,7 @@
         "sourceNativeId": "osm:node:4999341449"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:80f744af",
+      "identityChecksum": "fnv1a32:d338940a",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -1981,6 +2097,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4947158661",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4947158661",
+      "canonicalIdentityKey": "fnv1a32:e31f47d6",
       "displayName": "Sümbül Efendi",
       "normalizedName": "sümbül efendi",
       "localityType": "suburb",
@@ -2005,7 +2123,7 @@
         "sourceNativeId": "osm:node:4947158661"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:d9835e85",
+      "identityChecksum": "fnv1a32:0adffa79",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -2015,6 +2133,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4947158668",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4947158668",
+      "canonicalIdentityKey": "fnv1a32:0e6ebe15",
       "displayName": "Şehremini",
       "normalizedName": "şehremini",
       "localityType": "suburb",
@@ -2039,7 +2159,7 @@
         "sourceNativeId": "osm:node:4947158668"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:f1e8419e",
+      "identityChecksum": "fnv1a32:15f953de",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -2049,6 +2169,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341443",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341443",
+      "canonicalIdentityKey": "fnv1a32:09043bb3",
       "displayName": "Şehsuvar Bey",
       "normalizedName": "şehsuvar bey",
       "localityType": "suburb",
@@ -2073,7 +2195,7 @@
         "sourceNativeId": "osm:node:4999341443"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:3354a146",
+      "identityChecksum": "fnv1a32:f8823f54",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -2083,6 +2205,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4947158644",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4947158644",
+      "canonicalIdentityKey": "fnv1a32:37027227",
       "displayName": "Tahtakale",
       "normalizedName": "tahtakale",
       "localityType": "suburb",
@@ -2107,7 +2231,7 @@
         "sourceNativeId": "osm:node:4947158644"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:4de16d06",
+      "identityChecksum": "fnv1a32:25b7a8e7",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -2117,6 +2241,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4947158664",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4947158664",
+      "canonicalIdentityKey": "fnv1a32:c20919e9",
       "displayName": "Taya Hatun",
       "normalizedName": "taya hatun",
       "localityType": "suburb",
@@ -2141,7 +2267,7 @@
         "sourceNativeId": "osm:node:4947158664"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:980bb2a4",
+      "identityChecksum": "fnv1a32:f9229a67",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -2151,6 +2277,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4996909359",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4996909359",
+      "canonicalIdentityKey": "fnv1a32:b36f1fce",
       "displayName": "Topkapı",
       "normalizedName": "topkapı",
       "localityType": "suburb",
@@ -2175,7 +2303,7 @@
         "sourceNativeId": "osm:node:4996909359"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:232057c4",
+      "identityChecksum": "fnv1a32:10c75536",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -2185,6 +2313,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:269753710",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:269753710",
+      "canonicalIdentityKey": "fnv1a32:f36e9cb1",
       "displayName": "Unkapanı",
       "normalizedName": "unkapanı",
       "localityType": "quarter",
@@ -2209,7 +2339,7 @@
         "sourceNativeId": "osm:node:269753710"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:f614bd4a",
+      "identityChecksum": "fnv1a32:965e6b44",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -2219,6 +2349,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:6315827801",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:6315827801",
+      "canonicalIdentityKey": "fnv1a32:ec3c0512",
       "displayName": "Vefa",
       "normalizedName": "vefa",
       "localityType": "quarter",
@@ -2243,7 +2375,7 @@
         "sourceNativeId": "osm:node:6315827801"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:d2c3eb9a",
+      "identityChecksum": "fnv1a32:c44b9c7e",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -2253,6 +2385,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4947158640",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4947158640",
+      "canonicalIdentityKey": "fnv1a32:82c8b293",
       "displayName": "Yavuz Sinan",
       "normalizedName": "yavuz sinan",
       "localityType": "suburb",
@@ -2277,7 +2411,7 @@
         "sourceNativeId": "osm:node:4947158640"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:87d15323",
+      "identityChecksum": "fnv1a32:49869627",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -2287,6 +2421,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341423",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341423",
+      "canonicalIdentityKey": "fnv1a32:0778b5a5",
       "displayName": "Yavuz Sultan Selim",
       "normalizedName": "yavuz sultan selim",
       "localityType": "suburb",
@@ -2311,7 +2447,7 @@
         "sourceNativeId": "osm:node:4999341423"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:5fb1b48b",
+      "identityChecksum": "fnv1a32:ffecb4a1",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -2321,6 +2457,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4999341452",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4999341452",
+      "canonicalIdentityKey": "fnv1a32:453b2ecd",
       "displayName": "Yedikule",
       "normalizedName": "yedikule",
       "localityType": "suburb",
@@ -2345,7 +2483,7 @@
         "sourceNativeId": "osm:node:4999341452"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:e5e56bcc",
+      "identityChecksum": "fnv1a32:dcb460b1",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -2355,6 +2493,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:7863036212",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:7863036212",
+      "canonicalIdentityKey": "fnv1a32:e62dc20b",
       "displayName": "Yenikapı",
       "normalizedName": "yenikapı",
       "localityType": "quarter",
@@ -2379,7 +2519,7 @@
         "sourceNativeId": "osm:node:7863036212"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:e57fbf71",
+      "identityChecksum": "fnv1a32:26a6b636",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -2389,6 +2529,8 @@
     },
     {
       "settlementId": "tr:settlement:osm:node:4947158667",
+      "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4947158667",
+      "canonicalIdentityKey": "fnv1a32:04be06bc",
       "displayName": "Zeyrek",
       "normalizedName": "zeyrek",
       "localityType": "suburb",
@@ -2413,7 +2555,7 @@
         "sourceNativeId": "osm:node:4947158667"
       },
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-      "identityChecksum": "fnv1a32:8569258c",
+      "identityChecksum": "fnv1a32:7cdf0d2c",
       "verificationState": "locality-seed",
       "administrativeStatus": "unknown",
       "geometryAvailability": "seed-only",
@@ -4173,5 +4315,5 @@
       "consumerNameSemantics": "ambiguous-seed-labels"
     }
   ],
-  "contentChecksum": "fnv1a32:59928ca0"
+  "contentChecksum": "fnv1a32:c85fa5eb"
 }

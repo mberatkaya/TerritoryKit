@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-identity-sprint-2c-decision@1",
-  "generatedAt": "2026-10-15T19:55:32.901Z",
+  "generatedAt": "2026-10-15T21:59:26.873Z",
   "district": "Fatih",
   "parentAdm2Id": "tr:adm2:54988432b39641834885080",
   "technicalPilotDecision": "GO_WITH_REVIEW",
@@ -22,10 +22,10 @@
     "determinismVerified": true,
     "zoneIdSetSha256": "334ba60d9e4bf65c2acfce7d3724e7bf430ec082ad897459a902c19d3660852f",
     "geometryHashSetSha256": "3b4c2dd9214f6aa1023277a3426e100bd9c2902f5c06e4a49b2478e462866645",
-    "identityLayerContentChecksum": "fnv1a32:59928ca0"
+    "identityLayerContentChecksum": "fnv1a32:c85fa5eb"
   },
   "consumerContract": {
-    "lookup": "createSettlementIdentityLookup (@territory-kit/core)",
+    "lookup": "loadSettlementIdentityConsumer (@territory-kit/core)",
     "autoDisplayNameAllowedOnlyWhen": "never for automatic seed associations; use consumerNameSemantics seed-locality-label with verificationState locality-seed",
     "reviewApprovalRequires": "explicit human review evidence (association method reviewed)"
   },
@@ -69,6 +69,8 @@
       "settlements": [
         {
           "settlementId": "tr:settlement:osm:node:4996909359",
+          "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4996909359",
+          "canonicalIdentityKey": "fnv1a32:b36f1fce",
           "displayName": "Topkapı",
           "normalizedName": "topkapı",
           "localityType": "suburb",
@@ -93,7 +95,7 @@
             "sourceNativeId": "osm:node:4996909359"
           },
           "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-          "identityChecksum": "fnv1a32:232057c4",
+          "identityChecksum": "fnv1a32:10c75536",
           "verificationState": "locality-seed",
           "administrativeStatus": "unknown",
           "geometryAvailability": "seed-only",
@@ -103,14 +105,16 @@
         }
       ],
       "associationStatus": "single-candidate",
+      "zoneResolution": "associated",
       "isAmbiguous": false,
-      "autoDisplayNameAllowed": false
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "seed-locality-label"
     },
     "layerVersion": {
       "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
       "gameplayDatasetVersion": "2.1.0-rc.8",
-      "contentChecksum": "fnv1a32:59928ca0",
-      "generatedAt": "2026-10-15T19:55:32.901Z"
+      "contentChecksum": "fnv1a32:c85fa5eb",
+      "generatedAt": "2026-10-15T21:59:26.873Z"
     }
   }
 }

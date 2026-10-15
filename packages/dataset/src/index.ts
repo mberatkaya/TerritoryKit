@@ -22,12 +22,23 @@ export {
   SETTLEMENT_CONSUMER_NAME_SEMANTICS,
   SETTLEMENT_VERIFICATION_STATES,
   buildSettlementIdentityLayer,
+  computeSettlementIdentityLayerContentChecksum,
   createSettlementIdFromSeed,
   dedupeSettlementSeeds,
   normalizeTurkishSettlementName,
   resolveSettlementGeometryAvailability,
   settlementHasLawfulPolygonEvidence
 } from "./settlement-identity.js";
+export {
+  SETTLEMENT_IDENTITY_VALIDATION_CODES,
+  collectGameplayAdm3Zones,
+  computeSettlementIdentityGeometryHashSetSha256,
+  computeSettlementIdentityZoneIdSetSha256,
+  validateSettlementIdentityLayer,
+  type SettlementIdentityPinExpectations,
+  type SettlementIdentityValidationIssue,
+  type SettlementIdentityValidationReport
+} from "./settlement-identity-validation.js";
 export {
   applyTerritoryAdjacencyOverrides,
   canonicalTerritoryAdjacencyPair,

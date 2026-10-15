@@ -30,6 +30,7 @@ describe("public API compatibility", () => {
       "inspectTerritoryBinarySpatialIndex",
       "intersectLineStringWithGeometry",
       "isTerritoryBinarySpatialIndex",
+      "loadSettlementIdentityConsumer",
       "loadTerritoryCountryDataset",
       "loadTerritoryQueryDataset",
       "normalizeLongitude",

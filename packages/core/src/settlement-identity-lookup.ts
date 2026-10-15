@@ -6,8 +6,12 @@ import {
   type SettlementIdentityLayer
 } from "@territory-kit/dataset";
 
+export type SettlementZoneResolution = "associated" | "unseeded" | "unknown-zone";
+
 export interface SettlementIdentityLookupOptions {
   layer: SettlementIdentityLayer;
+  gameplayZoneIds?: ReadonlySet<string>;
+  parentAdm2Id?: string;
 }
 
 export interface SettlementZoneLookupResult {
@@ -15,8 +19,11 @@ export interface SettlementZoneLookupResult {
   associations: readonly GameplayTerritoryAssociation[];
   settlements: readonly SettlementIdentity[];
   associationStatus: GameplayTerritoryAssociation["status"] | "unseeded";
+  zoneResolution: SettlementZoneResolution;
   isAmbiguous: boolean;
   autoDisplayNameAllowed: boolean;
+  consumerNameSemantics:
+    SettlementIdentityLayer["zoneSummaries"][number]["consumerNameSemantics"] | undefined;
 }
 
 export interface SettlementSeedLookupResult {
@@ -45,6 +52,8 @@ export function createSettlementIdentityLookup(
   options: SettlementIdentityLookupOptions
 ): SettlementIdentityLookup {
   const layer = options.layer;
+  const parentAdm2Id = options.parentAdm2Id ?? layer.parentAdm2Id;
+  const gameplayZoneIds = options.gameplayZoneIds;
   const settlementsById = new Map(layer.settlements.map((row) => [row.settlementId, row]));
   const associationsByZone = new Map<string, GameplayTerritoryAssociation[]>();
   const associationsBySettlement = new Map<string, GameplayTerritoryAssociation[]>();
@@ -68,7 +77,17 @@ export function createSettlementIdentityLookup(
       const settlements = associations
         .map((association) => settlementsById.get(association.settlementId))
         .filter((row): row is SettlementIdentity => row !== undefined);
-      const associationStatus = summary?.associationStatus ?? "unseeded";
+
+      const zoneResolution = resolveZoneResolution({
+        zoneId,
+        summary,
+        ...(gameplayZoneIds ? { gameplayZoneIds } : {}),
+        parentAdm2Id,
+        layer
+      });
+
+      const associationStatus =
+        zoneResolution === "unknown-zone" ? "unseeded" : (summary?.associationStatus ?? "unseeded");
       const isAmbiguous =
         associationStatus === "multiple-candidates" ||
         associationStatus === "review-required" ||
@@ -82,8 +101,10 @@ export function createSettlementIdentityLookup(
         associations,
         settlements,
         associationStatus,
+        zoneResolution,
         isAmbiguous,
-        autoDisplayNameAllowed: summary?.autoDisplayNameAllowed ?? false
+        autoDisplayNameAllowed: summary?.autoDisplayNameAllowed ?? false,
+        consumerNameSemantics: summary?.consumerNameSemantics
       };
     },
     findZonesForSettlement(settlementId) {
@@ -125,4 +146,30 @@ export function createSettlementIdentityLookup(
       };
     }
   };
+}
+
+function resolveZoneResolution(input: {
+  zoneId: string;
+  summary: SettlementIdentityLayer["zoneSummaries"][number] | undefined;
+  gameplayZoneIds?: ReadonlySet<string>;
+  parentAdm2Id: string;
+  layer: SettlementIdentityLayer;
+}): SettlementZoneResolution {
+  if (input.gameplayZoneIds && !input.gameplayZoneIds.has(input.zoneId)) {
+    return "unknown-zone";
+  }
+
+  if (!input.summary) {
+    return "unknown-zone";
+  }
+
+  if (input.layer.parentAdm2Id !== input.parentAdm2Id) {
+    return "unknown-zone";
+  }
+
+  if (input.summary.associationStatus === "unseeded") {
+    return "unseeded";
+  }
+
+  return "associated";
 }

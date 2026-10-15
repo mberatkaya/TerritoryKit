@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-consumer-pin@1",
+  "district": "Fatih",
+  "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+  "gameplayDatasetId": "territory-kit-tr-v2-playable-adm3-tr-adm2-54988432b39641834885080",
+  "gameplayDatasetVersion": "2.1.0-rc.8",
+  "zoneIdSetSha256": "334ba60d9e4bf65c2acfce7d3724e7bf430ec082ad897459a902c19d3660852f",
+  "geometryHashSetSha256": "3b4c2dd9214f6aa1023277a3426e100bd9c2902f5c06e4a49b2478e462866645",
+  "identityLayerContentChecksum": "fnv1a32:c85fa5eb",
+  "associationCounts": {
+    "zoneCount": 30,
+    "settlementCount": 71,
+    "ambiguousZoneCount": 15,
+    "singleCandidateZoneCount": 10,
+    "unseededZoneCount": 5
+  },
+  "sourceExpectations": {
+    "requireSourceLockVerified": false,
+    "missingSourceReasonCode": "SOURCE_LOCK_MISSING",
+    "osmSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
+  }
+}

@@ -18,9 +18,18 @@ const EXPECTED = {
   geometryHashSetSha256: "3b4c2dd9214f6aa1023277a3426e100bd9c2902f5c06e4a49b2478e462866645"
 };
 
+test("Fatih mahalle identity integration reports BLOCKED_BY_SOURCE without pinned rc.8", async (t) => {
+  if (existsSync(RC8_SHARD)) {
+    t.skip("pinned rc.8 shard present; covered by integration regeneration test");
+    return;
+  }
+  t.skip("BLOCKED_BY_SOURCE: pinned rc.8 Fatih shard not available locally");
+});
+
 test("Fatih mahalle identity integration regenerates pinned rc.8 reports", async (t) => {
   if (!existsSync(RC8_SHARD)) {
     t.skip("BLOCKED_BY_SOURCE: pinned rc.8 Fatih shard not available locally");
+    return;
   }
 
   execSync("node scripts/tr-mahalle-identity-layer-fatih.mjs", {
