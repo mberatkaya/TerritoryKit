@@ -29,7 +29,10 @@ const { VectorTile } = requireFromGenerators("@mapbox/vector-tile");
 const { PbfReader } = requireFromGenerators("pbf");
 
 const DEFAULT_RC7 = resolve(ROOT, ".territory/sprint-6/final/candidate");
-const DEFAULT_RC8 = resolve(ROOT, ".territory/national-geometry-remediation/candidate-rc8-impl-rev1");
+const DEFAULT_RC8 = resolve(
+  ROOT,
+  ".territory/national-geometry-remediation/candidate-rc8-impl-rev1"
+);
 const OUT_DIR = resolve(ROOT, "reports/tr-adm3/national-geometry-remediation");
 
 const THREE_BLOCKER_ADM2 = [
@@ -239,7 +242,13 @@ function compareQualityMetrics(rc7Smart, rc8Smart) {
   const rc8Map = buildSmartDistrictMaps(rc8Smart);
   const adm2Ids = [...new Set([...rc7Map.keys(), ...rc8Map.keys()])].sort();
 
-  const lowConfidence = { improved: [], unchanged: [], regressed: [], missingRc7: [], missingRc8: [] };
+  const lowConfidence = {
+    improved: [],
+    unchanged: [],
+    regressed: [],
+    missingRc7: [],
+    missingRc8: []
+  };
   const realism = { improved: [], unchanged: [], regressed: [], missingRc7: [], missingRc8: [] };
 
   for (const adm2Id of adm2Ids) {
@@ -284,13 +293,17 @@ function compareQualityMetrics(rc7Smart, rc8Smart) {
     },
     rc7: {
       lowConfidenceDistrictCount: rc7Smart.districts.filter((d) => d.confidence === "low").length,
-      realismWarningDistrictCount: rc7Smart.districts.filter((d) => districtRealismWarning(d)).length,
-      unsupportedStraightThresholdViolations: rc7Totals.unsupportedStraightThresholdViolations ?? null
+      realismWarningDistrictCount: rc7Smart.districts.filter((d) => districtRealismWarning(d))
+        .length,
+      unsupportedStraightThresholdViolations:
+        rc7Totals.unsupportedStraightThresholdViolations ?? null
     },
     rc8: {
       lowConfidenceDistrictCount: rc8Smart.districts.filter((d) => d.confidence === "low").length,
-      realismWarningDistrictCount: rc8Smart.districts.filter((d) => districtRealismWarning(d)).length,
-      unsupportedStraightThresholdViolations: rc8Totals.unsupportedStraightThresholdViolations ?? null
+      realismWarningDistrictCount: rc8Smart.districts.filter((d) => districtRealismWarning(d))
+        .length,
+      unsupportedStraightThresholdViolations:
+        rc8Totals.unsupportedStraightThresholdViolations ?? null
     },
     lowConfidenceDistricts: lowConfidence,
     realismWarnings: realism
@@ -349,12 +362,8 @@ async function diffStableIds(rc7Root, rc8Root) {
     }
   }
 
-  const rc7Manifest = JSON.parse(
-    await readFile(join(rc7Root, "manifest.json"), "utf8")
-  );
-  const rc8Manifest = JSON.parse(
-    await readFile(join(rc8Root, "manifest.json"), "utf8")
-  );
+  const rc7Manifest = JSON.parse(await readFile(join(rc7Root, "manifest.json"), "utf8"));
+  const rc8Manifest = JSON.parse(await readFile(join(rc8Root, "manifest.json"), "utf8"));
 
   let migrationPlanSummary = null;
   const migrationPath = join(rc8Root, "migration-plan.json");
@@ -401,8 +410,7 @@ async function diffStableIds(rc7Root, rc8Root) {
       geometryBytesChanged: geometryHashChanges.length > 0,
       ownershipMigrationSafe:
         onlyRc7.length === 0 && onlyRc8.length === 0 && parentIdChanges.length === 0,
-      note:
-        "Ownership migration assumes stable tr:adm3 IDs and parent tr:adm2 linkage; geometry-only edits require gameplay remap review, not ID remap."
+      note: "Ownership migration assumes stable tr:adm3 IDs and parent tr:adm2 linkage; geometry-only edits require gameplay remap review, not ID remap."
     }
   };
 }
@@ -443,12 +451,22 @@ async function verifyChecksumSample(candidateRoot, checksums, prefix, limit = 40
     const sha = await sha256File(absolute);
     const expectedSha = expected.sha256 ?? expected.hash;
     if (sha !== expectedSha) {
-      mismatches.push({ path: relativePath, issue: "SHA256_MISMATCH", expected: expectedSha, actual: sha });
+      mismatches.push({
+        path: relativePath,
+        issue: "SHA256_MISMATCH",
+        expected: expectedSha,
+        actual: sha
+      });
       continue;
     }
     verified += 1;
   }
-  return { verified, checked: Math.min(limit, entries.length), totalListed: entries.length, mismatches };
+  return {
+    verified,
+    checked: Math.min(limit, entries.length),
+    totalListed: entries.length,
+    mismatches
+  };
 }
 
 async function countMvtTiles(candidateRoot) {
@@ -565,15 +583,13 @@ async function validateMvtDelivery(rc8Root) {
         readiness.sourceLayerReady === true
           ? "CLOSED — encoded layer territory_adm3 verified on samples."
           : "OPEN",
-      parentAdm2IdOnSamples: samples.filter(
-        (s) => s.districtClassification === "DISTRICT_VERIFIED"
-      ).length,
+      parentAdm2IdOnSamples: samples.filter((s) => s.districtClassification === "DISTRICT_VERIFIED")
+        .length,
       featureMetadataAbsentSamples: samples.filter(
         (s) => s.districtClassification === "FEATURE_METADATA_ABSENT"
       ).length,
       fullMvtDeliveryReady: readiness.fullMvtDeliveryReady,
-      note:
-        "rc.7 districtRepresentativeGate failed when parentAdm2Id metadata absent on sampled features; re-evaluate with rc.8 bytes."
+      note: "rc.7 districtRepresentativeGate failed when parentAdm2Id metadata absent on sampled features; re-evaluate with rc.8 bytes."
     }
   };
 }
@@ -699,7 +715,8 @@ async function main() {
   const mergeGo =
     adm3Validation.aggregateErrors.siblingOverlapErrors === 0 &&
     adm3Validation.districtsWithGeometryErrors === 0 &&
-    qualityComparison.rc8.lowConfidenceDistrictCount <= qualityComparison.rc7.lowConfidenceDistrictCount &&
+    qualityComparison.rc8.lowConfidenceDistrictCount <=
+      qualityComparison.rc7.lowConfidenceDistrictCount &&
     qualityComparison.rc8.realismWarningDistrictCount <=
       qualityComparison.rc7.realismWarningDistrictCount &&
     stableIdDiff.zoneIdOnlyInRc7Count === 0 &&

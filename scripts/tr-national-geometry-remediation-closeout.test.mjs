@@ -14,7 +14,9 @@ test("rc.8 closeout reports exist when generated locally", async () => {
     "adm3-independent-validation.json",
     "final-decision.md"
   ];
-  if (!existsSync(resolve(ROOT, ".territory/national-geometry-remediation/candidate-rc8-impl-rev1"))) {
+  if (
+    !existsSync(resolve(ROOT, ".territory/national-geometry-remediation/candidate-rc8-impl-rev1"))
+  ) {
     return;
   }
   for (const name of required) {
