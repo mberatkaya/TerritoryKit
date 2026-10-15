@@ -5,13 +5,15 @@ import type {
 import {
   TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION,
   TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION,
+  TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION_REV4,
   buildTurkeySmartFallbackWithAdjacency,
   resolveTurkeySmartFallbackConfiguration
 } from "./turkey-smart-fallback.js";
 
 export {
   TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION,
-  TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION
+  TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION,
+  TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION_REV4
 };
 
 /**
@@ -57,6 +59,58 @@ export async function buildTurkeySmartFallbackV2PilotWithAdjacency(
         standard.targetGeometryAreaKm2 / Math.max(1, targetCount)
       ),
       maxAreaKm2: Math.min(baseMaxAreaKm2 * maxAreaGameplayMultiplier, gameplayAreaCapKm2),
+      minMeanQualityScore: 0.25,
+      minMeanBarrierAlignment: 0,
+      maxSyntheticSplits: 0,
+      requireBarrierForMultiTerritory: false
+    }
+  });
+}
+
+/**
+ * Sprint 2B.4 experimental hybrid: v1.7 area-merge anchors + watershed seeds, collapsing
+ * only weak inter-seed boundaries inside each v1.7 group (impl-rev4).
+ */
+export async function buildTurkeySmartFallbackV2PilotRev4HybridWithAdjacency(
+  input: TurkeySmartFallbackInput
+): Promise<TurkeySmartFallbackBuildResult> {
+  const standard = resolveTurkeySmartFallbackConfiguration({
+    ...input,
+    profile: input.profile ?? "dense-urban",
+    options: {
+      ...input.options,
+      algorithmVersion: TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION,
+      v2PilotImplementationRevision: TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION_REV4,
+      v2PilotV17AnchoredHybrid: true,
+      v2PilotWeakBarrierReassignment: false
+    }
+  }).configuration;
+  const targetCount = Math.min(96, Math.max(8, input.localitySeeds?.length ?? 0));
+  const gameplayAreaCapKm2 =
+    standard.targetGeometryAreaKm2 >= 75 && standard.profileDecision.signals.localitySeedCount >= 8
+      ? standard.targetGeometryAreaKm2 * 0.65
+      : Number.POSITIVE_INFINITY;
+  const baseMaxAreaKm2 = Math.max(standard.maxAreaKm2, standard.targetGeometryAreaKm2 / 6);
+
+  return buildTurkeySmartFallbackWithAdjacency({
+    ...input,
+    profile: input.profile ?? "dense-urban",
+    options: {
+      ...input.options,
+      algorithmVersion: TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION,
+      v2PilotImplementationRevision: TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION_REV4,
+      v2PilotV17AnchoredHybrid: true,
+      v2PilotWeakBarrierReassignment: false,
+      organic: true,
+      networkFirst: true,
+      seed: `${standard.seed}:v2-pilot-${TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION_REV4}`,
+      maxTerritories: 96,
+      targetTerritoryCount: targetCount,
+      targetAreaKm2: Math.max(
+        standard.targetAreaKm2,
+        standard.targetGeometryAreaKm2 / Math.max(1, targetCount)
+      ),
+      maxAreaKm2: Math.min(baseMaxAreaKm2, gameplayAreaCapKm2),
       minMeanQualityScore: 0.25,
       minMeanBarrierAlignment: 0,
       maxSyntheticSplits: 0,

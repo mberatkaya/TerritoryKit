@@ -1,0 +1,593 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-first-alternative-b-semantic@1",
+  "design": "Alternative B — gameplay geometry unchanged (v1.7 replay); mahalle seeds as semantic association only.",
+  "zoneCount": 30,
+  "ambiguousZoneCount": 15,
+  "singleSeedZoneCount": 10,
+  "unseededZoneCount": 5,
+  "distinctSeedsRepresented": 71,
+  "zones": [
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-8eebe5599fbf67d5bc23",
+      "zoneName": "Yedikule",
+      "containedSeedCount": 1,
+      "distinctMahalleNames": ["Yedikule"],
+      "namingStatus": "SINGLE_SEED_MATCH",
+      "seeds": [
+        {
+          "name": "Yedikule",
+          "coordinate": [28.9245673, 40.9943767]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-9f83a09e877b09576ca7",
+      "zoneName": "Territory 002",
+      "containedSeedCount": 2,
+      "distinctMahalleNames": ["Sümbül Efendi", "Silivrikapı"],
+      "namingStatus": "AMBIGUOUS_REVIEW_REQUIRED",
+      "seeds": [
+        {
+          "name": "Sümbül Efendi",
+          "coordinate": [28.9267659, 41.0017335]
+        },
+        {
+          "name": "Silivrikapı",
+          "coordinate": [28.9268933, 41.0054068]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b0035a2eaa3b83222d33",
+      "zoneName": "Territory 003",
+      "containedSeedCount": 0,
+      "distinctMahalleNames": [],
+      "namingStatus": "UNSEEDED",
+      "seeds": []
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-57c6546b8d8c52e3ca2f",
+      "zoneName": "Territory 004",
+      "containedSeedCount": 0,
+      "distinctMahalleNames": [],
+      "namingStatus": "UNSEEDED",
+      "seeds": []
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-bf7df56ae203fd5afe33",
+      "zoneName": "Territory 005",
+      "containedSeedCount": 4,
+      "distinctMahalleNames": ["Sultan Ahmet", "Muhsine Hatun", "Kumkapı", "Yenikapı"],
+      "namingStatus": "AMBIGUOUS_REVIEW_REQUIRED",
+      "seeds": [
+        {
+          "name": "Sultan Ahmet",
+          "coordinate": [28.9769087, 41.0041141]
+        },
+        {
+          "name": "Muhsine Hatun",
+          "coordinate": [28.9625315, 41.0047281]
+        },
+        {
+          "name": "Kumkapı",
+          "coordinate": [28.9646917, 41.0042146]
+        },
+        {
+          "name": "Yenikapı",
+          "coordinate": [28.9502321, 41.0043229]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-073b672500565ae4fb3e",
+      "zoneName": "Territory 006",
+      "containedSeedCount": 2,
+      "distinctMahalleNames": ["Koca Mustafapaşa", "Samatya"],
+      "namingStatus": "AMBIGUOUS_REVIEW_REQUIRED",
+      "seeds": [
+        {
+          "name": "Koca Mustafapaşa",
+          "coordinate": [28.9312607, 40.9996863]
+        },
+        {
+          "name": "Samatya",
+          "coordinate": [28.9326654, 41.000679]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-701b712ba93c285dfee4",
+      "zoneName": "Territory 007",
+      "containedSeedCount": 0,
+      "distinctMahalleNames": [],
+      "namingStatus": "UNSEEDED",
+      "seeds": []
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ae51c43e7a16247111a1",
+      "zoneName": "Territory 008",
+      "containedSeedCount": 3,
+      "distinctMahalleNames": ["Haseki Sultan", "Cerrahpaşa", "Aksaray"],
+      "namingStatus": "AMBIGUOUS_REVIEW_REQUIRED",
+      "seeds": [
+        {
+          "name": "Haseki Sultan",
+          "coordinate": [28.9451769, 41.0092592]
+        },
+        {
+          "name": "Cerrahpaşa",
+          "coordinate": [28.9362529, 41.005246]
+        },
+        {
+          "name": "Aksaray",
+          "coordinate": [28.9502838, 41.0083123]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-59f9cd89af41c5776554",
+      "zoneName": "Territory 009",
+      "containedSeedCount": 2,
+      "distinctMahalleNames": ["Küçük Ayasofya", "Binbirdirek"],
+      "namingStatus": "AMBIGUOUS_REVIEW_REQUIRED",
+      "seeds": [
+        {
+          "name": "Küçük Ayasofya",
+          "coordinate": [28.9721624, 41.0031621]
+        },
+        {
+          "name": "Binbirdirek",
+          "coordinate": [28.9721964, 41.0070922]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-cbeb5278a71425ce7202",
+      "zoneName": "Territory 010",
+      "containedSeedCount": 3,
+      "distinctMahalleNames": ["Hocapaşa", "Cankurtaran", "Alemdar"],
+      "namingStatus": "AMBIGUOUS_REVIEW_REQUIRED",
+      "seeds": [
+        {
+          "name": "Hocapaşa",
+          "coordinate": [28.9765078, 41.013878]
+        },
+        {
+          "name": "Cankurtaran",
+          "coordinate": [28.9811439, 41.0062855]
+        },
+        {
+          "name": "Alemdar",
+          "coordinate": [28.9764224, 41.0097673]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-88ec65114d7d0e51d713",
+      "zoneName": "Territory 011",
+      "containedSeedCount": 6,
+      "distinctMahalleNames": [
+        "Mimar Hayrettin",
+        "Saraç İshak",
+        "Emin Sinan",
+        "Mimar Kemalettin",
+        "Şehsuvar Bey",
+        "Nişanca"
+      ],
+      "namingStatus": "AMBIGUOUS_REVIEW_REQUIRED",
+      "seeds": [
+        {
+          "name": "Mimar Hayrettin",
+          "coordinate": [28.9672073, 41.0075488]
+        },
+        {
+          "name": "Saraç İshak",
+          "coordinate": [28.963701, 41.0065606]
+        },
+        {
+          "name": "Emin Sinan",
+          "coordinate": [28.9697509, 41.0070824]
+        },
+        {
+          "name": "Mimar Kemalettin",
+          "coordinate": [28.9632751, 41.008744]
+        },
+        {
+          "name": "Şehsuvar Bey",
+          "coordinate": [28.9672109, 41.0047129]
+        },
+        {
+          "name": "Nişanca",
+          "coordinate": [28.960263, 41.006884]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dacb79746e8604409768",
+      "zoneName": "Şehremini",
+      "containedSeedCount": 1,
+      "distinctMahalleNames": ["Şehremini"],
+      "namingStatus": "SINGLE_SEED_MATCH",
+      "seeds": [
+        {
+          "name": "Şehremini",
+          "coordinate": [28.9327162, 41.0138832]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-67991e44ab1c9e28442b",
+      "zoneName": "Territory 013",
+      "containedSeedCount": 4,
+      "distinctMahalleNames": ["Katip Kasım", "Mesihpaşa", "Kemalpaşa", "Laleli"],
+      "namingStatus": "AMBIGUOUS_REVIEW_REQUIRED",
+      "seeds": [
+        {
+          "name": "Katip Kasım",
+          "coordinate": [28.9551397, 41.0062654]
+        },
+        {
+          "name": "Mesihpaşa",
+          "coordinate": [28.9546142, 41.0082394]
+        },
+        {
+          "name": "Kemalpaşa",
+          "coordinate": [28.9554577, 41.0116066]
+        },
+        {
+          "name": "Laleli",
+          "coordinate": [28.9573175, 41.0095673]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-de3555218fb370c42fd2",
+      "zoneName": "Mevlanakapı",
+      "containedSeedCount": 1,
+      "distinctMahalleNames": ["Mevlanakapı"],
+      "namingStatus": "SINGLE_SEED_MATCH",
+      "seeds": [
+        {
+          "name": "Mevlanakapı",
+          "coordinate": [28.9237485, 41.013311]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-34d0c14106436af5f5a6",
+      "zoneName": "Seyyid Ömer",
+      "containedSeedCount": 1,
+      "distinctMahalleNames": ["Seyyid Ömer"],
+      "namingStatus": "SINGLE_SEED_MATCH",
+      "seeds": [
+        {
+          "name": "Seyyid Ömer",
+          "coordinate": [28.9313786, 41.0094787]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-78efecad6d2ae4ccd2ec",
+      "zoneName": "Territory 016",
+      "containedSeedCount": 12,
+      "distinctMahalleNames": [
+        "Cağaloğlu",
+        "Tahtakale",
+        "Taya Hatun",
+        "Rüstempaşa",
+        "Molla Fenari",
+        "Hobyar",
+        "Balabanağa",
+        "Beyazıt",
+        "Sururi",
+        "Eminönü",
+        "Mahmutpaşa",
+        "Sirkeci"
+      ],
+      "namingStatus": "AMBIGUOUS_REVIEW_REQUIRED",
+      "seeds": [
+        {
+          "name": "Cağaloğlu",
+          "coordinate": [28.9754943, 41.0118933]
+        },
+        {
+          "name": "Tahtakale",
+          "coordinate": [28.9689108, 41.0162853]
+        },
+        {
+          "name": "Taya Hatun",
+          "coordinate": [28.9694435, 41.0121022]
+        },
+        {
+          "name": "Rüstempaşa",
+          "coordinate": [28.9706209, 41.0168686]
+        },
+        {
+          "name": "Molla Fenari",
+          "coordinate": [28.9706351, 41.0093709]
+        },
+        {
+          "name": "Hobyar",
+          "coordinate": [28.9744019, 41.0154966]
+        },
+        {
+          "name": "Balabanağa",
+          "coordinate": [28.9583162, 41.0107246]
+        },
+        {
+          "name": "Beyazıt",
+          "coordinate": [28.9665055, 41.009722]
+        },
+        {
+          "name": "Sururi",
+          "coordinate": [28.9716378, 41.0133247]
+        },
+        {
+          "name": "Eminönü",
+          "coordinate": [28.9710147, 41.017536]
+        },
+        {
+          "name": "Mahmutpaşa",
+          "coordinate": [28.9711899, 41.0104616]
+        },
+        {
+          "name": "Sirkeci",
+          "coordinate": [28.9754914, 41.01485]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-13d94a01ceafb0ce5169",
+      "zoneName": "Territory 017",
+      "containedSeedCount": 0,
+      "distinctMahalleNames": [],
+      "namingStatus": "UNSEEDED",
+      "seeds": []
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ce3a6d0f0ea5c4667c87",
+      "zoneName": "İskenderpaşa",
+      "containedSeedCount": 1,
+      "distinctMahalleNames": ["İskenderpaşa"],
+      "namingStatus": "SINGLE_SEED_MATCH",
+      "seeds": [
+        {
+          "name": "İskenderpaşa",
+          "coordinate": [28.9502718, 41.0153898]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b5ae85dbcb276cc5da0b",
+      "zoneName": "Molla Gürani",
+      "containedSeedCount": 1,
+      "distinctMahalleNames": ["Molla Gürani"],
+      "namingStatus": "SINGLE_SEED_MATCH",
+      "seeds": [
+        {
+          "name": "Molla Gürani",
+          "coordinate": [28.9418478, 41.0129736]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-c760995c457452ed71a1",
+      "zoneName": "Territory 020",
+      "containedSeedCount": 11,
+      "distinctMahalleNames": [
+        "Unkapanı",
+        "Mercan",
+        "Yavuz Sinan",
+        "Hacı Kadın",
+        "Kalenderhane",
+        "Molla Hüsrev",
+        "Hoca Gıyasettin",
+        "Sarıdemir",
+        "Demirtaş",
+        "Süleymaniye",
+        "Vefa"
+      ],
+      "namingStatus": "AMBIGUOUS_REVIEW_REQUIRED",
+      "seeds": [
+        {
+          "name": "Unkapanı",
+          "coordinate": [28.9608827, 41.0221165]
+        },
+        {
+          "name": "Mercan",
+          "coordinate": [28.9674617, 41.013183]
+        },
+        {
+          "name": "Yavuz Sinan",
+          "coordinate": [28.9625709, 41.0202566]
+        },
+        {
+          "name": "Hacı Kadın",
+          "coordinate": [28.9597045, 41.0192279]
+        },
+        {
+          "name": "Kalenderhane",
+          "coordinate": [28.9587331, 41.0142172]
+        },
+        {
+          "name": "Molla Hüsrev",
+          "coordinate": [28.9588237, 41.0156647]
+        },
+        {
+          "name": "Hoca Gıyasettin",
+          "coordinate": [28.9616858, 41.019722]
+        },
+        {
+          "name": "Sarıdemir",
+          "coordinate": [28.9671737, 41.0182733]
+        },
+        {
+          "name": "Demirtaş",
+          "coordinate": [28.9661893, 41.0176226]
+        },
+        {
+          "name": "Süleymaniye",
+          "coordinate": [28.9655085, 41.0150133]
+        },
+        {
+          "name": "Vefa",
+          "coordinate": [28.9589045, 41.0166138]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-08c523104fbe1e7feb3d",
+      "zoneName": "Akşemsettin",
+      "containedSeedCount": 1,
+      "distinctMahalleNames": ["Akşemsettin"],
+      "namingStatus": "SINGLE_SEED_MATCH",
+      "seeds": [
+        {
+          "name": "Akşemsettin",
+          "coordinate": [28.9460241, 41.0188839]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b869ea01a2bad0439ea4",
+      "zoneName": "Territory 022",
+      "containedSeedCount": 0,
+      "distinctMahalleNames": [],
+      "namingStatus": "UNSEEDED",
+      "seeds": []
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b05a48a15e5125cdf298",
+      "zoneName": "Akdeniz",
+      "containedSeedCount": 1,
+      "distinctMahalleNames": ["Akdeniz"],
+      "namingStatus": "SINGLE_SEED_MATCH",
+      "seeds": [
+        {
+          "name": "Akdeniz",
+          "coordinate": [28.9446094, 41.0179509]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-290699f58ea199c88a63",
+      "zoneName": "Territory 024",
+      "containedSeedCount": 3,
+      "distinctMahalleNames": ["Zeyrek", "Cibali", "Küçükmustafapaşa"],
+      "namingStatus": "AMBIGUOUS_REVIEW_REQUIRED",
+      "seeds": [
+        {
+          "name": "Zeyrek",
+          "coordinate": [28.9533439, 41.0172116]
+        },
+        {
+          "name": "Cibali",
+          "coordinate": [28.9593551, 41.0235835]
+        },
+        {
+          "name": "Küçükmustafapaşa",
+          "coordinate": [28.9559005, 41.0261957]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-2b5978834366688ae645",
+      "zoneName": "Territory 025",
+      "containedSeedCount": 3,
+      "distinctMahalleNames": ["Fatih", "Yavuz Sultan Selim", "Ali Kuşçu"],
+      "namingStatus": "AMBIGUOUS_REVIEW_REQUIRED",
+      "seeds": [
+        {
+          "name": "Fatih",
+          "coordinate": [28.9479296, 41.0192846]
+        },
+        {
+          "name": "Yavuz Sultan Selim",
+          "coordinate": [28.9550654, 41.0270411]
+        },
+        {
+          "name": "Ali Kuşçu",
+          "coordinate": [28.9484468, 41.0206955]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-01eda0ae60d28fc3a2c7",
+      "zoneName": "Topkapı",
+      "containedSeedCount": 1,
+      "distinctMahalleNames": ["Topkapı"],
+      "namingStatus": "SINGLE_SEED_MATCH",
+      "seeds": [
+        {
+          "name": "Topkapı",
+          "coordinate": [28.9281683, 41.0207107]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b3e509aaad7fa40c97c0",
+      "zoneName": "Territory 027",
+      "containedSeedCount": 2,
+      "distinctMahalleNames": ["Hırka-i Şerif", "Karagümrük"],
+      "namingStatus": "AMBIGUOUS_REVIEW_REQUIRED",
+      "seeds": [
+        {
+          "name": "Hırka-i Şerif",
+          "coordinate": [28.9404275, 41.0246237]
+        },
+        {
+          "name": "Karagümrük",
+          "coordinate": [28.9373882, 41.0268821]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dc4135f5abb73435480a",
+      "zoneName": "Territory 028",
+      "containedSeedCount": 2,
+      "distinctMahalleNames": ["Balat", "Fener"],
+      "namingStatus": "AMBIGUOUS_REVIEW_REQUIRED",
+      "seeds": [
+        {
+          "name": "Balat",
+          "coordinate": [28.9482931, 41.0320032]
+        },
+        {
+          "name": "Fener",
+          "coordinate": [28.9509216, 41.0298173]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-f24cd8558fe73d01e2b4",
+      "zoneName": "Territory 029",
+      "containedSeedCount": 2,
+      "distinctMahalleNames": ["Ayvansaray", "Derviş Ali"],
+      "namingStatus": "AMBIGUOUS_REVIEW_REQUIRED",
+      "seeds": [
+        {
+          "name": "Ayvansaray",
+          "coordinate": [28.9425695, 41.0381763]
+        },
+        {
+          "name": "Derviş Ali",
+          "coordinate": [28.9392841, 41.0295845]
+        }
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b699d521a866aa6875c3",
+      "zoneName": "Atikali",
+      "containedSeedCount": 1,
+      "distinctMahalleNames": ["Atikali"],
+      "namingStatus": "SINGLE_SEED_MATCH",
+      "seeds": [
+        {
+          "name": "Atikali",
+          "coordinate": [28.9438294, 41.0245097]
+        }
+      ]
+    }
+  ],
+  "migrationImpact": "No polygon or stable ID change; consumer must not auto-apply mahalle display names when namingStatus is AMBIGUOUS_REVIEW_REQUIRED."
+}

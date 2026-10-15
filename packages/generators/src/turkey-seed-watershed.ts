@@ -209,3 +209,322 @@ export function refineSeedWatershedFaceLabelsWeakBarrier(input: {
 
   return { reassignedFaceCount, blockedBySeedAnchorCount };
 }
+
+export type TurkeyV17AnchoredWatershedMergeStats = {
+  crossSeedWeakMergeCount: number;
+  strongBlockedAdjacencyCount: number;
+  maxAreaBlockedMergeCount: number;
+};
+
+/**
+ * Replicate v1.7 area-target face merges on a parallel leader array (same face graph).
+ */
+export function buildTurkeyNetworkFaceV17MergeLeader(input: {
+  faceCount: number;
+  faceAreaKm2: readonly number[];
+  neighbours: ReadonlyMap<number, ReadonlyMap<number, TurkeyBarrierGraphNeighbourEdge>>;
+  targetAreaKm2: number;
+  targetGeometryAreaKm2: number;
+  seedCount: number;
+  maxAreaKm2: number;
+  areaToleranceKm2: number;
+}): number[] {
+  const area = [...input.faceAreaKm2];
+  const leader = input.faceCount > 0 ? Array.from({ length: input.faceCount }, (_, i) => i) : [];
+  const members = new Map<number, number[]>(leader.map((index) => [index, [index]]));
+  const find = (index: number): number => {
+    while (leader[index] !== index) {
+      index = leader[index]!;
+    }
+    return index;
+  };
+  const union = (left: number, right: number): void => {
+    const rootLeft = find(left);
+    const rootRight = find(right);
+    if (rootLeft === rootRight) {
+      return;
+    }
+    leader[rootRight] = rootLeft;
+    area[rootLeft]! += area[rootRight]!;
+    members.set(rootLeft, [...(members.get(rootLeft) ?? []), ...(members.get(rootRight) ?? [])]);
+    members.delete(rootRight);
+  };
+  const target = Math.max(
+    input.targetAreaKm2,
+    input.targetGeometryAreaKm2 / Math.max(1, input.seedCount)
+  );
+  const processed = new Set<number>();
+  for (const index of leader
+    .map((_, faceIndex) => faceIndex)
+    .sort((a, b) => area[a]! - area[b]! || a - b)) {
+    const root = find(index);
+    if (processed.has(root)) {
+      continue;
+    }
+    while (area[root]! < target * 0.6) {
+      const choices = new Map<number, { strength: number; length: number }>();
+      for (const member of members.get(root) ?? []) {
+        for (const [other, edge] of input.neighbours.get(member) ?? []) {
+          const peer = find(other);
+          if (peer === root || area[root]! + area[peer]! > input.maxAreaKm2) {
+            continue;
+          }
+          const prior = choices.get(peer);
+          choices.set(peer, {
+            strength: Math.max(prior?.strength ?? 0, edge.strength),
+            length: (prior?.length ?? 0) + edge.length
+          });
+        }
+      }
+      const selected = [...choices.entries()].sort(
+        (a, b) =>
+          a[1].strength - b[1].strength ||
+          b[1].length - a[1].length ||
+          Math.abs(area[root]! + area[a[0]]! - target) -
+            Math.abs(area[root]! + area[b[0]]! - target) ||
+          a[0] - b[0]
+      )[0];
+      if (!selected) {
+        break;
+      }
+      union(root, selected[0]);
+    }
+    processed.add(root);
+  }
+  return leader;
+}
+
+/**
+ * impl-rev4: within each v1.7 merge group, union watershed components that differ only
+ * across weak inter-seed barriers; keep splits when a strong barrier separates seeds.
+ */
+export function mergeV17AnchoredWatershedFaceGroups(input: {
+  faceCount: number;
+  seedLabels: readonly number[];
+  neighbours: ReadonlyMap<number, ReadonlyMap<number, TurkeyBarrierGraphNeighbourEdge>>;
+  leaderV17: readonly number[];
+  leader: number[];
+  faceAreaKm2: readonly number[];
+  maxAreaKm2: number;
+  areaToleranceKm2: number;
+  strongStrengthThreshold?: number;
+}): TurkeyV17AnchoredWatershedMergeStats {
+  const strongThreshold = input.strongStrengthThreshold ?? 0.75;
+  const area = [...input.faceAreaKm2];
+  const findV17 = (faceIndex: number): number => {
+    let current = faceIndex;
+    while (input.leaderV17[current] !== current) {
+      current = input.leaderV17[current]!;
+    }
+    return current;
+  };
+  const find = (faceIndex: number): number => {
+    let current = faceIndex;
+    while (input.leader[current] !== current) {
+      current = input.leader[current]!;
+    }
+    return current;
+  };
+  const union = (left: number, right: number): void => {
+    const rootLeft = find(left);
+    const rootRight = find(right);
+    if (rootLeft === rootRight) {
+      return;
+    }
+    if (area[rootLeft]! + area[rootRight]! > input.maxAreaKm2 + input.areaToleranceKm2) {
+      return;
+    }
+    input.leader[rootRight] = rootLeft;
+    area[rootLeft]! += area[rootRight]!;
+  };
+
+  let crossSeedWeakMergeCount = 0;
+  let strongBlockedAdjacencyCount = 0;
+  let maxAreaBlockedMergeCount = 0;
+
+  const v17Roots = new Set<number>();
+  for (let faceIndex = 0; faceIndex < input.faceCount; faceIndex++) {
+    v17Roots.add(findV17(faceIndex));
+  }
+
+  for (const v17Root of [...v17Roots].sort((a, b) => a - b)) {
+    const componentRoots = new Set<number>();
+    for (let faceIndex = 0; faceIndex < input.faceCount; faceIndex++) {
+      if (findV17(faceIndex) !== v17Root) {
+        continue;
+      }
+      componentRoots.add(find(faceIndex));
+    }
+    const sortedComponents = [...componentRoots].sort((a, b) => a - b);
+    const componentSeedLabel = new Map<number, number>();
+    for (const component of sortedComponents) {
+      for (let faceIndex = 0; faceIndex < input.faceCount; faceIndex++) {
+        if (find(faceIndex) !== component) {
+          continue;
+        }
+        const label = input.seedLabels[faceIndex] ?? -1;
+        if (label !== -1) {
+          componentSeedLabel.set(component, label);
+          break;
+        }
+      }
+    }
+
+    const blocked = new Set<string>();
+    for (let faceIndex = 0; faceIndex < input.faceCount; faceIndex++) {
+      if (findV17(faceIndex) !== v17Root) {
+        continue;
+      }
+      const componentA = find(faceIndex);
+      const labelA = componentSeedLabel.get(componentA) ?? input.seedLabels[faceIndex] ?? -1;
+      for (const [neighbor, edge] of input.neighbours.get(faceIndex) ?? []) {
+        if (findV17(neighbor) !== v17Root) {
+          continue;
+        }
+        const componentB = find(neighbor);
+        if (componentA === componentB) {
+          continue;
+        }
+        const labelB = componentSeedLabel.get(componentB) ?? input.seedLabels[neighbor] ?? -1;
+        if (labelA === -1 || labelB === -1 || labelA === labelB) {
+          continue;
+        }
+        if (edge.strength >= strongThreshold) {
+          const key =
+            componentA < componentB ? `${componentA}:${componentB}` : `${componentB}:${componentA}`;
+          blocked.add(key);
+          strongBlockedAdjacencyCount++;
+        }
+      }
+    }
+
+    const componentLeader = new Map<number, number>();
+    for (const component of sortedComponents) {
+      componentLeader.set(component, component);
+    }
+    const findComponent = (component: number): number => {
+      let current = component;
+      while (componentLeader.get(current) !== current) {
+        current = componentLeader.get(current)!;
+      }
+      return current;
+    };
+    const unionComponents = (left: number, right: number): void => {
+      const rootLeft = findComponent(left);
+      const rootRight = findComponent(right);
+      if (rootLeft === rootRight) {
+        return;
+      }
+      componentLeader.set(rootRight, rootLeft);
+    };
+
+    const componentAdjacency = new Map<number, Set<number>>();
+    for (const component of sortedComponents) {
+      componentAdjacency.set(component, new Set());
+    }
+    for (let faceIndex = 0; faceIndex < input.faceCount; faceIndex++) {
+      if (findV17(faceIndex) !== v17Root) {
+        continue;
+      }
+      const componentA = find(faceIndex);
+      for (const [neighbor] of input.neighbours.get(faceIndex) ?? []) {
+        if (findV17(neighbor) !== v17Root) {
+          continue;
+        }
+        const componentB = find(neighbor);
+        if (componentA === componentB) {
+          continue;
+        }
+        componentAdjacency.get(componentA)?.add(componentB);
+        componentAdjacency.get(componentB)?.add(componentA);
+      }
+    }
+    const visitQueue = [...sortedComponents];
+    const seenComponents = new Set<number>();
+    while (visitQueue.length) {
+      const start = visitQueue.shift()!;
+      if (seenComponents.has(start)) {
+        continue;
+      }
+      seenComponents.add(start);
+      const stack = [start];
+      while (stack.length) {
+        const current = stack.pop()!;
+        for (const neighbor of componentAdjacency.get(current) ?? []) {
+          const key = current < neighbor ? `${current}:${neighbor}` : `${neighbor}:${current}`;
+          if (blocked.has(key)) {
+            continue;
+          }
+          unionComponents(current, neighbor);
+          if (!seenComponents.has(neighbor)) {
+            seenComponents.add(neighbor);
+            stack.push(neighbor);
+          }
+        }
+      }
+    }
+
+    const mergedGroups = new Map<number, number[]>();
+    for (const component of sortedComponents) {
+      const root = findComponent(component);
+      const group = mergedGroups.get(root) ?? [];
+      group.push(component);
+      mergedGroups.set(root, group);
+    }
+
+    for (const components of mergedGroups.values()) {
+      if (components.length <= 1) {
+        continue;
+      }
+      const labels = new Set(
+        components
+          .map((component) => componentSeedLabel.get(component) ?? -1)
+          .filter((label) => label !== -1)
+      );
+      if (labels.size <= 1) {
+        continue;
+      }
+      const anchorComponent = components[0]!;
+      let anchorFace = -1;
+      for (let faceIndex = 0; faceIndex < input.faceCount; faceIndex++) {
+        if (find(faceIndex) === anchorComponent) {
+          anchorFace = faceIndex;
+          break;
+        }
+      }
+      if (anchorFace < 0) {
+        continue;
+      }
+      for (let index = 1; index < components.length; index++) {
+        let otherFace = -1;
+        const otherComponent = components[index]!;
+        for (let faceIndex = 0; faceIndex < input.faceCount; faceIndex++) {
+          if (find(faceIndex) === otherComponent) {
+            otherFace = faceIndex;
+            break;
+          }
+        }
+        if (otherFace < 0) {
+          continue;
+        }
+        const beforeLeft = find(anchorFace);
+        const beforeRight = find(otherFace);
+        if (beforeLeft === beforeRight) {
+          continue;
+        }
+        if (area[beforeLeft]! + area[beforeRight]! > input.maxAreaKm2 + input.areaToleranceKm2) {
+          maxAreaBlockedMergeCount++;
+          continue;
+        }
+        union(anchorFace, otherFace);
+        crossSeedWeakMergeCount++;
+      }
+    }
+  }
+
+  return {
+    crossSeedWeakMergeCount,
+    strongBlockedAdjacencyCount,
+    maxAreaBlockedMergeCount
+  };
+}

@@ -34,14 +34,18 @@ import { createTurkeyV2Adm3TerritoryId } from "./turkey-adm3-ingestion.js";
 import { isRecord, serializeJsonStable, sha256Hex } from "./sources/utils.js";
 import {
   auditSeedWatershedBarrierAssignments,
+  buildTurkeyNetworkFaceV17MergeLeader,
+  mergeV17AnchoredWatershedFaceGroups,
   refineSeedWatershedFaceLabelsWeakBarrier,
   turkeyBarrierGraphEdgeCrossingCostMeters,
-  type TurkeySeedWatershedBarrierAudit
+  type TurkeySeedWatershedBarrierAudit,
+  type TurkeyV17AnchoredWatershedMergeStats
 } from "./turkey-seed-watershed.js";
 
 export const TURKEY_SMART_FALLBACK_ALGORITHM_VERSION = "smart-derived-v1.7" as const;
 export const TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION = "smart-derived-v2.0-pilot" as const;
 export const TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION = "impl-rev3" as const;
+export const TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION_REV4 = "impl-rev4" as const;
 
 const SUPPORTED_TURKEY_SMART_FALLBACK_ALGORITHM_VERSIONS = new Set<string>([
   TURKEY_SMART_FALLBACK_ALGORITHM_VERSION,
@@ -144,6 +148,7 @@ export interface TurkeyNetworkConstructionDiagnostics {
   postMergePieceCount: number;
   candidateCount: number;
   maxAreaBlockedMergeCount?: number;
+  v17AnchoredWatershedMerge?: TurkeyV17AnchoredWatershedMergeStats;
   seedWatershedBarrierAudit?: TurkeySeedWatershedBarrierAudit;
 }
 export type TurkeySmartFallbackSourceStrategy = "barrier-guided" | "synthetic-last-resort";
@@ -268,6 +273,8 @@ export interface TurkeySmartFallbackOptions {
   /** v2 pilot only: scales gameplay maxAreaKm2 (Fatih hypothesis B used 1.12). */
   v2PilotMaxAreaGameplayMultiplier?: number;
   v2PilotImplementationRevision?: string;
+  /** v2 pilot impl-rev4: collapse weak inter-seed splits inside v1.7 merge groups. */
+  v2PilotV17AnchoredHybrid?: boolean;
 }
 
 export interface TurkeySmartFallbackInput {
@@ -307,6 +314,7 @@ export interface TurkeySmartFallbackConfiguration {
   algorithmVersion: TurkeySmartFallbackAlgorithmVersion;
   seedWatershedPartition?: boolean;
   seedWatershedWeakBarrierReassignment?: boolean;
+  seedWatershedV17AnchoredHybrid?: boolean;
   implementationRevision?: string;
   seed: string;
   targetAreaKm2: number;
@@ -922,6 +930,9 @@ export function resolveTurkeySmartFallbackConfiguration(input: TurkeySmartFallba
   const v2WeakBarrierReassignment =
     input.options?.v2PilotWeakBarrierReassignment ??
     v2ImplementationRevision === TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION;
+  const v2V17AnchoredHybrid =
+    input.options?.v2PilotV17AnchoredHybrid ??
+    v2ImplementationRevision === TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION_REV4;
 
   const configuration: TurkeySmartFallbackConfiguration = {
     schemaVersion: TURKEY_SMART_FALLBACK_CONFIGURATION_SCHEMA_VERSION,
@@ -932,7 +943,8 @@ export function resolveTurkeySmartFallbackConfiguration(input: TurkeySmartFallba
       ? {
           seedWatershedPartition: true,
           implementationRevision: v2ImplementationRevision,
-          ...(v2WeakBarrierReassignment ? { seedWatershedWeakBarrierReassignment: true } : {})
+          ...(v2WeakBarrierReassignment ? { seedWatershedWeakBarrierReassignment: true } : {}),
+          ...(v2V17AnchoredHybrid ? { seedWatershedV17AnchoredHybrid: true } : {})
         }
       : {}),
     organic: input.options?.organic ?? (seedWatershedPartition ? true : false),
@@ -2372,6 +2384,28 @@ function buildNetworkFirstPieces(input: {
       }
     }
     construction.maxAreaBlockedMergeCount = maxAreaBlockedMergeCount;
+    if (input.configuration.seedWatershedV17AnchoredHybrid) {
+      const leaderV17 = buildTurkeyNetworkFaceV17MergeLeader({
+        faceCount: faces.length,
+        faceAreaKm2: faces.map((face) => face.areaKm2),
+        neighbours,
+        targetAreaKm2: input.configuration.targetAreaKm2,
+        targetGeometryAreaKm2: input.configuration.targetGeometryAreaKm2,
+        seedCount: input.seeds.length,
+        maxAreaKm2: input.configuration.maxAreaKm2,
+        areaToleranceKm2: AREA_TOLERANCE_KM2
+      });
+      construction.v17AnchoredWatershedMerge = mergeV17AnchoredWatershedFaceGroups({
+        faceCount: faces.length,
+        seedLabels,
+        neighbours,
+        leaderV17,
+        leader,
+        faceAreaKm2: faces.map((face) => face.areaKm2),
+        maxAreaKm2: input.configuration.maxAreaKm2,
+        areaToleranceKm2: AREA_TOLERANCE_KM2
+      });
+    }
   } else {
     const target = Math.max(
       input.configuration.targetAreaKm2,

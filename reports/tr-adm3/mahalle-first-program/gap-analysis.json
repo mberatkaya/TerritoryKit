@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-first-gap-analysis@1",
-  "generatedAt": "2026-10-15T16:07:29.502Z",
+  "generatedAt": "2026-10-15T17:14:34.575Z",
   "originMainSha": "d0d977f684b868adb37e40676747725d7a231453",
   "pr111": {
     "number": 111,
@@ -37,7 +37,7 @@
   },
   "governanceDelta": {
     "schemaVersion": "territorykit-tr-mahalle-first-governance-delta@1",
-    "generatedAt": "2026-10-15T16:07:29.502Z",
+    "generatedAt": "2026-10-15T17:14:34.573Z",
     "originMainSha": "d0d977f684b868adb37e40676747725d7a231453",
     "registrySummary": {
       "officialSourceCount": 81,

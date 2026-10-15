@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { assignSeedWatershedFaceLabels } from "../src/turkey-smart-fallback.js";
 import {
   auditSeedWatershedBarrierAssignments,
+  mergeV17AnchoredWatershedFaceGroups,
   turkeyBarrierGraphCrossingCostFactor,
   turkeyBarrierGraphEdgeCrossingCostMeters,
   turkeyBarrierGraphEdgeCrossingCostMetersImplRev1
@@ -100,5 +101,40 @@ describe("assignSeedWatershedFaceLabels synthetic graph", () => {
     expect(audit.unseededFaceCount).toBe(0);
     expect(audit.multiFacePerSeedLabelFaceCount).toBeGreaterThan(0);
     expect(audit.distinctLabeledSeedCount).toBe(2);
+  });
+});
+
+describe("v17-anchored watershed merge (impl-rev4)", () => {
+  it("merges different-seed components when only weak barriers separate them inside a v17 group", () => {
+    const neighbours = new Map<number, Map<number, { strength: number; length: number }>>([
+      [0, new Map([[1, { strength: 0.2, length: 50 }]])],
+      [1, new Map([[0, { strength: 0.2, length: 50 }]])],
+      [2, new Map([[3, { strength: 0.9, length: 50 }]])],
+      [3, new Map([[2, { strength: 0.9, length: 50 }]])]
+    ]);
+    const faceAreaKm2 = [0.1, 0.1, 0.1, 0.1];
+    const leaderV17 = [0, 0, 0, 0];
+    const leader = [0, 1, 2, 3];
+    const seedLabels = [0, 1, 0, 1];
+    const stats = mergeV17AnchoredWatershedFaceGroups({
+      faceCount: 4,
+      seedLabels,
+      neighbours,
+      leaderV17,
+      leader,
+      faceAreaKm2,
+      maxAreaKm2: 1,
+      areaToleranceKm2: 0.001
+    });
+    expect(stats.crossSeedWeakMergeCount).toBeGreaterThan(0);
+    const find = (face: number): number => {
+      let current = face;
+      while (leader[current] !== current) {
+        current = leader[current]!;
+      }
+      return current;
+    };
+    expect(find(0)).toBe(find(1));
+    expect(find(2)).not.toBe(find(3));
   });
 });

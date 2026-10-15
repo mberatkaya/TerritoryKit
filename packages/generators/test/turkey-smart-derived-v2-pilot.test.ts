@@ -3,7 +3,9 @@ import { createSquareZone } from "@territory-kit/shared-testkit";
 import {
   TURKEY_SMART_FALLBACK_ALGORITHM_VERSION,
   TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION,
+  TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION_REV4,
   buildTurkeyNetworkFirstSmartFallbackWithAdjacency,
+  buildTurkeySmartFallbackV2PilotRev4HybridWithAdjacency,
   buildTurkeySmartFallbackV2PilotWithAdjacency,
   resolveTurkeySmartFallbackConfiguration
 } from "../src/turkey-adm3.js";
@@ -126,5 +128,27 @@ describe("smart-derived-v2.0-pilot", () => {
     const first = await buildTurkeySmartFallbackV2PilotWithAdjacency(baseInput);
     const second = await buildTurkeySmartFallbackV2PilotWithAdjacency(baseInput);
     expect(second.deterministicHash).toBe(first.deterministicHash);
+  });
+
+  it("enables v17-anchored hybrid only for impl-rev4", () => {
+    const resolution = resolveTurkeySmartFallbackConfiguration({
+      ...baseInput,
+      options: {
+        ...baseInput.options,
+        algorithmVersion: TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION,
+        v2PilotImplementationRevision: TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION_REV4
+      }
+    });
+    expect(resolution.configuration.seedWatershedV17AnchoredHybrid).toBe(true);
+    expect(resolution.configuration.seedWatershedWeakBarrierReassignment).toBeUndefined();
+  });
+
+  it("builds impl-rev4 hybrid without changing default impl-rev3 revision constant", async () => {
+    const rev4 = await buildTurkeySmartFallbackV2PilotRev4HybridWithAdjacency(baseInput);
+    expect(rev4.configuration.implementationRevision).toBe(
+      TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION_REV4
+    );
+    expect(rev4.configuration.seedWatershedV17AnchoredHybrid).toBe(true);
+    expect(rev4.zones.length).toBeGreaterThan(0);
   });
 });

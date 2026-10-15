@@ -1,6 +1,6 @@
 # Mahalle-first ADM3 — gap analysis (keşif)
 
-**Üretim zamanı (UTC):** 2026-10-15T16:07:29.502Z  
+**Üretim zamanı (UTC):** 2026-10-15T17:14:34.575Z  
 **Doğrulanan `origin/main`:** `d0d977f684b868adb37e40676747725d7a231453`  
 **PR #111:** merge edildi (ulusal geometri remediation + rc.8 doğrulama).
 
@@ -10,14 +10,14 @@ TerritoryKit bugün **mahalle-first** hedefi için güçlü bir governance + v1.
 
 ## Sprint durumu (dört sprint + 3.5/3.6)
 
-| Sprint | Odak                      | Durum                                         |
-| ------ | ------------------------- | --------------------------------------------- |
-| 1      | Kaynak / governance       | **done** (#107)                               |
-| 2      | İstanbul ADM3 kalite      | **done** (#108) — 6 ilçe                      |
-| 3      | Ulusal RC + delivery      | **done** (#109)                               |
-| 3.5    | 973 ilçe envanter QA      | **done** (#110)                               |
-| 3.6    | Geometri remediation rc.8 | **done** (#111)                               |
-| 4      | Rush&Claim                | **planlı** — yasal/hosted kapıları açık değil |
+| Sprint | Odak | Durum |
+| ------ | ---- | ----- |
+| 1 | Kaynak / governance | **done** (#107) |
+| 2 | İstanbul ADM3 kalite | **done** (#108) — 6 ilçe |
+| 3 | Ulusal RC + delivery | **done** (#109) |
+| 3.5 | 973 ilçe envanter QA | **done** (#110) |
+| 3.6 | Geometri remediation rc.8 | **done** (#111) |
+| 4 | Rush&Claim | **planlı** — yasal/hosted kapıları açık değil |
 
 ## Governance delta (Sprint 1 yeniden değerlendirme)
 
@@ -25,29 +25,29 @@ Registry özeti: **81** il, **4** il productionEligible, **62** official-restric
 
 ### Odak iller (makine okunur: `gap-analysis.json` → `governanceDelta.focusProvinces`)
 
-| İl             | Registry status         | Catalog ingestion       | Not                                                               |
-| -------------- | ----------------------- | ----------------------- | ----------------------------------------------------------------- |
-| Bursa (16)     | official-ready          | adm3-catalog SHA pinned | Lisans: Bursa Açık Veri — redistribution allowed (catalog)        |
-| Gaziantep (27) | official-ready          | KML pinned              | CC BY 4.0 (catalog)                                               |
-| İstanbul (34)  | partial-official        | yok                     | İBB servis **license-blocked**; Kadıköy SHP **BLOCKED_BY_SOURCE** |
-| Sakarya (54)   | official-license-review | GeoJSON URL             | CRS/reprojection engeli; **candidate**, productionEligible false  |
-| Sivas (58)     | official-license-review | SHP ZIP                 | İndirme timeout; alan şeması bekliyor                             |
+| İl | Registry status | Catalog ingestion | Not |
+| --- | --- | --- | --- |
+| Bursa (16) | official-ready | adm3-catalog SHA pinned | Lisans: Bursa Açık Veri — redistribution allowed (catalog) |
+| Gaziantep (27) | official-ready | KML pinned | CC BY 4.0 (catalog) |
+| İstanbul (34) | partial-official | yok | İBB servis **license-blocked**; Kadıköy SHP **BLOCKED_BY_SOURCE** |
+| Sakarya (54) | official-license-review | GeoJSON URL | CRS/reprojection engeli; **candidate**, productionEligible false |
+| Sivas (58) | official-license-review | SHP ZIP | İndirme timeout; alan şeması bekliyor |
 
 **Veri katmanları:** indirilen doğrulanmış bytes ≠ onaylı redistribution ≠ gameplay estimated zone. Eksik kurum izinleri `human-approvals-required.json` içinde **PENDING_REVIEW** / **NOT_AUTHORIZED** olarak kalır.
 
 ## Modül eşlemesi ve boşluklar
 
-- **Source registry (81 il)** → `datasets/sources/TR/adm3/source-registry.json` — _gap:_ 4/81 productionEligible; 62 official-restricted; İstanbul license-blocked
-- **Official importer / adapters** → `packages/generators/src/turkey-adm3-ingestion.ts, turkey-adm3-adapters.ts, adm3-catalog.json` — _gap:_ Sakarya CRS/reprojection; Kadıköy bundle structurally invalid; Sivas download timeout
-- **OSM pipeline + barriers** → `packages/generators/src/turkey-osm-barriers.ts, turkey-adm3-osm.ts` — _gap:_ Eyüpsultan %24 network coverage; sparse barrier graphs in rural pilots
-- **smart-derived v1.7** → `packages/generators/src/turkey-smart-fallback.ts` — _gap:_ smart-derived-v2 yok; 631 low-confidence / 577 realism-warning districts (rc.8)
-- **Mahalle seed resolver** → `turkey-osm-barriers locality-seeds.json + normalizeLocalitySeeds in smart-fallback` — _gap:_ Seed coverage düşük; nameSource=generated-index yaygın; resmi mahalle uydurma yok (doğru)
-- **Barrier graph + organic routing** → `turkey-network-faces.ts, turkey-network-bounded.ts, turkey-organic-routing.ts` — _gap:_ Eyüpsultan ORGANIC_ROUTE_NO_PATH; parçalı graph bileşenleri
-- **Coastline / water QA** → `turkey-istanbul-geometry-diagnostics.ts, inspectTurkeyGeneratedCoastlineSpill` — _gap:_ Sprint-2 pilotlarda coastlineEvidence çoğunlukla NOT_ASSESSED
-- **Disconnected geometry QA** → `turkey-generated-zone-pathology.ts, component-chunk in smart-fallback` — _gap:_ crossWaterComponentSeparation çoğu pilotte NOT_ASSESSED
-- **Hybrid priority + clipping** → `packages/generators/src/turkey-v2-hybrid.ts` — _gap:_ PR #111 sibling overlap remediation; kalite skorları değişmedi
-- **National assembly + source-lock** → `turkey-v2-national.ts, packages/cli tr v2 national` — _gap:_ rc.8 publishReady=false (buildMode partial); rc.7 bytes korunmalı
-- **QA / MVT / migration** → `packages/dataset quality, render-artifacts, @territory-kit/migration` — _gap:_ rc.8 geometry hash delta 34 zone; migration-plan.json rc.7→rc.8 için authoritative değil
+- **Source registry (81 il)** → `datasets/sources/TR/adm3/source-registry.json` — *gap:* 4/81 productionEligible; 62 official-restricted; İstanbul license-blocked
+- **Official importer / adapters** → `packages/generators/src/turkey-adm3-ingestion.ts, turkey-adm3-adapters.ts, adm3-catalog.json` — *gap:* Sakarya CRS/reprojection; Kadıköy bundle structurally invalid; Sivas download timeout
+- **OSM pipeline + barriers** → `packages/generators/src/turkey-osm-barriers.ts, turkey-adm3-osm.ts` — *gap:* Eyüpsultan %24 network coverage; sparse barrier graphs in rural pilots
+- **smart-derived v1.7** → `packages/generators/src/turkey-smart-fallback.ts` — *gap:* smart-derived-v2 yok; 631 low-confidence / 577 realism-warning districts (rc.8)
+- **Mahalle seed resolver** → `turkey-osm-barriers locality-seeds.json + normalizeLocalitySeeds in smart-fallback` — *gap:* Seed coverage düşük; nameSource=generated-index yaygın; resmi mahalle uydurma yok (doğru)
+- **Barrier graph + organic routing** → `turkey-network-faces.ts, turkey-network-bounded.ts, turkey-organic-routing.ts` — *gap:* Eyüpsultan ORGANIC_ROUTE_NO_PATH; parçalı graph bileşenleri
+- **Coastline / water QA** → `turkey-istanbul-geometry-diagnostics.ts, inspectTurkeyGeneratedCoastlineSpill` — *gap:* Sprint-2 pilotlarda coastlineEvidence çoğunlukla NOT_ASSESSED
+- **Disconnected geometry QA** → `turkey-generated-zone-pathology.ts, component-chunk in smart-fallback` — *gap:* crossWaterComponentSeparation çoğu pilotte NOT_ASSESSED
+- **Hybrid priority + clipping** → `packages/generators/src/turkey-v2-hybrid.ts` — *gap:* PR #111 sibling overlap remediation; kalite skorları değişmedi
+- **National assembly + source-lock** → `turkey-v2-national.ts, packages/cli tr v2 national` — *gap:* rc.8 publishReady=false (buildMode partial); rc.7 bytes korunmalı
+- **QA / MVT / migration** → `packages/dataset quality, render-artifacts, @territory-kit/migration` — *gap:* rc.8 geometry hash delta 34 zone; migration-plan.json rc.7→rc.8 için authoritative değil
 
 ## smart-derived-v2 gereksinim boşlukları
 

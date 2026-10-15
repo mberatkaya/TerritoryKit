@@ -203,7 +203,10 @@ export {
   normalizeTurkeySmartFallbackBarriers,
   resolveTurkeySmartFallbackConfiguration
 } from "./turkey-smart-fallback.js";
-export { buildTurkeySmartFallbackV2PilotWithAdjacency } from "./turkey-smart-derived-v2-pilot.js";
+export {
+  buildTurkeySmartFallbackV2PilotRev4HybridWithAdjacency,
+  buildTurkeySmartFallbackV2PilotWithAdjacency
+} from "./turkey-smart-derived-v2-pilot.js";
 export {
   TURKEY_ADM3_COVERAGE_SCHEMA_VERSION,
   TURKEY_ADM3_IMPORT_REPORT_SCHEMA_VERSION,
