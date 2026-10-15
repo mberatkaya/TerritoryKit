@@ -15,14 +15,14 @@
 
 ## Metrics snapshot
 
-| Metric                              | rc.8 baseline |       v1.7 replay |          v2 pilot |
-| ----------------------------------- | ------------: | ----------------: | ----------------: |
-| ADM3 zones                          |            30 |                30 |                47 |
-| Seed-named share                    |        0.3333 |            0.3333 |            0.7872 |
-| Mean zone barrier alignment         |  NOT_ASSESSED |            0.8954 |            0.6671 |
-| Weighted internal barrier alignment |  NOT_ASSESSED |            0.8907 |            0.6562 |
-| Longest unsupported chain (m)       |  NOT_ASSESSED |                 0 |                 0 |
-| Deterministic hash                  |             — | 9845cbb6d3efc94e… | c19d894caa7272ff… |
+| Metric | rc.8 baseline | v1.7 replay | v2 pilot |
+| --- | ---: | ---: | ---: |
+| ADM3 zones | 30 | 30 | 47 |
+| Seed-named share | 0.3333 | 0.3333 | 0.7872 |
+| Mean zone barrier alignment | NOT_ASSESSED | 0.8954 | 0.6671 |
+| Weighted internal barrier alignment | NOT_ASSESSED | 0.8907 | 0.6562 |
+| Longest unsupported chain (m) | NOT_ASSESSED | 0 | 0 |
+| Deterministic hash | — | 9845cbb6d3efc94e… | c19d894caa7272ff… |
 
 ## Next gate (Eyüpsultan)
 
@@ -32,3 +32,4 @@
 ## Tests
 
 - Run `pnpm --filter @territory-kit/generators test turkey-smart-derived-v2-pilot` and full `pnpm verify` before merge.
+

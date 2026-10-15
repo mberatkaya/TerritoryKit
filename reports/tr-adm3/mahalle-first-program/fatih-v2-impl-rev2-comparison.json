@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-first-fatih-sprint-2b-comparison@1",
-  "generatedAt": "2026-10-15T16:27:35.647Z",
+  "generatedAt": "2026-10-15T16:29:40.612Z",
   "district": "Fatih",
   "parentAdm2Id": "tr:adm2:54988432b39641834885080",
   "baseline": {
@@ -56,8 +56,8 @@
   "v17Replay": {
     "algorithmVersion": "smart-derived-v1.7",
     "deterministicHash": "9845cbb6d3efc94ee1343c7c7814de8b19661ab1bc4b4475e5c0951d9cbb7456",
-    "buildDurationMs": 1441,
-    "memoryDeltaMb": 69.77,
+    "buildDurationMs": 1425,
+    "memoryDeltaMb": 88.71,
     "validationOk": true,
     "qualityOk": true,
     "adm3ZoneCount": 30,
@@ -97,8 +97,8 @@
     "implementationRevision": "impl-rev2",
     "deterministicHash": "c19d894caa7272ffc7b6e6a6dc41b9efdcc5a088034592d0d08764d337d959c1",
     "determinismVerified": true,
-    "buildDurationMs": 3601,
-    "memoryDeltaMb": 15.19,
+    "buildDurationMs": 3608,
+    "memoryDeltaMb": -2.98,
     "validationOk": true,
     "qualityOk": true,
     "adm3ZoneCount": 47,
@@ -155,7 +155,7 @@
       "residualAreaPercent": 1.483662,
       "networkTerritoryCount": 47,
       "peakLocalGraphSize": 16330,
-      "polygonizationDurationMs": 72,
+      "polygonizationDurationMs": 71,
       "processingMode": "monolithic",
       "chunkCount": 0,
       "largestChunkSegments": 0,
