@@ -1,7 +1,7 @@
 {
   "schemaVersion": "territorykit-tr-national-geometry-remediation@1",
-  "gitCommit": "pending-commit",
-  "generatedAt": "2026-10-14T14:00:00.000Z",
+  "gitCommit": "893480e78e82da8d6f6f234ebd6adaaa26599888",
+  "generatedAt": "2026-10-15T15:30:00.000Z",
   "rootCause": {
     "summary": "Hybrid quality gate filtered SIBLING_GEOMETRY_OVERLAP using polygon-clipping area > overlapToleranceKm2 while national evidence uses validateGeometryDataset sibling checks; sub-threshold overlaps still failed independent validation. CLI hybrid OSM options diverged from national (missing maxTerritories, legacy smart fallback default true).",
     "fixes": [
@@ -16,22 +16,52 @@
     "command": "node scripts/tr-rc8-three-district-preflight.mjs"
   },
   "rc8NationalBuild": {
-    "status": "IN_PROGRESS",
-    "qualityOutcome": "PENDING",
-    "processPid": 37104,
-    "districtArtifactsWritten": 151,
-    "districtArtifactsTarget": 973,
+    "status": "COMPLETE",
+    "qualityOutcome": "PASS_INDEPENDENT_GEOMETRY",
     "output": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+    "reports": ".territory/national-geometry-remediation/reports-impl-rev1",
     "log": ".territory/national-geometry-remediation/build-impl-rev1.log",
-    "osmSourceLock": {
-      "path": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json",
-      "contentAddressedSnapshotId": "TR-5ec68ce5e0b2be55",
-      "sha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
-    },
-    "checkpointSchemaRequired": "territorykit-tr-smart-district-checkpoint@5",
-    "checkpointImplementationRevisionRequired": "national-hybrid-sibling-gate-v2",
-    "experimentalFlags": ["--allow-parent-provenance-mismatch"],
-    "note": "Clean directory; no restore from candidate-rc8 @4 checkpoints. Observed 2026-10-15 session — re-count districts before final sign-off."
+    "datasetVersion": "2.1.0-rc.8",
+    "canonicalGeometryHash": "5aaa8ba0f796cf1692192faa90f77cc0e69c3561bbd2e31892d0837a2cb23a3f",
+    "adm3ZoneCount": 20392,
+    "districtCount": 973,
+    "failedDistrictCount": 0,
+    "buildMode": "partial",
+    "publishReady": false,
+    "closeoutEvidence": {
+      "command": "pnpm data:tr:national-geometry-remediation:closeout",
+      "adm3IndependentValidation": "reports/tr-adm3/national-geometry-remediation/adm3-independent-validation.json",
+      "nationalQualityComparison": "reports/tr-adm3/national-geometry-remediation/national-quality-comparison.json",
+      "stableIdDiff": "reports/tr-adm3/national-geometry-remediation/stable-id-diff.json",
+      "mvtValidation": "reports/tr-adm3/national-geometry-remediation/mvt-validation-rc8.json"
+    }
+  },
+  "geometryDelta": {
+    "zonesWithGeometryHashChange": 34,
+    "districtsAffected": [
+      {
+        "adm2Id": "tr:adm2:54988432b95277821649488",
+        "name": "İskenderun",
+        "geometryHashChangeCount": 23
+      },
+      {
+        "adm2Id": "tr:adm2:54988432b28913521474336",
+        "name": "Erbaa",
+        "geometryHashChangeCount": 7
+      },
+      {
+        "adm2Id": "tr:adm2:54988432b81567150601582",
+        "name": "Ağrı merkez",
+        "geometryHashChangeCount": 4
+      }
+    ],
+    "independentSiblingOverlapErrors": 0,
+    "rc7GeometryBlockedDistrictsRemediated": 3
+  },
+  "smartCoverageDelta": {
+    "lowConfidenceDistricts": { "rc7": 631, "rc8": 631, "delta": 0 },
+    "realismWarningDistricts": { "rc7": 577, "rc8": 577, "delta": 0 },
+    "note": "Scope of PR #111 is geometry overlap remediation; smart realism metrics unchanged."
   },
   "ciBlockerHybridTest": {
     "status": "PASS",

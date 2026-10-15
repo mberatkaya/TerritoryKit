@@ -1,39 +1,69 @@
-# National geometry remediation — interim decision
+# National geometry remediation — final decision (rc.8)
 
-**Dataset baseline:** `territory-kit-tr-v2-playable@2.1.0-rc.7` (`.territory/sprint-6/final/candidate`, unchanged)  
-**Candidate target:** `2.1.0-rc.8` → `.territory/national-geometry-remediation/candidate-rc8-impl-rev1`  
-**Implementation revision:** `national-hybrid-sibling-gate-v2`  
-**Branch:** `feat/tr-national-geometry-remediation`
+**Branch:** feat/tr-national-geometry-remediation  
+**Inspected commit:** `893480e78e82da8d6f6f234ebd6adaaa26599888`  
+**rc.7 bytes:** `.territory/sprint-6/final/candidate` (unchanged)  
+**rc.8 bytes:** `.territory/national-geometry-remediation/candidate-rc8-impl-rev1` (unchanged)
 
-## Decision matrix (interim)
+## MERGE recommendation
 
-| Gate                                                  | Verdict            | Notes                                                                              |
-| ----------------------------------------------------- | ------------------ | ---------------------------------------------------------------------------------- |
-| Three-overlap remediation (Vitest + dataset ADM3)     | **PASS**           | `turkey-national-blocker-districts-hybrid.test.ts`                                 |
-| Three-overlap remediation (CLI real hybrid preflight) | **PASS**           | `preflight-real-hybrid-rc8-impl-rev1.json` — strict `SIBLING_GEOMETRY_OVERLAP` = 0 |
-| Checkpoint @5 / implementation revision               | **PASS**           | `national-hybrid-sibling-gate-v2`                                                  |
-| National geometry improvement (rc.8 vs rc.7)          | **IN_PROGRESS**    | `build-impl-rev1.log` / `candidate-rc8-impl-rev1`                                  |
-| New candidate integrity                               | **PENDING**        | Build completion + validate                                                        |
-| Stable ID and migration readiness                     | **PENDING**        | `migration-plan.json` after build                                                  |
-| Rush&Claim Sprint 4 technical readiness               | **CONDITIONAL GO** | rc.8 metrics pending                                                               |
-| Production dataset promotion                          | **NO-GO**          | Yetkisiz                                                                           |
+**MERGE GO** (technical, PR #111 — not production publish)
 
-## Kök neden (üç overlap — çözüldü)
+## ADM3 independent geometry validation (rc.8)
 
-1. Hybrid `effectiveSiblingOverlap` kapısı `validateGeometryDataset` uyarılarını polygon-clipping alanı > `overlapToleranceKm2` ile süzüyordu; bağımsız validator aynı çiftleri hâlâ `SIBLING_GEOMETRY_OVERLAP` olarak işaretliyordu (`qualityOk=true` / gate true / validator fail).
-2. Preflight `generatedZoneCount=0` sayacı `boundarySourceClass: smart-derived` zone'ları saymıyordu (`generated-zone` / `sourceKind` aranıyordu).
-3. `tr adm3 hybrid build` OSM seçenekleri ulusal build ile hizalı değildi (`maxTerritories` eksik, `fallbackToLegacyOnSmartFailure` varsayılan true).
+| Metric                             | Value |
+| ---------------------------------- | ----- |
+| ADM3 zones validated               | 20392 |
+| Districts with geometry errors     | 0     |
+| Sibling overlap errors (aggregate) | 0     |
+| Parent containment errors          | 0     |
+| Invalid polygon errors             | 0     |
 
-## Düzeltme
+### Three former blocker districts
 
-- `countStrictSiblingGeometryOverlaps` — kapı ve `prevalidatedPartition` re-carve tetikleyicisi ulusal validator ile hizalı.
-- CLI `resolveOsmBarrierGeneratedOptions` — ulusal `maxTerritories` + `fallbackToLegacyOnSmartFailure: false`.
-- `implementationRevision` → `national-hybrid-sibling-gate-v2` (eski `@5` checkpoint'ler restore edilmez).
+- **Ağrı merkez** (tr:adm2:54988432b81567150601582): sibling overlaps=0, parent containment=0, invalid polygon=0
+- **İskenderun** (tr:adm2:54988432b95277821649488): sibling overlaps=0, parent containment=0, invalid polygon=0
+- **Erbaa** (tr:adm2:54988432b28913521474336): sibling overlaps=0, parent containment=0, invalid polygon=0
 
-## Test komutları
+## Smart coverage quality delta (same methodology as audit)
 
-```bash
-node scripts/tr-rc8-three-district-preflight.mjs
-pnpm --filter @territory-kit/generators test turkey-national-blocker-districts-hybrid.test.ts
-pnpm verify
-```
+| Metric                                          | rc.7 | rc.8 | Delta |
+| ----------------------------------------------- | ---: | ---: | ----: |
+| Low-confidence districts                        |  631 |  631 |     0 |
+| Realism warning districts                       |  577 |  577 |     0 |
+| unsupportedStraightThresholdViolations (totals) |  577 |  577 |     0 |
+
+Low-confidence: improved=0, unchanged=973, regressed=0.
+
+Realism warnings: improved=0, unchanged=973, regressed=0.
+
+## Stable ID / migration
+
+- Canonical geometry hash changed: **true**
+- Zone ID drift (rc.7 only / rc.8 only): **0 / 0**
+- Parent ID changes: **0**
+- Geometry hash changes (zones): **34** (İskenderun 23, Erbaa 7, Ağrı merkez 4)
+- migration-plan.json: **not authoritative** for rc.7→rc.8 — 20 392×`added` (no `--migration-baseline`); use `stable-id-diff.json` for ownership.
+
+## Geometry remediation gain (rc.8 vs rc.7)
+
+- rc.7 geometry-blocked districts (sibling overlap): **3** → rc.8 independent validator district errors: **0**
+- Low-confidence / realism warning districts: **631 / 577** unchanged (out of PR scope)
+
+## MVT / shards (rc.8)
+
+- MVT tiles: **18856**
+- render manifest `sourceLayer`: **territory_adm3**
+- `delivery-manifest.json`: **absent** (rc.7 had delivery-manifest artifacts; runtime consumer manifest still a separate delivery step)
+- Sampled tiles: parentAdm2Id + `territory_adm3` layer **5/5 PASS**
+- fullMvtDeliveryReady (sample gate): **true**
+
+## publishReady=false (not district incompleteness)
+
+- buildMode: **partial**
+- publishReady gate failures: **buildMode, nationalCompleteness**
+- 973 districts built: **true**
+
+## Explicit non-actions
+
+No production promotion, npm publish, CDN deploy, or Rush&Claim migration executed.

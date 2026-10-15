@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "territorykit-tr-adm3-independent-validation@1",
+  "validator": "validateGeometryDataset checks=full epsilon=1e-9 allowHoleBoundaryTouch=true",
+  "evidenceClass": "REAL_ARTIFACT_VERIFIED",
+  "candidateRoot": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+  "adm3ZoneCount": 20392,
+  "expectedAdm3ZoneCount": 20392,
+  "adm3ZoneCountMatches": true,
+  "districtsValidated": 973,
+  "districtsWithGeometryErrors": 0,
+  "aggregateErrors": {
+    "siblingOverlapErrors": 0,
+    "parentContainmentErrors": 0,
+    "invalidPolygonErrors": 0
+  },
+  "threeBlockerDistricts": [
+    {
+      "adm2Id": "tr:adm2:54988432b81567150601582",
+      "districtName": "Ağrı merkez",
+      "siblingOverlapErrorCount": 0,
+      "parentContainmentErrorCount": 0,
+      "invalidPolygonErrorCount": 0,
+      "geometryOk": true,
+      "errorIssues": []
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "districtName": "İskenderun",
+      "siblingOverlapErrorCount": 0,
+      "parentContainmentErrorCount": 0,
+      "invalidPolygonErrorCount": 0,
+      "geometryOk": true,
+      "errorIssues": []
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b28913521474336",
+      "districtName": "Erbaa",
+      "siblingOverlapErrorCount": 0,
+      "parentContainmentErrorCount": 0,
+      "invalidPolygonErrorCount": 0,
+      "geometryOk": true,
+      "errorIssues": []
+    }
+  ],
+  "districtReportsWithIssues": [],
+  "districtReportsSampleBlockersIncluded": 3
+}
