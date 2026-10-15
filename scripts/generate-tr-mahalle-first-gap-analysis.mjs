@@ -6,6 +6,7 @@
 import { execSync } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { format as formatPrettier } from "prettier";
 
 const REPO_ROOT = process.cwd();
 const REPORT_DIR = "reports/tr-adm3/mahalle-first-program";
@@ -364,8 +365,10 @@ ${report.nextPilotActions.map((a, i) => `${i + 1}. ${a}`).join("\n")}
 Makine okunur rapor: [\`gap-analysis.json\`](./gap-analysis.json)
 `;
 
-  await fs.writeFile(path.join(REPORT_DIR, "gap-analysis.md"), md);
-  console.log(`Wrote ${jsonPath} and ${REPORT_DIR}/gap-analysis.md`);
+  const mdPath = path.join(REPORT_DIR, "gap-analysis.md");
+  const formattedMd = await formatPrettier(md, { filepath: mdPath });
+  await fs.writeFile(mdPath, formattedMd);
+  console.log(`Wrote ${jsonPath} and ${mdPath}`);
 }
 
 main().catch((error) => {
