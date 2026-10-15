@@ -19,7 +19,7 @@
     "status": "IN_PROGRESS",
     "qualityOutcome": "PENDING",
     "processPid": 37104,
-    "districtArtifactsWritten": 111,
+    "districtArtifactsWritten": 151,
     "districtArtifactsTarget": 973,
     "output": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
     "log": ".territory/national-geometry-remediation/build-impl-rev1.log",
@@ -34,7 +34,8 @@
     "note": "Clean directory; no restore from candidate-rc8 @4 checkpoints. Observed 2026-10-15 session — re-count districts before final sign-off."
   },
   "ciBlockerHybridTest": {
-    "status": "FIX_PENDING_PUSH",
+    "status": "PASS",
+    "verifiedRunId": 38735872498,
     "failedRunId": 38576319295,
     "strategy": "Committed ODbL OSM barrier fixtures under packages/generators/test/fixtures/national-blocker-districts when inputs absent locally; NOT_RUN_MISSING_REAL_ARTIFACT when neither local nor fixture artifacts exist."
   }
