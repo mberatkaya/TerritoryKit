@@ -16,6 +16,7 @@ export {
   loadTerritoryCountryDataset
 } from "./country-loader.js";
 export { loadTerritoryQueryDataset } from "./query-loader.js";
+export { createTrSettlementAssociationQuery } from "./settlement-association-query.js";
 export {
   canonicalizeTerritoryGeometry,
   computeTerritoryAreaM2,
@@ -68,6 +69,10 @@ export type {
   TerritoryQueryDatasetHandle,
   TerritoryQueryDatasetLoadOptions
 } from "./query-loader.js";
+export type {
+  TrSettlementAssociationQuery,
+  TrSettlementAssociationQueryResult
+} from "./settlement-association-query.js";
 export type {
   BoundaryMode,
   BoundsQuery,

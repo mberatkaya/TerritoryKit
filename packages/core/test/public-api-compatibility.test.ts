@@ -23,6 +23,7 @@ describe("public API compatibility", () => {
       "createTerritoryGeometryVersion",
       "createTerritoryIdentity",
       "createTerritoryRegistryClient",
+      "createTrSettlementAssociationQuery",
       "decodeTerritoryBinarySpatialIndex",
       "defaultZoomLevelStrategy",
       "encodeTerritoryBinarySpatialIndex",

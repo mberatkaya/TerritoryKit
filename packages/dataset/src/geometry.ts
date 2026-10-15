@@ -137,6 +137,30 @@ export function computeTerritoryRepresentativePoint(geometry: TerritoryGeometry)
   return firstGeometryCoordinate(geometry) ?? bboxCenter;
 }
 
+export type TerritoryGeometryPointPlacement = "inside" | "boundary" | "outside";
+
+export function classifyLngLatTerritoryGeometryPlacement(
+  coordinate: LngLat,
+  geometry: TerritoryGeometry
+): TerritoryGeometryPointPlacement {
+  if (pointIntersectsGeometry(coordinate, geometry, "contains")) {
+    return "inside";
+  }
+
+  if (pointIntersectsGeometry(coordinate, geometry, "covers")) {
+    return "boundary";
+  }
+
+  return "outside";
+}
+
+export function isLngLatInsideTerritoryGeometry(
+  coordinate: LngLat,
+  geometry: TerritoryGeometry
+): boolean {
+  return pointIntersectsGeometry(coordinate, geometry, "covers");
+}
+
 export function canonicalizeTerritoryGeometry(geometry: TerritoryGeometry): TerritoryGeometry {
   if (geometry.type === "Polygon") {
     return {

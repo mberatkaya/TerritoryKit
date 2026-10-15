@@ -1,14 +1,32 @@
 export { createTerritoryDatasetFromGeoJson, loadTerritoryDatasetFromGeoJson } from "./geojson.js";
 export {
   canonicalizeTerritoryGeometry,
+  classifyLngLatTerritoryGeometryPlacement,
   computeGeometryBBox,
   computeGeometryCenter,
   computeTerritoryAreaM2,
   computeTerritoryRepresentativePoint,
   createTerritoryGeometryVersion,
   geometryToPolygons,
-  hasRingSelfIntersection
+  hasRingSelfIntersection,
+  isLngLatInsideTerritoryGeometry
 } from "./geometry.js";
+export {
+  TR_SETTLEMENT_ASSOCIATION_METHODS,
+  TR_SETTLEMENT_ASSOCIATION_SCHEMA_VERSION,
+  TR_SETTLEMENT_ASSOCIATION_STATUSES,
+  TR_SETTLEMENT_KINDS,
+  TR_SETTLEMENT_REASON_CODES,
+  buildTrSettlementAssociations,
+  compareTrSettlementGameplayGeometryInvariant,
+  computeTrSettlementGameplayFingerprint,
+  computeTrSettlementAssociationContentHash,
+  createTrSettlementRefId,
+  mapTrSettlementSeedType,
+  normalizeTrSettlementName,
+  resolveTrSettlementSourceLicenseStatus,
+  validateTrSettlementAssociationArtifact
+} from "./tr-settlement-association.js";
 export {
   applyTerritoryAdjacencyOverrides,
   canonicalTerritoryAdjacencyPair,
@@ -114,6 +132,21 @@ export type {
   TerritoryManualAdjacencyAdd,
   TerritoryManualAdjacencyRemove
 } from "./adjacency.js";
+export type {
+  TrSettlementAssociationArtifact,
+  TrSettlementAssociationBuildInput,
+  TrSettlementAssociationMethod,
+  TrSettlementAssociationRecord,
+  TrSettlementAssociationSourceContext,
+  TrSettlementAssociationStatus,
+  TrSettlementAssociationValidationIssue,
+  TrSettlementAssociationValidationReport,
+  TrSettlementGeometryInvariantReport,
+  TrSettlementKind,
+  TrSettlementReasonCode,
+  TrSettlementSeedInput,
+  TrSettlementZoneSummary
+} from "./tr-settlement-association.js";
 export type {
   TerritoryAdminLevel,
   LngLat,

@@ -39,6 +39,11 @@
       "types": "./dist/turkey-v2.d.mts",
       "import": "./dist/turkey-v2.mjs",
       "require": "./dist/turkey-v2.cjs"
+    },
+    "./tr-settlement-association": {
+      "types": "./dist/tr-settlement-association.d.mts",
+      "import": "./dist/tr-settlement-association.mjs",
+      "require": "./dist/tr-settlement-association.cjs"
     }
   },
   "scripts": {
