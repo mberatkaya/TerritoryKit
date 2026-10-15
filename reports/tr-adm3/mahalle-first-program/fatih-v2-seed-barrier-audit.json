@@ -1,0 +1,1641 @@
+{
+  "seedAssignment": {
+    "schemaVersion": "territorykit-tr-mahalle-first-seed-assignment@1",
+    "seeds": [
+      {
+        "authoritative": false,
+        "confidence": 0.72,
+        "coordinate": [
+          28.9754943,
+          41.0118933
+        ],
+        "id": "osm:node:14067649003",
+        "name": "Cağaloğlu",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:14067649003",
+        "type": "quarter"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9479296,
+          41.0192846
+        ],
+        "id": "osm:node:26504810",
+        "name": "Fatih",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:26504810",
+        "type": "locality"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.72,
+        "coordinate": [
+          28.9608827,
+          41.0221165
+        ],
+        "id": "osm:node:269753710",
+        "name": "Unkapanı",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:269753710",
+        "type": "quarter"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9425695,
+          41.0381763
+        ],
+        "id": "osm:node:4947158624",
+        "name": "Ayvansaray",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4947158624",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9502718,
+          41.0153898
+        ],
+        "id": "osm:node:4947158632",
+        "name": "İskenderpaşa",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4947158632",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9313786,
+          41.0094787
+        ],
+        "id": "osm:node:4947158636",
+        "name": "Seyyid Ömer",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4947158636",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9674617,
+          41.013183
+        ],
+        "id": "osm:node:4947158637",
+        "name": "Mercan",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4947158637",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9625709,
+          41.0202566
+        ],
+        "id": "osm:node:4947158640",
+        "name": "Yavuz Sinan",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4947158640",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9689108,
+          41.0162853
+        ],
+        "id": "osm:node:4947158644",
+        "name": "Tahtakale",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4947158644",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9267659,
+          41.0017335
+        ],
+        "id": "osm:node:4947158661",
+        "name": "Sümbül Efendi",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4947158661",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9694435,
+          41.0121022
+        ],
+        "id": "osm:node:4947158664",
+        "name": "Taya Hatun",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4947158664",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9392841,
+          41.0295845
+        ],
+        "id": "osm:node:4947158665",
+        "name": "Derviş Ali",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4947158665",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9597045,
+          41.0192279
+        ],
+        "id": "osm:node:4947158666",
+        "name": "Hacı Kadın",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4947158666",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9533439,
+          41.0172116
+        ],
+        "id": "osm:node:4947158667",
+        "name": "Zeyrek",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4947158667",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9327162,
+          41.0138832
+        ],
+        "id": "osm:node:4947158668",
+        "name": "Şehremini",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4947158668",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9451769,
+          41.0092592
+        ],
+        "id": "osm:node:4996909325",
+        "name": "Haseki Sultan",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4996909325",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9362529,
+          41.005246
+        ],
+        "id": "osm:node:4996909326",
+        "name": "Cerrahpaşa",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4996909326",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9587331,
+          41.0142172
+        ],
+        "id": "osm:node:4996909339",
+        "name": "Kalenderhane",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4996909339",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9588237,
+          41.0156647
+        ],
+        "id": "osm:node:4996909340",
+        "name": "Molla Hüsrev",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4996909340",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9706209,
+          41.0168686
+        ],
+        "id": "osm:node:4996909348",
+        "name": "Rüstempaşa",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4996909348",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9281683,
+          41.0207107
+        ],
+        "id": "osm:node:4996909359",
+        "name": "Topkapı",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4996909359",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9616858,
+          41.019722
+        ],
+        "id": "osm:node:4999339805",
+        "name": "Hoca Gıyasettin",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999339805",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9672073,
+          41.0075488
+        ],
+        "id": "osm:node:4999339806",
+        "name": "Mimar Hayrettin",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999339806",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9706351,
+          41.0093709
+        ],
+        "id": "osm:node:4999339807",
+        "name": "Molla Fenari",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999339807",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9765078,
+          41.013878
+        ],
+        "id": "osm:node:4999339808",
+        "name": "Hocapaşa",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999339808",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9671737,
+          41.0182733
+        ],
+        "id": "osm:node:4999339809",
+        "name": "Sarıdemir",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999339809",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9312607,
+          40.9996863
+        ],
+        "id": "osm:node:4999339810",
+        "name": "Koca Mustafapaşa",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999339810",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9551397,
+          41.0062654
+        ],
+        "id": "osm:node:4999339811",
+        "name": "Katip Kasım",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999339811",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.963701,
+          41.0065606
+        ],
+        "id": "osm:node:4999339812",
+        "name": "Saraç İshak",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999339812",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9546142,
+          41.0082394
+        ],
+        "id": "osm:node:4999339813",
+        "name": "Mesihpaşa",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999339813",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9769087,
+          41.0041141
+        ],
+        "id": "osm:node:4999339814",
+        "name": "Sultan Ahmet",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999339814",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9811439,
+          41.0062855
+        ],
+        "id": "osm:node:4999339815",
+        "name": "Cankurtaran",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999339815",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9744019,
+          41.0154966
+        ],
+        "id": "osm:node:4999339816",
+        "name": "Hobyar",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999339816",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9404275,
+          41.0246237
+        ],
+        "id": "osm:node:4999339818",
+        "name": "Hırka-i Şerif",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999339818",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9593551,
+          41.0235835
+        ],
+        "id": "osm:node:4999339819",
+        "name": "Cibali",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999339819",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9502838,
+          41.0083123
+        ],
+        "id": "osm:node:4999339820",
+        "name": "Aksaray",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999339820",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9482931,
+          41.0320032
+        ],
+        "id": "osm:node:4999341422",
+        "name": "Balat",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341422",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9550654,
+          41.0270411
+        ],
+        "id": "osm:node:4999341423",
+        "name": "Yavuz Sultan Selim",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341423",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9460241,
+          41.0188839
+        ],
+        "id": "osm:node:4999341426",
+        "name": "Akşemsettin",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341426",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9373882,
+          41.0268821
+        ],
+        "id": "osm:node:4999341427",
+        "name": "Karagümrük",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341427",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9484468,
+          41.0206955
+        ],
+        "id": "osm:node:4999341428",
+        "name": "Ali Kuşçu",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341428",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9583162,
+          41.0107246
+        ],
+        "id": "osm:node:4999341431",
+        "name": "Balabanağa",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341431",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9661893,
+          41.0176226
+        ],
+        "id": "osm:node:4999341432",
+        "name": "Demirtaş",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341432",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9697509,
+          41.0070824
+        ],
+        "id": "osm:node:4999341434",
+        "name": "Emin Sinan",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341434",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9764224,
+          41.0097673
+        ],
+        "id": "osm:node:4999341435",
+        "name": "Alemdar",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341435",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9665055,
+          41.009722
+        ],
+        "id": "osm:node:4999341436",
+        "name": "Beyazıt",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341436",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9554577,
+          41.0116066
+        ],
+        "id": "osm:node:4999341438",
+        "name": "Kemalpaşa",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341438",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9721624,
+          41.0031621
+        ],
+        "id": "osm:node:4999341441",
+        "name": "Küçük Ayasofya",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341441",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9632751,
+          41.008744
+        ],
+        "id": "osm:node:4999341442",
+        "name": "Mimar Kemalettin",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341442",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9672109,
+          41.0047129
+        ],
+        "id": "osm:node:4999341443",
+        "name": "Şehsuvar Bey",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341443",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9625315,
+          41.0047281
+        ],
+        "id": "osm:node:4999341444",
+        "name": "Muhsine Hatun",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341444",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.960263,
+          41.006884
+        ],
+        "id": "osm:node:4999341445",
+        "name": "Nişanca",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341445",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9438294,
+          41.0245097
+        ],
+        "id": "osm:node:4999341446",
+        "name": "Atikali",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341446",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9418478,
+          41.0129736
+        ],
+        "id": "osm:node:4999341447",
+        "name": "Molla Gürani",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341447",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9655085,
+          41.0150133
+        ],
+        "id": "osm:node:4999341449",
+        "name": "Süleymaniye",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341449",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9268933,
+          41.0054068
+        ],
+        "id": "osm:node:4999341450",
+        "name": "Silivrikapı",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341450",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9245673,
+          40.9943767
+        ],
+        "id": "osm:node:4999341452",
+        "name": "Yedikule",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341452",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9237485,
+          41.013311
+        ],
+        "id": "osm:node:4999341453",
+        "name": "Mevlanakapı",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341453",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9721964,
+          41.0070922
+        ],
+        "id": "osm:node:4999341455",
+        "name": "Binbirdirek",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341455",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.58,
+        "coordinate": [
+          28.9716378,
+          41.0133247
+        ],
+        "id": "osm:node:4999341456",
+        "name": "Sururi",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:4999341456",
+        "type": "suburb"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.72,
+        "coordinate": [
+          28.9509216,
+          41.0298173
+        ],
+        "id": "osm:node:6093191297",
+        "name": "Fener",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:6093191297",
+        "type": "quarter"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.72,
+        "coordinate": [
+          28.9710147,
+          41.017536
+        ],
+        "id": "osm:node:6310508017",
+        "name": "Eminönü",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:6310508017",
+        "type": "quarter"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.72,
+        "coordinate": [
+          28.9711899,
+          41.0104616
+        ],
+        "id": "osm:node:6311605509",
+        "name": "Mahmutpaşa",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:6311605509",
+        "type": "quarter"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.72,
+        "coordinate": [
+          28.9646917,
+          41.0042146
+        ],
+        "id": "osm:node:6315573196",
+        "name": "Kumkapı",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:6315573196",
+        "type": "quarter"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.72,
+        "coordinate": [
+          28.9573175,
+          41.0095673
+        ],
+        "id": "osm:node:6315581139",
+        "name": "Laleli",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:6315581139",
+        "type": "quarter"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.72,
+        "coordinate": [
+          28.9589045,
+          41.0166138
+        ],
+        "id": "osm:node:6315827801",
+        "name": "Vefa",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:6315827801",
+        "type": "quarter"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.72,
+        "coordinate": [
+          28.9326654,
+          41.000679
+        ],
+        "id": "osm:node:6318171354",
+        "name": "Samatya",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:6318171354",
+        "type": "quarter"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.72,
+        "coordinate": [
+          28.9446094,
+          41.0179509
+        ],
+        "id": "osm:node:6318210483",
+        "name": "Akdeniz",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:6318210483",
+        "type": "quarter"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.72,
+        "coordinate": [
+          28.9559005,
+          41.0261957
+        ],
+        "id": "osm:node:6320765720",
+        "name": "Küçükmustafapaşa",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:6320765720",
+        "type": "quarter"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.72,
+        "coordinate": [
+          28.9502321,
+          41.0043229
+        ],
+        "id": "osm:node:7863036212",
+        "name": "Yenikapı",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:7863036212",
+        "type": "quarter"
+      },
+      {
+        "authoritative": false,
+        "confidence": 0.72,
+        "coordinate": [
+          28.9754914,
+          41.01485
+        ],
+        "id": "osm:node:7863036213",
+        "name": "Sirkeci",
+        "source": "openstreetmap",
+        "sourceId": "osm:node:7863036213",
+        "type": "quarter"
+      }
+    ],
+    "zones": [
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-8e15171d38be61841178",
+        "name": "Territory 001",
+        "seedName": null,
+        "nameSource": "generated-index",
+        "seedIds": [
+          "osm:node:4999341452",
+          "osm:node:6318171354"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-befb12aac3a731efd188",
+        "name": "Koca Mustafapaşa",
+        "seedName": "Koca Mustafapaşa",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4999339810"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-93dc7c16a04e67c51079",
+        "name": "Territory 003",
+        "seedName": null,
+        "nameSource": "generated-index",
+        "seedIds": [
+          "osm:node:4999339813",
+          "osm:node:4999339814",
+          "osm:node:6315573196",
+          "osm:node:6315581139",
+          "osm:node:7863036212"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-5f59eba8e0003e54292c",
+        "name": "Sümbül Efendi",
+        "seedName": "Sümbül Efendi",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4947158661"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-042d80e7e555396e9249",
+        "name": "Silivrikapı",
+        "seedName": "Silivrikapı",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4999341450"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-d8231f6be75527646f67",
+        "name": "Küçük Ayasofya",
+        "seedName": "Küçük Ayasofya",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4999341441"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-6182d42a58bc879ef704",
+        "name": "Cerrahpaşa",
+        "seedName": "Cerrahpaşa",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4996909326"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-ea5606b58bca235cfee5",
+        "name": "Territory 008",
+        "seedName": null,
+        "nameSource": "generated-index",
+        "seedIds": [
+          "osm:node:4999341434",
+          "osm:node:4999341443"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-edec9e69e836ef0e5355",
+        "name": "Territory 009",
+        "seedName": null,
+        "nameSource": "generated-index",
+        "seedIds": [
+          "osm:node:4999339808",
+          "osm:node:4999339815"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-88e33094d09d5a9a5284",
+        "name": "Muhsine Hatun",
+        "seedName": "Muhsine Hatun",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4999341444"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-5ea311e7af9d109674c5",
+        "name": "Mevlanakapı",
+        "seedName": "Mevlanakapı",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4999341453"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-efca1d3745744a60a725",
+        "name": "Katip Kasım",
+        "seedName": "Katip Kasım",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4999339811"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-0754a76a9ef92c71c8d5",
+        "name": "Territory 013",
+        "seedName": null,
+        "nameSource": "generated-index",
+        "seedIds": [
+          "osm:node:4999339812",
+          "osm:node:4999341445"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-d746803191a7cc657645",
+        "name": "Binbirdirek",
+        "seedName": "Binbirdirek",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4999341455"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-b1062504b40f0b67b92f",
+        "name": "Territory 015",
+        "seedName": null,
+        "nameSource": "generated-index",
+        "seedIds": [
+          "osm:node:4999339806",
+          "osm:node:4999341442"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-ca409c79b07f67476362",
+        "name": "Haseki Sultan",
+        "seedName": "Haseki Sultan",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4996909325"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-ce3484689223a5d1c0e8",
+        "name": "Aksaray",
+        "seedName": "Aksaray",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4999339820"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-3e1d67feed35403565c6",
+        "name": "Territory 018",
+        "seedName": null,
+        "nameSource": "generated-index",
+        "seedIds": [
+          "osm:node:14067649003",
+          "osm:node:4999341435"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-e6297028aacc07df7ff0",
+        "name": "Territory 019",
+        "seedName": null,
+        "nameSource": "generated-index",
+        "seedIds": [
+          "osm:node:4947158637",
+          "osm:node:4947158644",
+          "osm:node:4947158664",
+          "osm:node:4996909340",
+          "osm:node:4996909348",
+          "osm:node:4999339807",
+          "osm:node:4999339809",
+          "osm:node:4999339816",
+          "osm:node:4999341432",
+          "osm:node:4999341436",
+          "osm:node:4999341449",
+          "osm:node:4999341456",
+          "osm:node:6310508017",
+          "osm:node:6311605509",
+          "osm:node:7863036213"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-39e0ba7c2df62aa4883f",
+        "name": "Seyyid Ömer",
+        "seedName": "Seyyid Ömer",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4947158636"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-8082075eb2ca17668d51",
+        "name": "Molla Gürani",
+        "seedName": "Molla Gürani",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4999341447"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-0e7ca810b06f040cf875",
+        "name": "Territory 022",
+        "seedName": null,
+        "nameSource": "generated-index",
+        "seedIds": [
+          "osm:node:4999341431",
+          "osm:node:4999341438"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-c3676c51f46d5dfa4469",
+        "name": "İskenderpaşa",
+        "seedName": "İskenderpaşa",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4947158632"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-5f8b9d9cfcda54d19176",
+        "name": "Şehremini",
+        "seedName": "Şehremini",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4947158668"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-55b3eadb6bdd4219b05f",
+        "name": "Kalenderhane",
+        "seedName": "Kalenderhane",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4996909339"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-a1b4e4379fab67a59735",
+        "name": "Fatih",
+        "seedName": "Fatih",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:26504810"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-e86638deb4b3971cee8c",
+        "name": "Topkapı",
+        "seedName": "Topkapı",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4996909359"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-df6e95fd065eb9b117fa",
+        "name": "Akdeniz",
+        "seedName": "Akdeniz",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:6318210483"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-deb30d50d4ae3963cd41",
+        "name": "Unkapanı",
+        "seedName": "Unkapanı",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:269753710"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-b7818e4ce114889a40d1",
+        "name": "Territory 030",
+        "seedName": null,
+        "nameSource": "generated-index",
+        "seedIds": [
+          "osm:node:4947158666",
+          "osm:node:4999339805",
+          "osm:node:6315827801"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-2c66f986aaecafb20325",
+        "name": "Akşemsettin",
+        "seedName": "Akşemsettin",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4999341426"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-6c6bca4e01aea6d1f709",
+        "name": "Zeyrek",
+        "seedName": "Zeyrek",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4947158667"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-2d0f521294af9bf2568b",
+        "name": "Yavuz Sinan",
+        "seedName": "Yavuz Sinan",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4947158640"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-9eff30b083a85d6c1d6a",
+        "name": "Hırka-i Şerif",
+        "seedName": "Hırka-i Şerif",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4999339818"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-e23d48f2e04a8d85c5b2",
+        "name": "Ali Kuşçu",
+        "seedName": "Ali Kuşçu",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4999341428"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-c890fbbbda4631434b7b",
+        "name": "Cibali",
+        "seedName": "Cibali",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4999339819"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-b780a4c28ed595aaefbd",
+        "name": "Yavuz Sultan Selim",
+        "seedName": "Yavuz Sultan Selim",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4999341423"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-d5d1c535c592b3bb9c04",
+        "name": "Küçükmustafapaşa",
+        "seedName": "Küçükmustafapaşa",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:6320765720"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-194e2d7f7d1d145df6fc",
+        "name": "Atikali",
+        "seedName": "Atikali",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4999341446"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-0e42767cea8f50a2c06f",
+        "name": "Karagümrük",
+        "seedName": "Karagümrük",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4999341427"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-937e23c55c8bedc3dca4",
+        "name": "Derviş Ali",
+        "seedName": "Derviş Ali",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4947158665"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-753aaaeca814cca7c4b5",
+        "name": "Fener",
+        "seedName": "Fener",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:6093191297"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-a47337a6111a4471f7a8",
+        "name": "Balat",
+        "seedName": "Balat",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4999341422"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      },
+      {
+        "id": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-3127378b1b4def72759d",
+        "name": "Ayvansaray",
+        "seedName": "Ayvansaray",
+        "nameSource": "locality-seed",
+        "seedIds": [
+          "osm:node:4947158624"
+        ],
+        "reasonCodes": [
+          "SEED_WATERSHED_ASSIGNED"
+        ]
+      }
+    ]
+  },
+  "barrierDiagnostics": {
+    "schemaVersion": "territorykit-tr-mahalle-first-barrier-graph@1",
+    "manifest": {
+      "adm2Id": "tr:adm2:54988432b39641834885080",
+      "algorithmVersion": "tr-osm-barriers-v1.3",
+      "artifactChecksum": "c53f668586e639302eb4d51b26000a583cf6f0bb299b6cead73914bc88c9f652",
+      "configurationHash": "f629e0106456787ad18a1696ba754c44d7b30b916616b5db03e64873a79bfcce",
+      "countryCode": "TR",
+      "counts": {
+        "landuse": 39,
+        "localitySeeds": 71,
+        "parks": 140,
+        "railways": 132,
+        "roads": 3248,
+        "water": 39
+      },
+      "generatedAt": "1970-01-01T00:00:00.000Z",
+      "hashes": {
+        "landuse": "fabb989e2e1d6a7338bb8e61f45aabcca5f65641b80f132e708830d129473e30",
+        "localitySeeds": "6fae447909e75dad03d1c525db4e339b63930d8939e4b30e03c933a6771335c4",
+        "parks": "782465083e02e5dd6354084cfabcca446e3e4e6635aec7c19a779669330fc4df",
+        "quality": "f6a97a0da8b55e62e3ca35ec9b85a7fc73ade1a35dab633c77eccbfde777a249",
+        "railways": "a41fb7def83cb2cbe24a44619b2ed0b9223388fd88263eb9a5fb20593f04e87a",
+        "roads": "377666a33ce63a6cce4d05a8a26de6dc5f6277abe6a167da84c7be9f15da1d0c",
+        "water": "4dd835a674212713af1e52fa361c4e83dbaa1415e20125fb892e56ebad66615a"
+      },
+      "parentGeometryHash": "76a0e32cdaa89383f17d1985dc6abec24bb03d7f515047c4a93cb52d75b619f7",
+      "schemaVersion": "territorykit-tr-osm-barrier-artifact@1",
+      "source": {
+        "attribution": "OpenStreetMap contributors, ODbL 1.0",
+        "format": "osm-pbf",
+        "license": "ODbL-1.0",
+        "providerId": "geofabrik-osm-extracts",
+        "providerName": "Geofabrik OpenStreetMap extracts",
+        "snapshotDate": "2026-08-27T20:21:06.000Z",
+        "snapshotSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+        "sourceDatasetId": "geofabrik:europe:turkey",
+        "sourceUrl": "https://download.geofabrik.de/europe/turkey.html"
+      },
+      "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
+    },
+    "quality": {
+      "adm2Id": "tr:adm2:54988432b39641834885080",
+      "barrierLengthKm": 515.258304,
+      "inputCoverageConfidence": 1,
+      "issues": [
+        {
+          "adm2Id": "tr:adm2:54988432b39641834885080",
+          "code": "OSM_MULTIPOLYGON_NESTED_RELATION_UNSUPPORTED",
+          "details": {
+            "layer": "landuse",
+            "memberRelationId": 8309769,
+            "relationId": 8309779,
+            "role": "outer",
+            "sourceNativeId": "osm:relation:8309779"
+          },
+          "message": "Nested OSM relation members are currently unsupported for barrier multipolygon assembly.",
+          "severity": "warning"
+        },
+        {
+          "adm2Id": "tr:adm2:54988432b39641834885080",
+          "code": "OSM_MULTIPOLYGON_ORPHAN_INNER",
+          "details": {
+            "layer": "landuse",
+            "memberWayIds": [
+              1374395059
+            ],
+            "relationId": 8845862,
+            "representativePoint": [
+              28.9911216,
+              41.1576879
+            ],
+            "sourceNativeId": "osm:relation:8845862"
+          },
+          "message": "OSM multipolygon inner ring could not be assigned to any outer ring.",
+          "severity": "warning"
+        },
+        {
+          "adm2Id": "tr:adm2:54988432b39641834885080",
+          "code": "OSM_MULTIPOLYGON_UNSUPPORTED_RELATION_TYPE",
+          "details": {
+            "layer": "landuse",
+            "relationId": 18511302,
+            "sourceNativeId": "osm:relation:18511302",
+            "type": "site"
+          },
+          "message": "OSM polygon relation has barrier tags but is not a supported multipolygon/boundary relation.",
+          "severity": "warning"
+        },
+        {
+          "adm2Id": "tr:adm2:54988432b39641834885080",
+          "code": "OSM_MULTIPOLYGON_UNSUPPORTED_RELATION_TYPE",
+          "details": {
+            "layer": "water",
+            "relationId": 21061364,
+            "sourceNativeId": "osm:relation:21061364",
+            "type": ""
+          },
+          "message": "OSM polygon relation has barrier tags but is not a supported multipolygon/boundary relation.",
+          "severity": "warning"
+        }
+      ],
+      "landuseFeatureCount": 39,
+      "localitySeedCount": 71,
+      "majorBarrierLengthKm": 202.55557,
+      "majorRoadCount": 922,
+      "ok": true,
+      "parkFeatureCount": 140,
+      "railFeatureCount": 132,
+      "roadFeatureCount": 3248,
+      "schemaVersion": "territorykit-tr-osm-barrier-quality@1",
+      "status": "eligible",
+      "waterFeatureCount": 39
+    },
+    "v2NetworkConstruction": {
+      "constructionStatus": "constructed",
+      "inputBarrierCount": 3275,
+      "inputSegmentCount": 19075,
+      "weakFilteredSegmentCount": 19075,
+      "mediumFilteredSegmentCount": 9626,
+      "strongFilteredSegmentCount": 5524,
+      "geographicContourFilteredSegmentCount": 7288,
+      "selectedSegmentCount": 19075,
+      "graphComponentCount": 198,
+      "graphComponentBasis": "polygonized",
+      "largestComponentSegments": 16330,
+      "rawFaceCount": 2289,
+      "filteredFaceCount": 2084,
+      "acceptedFaceAreaKm2": 16.059766,
+      "rejectedFaceAreaKm2": 0.046676656300257406,
+      "areaRejectedGroupCount": 104,
+      "invalidGeometryGroupCount": 0,
+      "topologyRejectedGroupCount": 42,
+      "networkCoveragePercent": 98.150724,
+      "residualAreaPercent": 1.849508,
+      "networkTerritoryCount": 44,
+      "peakLocalGraphSize": 16330,
+      "polygonizationDurationMs": 71,
+      "processingMode": "monolithic",
+      "chunkCount": 0,
+      "largestChunkSegments": 0,
+      "largestChunkFaces": 0,
+      "chunkOnlyBoundaryCount": 0,
+      "parentClosedComponentCount": 0,
+      "residualGapAttachedCount": 12,
+      "residualUnattachedAreaKm2": 0.000018,
+      "preMergeCoveragePercent": 100.000153,
+      "postMergeCoveragePercent": 100.000147,
+      "candidateCoveragePercent": 100.000171,
+      "preMergePieceCount": 153,
+      "postMergePieceCount": 44,
+      "candidateCount": 44
+    }
+  }
+}

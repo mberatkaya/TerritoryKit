@@ -34,6 +34,17 @@ import { createTurkeyV2Adm3TerritoryId } from "./turkey-adm3-ingestion.js";
 import { isRecord, serializeJsonStable, sha256Hex } from "./sources/utils.js";
 
 export const TURKEY_SMART_FALLBACK_ALGORITHM_VERSION = "smart-derived-v1.7" as const;
+export const TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION = "smart-derived-v2.0-pilot" as const;
+export const TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION = "impl-rev1" as const;
+
+const SUPPORTED_TURKEY_SMART_FALLBACK_ALGORITHM_VERSIONS = new Set<string>([
+  TURKEY_SMART_FALLBACK_ALGORITHM_VERSION,
+  TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION
+]);
+
+export type TurkeySmartFallbackAlgorithmVersion =
+  | typeof TURKEY_SMART_FALLBACK_ALGORITHM_VERSION
+  | typeof TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION;
 export const TURKEY_SMART_FALLBACK_CONFIGURATION_SCHEMA_VERSION =
   "territorykit-tr-smart-fallback-config@1" as const;
 export const TURKEY_SMART_FALLBACK_MANIFEST_SCHEMA_VERSION =
@@ -272,7 +283,9 @@ export interface TurkeySmartFallbackConfiguration {
   schemaVersion: typeof TURKEY_SMART_FALLBACK_CONFIGURATION_SCHEMA_VERSION;
   profile: TurkeySmartFallbackProfile;
   selectedProfile: ResolvedTurkeySmartFallbackProfile;
-  algorithmVersion: typeof TURKEY_SMART_FALLBACK_ALGORITHM_VERSION;
+  algorithmVersion: TurkeySmartFallbackAlgorithmVersion;
+  seedWatershedPartition?: boolean;
+  implementationRevision?: string;
   seed: string;
   targetAreaKm2: number;
   minAreaKm2: number;
@@ -383,7 +396,7 @@ export interface TurkeySmartFallbackQualityReport {
     routeFailureReason: string | null;
   };
   parentId: string;
-  algorithmVersion: typeof TURKEY_SMART_FALLBACK_ALGORITHM_VERSION;
+  algorithmVersion: TurkeySmartFallbackAlgorithmVersion;
   territoryCount: number;
   validGeometryCount: number;
   invalidGeometryCount: number;
@@ -818,7 +831,7 @@ export function resolveTurkeySmartFallbackConfiguration(input: TurkeySmartFallba
 
   if (
     input.options?.algorithmVersion !== undefined &&
-    input.options.algorithmVersion !== TURKEY_SMART_FALLBACK_ALGORITHM_VERSION
+    !SUPPORTED_TURKEY_SMART_FALLBACK_ALGORITHM_VERSIONS.has(input.options.algorithmVersion)
   ) {
     issues.push({
       code: "SMART_FALLBACK_UNSUPPORTED_ALGORITHM",
@@ -826,6 +839,13 @@ export function resolveTurkeySmartFallbackConfiguration(input: TurkeySmartFallba
       message: `Unsupported smart fallback algorithm '${input.options.algorithmVersion}'.`
     });
   }
+
+  const resolvedAlgorithmVersion: TurkeySmartFallbackAlgorithmVersion =
+    input.options?.algorithmVersion === TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION
+      ? TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION
+      : TURKEY_SMART_FALLBACK_ALGORITHM_VERSION;
+  const seedWatershedPartition =
+    resolvedAlgorithmVersion === TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION;
 
   const seed = input.options?.seed ?? "territory-kit-smart-fallback";
   if (seed.trim().length === 0) {
@@ -875,9 +895,15 @@ export function resolveTurkeySmartFallbackConfiguration(input: TurkeySmartFallba
     schemaVersion: TURKEY_SMART_FALLBACK_CONFIGURATION_SCHEMA_VERSION,
     profile: input.profile,
     selectedProfile: profileDecision.selectedProfile,
-    algorithmVersion: TURKEY_SMART_FALLBACK_ALGORITHM_VERSION,
-    organic: input.options?.organic ?? false,
-    networkFirst: input.options?.networkFirst ?? false,
+    algorithmVersion: resolvedAlgorithmVersion,
+    ...(seedWatershedPartition
+      ? {
+          seedWatershedPartition: true,
+          implementationRevision: TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION
+        }
+      : {}),
+    organic: input.options?.organic ?? (seedWatershedPartition ? true : false),
+    networkFirst: input.options?.networkFirst ?? (seedWatershedPartition ? true : false),
     ...(input.options?.organicGeographicRefinement ? { organicGeographicRefinement: true } : {}),
     seed,
     targetAreaKm2: roundAreaKm2(targetAreaKm2),
@@ -1867,6 +1893,98 @@ export function buildTurkeySmartFallback(
 
 /** Graph faces are construction material, not gameplay zones. Shared real edges
  * determine legal merges; incomplete graph coverage is left to Organic. */
+function assignSeedWatershedFaceLabels(input: {
+  faces: readonly TurkeyNetworkFace[];
+  neighbours: ReadonlyMap<number, ReadonlyMap<number, { strength: number; length: number }>>;
+  seeds: readonly TurkeySmartFallbackLocalitySeed[];
+}): number[] {
+  const faceCount = input.faces.length;
+  const seedLabels = new Array<number>(faceCount).fill(-1);
+  if (!input.seeds.length || !faceCount) {
+    return seedLabels;
+  }
+
+  const representativePoints = input.faces.map((face) =>
+    computeGeometryRepresentativePoint(face.geometry)
+  );
+  const distance = new Array<number>(faceCount).fill(Number.POSITIVE_INFINITY);
+  const queue: Array<{ dist: number; face: number; seed: number }> = [];
+
+  for (let seedIndex = 0; seedIndex < input.seeds.length; seedIndex++) {
+    const seed = input.seeds[seedIndex]!;
+    let sourceFace = -1;
+    let nearestKm = Number.POSITIVE_INFINITY;
+    for (let faceIndex = 0; faceIndex < faceCount; faceIndex++) {
+      const faceGeometry = toClippingMultiPolygon(input.faces[faceIndex]!.geometry);
+      if (pointInClippingGeometry(seed.coordinate, faceGeometry)) {
+        sourceFace = faceIndex;
+        nearestKm = 0;
+        break;
+      }
+      const candidateKm = haversineKm(seed.coordinate, representativePoints[faceIndex]!);
+      if (candidateKm < nearestKm) {
+        nearestKm = candidateKm;
+        sourceFace = faceIndex;
+      }
+    }
+    if (sourceFace >= 0) {
+      queue.push({ dist: 0, face: sourceFace, seed: seedIndex });
+    }
+  }
+
+  queue.sort(
+    (left, right) => left.dist - right.dist || left.seed - right.seed || left.face - right.face
+  );
+  for (const item of queue) {
+    if (distance[item.face] > item.dist) {
+      distance[item.face] = item.dist;
+      seedLabels[item.face] = item.seed;
+    }
+  }
+
+  while (queue.length > 0) {
+    queue.sort(
+      (left, right) => left.dist - right.dist || left.seed - right.seed || left.face - right.face
+    );
+    const current = queue.shift()!;
+    if (current.dist > distance[current.face]) {
+      continue;
+    }
+    for (const [neighbor, edge] of input.neighbours.get(current.face) ?? []) {
+      const crossingCostMeters = edge.length / Math.max(edge.strength, 0.15);
+      const nextDist = current.dist + crossingCostMeters;
+      if (nextDist + 1e-6 < distance[neighbor]) {
+        distance[neighbor] = nextDist;
+        seedLabels[neighbor] = current.seed;
+        queue.push({ dist: nextDist, face: neighbor, seed: current.seed });
+      }
+    }
+  }
+
+  for (let faceIndex = 0; faceIndex < faceCount; faceIndex++) {
+    if (seedLabels[faceIndex] !== -1) {
+      continue;
+    }
+    let bestNeighbor = -1;
+    let bestSeed = -1;
+    let bestStrength = -1;
+    for (const [neighbor, edge] of input.neighbours.get(faceIndex) ?? []) {
+      const neighborSeed = seedLabels[neighbor];
+      if (neighborSeed === -1 || edge.strength <= bestStrength) {
+        continue;
+      }
+      bestStrength = edge.strength;
+      bestNeighbor = neighbor;
+      bestSeed = neighborSeed;
+    }
+    if (bestSeed >= 0) {
+      seedLabels[faceIndex] = bestSeed;
+    }
+  }
+
+  return seedLabels;
+}
+
 function buildNetworkFirstPieces(input: {
   parentGeometry: ClippingMultiPolygon;
   parent: TerritoryGeometry;
@@ -2113,47 +2231,87 @@ function buildNetworkFirstPieces(input: {
     while (leader[i] !== i) i = leader[i]!;
     return i;
   };
+  const union = (left: number, right: number): void => {
+    const rootLeft = find(left);
+    const rootRight = find(right);
+    if (rootLeft === rootRight) {
+      return;
+    }
+    leader[rootRight] = rootLeft;
+    area[rootLeft]! += area[rootRight]!;
+    members.set(rootLeft, [...(members.get(rootLeft) ?? []), ...(members.get(rootRight) ?? [])]);
+    members.delete(rootRight);
+  };
   let mergeCount = 0;
   let weakBarrierMergeCount = 0;
-  const target = Math.max(
-    input.configuration.targetAreaKm2,
-    input.configuration.targetGeometryAreaKm2 / Math.max(1, input.seeds.length)
-  );
-  const processed = new Set<number>();
-  for (const i of faces.map((_, index) => index).sort((a, b) => area[a]! - area[b]! || a - b)) {
-    const root = find(i);
-    if (processed.has(root)) continue;
-    while (area[root]! < target * 0.6) {
-      const choices = new Map<number, { strength: number; length: number }>();
-      for (const j of members.get(root) ?? []) {
-        for (const [other, edge] of neighbours.get(j) ?? []) {
-          const peer = find(other);
-          if (peer === root || area[root]! + area[peer]! > input.configuration.maxAreaKm2) continue;
-          const prior = choices.get(peer);
-          choices.set(peer, {
-            strength: Math.max(prior?.strength ?? 0, edge.strength),
-            length: (prior?.length ?? 0) + edge.length
-          });
+  if (input.configuration.seedWatershedPartition) {
+    const seedLabels = assignSeedWatershedFaceLabels({
+      faces,
+      neighbours,
+      seeds: input.seeds
+    });
+    for (let faceIndex = 0; faceIndex < faces.length; faceIndex++) {
+      for (const [neighbor, edge] of neighbours.get(faceIndex) ?? []) {
+        if (seedLabels[faceIndex] !== seedLabels[neighbor] || seedLabels[faceIndex] === -1) {
+          continue;
+        }
+        const beforeLeft = find(faceIndex);
+        const beforeRight = find(neighbor);
+        if (beforeLeft === beforeRight) {
+          continue;
+        }
+        if (
+          area[beforeLeft]! + area[beforeRight]! >
+          input.configuration.maxAreaKm2 + AREA_TOLERANCE_KM2
+        ) {
+          continue;
+        }
+        union(faceIndex, neighbor);
+        mergeCount++;
+        if (edge.strength < 0.45) {
+          weakBarrierMergeCount++;
         }
       }
-      const selected = [...choices.entries()].sort(
-        (a, b) =>
-          a[1].strength - b[1].strength ||
-          b[1].length - a[1].length ||
-          Math.abs(area[root]! + area[a[0]]! - target) -
-            Math.abs(area[root]! + area[b[0]]! - target) ||
-          a[0] - b[0]
-      )[0];
-      if (!selected) break;
-      const peer = selected[0];
-      leader[peer] = root;
-      area[root]! += area[peer]!;
-      members.set(root, [...(members.get(root) ?? []), ...(members.get(peer) ?? [])]);
-      members.delete(peer);
-      mergeCount++;
-      if (selected[1].strength < 0.45) weakBarrierMergeCount++;
     }
-    processed.add(root);
+  } else {
+    const target = Math.max(
+      input.configuration.targetAreaKm2,
+      input.configuration.targetGeometryAreaKm2 / Math.max(1, input.seeds.length)
+    );
+    const processed = new Set<number>();
+    for (const i of faces.map((_, index) => index).sort((a, b) => area[a]! - area[b]! || a - b)) {
+      const root = find(i);
+      if (processed.has(root)) continue;
+      while (area[root]! < target * 0.6) {
+        const choices = new Map<number, { strength: number; length: number }>();
+        for (const j of members.get(root) ?? []) {
+          for (const [other, edge] of neighbours.get(j) ?? []) {
+            const peer = find(other);
+            if (peer === root || area[root]! + area[peer]! > input.configuration.maxAreaKm2)
+              continue;
+            const prior = choices.get(peer);
+            choices.set(peer, {
+              strength: Math.max(prior?.strength ?? 0, edge.strength),
+              length: (prior?.length ?? 0) + edge.length
+            });
+          }
+        }
+        const selected = [...choices.entries()].sort(
+          (a, b) =>
+            a[1].strength - b[1].strength ||
+            b[1].length - a[1].length ||
+            Math.abs(area[root]! + area[a[0]]! - target) -
+              Math.abs(area[root]! + area[b[0]]! - target) ||
+            a[0] - b[0]
+        )[0];
+        if (!selected) break;
+        const peer = selected[0];
+        union(root, peer);
+        mergeCount++;
+        if (selected[1].strength < 0.45) weakBarrierMergeCount++;
+      }
+      processed.add(root);
+    }
   }
   const groups = new Map<number, TurkeyNetworkFace[]>();
   for (let i = 0; i < faces.length; i++) {
@@ -3757,11 +3915,13 @@ function createSmartFallbackZone(input: {
             ? "medium"
             : "low",
         gameplayOnly: input.configuration.organic,
-        smartFallbackMode: input.configuration.networkFirst
-          ? "network-first"
-          : input.configuration.organic
-            ? "organic"
-            : "standard",
+        smartFallbackMode: input.configuration.seedWatershedPartition
+          ? "seed-watershed-v2-pilot"
+          : input.configuration.networkFirst
+            ? "network-first"
+            : input.configuration.organic
+              ? "organic"
+              : "standard",
         administrative: false,
         authoritative: false,
         providerClass: "generated",
@@ -3842,6 +4002,14 @@ function createSmartFallbackZone(input: {
           sourceStrategy: input.candidate.strategy,
           administrative: false,
           authoritative: false,
+          ...(input.configuration.seedWatershedPartition
+            ? {
+                implementationRevision: input.configuration.implementationRevision,
+                reasonCodes: input.candidate.seeds.length
+                  ? ["SEED_WATERSHED_ASSIGNED"]
+                  : ["SEED_WATERSHED_UNSEEDED"]
+              }
+            : {}),
           quality: input.candidate.quality,
           barrierIds: input.candidate.barrierIds,
           seedIds: input.candidate.seedIds,

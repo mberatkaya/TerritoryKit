@@ -1,0 +1,470 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-first-gap-analysis@1",
+  "generatedAt": "2026-10-15T16:07:29.502Z",
+  "originMainSha": "d0d977f684b868adb37e40676747725d7a231453",
+  "pr111": {
+    "number": 111,
+    "state": "MERGED",
+    "note": "National ADM3 geometry remediation + rc.8 validation; doğrulama: gh pr view 111"
+  },
+  "openPullRequests": {
+    "note": "Yalnızca dependabot + #103 Version Packages (observe only)",
+    "excludeAutoMerge": true
+  },
+  "preservedArtifacts": {
+    "rc7": ".territory/sprint-6/final/candidate",
+    "rc8": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+    "policy": "READ_ONLY_BASELINE; yeni pilot çıktıları .territory/mahalle-first-pilot/ altında"
+  },
+  "sprintProgramStatus": {
+    "sprint1Governance": "done (#107)",
+    "sprint2Istanbul": "done (#108) — 6 ilçe; Başakşehir/Esenyurt kapsam dışı",
+    "sprint3NationalRc": "done (#109)",
+    "sprint35QualityCloseout": "done (#110)",
+    "sprint36GeometryRemediation": "done (#111)",
+    "sprint4RushClaim": "planned — blocked on legal/hosted gates",
+    "mahalleFirstSmartDerivedV2": "not-started-in-main"
+  },
+  "nationalMetrics": {
+    "source": "reports/tr-adm3/audit/current-state.md + national-geometry-remediation/final-decision.md",
+    "adm3ZoneCount": 20392,
+    "officialDistricts": "61 districts (Bursa, Gaziantep, Kayseri, Ordu)",
+    "estimatedAreaSharePercent": 95.002519987,
+    "officialAreaSharePercent": 4.997458769,
+    "lowConfidenceDistrictsRc8": 631,
+    "realismWarningDistrictsRc8": 577,
+    "geometryBlockedDistrictsRc8": 0
+  },
+  "governanceDelta": {
+    "schemaVersion": "territorykit-tr-mahalle-first-governance-delta@1",
+    "generatedAt": "2026-10-15T16:07:29.502Z",
+    "originMainSha": "d0d977f684b868adb37e40676747725d7a231453",
+    "registrySummary": {
+      "officialSourceCount": 81,
+      "osmCandidateSourceCount": 81,
+      "productionEligibleProvinceCount": 4,
+      "productionEligibleSourceCount": 4,
+      "provinceCount": 81,
+      "sourceCount": 162,
+      "statusCounts": {
+        "official-license-review": 7,
+        "official-ready": 4,
+        "official-restricted": 62,
+        "official-service-only": 2,
+        "osm-candidate": 0,
+        "partial-official": 6,
+        "research-required": 0,
+        "unavailable": 0
+      }
+    },
+    "focusProvinces": [
+      {
+        "code": "16",
+        "name": "Bursa",
+        "status": "official-ready",
+        "productionEligible": true,
+        "officialSources": [
+          {
+            "id": "tr-adm3-official-local-16-bursa-buyuksehir-belediyesi-open-data",
+            "productionEligible": true,
+            "licenseState": "approved",
+            "licenseName": "Bursa Acik Veri Lisansi",
+            "sourceInventoryStatus": "approved",
+            "geometryAvailable": true,
+            "accessType": "public-download",
+            "lifecycle": "approved"
+          }
+        ],
+        "catalogSidecar": {
+          "providerId": "tr-adm3-official-16-bursa-buyuksehir-belediyesi-open-data",
+          "downloadUrl": "https://bapi.bursa.bel.tr/apigateway/bbbAcikVeri_Cbs/Mahalle",
+          "license": "Bursa Acik Veri Lisansi",
+          "redistributionStatus": "allowed",
+          "expectedSha256": "515962f651521ba7b5e498d1654a19fb37b9f93ad49fdae545dd7f1943be781a",
+          "expectedFeatureCount": 1074
+        },
+        "sourceDataTiers": [
+          {
+            "sourceId": "tr-adm3-official-local-16-bursa-buyuksehir-belediyesi-open-data",
+            "dataTier": "registry-metadata-only",
+            "productionEligible": true
+          }
+        ]
+      },
+      {
+        "code": "27",
+        "name": "Gaziantep",
+        "status": "official-ready",
+        "productionEligible": true,
+        "officialSources": [
+          {
+            "id": "tr-adm3-official-local-27-gaziantep-buyuksehir-belediyesi-open-data-via-ulasav",
+            "productionEligible": true,
+            "licenseState": "approved",
+            "licenseName": "CC BY 4.0",
+            "sourceInventoryStatus": "approved",
+            "geometryAvailable": true,
+            "accessType": "public-download",
+            "lifecycle": "approved"
+          }
+        ],
+        "catalogSidecar": {
+          "providerId": "gaziantep-open-data",
+          "downloadUrl": "https://acikveri.gaziantep.bel.tr/dataset/5fac9bc5-8cc0-4883-8805-1f71149319db/resource/df82c9ce-f69d-4cc2-bf57-d4a36ed1c144/download/mahalle_sinirlari-1.kml",
+          "license": "CC BY 4.0",
+          "redistributionStatus": "allowed",
+          "expectedSha256": "f145ae9edd2db7a341634e14d59060a535258461794d361c3f49bdec2bcbfa9a",
+          "expectedFeatureCount": 786
+        },
+        "sourceDataTiers": [
+          {
+            "sourceId": "tr-adm3-official-local-27-gaziantep-buyuksehir-belediyesi-open-data-via-ulasav",
+            "dataTier": "registry-metadata-only",
+            "productionEligible": true
+          }
+        ]
+      },
+      {
+        "code": "34",
+        "name": "İstanbul",
+        "status": "official-license-review",
+        "productionEligible": false,
+        "officialSources": [
+          {
+            "id": "tr-adm3-official-local-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces",
+            "productionEligible": false,
+            "licenseState": "review-required",
+            "licenseName": "unknown",
+            "sourceInventoryStatus": "license-blocked",
+            "geometryAvailable": true,
+            "accessType": "restricted",
+            "lifecycle": "discovered"
+          }
+        ],
+        "catalogSidecar": null,
+        "sourceDataTiers": [
+          {
+            "sourceId": "tr-adm3-official-local-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces",
+            "dataTier": "research-only",
+            "productionEligible": false
+          }
+        ]
+      },
+      {
+        "code": "54",
+        "name": "Sakarya",
+        "status": "official-license-review",
+        "productionEligible": false,
+        "officialSources": [
+          {
+            "id": "tr-adm3-official-local-54-sakarya-buyuksehir-belediyesi-open-data",
+            "productionEligible": false,
+            "licenseState": "review-required",
+            "licenseName": "Sakarya Acik Veri Lisansi",
+            "sourceInventoryStatus": "candidate",
+            "geometryAvailable": true,
+            "accessType": "public-download",
+            "lifecycle": "verified"
+          }
+        ],
+        "catalogSidecar": null,
+        "sourceDataTiers": [
+          {
+            "sourceId": "tr-adm3-official-local-54-sakarya-buyuksehir-belediyesi-open-data",
+            "dataTier": "candidate-downloaded-or-verified-metadata",
+            "productionEligible": false
+          }
+        ]
+      },
+      {
+        "code": "58",
+        "name": "Sivas",
+        "status": "official-license-review",
+        "productionEligible": false,
+        "officialSources": [
+          {
+            "id": "tr-adm3-official-local-58-sivas-belediyesi-open-data-via-ulasav",
+            "productionEligible": false,
+            "licenseState": "review-required",
+            "licenseName": "Sivas Acik Veri Lisansi / CC BY 4.0 detail on ULASAV",
+            "sourceInventoryStatus": "candidate",
+            "geometryAvailable": true,
+            "accessType": "public-download",
+            "lifecycle": "verified"
+          }
+        ],
+        "catalogSidecar": null,
+        "sourceDataTiers": [
+          {
+            "sourceId": "tr-adm3-official-local-58-sivas-belediyesi-open-data-via-ulasav",
+            "dataTier": "candidate-downloaded-or-verified-metadata",
+            "productionEligible": false
+          }
+        ]
+      }
+    ],
+    "kadikoyAcquisition": {
+      "acquisitionEvidencePath": "reports/tr-adm3/audit/kadikoy-acquisition.json",
+      "acquisitionEvidenceClass": "HISTORICAL_AUDIT_ONLY",
+      "localBundleDir": ".territory/quality-source-audit/kadikoy",
+      "companionStates": [
+        {
+          "fileName": "mahalle_sinir.shp",
+          "localPath": ".territory/quality-source-audit/kadikoy/mahalle_sinir.shp",
+          "state": "LOCAL_FILE_PRESENT",
+          "acquisitionSha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+          "byteSize": 103260
+        },
+        {
+          "fileName": "mahalle_sinir.shx",
+          "localPath": ".territory/quality-source-audit/kadikoy/mahalle_sinir.shx",
+          "state": "LOCAL_FILE_PRESENT",
+          "acquisitionSha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+          "byteSize": 103260
+        },
+        {
+          "fileName": "mahalle_sinir.dbf",
+          "localPath": ".territory/quality-source-audit/kadikoy/mahalle_sinir.dbf",
+          "state": "LOCAL_FILE_PRESENT",
+          "acquisitionSha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+          "byteSize": 103260
+        },
+        {
+          "fileName": "mahalle_sinir.prj",
+          "localPath": ".territory/quality-source-audit/kadikoy/mahalle_sinir.prj",
+          "state": "LOCAL_FILE_PRESENT",
+          "acquisitionSha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+          "byteSize": 103260
+        },
+        {
+          "fileName": "mahalle_sinir.cpg",
+          "localPath": ".territory/quality-source-audit/kadikoy/mahalle_sinir.cpg",
+          "state": "LOCAL_FILE_PRESENT",
+          "acquisitionSha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+          "byteSize": 103260
+        }
+      ],
+      "bundle": {
+        "schemaVersion": "territorykit-tr-adm3-municipal-shapefile-bundle@1",
+        "status": "BLOCKED_DUPLICATE_RESPONSE",
+        "structuralStatus": "STRUCTURALLY_INVALID",
+        "productionEligibility": "NOT_ELIGIBLE",
+        "reasonCodes": [
+          "DBF_PARSE_FAILED",
+          "IDENTICAL_COMPANION_BYTES",
+          "INVALID_DBF_SIGNATURE",
+          "INVALID_PRJ_SYNTAX",
+          "SHP_SHX_OFFSET_MISMATCH",
+          "SHP_SHX_RECORD_COUNT_MISMATCH",
+          "HISTORICAL_IDENTICAL_DOWNLOAD_BYTES"
+        ],
+        "companions": [
+          {
+            "role": "cpg",
+            "fileName": "mahalle_sinir.cpg",
+            "byteSize": 103260,
+            "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+            "detectedKind": "codepage-sidecar"
+          },
+          {
+            "role": "dbf",
+            "fileName": "mahalle_sinir.dbf",
+            "byteSize": 103260,
+            "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+            "detectedKind": "invalid-dbf-header"
+          },
+          {
+            "role": "prj",
+            "fileName": "mahalle_sinir.prj",
+            "byteSize": 103260,
+            "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+            "detectedKind": "non-wkt-prj"
+          },
+          {
+            "role": "shp",
+            "fileName": "mahalle_sinir.shp",
+            "byteSize": 103260,
+            "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+            "detectedKind": "esri-shapefile-main"
+          },
+          {
+            "role": "shx",
+            "fileName": "mahalle_sinir.shx",
+            "byteSize": 103260,
+            "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+            "detectedKind": "esri-shapefile-index"
+          }
+        ],
+        "shpRecordCount": 21,
+        "shxRecordCount": 12895,
+        "dbfRecordCount": null,
+        "uniqueSha256Count": 1,
+        "notes": [
+          "Tüm companion dosyalar aynı SHA-256 ve boyuta sahip; bağımsız SHP bundle doğrulanamaz.",
+          "Acquisition kaydı: beş indirme URL'si aynı SHP baytlarını döndürdü (bağımsız companion doğrulaması yapılmadı)."
+        ]
+      },
+      "pilotStatus": "BLOCKED_BY_SOURCE",
+      "verificationClass": "FIXTURE_TESTED"
+    },
+    "humanApprovals": [
+      {
+        "id": "LEGAL_ADM0_ADM2_GEOBOUNDARIES",
+        "status": "PENDING_REVIEW",
+        "summary": "geoBoundaries gbOpen license chain vs per-level lock strings for TR ADM0–ADM2"
+      },
+      {
+        "id": "PATH_A_OR_B_MIGRATION",
+        "status": "NOT_AUTHORIZED",
+        "summary": "Parent polygon migration (Path A) or metadata realignment (Path B)"
+      },
+      {
+        "id": "DEC_008_ACCEPTANCE",
+        "status": "OPEN",
+        "summary": "Accept proposed DEC-008 after legal and replay evidence review"
+      },
+      {
+        "id": "ADR_006_AMENDMENT",
+        "status": "OPEN",
+        "summary": "Amend ADR-006 only if Path B is chosen"
+      },
+      {
+        "id": "NATIONAL_DATASET_PROMOTION",
+        "status": "NOT_AUTHORIZED",
+        "summary": "Promote territory-kit-tr-v2-playable@2.1.0-rc.7 to production/hosted delivery"
+      },
+      {
+        "id": "ADM3_OFFICIAL_SOURCE_EXPANSION",
+        "status": "PENDING_PER_PROVINCE",
+        "summary": "Municipal/national official ADM3 licenses (81-province registry blockers)"
+      },
+      {
+        "id": "VERSION_PACKAGES_PR_103",
+        "status": "OBSERVE_ONLY",
+        "summary": "PR #103 Version Packages — do not merge without explicit authorization"
+      }
+    ],
+    "prohibitions": [
+      "missing-institution-permission-never-marked-approved",
+      "no-license-unknown-mahalle-in-public-artifacts",
+      "no-overwrite-rc7-rc8-candidate-bytes-without-explicit-build"
+    ]
+  },
+  "moduleMap": [
+    {
+      "requirement": "Source registry (81 il)",
+      "implementation": "datasets/sources/TR/adm3/source-registry.json",
+      "generator": "scripts/generate-tr-adm3-source-registry.mjs",
+      "gap": "4/81 productionEligible; 62 official-restricted; İstanbul license-blocked"
+    },
+    {
+      "requirement": "Official importer / adapters",
+      "implementation": "packages/generators/src/turkey-adm3-ingestion.ts, turkey-adm3-adapters.ts, adm3-catalog.json",
+      "gap": "Sakarya CRS/reprojection; Kadıköy bundle structurally invalid; Sivas download timeout"
+    },
+    {
+      "requirement": "OSM pipeline + barriers",
+      "implementation": "packages/generators/src/turkey-osm-barriers.ts, turkey-adm3-osm.ts",
+      "gap": "Eyüpsultan %24 network coverage; sparse barrier graphs in rural pilots"
+    },
+    {
+      "requirement": "smart-derived v1.7",
+      "implementation": "packages/generators/src/turkey-smart-fallback.ts",
+      "gap": "smart-derived-v2 yok; 631 low-confidence / 577 realism-warning districts (rc.8)"
+    },
+    {
+      "requirement": "Mahalle seed resolver",
+      "implementation": "turkey-osm-barriers locality-seeds.json + normalizeLocalitySeeds in smart-fallback",
+      "gap": "Seed coverage düşük; nameSource=generated-index yaygın; resmi mahalle uydurma yok (doğru)"
+    },
+    {
+      "requirement": "Barrier graph + organic routing",
+      "implementation": "turkey-network-faces.ts, turkey-network-bounded.ts, turkey-organic-routing.ts",
+      "gap": "Eyüpsultan ORGANIC_ROUTE_NO_PATH; parçalı graph bileşenleri"
+    },
+    {
+      "requirement": "Coastline / water QA",
+      "implementation": "turkey-istanbul-geometry-diagnostics.ts, inspectTurkeyGeneratedCoastlineSpill",
+      "gap": "Sprint-2 pilotlarda coastlineEvidence çoğunlukla NOT_ASSESSED"
+    },
+    {
+      "requirement": "Disconnected geometry QA",
+      "implementation": "turkey-generated-zone-pathology.ts, component-chunk in smart-fallback",
+      "gap": "crossWaterComponentSeparation çoğu pilotte NOT_ASSESSED"
+    },
+    {
+      "requirement": "Hybrid priority + clipping",
+      "implementation": "packages/generators/src/turkey-v2-hybrid.ts",
+      "gap": "PR #111 sibling overlap remediation; kalite skorları değişmedi"
+    },
+    {
+      "requirement": "National assembly + source-lock",
+      "implementation": "turkey-v2-national.ts, packages/cli tr v2 national",
+      "gap": "rc.8 publishReady=false (buildMode partial); rc.7 bytes korunmalı"
+    },
+    {
+      "requirement": "QA / MVT / migration",
+      "implementation": "packages/dataset quality, render-artifacts, @territory-kit/migration",
+      "gap": "rc.8 geometry hash delta 34 zone; migration-plan.json rc.7→rc.8 için authoritative değil"
+    }
+  ],
+  "smartDerivedV2Gaps": [
+    {
+      "id": "v2-algorithm-version",
+      "status": "missing",
+      "detail": "Kod yalnızca smart-derived-v1.7 kabul ediyor (SMART_FALLBACK_UNSUPPORTED_ALGORITHM aksi halde)."
+    },
+    {
+      "id": "seed-anchored-partition",
+      "status": "partial",
+      "detail": "v1.7 seed ataması var; mahalle seed yoğunluğu ile bölüm sayısı hizası zayıf (özellikle kırsal)."
+    },
+    {
+      "id": "coastline-assessment",
+      "status": "partial",
+      "detail": "Su poligonu yoksa fail-closed NOT_ASSESSED; v2 kıyı politikasını genişletmeli."
+    },
+    {
+      "id": "barrier-graph-fragmentation",
+      "status": "blocked-pilot",
+      "detail": "Eyüpsultan 368 graph bileşeni; v2 pilot önceliği."
+    },
+    {
+      "id": "official-vs-gameplay-separation",
+      "status": "done",
+      "detail": "administrative:false, boundarySourceClass smart-derived, dataset validation enforced."
+    }
+  ],
+  "istanbulSprint2Carryover": {
+    "pilotDistrictCount": 6,
+    "kadikoyStatus": "BLOCKED_BY_SOURCE",
+    "determinismNote": "Determinizm kanıtı yalnızca replay edilen 3 ilçe için geçerlidir; 6 pilot ilçe deterministik değildir."
+  },
+  "evidenceIndex": [
+    "reports/tr-adm3/sprint-1-governance/",
+    "reports/tr-adm3/sprint-2-istanbul/",
+    "reports/tr-adm3/sprint-3-national-rc/",
+    "reports/tr-adm3/national-quality-closeout/",
+    "reports/tr-adm3/national-geometry-remediation/",
+    "reports/tr-adm3/audit/current-state.md"
+  ],
+  "completed": [
+    "PR #111 merged on origin/main",
+    "Source registry 81 il + adm3-catalog 4 ingestion-ready provinces",
+    "smart-derived-v1.7 national rc.7/rc.8 topology remediation",
+    "Sprint 2 Istanbul diagnostic reports and Kadıköy acquisition failure classification"
+  ],
+  "failed": [],
+  "blocked": [
+    "ADM3 official expansion without per-province legal acceptance",
+    "Kadıköy mahalle SHP bundle (identical companion bytes)",
+    "İstanbul İBB ArcGIS — license-blocked, research-only",
+    "National publish-ready / production promotion",
+    "973-district full rebuild for v2 until Istanbul pilot acceptance"
+  ],
+  "nextPilotActions": [
+    "Run scripts/tr-mahalle-first-istanbul-v2-pilot.mjs against rc.7 baseline bytes",
+    "Implement smart-derived-v2.0-pilot behind explicit opt-in (no national default)",
+    "Re-assess coastline/barrier metrics on 8 Istanbul districts including Başakşehir/Esenyurt"
+  ]
+}
