@@ -19,8 +19,11 @@ Introduce a versioned artifact schema `territorykit-tr-settlement-association@1`
 - Uses `settlementRefId` namespaces qualified by `sourceSnapshotChecksum`; display names are never stable IDs.
 - Separates zone-level geometric status (`SINGLE_SEED_MATCH`, `AMBIGUOUS_REVIEW_REQUIRED`, `UNSEEDED`) from record-level source review (`SOURCE_REVIEW_REQUIRED`) and verified official boundaries (`VERIFIED_BOUNDARY_MATCH`).
 - Invalidates and rebuilds when `canonicalGeometryHash` or `sourceSnapshotChecksum` changes.
+- `contentHash` is deterministic over semantic payload and **excludes** `builtAt`; full JSON file SHA-256 still changes when `builtAt` changes.
+- `licenseIdentified` (upstream license name present) is separate from `publicationRightsStatus` (explicit redistribution/publication approval). Knowing `ODbL-1.0` does not imply approved publication rights.
+- `VERIFIED_BOUNDARY_MATCH` is fail-closed: requires `official-boundary-overlay`, governed provenance, approved publication rights, per-record snapshot checksum, and spatial boundary evidence token — OSM seed point-in-zone rows remain geometric/semantic only.
 
-Implementation lives in `@territory-kit/dataset/tr-settlement-association` (build + validate) and `@territory-kit/core` (`createTrSettlementAssociationQuery`).
+Implementation lives in `@territory-kit/dataset/tr-settlement-association` (build + validate) and `@territory-kit/core` (`loadTrSettlementAssociationConsumer`, `createTrSettlementAssociationQuery`).
 
 ## Consequences
 

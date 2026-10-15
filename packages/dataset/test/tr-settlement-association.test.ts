@@ -1,9 +1,18 @@
 import { describe, expect, it } from "vitest";
 import type { TerritoryDataset, TerritoryZone } from "../src/types.js";
+import type {
+  TrSettlementAssociationArtifact,
+  TrSettlementAssociationRecord
+} from "../src/tr-settlement-association.js";
 import {
+  TR_SETTLEMENT_VERIFIED_BOUNDARY_EVIDENCE_TOKEN,
+  assessVerifiedBoundaryMatchFailures,
   buildTrSettlementAssociations,
+  computeTrSettlementAssociationContentHash,
   createTrSettlementRefId,
   normalizeTrSettlementName,
+  resolveTrSettlementLicenseIdentified,
+  resolveTrSettlementPublicationRightsStatus,
   validateTrSettlementAssociationArtifact
 } from "../src/tr-settlement-association.js";
 import { isLngLatInsideTerritoryGeometry } from "../src/geometry.js";
@@ -161,5 +170,170 @@ describe("tr-settlement-association", () => {
     const zone = squareZone("z", 0, 0, 1);
     expect(isLngLatInsideTerritoryGeometry([0.5, 0.5], zone.geometry)).toBe(true);
     expect(isLngLatInsideTerritoryGeometry([2, 2], zone.geometry)).toBe(false);
+  });
+
+  it("separates license identification from publication approval", () => {
+    const identifiedPending = {
+      license: "ODbL-1.0",
+      licenseState: "pending" as const
+    };
+    expect(resolveTrSettlementLicenseIdentified(identifiedPending)).toBe(true);
+    expect(resolveTrSettlementPublicationRightsStatus(identifiedPending)).toBe("pending");
+
+    const identifiedApproved = {
+      license: "ODbL-1.0",
+      licenseState: "approved" as const
+    };
+    expect(resolveTrSettlementPublicationRightsStatus(identifiedApproved)).toBe("approved");
+    expect(resolveTrSettlementPublicationRightsStatus({ license: "ODbL-1.0" })).toBe("unknown");
+  });
+
+  it("excludes builtAt from contentHash while preserving semantic equality", () => {
+    const dataset = createDataset([squareZone("zone-a", 0, 0, 1)]);
+    const left = buildTrSettlementAssociations({
+      dataset,
+      parentAdm2Id: "tr:adm2:parent",
+      builtAt: "2026-10-15T00:00:00.000Z",
+      source: { sourceSnapshotChecksum: "f".repeat(64), licenseState: "approved", license: "test" },
+      seeds: [{ name: "Alpha", coordinate: [0.25, 0.25], sourceId: "node:1" }]
+    });
+    const right = buildTrSettlementAssociations({
+      dataset,
+      parentAdm2Id: "tr:adm2:parent",
+      builtAt: "2026-10-16T12:00:00.000Z",
+      source: { sourceSnapshotChecksum: "f".repeat(64), licenseState: "approved", license: "test" },
+      seeds: [{ name: "Alpha", coordinate: [0.25, 0.25], sourceId: "node:1" }]
+    });
+    expect(left.contentHash).toBe(right.contentHash);
+    expect(left.builtAt).not.toBe(right.builtAt);
+  });
+
+  it("rejects fake VERIFIED_BOUNDARY_MATCH and stale artifact bindings", () => {
+    const dataset = createDataset([squareZone("zone-a", 0, 0, 1)]);
+    const artifact = buildTrSettlementAssociations({
+      dataset,
+      parentAdm2Id: "tr:adm2:parent",
+      builtAt: "2026-10-15T00:00:00.000Z",
+      source: {
+        providerId: "osm",
+        sourceDatasetId: "planet",
+        sourceSnapshotChecksum: "a".repeat(64),
+        license: "ODbL-1.0",
+        licenseState: "pending"
+      },
+      seeds: [{ name: "Alpha", coordinate: [0.25, 0.25], sourceId: "node:1" }]
+    });
+
+    const fakeVerified = {
+      ...artifact,
+      associations: [
+        {
+          ...artifact.associations[0]!,
+          associationStatus: "VERIFIED_BOUNDARY_MATCH" as const,
+          associationMethod: "seed-point-in-zone" as const
+        }
+      ]
+    };
+    const verifiedValidation = validateTrSettlementAssociationArtifact(dataset, fakeVerified);
+    expect(verifiedValidation.ok).toBe(false);
+    expect(verifiedValidation.issues.some((issue) => issue.code === "UNVERIFIED_BOUNDARY")).toBe(
+      true
+    );
+
+    const wrongDatasetVersion = { ...artifact, datasetVersion: "2.1.0-rc.7" };
+    expect(validateTrSettlementAssociationArtifact(dataset, wrongDatasetVersion).ok).toBe(false);
+
+    const wrongGeometryHash = { ...artifact, canonicalGeometryHash: "stale-hash" };
+    expect(validateTrSettlementAssociationArtifact(dataset, wrongGeometryHash).ok).toBe(false);
+
+    const snapshotMismatch = validateTrSettlementAssociationArtifact(dataset, artifact, {
+      expectedSourceSnapshotChecksum: "b".repeat(64)
+    });
+    expect(snapshotMismatch.ok).toBe(false);
+    expect(snapshotMismatch.issues.some((issue) => issue.code === "SOURCE_SNAPSHOT_MISMATCH")).toBe(
+      true
+    );
+
+    const staleContentHash = {
+      ...artifact,
+      contentHash: "fnv1a32:00000000"
+    };
+    expect(validateTrSettlementAssociationArtifact(dataset, staleContentHash).ok).toBe(false);
+
+    const unknownZone = {
+      ...artifact,
+      associations: [
+        {
+          ...artifact.associations[0]!,
+          zoneId: "tr:adm3:missing-zone"
+        }
+      ]
+    };
+    expect(validateTrSettlementAssociationArtifact(dataset, unknownZone).ok).toBe(false);
+    expect(unknownZone.associations[0]!.publicationRightsStatus).toBe("pending");
+  });
+
+  it("accepts VERIFIED_BOUNDARY_MATCH only with full boundary evidence", () => {
+    const source = {
+      providerId: "official",
+      sourceDatasetId: "tr-mahalle",
+      sourceSnapshotChecksum: "c".repeat(64),
+      license: "custom-official",
+      licenseState: "approved" as const
+    };
+    const association: TrSettlementAssociationRecord = {
+      parentAdm2Id: "tr:adm2:parent",
+      zoneId: "zone-a",
+      settlementRefId: "tr:settlement-ref:official:1",
+      name: "Official",
+      normalizedName: "official",
+      settlementKind: "neighbourhood",
+      seedCoordinate: [0.5, 0.5],
+      sourceSnapshotChecksum: "c".repeat(64),
+      associationMethod: "official-boundary-overlay",
+      associationConfidence: 1,
+      associationStatus: "VERIFIED_BOUNDARY_MATCH",
+      evidence: [TR_SETTLEMENT_VERIFIED_BOUNDARY_EVIDENCE_TOKEN],
+      reasonCodes: [],
+      sourceLicenseStatus: "known",
+      licenseIdentified: true,
+      publicationRightsStatus: "approved"
+    };
+    expect(assessVerifiedBoundaryMatchFailures(association, source)).toEqual([]);
+  });
+
+  it("flags license-pending records without treating ODbL name as approved publication", () => {
+    const dataset = createDataset([squareZone("zone-a", 0, 0, 1)]);
+    const artifact = buildTrSettlementAssociations({
+      dataset,
+      parentAdm2Id: "tr:adm2:parent",
+      builtAt: "2026-10-15T00:00:00.000Z",
+      source: {
+        license: "ODbL-1.0",
+        licenseState: "pending",
+        sourceSnapshotChecksum: "d".repeat(64)
+      },
+      seeds: [{ name: "Alpha", coordinate: [0.25, 0.25], sourceId: "node:1" }]
+    });
+    expect(artifact.associations[0]?.associationStatus).toBe("SOURCE_REVIEW_REQUIRED");
+    expect(artifact.associations[0]?.licenseIdentified).toBe(true);
+    expect(artifact.associations[0]?.reasonCodes).toContain("PUBLICATION_RIGHTS_PENDING");
+    expect(validateTrSettlementAssociationArtifact(dataset, artifact).ok).toBe(true);
+  });
+
+  it("rejects schema version drift", () => {
+    const dataset = createDataset([squareZone("zone-a", 0, 0, 1)]);
+    const artifact = buildTrSettlementAssociations({
+      dataset,
+      parentAdm2Id: "tr:adm2:parent",
+      source: { sourceSnapshotChecksum: "e".repeat(64) },
+      seeds: [{ name: "Alpha", coordinate: [0.25, 0.25], sourceId: "node:1" }]
+    });
+    const wrongSchema = {
+      ...artifact,
+      schemaVersion: "territorykit-tr-settlement-association@99"
+    } as unknown as TrSettlementAssociationArtifact;
+    expect(validateTrSettlementAssociationArtifact(dataset, wrongSchema).ok).toBe(false);
+    expect(computeTrSettlementAssociationContentHash(artifact)).toBe(artifact.contentHash);
   });
 });

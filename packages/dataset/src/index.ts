@@ -17,15 +17,20 @@ export {
   TR_SETTLEMENT_ASSOCIATION_STATUSES,
   TR_SETTLEMENT_KINDS,
   TR_SETTLEMENT_REASON_CODES,
+  assessVerifiedBoundaryMatchFailures,
   buildTrSettlementAssociations,
+  buildTrSettlementPinnedShardEvidence,
   compareTrSettlementGameplayGeometryInvariant,
   computeTrSettlementGameplayFingerprint,
   computeTrSettlementAssociationContentHash,
   createTrSettlementRefId,
   mapTrSettlementSeedType,
   normalizeTrSettlementName,
+  resolveTrSettlementLicenseIdentified,
+  resolveTrSettlementPublicationRightsStatus,
   resolveTrSettlementSourceLicenseStatus,
-  validateTrSettlementAssociationArtifact
+  validateTrSettlementAssociationArtifact,
+  TR_SETTLEMENT_VERIFIED_BOUNDARY_EVIDENCE_TOKEN
 } from "./tr-settlement-association.js";
 export {
   applyTerritoryAdjacencyOverrides,
@@ -140,8 +145,11 @@ export type {
   TrSettlementAssociationSourceContext,
   TrSettlementAssociationStatus,
   TrSettlementAssociationValidationIssue,
+  TrSettlementAssociationValidationOptions,
   TrSettlementAssociationValidationReport,
   TrSettlementGeometryInvariantReport,
+  TrSettlementPinnedShardEvidence,
+  TrSettlementPublicationRightsStatus,
   TrSettlementKind,
   TrSettlementReasonCode,
   TrSettlementSeedInput,

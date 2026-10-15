@@ -1,20 +1,20 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-first-sprint-2c-comparison@1",
-  "generatedAt": "2026-10-15T17:44:06.991Z",
+  "generatedAt": "2026-10-15T17:56:39.377Z",
   "parentAdm2Id": "tr:adm2:54988432b39641834885080",
   "rc8Shard": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1/districts/tr_adm2_54988432b39641834885080/dataset.json",
   "authoritativeGameplaySource": "rc8-shard",
-  "rc8SelfInvariant": {
-    "ok": true,
-    "zoneCountMatch": true,
-    "zoneIdSetMatch": true,
-    "canonicalGeometryHashMatch": true,
-    "gameplayFingerprintMatch": true,
+  "rc8PinnedShardEvidence": {
+    "shardPath": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1/districts/tr_adm2_54988432b39641834885080/dataset.json",
+    "shardSha256": "902df1719ecb1c86f06ffd28f98b3b3f2474f3b3b12ed5ced1a517adc0276446",
+    "expectedShardSha256": "902df1719ecb1c86f06ffd28f98b3b3f2474f3b3b12ed5ced1a517adc0276446",
+    "shardBytesMatch": true,
     "gameplayFingerprint": "fnv1a32:5b6c0f32",
-    "parentRelationMatch": true,
-    "neighborRelationMatch": true,
-    "mismatches": []
+    "manifestGeometryHash": "ba17816e271180fc823ef372388bf7d31aa09904d6e035ece7a0a759027ebef9",
+    "manifestDatasetVersion": "2.1.0-rc.8",
+    "adm3ZoneCount": 30
   },
+  "rc8PinPath": "reports/tr-adm3/mahalle-first-program/fatih-rc8-shard-pin.json",
   "v17ReplayVsRc8": {
     "ok": false,
     "zoneCountMatch": true,
@@ -85,15 +85,17 @@
   },
   "officialMahalleInventoryComparison": "NOT_ASSESSED",
   "validationOk": true,
+  "consumerReady": true,
   "sdkProof": {
     "sampleZoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-01eda0ae60d28fc3a2c7",
     "associationStatus": "SINGLE_SEED_MATCH",
-    "reasonCodeCount": 1,
+    "zoneResolution": "associated",
+    "reasonCodeCount": 2,
     "provenanceProviderId": "geofabrik-osm-extracts"
   },
   "legalBlockers": [
     "OSM locality seeds are not licensed official mahalle boundaries.",
     "VERIFIED_BOUNDARY_MATCH requires separately governed official polygon sources."
   ],
-  "durationMs": 1521
+  "durationMs": 1517
 }

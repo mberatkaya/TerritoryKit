@@ -32,6 +32,7 @@ describe("public API compatibility", () => {
       "isTerritoryBinarySpatialIndex",
       "loadTerritoryCountryDataset",
       "loadTerritoryQueryDataset",
+      "loadTrSettlementAssociationConsumer",
       "normalizeLongitude",
       "validateTerritoryBinarySpatialIndex",
       "zoomToDefaultLevel"

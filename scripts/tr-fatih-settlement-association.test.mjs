@@ -16,10 +16,12 @@ test("fatih settlement association comparison documents expected baseline", asyn
   assert.equal(comparison.validationOk, true);
 });
 
-test("fatih settlement geometry invariant is independently recorded", async () => {
+test("fatih settlement geometry invariant pins rc8 shard bytes", async () => {
   const invariant = JSON.parse(
     await readFile(join(reportRoot, "fatih-settlement-geometry-invariant.json"), "utf8")
   );
-  assert.equal(invariant.rc8SelfInvariant.ok, true);
+  assert.equal(invariant.rc8PinnedShardEvidence.shardBytesMatch, true);
+  assert.equal(invariant.rc8PinnedShardEvidence.adm3ZoneCount, 30);
   assert.equal(typeof invariant.v17ReplayVsRc8.ok, "boolean");
+  assert.equal(invariant.rc8Pin.shardSha256, invariant.rc8PinnedShardEvidence.shardSha256);
 });

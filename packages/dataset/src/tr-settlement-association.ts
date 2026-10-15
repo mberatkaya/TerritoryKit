@@ -34,9 +34,24 @@ export const TR_SETTLEMENT_REASON_CODES = [
   "MULTI_ZONE_ASSOCIATION",
   "MULTI_SEED_IN_ZONE",
   "SOURCE_LICENSE_UNKNOWN",
+  "PUBLICATION_RIGHTS_PENDING",
   "OFFICIAL_NAME_NOT_ASSESSED",
   "RURAL_VILLAGE_SEMANTICS"
 ] as const;
+
+export const TR_SETTLEMENT_PUBLICATION_RIGHTS_STATUSES = [
+  "approved",
+  "pending",
+  "restricted",
+  "unknown"
+] as const;
+
+export type TrSettlementPublicationRightsStatus =
+  (typeof TR_SETTLEMENT_PUBLICATION_RIGHTS_STATUSES)[number];
+
+/** Evidence token required on records marked VERIFIED_BOUNDARY_MATCH. */
+export const TR_SETTLEMENT_VERIFIED_BOUNDARY_EVIDENCE_TOKEN =
+  "verified-official-boundary-spatial-match" as const;
 
 export type TrSettlementReasonCode = (typeof TR_SETTLEMENT_REASON_CODES)[number];
 
@@ -75,7 +90,10 @@ export interface TrSettlementAssociationRecord {
   associationStatus: TrSettlementAssociationStatus;
   evidence: string[];
   reasonCodes: TrSettlementReasonCode[];
+  /** @deprecated Use `licenseIdentified` + `publicationRightsStatus`; retained for Rush&Claim preview. */
   sourceLicenseStatus: "known" | "unknown" | "restricted";
+  licenseIdentified: boolean;
+  publicationRightsStatus: TrSettlementPublicationRightsStatus;
 }
 
 export interface TrSettlementZoneSummary {
@@ -131,6 +149,21 @@ export interface TrSettlementAssociationValidationReport {
   issues: TrSettlementAssociationValidationIssue[];
 }
 
+export interface TrSettlementAssociationValidationOptions {
+  expectedSourceSnapshotChecksum?: string;
+}
+
+export interface TrSettlementPinnedShardEvidence {
+  shardPath: string;
+  shardSha256: string;
+  expectedShardSha256?: string;
+  shardBytesMatch: boolean;
+  gameplayFingerprint: string;
+  manifestGeometryHash: string;
+  manifestDatasetVersion: string;
+  adm3ZoneCount: number;
+}
+
 export interface TrSettlementGeometryInvariantReport {
   ok: boolean;
   zoneCountMatch: boolean;
@@ -164,26 +197,117 @@ export function mapTrSettlementSeedType(type: string | undefined): TrSettlementK
   }
 }
 
-export function resolveTrSettlementSourceLicenseStatus(
+export function resolveTrSettlementLicenseIdentified(
   source: TrSettlementAssociationSourceContext
-): "known" | "unknown" | "restricted" {
+): boolean {
+  return Boolean(source.license?.trim());
+}
+
+export function resolveTrSettlementPublicationRightsStatus(
+  source: TrSettlementAssociationSourceContext
+): TrSettlementPublicationRightsStatus {
   if (source.licenseState === "restricted") {
     return "restricted";
   }
 
-  if (source.licenseState === "unknown" || source.licenseState === "pending") {
-    return "unknown";
+  if (source.licenseState === "approved") {
+    return "approved";
   }
 
-  if (
-    (source.licenseState === "approved" || source.licenseState === undefined) &&
-    source.license &&
-    source.license.trim().length > 0
-  ) {
-    return "known";
+  if (source.licenseState === "pending") {
+    return "pending";
   }
 
   return "unknown";
+}
+
+/** Maps publication/redistribution rights to legacy `sourceLicenseStatus` (not license identification). */
+export function resolveTrSettlementSourceLicenseStatus(
+  source: TrSettlementAssociationSourceContext
+): "known" | "unknown" | "restricted" {
+  const publicationRights = resolveTrSettlementPublicationRightsStatus(source);
+  if (publicationRights === "approved") {
+    return "known";
+  }
+
+  if (publicationRights === "restricted") {
+    return "restricted";
+  }
+
+  return "unknown";
+}
+
+export function assessVerifiedBoundaryMatchFailures(
+  association: TrSettlementAssociationRecord,
+  source: TrSettlementAssociationSourceContext
+): string[] {
+  const failures: string[] = [];
+
+  if (association.associationMethod !== "official-boundary-overlay") {
+    failures.push("VERIFIED_BOUNDARY_MATCH requires associationMethod official-boundary-overlay.");
+  }
+
+  if (!association.licenseIdentified) {
+    failures.push("VERIFIED_BOUNDARY_MATCH requires an identified upstream license on the source.");
+  }
+
+  if (association.publicationRightsStatus !== "approved") {
+    failures.push(
+      "VERIFIED_BOUNDARY_MATCH requires explicit publication/redistribution approval; license identification alone is insufficient."
+    );
+  }
+
+  if (!source.providerId?.trim() || !source.sourceDatasetId?.trim()) {
+    failures.push("VERIFIED_BOUNDARY_MATCH requires source providerId and sourceDatasetId.");
+  }
+
+  if (!source.sourceSnapshotChecksum?.trim()) {
+    failures.push("VERIFIED_BOUNDARY_MATCH requires source.sourceSnapshotChecksum.");
+  }
+
+  if (!association.sourceSnapshotChecksum?.trim()) {
+    failures.push("VERIFIED_BOUNDARY_MATCH requires per-record sourceSnapshotChecksum.");
+  }
+
+  if (
+    !association.evidence.includes(TR_SETTLEMENT_VERIFIED_BOUNDARY_EVIDENCE_TOKEN) &&
+    !association.evidence.some((entry) => entry.includes("official boundary spatial match"))
+  ) {
+    failures.push(
+      "VERIFIED_BOUNDARY_MATCH requires governed official polygon spatial-match evidence."
+    );
+  }
+
+  if (association.associationMethod === "seed-point-in-zone") {
+    failures.push("OSM seed point-in-zone associations cannot be VERIFIED_BOUNDARY_MATCH.");
+  }
+
+  return failures;
+}
+
+export function buildTrSettlementPinnedShardEvidence(input: {
+  shardPath: string;
+  shardSha256: string;
+  dataset: TerritoryDataset;
+  parentAdm2Id: string;
+  expectedShardSha256?: string;
+}): TrSettlementPinnedShardEvidence {
+  const adm3ZoneCount = input.dataset.zones.filter(
+    (zone) => zone.level === 3 && zone.parentId === input.parentAdm2Id
+  ).length;
+
+  return {
+    shardPath: input.shardPath,
+    shardSha256: input.shardSha256,
+    ...(input.expectedShardSha256 ? { expectedShardSha256: input.expectedShardSha256 } : {}),
+    shardBytesMatch: input.expectedShardSha256
+      ? input.shardSha256 === input.expectedShardSha256
+      : true,
+    gameplayFingerprint: computeTrSettlementGameplayFingerprint(input.dataset, input.parentAdm2Id),
+    manifestGeometryHash: input.dataset.manifest.geometryHash,
+    manifestDatasetVersion: input.dataset.manifest.datasetVersion,
+    adm3ZoneCount
+  };
 }
 
 export function createTrSettlementRefId(
@@ -264,6 +388,8 @@ export function buildTrSettlementAssociations(
     throw new Error(`Parent ADM2 zone not found: ${input.parentAdm2Id}`);
   }
 
+  const licenseIdentified = resolveTrSettlementLicenseIdentified(input.source);
+  const publicationRightsStatus = resolveTrSettlementPublicationRightsStatus(input.source);
   const sourceLicenseStatus = resolveTrSettlementSourceLicenseStatus(input.source);
   const settlementRefToZones = new Map<string, Set<string>>();
   const associations: TrSettlementAssociationRecord[] = [];
@@ -356,10 +482,17 @@ export function buildTrSettlementAssociations(
     }
 
     let associationStatus: TrSettlementAssociationStatus = "SINGLE_SEED_MATCH";
-    if (sourceLicenseStatus !== "known") {
+    if (publicationRightsStatus !== "approved") {
       associationStatus = "SOURCE_REVIEW_REQUIRED";
-      reasonCodes.push("SOURCE_LICENSE_UNKNOWN");
-      evidence.push("Source license not established; cannot mark VERIFIED_BOUNDARY_MATCH.");
+      if (!licenseIdentified) {
+        reasonCodes.push("SOURCE_LICENSE_UNKNOWN");
+        evidence.push("Source license not identified; geometric association only.");
+      } else {
+        reasonCodes.push("PUBLICATION_RIGHTS_PENDING");
+        evidence.push(
+          "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+        );
+      }
     }
 
     for (const match of matchedZones) {
@@ -391,7 +524,9 @@ export function buildTrSettlementAssociations(
         associationStatus,
         evidence: [...new Set(recordEvidence)].sort(),
         reasonCodes: [...new Set(recordReasonCodes)].sort(),
-        sourceLicenseStatus
+        sourceLicenseStatus,
+        licenseIdentified,
+        publicationRightsStatus
       });
     }
   }
@@ -445,7 +580,7 @@ export function buildTrSettlementAssociations(
     source: input.source,
     invalidation: {
       rebuildWhen: ["canonicalGeometryHash", "sourceSnapshotChecksum"],
-      note: "Rebuild association artifact when gameplay canonicalGeometryHash or seed sourceSnapshotChecksum changes; gameplay polygons and zone IDs are not mutated by this layer."
+      note: "Rebuild association artifact when gameplay canonicalGeometryHash or seed sourceSnapshotChecksum changes; gameplay polygons and zone IDs are not mutated by this layer. Artifact contentHash is deterministic over semantic payload and excludes builtAt; full JSON byte checksums still change when builtAt changes."
     },
     summary: {
       zoneCount: adm3Zones.length,
@@ -467,12 +602,14 @@ export function computeTrSettlementAssociationContentHash(
   artifact: Omit<TrSettlementAssociationArtifact, "contentHash"> & { contentHash?: string }
 ): string {
   const stableArtifact = stripContentHash(artifact);
-  return `fnv1a32:${fnv1a32(stableStringify(stableArtifact))}`;
+  const { builtAt: _builtAt, ...semanticPayload } = stableArtifact;
+  return `fnv1a32:${fnv1a32(stableStringify(semanticPayload))}`;
 }
 
 export function validateTrSettlementAssociationArtifact(
   dataset: TerritoryDataset,
-  artifact: TrSettlementAssociationArtifact
+  artifact: TrSettlementAssociationArtifact,
+  options: TrSettlementAssociationValidationOptions = {}
 ): TrSettlementAssociationValidationReport {
   const issues: TrSettlementAssociationValidationIssue[] = [];
   const zoneIds = new Set(dataset.zones.map((zone) => zone.id));
@@ -523,6 +660,18 @@ export function validateTrSettlementAssociationArtifact(
     });
   }
 
+  if (options.expectedSourceSnapshotChecksum) {
+    const actualChecksum = artifact.source.sourceSnapshotChecksum?.trim();
+    if (actualChecksum !== options.expectedSourceSnapshotChecksum) {
+      issues.push({
+        code: "SOURCE_SNAPSHOT_MISMATCH",
+        severity: "error",
+        message: "Artifact source snapshot checksum does not match expected seed snapshot.",
+        path: "$.source.sourceSnapshotChecksum"
+      });
+    }
+  }
+
   for (const association of artifact.associations) {
     if (!zoneIds.has(association.zoneId)) {
       issues.push({
@@ -534,17 +683,16 @@ export function validateTrSettlementAssociationArtifact(
       });
     }
 
-    if (
-      association.associationStatus === "VERIFIED_BOUNDARY_MATCH" &&
-      association.sourceLicenseStatus !== "known"
-    ) {
-      issues.push({
-        code: "UNVERIFIED_BOUNDARY",
-        severity: "error",
-        message: "VERIFIED_BOUNDARY_MATCH requires known source license.",
-        settlementRefId: association.settlementRefId,
-        zoneId: association.zoneId
-      });
+    if (association.associationStatus === "VERIFIED_BOUNDARY_MATCH") {
+      for (const message of assessVerifiedBoundaryMatchFailures(association, artifact.source)) {
+        issues.push({
+          code: "UNVERIFIED_BOUNDARY",
+          severity: "error",
+          message,
+          settlementRefId: association.settlementRefId,
+          zoneId: association.zoneId
+        });
+      }
     }
   }
 

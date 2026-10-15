@@ -1,3 +1,4 @@
+import type { TerritoryDataset } from "@territory-kit/dataset";
 import type {
   TrSettlementAssociationArtifact,
   TrSettlementAssociationRecord,
@@ -6,6 +7,8 @@ import type {
   TrSettlementZoneSummary
 } from "@territory-kit/dataset/tr-settlement-association";
 
+export type TrSettlementZoneResolution = "associated" | "unseeded" | "unknown-zone";
+
 export interface TrSettlementAssociationQueryResult {
   zoneId: string;
   zoneSummary: TrSettlementZoneSummary | null;
@@ -13,6 +16,12 @@ export interface TrSettlementAssociationQueryResult {
   associationStatus: TrSettlementAssociationStatus;
   reasonCodes: TrSettlementReasonCode[];
   provenance: TrSettlementAssociationArtifact["source"];
+  zoneResolution: TrSettlementZoneResolution;
+}
+
+export interface TrSettlementAssociationQueryContext {
+  dataset?: TerritoryDataset;
+  parentAdm2Id?: string;
 }
 
 export interface TrSettlementAssociationQuery {
@@ -23,7 +32,8 @@ export interface TrSettlementAssociationQuery {
 }
 
 export function createTrSettlementAssociationQuery(
-  artifact: TrSettlementAssociationArtifact
+  artifact: TrSettlementAssociationArtifact,
+  context: TrSettlementAssociationQueryContext = {}
 ): TrSettlementAssociationQuery {
   const associationsByZone = new Map<string, TrSettlementAssociationRecord[]>();
   const zonesBySettlement = new Map<string, Set<string>>();
@@ -46,11 +56,44 @@ export function createTrSettlementAssociationQuery(
     associationsByZone.set(zoneId, zoneAssociations);
   }
 
+  const parentAdm2Id = context.parentAdm2Id ?? artifact.parentAdm2Id;
+  const datasetZoneIds = context.dataset
+    ? new Set(context.dataset.zones.map((zone) => zone.id))
+    : undefined;
+
+  function resolveZoneResolution(zoneId: string, zoneSummary: TrSettlementZoneSummary | null) {
+    if (datasetZoneIds && !datasetZoneIds.has(zoneId)) {
+      return "unknown-zone" as const;
+    }
+
+    if (context.dataset) {
+      const zone = context.dataset.zones.find((candidate) => candidate.id === zoneId);
+      if (!zone) {
+        return "unknown-zone" as const;
+      }
+
+      if (zone.level === 3 && zone.parentId !== parentAdm2Id) {
+        return "unknown-zone" as const;
+      }
+    }
+
+    if (!zoneSummary) {
+      return "unknown-zone" as const;
+    }
+
+    if (zoneSummary.associationStatus === "UNSEEDED") {
+      return "unseeded" as const;
+    }
+
+    return "associated" as const;
+  }
+
   return {
     artifact,
     getAssociationsForZone(zoneId: string): TrSettlementAssociationQueryResult {
       const associations = associationsByZone.get(zoneId) ?? [];
       const zoneSummary = summaryByZone.get(zoneId) ?? null;
+      const zoneResolution = resolveZoneResolution(zoneId, zoneSummary);
       const reasonCodes = [
         ...new Set([
           ...(zoneSummary?.reasonCodes ?? []),
@@ -64,7 +107,8 @@ export function createTrSettlementAssociationQuery(
         associations,
         associationStatus: zoneSummary?.associationStatus ?? "UNSEEDED",
         reasonCodes,
-        provenance: artifact.source
+        provenance: artifact.source,
+        zoneResolution
       };
     },
     getZonesForSettlement(settlementRefId: string): string[] {

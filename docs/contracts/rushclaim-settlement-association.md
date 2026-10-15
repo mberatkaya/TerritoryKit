@@ -7,7 +7,11 @@ This document describes how Rush&Claim should consume Turkey settlement associat
 1. User taps a gameplay zone on the map.
 2. **Claim/scoring** uses the existing `zoneId` from `territory-schema@1` (unchanged).
 3. Load `territorykit-tr-settlement-association@1` sidecar for the district shard.
-4. Query via `createTrSettlementAssociationQuery(artifact).getAssociationsForZone(zoneId)`.
+4. **Fail-closed:** `loadTrSettlementAssociationConsumer({ dataset, artifact, expectedSourceSnapshotChecksum })` — do not query until `ok === true` (schema/datasetVersion/geometryHash/contentHash and optional seed snapshot must match).
+5. Query via `consumer.query.getAssociationsForZone(zoneId)` and inspect `zoneResolution`:
+   - `associated` — zone is in artifact scope with seed linkage.
+   - `unseeded` — known gameplay zone with no seeds (distinct from invalid IDs).
+   - `unknown-zone` — zone id not in dataset scope or outside artifact parent ADM2.
 
 ## Display rules
 
@@ -21,13 +25,25 @@ This document describes how Rush&Claim should consume Turkey settlement associat
 ## API surface (TerritoryKit)
 
 ```ts
-import { createTrSettlementAssociationQuery } from "@territory-kit/core";
+import { loadTrSettlementAssociationConsumer } from "@territory-kit/core";
 
-const query = createTrSettlementAssociationQuery(artifact);
-const result = query.getAssociationsForZone(zoneId);
-// result.associationStatus, result.reasonCodes, result.provenance
-const zones = query.getZonesForSettlement(settlementRefId);
+const consumer = loadTrSettlementAssociationConsumer({
+  dataset,
+  artifact,
+  expectedSourceSnapshotChecksum: expectedSeedSnapshotSha256
+});
+if (!consumer.ok) {
+  throw new Error("Settlement association artifact failed validation");
+}
+const result = consumer.query.getAssociationsForZone(zoneId);
+// result.associationStatus, result.zoneResolution, result.reasonCodes, result.provenance
+const zones = consumer.query.getZonesForSettlement(settlementRefId);
 ```
+
+## Determinism note
+
+- `contentHash` covers semantic association payload and excludes `builtAt`.
+- Shipping JSON byte checksums (`.sha256` on report files) include `builtAt` and formatting — do not use file SHA-256 as a substitute for `contentHash`.
 
 ## Non-goals (this sprint)
 

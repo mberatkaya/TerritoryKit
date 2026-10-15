@@ -10,11 +10,12 @@ import { dirname, join } from "node:path";
 import { performance } from "node:perf_hooks";
 import {
   buildTrSettlementAssociations,
+  buildTrSettlementPinnedShardEvidence,
   compareTrSettlementGameplayGeometryInvariant,
   validateTrSettlementAssociationArtifact
 } from "../packages/dataset/dist/tr-settlement-association.mjs";
 import { loadTerritoryDataset } from "../packages/dataset/dist/index.mjs";
-import { createTrSettlementAssociationQuery } from "../packages/core/dist/settlement-association-query.mjs";
+import { loadTrSettlementAssociationConsumer } from "../packages/core/dist/settlement-association-loader.mjs";
 import {
   buildTurkeyNetworkFirstSmartFallbackWithAdjacency,
   createTurkeySmartFallbackDataset,
@@ -33,6 +34,7 @@ const OUTPUT_ROOT =
   process.env.MAHALLE_FIRST_FATIH_SETTLEMENT_OUTPUT ??
   ".territory/mahalle-first-pilot/fatih-settlement-association";
 const REPORT_ROOT = "reports/tr-adm3/mahalle-first-program";
+const RC8_PIN_PATH = join(REPORT_ROOT, "fatih-rc8-shard-pin.json");
 
 const EXPECTED_BASELINE = {
   zoneCount: 30,
@@ -93,7 +95,10 @@ async function main() {
     `tr_adm2_${FATIH_ADM2_SUFFIX}`,
     "dataset.json"
   );
-  const baselineDataset = loadTerritoryDataset(await readJson(baselineShard));
+  const baselineShardBytes = await readFile(join(REPO_ROOT, baselineShard));
+  const baselineShardSha256 = createHash("sha256").update(baselineShardBytes).digest("hex");
+  const rc8Pin = await readJson(RC8_PIN_PATH);
+  const baselineDataset = loadTerritoryDataset(JSON.parse(baselineShardBytes.toString("utf8")));
   const parent = baselineDataset.zones.find(
     (zone) => zone.level === 2 && zone.id === PARENT_ADM2_ID
   );
@@ -136,11 +141,13 @@ async function main() {
   };
 
   const v17Replay = await runV17ReplayDataset(parent, barrierArtifact, smartInput);
-  const rc8SelfInvariant = compareTrSettlementGameplayGeometryInvariant(
-    baselineDataset,
-    baselineDataset,
-    PARENT_ADM2_ID
-  );
+  const rc8PinnedShardEvidence = buildTrSettlementPinnedShardEvidence({
+    shardPath: baselineShard,
+    shardSha256: baselineShardSha256,
+    dataset: baselineDataset,
+    parentAdm2Id: PARENT_ADM2_ID,
+    expectedShardSha256: rc8Pin.shardSha256
+  });
   const v17ReplayVsRc8 = compareTrSettlementGameplayGeometryInvariant(
     baselineDataset,
     v17Replay.dataset,
@@ -158,15 +165,23 @@ async function main() {
       sourceSnapshotChecksum: barrierArtifact.manifest.source.snapshotSha256,
       sourceSnapshotId: barrierArtifact.manifest.source.snapshotSha256.slice(0, 16),
       license: barrierArtifact.manifest.source.license,
-      licenseState: barrierArtifact.manifest.source.license ? "approved" : "unknown",
+      licenseState: barrierArtifact.manifest.source.license ? "pending" : "unknown",
       attribution: barrierArtifact.manifest.source.attribution
     }
   };
 
   const artifact = buildTrSettlementAssociations(associationInput);
-  const validation = validateTrSettlementAssociationArtifact(baselineDataset, artifact);
-  const query = createTrSettlementAssociationQuery(artifact);
-  const proof = query.getAssociationsForZone(artifact.zoneSummaries[0]?.zoneId ?? "");
+  const validation = validateTrSettlementAssociationArtifact(baselineDataset, artifact, {
+    expectedSourceSnapshotChecksum: barrierArtifact.manifest.source.snapshotSha256
+  });
+  const consumer = loadTrSettlementAssociationConsumer({
+    dataset: baselineDataset,
+    artifact,
+    expectedSourceSnapshotChecksum: barrierArtifact.manifest.source.snapshotSha256
+  });
+  const proof = consumer.ok
+    ? consumer.query.getAssociationsForZone(artifact.zoneSummaries[0]?.zoneId ?? "")
+    : null;
 
   const statusCounts = countZoneStatuses(artifact);
   const comparison = {
@@ -175,7 +190,8 @@ async function main() {
     parentAdm2Id: PARENT_ADM2_ID,
     rc8Shard: baselineShard,
     authoritativeGameplaySource: "rc8-shard",
-    rc8SelfInvariant,
+    rc8PinnedShardEvidence,
+    rc8PinPath: RC8_PIN_PATH,
     v17ReplayVsRc8,
     v17ReplayMatchesRc8: v17ReplayVsRc8.ok,
     v17ReplayNote: v17ReplayVsRc8.ok
@@ -201,12 +217,16 @@ async function main() {
     },
     officialMahalleInventoryComparison: "NOT_ASSESSED",
     validationOk: validation.ok,
-    sdkProof: {
-      sampleZoneId: proof.zoneId,
-      associationStatus: proof.associationStatus,
-      reasonCodeCount: proof.reasonCodes.length,
-      provenanceProviderId: proof.provenance.providerId ?? null
-    },
+    consumerReady: consumer.ok,
+    sdkProof: proof
+      ? {
+          sampleZoneId: proof.zoneId,
+          associationStatus: proof.associationStatus,
+          zoneResolution: proof.zoneResolution,
+          reasonCodeCount: proof.reasonCodes.length,
+          provenanceProviderId: proof.provenance.providerId ?? null
+        }
+      : null,
     legalBlockers: [
       "OSM locality seeds are not licensed official mahalle boundaries.",
       "VERIFIED_BOUNDARY_MATCH requires separately governed official polygon sources."
@@ -219,7 +239,8 @@ async function main() {
     writeStableJson(join(REPORT_ROOT, "fatih-settlement-association.json"), artifact),
     writeStableJson(join(REPORT_ROOT, "fatih-settlement-association-comparison.json"), comparison),
     writeStableJson(join(REPORT_ROOT, "fatih-settlement-geometry-invariant.json"), {
-      rc8SelfInvariant,
+      rc8PinnedShardEvidence,
+      rc8Pin,
       v17ReplayVsRc8
     })
   ]);
@@ -242,19 +263,24 @@ async function main() {
   console.log(
     JSON.stringify(
       {
-        ok: validation.ok && rc8SelfInvariant.ok && comparison.delta.distinctSeedsRepresented === 0,
+        ok:
+          validation.ok &&
+          consumer.ok &&
+          rc8PinnedShardEvidence.shardBytesMatch &&
+          comparison.delta.distinctSeedsRepresented === 0,
         writes,
         comparison: comparison.actual,
         delta: comparison.delta,
         v17ReplayMatchesRc8: v17ReplayVsRc8.ok,
-        rc8SelfInvariantOk: rc8SelfInvariant.ok
+        rc8PinnedShardBytesMatch: rc8PinnedShardEvidence.shardBytesMatch,
+        consumerReady: consumer.ok
       },
       null,
       2
     )
   );
 
-  if (!validation.ok || !rc8SelfInvariant.ok) {
+  if (!validation.ok || !consumer.ok || !rc8PinnedShardEvidence.shardBytesMatch) {
     process.exitCode = 1;
   }
 }

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-first-rc8-shard-pin@1",
+  "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+  "rc8RootEnv": "MAHALLE_FIRST_RC8_ROOT",
+  "rc8RootDefault": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+  "shardRelativePath": "districts/tr_adm2_54988432b39641834885080/dataset.json",
+  "shardSha256": "902df1719ecb1c86f06ffd28f98b3b3f2474f3b3b12ed5ced1a517adc0276446",
+  "manifestDatasetVersion": "2.1.0-rc.8",
+  "manifestGeometryHash": "ba17816e271180fc823ef372388bf7d31aa09904d6e035ece7a0a759027ebef9",
+  "gameplayFingerprint": "fnv1a32:5b6c0f32",
+  "adm3ZoneCount": 30,
+  "note": "Read-only byte fingerprint for pinned rc.8 Fatih shard; recomputed by scripts/tr-fatih-settlement-association.mjs and compared fail-closed."
+}

@@ -77,9 +77,10 @@ describe("settlement association query", () => {
       seeds: [{ name: "Mahalle", coordinate: [0.5, 0.5], sourceId: "node:99" }]
     });
 
-    const query = createTrSettlementAssociationQuery(artifact);
+    const query = createTrSettlementAssociationQuery(artifact, { dataset });
     const zoneResult = query.getAssociationsForZone("zone-1");
     expect(zoneResult.associationStatus).toBe("SINGLE_SEED_MATCH");
+    expect(zoneResult.zoneResolution).toBe("associated");
     expect(zoneResult.associations).toHaveLength(1);
     expect(zoneResult.provenance.providerId).toBe("osm");
 

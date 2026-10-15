@@ -4,19 +4,19 @@
   "datasetVersion": "2.1.0-rc.8",
   "canonicalGeometryHash": "ba17816e271180fc823ef372388bf7d31aa09904d6e035ece7a0a759027ebef9",
   "parentAdm2Id": "tr:adm2:54988432b39641834885080",
-  "builtAt": "2026-10-15T17:44:06.991Z",
+  "builtAt": "2026-10-15T17:56:39.377Z",
   "source": {
     "providerId": "geofabrik-osm-extracts",
     "sourceDatasetId": "geofabrik:europe:turkey",
     "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
     "sourceSnapshotId": "5ec68ce5e0b2be55",
     "license": "ODbL-1.0",
-    "licenseState": "approved",
+    "licenseState": "pending",
     "attribution": "OpenStreetMap contributors, ODbL 1.0"
   },
   "invalidation": {
     "rebuildWhen": ["canonicalGeometryHash", "sourceSnapshotChecksum"],
-    "note": "Rebuild association artifact when gameplay canonicalGeometryHash or seed sourceSnapshotChecksum changes; gameplay polygons and zone IDs are not mutated by this layer."
+    "note": "Rebuild association artifact when gameplay canonicalGeometryHash or seed sourceSnapshotChecksum changes; gameplay polygons and zone IDs are not mutated by this layer. Artifact contentHash is deterministic over semantic payload and excludes builtAt; full JSON byte checksums still change when builtAt changes."
   },
   "summary": {
     "zoneCount": 30,
@@ -43,10 +43,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -60,10 +64,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -77,10 +85,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.72,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -94,10 +106,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -111,10 +127,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -128,10 +148,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -145,10 +169,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.72,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -162,10 +190,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -179,10 +211,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -196,10 +232,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -213,10 +253,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -230,10 +274,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -247,10 +295,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -264,10 +316,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -281,10 +337,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -298,10 +358,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -315,10 +379,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.72,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -332,10 +400,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.72,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -349,10 +421,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -366,10 +442,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -383,10 +463,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -400,10 +484,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -417,10 +505,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -434,10 +526,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -451,10 +547,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -468,10 +568,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -485,10 +589,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.72,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -502,10 +610,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.72,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -519,10 +631,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.72,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -536,10 +652,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -553,10 +673,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -570,10 +694,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -587,10 +715,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -604,10 +736,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -621,10 +757,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -638,10 +778,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -655,10 +799,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -672,10 +820,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -689,10 +841,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -706,10 +862,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -723,10 +883,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -740,10 +904,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.72,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -757,10 +925,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -774,10 +946,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -791,10 +967,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -808,10 +988,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -825,10 +1009,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -842,10 +1030,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -859,10 +1051,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.72,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -876,10 +1072,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.72,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -893,10 +1093,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.72,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -910,10 +1114,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -927,10 +1135,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -944,10 +1156,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -961,10 +1177,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -978,10 +1198,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -995,10 +1219,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -1012,10 +1240,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -1029,10 +1261,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -1046,10 +1282,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -1063,10 +1303,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.72,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -1080,10 +1324,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -1097,10 +1345,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -1114,10 +1366,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -1131,10 +1387,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -1148,10 +1408,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -1165,10 +1429,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -1182,10 +1450,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.72,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -1199,10 +1471,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -1216,10 +1492,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     },
     {
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
@@ -1233,10 +1513,14 @@
       "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
       "associationMethod": "seed-point-in-zone",
       "associationConfidence": 0.58,
-      "associationStatus": "SINGLE_SEED_MATCH",
-      "evidence": [],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"],
-      "sourceLicenseStatus": "known"
+      "associationStatus": "SOURCE_REVIEW_REQUIRED",
+      "evidence": [
+        "License name identified but publication/redistribution is not approved; cannot mark VERIFIED_BOUNDARY_MATCH."
+      ],
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"],
+      "sourceLicenseStatus": "unknown",
+      "licenseIdentified": true,
+      "publicationRightsStatus": "pending"
     }
   ],
   "zoneSummaries": [
@@ -1245,7 +1529,7 @@
       "associationStatus": "SINGLE_SEED_MATCH",
       "associationCount": 1,
       "distinctSettlementRefIds": ["tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4996909359"],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-073b672500565ae4fb3e",
@@ -1255,14 +1539,18 @@
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999339810",
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:6318171354"
       ],
-      "reasonCodes": ["MULTI_SEED_IN_ZONE", "OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": [
+        "MULTI_SEED_IN_ZONE",
+        "OFFICIAL_NAME_NOT_ASSESSED",
+        "PUBLICATION_RIGHTS_PENDING"
+      ]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-08c523104fbe1e7feb3d",
       "associationStatus": "SINGLE_SEED_MATCH",
       "associationCount": 1,
       "distinctSettlementRefIds": ["tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999341426"],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-13d94a01ceafb0ce5169",
@@ -1280,7 +1568,11 @@
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999339819",
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:6320765720"
       ],
-      "reasonCodes": ["MULTI_SEED_IN_ZONE", "OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": [
+        "MULTI_SEED_IN_ZONE",
+        "OFFICIAL_NAME_NOT_ASSESSED",
+        "PUBLICATION_RIGHTS_PENDING"
+      ]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-2b5978834366688ae645",
@@ -1291,14 +1583,18 @@
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999341423",
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999341428"
       ],
-      "reasonCodes": ["MULTI_SEED_IN_ZONE", "OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": [
+        "MULTI_SEED_IN_ZONE",
+        "OFFICIAL_NAME_NOT_ASSESSED",
+        "PUBLICATION_RIGHTS_PENDING"
+      ]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-34d0c14106436af5f5a6",
       "associationStatus": "SINGLE_SEED_MATCH",
       "associationCount": 1,
       "distinctSettlementRefIds": ["tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4947158636"],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-57c6546b8d8c52e3ca2f",
@@ -1315,7 +1611,11 @@
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999341441",
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999341455"
       ],
-      "reasonCodes": ["MULTI_SEED_IN_ZONE", "OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": [
+        "MULTI_SEED_IN_ZONE",
+        "OFFICIAL_NAME_NOT_ASSESSED",
+        "PUBLICATION_RIGHTS_PENDING"
+      ]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-67991e44ab1c9e28442b",
@@ -1327,7 +1627,11 @@
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999341438",
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:6315581139"
       ],
-      "reasonCodes": ["MULTI_SEED_IN_ZONE", "OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": [
+        "MULTI_SEED_IN_ZONE",
+        "OFFICIAL_NAME_NOT_ASSESSED",
+        "PUBLICATION_RIGHTS_PENDING"
+      ]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-701b712ba93c285dfee4",
@@ -1354,7 +1658,11 @@
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:6311605509",
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:7863036213"
       ],
-      "reasonCodes": ["MULTI_SEED_IN_ZONE", "OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": [
+        "MULTI_SEED_IN_ZONE",
+        "OFFICIAL_NAME_NOT_ASSESSED",
+        "PUBLICATION_RIGHTS_PENDING"
+      ]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-88ec65114d7d0e51d713",
@@ -1368,14 +1676,18 @@
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999341443",
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999341445"
       ],
-      "reasonCodes": ["MULTI_SEED_IN_ZONE", "OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": [
+        "MULTI_SEED_IN_ZONE",
+        "OFFICIAL_NAME_NOT_ASSESSED",
+        "PUBLICATION_RIGHTS_PENDING"
+      ]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-8eebe5599fbf67d5bc23",
       "associationStatus": "SINGLE_SEED_MATCH",
       "associationCount": 1,
       "distinctSettlementRefIds": ["tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999341452"],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-9f83a09e877b09576ca7",
@@ -1385,7 +1697,11 @@
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4947158661",
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999341450"
       ],
-      "reasonCodes": ["MULTI_SEED_IN_ZONE", "OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": [
+        "MULTI_SEED_IN_ZONE",
+        "OFFICIAL_NAME_NOT_ASSESSED",
+        "PUBLICATION_RIGHTS_PENDING"
+      ]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ae51c43e7a16247111a1",
@@ -1396,7 +1712,11 @@
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4996909326",
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999339820"
       ],
-      "reasonCodes": ["MULTI_SEED_IN_ZONE", "OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": [
+        "MULTI_SEED_IN_ZONE",
+        "OFFICIAL_NAME_NOT_ASSESSED",
+        "PUBLICATION_RIGHTS_PENDING"
+      ]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b0035a2eaa3b83222d33",
@@ -1410,7 +1730,7 @@
       "associationStatus": "SINGLE_SEED_MATCH",
       "associationCount": 1,
       "distinctSettlementRefIds": ["tr:settlement-ref:5ec68ce5e0b2be55:osm:node:6318210483"],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b3e509aaad7fa40c97c0",
@@ -1420,21 +1740,25 @@
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999339818",
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999341427"
       ],
-      "reasonCodes": ["MULTI_SEED_IN_ZONE", "OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": [
+        "MULTI_SEED_IN_ZONE",
+        "OFFICIAL_NAME_NOT_ASSESSED",
+        "PUBLICATION_RIGHTS_PENDING"
+      ]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b5ae85dbcb276cc5da0b",
       "associationStatus": "SINGLE_SEED_MATCH",
       "associationCount": 1,
       "distinctSettlementRefIds": ["tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999341447"],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b699d521a866aa6875c3",
       "associationStatus": "SINGLE_SEED_MATCH",
       "associationCount": 1,
       "distinctSettlementRefIds": ["tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999341446"],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b869ea01a2bad0439ea4",
@@ -1453,7 +1777,11 @@
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:6315573196",
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:7863036212"
       ],
-      "reasonCodes": ["MULTI_SEED_IN_ZONE", "OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": [
+        "MULTI_SEED_IN_ZONE",
+        "OFFICIAL_NAME_NOT_ASSESSED",
+        "PUBLICATION_RIGHTS_PENDING"
+      ]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-c760995c457452ed71a1",
@@ -1472,7 +1800,11 @@
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999341449",
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:6315827801"
       ],
-      "reasonCodes": ["MULTI_SEED_IN_ZONE", "OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": [
+        "MULTI_SEED_IN_ZONE",
+        "OFFICIAL_NAME_NOT_ASSESSED",
+        "PUBLICATION_RIGHTS_PENDING"
+      ]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-cbeb5278a71425ce7202",
@@ -1483,21 +1815,25 @@
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999339815",
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999341435"
       ],
-      "reasonCodes": ["MULTI_SEED_IN_ZONE", "OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": [
+        "MULTI_SEED_IN_ZONE",
+        "OFFICIAL_NAME_NOT_ASSESSED",
+        "PUBLICATION_RIGHTS_PENDING"
+      ]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ce3a6d0f0ea5c4667c87",
       "associationStatus": "SINGLE_SEED_MATCH",
       "associationCount": 1,
       "distinctSettlementRefIds": ["tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4947158632"],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dacb79746e8604409768",
       "associationStatus": "SINGLE_SEED_MATCH",
       "associationCount": 1,
       "distinctSettlementRefIds": ["tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4947158668"],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dc4135f5abb73435480a",
@@ -1507,14 +1843,18 @@
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999341422",
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:6093191297"
       ],
-      "reasonCodes": ["MULTI_SEED_IN_ZONE", "OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": [
+        "MULTI_SEED_IN_ZONE",
+        "OFFICIAL_NAME_NOT_ASSESSED",
+        "PUBLICATION_RIGHTS_PENDING"
+      ]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-de3555218fb370c42fd2",
       "associationStatus": "SINGLE_SEED_MATCH",
       "associationCount": 1,
       "distinctSettlementRefIds": ["tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4999341453"],
-      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": ["OFFICIAL_NAME_NOT_ASSESSED", "PUBLICATION_RIGHTS_PENDING"]
     },
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-f24cd8558fe73d01e2b4",
@@ -1524,8 +1864,12 @@
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4947158624",
         "tr:settlement-ref:5ec68ce5e0b2be55:osm:node:4947158665"
       ],
-      "reasonCodes": ["MULTI_SEED_IN_ZONE", "OFFICIAL_NAME_NOT_ASSESSED"]
+      "reasonCodes": [
+        "MULTI_SEED_IN_ZONE",
+        "OFFICIAL_NAME_NOT_ASSESSED",
+        "PUBLICATION_RIGHTS_PENDING"
+      ]
     }
   ],
-  "contentHash": "fnv1a32:076b9fa8"
+  "contentHash": "fnv1a32:8f50d1ce"
 }
