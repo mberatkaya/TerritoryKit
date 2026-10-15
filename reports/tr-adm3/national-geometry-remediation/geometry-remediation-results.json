@@ -17,11 +17,25 @@
   },
   "rc8NationalBuild": {
     "status": "IN_PROGRESS",
+    "qualityOutcome": "PENDING",
+    "processPid": 37104,
+    "districtArtifactsWritten": 109,
+    "districtArtifactsTarget": 973,
     "output": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
     "log": ".territory/national-geometry-remediation/build-impl-rev1.log",
+    "osmSourceLock": {
+      "path": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json",
+      "contentAddressedSnapshotId": "TR-5ec68ce5e0b2be55",
+      "sha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
+    },
     "checkpointSchemaRequired": "territorykit-tr-smart-district-checkpoint@5",
     "checkpointImplementationRevisionRequired": "national-hybrid-sibling-gate-v2",
     "experimentalFlags": ["--allow-parent-provenance-mismatch"],
-    "note": "Clean directory; no restore from candidate-rc8 @4 checkpoints."
+    "note": "Clean directory; no restore from candidate-rc8 @4 checkpoints. Observed 2026-10-15 session — re-count districts before final sign-off."
+  },
+  "ciBlockerHybridTest": {
+    "status": "FIX_PENDING_PUSH",
+    "failedRunId": 38576319295,
+    "strategy": "Committed ODbL OSM barrier fixtures under packages/generators/test/fixtures/national-blocker-districts when inputs absent locally; NOT_RUN_MISSING_REAL_ARTIFACT when neither local nor fixture artifacts exist."
   }
 }

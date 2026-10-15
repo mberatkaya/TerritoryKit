@@ -1,0 +1,626 @@
+[
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1710354,
+      36.5902266
+    ],
+    "id": "osm:node:14644309",
+    "name": "İskenderun",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:14644309",
+    "type": "locality"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.2422085,
+      36.6511908
+    ],
+    "id": "osm:node:1577027550",
+    "name": "Akarca",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:1577027550",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.2265103,
+      36.6972887
+    ],
+    "id": "osm:node:1577027551",
+    "name": "Azganlık",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:1577027551",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.205349,
+      36.570251
+    ],
+    "id": "osm:node:1577027552",
+    "name": "Aşkarbeyli",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:1577027552",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.2268578,
+      36.6191065
+    ],
+    "id": "osm:node:1577027553",
+    "name": "Bekbele",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:1577027553",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.2023033,
+      36.5516332
+    ],
+    "id": "osm:node:1577027555",
+    "name": "Cebike",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:1577027555",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.2359215,
+      36.6437255
+    ],
+    "id": "osm:node:1577027559",
+    "name": "Kavaklıoluk",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:1577027559",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.234451,
+      36.62167
+    ],
+    "id": "osm:node:1577027560",
+    "name": "Orhangazi",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:1577027560",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.21776,
+      36.6701867
+    ],
+    "id": "osm:node:1577027561",
+    "name": "Sarıseki",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:1577027561",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.182342,
+      36.525444
+    ],
+    "id": "osm:node:2010731128",
+    "name": "Cırtıman",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2010731128",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1831432,
+      36.5666207
+    ],
+    "id": "osm:node:2712728274",
+    "name": "Buluttepe",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2712728274",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.2181834,
+      36.5602291
+    ],
+    "id": "osm:node:3109224879",
+    "name": "Suçıkağı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:3109224879",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.72,
+    "coordinate": [
+      36.2242696,
+      36.5683677
+    ],
+    "id": "osm:node:3111859714",
+    "name": "Kösür",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:3111859714",
+    "type": "neighbourhood"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1953726,
+      36.5835915
+    ],
+    "id": "osm:node:3111860129",
+    "name": "Modernevler",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:3111860129",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.215167,
+      36.608768
+    ],
+    "id": "osm:node:8203383794",
+    "name": "Akçay",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383794",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.2415677,
+      36.6294369
+    ],
+    "id": "osm:node:8203383795",
+    "name": "Bitişik",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383795",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.2180919,
+      36.6249269
+    ],
+    "id": "osm:node:8203383796",
+    "name": "Çınarlı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383796",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.3210783,
+      36.6572139
+    ],
+    "id": "osm:node:8203383797",
+    "name": "Kaledibi",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383797",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1908588,
+      36.5751531
+    ],
+    "id": "osm:node:8203383800",
+    "name": "Sakarya",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383800",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1923772,
+      36.5783051
+    ],
+    "id": "osm:node:8203383801",
+    "name": "Yunus Emre",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383801",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1729192,
+      36.5709364
+    ],
+    "id": "osm:node:8203383802",
+    "name": "Esentepe",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383802",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.162706,
+      36.5708202
+    ],
+    "id": "osm:node:8203383803",
+    "name": "Numune",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383803",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1588149,
+      36.5575952
+    ],
+    "id": "osm:node:8203383804",
+    "name": "İsmet İnönü",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383804",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1495492,
+      36.5637391
+    ],
+    "id": "osm:node:8203383805",
+    "name": "Mustafa Kemal",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383805",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1551439,
+      36.5827671
+    ],
+    "id": "osm:node:8203383806",
+    "name": "Meydan",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383806",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.155169,
+      36.5728707
+    ],
+    "id": "osm:node:8203383807",
+    "name": "Gürsel",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383807",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.16579,
+      36.5829443
+    ],
+    "id": "osm:node:8203383808",
+    "name": "Barbaros",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383808",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1754485,
+      36.5738865
+    ],
+    "id": "osm:node:8203383809",
+    "name": "Barıştepe",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383809",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.160738,
+      36.5848979
+    ],
+    "id": "osm:node:8203383810",
+    "name": "Cumhuriyet",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383810",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1747775,
+      36.5881335
+    ],
+    "id": "osm:node:8203383811",
+    "name": "Çay",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383811",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.2159785,
+      36.6398297
+    ],
+    "id": "osm:node:8203383812",
+    "name": "Denizciler",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383812",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1712289,
+      36.5810417
+    ],
+    "id": "osm:node:8203383813",
+    "name": "Dumlupınar",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383813",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1776834,
+      36.5699163
+    ],
+    "id": "osm:node:8203383814",
+    "name": "Kocatepe",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383814",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1909214,
+      36.5686524
+    ],
+    "id": "osm:node:8203383815",
+    "name": "Gültepe",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383815",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.16527,
+      36.5900815
+    ],
+    "id": "osm:node:8203383816",
+    "name": "Hürriyet",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203383816",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.2116487,
+      36.6173404
+    ],
+    "id": "osm:node:8203399717",
+    "name": "Fatih Sultan Mehmet",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203399717",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.210282,
+      36.6115041
+    ],
+    "id": "osm:node:8203399718",
+    "name": "Güzelçay",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203399718",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.226296,
+      36.7138532
+    ],
+    "id": "osm:node:8203399719",
+    "name": "Karayılan",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203399719",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1688462,
+      36.5844244
+    ],
+    "id": "osm:node:8203399720",
+    "name": "Kurtuluş",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203399720",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1658195,
+      36.578007
+    ],
+    "id": "osm:node:8203399721",
+    "name": "Pınarbaşı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203399721",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.171228,
+      36.5782075
+    ],
+    "id": "osm:node:8203399722",
+    "name": "Muradiye",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203399722",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1564794,
+      36.5879755
+    ],
+    "id": "osm:node:8203399723",
+    "name": "Pirireis",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203399723",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1622817,
+      36.592093
+    ],
+    "id": "osm:node:8203399724",
+    "name": "Süleymaniye",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203399724",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1665071,
+      36.5909631
+    ],
+    "id": "osm:node:8203399725",
+    "name": "Yenişehir",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203399725",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1708744,
+      36.5883849
+    ],
+    "id": "osm:node:8203399726",
+    "name": "Savaş",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203399726",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      36.1838245,
+      36.572186
+    ],
+    "id": "osm:node:8203399727",
+    "name": "Yıldırımtepe",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8203399727",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.72,
+    "coordinate": [
+      36.2431084,
+      36.5949668
+    ],
+    "id": "osm:node:9556376187",
+    "name": "Güzelköy",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:9556376187",
+    "type": "neighbourhood"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.72,
+    "coordinate": [
+      36.3350809,
+      36.6451113
+    ],
+    "id": "osm:node:9556434367",
+    "name": "yayla",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:9556434367",
+    "type": "neighbourhood"
+  }
+]

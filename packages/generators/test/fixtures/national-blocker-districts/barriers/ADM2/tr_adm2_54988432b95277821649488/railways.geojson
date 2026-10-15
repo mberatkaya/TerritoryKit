@@ -1,0 +1,4491 @@
+{
+  "features": [
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2012248,
+            36.6927361
+          ],
+          [
+            36.2012557,
+            36.6926856
+          ],
+          [
+            36.2029432,
+            36.689897
+          ],
+          [
+            36.204156,
+            36.6879086
+          ],
+          [
+            36.2044465,
+            36.6874539
+          ],
+          [
+            36.2046013,
+            36.6871963
+          ],
+          [
+            36.210913,
+            36.6757042
+          ],
+          [
+            36.2115788,
+            36.6743106
+          ],
+          [
+            36.2118574,
+            36.6736371
+          ],
+          [
+            36.2121009,
+            36.6729988
+          ],
+          [
+            36.2126655,
+            36.6714558
+          ],
+          [
+            36.2127077,
+            36.6713573
+          ],
+          [
+            36.2131096,
+            36.6701416
+          ],
+          [
+            36.213212,
+            36.6698542
+          ],
+          [
+            36.2136034,
+            36.6687553
+          ],
+          [
+            36.2137937,
+            36.6682506
+          ],
+          [
+            36.2148478,
+            36.6651952
+          ],
+          [
+            36.2149257,
+            36.664979
+          ],
+          [
+            36.2150336,
+            36.6646924
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1083505064",
+      "properties": {
+        "@id": "osm:way:1083505064",
+        "axle_load": "22.5",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "name": "Toprakkale-İskenderun demiryolu",
+        "operator": "TCDD",
+        "osm_id": "1083505064",
+        "osm_type": "way",
+        "railway": "rail",
+        "railway:etcs": "no",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "main",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2011803,
+            36.6928091
+          ],
+          [
+            36.2012248,
+            36.6927361
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1083505065",
+      "properties": {
+        "@id": "osm:way:1083505065",
+        "axle_load": "22.5",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "bridge": "yes",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "layer": "1",
+        "name": "Toprakkale-İskenderun demiryolu",
+        "operator": "TCDD",
+        "osm_id": "1083505065",
+        "osm_type": "way",
+        "railway": "rail",
+        "railway:etcs": "no",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "main",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1897212,
+            36.5911219
+          ],
+          [
+            36.1903123,
+            36.5912662
+          ],
+          [
+            36.1906233,
+            36.5913103
+          ],
+          [
+            36.1909373,
+            36.5913361
+          ],
+          [
+            36.1910986,
+            36.5913494
+          ],
+          [
+            36.1911783,
+            36.591356
+          ],
+          [
+            36.1917637,
+            36.5914588
+          ],
+          [
+            36.1924528,
+            36.5917575
+          ],
+          [
+            36.1928756,
+            36.5920578
+          ],
+          [
+            36.1932415,
+            36.5924495
+          ],
+          [
+            36.193522,
+            36.5928673
+          ],
+          [
+            36.1936354,
+            36.5932755
+          ],
+          [
+            36.1937416,
+            36.5936917
+          ],
+          [
+            36.1937909,
+            36.5938672
+          ],
+          [
+            36.1938467,
+            36.5940366
+          ],
+          [
+            36.1939126,
+            36.5942474
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1126440615",
+      "properties": {
+        "@id": "osm:way:1126440615",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "1126440615",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2097817,
+            36.7191486
+          ],
+          [
+            36.2095587,
+            36.7195656
+          ],
+          [
+            36.2094065,
+            36.720028
+          ],
+          [
+            36.2094278,
+            36.7204167
+          ],
+          [
+            36.2095693,
+            36.7207542
+          ],
+          [
+            36.2098206,
+            36.7211344
+          ],
+          [
+            36.2102842,
+            36.7214579
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430308654",
+      "properties": {
+        "@id": "osm:way:1430308654",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "1430308654",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2099673,
+            36.7214086
+          ],
+          [
+            36.2091192,
+            36.7208545
+          ],
+          [
+            36.2085034,
+            36.720358
+          ],
+          [
+            36.2083105,
+            36.7202261
+          ],
+          [
+            36.2052909,
+            36.7172305
+          ],
+          [
+            36.1974075,
+            36.7094093
+          ],
+          [
+            36.1969111,
+            36.7088277
+          ],
+          [
+            36.1967444,
+            36.7086159
+          ],
+          [
+            36.1962354,
+            36.7078036
+          ],
+          [
+            36.1960135,
+            36.7074133
+          ],
+          [
+            36.1957855,
+            36.7068699
+          ],
+          [
+            36.1956746,
+            36.7065883
+          ],
+          [
+            36.1954745,
+            36.7059134
+          ],
+          [
+            36.1952931,
+            36.7044986
+          ],
+          [
+            36.1952958,
+            36.704028
+          ],
+          [
+            36.1953766,
+            36.7034535
+          ],
+          [
+            36.1955074,
+            36.7028297
+          ],
+          [
+            36.1957368,
+            36.7021904
+          ],
+          [
+            36.1959485,
+            36.7016534
+          ],
+          [
+            36.1963513,
+            36.7009057
+          ],
+          [
+            36.1973476,
+            36.6992993
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430308655",
+      "properties": {
+        "@id": "osm:way:1430308655",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "1430308655",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1974057,
+            36.6993172
+          ],
+          [
+            36.1971378,
+            36.6997646
+          ],
+          [
+            36.1964311,
+            36.7009319
+          ],
+          [
+            36.1960312,
+            36.7016792
+          ],
+          [
+            36.1958334,
+            36.7021978
+          ],
+          [
+            36.1955819,
+            36.7028394
+          ],
+          [
+            36.1954602,
+            36.7034265
+          ],
+          [
+            36.1954147,
+            36.7037267
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430308656",
+      "properties": {
+        "@id": "osm:way:1430308656",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "1430308656",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1974796,
+            36.699345
+          ],
+          [
+            36.1968527,
+            36.7003975
+          ],
+          [
+            36.1965108,
+            36.7009582
+          ],
+          [
+            36.1961138,
+            36.7017049
+          ],
+          [
+            36.1959301,
+            36.7022051
+          ],
+          [
+            36.1956564,
+            36.7028491
+          ],
+          [
+            36.1955437,
+            36.7033996
+          ],
+          [
+            36.1954147,
+            36.7037267
+          ],
+          [
+            36.1952958,
+            36.704028
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430308657",
+      "properties": {
+        "@id": "osm:way:1430308657",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "1430308657",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1971378,
+            36.6997646
+          ],
+          [
+            36.1968527,
+            36.7003975
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430308658",
+      "properties": {
+        "@id": "osm:way:1430308658",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "1430308658",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1978614,
+            36.6985806
+          ],
+          [
+            36.1980333,
+            36.6982963
+          ],
+          [
+            36.2007022,
+            36.6938809
+          ],
+          [
+            36.2007329,
+            36.69383
+          ],
+          [
+            36.2009695,
+            36.6932707
+          ],
+          [
+            36.2012384,
+            36.6928252
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430556439",
+      "properties": {
+        "@id": "osm:way:1430556439",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "1430556439",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1979261,
+            36.6986053
+          ],
+          [
+            36.1983524,
+            36.6978992
+          ],
+          [
+            36.2006329,
+            36.6941367
+          ],
+          [
+            36.2007022,
+            36.6938809
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430556440",
+      "properties": {
+        "@id": "osm:way:1430556440",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "1430556440",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1980333,
+            36.6982963
+          ],
+          [
+            36.1983524,
+            36.6978992
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430556441",
+      "properties": {
+        "@id": "osm:way:1430556441",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "1430556441",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2012783,
+            36.6927505
+          ],
+          [
+            36.2015867,
+            36.692239
+          ],
+          [
+            36.2029177,
+            36.6900799
+          ],
+          [
+            36.2030188,
+            36.6899159
+          ],
+          [
+            36.203696,
+            36.6888175
+          ],
+          [
+            36.2045493,
+            36.6874808
+          ],
+          [
+            36.2047048,
+            36.6872372
+          ],
+          [
+            36.2065066,
+            36.6839914
+          ],
+          [
+            36.2066055,
+            36.6836983
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430556442",
+      "properties": {
+        "@id": "osm:way:1430556442",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "1430556442",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2012384,
+            36.6928252
+          ],
+          [
+            36.2012783,
+            36.6927505
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430556443",
+      "properties": {
+        "@id": "osm:way:1430556443",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "bridge": "yes",
+        "electrified": "no",
+        "gauge": "1435",
+        "layer": "1",
+        "osm_id": "1430556443",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2029177,
+            36.6900799
+          ],
+          [
+            36.2028323,
+            36.6903007
+          ],
+          [
+            36.2017996,
+            36.6919943
+          ],
+          [
+            36.2015867,
+            36.692239
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430556444",
+      "properties": {
+        "@id": "osm:way:1430556444",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "1430556444",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.214824,
+            36.6647244
+          ],
+          [
+            36.2144747,
+            36.665757
+          ],
+          [
+            36.2135419,
+            36.6685023
+          ],
+          [
+            36.2134879,
+            36.6688923
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430556445",
+      "properties": {
+        "@id": "osm:way:1430556445",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "1430556445",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2144747,
+            36.665757
+          ],
+          [
+            36.2145075,
+            36.6654451
+          ],
+          [
+            36.2147516,
+            36.6647072
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430556446",
+      "properties": {
+        "@id": "osm:way:1430556446",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "1430556446",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1983048,
+            36.6139103
+          ],
+          [
+            36.1985963,
+            36.6157328
+          ],
+          [
+            36.1986393,
+            36.6158302
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430566496",
+      "properties": {
+        "@id": "osm:way:1430566496",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "1430566496",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1983486,
+            36.6139057
+          ],
+          [
+            36.1986393,
+            36.6158302
+          ],
+          [
+            36.1986594,
+            36.6159637
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430566498",
+      "properties": {
+        "@id": "osm:way:1430566498",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "1430566498",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1979433,
+            36.6119521
+          ],
+          [
+            36.198036,
+            36.6121456
+          ],
+          [
+            36.1981856,
+            36.6131181
+          ],
+          [
+            36.1982897,
+            36.6138171
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430566499",
+      "properties": {
+        "@id": "osm:way:1430566499",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "1430566499",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1983335,
+            36.6138125
+          ],
+          [
+            36.1982596,
+            36.6133093
+          ],
+          [
+            36.1981856,
+            36.6131181
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430566500",
+      "properties": {
+        "@id": "osm:way:1430566500",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "1430566500",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1848988,
+            36.5886653
+          ],
+          [
+            36.18538,
+            36.5887943
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430578939",
+      "properties": {
+        "@id": "osm:way:1430578939",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "osm_id": "1430578939",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "crossover",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1835366,
+            36.5887299
+          ],
+          [
+            36.1833989,
+            36.5885322
+          ],
+          [
+            36.183189,
+            36.5882959
+          ],
+          [
+            36.1830367,
+            36.5881766
+          ],
+          [
+            36.1829584,
+            36.5881153
+          ],
+          [
+            36.1827391,
+            36.5879979
+          ],
+          [
+            36.1823998,
+            36.5878444
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:1430578940",
+      "properties": {
+        "@id": "osm:way:1430578940",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "1430578940",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2099157,
+            36.721625
+          ],
+          [
+            36.2094232,
+            36.7212626
+          ],
+          [
+            36.2085743,
+            36.7205564
+          ],
+          [
+            36.2082772,
+            36.7202617
+          ],
+          [
+            36.2049641,
+            36.7170054
+          ],
+          [
+            36.2033015,
+            36.7153713
+          ],
+          [
+            36.1973722,
+            36.7094737
+          ],
+          [
+            36.1968648,
+            36.7088609
+          ],
+          [
+            36.1966669,
+            36.7086316
+          ],
+          [
+            36.1961661,
+            36.7078681
+          ],
+          [
+            36.1959257,
+            36.7074317
+          ],
+          [
+            36.1956519,
+            36.7068064
+          ],
+          [
+            36.1953914,
+            36.7059275
+          ],
+          [
+            36.1952192,
+            36.704503
+          ],
+          [
+            36.195233,
+            36.70403
+          ],
+          [
+            36.1952931,
+            36.7034804
+          ],
+          [
+            36.1954329,
+            36.70282
+          ],
+          [
+            36.1956401,
+            36.702183
+          ],
+          [
+            36.1958659,
+            36.7016277
+          ],
+          [
+            36.1962857,
+            36.7008216
+          ],
+          [
+            36.1973114,
+            36.6991426
+          ],
+          [
+            36.1973678,
+            36.6990501
+          ],
+          [
+            36.1974666,
+            36.6988884
+          ],
+          [
+            36.2011803,
+            36.6928091
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:177818632",
+      "properties": {
+        "@id": "osm:way:177818632",
+        "axle_load": "22.5",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "name": "Toprakkale-İskenderun demiryolu",
+        "operator": "TCDD",
+        "osm_id": "177818632",
+        "osm_type": "way",
+        "railway": "rail",
+        "railway:etcs": "no",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "main",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1950439,
+            36.5971896
+          ],
+          [
+            36.1951061,
+            36.5974143
+          ],
+          [
+            36.1953199,
+            36.5981542
+          ],
+          [
+            36.1957812,
+            36.5996684
+          ],
+          [
+            36.1960744,
+            36.6006589
+          ],
+          [
+            36.1962235,
+            36.60134
+          ],
+          [
+            36.1963383,
+            36.6020153
+          ],
+          [
+            36.1967844,
+            36.6049586
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223401898",
+      "properties": {
+        "@id": "osm:way:223401898",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223401898",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1949964,
+            36.5970191
+          ],
+          [
+            36.1950439,
+            36.5971896
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223401903",
+      "properties": {
+        "@id": "osm:way:223401903",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "bridge": "yes",
+        "electrified": "no",
+        "gauge": "1435",
+        "layer": "1",
+        "operator": "TCDD",
+        "osm_id": "223401903",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1951061,
+            36.5974143
+          ],
+          [
+            36.1950026,
+            36.5971918
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223401904",
+      "properties": {
+        "@id": "osm:way:223401904",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "223401904",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1950026,
+            36.5971918
+          ],
+          [
+            36.1949525,
+            36.5970245
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223401908",
+      "properties": {
+        "@id": "osm:way:223401908",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "bridge": "yes",
+        "electrified": "no",
+        "gauge": "1435",
+        "layer": "1",
+        "operator": "TCDD",
+        "osm_id": "223401908",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1949964,
+            36.5970191
+          ],
+          [
+            36.1947107,
+            36.5960966
+          ],
+          [
+            36.1941522,
+            36.5942019
+          ],
+          [
+            36.1939394,
+            36.5938705
+          ],
+          [
+            36.1937757,
+            36.5936191
+          ],
+          [
+            36.1936354,
+            36.5932755
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223401910",
+      "properties": {
+        "@id": "osm:way:223401910",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223401910",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1950026,
+            36.5971918
+          ],
+          [
+            36.194908,
+            36.5970301
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223401911",
+      "properties": {
+        "@id": "osm:way:223401911",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "bridge": "yes",
+        "electrified": "no",
+        "gauge": "1435",
+        "layer": "1",
+        "operator": "TCDD",
+        "osm_id": "223401911",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1948842,
+            36.5969898
+          ],
+          [
+            36.1946149,
+            36.5961148
+          ],
+          [
+            36.1940596,
+            36.5942195
+          ],
+          [
+            36.1937757,
+            36.5936191
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223401915",
+      "properties": {
+        "@id": "osm:way:223401915",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223401915",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1947719,
+            36.5967949
+          ],
+          [
+            36.194567,
+            36.5961239
+          ],
+          [
+            36.1940008,
+            36.5942271
+          ],
+          [
+            36.1937416,
+            36.5936917
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223401916",
+      "properties": {
+        "@id": "osm:way:223401916",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223401916",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1949525,
+            36.5970245
+          ],
+          [
+            36.1946628,
+            36.5961057
+          ],
+          [
+            36.1941032,
+            36.5942112
+          ],
+          [
+            36.1939394,
+            36.5938705
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223401917",
+      "properties": {
+        "@id": "osm:way:223401917",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "223401917",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1946411,
+            36.5965403
+          ],
+          [
+            36.1945191,
+            36.5961331
+          ],
+          [
+            36.1939507,
+            36.5942402
+          ],
+          [
+            36.1938684,
+            36.5940087
+          ],
+          [
+            36.1937909,
+            36.5938672
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223401919",
+      "properties": {
+        "@id": "osm:way:223401919",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223401919",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.194908,
+            36.5970301
+          ],
+          [
+            36.1948842,
+            36.5969898
+          ],
+          [
+            36.1947719,
+            36.5967949
+          ],
+          [
+            36.1946411,
+            36.5965403
+          ],
+          [
+            36.1945649,
+            36.5963814
+          ],
+          [
+            36.1944712,
+            36.5961422
+          ],
+          [
+            36.1939126,
+            36.5942474
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223401925",
+      "properties": {
+        "@id": "osm:way:223401925",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223401925",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1786819,
+            36.5860403
+          ],
+          [
+            36.1802806,
+            36.586553
+          ],
+          [
+            36.1827883,
+            36.5874798
+          ],
+          [
+            36.1837901,
+            36.5879636
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223405910",
+      "properties": {
+        "@id": "osm:way:223405910",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223405910",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1782934,
+            36.5863405
+          ],
+          [
+            36.1818603,
+            36.5876493
+          ],
+          [
+            36.1823998,
+            36.5878444
+          ],
+          [
+            36.1829467,
+            36.5880501
+          ],
+          [
+            36.1837521,
+            36.5883452
+          ],
+          [
+            36.1842668,
+            36.5884714
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223405911",
+      "properties": {
+        "@id": "osm:way:223405911",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223405911",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1761825,
+            36.5854484
+          ],
+          [
+            36.1775972,
+            36.5859848
+          ],
+          [
+            36.178626,
+            36.5862884
+          ],
+          [
+            36.1791738,
+            36.5864199
+          ],
+          [
+            36.1795588,
+            36.586512
+          ],
+          [
+            36.1800287,
+            36.5866245
+          ],
+          [
+            36.180759,
+            36.586836
+          ],
+          [
+            36.1837901,
+            36.5879636
+          ],
+          [
+            36.1848036,
+            36.5883366
+          ],
+          [
+            36.1850332,
+            36.5884889
+          ],
+          [
+            36.1853148,
+            36.5886557
+          ],
+          [
+            36.1855656,
+            36.5888096
+          ],
+          [
+            36.1859698,
+            36.5890054
+          ],
+          [
+            36.1862521,
+            36.5891582
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223405913",
+      "properties": {
+        "@id": "osm:way:223405913",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223405913",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1786557,
+            36.5864156
+          ],
+          [
+            36.1775972,
+            36.5859848
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223405915",
+      "properties": {
+        "@id": "osm:way:223405915",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "osm_id": "223405915",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.176048,
+            36.585663
+          ],
+          [
+            36.1771802,
+            36.5860909
+          ],
+          [
+            36.1774709,
+            36.586159
+          ],
+          [
+            36.1777994,
+            36.5862098
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223405916",
+      "properties": {
+        "@id": "osm:way:223405916",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223405916",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1786342,
+            36.5861346
+          ],
+          [
+            36.180221,
+            36.5866268
+          ],
+          [
+            36.180759,
+            36.586836
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223405917",
+      "properties": {
+        "@id": "osm:way:223405917",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223405917",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1800287,
+            36.5866245
+          ],
+          [
+            36.1850332,
+            36.5884889
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223405918",
+      "properties": {
+        "@id": "osm:way:223405918",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223405918",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1791738,
+            36.5864199
+          ],
+          [
+            36.1855656,
+            36.5888096
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223405920",
+      "properties": {
+        "@id": "osm:way:223405920",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223405920",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1795588,
+            36.586512
+          ],
+          [
+            36.1853148,
+            36.5886557
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223405921",
+      "properties": {
+        "@id": "osm:way:223405921",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223405921",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1790733,
+            36.5865633
+          ],
+          [
+            36.1794314,
+            36.5866382
+          ],
+          [
+            36.1848988,
+            36.5886653
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223405922",
+      "properties": {
+        "@id": "osm:way:223405922",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223405922",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.178626,
+            36.5862884
+          ],
+          [
+            36.18538,
+            36.5887943
+          ],
+          [
+            36.1859698,
+            36.5890054
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223405923",
+      "properties": {
+        "@id": "osm:way:223405923",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223405923",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1897212,
+            36.5911219
+          ],
+          [
+            36.1889849,
+            36.5908246
+          ],
+          [
+            36.1887377,
+            36.590709
+          ],
+          [
+            36.1885185,
+            36.5905796
+          ],
+          [
+            36.1882692,
+            36.5904105
+          ],
+          [
+            36.1881037,
+            36.5902707
+          ],
+          [
+            36.1879403,
+            36.5900929
+          ],
+          [
+            36.1877533,
+            36.5899169
+          ],
+          [
+            36.1875642,
+            36.5897702
+          ],
+          [
+            36.1874892,
+            36.5897268
+          ],
+          [
+            36.187317,
+            36.589627
+          ],
+          [
+            36.1866531,
+            36.5893005
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223425053",
+      "properties": {
+        "@id": "osm:way:223425053",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223425053",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1846621,
+            36.5888553
+          ],
+          [
+            36.1848965,
+            36.5889639
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223425055",
+      "properties": {
+        "@id": "osm:way:223425055",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "osm_id": "223425055",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1896381,
+            36.590659
+          ],
+          [
+            36.1887868,
+            36.5903686
+          ],
+          [
+            36.1885015,
+            36.5902668
+          ],
+          [
+            36.1884219,
+            36.5902336
+          ],
+          [
+            36.1882775,
+            36.5901665
+          ],
+          [
+            36.1881133,
+            36.5900689
+          ],
+          [
+            36.1879431,
+            36.5899408
+          ],
+          [
+            36.1877835,
+            36.5898541
+          ],
+          [
+            36.1874892,
+            36.5897268
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223425058",
+      "properties": {
+        "@id": "osm:way:223425058",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "223425058",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1853228,
+            36.5896354
+          ],
+          [
+            36.1851341,
+            36.5895201
+          ],
+          [
+            36.1846823,
+            36.5891107
+          ],
+          [
+            36.1845973,
+            36.5890392
+          ],
+          [
+            36.1841824,
+            36.5887402
+          ],
+          [
+            36.1839008,
+            36.5885405
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223425060",
+      "properties": {
+        "@id": "osm:way:223425060",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "osm_id": "223425060",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1891079,
+            36.590343
+          ],
+          [
+            36.1903246,
+            36.5909042
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223425062",
+      "properties": {
+        "@id": "osm:way:223425062",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "223425062",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1860822,
+            36.5891478
+          ],
+          [
+            36.1847857,
+            36.5887097
+          ],
+          [
+            36.1842356,
+            36.5885254
+          ],
+          [
+            36.1837253,
+            36.5883862
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223425063",
+      "properties": {
+        "@id": "osm:way:223425063",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "osm_id": "223425063",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1902771,
+            36.590958
+          ],
+          [
+            36.1902077,
+            36.5909255
+          ],
+          [
+            36.1899116,
+            36.590787
+          ],
+          [
+            36.1896381,
+            36.590659
+          ],
+          [
+            36.1890884,
+            36.5904022
+          ],
+          [
+            36.188822,
+            36.5903107
+          ],
+          [
+            36.1885343,
+            36.5902128
+          ],
+          [
+            36.1884492,
+            36.5901763
+          ],
+          [
+            36.188241,
+            36.5900713
+          ],
+          [
+            36.1880358,
+            36.5899725
+          ],
+          [
+            36.1877835,
+            36.5898541
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223425065",
+      "properties": {
+        "@id": "osm:way:223425065",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "223425065",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1911128,
+            36.590873
+          ],
+          [
+            36.186588,
+            36.5892276
+          ],
+          [
+            36.1859698,
+            36.5890054
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223425067",
+      "properties": {
+        "@id": "osm:way:223425067",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "223425067",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1844803,
+            36.588759
+          ],
+          [
+            36.1836754,
+            36.588394
+          ],
+          [
+            36.1834859,
+            36.588302
+          ],
+          [
+            36.1829467,
+            36.5880501
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223425069",
+      "properties": {
+        "@id": "osm:way:223425069",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "osm_id": "223425069",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1855548,
+            36.5890197
+          ],
+          [
+            36.1845547,
+            36.5886816
+          ],
+          [
+            36.184,
+            36.5884827
+          ],
+          [
+            36.1837253,
+            36.5883862
+          ],
+          [
+            36.1834859,
+            36.588302
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223425070",
+      "properties": {
+        "@id": "osm:way:223425070",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "osm_id": "223425070",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1903886,
+            36.5907429
+          ],
+          [
+            36.1888216,
+            36.5901336
+          ],
+          [
+            36.1881118,
+            36.5898883
+          ],
+          [
+            36.1878778,
+            36.5898443
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223425071",
+      "properties": {
+        "@id": "osm:way:223425071",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "223425071",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.188617,
+            36.5901104
+          ],
+          [
+            36.1881893,
+            36.5899542
+          ],
+          [
+            36.1878778,
+            36.5898443
+          ],
+          [
+            36.187317,
+            36.589627
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223425072",
+      "properties": {
+        "@id": "osm:way:223425072",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "223425072",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1904594,
+            36.5904036
+          ],
+          [
+            36.1880873,
+            36.5894987
+          ],
+          [
+            36.1877469,
+            36.589406
+          ],
+          [
+            36.187145,
+            36.5893387
+          ],
+          [
+            36.1869021,
+            36.5893077
+          ],
+          [
+            36.186588,
+            36.5892276
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223425073",
+      "properties": {
+        "@id": "osm:way:223425073",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "223425073",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1836754,
+            36.588394
+          ],
+          [
+            36.1839008,
+            36.5885405
+          ],
+          [
+            36.1841231,
+            36.588643
+          ],
+          [
+            36.1845947,
+            36.5889478
+          ],
+          [
+            36.1847398,
+            36.5890709
+          ],
+          [
+            36.1851924,
+            36.5894822
+          ],
+          [
+            36.1856294,
+            36.5897615
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223425074",
+      "properties": {
+        "@id": "osm:way:223425074",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "osm_id": "223425074",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1973171,
+            36.6078209
+          ],
+          [
+            36.1972212,
+            36.6075862
+          ],
+          [
+            36.1972101,
+            36.6075156
+          ],
+          [
+            36.196904,
+            36.605505
+          ],
+          [
+            36.1968266,
+            36.6051392
+          ],
+          [
+            36.1967844,
+            36.6049586
+          ],
+          [
+            36.1966444,
+            36.6044685
+          ],
+          [
+            36.19653,
+            36.6040677
+          ],
+          [
+            36.1963994,
+            36.6031587
+          ],
+          [
+            36.1962828,
+            36.6023786
+          ],
+          [
+            36.196228,
+            36.6020118
+          ],
+          [
+            36.1961141,
+            36.6013371
+          ],
+          [
+            36.1959529,
+            36.6006814
+          ],
+          [
+            36.1958433,
+            36.6002793
+          ],
+          [
+            36.1958284,
+            36.6000351
+          ],
+          [
+            36.1957812,
+            36.5996684
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223427803",
+      "properties": {
+        "@id": "osm:way:223427803",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223427803",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1955585,
+            36.5996521
+          ],
+          [
+            36.1958658,
+            36.6006891
+          ],
+          [
+            36.1960743,
+            36.6017607
+          ],
+          [
+            36.1961796,
+            36.6021231
+          ],
+          [
+            36.1962828,
+            36.6023786
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223427808",
+      "properties": {
+        "@id": "osm:way:223427808",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "223427808",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1966444,
+            36.6044685
+          ],
+          [
+            36.1962831,
+            36.6020136
+          ],
+          [
+            36.1961688,
+            36.6013386
+          ],
+          [
+            36.1960136,
+            36.6006702
+          ],
+          [
+            36.1959378,
+            36.6003941
+          ],
+          [
+            36.1958284,
+            36.6000351
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:223427810",
+      "properties": {
+        "@id": "osm:way:223427810",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "223427810",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2053589,
+            36.7233153
+          ],
+          [
+            36.2057526,
+            36.7234763
+          ],
+          [
+            36.2057957,
+            36.7234938
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:240436444",
+      "properties": {
+        "@id": "osm:way:240436444",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "240436444",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "industrial"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2015966,
+            36.7186475
+          ],
+          [
+            36.2018792,
+            36.7191647
+          ],
+          [
+            36.2020817,
+            36.7194858
+          ],
+          [
+            36.2023678,
+            36.7197505
+          ],
+          [
+            36.202808,
+            36.7199833
+          ],
+          [
+            36.2031074,
+            36.7202374
+          ],
+          [
+            36.203293,
+            36.7205198
+          ],
+          [
+            36.2037629,
+            36.7214213
+          ],
+          [
+            36.2040891,
+            36.7221252
+          ],
+          [
+            36.2041657,
+            36.7222987
+          ],
+          [
+            36.2042802,
+            36.722504
+          ],
+          [
+            36.2043538,
+            36.7226344
+          ],
+          [
+            36.204515,
+            36.7228015
+          ],
+          [
+            36.2046526,
+            36.7229234
+          ],
+          [
+            36.2050707,
+            36.723159
+          ],
+          [
+            36.2052146,
+            36.723237
+          ],
+          [
+            36.2053589,
+            36.7233153
+          ],
+          [
+            36.2057291,
+            36.723524
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:240436450",
+      "properties": {
+        "@id": "osm:way:240436450",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "240436450",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "industrial"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2046473,
+            36.7240146
+          ],
+          [
+            36.2046372,
+            36.7237722
+          ],
+          [
+            36.2046218,
+            36.7235622
+          ],
+          [
+            36.2045954,
+            36.7233682
+          ],
+          [
+            36.2045619,
+            36.7232637
+          ],
+          [
+            36.2045337,
+            36.7231759
+          ],
+          [
+            36.2041657,
+            36.7222987
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:240564944",
+      "properties": {
+        "@id": "osm:way:240564944",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "240564944",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "industrial"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2100713,
+            36.7215545
+          ],
+          [
+            36.2095778,
+            36.7212172
+          ],
+          [
+            36.2090703,
+            36.7208865
+          ],
+          [
+            36.2085216,
+            36.7204266
+          ],
+          [
+            36.2082772,
+            36.7202617
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:267288467",
+      "properties": {
+        "@id": "osm:way:267288467",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "267288467",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.210141,
+            36.7215229
+          ],
+          [
+            36.2099673,
+            36.7214086
+          ],
+          [
+            36.2095778,
+            36.7212172
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:267288929",
+      "properties": {
+        "@id": "osm:way:267288929",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "267288929",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2131096,
+            36.6701416
+          ],
+          [
+            36.2131932,
+            36.6697183
+          ],
+          [
+            36.2134879,
+            36.6688923
+          ],
+          [
+            36.2147239,
+            36.665428
+          ],
+          [
+            36.2148478,
+            36.6651952
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:267290995",
+      "properties": {
+        "@id": "osm:way:267290995",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "267290995",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2147111,
+            36.6657744
+          ],
+          [
+            36.2146655,
+            36.666082
+          ],
+          [
+            36.2140371,
+            36.6678638
+          ],
+          [
+            36.2139027,
+            36.6680672
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:267292370",
+      "properties": {
+        "@id": "osm:way:267292370",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "267292370",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.213338,
+            36.6696688
+          ],
+          [
+            36.212768,
+            36.6713707
+          ],
+          [
+            36.2127308,
+            36.6714717
+          ],
+          [
+            36.2119021,
+            36.6736622
+          ],
+          [
+            36.2116224,
+            36.6743283
+          ],
+          [
+            36.2109516,
+            36.6757092
+          ],
+          [
+            36.2091369,
+            36.6791128
+          ],
+          [
+            36.2066055,
+            36.6836983
+          ],
+          [
+            36.2046612,
+            36.68722
+          ],
+          [
+            36.2045033,
+            36.6874688
+          ],
+          [
+            36.203633,
+            36.6888401
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:267292371",
+      "properties": {
+        "@id": "osm:way:267292371",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "osm_id": "267292371",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2149257,
+            36.664979
+          ],
+          [
+            36.2148854,
+            36.6652645
+          ],
+          [
+            36.2147111,
+            36.6657744
+          ],
+          [
+            36.2139027,
+            36.6680672
+          ],
+          [
+            36.213338,
+            36.6696688
+          ],
+          [
+            36.213212,
+            36.6698542
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:267292518",
+      "properties": {
+        "@id": "osm:way:267292518",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "267292518",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "siding",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2065275,
+            36.6356692
+          ],
+          [
+            36.2064472,
+            36.6355604
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:267295837",
+      "properties": {
+        "@id": "osm:way:267295837",
+        "axle_load": "22.5",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "bridge": "yes",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "layer": "1",
+        "name": "Toprakkale-İskenderun demiryolu",
+        "operator": "TCDD",
+        "osm_id": "267295837",
+        "osm_type": "way",
+        "railway": "rail",
+        "railway:etcs": "no",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "main",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.2064472,
+              36.6355604
+            ],
+            [
+              36.2063436,
+              36.6354379
+            ],
+            [
+              36.2060494,
+              36.6351445
+            ],
+            [
+              36.2058116,
+              36.6349294
+            ],
+            [
+              36.2056523,
+              36.6348017
+            ],
+            [
+              36.2048757,
+              36.6342957
+            ],
+            [
+              36.2033754,
+              36.6334355
+            ],
+            [
+              36.2018055,
+              36.6325338
+            ],
+            [
+              36.201416,
+              36.6323181
+            ]
+          ],
+          [
+            [
+              36.1998348,
+              36.6313512
+            ],
+            [
+              36.1996165,
+              36.6311689
+            ],
+            [
+              36.1992574,
+              36.6308307
+            ],
+            [
+              36.1989655,
+              36.6304903
+            ],
+            [
+              36.1987499,
+              36.6302125
+            ],
+            [
+              36.1985571,
+              36.629881
+            ],
+            [
+              36.1983732,
+              36.6294656
+            ],
+            [
+              36.1982317,
+              36.6290337
+            ],
+            [
+              36.1978058,
+              36.6274891
+            ],
+            [
+              36.1976699,
+              36.6270221
+            ]
+          ],
+          [
+            [
+              36.197534,
+              36.6249191
+            ],
+            [
+              36.1975594,
+              36.6247891
+            ],
+            [
+              36.1976734,
+              36.6244489
+            ],
+            [
+              36.1977881,
+              36.6241628
+            ],
+            [
+              36.1979917,
+              36.6237858
+            ],
+            [
+              36.1984052,
+              36.623132
+            ],
+            [
+              36.1987208,
+              36.6226224
+            ],
+            [
+              36.1988478,
+              36.6222625
+            ],
+            [
+              36.1989447,
+              36.6218701
+            ],
+            [
+              36.1990122,
+              36.6215081
+            ],
+            [
+              36.1990326,
+              36.6210672
+            ],
+            [
+              36.1990046,
+              36.6206278
+            ],
+            [
+              36.1989506,
+              36.6199797
+            ],
+            [
+              36.1987591,
+              36.6178397
+            ]
+          ]
+        ],
+        "type": "MultiLineString"
+      },
+      "id": "osm:way:267295838",
+      "properties": {
+        "@id": "osm:way:267295838",
+        "axle_load": "22.5",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "name": "Toprakkale-İskenderun demiryolu",
+        "operator": "TCDD",
+        "osm_id": "267295838",
+        "osm_type": "way",
+        "railway": "rail",
+        "railway:etcs": "no",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "main",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1982534,
+            36.6139168
+          ],
+          [
+            36.1982396,
+            36.6138307
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:267297096",
+      "properties": {
+        "@id": "osm:way:267297096",
+        "axle_load": "22.5",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "bridge": "yes",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "layer": "1",
+        "name": "Toprakkale-İskenderun demiryolu",
+        "operator": "TCDD",
+        "osm_id": "267297096",
+        "osm_type": "way",
+        "railway": "rail",
+        "railway:etcs": "no",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "main",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1982396,
+            36.6138307
+          ],
+          [
+            36.1979433,
+            36.6119521
+          ],
+          [
+            36.1975717,
+            36.6095282
+          ],
+          [
+            36.1973171,
+            36.6078209
+          ],
+          [
+            36.1972704,
+            36.6075099
+          ],
+          [
+            36.1963934,
+            36.6020171
+          ],
+          [
+            36.1962782,
+            36.6013415
+          ],
+          [
+            36.1961334,
+            36.600656
+          ],
+          [
+            36.1953996,
+            36.5981398
+          ],
+          [
+            36.1951198,
+            36.5971855
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:267297097",
+      "properties": {
+        "@id": "osm:way:267297097",
+        "axle_load": "22.5",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "name": "Toprakkale-İskenderun demiryolu",
+        "operator": "TCDD",
+        "osm_id": "267297097",
+        "osm_type": "way",
+        "railway": "rail",
+        "railway:etcs": "no",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "main",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1983048,
+            36.6139103
+          ],
+          [
+            36.1982897,
+            36.6138171
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:267297803",
+      "properties": {
+        "@id": "osm:way:267297803",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "bridge": "yes",
+        "electrified": "no",
+        "gauge": "1435",
+        "layer": "1",
+        "osm_id": "267297803",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1983486,
+            36.6139057
+          ],
+          [
+            36.1983335,
+            36.6138125
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:267300362",
+      "properties": {
+        "@id": "osm:way:267300362",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "bridge": "yes",
+        "electrified": "no",
+        "gauge": "1435",
+        "layer": "1",
+        "osm_id": "267300362",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "spur",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1790733,
+            36.5865633
+          ],
+          [
+            36.1786557,
+            36.5864156
+          ],
+          [
+            36.1782934,
+            36.5863405
+          ],
+          [
+            36.1777994,
+            36.5862098
+          ],
+          [
+            36.1772194,
+            36.5860239
+          ],
+          [
+            36.1760992,
+            36.5855816
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:267305582",
+      "properties": {
+        "@id": "osm:way:267305582",
+        "axle_load": "22.5",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "267305582",
+        "osm_type": "way",
+        "railway": "rail",
+        "railway:etcs": "no",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.188617,
+            36.5901104
+          ],
+          [
+            36.1891079,
+            36.590343
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:267306558",
+      "properties": {
+        "@id": "osm:way:267306558",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "no",
+        "gauge": "1435",
+        "layer": "-1",
+        "osm_id": "267306558",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "yard",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1815303,
+            36.5874764
+          ],
+          [
+            36.1818603,
+            36.5876493
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:267306560",
+      "properties": {
+        "@id": "osm:way:267306560",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "operator": "TCDD",
+        "osm_id": "267306560",
+        "osm_type": "way",
+        "railway": "rail",
+        "service": "crossover",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1987591,
+            36.6178397
+          ],
+          [
+            36.1987478,
+            36.6176918
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:88375621",
+      "properties": {
+        "@id": "osm:way:88375621",
+        "axle_load": "22.5",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "bridge": "yes",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "layer": "1",
+        "name": "Toprakkale-İskenderun demiryolu",
+        "operator": "TCDD",
+        "osm_id": "88375621",
+        "osm_type": "way",
+        "railway": "rail",
+        "railway:etcs": "no",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "main",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2078944,
+            36.638032
+          ],
+          [
+            36.2072316,
+            36.63683
+          ],
+          [
+            36.2068251,
+            36.6361019
+          ],
+          [
+            36.2065275,
+            36.6356692
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:88375643",
+      "properties": {
+        "@id": "osm:way:88375643",
+        "axle_load": "22.5",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "name": "Toprakkale-İskenderun demiryolu",
+        "operator": "TCDD",
+        "osm_id": "88375643",
+        "osm_type": "way",
+        "railway": "rail",
+        "railway:etcs": "no",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "main",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1950728,
+            36.5970096
+          ],
+          [
+            36.1942429,
+            36.5940902
+          ],
+          [
+            36.1940036,
+            36.5934536
+          ],
+          [
+            36.1937432,
+            36.5929797
+          ],
+          [
+            36.1934189,
+            36.5925582
+          ],
+          [
+            36.1931353,
+            36.592243
+          ],
+          [
+            36.1928289,
+            36.591925
+          ],
+          [
+            36.1924459,
+            36.5916289
+          ],
+          [
+            36.1922591,
+            36.5915025
+          ],
+          [
+            36.192063,
+            36.5913769
+          ],
+          [
+            36.1915912,
+            36.5911374
+          ],
+          [
+            36.1912991,
+            36.5910077
+          ],
+          [
+            36.1911808,
+            36.5909551
+          ],
+          [
+            36.1866531,
+            36.5893005
+          ],
+          [
+            36.1862521,
+            36.5891582
+          ],
+          [
+            36.1848988,
+            36.5886653
+          ],
+          [
+            36.1842668,
+            36.5884714
+          ],
+          [
+            36.1815303,
+            36.5874764
+          ],
+          [
+            36.1812186,
+            36.5873619
+          ],
+          [
+            36.1790733,
+            36.5865633
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:88375652",
+      "properties": {
+        "@id": "osm:way:88375652",
+        "axle_load": "22.5",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "name": "Toprakkale-İskenderun demiryolu",
+        "operator": "TCDD",
+        "osm_id": "88375652",
+        "osm_type": "way",
+        "railway": "rail",
+        "railway:etcs": "no",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "main",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2080594,
+            36.6383125
+          ],
+          [
+            36.2078944,
+            36.638032
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:88375661",
+      "properties": {
+        "@id": "osm:way:88375661",
+        "axle_load": "22.5",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "bridge": "yes",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "layer": "1",
+        "name": "Toprakkale-İskenderun demiryolu",
+        "operator": "TCDD",
+        "osm_id": "88375661",
+        "osm_type": "way",
+        "railway": "rail",
+        "railway:etcs": "no",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "main",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1951198,
+            36.5971855
+          ],
+          [
+            36.1950728,
+            36.5970096
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:88375680",
+      "properties": {
+        "@id": "osm:way:88375680",
+        "axle_load": "22.5",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "bridge": "yes",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "layer": "1",
+        "name": "Toprakkale-İskenderun demiryolu",
+        "operator": "TCDD",
+        "osm_id": "88375680",
+        "osm_type": "way",
+        "railway": "rail",
+        "railway:etcs": "no",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "main",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2151995,
+            36.6642228
+          ],
+          [
+            36.2162397,
+            36.6613107
+          ],
+          [
+            36.2164116,
+            36.6605193
+          ],
+          [
+            36.2164639,
+            36.6599797
+          ],
+          [
+            36.2164103,
+            36.6594147
+          ],
+          [
+            36.2163369,
+            36.6590394
+          ],
+          [
+            36.2161336,
+            36.6585089
+          ],
+          [
+            36.215994,
+            36.6582142
+          ],
+          [
+            36.2157466,
+            36.6577996
+          ],
+          [
+            36.2154649,
+            36.6574362
+          ],
+          [
+            36.2144581,
+            36.6564413
+          ],
+          [
+            36.2141279,
+            36.6560437
+          ],
+          [
+            36.2138485,
+            36.6555421
+          ],
+          [
+            36.2136746,
+            36.6551216
+          ],
+          [
+            36.2135644,
+            36.6547463
+          ],
+          [
+            36.2134229,
+            36.6542887
+          ],
+          [
+            36.2132524,
+            36.653902
+          ],
+          [
+            36.2130049,
+            36.6534804
+          ],
+          [
+            36.2128033,
+            36.652993
+          ],
+          [
+            36.2127587,
+            36.6527348
+          ],
+          [
+            36.2126834,
+            36.6522063
+          ],
+          [
+            36.2126748,
+            36.6514366
+          ],
+          [
+            36.2128463,
+            36.6505491
+          ],
+          [
+            36.2129897,
+            36.6496972
+          ],
+          [
+            36.2130323,
+            36.6493089
+          ],
+          [
+            36.2130561,
+            36.6488936
+          ],
+          [
+            36.2130397,
+            36.6484865
+          ],
+          [
+            36.2130089,
+            36.6480492
+          ],
+          [
+            36.2128097,
+            36.6464653
+          ],
+          [
+            36.2124622,
+            36.6440734
+          ],
+          [
+            36.2123322,
+            36.6433704
+          ],
+          [
+            36.2121788,
+            36.6426789
+          ],
+          [
+            36.2120254,
+            36.6421801
+          ],
+          [
+            36.2118628,
+            36.6417804
+          ],
+          [
+            36.2115796,
+            36.6413067
+          ],
+          [
+            36.2113672,
+            36.641016
+          ],
+          [
+            36.2108165,
+            36.6404023
+          ],
+          [
+            36.2106576,
+            36.6402855
+          ],
+          [
+            36.2102739,
+            36.640041
+          ],
+          [
+            36.2099874,
+            36.6398611
+          ],
+          [
+            36.2094196,
+            36.6395392
+          ],
+          [
+            36.2089679,
+            36.6392547
+          ],
+          [
+            36.2085543,
+            36.6388906
+          ],
+          [
+            36.2082373,
+            36.6385482
+          ],
+          [
+            36.2080594,
+            36.6383125
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:88375687",
+      "properties": {
+        "@id": "osm:way:88375687",
+        "axle_load": "22.5",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "name": "Toprakkale-İskenderun demiryolu",
+        "operator": "TCDD",
+        "osm_id": "88375687",
+        "osm_type": "way",
+        "railway": "rail",
+        "railway:etcs": "no",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "main",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.1987478,
+            36.6176918
+          ],
+          [
+            36.19862,
+            36.616207
+          ],
+          [
+            36.1985873,
+            36.6160024
+          ],
+          [
+            36.1982534,
+            36.6139168
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:88375703",
+      "properties": {
+        "@id": "osm:way:88375703",
+        "axle_load": "22.5",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "name": "Toprakkale-İskenderun demiryolu",
+        "operator": "TCDD",
+        "osm_id": "88375703",
+        "osm_type": "way",
+        "railway": "rail",
+        "railway:etcs": "no",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "main",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            36.2150336,
+            36.6646924
+          ],
+          [
+            36.2151995,
+            36.6642228
+          ]
+        ],
+        "type": "LineString"
+      },
+      "id": "osm:way:88375710",
+      "properties": {
+        "@id": "osm:way:88375710",
+        "axle_load": "22.5",
+        "barrierClass": "rail",
+        "barrierLayer": "railways",
+        "barrierStrength": "0.75",
+        "bridge": "yes",
+        "electrified": "contact_line",
+        "frequency": "50",
+        "gauge": "1435",
+        "layer": "1",
+        "name": "Toprakkale-İskenderun demiryolu",
+        "operator": "TCDD",
+        "osm_id": "88375710",
+        "osm_type": "way",
+        "railway": "rail",
+        "railway:etcs": "no",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "usage": "main",
+        "voltage": "25000"
+      },
+      "type": "Feature"
+    }
+  ],
+  "type": "FeatureCollection"
+}

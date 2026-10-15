@@ -1,0 +1,72 @@
+{
+  "adm2Id": "tr:adm2:54988432b95277821649488",
+  "barrierLengthKm": 1494.095865,
+  "inputCoverageConfidence": 1,
+  "issues": [
+    {
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "code": "OSM_MULTIPOLYGON_ORPHAN_INNER",
+      "details": {
+        "layer": "landuse",
+        "memberWayIds": [
+          393314168
+        ],
+        "relationId": 15622596,
+        "representativePoint": [
+          36.3227744,
+          36.9273918
+        ],
+        "sourceNativeId": "osm:relation:15622596"
+      },
+      "message": "OSM multipolygon inner ring could not be assigned to any outer ring.",
+      "severity": "warning"
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "code": "OSM_MULTIPOLYGON_ORPHAN_INNER",
+      "details": {
+        "layer": "landuse",
+        "memberWayIds": [
+          393314169
+        ],
+        "relationId": 15622596,
+        "representativePoint": [
+          36.3331449,
+          36.9404489
+        ],
+        "sourceNativeId": "osm:relation:15622596"
+      },
+      "message": "OSM multipolygon inner ring could not be assigned to any outer ring.",
+      "severity": "warning"
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "code": "OSM_MULTIPOLYGON_ORPHAN_INNER",
+      "details": {
+        "layer": "landuse",
+        "memberWayIds": [
+          393548230
+        ],
+        "relationId": 15624309,
+        "representativePoint": [
+          36.3006817,
+          36.9186747
+        ],
+        "sourceNativeId": "osm:relation:15624309"
+      },
+      "message": "OSM multipolygon inner ring could not be assigned to any outer ring.",
+      "severity": "warning"
+    }
+  ],
+  "landuseFeatureCount": 20,
+  "localitySeedCount": 48,
+  "majorBarrierLengthKm": 423.45456,
+  "majorRoadCount": 554,
+  "ok": true,
+  "parkFeatureCount": 31,
+  "railFeatureCount": 88,
+  "roadFeatureCount": 3731,
+  "schemaVersion": "territorykit-tr-osm-barrier-quality@1",
+  "status": "eligible",
+  "waterFeatureCount": 55
+}
