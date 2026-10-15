@@ -4,6 +4,7 @@
  */
 import fs from "node:fs/promises";
 import path from "node:path";
+import { writeReportJson } from "./lib/write-report-json.mjs";
 
 const REPO_ROOT = process.cwd();
 const ARTIFACT_ROOT =
@@ -137,7 +138,7 @@ async function main() {
 
   await fs.mkdir(path.join(REPO_ROOT, OUTPUT_ROOT), { recursive: true });
   const outPath = path.join(OUTPUT_ROOT, OUTPUT_FILE);
-  await fs.writeFile(outPath, `${JSON.stringify(report, null, 2)}\n`);
+  await writeReportJson(outPath, report);
   console.log(`Wrote ${outPath}`);
 }
 

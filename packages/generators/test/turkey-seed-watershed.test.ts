@@ -20,9 +20,9 @@ describe("turkey seed watershed barrier crossing cost", () => {
 
   it("documents impl-rev1 inversion and impl-rev2 correction on equal-length edges", () => {
     const lengthMeters = 100;
-    expect(
-      turkeyBarrierGraphEdgeCrossingCostMetersImplRev1(lengthMeters, 0.9)
-    ).toBeLessThan(turkeyBarrierGraphEdgeCrossingCostMetersImplRev1(lengthMeters, 0.2));
+    expect(turkeyBarrierGraphEdgeCrossingCostMetersImplRev1(lengthMeters, 0.9)).toBeLessThan(
+      turkeyBarrierGraphEdgeCrossingCostMetersImplRev1(lengthMeters, 0.2)
+    );
     expect(turkeyBarrierGraphEdgeCrossingCostMeters(lengthMeters, 0.9)).toBeGreaterThan(
       turkeyBarrierGraphEdgeCrossingCostMeters(lengthMeters, 0.2)
     );
@@ -40,10 +40,34 @@ describe("turkey seed watershed barrier crossing cost", () => {
 describe("assignSeedWatershedFaceLabels synthetic graph", () => {
   it("assigns both seeds on a 2x2 weak-grid graph", () => {
     const neighbours = new Map<number, Map<number, { strength: number; length: number }>>([
-      [0, new Map([[1, { strength: 0.2, length: 100 }], [2, { strength: 0.2, length: 100 }]])],
-      [1, new Map([[0, { strength: 0.2, length: 100 }], [3, { strength: 0.2, length: 100 }]])],
-      [2, new Map([[0, { strength: 0.2, length: 100 }], [3, { strength: 0.2, length: 100 }]])],
-      [3, new Map([[1, { strength: 0.2, length: 100 }], [2, { strength: 0.2, length: 100 }]])]
+      [
+        0,
+        new Map([
+          [1, { strength: 0.2, length: 100 }],
+          [2, { strength: 0.2, length: 100 }]
+        ])
+      ],
+      [
+        1,
+        new Map([
+          [0, { strength: 0.2, length: 100 }],
+          [3, { strength: 0.2, length: 100 }]
+        ])
+      ],
+      [
+        2,
+        new Map([
+          [0, { strength: 0.2, length: 100 }],
+          [3, { strength: 0.2, length: 100 }]
+        ])
+      ],
+      [
+        3,
+        new Map([
+          [1, { strength: 0.2, length: 100 }],
+          [2, { strength: 0.2, length: 100 }]
+        ])
+      ]
     ]);
     const faces = [0, 1, 2, 3].map((index) => ({
       geometry: {
@@ -60,7 +84,10 @@ describe("assignSeedWatershedFaceLabels synthetic graph", () => {
       },
       areaKm2: 0.01,
       edges: [],
-      barrierIds: []
+      barrierIds: [],
+      barrierClasses: [],
+      realBoundaryLengthMeters: 0,
+      parentBoundaryLengthMeters: 0
     }));
     const seeds = [
       { name: "A", coordinate: [29.0025, 41.0025] as [number, number] },
@@ -69,8 +96,9 @@ describe("assignSeedWatershedFaceLabels synthetic graph", () => {
     const labels = assignSeedWatershedFaceLabels({ faces, neighbours, seeds });
     expect(labels[0]).toBe(0);
     expect(labels[3]).toBe(1);
-    expect(auditSeedWatershedBarrierAssignments({ seedLabels: labels, neighbours }).unseededFaceCount).toBe(
-      0
-    );
+    const audit = auditSeedWatershedBarrierAssignments({ seedLabels: labels, neighbours });
+    expect(audit.unseededFaceCount).toBe(0);
+    expect(audit.multiFacePerSeedLabelFaceCount).toBeGreaterThan(0);
+    expect(audit.distinctLabeledSeedCount).toBe(2);
   });
 });

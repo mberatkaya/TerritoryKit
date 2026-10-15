@@ -5,6 +5,7 @@
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
+import { writeReportJson, writeReportMarkdown } from "./lib/write-report-json.mjs";
 import { performance } from "node:perf_hooks";
 import { validateTurkeyV2Dataset } from "../packages/dataset/dist/turkey-v2.mjs";
 import {
@@ -30,10 +31,34 @@ const OSM_SOURCE_LOCK =
   process.env.MAHALLE_FIRST_OSM_SOURCE_LOCK ??
   ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json";
 const OUTPUT_ROOT =
-  process.env.MAHALLE_FIRST_FATIH_V2_OUTPUT ?? ".territory/mahalle-first-pilot/fatih-v2-impl-rev2";
+  process.env.MAHALLE_FIRST_FATIH_V2_OUTPUT ?? ".territory/mahalle-first-pilot/fatih-v2-impl-rev3";
 const REPORT_ROOT = "reports/tr-adm3/mahalle-first-program";
 const REV1_HISTORICAL_COMPARISON = join(REPORT_ROOT, "fatih-v1-v2-comparison.json");
+const REV2_HISTORICAL_COMPARISON = join(REPORT_ROOT, "fatih-v2-impl-rev2-comparison.json");
 const NOT_ASSESSED = "NOT_ASSESSED";
+const REV2_SEED_COVERAGE_FLOOR = 0.5211;
+const V17_WEIGHTED_ALIGNMENT_TARGET = 0.8907;
+
+const HYPOTHESIS_VARIANTS = [
+  {
+    id: "hypothesis-a-weak-reassignment",
+    hypothesis: "A",
+    v2PilotWeakBarrierReassignment: true,
+    v2PilotMaxAreaGameplayMultiplier: 1
+  },
+  {
+    id: "hypothesis-b-max-area-1p12",
+    hypothesis: "B",
+    v2PilotWeakBarrierReassignment: false,
+    v2PilotMaxAreaGameplayMultiplier: 1.12
+  },
+  {
+    id: "impl-rev3-combined",
+    hypothesis: "A+B",
+    v2PilotWeakBarrierReassignment: true,
+    v2PilotMaxAreaGameplayMultiplier: 1.12
+  }
+];
 
 async function readJson(path) {
   return JSON.parse(await readFile(join(REPO_ROOT, path), "utf8"));
@@ -186,6 +211,110 @@ function migrationImpact(baselineZones, candidateZones) {
   };
 }
 
+function withV2PilotOptions(smartInput, variant) {
+  return {
+    ...smartInput,
+    options: {
+      ...smartInput.options,
+      v2PilotImplementationRevision: TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION,
+      v2PilotWeakBarrierReassignment: variant.v2PilotWeakBarrierReassignment,
+      v2PilotMaxAreaGameplayMultiplier: variant.v2PilotMaxAreaGameplayMultiplier
+    }
+  };
+}
+
+function scorePilotVariant(build, seeds) {
+  const coverage = summarizeSeedCoverage(build.result.zones, seeds);
+  return {
+    weightedInternalBarrierAlignment: build.result.quality.weightedInternalBarrierAlignment ?? 0,
+    seedCoverageRatio: coverage.seedCoverageRatio,
+    seedNamedShare: coverage.seedNamedShare,
+    adm3ZoneCount: coverage.adm3ZoneCount,
+    geographicRealism: build.result.quality.gates?.geographicRealism === true,
+    seedCoverageOk: coverage.seedCoverageRatio + 1e-4 >= REV2_SEED_COVERAGE_FLOOR * 0.97,
+    validationOk: build.validation.ok,
+    qualityOk: build.result.quality.ok
+  };
+}
+
+function pickHypothesisWinner(variantResults) {
+  const eligible = variantResults.filter(
+    (row) =>
+      row.score.validationOk &&
+      row.score.qualityOk &&
+      row.score.geographicRealism &&
+      row.score.seedCoverageOk
+  );
+  eligible.sort(
+    (left, right) =>
+      right.score.weightedInternalBarrierAlignment - left.score.weightedInternalBarrierAlignment ||
+      right.score.seedCoverageRatio - left.score.seedCoverageRatio ||
+      left.score.adm3ZoneCount - right.score.adm3ZoneCount
+  );
+  return eligible[0] ?? variantResults.find((row) => row.id === "impl-rev3-combined");
+}
+
+function buildRootCauseAnalysis({ v17Replay, v2Build, v2Rev2Historical, pathologyV2, seeds }) {
+  const network =
+    v2Build.result.quality.networkConstruction ?? v2Build.result.quality.networkDiagnostics ?? {};
+  const audit = network.seedWatershedBarrierAudit ?? null;
+  const pathologyByKind = {};
+  for (const finding of pathologyV2.findings ?? []) {
+    const key = finding.kind ?? finding.code ?? "unknown";
+    pathologyByKind[key] = (pathologyByKind[key] ?? 0) + 1;
+  }
+  const v17Weighted = v17Replay.result.quality.weightedInternalBarrierAlignment ?? 0;
+  const v2Weighted = v2Build.result.quality.weightedInternalBarrierAlignment ?? 0;
+  return {
+    weightedAlignmentDeltaVsV17Replay: round(v2Weighted - v17Weighted),
+    v17ReplayWeightedInternalBarrierAlignment: round(v17Weighted),
+    v2WeightedInternalBarrierAlignment: round(v2Weighted),
+    rev2HistoricalWeighted:
+      v2Rev2Historical?.v2Pilot?.quality?.weightedInternalBarrierAlignment ?? null,
+    seedSemantics: {
+      validSeedCount: seeds.length,
+      distinctRepresentedSeeds:
+        v2Build.result.quality.seedCoverageDetail?.distinctMahalleSeedsRepresented ?? null,
+      seedNamedZoneCount: summarizeSeedCoverage(v2Build.result.zones, seeds).seedNamedZoneCount,
+      seedsInOwnPolygonCount:
+        v2Build.result.quality.seedCoverageDetail?.seedsInOwnPolygonCount ?? null,
+      zonesWithoutSeedCount:
+        v2Build.result.quality.seedCoverageDetail?.zonesWithoutSeedCount ?? null,
+      seedNameCollisionCount:
+        v2Build.result.quality.seedCoverageDetail?.seedNameCollisionCount ?? null,
+      note: "47 distinct represented seeds vs 37 seed-named zones: extra represented seeds can share a name with a primary zone or sit in multi-face watershed components without a dedicated named polygon."
+    },
+    watershedBarrierAudit: audit,
+    seedFaceSemantics: {
+      multiFacePerSeedLabelFaceCount: audit?.multiFacePerSeedLabelFaceCount ?? null,
+      distinctLabeledSeedCount: audit?.distinctLabeledSeedCount ?? null,
+      unseededFaceCount: audit?.unseededFaceCount ?? null,
+      weakDifferentSeedBoundaryLengthMeters: audit?.weakDifferentSeedBoundaryLengthMeters ?? null,
+      strongDifferentSeedBoundaryLengthMeters:
+        audit?.strongDifferentSeedBoundaryLengthMeters ?? null,
+      weakBarrierReassignedFaceCount: audit?.weakBarrierReassignedFaceCount ?? null,
+      legacyMisnamedMetric:
+        "seedCollisionFaceCount was retired; multi-face-per-seed is normal watershed behavior, not a seed conflict."
+    },
+    networkResidual: {
+      networkCoveragePercent: network.networkCoveragePercent ?? null,
+      residualAreaPercent: network.residualAreaPercent ?? null,
+      areaRejectedGroupCount: network.areaRejectedGroupCount ?? null,
+      topologyRejectedGroupCount: network.topologyRejectedGroupCount ?? null,
+      maxAreaBlockedMergeCount: network.maxAreaBlockedMergeCount ?? null,
+      residualGapAttachedCount: network.residualGapAttachedCount ?? null,
+      residualUnattachedAreaKm2: network.residualUnattachedAreaKm2 ?? null,
+      preMergePieceCount: network.preMergePieceCount ?? null,
+      postMergePieceCount: network.postMergePieceCount ?? null
+    },
+    pathologyDistribution: {
+      totalFindings: pathologyV2.findings?.length ?? 0,
+      byKind: pathologyByKind
+    },
+    groundTruthIoU: NOT_ASSESSED
+  };
+}
+
 async function runBuild(label, builder, smartInput) {
   const started = performance.now();
   const memoryBefore = process.memoryUsage().heapUsed;
@@ -259,15 +388,39 @@ async function main() {
     buildTurkeyNetworkFirstSmartFallbackWithAdjacency,
     smartInput
   );
+  let v2Rev2Historical = null;
+  try {
+    v2Rev2Historical = await readJson(REV2_HISTORICAL_COMPARISON);
+  } catch {
+    v2Rev2Historical = null;
+  }
+
+  const hypothesisVariantResults = [];
+  for (const variant of HYPOTHESIS_VARIANTS) {
+    const build = await runBuild(
+      variant.id,
+      buildTurkeySmartFallbackV2PilotWithAdjacency,
+      withV2PilotOptions(smartInput, variant)
+    );
+    hypothesisVariantResults.push({
+      ...variant,
+      score: scorePilotVariant(build, artifact.localitySeeds),
+      deterministicHash: build.result.deterministicHash,
+      buildDurationMs: build.durationMs
+    });
+  }
+  const winningVariant = pickHypothesisWinner(hypothesisVariantResults);
+  const v2SmartInput = withV2PilotOptions(smartInput, winningVariant);
+
   const v2Build = await runBuild(
     "v2-pilot",
     buildTurkeySmartFallbackV2PilotWithAdjacency,
-    smartInput
+    v2SmartInput
   );
   const v2Repeat = await runBuild(
     "v2-pilot-repeat",
     buildTurkeySmartFallbackV2PilotWithAdjacency,
-    smartInput
+    v2SmartInput
   );
 
   const pathologyV17 = inspectTurkeyGeneratedZonePathology({ zones: v17Replay.result.zones });
@@ -281,8 +434,16 @@ async function main() {
     v2Rev1Historical = null;
   }
 
+  const rootCause = buildRootCauseAnalysis({
+    v17Replay,
+    v2Build,
+    v2Rev2Historical,
+    pathologyV2,
+    seeds: artifact.localitySeeds
+  });
+
   const comparison = {
-    schemaVersion: "territorykit-tr-mahalle-first-fatih-sprint-2b-comparison@1",
+    schemaVersion: "territorykit-tr-mahalle-first-fatih-sprint-2b3-comparison@1",
     generatedAt: new Date().toISOString(),
     district: "Fatih",
     parentAdm2Id: PARENT_ADM2_ID,
@@ -303,6 +464,28 @@ async function main() {
           quality: v2Rev1Historical.v2Pilot.quality
         }
       : null,
+    v2Rev2Historical: v2Rev2Historical?.v2Pilot
+      ? {
+          implementationRevision: v2Rev2Historical.v2Pilot.implementationRevision ?? "impl-rev2",
+          adm3ZoneCount: v2Rev2Historical.v2Pilot.adm3ZoneCount,
+          seedNamedShare: v2Rev2Historical.v2Pilot.seedNamedShare,
+          seedCoverageRatio: v2Rev2Historical.v2Pilot.seedCoverageRatio,
+          quality: v2Rev2Historical.v2Pilot.quality,
+          weightedInternalBarrierAlignment:
+            v2Rev2Historical.v2Pilot.quality?.weightedInternalBarrierAlignment ?? null
+        }
+      : null,
+    hypothesisEvaluation: {
+      variants: hypothesisVariantResults,
+      selectedVariantId: winningVariant.id,
+      selectionPolicy:
+        "Among geography/validation-passing variants, maximize weighted internal barrier alignment without material seed-coverage regression vs impl-rev2 (>=97% of 0.5211)."
+    },
+    acceptanceTargets: {
+      weightedInternalBarrierAlignmentTarget: V17_WEIGHTED_ALIGNMENT_TARGET,
+      seedCoverageRatioFloor: REV2_SEED_COVERAGE_FLOOR
+    },
+    rootCauseSummary: rootCause,
     v17Replay: {
       algorithmVersion: TURKEY_SMART_FALLBACK_ALGORITHM_VERSION,
       deterministicHash: v17Replay.result.deterministicHash,
@@ -402,10 +585,15 @@ async function main() {
   };
 
   const migration = {
-    schemaVersion: "territorykit-tr-mahalle-first-migration-impact@1",
+    schemaVersion: "territorykit-tr-mahalle-first-migration-impact@2",
     baselineRc8VsV2: migrationImpact(baselineV17Zones, v2Build.result.zones),
     v17ReplayVsV2: migrationImpact(v17Replay.result.zones, v2Build.result.zones),
     replacementMapDraft: draftStableIdReplacementMap(baselineV17Zones, v2Build.result.zones),
+    exactPolygonEvidence: {
+      status: NOT_ASSESSED,
+      reason:
+        "Fatih sprint-2b3 pilot records bbox-overlap draft only; exact intersection/IoU/split-merge evidence requires a dedicated geometry diff job on pinned shards."
+    },
     stableIdNotes: {
       algorithmVersionRegeneration:
         "v2 pilot uses smart-derived-v2.0-pilot IDs; zero retained rc.8 IDs is expected without an approved replacement map.",
@@ -414,10 +602,11 @@ async function main() {
   };
 
   const barrierDiagnostics = {
-    schemaVersion: "territorykit-tr-mahalle-first-barrier-graph@1",
+    schemaVersion: "territorykit-tr-mahalle-first-barrier-graph@2",
     manifest: artifact.manifest,
     quality: artifact.quality,
-    v2NetworkConstruction: v2Build.result.quality.networkConstruction ?? null
+    v2NetworkConstruction: v2Build.result.quality.networkConstruction ?? null,
+    rootCauseAnalysis: rootCause
   };
 
   const visualComparisonHtml = buildVisualComparisonHtml({
@@ -470,16 +659,23 @@ async function main() {
       join(OUTPUT_ROOT, "screenshot-status.json"),
       { status: "NOT_RUN", reason: "No headless MapLibre renderer in CI script" }
     ],
-    [join(REPORT_ROOT, "fatih-v2-impl-rev2-comparison.json"), comparison],
-    [join(REPORT_ROOT, "fatih-v2-impl-rev2-geometry-quality.json"), geometryQuality],
+    [join(REPORT_ROOT, "fatih-v2-impl-rev3-comparison.json"), comparison],
+    [join(REPORT_ROOT, "fatih-v2-impl-rev3-geometry-quality.json"), geometryQuality],
     [
-      join(REPORT_ROOT, "fatih-v2-impl-rev2-seed-barrier-audit.json"),
+      join(REPORT_ROOT, "fatih-v2-impl-rev3-seed-barrier-audit.json"),
       { seedAssignment, barrierDiagnostics }
     ],
-    [join(REPORT_ROOT, "fatih-v2-impl-rev2-migration-impact.json"), migration],
+    [join(REPORT_ROOT, "fatih-v2-impl-rev3-migration-impact.json"), migration],
+    [
+      join(REPORT_ROOT, "sprint-2b3-decision.md"),
+      { kind: "markdown", body: buildDecisionMarkdown(comparison, locks, "Sprint 2B.3") }
+    ],
     [
       join(REPORT_ROOT, "sprint-2b-decision.md"),
-      { kind: "markdown", body: buildDecisionMarkdown(comparison, locks, "Sprint 2B") }
+      {
+        kind: "markdown",
+        body: buildDecisionMarkdown(comparison, locks, "Sprint 2B (superseded by 2B.3)")
+      }
     ],
     [
       join(REPORT_ROOT, "sprint-2a-decision.md"),
@@ -493,21 +689,20 @@ async function main() {
   for (const [relativePath, payload] of writes) {
     const absolute = join(REPO_ROOT, relativePath);
     await mkdir(dirname(absolute), { recursive: true });
-    const body =
-      payload?.kind === "markdown" ? `${payload.body}\n` : `${JSON.stringify(payload, null, 2)}\n`;
-    await writeFile(absolute, body, "utf8");
+    if (typeof payload === "string") {
+      await writeFile(absolute, payload.endsWith("\n") ? payload : `${payload}\n`, "utf8");
+    } else if (payload?.kind === "markdown") {
+      await writeReportMarkdown(absolute, payload.body);
+    } else {
+      await writeReportJson(absolute, payload);
+    }
   }
 
   // Roads sample for visual overlay (truncate for HTML size)
-  await writeFile(
-    join(REPO_ROOT, OUTPUT_ROOT, "roads-sample.geojson"),
-    `${JSON.stringify(artifact.roads, null, 2)}\n`,
-    "utf8"
-  );
-  await writeFile(
+  await writeReportJson(join(REPO_ROOT, OUTPUT_ROOT, "roads-sample.geojson"), artifact.roads);
+  await writeReportJson(
     join(REPO_ROOT, OUTPUT_ROOT, "railways-sample.geojson"),
-    `${JSON.stringify(artifact.railways ?? { type: "FeatureCollection", features: [] }, null, 2)}\n`,
-    "utf8"
+    artifact.railways ?? { type: "FeatureCollection", features: [] }
   );
 
   console.log(
@@ -533,20 +728,29 @@ function deriveDecision(v2Build, v17Replay, baselineZones, v2Zones, seeds, v2Rev
     return { status: "FAIL", reason: "Smart fallback quality gates failed on v2 pilot." };
   }
   const geographicRealism = v2Build.result.quality.gates.geographicRealism === true;
+  const coverage = summarizeSeedCoverage(v2Zones, seeds);
   const seedGain =
-    summarizeSeedCoverage(v2Zones, seeds).seedNamedShare >
-    summarizeSeedCoverage(baselineZones, seeds).seedNamedShare;
+    coverage.seedNamedShare > summarizeSeedCoverage(baselineZones, seeds).seedNamedShare;
   const v17ZoneAlignment = v17Replay.result.quality.meanZoneBarrierAlignment ?? 0;
   const v2ZoneAlignment = v2Build.result.quality.meanZoneBarrierAlignment ?? 0;
   const v17Weighted = v17Replay.result.quality.weightedInternalBarrierAlignment ?? 0;
   const v2Weighted = v2Build.result.quality.weightedInternalBarrierAlignment ?? 0;
   const barrierGain =
     v2ZoneAlignment + 1e-6 >= v17ZoneAlignment && v2Weighted + 1e-6 >= v17Weighted;
+  const seedCoverageOk = coverage.seedCoverageRatio + 1e-4 >= REV2_SEED_COVERAGE_FLOOR * 0.97;
+  const weightedTargetMet = v2Weighted + 1e-4 >= V17_WEIGHTED_ALIGNMENT_TARGET;
 
   if (!geographicRealism) {
     return {
       status: "FAIL",
       reason: "Geographic realism gate did not pass on v2 pilot."
+    };
+  }
+  if (seedCoverageOk && weightedTargetMet && geographicRealism) {
+    return {
+      status: "PASS_WITH_REVIEW",
+      reason:
+        "impl-rev3 met Fatih acceptance targets: weighted barrier alignment at v1.7 replay level with seed coverage not materially below impl-rev2."
     };
   }
   if (seedGain && barrierGain) {
@@ -564,23 +768,43 @@ function deriveDecision(v2Build, v17Replay, baselineZones, v2Zones, seeds, v2Rev
         : "";
     return {
       status: "INCONCLUSIVE",
-      reason: `Pareto trade-off: seed-named coverage improved vs rc.8/v1.7 replay but barrier alignment has not reached v1.7 replay levels.${paretoNote}`,
-      paretoTradeOff: true
+      reason: `Pareto trade-off: seed-named coverage improved vs rc.8/v1.7 replay but barrier alignment has not reached v1.7 replay levels (weighted ${round(v2Weighted)} vs target ${V17_WEIGHTED_ALIGNMENT_TARGET}).${paretoNote}`,
+      paretoTradeOff: true,
+      nationalExpansion: "NO-GO"
     };
   }
   return {
     status: "INCONCLUSIVE",
-    reason: "No material seed-coverage gain vs rc.8 baseline on pinned inputs."
+    reason: "No material seed-coverage gain vs rc.8 baseline on pinned inputs.",
+    nationalExpansion: "NO-GO"
   };
 }
 
 function buildDecisionMarkdown(comparison, locks, sprintLabel) {
+  const hypothesisLines = (comparison.hypothesisEvaluation?.variants ?? [])
+    .map(
+      (row) =>
+        `- ${row.id}: weighted=${row.score.weightedInternalBarrierAlignment}, seedCoverage=${row.score.seedCoverageRatio}, zones=${row.score.adm3ZoneCount}`
+    )
+    .join("\n");
   return `# ${sprintLabel} — Fatih smart-derived-v2.0-pilot
 
 ## Decision
 
 - **Status:** ${comparison.decision.status}
 - **Reason:** ${comparison.decision.reason}
+- **National expansion:** ${comparison.decision.nationalExpansion ?? "NO-GO (Fatih pilot only)"}
+- **Selected variant:** ${comparison.hypothesisEvaluation?.selectedVariantId ?? "impl-rev3"}
+
+## Hypothesis variants (deterministic)
+
+${hypothesisLines || "- (not evaluated)"}
+
+## Design note
+
+- Hypothesis A (weak-barrier watershed relabeling) materially improved weighted barrier alignment vs impl-rev2 (+0.096) while preserving seed coverage.
+- Hypothesis B (max-area ×1.12) did not change Fatih metrics vs rev2; default impl-rev3 keeps multiplier 1.0.
+- Closing the remaining ~0.14 weighted gap to v1.7 replay likely requires a deeper v2 partition model (fewer zone boundaries / stronger-barrier-preserving merges), not further threshold tuning.
 
 ## Locks
 

@@ -7,10 +7,7 @@
   "currentNationalAlgorithm": "smart-derived-v1.7",
   "sprint2PilotDistrictCount": 6,
   "expandedPilotDistrictCount": 8,
-  "newDistrictsVsSprint2": [
-    "Başakşehir",
-    "Esenyurt"
-  ],
+  "newDistrictsVsSprint2": ["Başakşehir", "Esenyurt"],
   "districts": [
     {
       "district": "Fatih",

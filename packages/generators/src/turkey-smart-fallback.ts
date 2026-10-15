@@ -34,13 +34,14 @@ import { createTurkeyV2Adm3TerritoryId } from "./turkey-adm3-ingestion.js";
 import { isRecord, serializeJsonStable, sha256Hex } from "./sources/utils.js";
 import {
   auditSeedWatershedBarrierAssignments,
+  refineSeedWatershedFaceLabelsWeakBarrier,
   turkeyBarrierGraphEdgeCrossingCostMeters,
   type TurkeySeedWatershedBarrierAudit
 } from "./turkey-seed-watershed.js";
 
 export const TURKEY_SMART_FALLBACK_ALGORITHM_VERSION = "smart-derived-v1.7" as const;
 export const TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION = "smart-derived-v2.0-pilot" as const;
-export const TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION = "impl-rev2" as const;
+export const TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION = "impl-rev3" as const;
 
 const SUPPORTED_TURKEY_SMART_FALLBACK_ALGORITHM_VERSIONS = new Set<string>([
   TURKEY_SMART_FALLBACK_ALGORITHM_VERSION,
@@ -142,6 +143,7 @@ export interface TurkeyNetworkConstructionDiagnostics {
   preMergePieceCount: number;
   postMergePieceCount: number;
   candidateCount: number;
+  maxAreaBlockedMergeCount?: number;
   seedWatershedBarrierAudit?: TurkeySeedWatershedBarrierAudit;
 }
 export type TurkeySmartFallbackSourceStrategy = "barrier-guided" | "synthetic-last-resort";
@@ -261,6 +263,11 @@ export interface TurkeySmartFallbackOptions {
   snapToleranceDegrees?: number;
   barrierConfig?: Partial<TurkeySmartFallbackBarrierConfig>;
   sourceMetadata?: TurkeySmartFallbackSourceMetadata;
+  /** v2 pilot only: defaults to true for current implementation revision. */
+  v2PilotWeakBarrierReassignment?: boolean;
+  /** v2 pilot only: scales gameplay maxAreaKm2 (Fatih hypothesis B used 1.12). */
+  v2PilotMaxAreaGameplayMultiplier?: number;
+  v2PilotImplementationRevision?: string;
 }
 
 export interface TurkeySmartFallbackInput {
@@ -299,6 +306,7 @@ export interface TurkeySmartFallbackConfiguration {
   selectedProfile: ResolvedTurkeySmartFallbackProfile;
   algorithmVersion: TurkeySmartFallbackAlgorithmVersion;
   seedWatershedPartition?: boolean;
+  seedWatershedWeakBarrierReassignment?: boolean;
   implementationRevision?: string;
   seed: string;
   targetAreaKm2: number;
@@ -366,7 +374,7 @@ export interface TurkeySmartFallbackInputDiagnostics {
 
 export interface TurkeySmartFallbackManifest {
   schemaVersion: typeof TURKEY_SMART_FALLBACK_MANIFEST_SCHEMA_VERSION;
-  algorithm: typeof TURKEY_SMART_FALLBACK_ALGORITHM_VERSION;
+  algorithm: TurkeySmartFallbackAlgorithmVersion;
   parentAdm2: string;
   profile: ResolvedTurkeySmartFallbackProfile;
   inputs: Record<
@@ -908,6 +916,13 @@ export function resolveTurkeySmartFallbackConfiguration(input: TurkeySmartFallba
     });
   }
 
+  const v2ImplementationRevision =
+    input.options?.v2PilotImplementationRevision ??
+    TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION;
+  const v2WeakBarrierReassignment =
+    input.options?.v2PilotWeakBarrierReassignment ??
+    v2ImplementationRevision === TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION;
+
   const configuration: TurkeySmartFallbackConfiguration = {
     schemaVersion: TURKEY_SMART_FALLBACK_CONFIGURATION_SCHEMA_VERSION,
     profile: input.profile,
@@ -916,7 +931,8 @@ export function resolveTurkeySmartFallbackConfiguration(input: TurkeySmartFallba
     ...(seedWatershedPartition
       ? {
           seedWatershedPartition: true,
-          implementationRevision: TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION
+          implementationRevision: v2ImplementationRevision,
+          ...(v2WeakBarrierReassignment ? { seedWatershedWeakBarrierReassignment: true } : {})
         }
       : {}),
     organic: input.options?.organic ?? (seedWatershedPartition ? true : false),
@@ -1935,7 +1951,6 @@ export function assignSeedWatershedFaceLabels(input: {
       const faceGeometry = toClippingMultiPolygon(input.faces[faceIndex]!.geometry);
       if (pointInClippingGeometry(seed.coordinate, faceGeometry)) {
         sourceFace = faceIndex;
-        nearestKm = 0;
         break;
       }
       const candidateKm = haversineKm(seed.coordinate, representativePoints[faceIndex]!);
@@ -1953,7 +1968,8 @@ export function assignSeedWatershedFaceLabels(input: {
     (left, right) => left.dist - right.dist || left.seed - right.seed || left.face - right.face
   );
   for (const item of queue) {
-    if (distance[item.face] > item.dist) {
+    const priorDist = distance[item.face];
+    if (priorDist !== undefined && priorDist > item.dist) {
       distance[item.face] = item.dist;
       seedLabels[item.face] = item.seed;
     }
@@ -1964,7 +1980,8 @@ export function assignSeedWatershedFaceLabels(input: {
       (left, right) => left.dist - right.dist || left.seed - right.seed || left.face - right.face
     );
     const current = queue.shift()!;
-    if (current.dist > distance[current.face]) {
+    const currentDistance = distance[current.face];
+    if (currentDistance === undefined || current.dist > currentDistance) {
       continue;
     }
     for (const [neighbor, edge] of input.neighbours.get(current.face) ?? []) {
@@ -1973,7 +1990,8 @@ export function assignSeedWatershedFaceLabels(input: {
         edge.strength
       );
       const nextDist = current.dist + crossingCostMeters;
-      if (nextDist + 1e-6 < distance[neighbor]) {
+      const neighborDistance = distance[neighbor];
+      if (neighborDistance !== undefined && nextDist + 1e-6 < neighborDistance) {
         distance[neighbor] = nextDist;
         seedLabels[neighbor] = current.seed;
         queue.push({ dist: nextDist, face: neighbor, seed: current.seed });
@@ -1985,16 +2003,14 @@ export function assignSeedWatershedFaceLabels(input: {
     if (seedLabels[faceIndex] !== -1) {
       continue;
     }
-    let bestNeighbor = -1;
     let bestSeed = -1;
     let bestStrength = Number.POSITIVE_INFINITY;
     for (const [neighbor, edge] of input.neighbours.get(faceIndex) ?? []) {
-      const neighborSeed = seedLabels[neighbor];
+      const neighborSeed = seedLabels[neighbor] ?? -1;
       if (neighborSeed === -1 || edge.strength >= bestStrength) {
         continue;
       }
       bestStrength = edge.strength;
-      bestNeighbor = neighbor;
       bestSeed = neighborSeed;
     }
     if (bestSeed >= 0) {
@@ -2270,10 +2286,39 @@ function buildNetworkFirstPieces(input: {
       neighbours,
       seeds: input.seeds
     });
-    construction.seedWatershedBarrierAudit = auditSeedWatershedBarrierAssignments({
-      seedLabels,
-      neighbours
+    const anchorFaceIndexBySeed = input.seeds.map((seed) => {
+      let sourceFace = -1;
+      let nearestKm = Number.POSITIVE_INFINITY;
+      for (let faceIndex = 0; faceIndex < faces.length; faceIndex++) {
+        const faceGeometry = toClippingMultiPolygon(faces[faceIndex]!.geometry);
+        if (pointInClippingGeometry(seed.coordinate, faceGeometry)) {
+          return faceIndex;
+        }
+        const representative = computeGeometryRepresentativePoint(faces[faceIndex]!.geometry);
+        const candidateKm = haversineKm(seed.coordinate, representative);
+        if (candidateKm < nearestKm) {
+          nearestKm = candidateKm;
+          sourceFace = faceIndex;
+        }
+      }
+      return sourceFace;
     });
+    let weakBarrierReassignment = { reassignedFaceCount: 0, blockedBySeedAnchorCount: 0 };
+    if (input.configuration.seedWatershedWeakBarrierReassignment) {
+      weakBarrierReassignment = refineSeedWatershedFaceLabelsWeakBarrier({
+        seedLabels,
+        neighbours,
+        anchorFaceIndexBySeed
+      });
+    }
+    construction.seedWatershedBarrierAudit = {
+      ...auditSeedWatershedBarrierAssignments({
+        seedLabels,
+        neighbours
+      }),
+      weakBarrierReassignedFaceCount: weakBarrierReassignment.reassignedFaceCount,
+      weakBarrierReassignmentBlockedBySeedAnchor: weakBarrierReassignment.blockedBySeedAnchorCount
+    };
     const mergeCandidates: Array<{
       face: number;
       neighbor: number;
@@ -2306,6 +2351,7 @@ function buildNetworkFirstPieces(input: {
         left.face - right.face ||
         left.neighbor - right.neighbor
     );
+    let maxAreaBlockedMergeCount = 0;
     for (const candidate of mergeCandidates) {
       const beforeLeft = find(candidate.face);
       const beforeRight = find(candidate.neighbor);
@@ -2316,6 +2362,7 @@ function buildNetworkFirstPieces(input: {
         area[beforeLeft]! + area[beforeRight]! >
         input.configuration.maxAreaKm2 + AREA_TOLERANCE_KM2
       ) {
+        maxAreaBlockedMergeCount++;
         continue;
       }
       union(candidate.face, candidate.neighbor);
@@ -2324,6 +2371,7 @@ function buildNetworkFirstPieces(input: {
         weakBarrierMergeCount++;
       }
     }
+    construction.maxAreaBlockedMergeCount = maxAreaBlockedMergeCount;
   } else {
     const target = Math.max(
       input.configuration.targetAreaKm2,
@@ -4306,7 +4354,6 @@ function inspectSmartFallbackQuality(input: {
         return passesTurkeySmartGridLikeness(alignment, component.areaKm2, componentZones.length);
       });
   const qualityScores = input.candidates.map((candidate) => candidate.quality.score);
-  const assignedSeedIds = new Set(input.candidates.flatMap((candidate) => candidate.seedIds));
   const seedCoverageDetail = assessTurkeySmartSeedCoverageDetail(input.seeds, input.candidates);
   const seedCoverage =
     input.seeds.length === 0

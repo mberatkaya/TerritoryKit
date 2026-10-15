@@ -1,0 +1,698 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-first-migration-impact@2",
+  "baselineRc8VsV2": {
+    "baselineStableIdCount": 30,
+    "candidateStableIdCount": 47,
+    "retainedStableIdCount": 0,
+    "retainedStableIdShare": 0,
+    "newStableIdCount": 47,
+    "droppedStableIdCount": 30
+  },
+  "v17ReplayVsV2": {
+    "baselineStableIdCount": 30,
+    "candidateStableIdCount": 47,
+    "retainedStableIdCount": 0,
+    "retainedStableIdShare": 0,
+    "newStableIdCount": 47,
+    "droppedStableIdCount": 30
+  },
+  "replacementMapDraft": {
+    "schemaVersion": "territorykit-tr-mahalle-first-replacement-map-draft@1",
+    "migrationApproval": "DRAFT_NOT_APPROVED",
+    "method": "bbox-overlap-heuristic-only",
+    "proposals": [
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-01eda0ae60d28fc3a2c7",
+        "baselineAreaKm2": 0.256,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-6e1a767b9cc2e4399c33",
+            "overlap": 0.3212382307860821,
+            "areaKm2": 0.810744
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-ad430327c524c63d9d33",
+            "overlap": 0.10014382409834428,
+            "areaKm2": 0.535084
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-f3d291cffc5479f537c8",
+            "overlap": 0.08838409971653809,
+            "areaKm2": 0.3359
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-073b672500565ae4fb3e",
+        "baselineAreaKm2": 0.499,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-54d85554e979120c7a5f",
+            "overlap": 0.4097303779156845,
+            "areaKm2": 0.207376
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-834cc19f682e2c2a19f0",
+            "overlap": 0.2900692004884225,
+            "areaKm2": 1.084951
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-bc7414ff1b16e5e6837b",
+            "overlap": 0.1915214597849311,
+            "areaKm2": 0.201946
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-08c523104fbe1e7feb3d",
+        "baselineAreaKm2": 0.275,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-593d074ad776225eea50",
+            "overlap": 0.5234332796670174,
+            "areaKm2": 0.191295
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-46e8366c8315163661e3",
+            "overlap": 0.44167042351200747,
+            "areaKm2": 0.240189
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-d4f8855c876a8280abf4",
+            "overlap": 0.2369306568881935,
+            "areaKm2": 0.297456
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-13d94a01ceafb0ce5169",
+        "baselineAreaKm2": 0.052,
+        "status": "NO_OVERLAP_CANDIDATE",
+        "topCandidates": [],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-290699f58ea199c88a63",
+        "baselineAreaKm2": 0.555,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-d39130d522c1f8fe12ad",
+            "overlap": 0.533116304161031,
+            "areaKm2": 0.435347
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-0370cd451302781b4255",
+            "overlap": 0.2480102530035629,
+            "areaKm2": 0.414326
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-c31c1c7db435335fab6a",
+            "overlap": 0.20056459232039456,
+            "areaKm2": 0.128077
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-2b5978834366688ae645",
+        "baselineAreaKm2": 0.347,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-0370cd451302781b4255",
+            "overlap": 0.3698187383611023,
+            "areaKm2": 0.414326
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-d39130d522c1f8fe12ad",
+            "overlap": 0.23342938579307682,
+            "areaKm2": 0.435347
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-b37cf67bc8c6bbc13907",
+            "overlap": 0.212290992132055,
+            "areaKm2": 0.450281
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-34d0c14106436af5f5a6",
+        "baselineAreaKm2": 0.423,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-8b0a5bf303db37723b2d",
+            "overlap": 0.4567730052942233,
+            "areaKm2": 0.185035
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-ad430327c524c63d9d33",
+            "overlap": 0.2408618940256726,
+            "areaKm2": 0.535084
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-ab7446d1de5184093265",
+            "overlap": 0.1012682772235369,
+            "areaKm2": 0.524784
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-57c6546b8d8c52e3ca2f",
+        "baselineAreaKm2": 0.487,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-910722c39a51e7e43b35",
+            "overlap": 0.1318255121512054,
+            "areaKm2": 1.951442
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-59f9cd89af41c5776554",
+        "baselineAreaKm2": 0.246,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-c629731e14078fa45327",
+            "overlap": 0.5862742737229747,
+            "areaKm2": 0.148752
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-87aefc7ff92dec525e99",
+            "overlap": 0.32079886570158206,
+            "areaKm2": 0.079103
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-7b8d34a6d9bc1b30b5af",
+            "overlap": 0.1783509251525177,
+            "areaKm2": 0.123524
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-67991e44ab1c9e28442b",
+        "baselineAreaKm2": 0.295,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-8753dc15b2e0d698743f",
+            "overlap": 0.4533880280632374,
+            "areaKm2": 0.161314
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-62dc59881e20620e5fb2",
+            "overlap": 0.24176414564579793,
+            "areaKm2": 0.083803
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-8ddd593d52c42af4ac39",
+            "overlap": 0.14242209115226687,
+            "areaKm2": 0.07512
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-701b712ba93c285dfee4",
+        "baselineAreaKm2": 0.355,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-1d07900354d3d3619607",
+            "overlap": 0.3046910963999339,
+            "areaKm2": 0.241864
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-910722c39a51e7e43b35",
+            "overlap": 0.1583076102501665,
+            "areaKm2": 1.951442
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-ab7446d1de5184093265",
+            "overlap": 0.12453830514876701,
+            "areaKm2": 0.524784
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-78efecad6d2ae4ccd2ec",
+        "baselineAreaKm2": 1.149,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-f60791eef1510159f78b",
+            "overlap": 0.834773174405901,
+            "areaKm2": 0.985379
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-85154f0afdf16e20891f",
+            "overlap": 0.13845175463820047,
+            "areaKm2": 1.71003
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-561706ed90f807766962",
+            "overlap": 0.09917587853286129,
+            "areaKm2": 0.14623
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-88ec65114d7d0e51d713",
+        "baselineAreaKm2": 0.471,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-4d9ef56cdb59419833c0",
+            "overlap": 0.722577481320092,
+            "areaKm2": 0.193844
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-703b45fba294ae7a1b6b",
+            "overlap": 0.33732914386368956,
+            "areaKm2": 0.14131
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-7b8d34a6d9bc1b30b5af",
+            "overlap": 0.25868409892106903,
+            "areaKm2": 0.123524
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-8eebe5599fbf67d5bc23",
+        "baselineAreaKm2": 0.709,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-2817389992344b1b049f",
+            "overlap": 0.8950936741869283,
+            "areaKm2": 0.713622
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-834cc19f682e2c2a19f0",
+            "overlap": 0.3219568895996376,
+            "areaKm2": 1.084951
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-a81e943982daab58efec",
+            "overlap": 0.2332280736244307,
+            "areaKm2": 0.23314
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-9f83a09e877b09576ca7",
+        "baselineAreaKm2": 0.605,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-834cc19f682e2c2a19f0",
+            "overlap": 0.5081448871831418,
+            "areaKm2": 1.084951
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-a81e943982daab58efec",
+            "overlap": 0.39742385555797183,
+            "areaKm2": 0.23314
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-2817389992344b1b049f",
+            "overlap": 0.2985448773623102,
+            "areaKm2": 0.713622
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ae51c43e7a16247111a1",
+        "baselineAreaKm2": 0.866,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-ab7446d1de5184093265",
+            "overlap": 0.6171886073231275,
+            "areaKm2": 0.524784
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-1d07900354d3d3619607",
+            "overlap": 0.24878900776408838,
+            "areaKm2": 0.241864
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-910722c39a51e7e43b35",
+            "overlap": 0.18259998222088794,
+            "areaKm2": 1.951442
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b0035a2eaa3b83222d33",
+        "baselineAreaKm2": 0.305,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-a81e943982daab58efec",
+            "overlap": 0.793340974922817,
+            "areaKm2": 0.23314
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-bc7414ff1b16e5e6837b",
+            "overlap": 0.3308390300926373,
+            "areaKm2": 0.201946
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-2817389992344b1b049f",
+            "overlap": 0.20285796242135393,
+            "areaKm2": 0.713622
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b05a48a15e5125cdf298",
+        "baselineAreaKm2": 0.274,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-593d074ad776225eea50",
+            "overlap": 0.3554891072765418,
+            "areaKm2": 0.191295
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-d4f8855c876a8280abf4",
+            "overlap": 0.26975671839395043,
+            "areaKm2": 0.297456
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-bfc3abe9f57d3b49fd17",
+            "overlap": 0.26798361946847754,
+            "areaKm2": 0.348344
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b3e509aaad7fa40c97c0",
+        "baselineAreaKm2": 0.432,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-6454e365ecf9d1cf2cbe",
+            "overlap": 0.710784170632059,
+            "areaKm2": 0.406341
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-f3d291cffc5479f537c8",
+            "overlap": 0.34523897361927897,
+            "areaKm2": 0.3359
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-355f107a9bdad4cc4f15",
+            "overlap": 0.2717795901113656,
+            "areaKm2": 0.24919
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b5ae85dbcb276cc5da0b",
+        "baselineAreaKm2": 0.249,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-d4f8855c876a8280abf4",
+            "overlap": 0.727422730102757,
+            "areaKm2": 0.297456
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-bfc3abe9f57d3b49fd17",
+            "overlap": 0.3076967220971606,
+            "areaKm2": 0.348344
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-ab7446d1de5184093265",
+            "overlap": 0.1526120671733297,
+            "areaKm2": 0.524784
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b699d521a866aa6875c3",
+        "baselineAreaKm2": 0.439,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-355f107a9bdad4cc4f15",
+            "overlap": 0.709554884333396,
+            "areaKm2": 0.24919
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-1f2352d8cf35f47988bb",
+            "overlap": 0.25417931300853386,
+            "areaKm2": 0.339129
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-6454e365ecf9d1cf2cbe",
+            "overlap": 0.17145511985723738,
+            "areaKm2": 0.406341
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b869ea01a2bad0439ea4",
+        "baselineAreaKm2": 0.602,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-6e1a767b9cc2e4399c33",
+            "overlap": 0.553356070373491,
+            "areaKm2": 0.810744
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-ad430327c524c63d9d33",
+            "overlap": 0.43657079684477057,
+            "areaKm2": 0.535084
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-593d074ad776225eea50",
+            "overlap": 0.20416379444601068,
+            "areaKm2": 0.191295
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-bf7df56ae203fd5afe33",
+        "baselineAreaKm2": 1.11,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-910722c39a51e7e43b35",
+            "overlap": 0.7821852684046104,
+            "areaKm2": 1.951442
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-1d07900354d3d3619607",
+            "overlap": 0.08651981262008919,
+            "areaKm2": 0.241864
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-85154f0afdf16e20891f",
+            "overlap": 0.07755597554281932,
+            "areaKm2": 1.71003
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-c760995c457452ed71a1",
+        "baselineAreaKm2": 0.66,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-d39130d522c1f8fe12ad",
+            "overlap": 0.29777650001595773,
+            "areaKm2": 0.435347
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-f60791eef1510159f78b",
+            "overlap": 0.2900422842624872,
+            "areaKm2": 0.985379
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-561706ed90f807766962",
+            "overlap": 0.1916240145724877,
+            "areaKm2": 0.14623
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-cbeb5278a71425ce7202",
+        "baselineAreaKm2": 1.753,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-85154f0afdf16e20891f",
+            "overlap": 1,
+            "areaKm2": 1.71003
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-f60791eef1510159f78b",
+            "overlap": 0.11800370052973277,
+            "areaKm2": 0.985379
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-910722c39a51e7e43b35",
+            "overlap": 0.11655067016375355,
+            "areaKm2": 1.951442
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ce3a6d0f0ea5c4667c87",
+        "baselineAreaKm2": 0.309,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-bfc3abe9f57d3b49fd17",
+            "overlap": 0.6243056077672073,
+            "areaKm2": 0.348344
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-d4f8855c876a8280abf4",
+            "overlap": 0.3357662047710244,
+            "areaKm2": 0.297456
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-0370cd451302781b4255",
+            "overlap": 0.2120804165969799,
+            "areaKm2": 0.414326
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dacb79746e8604409768",
+        "baselineAreaKm2": 0.682,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-f8e6c9270d68e4d94619",
+            "overlap": 0.6793547330024092,
+            "areaKm2": 0.495764
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-ad430327c524c63d9d33",
+            "overlap": 0.39111703798840175,
+            "areaKm2": 0.535084
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-834cc19f682e2c2a19f0",
+            "overlap": 0.25891241512731683,
+            "areaKm2": 1.084951
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dc4135f5abb73435480a",
+        "baselineAreaKm2": 0.633,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-b37cf67bc8c6bbc13907",
+            "overlap": 0.6738904734737735,
+            "areaKm2": 0.450281
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-1f2352d8cf35f47988bb",
+            "overlap": 0.23546776016877402,
+            "areaKm2": 0.339129
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-0370cd451302781b4255",
+            "overlap": 0.22481293555557927,
+            "areaKm2": 0.414326
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-de3555218fb370c42fd2",
+        "baselineAreaKm2": 0.395,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-f8e6c9270d68e4d94619",
+            "overlap": 0.280258022874978,
+            "areaKm2": 0.495764
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-ad430327c524c63d9d33",
+            "overlap": 0.17856348083269935,
+            "areaKm2": 0.535084
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-8b0a5bf303db37723b2d",
+            "overlap": 0.1721246359635654,
+            "areaKm2": 0.185035
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      },
+      {
+        "baselineId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-f24cd8558fe73d01e2b4",
+        "baselineAreaKm2": 0.933,
+        "status": "PROPOSED_REPLACEMENT",
+        "topCandidates": [
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-f3d291cffc5479f537c8",
+            "overlap": 0.22140452049572798,
+            "areaKm2": 0.3359
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-da184e5c92e42de74c02",
+            "overlap": 0.21484293970551102,
+            "areaKm2": 0.366323
+          },
+          {
+            "candidateId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v2-0-pilot-6454e365ecf9d1cf2cbe",
+            "overlap": 0.17737643154890154,
+            "areaKm2": 0.406341
+          }
+        ],
+        "migrationApproval": "DRAFT_NOT_APPROVED"
+      }
+    ]
+  },
+  "exactPolygonEvidence": {
+    "status": "NOT_ASSESSED",
+    "reason": "Fatih sprint-2b3 pilot records bbox-overlap draft only; exact intersection/IoU/split-merge evidence requires a dedicated geometry diff job on pinned shards."
+  },
+  "stableIdNotes": {
+    "algorithmVersionRegeneration": "v2 pilot uses smart-derived-v2.0-pilot IDs; zero retained rc.8 IDs is expected without an approved replacement map.",
+    "migrationApproval": "DRAFT_NOT_APPROVED"
+  }
+}

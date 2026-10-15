@@ -29,7 +29,11 @@ export const TURKEY_V2_NATIONAL_CHECKPOINT_PRODUCTION_BEHAVIOR_DIGESTS: Readonly
   Record<string, string>
 > = {
   "packages/generators/src/turkey-smart-fallback.ts":
-    "1877ba4f4a4ba1fca6636aebe4bbe6db0ea7a5edfb1b7880ba59daff99f03a3e",
+    "a914a235855041557e222a70f6d369f2e8c29d9ab20862cf769b10f067c21e9b",
+  "packages/generators/src/turkey-seed-watershed.ts":
+    "1bcc3a0c2586b3002034c09dcfefc381421c7f1c91345dcc1d7d4ec3c275498b",
+  "packages/generators/src/turkey-smart-derived-v2-pilot.ts":
+    "28f1f7422510c48b5add4461c8710f1de546839e693daa06a593a1081e498c14",
   "packages/generators/src/turkey-v2-hybrid.ts":
     "2582e62b2534f72e931972c121d394b53c6b33f82eaf0d4547002fd427c7db58",
   "packages/cli/src/turkey-adm3-hybrid.ts":
