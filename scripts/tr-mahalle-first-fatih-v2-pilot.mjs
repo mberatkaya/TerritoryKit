@@ -30,8 +30,10 @@ const OSM_SOURCE_LOCK =
   process.env.MAHALLE_FIRST_OSM_SOURCE_LOCK ??
   ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json";
 const OUTPUT_ROOT =
-  process.env.MAHALLE_FIRST_FATIH_V2_OUTPUT ?? ".territory/mahalle-first-pilot/fatih-v2";
+  process.env.MAHALLE_FIRST_FATIH_V2_OUTPUT ?? ".territory/mahalle-first-pilot/fatih-v2-impl-rev2";
 const REPORT_ROOT = "reports/tr-adm3/mahalle-first-program";
+const REV1_HISTORICAL_COMPARISON = join(REPORT_ROOT, "fatih-v1-v2-comparison.json");
+const NOT_ASSESSED = "NOT_ASSESSED";
 
 async function readJson(path) {
   return JSON.parse(await readFile(join(REPO_ROOT, path), "utf8"));
@@ -91,6 +93,7 @@ function summarizeQuality(quality, pathology) {
   return {
     meanBarrierAlignment: round(quality.meanBarrierAlignment ?? 0),
     meanZoneBarrierAlignment: round(quality.meanZoneBarrierAlignment ?? 0),
+    weightedInternalBarrierAlignment: round(quality.weightedInternalBarrierAlignment ?? 0),
     geographicRealism: quality.gates?.geographicRealism ?? null,
     gridLikeness: quality.gates?.gridLikeness ?? null,
     longUnsupportedStraightBoundaryRatio: round(quality.longUnsupportedStraightBoundaryRatio ?? 0),
@@ -101,8 +104,72 @@ function summarizeQuality(quality, pathology) {
     barrierFollowingInternalBoundaryRatio: round(
       quality.barrierFollowingInternalBoundaryRatio ?? 0
     ),
-    pathologyFindingCount: pathology.findings?.length ?? 0
+    seedCoverageDetail: quality.seedCoverageDetail ?? null,
+    pathologyFindingCount: pathology.findings?.length ?? 0,
+    qualityGateNotes: {
+      minMeanBarrierAlignment: 0,
+      requireBarrierForMultiTerritory: false,
+      minMeanQualityScore: 0.25,
+      effect:
+        "v2 pilot relaxes barrier-alignment and barrier-sufficiency gates; geographic realism and geometry gates remain authoritative."
+    }
   };
+}
+
+function summarizeBaselineRc8Quality() {
+  return {
+    meanBarrierAlignment: { status: NOT_ASSESSED, value: null },
+    meanZoneBarrierAlignment: { status: NOT_ASSESSED, value: null },
+    weightedInternalBarrierAlignment: { status: NOT_ASSESSED, value: null },
+    geographicRealism: { status: NOT_ASSESSED, value: null },
+    longestUnsupportedStraightChainMeters: { status: NOT_ASSESSED, value: null }
+  };
+}
+
+function draftStableIdReplacementMap(baselineZones, candidateZones) {
+  const candidates = candidateZones.map((zone) => ({
+    id: zone.id,
+    areaKm2: (territoryMeta(zone).areaM2 ?? 0) / 1_000_000,
+    bbox: zone.bbox
+  }));
+  const proposals = [];
+  for (const baseline of baselineZones) {
+    const baselineArea = (territoryMeta(baseline).areaM2 ?? 0) / 1_000_000;
+    const overlaps = candidates
+      .map((candidate) => {
+        const overlap = bboxOverlapRatio(baseline.bbox, candidate.bbox);
+        return { candidateId: candidate.id, overlap, areaKm2: candidate.areaKm2 };
+      })
+      .filter((row) => row.overlap > 0.05)
+      .sort((a, b) => b.overlap - a.overlap || a.candidateId.localeCompare(b.candidateId));
+    proposals.push({
+      baselineId: baseline.id,
+      baselineAreaKm2: round(baselineArea, 3),
+      status: overlaps.length ? "PROPOSED_REPLACEMENT" : "NO_OVERLAP_CANDIDATE",
+      topCandidates: overlaps.slice(0, 3),
+      migrationApproval: "DRAFT_NOT_APPROVED"
+    });
+  }
+  return {
+    schemaVersion: "territorykit-tr-mahalle-first-replacement-map-draft@1",
+    migrationApproval: "DRAFT_NOT_APPROVED",
+    method: "bbox-overlap-heuristic-only",
+    proposals
+  };
+}
+
+function bboxOverlapRatio(left, right) {
+  if (!left || !right) return 0;
+  const west = Math.max(left[0], right[0]);
+  const south = Math.max(left[1], right[1]);
+  const east = Math.min(left[2], right[2]);
+  const north = Math.min(left[3], right[3]);
+  if (east <= west || north <= south) return 0;
+  const intersection = (east - west) * (north - south);
+  const leftArea = Math.max(0, left[2] - left[0]) * Math.max(0, left[3] - left[1]);
+  const rightArea = Math.max(0, right[2] - right[0]) * Math.max(0, right[3] - right[1]);
+  const union = leftArea + rightArea - intersection;
+  return union > 0 ? intersection / union : 0;
 }
 
 function migrationImpact(baselineZones, candidateZones) {
@@ -207,8 +274,15 @@ async function main() {
   const pathologyV2 = inspectTurkeyGeneratedZonePathology({ zones: v2Build.result.zones });
   const pathologyBaseline = inspectTurkeyGeneratedZonePathology({ zones: baselineV17Zones });
 
+  let v2Rev1Historical = null;
+  try {
+    v2Rev1Historical = await readJson(REV1_HISTORICAL_COMPARISON);
+  } catch {
+    v2Rev1Historical = null;
+  }
+
   const comparison = {
-    schemaVersion: "territorykit-tr-mahalle-first-fatih-v1-v2-comparison@1",
+    schemaVersion: "territorykit-tr-mahalle-first-fatih-sprint-2b-comparison@1",
     generatedAt: new Date().toISOString(),
     district: "Fatih",
     parentAdm2Id: PARENT_ADM2_ID,
@@ -218,19 +292,17 @@ async function main() {
       algorithmVersion: TURKEY_SMART_FALLBACK_ALGORITHM_VERSION,
       readOnly: true,
       ...summarizeSeedCoverage(baselineV17Zones, artifact.localitySeeds),
-      quality: summarizeQuality(
-        {
-          meanBarrierAlignment: 0,
-          meanZoneBarrierAlignment: 0,
-          gates: {},
-          longUnsupportedStraightBoundaryRatio: 0,
-          longestUnsupportedStraightChainMeters: 0,
-          barrierFollowingInternalBoundaryRatio: 0
-        },
-        pathologyBaseline
-      ),
+      quality: summarizeBaselineRc8Quality(),
       pathologyFindingCount: pathologyBaseline.findings.length
     },
+    v2Rev1Historical: v2Rev1Historical?.v2Pilot
+      ? {
+          implementationRevision: v2Rev1Historical.v2Pilot.implementationRevision ?? "impl-rev1",
+          adm3ZoneCount: v2Rev1Historical.v2Pilot.adm3ZoneCount,
+          seedNamedShare: v2Rev1Historical.v2Pilot.seedNamedShare,
+          quality: v2Rev1Historical.v2Pilot.quality
+        }
+      : null,
     v17Replay: {
       algorithmVersion: TURKEY_SMART_FALLBACK_ALGORITHM_VERSION,
       deterministicHash: v17Replay.result.deterministicHash,
@@ -254,7 +326,9 @@ async function main() {
       ...summarizeSeedCoverage(v2Build.result.zones, artifact.localitySeeds),
       quality: summarizeQuality(v2Build.result.quality, pathologyV2),
       pathologyFindingCount: pathologyV2.findings.length,
-      networkDiagnostics: v2Build.result.quality.networkConstruction ?? null
+      networkDiagnostics: v2Build.result.quality.networkConstruction ?? null,
+      seedWatershedBarrierAudit:
+        v2Build.result.quality.networkConstruction?.seedWatershedBarrierAudit ?? null
     },
     deltas: {
       seedNamedShareV2MinusBaseline: round(
@@ -269,14 +343,22 @@ async function main() {
         (v2Build.result.quality.longestUnsupportedStraightChainMeters ?? 0) -
           (v17Replay.result.quality.longestUnsupportedStraightChainMeters ?? 0),
         2
-      )
+      ),
+      weightedInternalBarrierAlignmentV2MinusV17Replay: round(
+        (v2Build.result.quality.weightedInternalBarrierAlignment ?? 0) -
+          (v17Replay.result.quality.weightedInternalBarrierAlignment ?? 0)
+      ),
+      adm3ZoneCountV2MinusV17Replay: v2Build.result.zones.length - v17Replay.result.zones.length,
+      zoneCountRationale:
+        "Higher ADM3 counts can follow seed-watershed face cardinality and max-area caps; zone count alone is not a success metric."
     },
     decision: deriveDecision(
       v2Build,
       v17Replay,
       baselineV17Zones,
       v2Build.result.zones,
-      artifact.localitySeeds
+      artifact.localitySeeds,
+      v2Rev1Historical
     )
   };
 
@@ -322,7 +404,13 @@ async function main() {
   const migration = {
     schemaVersion: "territorykit-tr-mahalle-first-migration-impact@1",
     baselineRc8VsV2: migrationImpact(baselineV17Zones, v2Build.result.zones),
-    v17ReplayVsV2: migrationImpact(v17Replay.result.zones, v2Build.result.zones)
+    v17ReplayVsV2: migrationImpact(v17Replay.result.zones, v2Build.result.zones),
+    replacementMapDraft: draftStableIdReplacementMap(baselineV17Zones, v2Build.result.zones),
+    stableIdNotes: {
+      algorithmVersionRegeneration:
+        "v2 pilot uses smart-derived-v2.0-pilot IDs; zero retained rc.8 IDs is expected without an approved replacement map.",
+      migrationApproval: "DRAFT_NOT_APPROVED"
+    }
   };
 
   const barrierDiagnostics = {
@@ -335,11 +423,12 @@ async function main() {
   const visualComparisonHtml = buildVisualComparisonHtml({
     center: parent.center,
     layers: {
-      baseline: "../" + join(OUTPUT_ROOT, "baseline-v17-rc8.geojson"),
+      baseline: "baseline-v17-rc8.geojson",
       v17Replay: "v17-replay.geojson",
       v2: "v2-candidate.geojson",
       seeds: "locality-seeds.geojson",
-      roads: "roads-sample.geojson"
+      roads: "roads-sample.geojson",
+      railways: "railways-sample.geojson"
     }
   });
 
@@ -381,23 +470,43 @@ async function main() {
       join(OUTPUT_ROOT, "screenshot-status.json"),
       { status: "NOT_RUN", reason: "No headless MapLibre renderer in CI script" }
     ],
-    [join(REPORT_ROOT, "fatih-v1-v2-comparison.json"), comparison],
-    [join(REPORT_ROOT, "fatih-v2-geometry-quality.json"), geometryQuality],
-    [join(REPORT_ROOT, "fatih-v2-seed-barrier-audit.json"), { seedAssignment, barrierDiagnostics }],
-    [join(REPORT_ROOT, "fatih-v2-migration-impact.json"), migration],
-    [join(REPORT_ROOT, "sprint-2a-decision.md"), buildDecisionMarkdown(comparison, locks)]
+    [join(REPORT_ROOT, "fatih-v2-impl-rev2-comparison.json"), comparison],
+    [join(REPORT_ROOT, "fatih-v2-impl-rev2-geometry-quality.json"), geometryQuality],
+    [
+      join(REPORT_ROOT, "fatih-v2-impl-rev2-seed-barrier-audit.json"),
+      { seedAssignment, barrierDiagnostics }
+    ],
+    [join(REPORT_ROOT, "fatih-v2-impl-rev2-migration-impact.json"), migration],
+    [
+      join(REPORT_ROOT, "sprint-2b-decision.md"),
+      { kind: "markdown", body: buildDecisionMarkdown(comparison, locks, "Sprint 2B") }
+    ],
+    [
+      join(REPORT_ROOT, "sprint-2a-decision.md"),
+      {
+        kind: "markdown",
+        body: buildDecisionMarkdown(comparison, locks, "Sprint 2A (superseded by 2B)")
+      }
+    ]
   ];
 
   for (const [relativePath, payload] of writes) {
     const absolute = join(REPO_ROOT, relativePath);
     await mkdir(dirname(absolute), { recursive: true });
-    await writeFile(absolute, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+    const body =
+      payload?.kind === "markdown" ? `${payload.body}\n` : `${JSON.stringify(payload, null, 2)}\n`;
+    await writeFile(absolute, body, "utf8");
   }
 
   // Roads sample for visual overlay (truncate for HTML size)
   await writeFile(
     join(REPO_ROOT, OUTPUT_ROOT, "roads-sample.geojson"),
     `${JSON.stringify(artifact.roads, null, 2)}\n`,
+    "utf8"
+  );
+  await writeFile(
+    join(REPO_ROOT, OUTPUT_ROOT, "railways-sample.geojson"),
+    `${JSON.stringify(artifact.railways ?? { type: "FeatureCollection", features: [] }, null, 2)}\n`,
     "utf8"
   );
 
@@ -416,7 +525,7 @@ async function main() {
   );
 }
 
-function deriveDecision(v2Build, v17Replay, baselineZones, v2Zones, seeds) {
+function deriveDecision(v2Build, v17Replay, baselineZones, v2Zones, seeds, v2Rev1Historical) {
   if (!v2Build.validation.ok) {
     return { status: "FAIL", reason: "Turkey V2 dataset validation failed on v2 pilot output." };
   }
@@ -427,9 +536,12 @@ function deriveDecision(v2Build, v17Replay, baselineZones, v2Zones, seeds) {
   const seedGain =
     summarizeSeedCoverage(v2Zones, seeds).seedNamedShare >
     summarizeSeedCoverage(baselineZones, seeds).seedNamedShare;
+  const v17ZoneAlignment = v17Replay.result.quality.meanZoneBarrierAlignment ?? 0;
+  const v2ZoneAlignment = v2Build.result.quality.meanZoneBarrierAlignment ?? 0;
+  const v17Weighted = v17Replay.result.quality.weightedInternalBarrierAlignment ?? 0;
+  const v2Weighted = v2Build.result.quality.weightedInternalBarrierAlignment ?? 0;
   const barrierGain =
-    (v2Build.result.quality.meanZoneBarrierAlignment ?? 0) >
-    (v17Replay.result.quality.meanZoneBarrierAlignment ?? 0);
+    v2ZoneAlignment + 1e-6 >= v17ZoneAlignment && v2Weighted + 1e-6 >= v17Weighted;
 
   if (!geographicRealism) {
     return {
@@ -444,10 +556,16 @@ function deriveDecision(v2Build, v17Replay, baselineZones, v2Zones, seeds) {
     };
   }
   if (seedGain && !barrierGain) {
+    const rev1ZoneAlignment = v2Rev1Historical?.quality?.meanZoneBarrierAlignment;
+    const rev2ZoneAlignment = v2Build.result.quality.meanZoneBarrierAlignment ?? 0;
+    const paretoNote =
+      rev1ZoneAlignment !== undefined
+        ? ` impl-rev2 raised mean zone barrier alignment from ${rev1ZoneAlignment} (impl-rev1) to ${round(rev2ZoneAlignment)} but remains below v1.7 replay (${round(v17ZoneAlignment)}).`
+        : "";
     return {
       status: "INCONCLUSIVE",
-      reason:
-        "Seed-named coverage improved materially but mean zone barrier alignment regressed vs v1.7 replay; boundary quality not proven."
+      reason: `Pareto trade-off: seed-named coverage improved vs rc.8/v1.7 replay but barrier alignment has not reached v1.7 replay levels.${paretoNote}`,
+      paretoTradeOff: true
     };
   }
   return {
@@ -456,8 +574,8 @@ function deriveDecision(v2Build, v17Replay, baselineZones, v2Zones, seeds) {
   };
 }
 
-function buildDecisionMarkdown(comparison, locks) {
-  return `# Sprint 2A — Fatih smart-derived-v2.0-pilot
+function buildDecisionMarkdown(comparison, locks, sprintLabel) {
+  return `# ${sprintLabel} — Fatih smart-derived-v2.0-pilot
 
 ## Decision
 
@@ -478,8 +596,9 @@ function buildDecisionMarkdown(comparison, locks) {
 | --- | ---: | ---: | ---: |
 | ADM3 zones | ${comparison.baseline.adm3ZoneCount} | ${comparison.v17Replay.adm3ZoneCount} | ${comparison.v2Pilot.adm3ZoneCount} |
 | Seed-named share | ${comparison.baseline.seedNamedShare} | ${comparison.v17Replay.seedNamedShare} | ${comparison.v2Pilot.seedNamedShare} |
-| Mean zone barrier alignment | ${comparison.baseline.quality.meanZoneBarrierAlignment} | ${comparison.v17Replay.quality.meanZoneBarrierAlignment} | ${comparison.v2Pilot.quality.meanZoneBarrierAlignment} |
-| Longest unsupported chain (m) | ${comparison.baseline.quality.longestUnsupportedStraightChainMeters} | ${comparison.v17Replay.quality.longestUnsupportedStraightChainMeters} | ${comparison.v2Pilot.quality.longestUnsupportedStraightChainMeters} |
+| Mean zone barrier alignment | ${comparison.baseline.quality.meanZoneBarrierAlignment?.status ?? comparison.baseline.quality.meanZoneBarrierAlignment} | ${comparison.v17Replay.quality.meanZoneBarrierAlignment} | ${comparison.v2Pilot.quality.meanZoneBarrierAlignment} |
+| Weighted internal barrier alignment | ${comparison.baseline.quality.weightedInternalBarrierAlignment?.status ?? "—"} | ${comparison.v17Replay.quality.weightedInternalBarrierAlignment} | ${comparison.v2Pilot.quality.weightedInternalBarrierAlignment} |
+| Longest unsupported chain (m) | ${comparison.baseline.quality.longestUnsupportedStraightChainMeters?.status ?? "—"} | ${comparison.v17Replay.quality.longestUnsupportedStraightChainMeters} | ${comparison.v2Pilot.quality.longestUnsupportedStraightChainMeters} |
 | Deterministic hash | — | ${comparison.v17Replay.deterministicHash.slice(0, 16)}… | ${comparison.v2Pilot.deterministicHash.slice(0, 16)}… |
 
 ## Next gate (Eyüpsultan)
@@ -508,7 +627,9 @@ function buildVisualComparisonHtml({ center, layers }) {
   <label><input type="checkbox" id="toggle-baseline" checked /> rc.8 baseline</label><br/>
   <label><input type="checkbox" id="toggle-v17" /> v1.7 replay</label><br/>
   <label><input type="checkbox" id="toggle-v2" checked /> v2 pilot</label><br/>
-  <label><input type="checkbox" id="toggle-seeds" checked /> seeds</label>
+  <label><input type="checkbox" id="toggle-seeds" checked /> seeds</label><br/>
+  <label><input type="checkbox" id="toggle-roads" /> barrier roads</label><br/>
+  <label><input type="checkbox" id="toggle-railways" /> railways</label>
 </div>
 <div id="map"></div>
 <script>
@@ -522,7 +643,9 @@ const sources = {
   baseline: '${layers.baseline}',
   v17: '${layers.v17Replay}',
   v2: '${layers.v2}',
-  seeds: '${layers.seeds}'
+  seeds: '${layers.seeds}',
+  roads: '${layers.roads}',
+  railways: '${layers.railways}'
 };
 map.on('load', async () => {
   for (const [id, url] of Object.entries(sources)) {
@@ -530,13 +653,15 @@ map.on('load', async () => {
     map.addSource(id, { type: 'geojson', data });
     if (id === 'seeds') {
       map.addLayer({ id: id+'-layer', type: 'circle', source: id, paint: { 'circle-radius': 5, 'circle-color': '#111' } });
+    } else if (id === 'roads' || id === 'railways') {
+      map.addLayer({ id: id+'-line', type: 'line', source: id, paint: { 'line-color': id==='railways' ? '#6b4c9a' : '#555', 'line-width': 1.2, 'line-opacity': 0.7 } });
     } else {
       map.addLayer({ id: id+'-fill', type: 'fill', source: id, paint: { 'fill-color': id==='v2' ? '#e4572e' : '#4c78a8', 'fill-opacity': 0.25 } });
       map.addLayer({ id: id+'-line', type: 'line', source: id, paint: { 'line-color': id==='v2' ? '#e4572e' : '#4c78a8', 'line-width': 1.5 } });
     }
   }
 });
-['toggle-baseline','toggle-v17','toggle-v2','toggle-seeds'].forEach((toggleId) => {
+['toggle-baseline','toggle-v17','toggle-v2','toggle-seeds','toggle-roads','toggle-railways'].forEach((toggleId) => {
   document.getElementById(toggleId).addEventListener('change', (event) => {
     const layerPrefix = toggleId.replace('toggle-','');
     const visibility = event.target.checked ? 'visible' : 'none';

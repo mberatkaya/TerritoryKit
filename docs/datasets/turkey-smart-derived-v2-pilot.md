@@ -19,9 +19,9 @@ v2, resmi idari mahalle **uydurmaz**; lisansı bilinmeyen belediye poligonların
 
 Baseline: `.territory/national-geometry-remediation/candidate-rc8-impl-rev1` (2.1.0-rc.8, salt okunur).
 
-Pilot çıktıları: `.territory/mahalle-first-pilot/fatih-v2/` (`pnpm data:tr:mahalle-first:fatih-v2-pilot`).
+Pilot çıktıları: `.territory/mahalle-first-pilot/fatih-v2-impl-rev2/` (`pnpm data:tr:mahalle-first:fatih-v2-pilot`).
 
-Algoritma: `buildTurkeySmartFallbackV2PilotWithAdjacency` — barrier yüzeyleri + çok kaynaklı seed watershed (v1.7 alan-hedefli face merge değil).
+Algoritma: `buildTurkeySmartFallbackV2PilotWithAdjacency` (`impl-rev2`) — barrier yüzeyleri + çok kaynaklı seed watershed; bariyer geçiş maliyeti güçlü bariyerde artar (impl-rev1 `length/strength` hatası düzeltildi).
 
 ## Kabul kapısı (ulusal build öncesi)
 

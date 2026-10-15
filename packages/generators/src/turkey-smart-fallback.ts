@@ -32,10 +32,15 @@ import { buildTerritoryAdjacency } from "./adjacency.js";
 import { computeGeometryRepresentativePoint } from "./geometry-repair.js";
 import { createTurkeyV2Adm3TerritoryId } from "./turkey-adm3-ingestion.js";
 import { isRecord, serializeJsonStable, sha256Hex } from "./sources/utils.js";
+import {
+  auditSeedWatershedBarrierAssignments,
+  turkeyBarrierGraphEdgeCrossingCostMeters,
+  type TurkeySeedWatershedBarrierAudit
+} from "./turkey-seed-watershed.js";
 
 export const TURKEY_SMART_FALLBACK_ALGORITHM_VERSION = "smart-derived-v1.7" as const;
 export const TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION = "smart-derived-v2.0-pilot" as const;
-export const TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION = "impl-rev1" as const;
+export const TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION = "impl-rev2" as const;
 
 const SUPPORTED_TURKEY_SMART_FALLBACK_ALGORITHM_VERSIONS = new Set<string>([
   TURKEY_SMART_FALLBACK_ALGORITHM_VERSION,
@@ -137,8 +142,17 @@ export interface TurkeyNetworkConstructionDiagnostics {
   preMergePieceCount: number;
   postMergePieceCount: number;
   candidateCount: number;
+  seedWatershedBarrierAudit?: TurkeySeedWatershedBarrierAudit;
 }
 export type TurkeySmartFallbackSourceStrategy = "barrier-guided" | "synthetic-last-resort";
+
+export interface TurkeySmartFallbackSeedCoverageDetail {
+  validSeedCount: number;
+  distinctMahalleSeedsRepresented: number;
+  seedsInOwnPolygonCount: number;
+  seedNameCollisionCount: number;
+  zonesWithoutSeedCount: number;
+}
 
 export type TurkeySmartFallbackIssueCode =
   | "OFFICIAL_ADM3_UNAVAILABLE"
@@ -463,6 +477,9 @@ export interface TurkeySmartFallbackQualityReport {
   unsupportedStraightChainCountAbove250m: number;
   unsupportedStraightChainCountAbove500m: number;
   seedCoverage: number;
+  seedCoverageDetail: TurkeySmartFallbackSeedCoverageDetail;
+  /** Internal boundaries counted once, weighted by shared-edge length (district-level). */
+  weightedInternalBarrierAlignment: number;
   meanQualityScore: number;
   minQualityScore: number;
   qualityDistribution: {
@@ -1893,7 +1910,7 @@ export function buildTurkeySmartFallback(
 
 /** Graph faces are construction material, not gameplay zones. Shared real edges
  * determine legal merges; incomplete graph coverage is left to Organic. */
-function assignSeedWatershedFaceLabels(input: {
+export function assignSeedWatershedFaceLabels(input: {
   faces: readonly TurkeyNetworkFace[];
   neighbours: ReadonlyMap<number, ReadonlyMap<number, { strength: number; length: number }>>;
   seeds: readonly TurkeySmartFallbackLocalitySeed[];
@@ -1951,7 +1968,10 @@ function assignSeedWatershedFaceLabels(input: {
       continue;
     }
     for (const [neighbor, edge] of input.neighbours.get(current.face) ?? []) {
-      const crossingCostMeters = edge.length / Math.max(edge.strength, 0.15);
+      const crossingCostMeters = turkeyBarrierGraphEdgeCrossingCostMeters(
+        edge.length,
+        edge.strength
+      );
       const nextDist = current.dist + crossingCostMeters;
       if (nextDist + 1e-6 < distance[neighbor]) {
         distance[neighbor] = nextDist;
@@ -1967,10 +1987,10 @@ function assignSeedWatershedFaceLabels(input: {
     }
     let bestNeighbor = -1;
     let bestSeed = -1;
-    let bestStrength = -1;
+    let bestStrength = Number.POSITIVE_INFINITY;
     for (const [neighbor, edge] of input.neighbours.get(faceIndex) ?? []) {
       const neighborSeed = seedLabels[neighbor];
-      if (neighborSeed === -1 || edge.strength <= bestStrength) {
+      if (neighborSeed === -1 || edge.strength >= bestStrength) {
         continue;
       }
       bestStrength = edge.strength;
@@ -2250,27 +2270,58 @@ function buildNetworkFirstPieces(input: {
       neighbours,
       seeds: input.seeds
     });
+    construction.seedWatershedBarrierAudit = auditSeedWatershedBarrierAssignments({
+      seedLabels,
+      neighbours
+    });
+    const mergeCandidates: Array<{
+      face: number;
+      neighbor: number;
+      strength: number;
+      length: number;
+    }> = [];
     for (let faceIndex = 0; faceIndex < faces.length; faceIndex++) {
+      if (seedLabels[faceIndex] === -1) {
+        continue;
+      }
       for (const [neighbor, edge] of neighbours.get(faceIndex) ?? []) {
-        if (seedLabels[faceIndex] !== seedLabels[neighbor] || seedLabels[faceIndex] === -1) {
+        if (seedLabels[neighbor] !== seedLabels[faceIndex]) {
           continue;
         }
-        const beforeLeft = find(faceIndex);
-        const beforeRight = find(neighbor);
-        if (beforeLeft === beforeRight) {
+        if (faceIndex > neighbor) {
           continue;
         }
-        if (
-          area[beforeLeft]! + area[beforeRight]! >
-          input.configuration.maxAreaKm2 + AREA_TOLERANCE_KM2
-        ) {
-          continue;
-        }
-        union(faceIndex, neighbor);
-        mergeCount++;
-        if (edge.strength < 0.45) {
-          weakBarrierMergeCount++;
-        }
+        mergeCandidates.push({
+          face: faceIndex,
+          neighbor,
+          strength: edge.strength,
+          length: edge.length
+        });
+      }
+    }
+    mergeCandidates.sort(
+      (left, right) =>
+        left.strength - right.strength ||
+        right.length - left.length ||
+        left.face - right.face ||
+        left.neighbor - right.neighbor
+    );
+    for (const candidate of mergeCandidates) {
+      const beforeLeft = find(candidate.face);
+      const beforeRight = find(candidate.neighbor);
+      if (beforeLeft === beforeRight) {
+        continue;
+      }
+      if (
+        area[beforeLeft]! + area[beforeRight]! >
+        input.configuration.maxAreaKm2 + AREA_TOLERANCE_KM2
+      ) {
+        continue;
+      }
+      union(candidate.face, candidate.neighbor);
+      mergeCount++;
+      if (candidate.strength < 0.45) {
+        weakBarrierMergeCount++;
       }
     }
   } else {
@@ -4027,6 +4078,58 @@ function createSmartFallbackZone(input: {
   };
 }
 
+export function assessTurkeySmartSeedCoverageDetail(
+  seeds: readonly TurkeySmartFallbackLocalitySeed[],
+  candidates: readonly ZoneCandidate[]
+): TurkeySmartFallbackSeedCoverageDetail {
+  const validSeedCount = seeds.length;
+  const seedById = new Map(seeds.map((seed) => [seedId(seed), seed]));
+  let seedsInOwnPolygonCount = 0;
+  for (const seed of seeds) {
+    const id = seedId(seed);
+    const soleOwner = candidates.find(
+      (candidate) =>
+        candidate.seedIds.length === 1 &&
+        candidate.seedIds[0] === id &&
+        pointInClippingGeometry(seed.coordinate, toClippingMultiPolygon(candidate.geometry))
+    );
+    if (soleOwner) {
+      seedsInOwnPolygonCount++;
+    }
+  }
+
+  const representedNames = new Set<string>();
+  const nameZoneCounts = new Map<string, number>();
+  let zonesWithoutSeedCount = 0;
+  for (const candidate of candidates) {
+    if (!candidate.seedIds.length) {
+      zonesWithoutSeedCount++;
+      continue;
+    }
+    const primarySeed = seedById.get(candidate.seedIds[0]!);
+    if (!primarySeed) {
+      continue;
+    }
+    const normalized = primarySeed.name.trim().toLocaleLowerCase("tr");
+    representedNames.add(normalized);
+    nameZoneCounts.set(normalized, (nameZoneCounts.get(normalized) ?? 0) + 1);
+  }
+  let seedNameCollisionCount = 0;
+  for (const count of nameZoneCounts.values()) {
+    if (count > 1) {
+      seedNameCollisionCount += count - 1;
+    }
+  }
+
+  return {
+    validSeedCount,
+    distinctMahalleSeedsRepresented: representedNames.size,
+    seedsInOwnPolygonCount,
+    seedNameCollisionCount,
+    zonesWithoutSeedCount
+  };
+}
+
 export function assessTurkeySmartPartitionAdequacy(input: {
   parentAreaKm2: number;
   territoryAreasKm2: readonly number[];
@@ -4204,8 +4307,11 @@ function inspectSmartFallbackQuality(input: {
       });
   const qualityScores = input.candidates.map((candidate) => candidate.quality.score);
   const assignedSeedIds = new Set(input.candidates.flatMap((candidate) => candidate.seedIds));
+  const seedCoverageDetail = assessTurkeySmartSeedCoverageDetail(input.seeds, input.candidates);
   const seedCoverage =
-    input.seeds.length === 0 ? 1 : roundMetric(assignedSeedIds.size / input.seeds.length);
+    input.seeds.length === 0
+      ? 1
+      : roundMetric(seedCoverageDetail.distinctMahalleSeedsRepresented / input.seeds.length);
   const strongBarrierCount = input.barriers.filter(
     (barrier) => barrier.strengthClass === "strong"
   ).length;
@@ -4544,6 +4650,8 @@ function inspectSmartFallbackQuality(input: {
         : []
     ),
     seedCoverage,
+    seedCoverageDetail,
+    weightedInternalBarrierAlignment: boundaryAlignment.realBarrierRatio,
     meanQualityScore,
     minQualityScore: minMetric(qualityScores),
     qualityDistribution,

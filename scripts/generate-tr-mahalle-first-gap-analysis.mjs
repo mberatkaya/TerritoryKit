@@ -37,7 +37,8 @@ const MODULE_MAP = [
   },
   {
     requirement: "Mahalle seed resolver",
-    implementation: "turkey-osm-barriers locality-seeds.json + normalizeLocalitySeeds in smart-fallback",
+    implementation:
+      "turkey-osm-barriers locality-seeds.json + normalizeLocalitySeeds in smart-fallback",
     gap: "Seed coverage düşük; nameSource=generated-index yaygın; resmi mahalle uydurma yok (doğru)"
   },
   {
@@ -76,12 +77,14 @@ const SMART_DERIVED_V2_GAPS = [
   {
     id: "v2-algorithm-version",
     status: "missing",
-    detail: "Kod yalnızca smart-derived-v1.7 kabul ediyor (SMART_FALLBACK_UNSUPPORTED_ALGORITHM aksi halde)."
+    detail:
+      "Kod yalnızca smart-derived-v1.7 kabul ediyor (SMART_FALLBACK_UNSUPPORTED_ALGORITHM aksi halde)."
   },
   {
     id: "seed-anchored-partition",
     status: "partial",
-    detail: "v1.7 seed ataması var; mahalle seed yoğunluğu ile bölüm sayısı hizası zayıf (özellikle kırsal)."
+    detail:
+      "v1.7 seed ataması var; mahalle seed yoğunluğu ile bölüm sayısı hizası zayıf (özellikle kırsal)."
   },
   {
     id: "coastline-assessment",
@@ -130,7 +133,9 @@ function extractProvince(registry, code) {
   if (!province) {
     return { code, status: "missing-from-registry" };
   }
-  const official = (province.sources ?? []).filter((s) => s.boundarySourceClass === "official-local");
+  const official = (province.sources ?? []).filter(
+    (s) => s.boundarySourceClass === "official-local"
+  );
   return {
     code,
     name: province.name,
@@ -184,11 +189,15 @@ async function main() {
   const humanApprovals = await readJson(
     "reports/tr-adm3/sprint-1-governance/human-approvals-required.json"
   );
-  const pilotSummary = await readJsonIfExists("reports/tr-adm3/sprint-2-istanbul/pilot-summary.json");
+  const pilotSummary = await readJsonIfExists(
+    "reports/tr-adm3/sprint-2-istanbul/pilot-summary.json"
+  );
   const rc8Decision = await readJsonIfExists(
     "reports/tr-adm3/national-geometry-remediation/final-decision.md"
   );
-  const sprint3Decision = await readJsonIfExists("reports/tr-adm3/sprint-3-national-rc/final-decision.md");
+  const sprint3Decision = await readJsonIfExists(
+    "reports/tr-adm3/sprint-3-national-rc/final-decision.md"
+  );
 
   const governanceDelta = {
     schemaVersion: "territorykit-tr-mahalle-first-governance-delta@1",
@@ -242,7 +251,8 @@ async function main() {
       mahalleFirstSmartDerivedV2: "not-started-in-main"
     },
     nationalMetrics: {
-      source: "reports/tr-adm3/audit/current-state.md + national-geometry-remediation/final-decision.md",
+      source:
+        "reports/tr-adm3/audit/current-state.md + national-geometry-remediation/final-decision.md",
       adm3ZoneCount: 20392,
       officialDistricts: "61 districts (Bursa, Gaziantep, Kayseri, Ordu)",
       estimatedAreaSharePercent: 95.002519987,

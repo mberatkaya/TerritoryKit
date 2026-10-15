@@ -118,6 +118,8 @@ describe("smart-derived-v2.0-pilot", () => {
         algorithmVersion: TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION
       });
     }
+    expect(v2.quality.weightedInternalBarrierAlignment).toBeGreaterThan(0);
+    expect(v2.quality.seedCoverageDetail.validSeedCount).toBe(seeds.length);
   });
 
   it("is deterministic for identical v2 inputs", async () => {

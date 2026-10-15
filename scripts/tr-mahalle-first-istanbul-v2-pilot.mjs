@@ -55,7 +55,8 @@ function summarizeDistrict(dataset, parentAdm2Id, label) {
     seedNamedZoneCount: seedNamed,
     seedNamedShare: zones.length ? round(seedNamed / zones.length) : 0,
     algorithmVersion,
-    administrativeOfficialCount: zones.filter((z) => territoryMeta(z).administrative === true).length
+    administrativeOfficialCount: zones.filter((z) => territoryMeta(z).administrative === true)
+      .length
   };
 }
 
@@ -64,12 +65,7 @@ function round(value) {
 }
 
 async function loadDistrictShard(adm2Suffix) {
-  const shardPath = path.join(
-    ARTIFACT_ROOT,
-    "districts",
-    `tr_adm2_${adm2Suffix}`,
-    "dataset.json"
-  );
+  const shardPath = path.join(ARTIFACT_ROOT, "districts", `tr_adm2_${adm2Suffix}`, "dataset.json");
   try {
     return { path: shardPath, dataset: await readJson(shardPath) };
   } catch {
