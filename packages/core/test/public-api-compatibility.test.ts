@@ -16,6 +16,7 @@ describe("public API compatibility", () => {
       "computeLngLatDistanceM",
       "computeTerritoryAreaM2",
       "computeTerritoryRepresentativePoint",
+      "createSettlementIdentityLookup",
       "createTerritoryBinarySpatialIndex",
       "createTerritoryCountryDatasetDescriptor",
       "createTerritoryDatasetVersionInfo",

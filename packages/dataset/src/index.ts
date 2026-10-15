@@ -7,8 +7,23 @@ export {
   computeTerritoryRepresentativePoint,
   createTerritoryGeometryVersion,
   geometryToPolygons,
-  hasRingSelfIntersection
+  hasRingSelfIntersection,
+  pointIntersectsGeometry
 } from "./geometry.js";
+export {
+  SETTLEMENT_ASSOCIATION_METHODS,
+  SETTLEMENT_ASSOCIATION_STATUSES,
+  SETTLEMENT_GEOMETRY_AVAILABILITY,
+  SETTLEMENT_IDENTITY_LAYER_SCHEMA_VERSION,
+  SETTLEMENT_LOCALITY_TYPES,
+  SETTLEMENT_PERMISSION_STATUSES,
+  SETTLEMENT_VERIFICATION_STATES,
+  buildSettlementIdentityLayer,
+  createSettlementIdFromSeed,
+  dedupeSettlementSeeds,
+  normalizeTurkishSettlementName,
+  resolveSettlementGeometryAvailability
+} from "./settlement-identity.js";
 export {
   applyTerritoryAdjacencyOverrides,
   canonicalTerritoryAdjacencyPair,
@@ -114,6 +129,23 @@ export type {
   TerritoryManualAdjacencyAdd,
   TerritoryManualAdjacencyRemove
 } from "./adjacency.js";
+export type { TerritoryPointBoundaryMode } from "./geometry.js";
+export type {
+  BuildSettlementIdentityLayerOptions,
+  GameplayTerritoryAssociation,
+  SettlementAssociationEvidence,
+  SettlementAssociationMethod,
+  SettlementAssociationStatus,
+  SettlementGeometryAvailability,
+  SettlementIdentity,
+  SettlementIdentityLayer,
+  SettlementIdentitySeedInput,
+  SettlementIdentitySourceProvenance,
+  SettlementIdentityZoneSummary,
+  SettlementLocalityType,
+  SettlementPermissionStatus,
+  SettlementVerificationState
+} from "./settlement-identity.js";
 export type {
   TerritoryAdminLevel,
   LngLat,

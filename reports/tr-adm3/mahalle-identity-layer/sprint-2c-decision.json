@@ -1,0 +1,112 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-sprint-2c-decision@1",
+  "generatedAt": "2026-10-15T18:54:16.018Z",
+  "district": "Fatih",
+  "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+  "technicalPilotDecision": "GO_WITH_REVIEW",
+  "productionReleaseReadiness": "NO_GO",
+  "rationale": [
+    "Gameplay rc.8 zone IDs and geometry hashes unchanged; identity layer is versioned separately.",
+    "Seed-only semantics explicitly non-authoritative; no official mahalle polygons promoted.",
+    "15 ambiguous zones require human review before auto display naming.",
+    "Official polygon acquisition remains the long-term precedence path."
+  ],
+  "metrics": {
+    "zoneCount": 30,
+    "ambiguousZoneCount": 15,
+    "singleSeedZoneCount": 10,
+    "unseededZoneCount": 5,
+    "distinctSeedsRepresented": 71
+  },
+  "immutability": {
+    "determinismVerified": true,
+    "zoneIdSetSha256": "334ba60d9e4bf65c2acfce7d3724e7bf430ec082ad897459a902c19d3660852f",
+    "geometryHashSetSha256": "3b4c2dd9214f6aa1023277a3426e100bd9c2902f5c06e4a49b2478e462866645",
+    "identityLayerContentChecksum": "fnv1a32:39d43195"
+  },
+  "consumerContract": {
+    "lookup": "createSettlementIdentityLookup (@territory-kit/core)",
+    "autoDisplayNameAllowedOnlyWhen": "zone summary associationStatus === single-candidate"
+  },
+  "nextIstanbulPilots": [
+    {
+      "district": "Kadıköy",
+      "note": "Blocked on official source acquisition / license review per Sprint 2 reports."
+    },
+    {
+      "district": "Eyüpsultan",
+      "note": "Sparse barrier network — expect lower seed coverage; identity layer still useful."
+    },
+    {
+      "district": "Adalar",
+      "note": "Coastline/multipolygon edge cases — validate boundary-point policy on islands."
+    }
+  ],
+  "lookupSmoke": {
+    "sampleZone": {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-01eda0ae60d28fc3a2c7",
+      "associations": [
+        {
+          "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-01eda0ae60d28fc3a2c7",
+          "settlementId": "tr:settlement:osm:node:4996909359",
+          "method": "point-containment-covers",
+          "status": "single-candidate",
+          "evidence": [
+            {
+              "reasonCode": "POINT_IN_ZONE",
+              "message": "Seed coordinate assigned via point-in-polygon (covers).",
+              "boundaryMode": "covers",
+              "seedCoordinate": [28.9281683, 41.0207107]
+            }
+          ],
+          "gameplayDatasetVersion": "2.1.0-rc.8",
+          "gameplayGeometryHash": "fnv1a32:2aba73f2",
+          "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
+          "reviewDecision": "approved"
+        }
+      ],
+      "settlements": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996909359",
+          "displayName": "Topkapı",
+          "normalizedName": "topkapı",
+          "localityType": "suburb",
+          "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+          "parentAdm1Id": "tr:adm1:34",
+          "parentAdm0Id": "tr:adm0:TR",
+          "seedCoordinate": [28.9281683, 41.0207107],
+          "sourceNativeId": "osm:node:4996909359",
+          "provenance": {
+            "providerId": "geofabrik-osm-extracts",
+            "providerName": "Geofabrik OpenStreetMap extracts",
+            "sourceDatasetId": "geofabrik:europe:turkey",
+            "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+            "snapshotDate": "2026-08-27T20:21:06.000Z",
+            "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+            "license": "ODbL-1.0",
+            "attribution": "OpenStreetMap contributors, ODbL 1.0",
+            "licenseState": "approved",
+            "permissionStatus": "redistribution-approved",
+            "sourceNativeId": "osm:node:4996909359"
+          },
+          "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
+          "identityChecksum": "fnv1a32:232057c4",
+          "verificationState": "locality-seed",
+          "administrativeStatus": "unknown",
+          "geometryAvailability": "seed-only",
+          "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+          "confidence": 0.58
+        }
+      ],
+      "associationStatus": "single-candidate",
+      "isAmbiguous": false,
+      "autoDisplayNameAllowed": true
+    },
+    "layerVersion": {
+      "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "contentChecksum": "fnv1a32:39d43195",
+      "generatedAt": "2026-10-15T18:54:16.018Z"
+    }
+  }
+}
