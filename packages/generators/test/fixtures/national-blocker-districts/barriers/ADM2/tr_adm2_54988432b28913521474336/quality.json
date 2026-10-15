@@ -1,0 +1,17 @@
+{
+  "adm2Id": "tr:adm2:54988432b28913521474336",
+  "barrierLengthKm": 4706.735457,
+  "inputCoverageConfidence": 1,
+  "issues": [],
+  "landuseFeatureCount": 188,
+  "localitySeedCount": 130,
+  "majorBarrierLengthKm": 1149.52067,
+  "majorRoadCount": 532,
+  "ok": true,
+  "parkFeatureCount": 5,
+  "railFeatureCount": 0,
+  "roadFeatureCount": 2700,
+  "schemaVersion": "territorykit-tr-osm-barrier-quality@1",
+  "status": "eligible",
+  "waterFeatureCount": 323
+}

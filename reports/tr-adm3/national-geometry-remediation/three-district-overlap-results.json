@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "territorykit-tr-national-geometry-remediation@1",
+  "gitCommit": "bd2b1e6b0a2092af694603363cba2fb5ee191798",
+  "generatedAt": "2026-10-14T10:36:29.189Z",
+  "districts": [
+    {
+      "adm2Id": "tr:adm2:54988432b81567150601582",
+      "districtName": "Ağrı merkez",
+      "provinceCode": "04",
+      "rc7SiblingOverlapIssueCount": 1,
+      "rootCause": "SMART_PARTITION_TOPOLOGY_NOISE_NORMALIZED_IN_QUALITY_GATE_PLUS_HYBRID_PREVALIDATED_PARTITION_SKIP",
+      "remediation": "enforceDisjointSmartFallbackZones + hybrid prevalidated fallback carve",
+      "postRemediationSiblingOverlapErrors": 0,
+      "testCommand": "pnpm --filter @territory-kit/generators test turkey-national-sibling-overlap-regression.test.ts",
+      "testOutcome": "PASS"
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "districtName": "İskenderun",
+      "provinceCode": "31",
+      "rc7SiblingOverlapIssueCount": 1,
+      "rootCause": "SMART_PARTITION_TOPOLOGY_NOISE_NORMALIZED_IN_QUALITY_GATE_PLUS_HYBRID_PREVALIDATED_PARTITION_SKIP",
+      "remediation": "enforceDisjointSmartFallbackZones + hybrid prevalidated fallback carve",
+      "postRemediationSiblingOverlapErrors": 0,
+      "testCommand": "pnpm --filter @territory-kit/generators test turkey-national-sibling-overlap-regression.test.ts",
+      "testOutcome": "PASS"
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b28913521474336",
+      "districtName": "Erbaa",
+      "provinceCode": "60",
+      "rc7SiblingOverlapIssueCount": 1,
+      "rootCause": "SMART_PARTITION_TOPOLOGY_NOISE_NORMALIZED_IN_QUALITY_GATE_PLUS_HYBRID_PREVALIDATED_PARTITION_SKIP",
+      "remediation": "enforceDisjointSmartFallbackZones + hybrid prevalidated fallback carve",
+      "postRemediationSiblingOverlapErrors": 0,
+      "testCommand": "pnpm --filter @territory-kit/generators test turkey-national-sibling-overlap-regression.test.ts",
+      "testOutcome": "PASS"
+    }
+  ],
+  "threeOverlapRemediation": "PASS"
+}

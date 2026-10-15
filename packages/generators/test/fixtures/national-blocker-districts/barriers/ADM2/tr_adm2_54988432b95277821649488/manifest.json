@@ -1,0 +1,39 @@
+{
+  "adm2Id": "tr:adm2:54988432b95277821649488",
+  "algorithmVersion": "tr-osm-barriers-v1.3",
+  "artifactChecksum": "9360a45db49181514911837163889d9c29301fa086d808cd3861fcb4db4a8b72",
+  "configurationHash": "f629e0106456787ad18a1696ba754c44d7b30b916616b5db03e64873a79bfcce",
+  "countryCode": "TR",
+  "counts": {
+    "landuse": 20,
+    "localitySeeds": 48,
+    "parks": 31,
+    "railways": 88,
+    "roads": 3731,
+    "water": 55
+  },
+  "generatedAt": "1970-01-01T00:00:00.000Z",
+  "hashes": {
+    "landuse": "8d192e832c37af98640ba84f8cbc411fa4d28995c29e7ac71d6a832d4a9fb92b",
+    "localitySeeds": "49107817e17942c84cc7c0e8cb4d9d8f8149061cafa188222cabbcfba3a2efba",
+    "parks": "d839d6317078687bb17fc957c5bd358ea0c0315105cb5baa3c0c2c24d0531efb",
+    "quality": "f08878e8cd53192bbeef5451c8ca9a0e76c20db0db3ac3775499b6fea005e9a9",
+    "railways": "ef00e6fbd7b2baedde110f6928d30ff77699023c0d202ea6534ba23562278eab",
+    "roads": "b9139f8db485dbeb2b6f62ca0d40b0225e54415f4c29cd375717bdf744ac3893",
+    "water": "b989273992d1a33aa6b3ccbaf0a63d2406997607b8d680bb93cf3c03dbfdc1ac"
+  },
+  "parentGeometryHash": "5ad853a931da48201d482168359b04e53ffee0bd47e473572ef3dcf22e957130",
+  "schemaVersion": "territorykit-tr-osm-barrier-artifact@1",
+  "source": {
+    "attribution": "OpenStreetMap contributors, ODbL 1.0",
+    "format": "osm-pbf",
+    "license": "ODbL-1.0",
+    "providerId": "geofabrik-osm-extracts",
+    "providerName": "Geofabrik OpenStreetMap extracts",
+    "snapshotDate": "2026-08-27T20:21:06.000Z",
+    "snapshotSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+    "sourceDatasetId": "geofabrik:europe:turkey",
+    "sourceUrl": "https://download.geofabrik.de/europe/turkey.html"
+  },
+  "sourceSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
+}

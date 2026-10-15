@@ -1831,7 +1831,96 @@ function buildEffectiveRealZones(input: {
   };
 }
 
+/** Matches national ADM3 sibling overlap evidence (area strictly above 1 m²). */
+const NATIONAL_SIBLING_OVERLAP_AREA_KM2 = 1 / 1_000_000;
+
+function countStrictSiblingGeometryOverlaps(zones: readonly TerritoryZone[]): number {
+  if (zones.length < 2) {
+    return 0;
+  }
+
+  return validateGeometryDataset(
+    {
+      manifest: {
+        datasetId: "tr-v2-hybrid-sibling-validation",
+        datasetVersion: "0",
+        schemaVersion: TERRITORY_SCHEMA_VERSION,
+        sourceDate: "1970-01-01",
+        geometryHash: "00"
+      },
+      zones: [...zones]
+    },
+    {
+      checks: {
+        coordinates: false,
+        rings: false,
+        selfIntersections: false,
+        holes: false,
+        bbox: false,
+        center: false,
+        antimeridian: false,
+        parentContainment: false,
+        siblingOverlaps: true
+      }
+    }
+  ).issues.filter(
+    (issue) => issue.code === "SIBLING_GEOMETRY_OVERLAP" && issue.severity === "error"
+  ).length;
+}
+
+function hasNationalSiblingOverlapAmongGenerated(zones: readonly TerritoryZone[]): boolean {
+  if (countStrictSiblingGeometryOverlaps(zones) > 0) {
+    return true;
+  }
+
+  const sorted = sortZones(zones);
+  for (let index = 0; index < sorted.length; index += 1) {
+    const left = sorted[index];
+    if (!left) continue;
+    for (let nextIndex = index + 1; nextIndex < sorted.length; nextIndex += 1) {
+      const right = sorted[nextIndex];
+      if (!right) continue;
+      const overlapKm2 = clippingAreaKm2(
+        intersectClippingGeometries(
+          toClippingMultiPolygon(left.geometry),
+          toClippingMultiPolygon(right.geometry)
+        )
+      );
+      if (overlapKm2 > NATIONAL_SIBLING_OVERLAP_AREA_KM2) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 function buildEffectiveGeneratedZones(input: {
+  prevalidatedPartition?: boolean;
+  district: TerritoryZone;
+  provinceCode: string;
+  districtCode: string;
+  districtGeometry: ClippingMultiPolygon;
+  realMask: ClippingMultiPolygon;
+  zones: readonly TerritoryZone[];
+  minimumEffectiveAreaKm2: number;
+  buildDate: string;
+  configurationHash: string;
+}): { zones: TerritoryZone[]; sliverAreaKm2: number } {
+  const built = buildEffectiveGeneratedZonesInternal(input);
+  if (
+    input.prevalidatedPartition &&
+    built.zones.length > 1 &&
+    hasNationalSiblingOverlapAmongGenerated(built.zones)
+  ) {
+    return buildEffectiveGeneratedZonesInternal({
+      ...input,
+      prevalidatedPartition: false
+    });
+  }
+  return built;
+}
+
+function buildEffectiveGeneratedZonesInternal(input: {
   prevalidatedPartition?: boolean;
   district: TerritoryZone;
   provinceCode: string;
@@ -2377,37 +2466,7 @@ function createQualityReport(input: {
   smartFallbackResult?: TurkeySmartFallbackBuildResult;
   deterministicHash: string;
 }): TurkeyV2HybridQualityReport {
-  const siblingOverlapIssues = validateGeometryDataset(input.dataset, {
-    checks: {
-      coordinates: false,
-      rings: false,
-      selfIntersections: false,
-      holes: false,
-      bbox: false,
-      center: false,
-      antimeridian: false,
-      parentContainment: false,
-      siblingOverlaps: true
-    }
-  }).issues.filter(
-    (issue) => issue.code === "SIBLING_GEOMETRY_OVERLAP" && issue.severity === "error"
-  );
-  const zonesById = new Map(input.zones.map((zone) => [zone.id, zone]));
-  // The predicate can flag sub-metre precision slivers along a shared edge.
-  // Check the actual clipped intersection before treating one as an overlap.
-  const finalOverlaps = siblingOverlapIssues.filter((issue) => {
-    const left = issue.zoneId && zonesById.get(issue.zoneId);
-    const right = issue.otherZoneId && zonesById.get(issue.otherZoneId);
-    if (!left || !right) return true;
-    return (
-      clippingAreaKm2(
-        intersectClippingGeometries(
-          toClippingMultiPolygon(left.geometry),
-          toClippingMultiPolygon(right.geometry)
-        )
-      ) > Math.min(input.overlapToleranceKm2, 0.000001)
-    );
-  }).length;
+  const finalOverlaps = countStrictSiblingGeometryOverlaps(input.zones);
   const parentContainmentErrors = computeParentContainmentErrors(
     input.district,
     input.zones,

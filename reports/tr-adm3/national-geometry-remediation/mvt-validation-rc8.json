@@ -1,0 +1,208 @@
+{
+  "schemaVersion": "territorykit-tr-mvt-validation-rc8@1",
+  "candidateRoot": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+  "tileInventory": {
+    "present": true,
+    "count": 18856
+  },
+  "deliveryManifestPath": null,
+  "deliveryManifestPresent": false,
+  "sourceLayerContract": {
+    "deliveryManifestSourceLayer": null,
+    "renderManifestSourceLayer": "territory_adm3",
+    "renderArtifactLayerId": "territory-adm3",
+    "consumerSourceLayerContract": "territory_adm3"
+  },
+  "deliveryReadinessGate": {
+    "pass": true,
+    "gate": "PASS",
+    "sourceLayerReady": true,
+    "fullMvtDeliveryReady": true,
+    "sourceLayerGate": "PASS",
+    "districtRepresentativeGate": "PASS",
+    "layerOk": true,
+    "districtVerifiedCount": 5,
+    "districtMetadataAbsentCount": 0,
+    "manifestMismatchCount": 0,
+    "insufficientEvidenceCount": 0
+  },
+  "representativeSamples": [
+    {
+      "label": "Fatih",
+      "adm2Id": "tr:adm2:54988432b39641834885080",
+      "tilePath": "render/tiles/10/594/383.mvt",
+      "byteSize": 128356,
+      "consumerSourceLayerContract": "territory_adm3",
+      "deliveryManifestSourceLayer": null,
+      "renderManifestSourceLayer": "territory_adm3",
+      "renderArtifactLayerId": "territory-adm3",
+      "territoryAdm3FeatureCount": 414,
+      "classification": "ACTUAL_LAYER_MATCH",
+      "encodedProtobufLayer": "territory_adm3",
+      "layerIds": ["territory_adm3"],
+      "districtClassification": "DISTRICT_VERIFIED",
+      "parentAdm2MetadataPresent": true,
+      "districtFeatureIndex": 54,
+      "sampleProperties": {
+        "territoryId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-01eda0ae60d28fc3a2c7",
+        "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+        "sourceClass": "generated",
+        "boundaryKind": "estimated",
+        "confidence": "high",
+        "administrative": false
+      },
+      "firstFeatureParentAdm2Id": "tr:adm2:54988432b10954011235531",
+      "firstFeatureTerritoryId": "tr:adm3:tr-il-34-ilce-54988432b10954011235531-generated-smart-derived-v1-7-05d430c98ba47dbed6cf",
+      "wrongDistrictIfUsedFirstFeature": false
+    },
+    {
+      "label": "Kadıköy",
+      "adm2Id": "tr:adm2:54988432b89638439219394",
+      "tilePath": "render/tiles/10/594/383.mvt",
+      "byteSize": 128356,
+      "consumerSourceLayerContract": "territory_adm3",
+      "deliveryManifestSourceLayer": null,
+      "renderManifestSourceLayer": "territory_adm3",
+      "renderArtifactLayerId": "territory-adm3",
+      "territoryAdm3FeatureCount": 414,
+      "classification": "ACTUAL_LAYER_MATCH",
+      "encodedProtobufLayer": "territory_adm3",
+      "layerIds": ["territory_adm3"],
+      "districtClassification": "DISTRICT_VERIFIED",
+      "parentAdm2MetadataPresent": true,
+      "districtFeatureIndex": 370,
+      "sampleProperties": {
+        "territoryId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-0b8d46dfaff46a87d676",
+        "parentAdm2Id": "tr:adm2:54988432b89638439219394",
+        "sourceClass": "generated",
+        "boundaryKind": "estimated",
+        "confidence": "high",
+        "administrative": false
+      },
+      "firstFeatureParentAdm2Id": "tr:adm2:54988432b10954011235531",
+      "firstFeatureTerritoryId": "tr:adm3:tr-il-34-ilce-54988432b10954011235531-generated-smart-derived-v1-7-05d430c98ba47dbed6cf",
+      "wrongDistrictIfUsedFirstFeature": false
+    },
+    {
+      "label": "Ağrı merkez",
+      "adm2Id": "tr:adm2:54988432b81567150601582",
+      "tilePath": "render/tiles/10/634/388.mvt",
+      "byteSize": 5928,
+      "consumerSourceLayerContract": "territory_adm3",
+      "deliveryManifestSourceLayer": null,
+      "renderManifestSourceLayer": "territory_adm3",
+      "renderArtifactLayerId": "territory-adm3",
+      "territoryAdm3FeatureCount": 14,
+      "classification": "ACTUAL_LAYER_MATCH",
+      "encodedProtobufLayer": "territory_adm3",
+      "layerIds": ["territory_adm3"],
+      "districtClassification": "DISTRICT_VERIFIED",
+      "parentAdm2MetadataPresent": true,
+      "districtFeatureIndex": 5,
+      "sampleProperties": {
+        "territoryId": "tr:adm3:tr-il-04-ilce-54988432b81567150601582-generated-smart-derived-v1-7-0533b66180b3e5e964b2",
+        "parentAdm2Id": "tr:adm2:54988432b81567150601582",
+        "sourceClass": "generated",
+        "boundaryKind": "estimated",
+        "confidence": "low",
+        "administrative": false
+      },
+      "firstFeatureParentAdm2Id": "tr:adm2:54988432b69584017445691",
+      "firstFeatureTerritoryId": "tr:adm3:tr-il-04-ilce-54988432b69584017445691-generated-smart-derived-v1-7-79975d011146a0cec2cd",
+      "wrongDistrictIfUsedFirstFeature": false
+    },
+    {
+      "label": "İskenderun",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "tilePath": "render/tiles/10/614/400.mvt",
+      "byteSize": 16638,
+      "consumerSourceLayerContract": "territory_adm3",
+      "deliveryManifestSourceLayer": null,
+      "renderManifestSourceLayer": "territory_adm3",
+      "renderArtifactLayerId": "territory-adm3",
+      "territoryAdm3FeatureCount": 38,
+      "classification": "ACTUAL_LAYER_MATCH",
+      "encodedProtobufLayer": "territory_adm3",
+      "layerIds": ["territory_adm3"],
+      "districtClassification": "DISTRICT_VERIFIED",
+      "parentAdm2MetadataPresent": true,
+      "districtFeatureIndex": 26,
+      "sampleProperties": {
+        "territoryId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-08e95a7eb1716b81bd43",
+        "parentAdm2Id": "tr:adm2:54988432b95277821649488",
+        "sourceClass": "generated",
+        "boundaryKind": "estimated",
+        "confidence": "low",
+        "administrative": false
+      },
+      "firstFeatureParentAdm2Id": "tr:adm2:54988432b25026961514665",
+      "firstFeatureTerritoryId": "tr:adm3:tr-il-31-ilce-54988432b25026961514665-generated-smart-derived-v1-7-bcdeca785b0318457a6a",
+      "wrongDistrictIfUsedFirstFeature": false
+    },
+    {
+      "label": "Erbaa",
+      "adm2Id": "tr:adm2:54988432b28913521474336",
+      "tilePath": "render/tiles/10/616/385.mvt",
+      "byteSize": 11851,
+      "consumerSourceLayerContract": "territory_adm3",
+      "deliveryManifestSourceLayer": null,
+      "renderManifestSourceLayer": "territory_adm3",
+      "renderArtifactLayerId": "territory-adm3",
+      "territoryAdm3FeatureCount": 25,
+      "classification": "ACTUAL_LAYER_MATCH",
+      "encodedProtobufLayer": "territory_adm3",
+      "layerIds": ["territory_adm3"],
+      "districtClassification": "DISTRICT_VERIFIED",
+      "parentAdm2MetadataPresent": true,
+      "districtFeatureIndex": 10,
+      "sampleProperties": {
+        "territoryId": "tr:adm3:tr-il-60-ilce-54988432b28913521474336-generated-smart-derived-v1-7-30a7f491940d0dff7b87",
+        "parentAdm2Id": "tr:adm2:54988432b28913521474336",
+        "sourceClass": "generated",
+        "boundaryKind": "estimated",
+        "confidence": "low",
+        "administrative": false
+      },
+      "firstFeatureParentAdm2Id": "tr:adm2:54988432b20612067222805",
+      "firstFeatureTerritoryId": "tr:adm3:tr-il-52-adm2-54988432b20612067222805-150971",
+      "wrongDistrictIfUsedFirstFeature": false
+    }
+  ],
+  "checksumSpotChecks": {
+    "levels": {
+      "verified": 6,
+      "checked": 6,
+      "totalListed": 6,
+      "mismatches": []
+    },
+    "districtShards": {
+      "verified": 25,
+      "checked": 25,
+      "totalListed": 973,
+      "mismatches": []
+    },
+    "shardsContentHash": "370eea6d0ea7fd9af0ace473c020fa9de5cedec6becaa38e842dd8ae1286bd7b"
+  },
+  "rc7FullMvtDeliveryBlockers": {
+    "pass": false,
+    "gate": "FAIL",
+    "sourceLayerReady": true,
+    "fullMvtDeliveryReady": false,
+    "sourceLayerGate": "PASS",
+    "districtRepresentativeGate": "FAIL",
+    "layerOk": true,
+    "districtVerifiedCount": 0,
+    "districtMetadataAbsentCount": 8,
+    "manifestMismatchCount": 0,
+    "insufficientEvidenceCount": 0
+  },
+  "blockerDelta": {
+    "deliveryManifestArtifact": "OPEN — rc.8 candidate has render/manifest.json but no delivery-manifest.json (rc.7 had delivery-manifest*.json).",
+    "renderManifestSourceLayer": "territory_adm3",
+    "sourceLayerReady": "CLOSED — encoded layer territory_adm3 verified on samples.",
+    "parentAdm2IdOnSamples": 5,
+    "featureMetadataAbsentSamples": 0,
+    "fullMvtDeliveryReady": true,
+    "note": "rc.7 districtRepresentativeGate failed when parentAdm2Id metadata absent on sampled features; re-evaluate with rc.8 bytes."
+  }
+}
