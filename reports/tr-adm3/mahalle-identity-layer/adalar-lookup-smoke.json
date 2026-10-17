@@ -1,0 +1,246 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-lookup-smoke@1",
+  "generatedAt": "2026-10-17T12:48:26.435Z",
+  "district": "Adalar",
+  "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+  "consumerLoadOk": true,
+  "validationIssueCodes": [],
+  "sampleZone": {
+    "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-2c554a5f5c64beb7bddd",
+    "associations": [
+      {
+        "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-2c554a5f5c64beb7bddd",
+        "settlementId": "tr:settlement:osm:node:1904383172",
+        "method": "point-containment-covers",
+        "status": "review-required",
+        "evidence": [
+          {
+            "reasonCode": "POINT_IN_ZONE",
+            "message": "Seed coordinate assigned via point-in-polygon (covers).",
+            "boundaryMode": "covers",
+            "seedCoordinate": [29.1146, 40.8480322]
+          }
+        ],
+        "gameplayDatasetVersion": "2.1.0-rc.8",
+        "gameplayGeometryHash": "fnv1a32:a2612fff",
+        "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+        "reviewDecision": "pending",
+        "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+      },
+      {
+        "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-2c554a5f5c64beb7bddd",
+        "settlementId": "tr:settlement:osm:node:14116365738",
+        "method": "point-containment-covers",
+        "status": "review-required",
+        "evidence": [
+          {
+            "reasonCode": "POINT_IN_ZONE",
+            "message": "Seed coordinate assigned via point-in-polygon (covers).",
+            "boundaryMode": "covers",
+            "seedCoordinate": [29.1150194, 40.8398409]
+          }
+        ],
+        "gameplayDatasetVersion": "2.1.0-rc.8",
+        "gameplayGeometryHash": "fnv1a32:a2612fff",
+        "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+        "reviewDecision": "pending",
+        "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+      },
+      {
+        "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-2c554a5f5c64beb7bddd",
+        "settlementId": "tr:settlement:osm:node:677532052",
+        "method": "point-containment-covers",
+        "status": "review-required",
+        "evidence": [
+          {
+            "reasonCode": "POINT_IN_ZONE",
+            "message": "Seed coordinate assigned via point-in-polygon (covers).",
+            "boundaryMode": "covers",
+            "seedCoordinate": [29.1200487, 40.8579661]
+          }
+        ],
+        "gameplayDatasetVersion": "2.1.0-rc.8",
+        "gameplayGeometryHash": "fnv1a32:a2612fff",
+        "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+        "reviewDecision": "pending",
+        "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+      },
+      {
+        "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-2c554a5f5c64beb7bddd",
+        "settlementId": "tr:settlement:osm:node:14113780115",
+        "method": "point-containment-covers",
+        "status": "review-required",
+        "evidence": [
+          {
+            "reasonCode": "POINT_IN_ZONE",
+            "message": "Seed coordinate assigned via point-in-polygon (covers).",
+            "boundaryMode": "covers",
+            "seedCoordinate": [29.1197691, 40.8535203]
+          }
+        ],
+        "gameplayDatasetVersion": "2.1.0-rc.8",
+        "gameplayGeometryHash": "fnv1a32:a2612fff",
+        "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+        "reviewDecision": "pending",
+        "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+      }
+    ],
+    "settlements": [
+      {
+        "settlementId": "tr:settlement:osm:node:1904383172",
+        "sourceReferenceId": "geofabrik-osm-extracts:osm:node:1904383172",
+        "canonicalIdentityKey": "fnv1a32:2c9426f0",
+        "displayName": "Eskibağ",
+        "normalizedName": "eskibağ",
+        "localityType": "locality",
+        "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+        "parentAdm1Id": "tr:adm1:34",
+        "parentAdm0Id": "tr:adm0:TR",
+        "seedCoordinate": [29.1146, 40.8480322],
+        "sourceNativeId": "osm:node:1904383172",
+        "provenance": {
+          "providerId": "geofabrik-osm-extracts",
+          "providerName": "Geofabrik OpenStreetMap extracts",
+          "sourceDatasetId": "geofabrik:europe:turkey",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "snapshotDate": "2026-08-27T20:21:06.000Z",
+          "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "licenseState": "pending",
+          "permissionStatus": "redistribution-unknown",
+          "sourceLockState": "unknown",
+          "redistributionEvidenceState": "pending",
+          "sourceNativeId": "osm:node:1904383172"
+        },
+        "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+        "identityChecksum": "fnv1a32:c2fcdc71",
+        "verificationState": "locality-seed",
+        "administrativeStatus": "unknown",
+        "geometryAvailability": "seed-only",
+        "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+        "polygonEvidenceState": "none",
+        "confidence": 0.58
+      },
+      {
+        "settlementId": "tr:settlement:osm:node:14116365738",
+        "sourceReferenceId": "geofabrik-osm-extracts:osm:node:14116365738",
+        "canonicalIdentityKey": "fnv1a32:44bb9e2b",
+        "displayName": "Güvercinlik",
+        "normalizedName": "güvercinlik",
+        "localityType": "locality",
+        "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+        "parentAdm1Id": "tr:adm1:34",
+        "parentAdm0Id": "tr:adm0:TR",
+        "seedCoordinate": [29.1150194, 40.8398409],
+        "sourceNativeId": "osm:node:14116365738",
+        "provenance": {
+          "providerId": "geofabrik-osm-extracts",
+          "providerName": "Geofabrik OpenStreetMap extracts",
+          "sourceDatasetId": "geofabrik:europe:turkey",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "snapshotDate": "2026-08-27T20:21:06.000Z",
+          "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "licenseState": "pending",
+          "permissionStatus": "redistribution-unknown",
+          "sourceLockState": "unknown",
+          "redistributionEvidenceState": "pending",
+          "sourceNativeId": "osm:node:14116365738"
+        },
+        "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+        "identityChecksum": "fnv1a32:209d745f",
+        "verificationState": "locality-seed",
+        "administrativeStatus": "unknown",
+        "geometryAvailability": "seed-only",
+        "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+        "polygonEvidenceState": "none",
+        "confidence": 0.58
+      },
+      {
+        "settlementId": "tr:settlement:osm:node:677532052",
+        "sourceReferenceId": "geofabrik-osm-extracts:osm:node:677532052",
+        "canonicalIdentityKey": "fnv1a32:cbfb6853",
+        "displayName": "Lunapark",
+        "normalizedName": "lunapark",
+        "localityType": "locality",
+        "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+        "parentAdm1Id": "tr:adm1:34",
+        "parentAdm0Id": "tr:adm0:TR",
+        "seedCoordinate": [29.1200487, 40.8579661],
+        "sourceNativeId": "osm:node:677532052",
+        "provenance": {
+          "providerId": "geofabrik-osm-extracts",
+          "providerName": "Geofabrik OpenStreetMap extracts",
+          "sourceDatasetId": "geofabrik:europe:turkey",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "snapshotDate": "2026-08-27T20:21:06.000Z",
+          "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "licenseState": "pending",
+          "permissionStatus": "redistribution-unknown",
+          "sourceLockState": "unknown",
+          "redistributionEvidenceState": "pending",
+          "sourceNativeId": "osm:node:677532052"
+        },
+        "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+        "identityChecksum": "fnv1a32:a5fcaf9c",
+        "verificationState": "locality-seed",
+        "administrativeStatus": "unknown",
+        "geometryAvailability": "seed-only",
+        "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+        "polygonEvidenceState": "none",
+        "confidence": 0.58
+      },
+      {
+        "settlementId": "tr:settlement:osm:node:14113780115",
+        "sourceReferenceId": "geofabrik-osm-extracts:osm:node:14113780115",
+        "canonicalIdentityKey": "fnv1a32:3eeffd2c",
+        "displayName": "Orman 177 Çeşmesi (2011)",
+        "normalizedName": "orman 177 çeşmesi (2011)",
+        "localityType": "locality",
+        "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+        "parentAdm1Id": "tr:adm1:34",
+        "parentAdm0Id": "tr:adm0:TR",
+        "seedCoordinate": [29.1197691, 40.8535203],
+        "sourceNativeId": "osm:node:14113780115",
+        "provenance": {
+          "providerId": "geofabrik-osm-extracts",
+          "providerName": "Geofabrik OpenStreetMap extracts",
+          "sourceDatasetId": "geofabrik:europe:turkey",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "snapshotDate": "2026-08-27T20:21:06.000Z",
+          "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "licenseState": "pending",
+          "permissionStatus": "redistribution-unknown",
+          "sourceLockState": "unknown",
+          "redistributionEvidenceState": "pending",
+          "sourceNativeId": "osm:node:14113780115"
+        },
+        "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+        "identityChecksum": "fnv1a32:a74d57ce",
+        "verificationState": "locality-seed",
+        "administrativeStatus": "unknown",
+        "geometryAvailability": "seed-only",
+        "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+        "polygonEvidenceState": "none",
+        "confidence": 0.58
+      }
+    ],
+    "associationStatus": "multiple-candidates",
+    "zoneResolution": "associated",
+    "isAmbiguous": true,
+    "autoDisplayNameAllowed": false,
+    "consumerNameSemantics": "ambiguous-seed-labels"
+  },
+  "layerVersion": {
+    "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+    "gameplayDatasetVersion": "2.1.0-rc.8",
+    "contentChecksum": "fnv1a32:253aaa6a",
+    "generatedAt": "2026-10-17T12:48:26.435Z"
+  }
+}

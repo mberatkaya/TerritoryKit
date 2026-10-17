@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-consumer-pin@1",
+  "district": "Esenyurt",
+  "parentAdm2Id": "tr:adm2:54988432b2777192469074",
+  "gameplayDatasetId": "territory-kit-tr-v2-playable-adm3-tr-adm2-54988432b2777192469074",
+  "gameplayDatasetVersion": "2.1.0-rc.8",
+  "zoneIdSetSha256": "27479c5393d3a89798c0a87ffe770aed0664f9751f4f1967177d01fcd0920258",
+  "geometryHashSetSha256": "08134ba145fc2a2f5e184b72877515cf4375b64cdad87701ec03f9853140454c",
+  "identityLayerContentChecksum": "fnv1a32:f024361a",
+  "associationCounts": {
+    "zoneCount": 36,
+    "settlementCount": 47,
+    "ambiguousZoneCount": 15,
+    "singleCandidateZoneCount": 2,
+    "unseededZoneCount": 19
+  },
+  "sourceExpectations": {
+    "requireSourceLockVerified": false,
+    "missingSourceReasonCode": "SOURCE_LOCK_MISSING",
+    "osmSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
+  }
+}

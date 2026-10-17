@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-coverage@1",
+  "generatedAt": "2026-10-17T12:48:26.931Z",
+  "district": "Kadıköy",
+  "parentAdm2Id": "tr:adm2:54988432b89638439219394",
+  "gameplayDatasetVersion": "2.1.0-rc.8",
+  "identityLayerVersion": "tr-mahalle-identity-kadikoy-pilot@2026-10-17",
+  "contentChecksum": "fnv1a32:76833ca1",
+  "associationCoverage": {
+    "seededZoneCount": 19,
+    "unseededZoneCount": 9,
+    "singleCandidateZoneCount": 11,
+    "ambiguousZoneCount": 8,
+    "seedCount": 35,
+    "associationCount": 35
+  },
+  "officialPolygonCoverage": {
+    "settlementCountWithOfficialPolygon": 0,
+    "settlementCountWithOsmAdminPolygon": 0,
+    "settlementCountSeedOnly": 35,
+    "note": "Municipal mahalle SHP bundle remains BLOCKED_BY_SOURCE (structurally invalid acquisition); identity layer uses OSM seeds only."
+  },
+  "officialDataPolicy": {
+    "status": "BLOCKED_BY_SOURCE",
+    "acquisitionEvidencePath": "reports/tr-adm3/audit/kadikoy-acquisition.json",
+    "licenseReview": "REVIEW_REQUIRED",
+    "note": "Do not treat seed associations as licensed official mahalle boundaries."
+  },
+  "sourcePrecedence": [
+    "approved-official-polygon",
+    "reviewed-osm-administrative-polygon",
+    "seed-only-semantic-association",
+    "unknown"
+  ],
+  "provenance": {
+    "gameplayShard": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1/districts/tr_adm2_54988432b89638439219394/dataset.json",
+    "rc8Root": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+    "barrierRoot": ".territory/sprint-6/calibration/barriers",
+    "osmSourceLock": null,
+    "osmSourceLockState": "unknown",
+    "barrierManifestChecksum": "0991e329c11c6f98a5407d186afcd48e3e9e656496d6524dd408446cfd1bc919",
+    "datasetSourceChecksum": "aba6add23dd17515bdff2262c9d64968c3e97d21d84cb435ff810d283bc05fac",
+    "missingSourceReasonCode": "SOURCE_LOCK_MISSING"
+  },
+  "licenseChecks": {
+    "osmLicense": "ODbL-1.0",
+    "licenseState": "pending",
+    "permissionStatus": "redistribution-unknown",
+    "redistributionApproved": false,
+    "redistributionEvidenceState": "pending",
+    "commercialUseRequiresSeparateReview": true,
+    "hostedTileDeliveryRequiresSeparateReview": true
+  }
+}

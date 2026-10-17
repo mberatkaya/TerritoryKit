@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-coverage@1",
+  "generatedAt": "2026-10-17T12:48:27.640Z",
+  "district": "Çatalca",
+  "parentAdm2Id": "tr:adm2:54988432b71345383711908",
+  "gameplayDatasetVersion": "2.1.0-rc.8",
+  "identityLayerVersion": "tr-mahalle-identity-catalca-pilot@2026-10-17",
+  "contentChecksum": "fnv1a32:3e67f8e1",
+  "associationCoverage": {
+    "seededZoneCount": 13,
+    "unseededZoneCount": 6,
+    "singleCandidateZoneCount": 1,
+    "ambiguousZoneCount": 12,
+    "seedCount": 248,
+    "associationCount": 248
+  },
+  "officialPolygonCoverage": {
+    "settlementCountWithOfficialPolygon": 0,
+    "settlementCountWithOsmAdminPolygon": 0,
+    "settlementCountSeedOnly": 248,
+    "note": "Rural/low road-density district; wide unseeded zones expected."
+  },
+  "sourcePrecedence": [
+    "approved-official-polygon",
+    "reviewed-osm-administrative-polygon",
+    "seed-only-semantic-association",
+    "unknown"
+  ],
+  "provenance": {
+    "gameplayShard": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1/districts/tr_adm2_54988432b71345383711908/dataset.json",
+    "rc8Root": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+    "barrierRoot": ".territory/sprint-6/calibration/barriers",
+    "osmSourceLock": null,
+    "osmSourceLockState": "unknown",
+    "barrierManifestChecksum": "aef684d8896eabcf993617fc9133306a258c5dad855b8f035573dbfe14cc01a0",
+    "datasetSourceChecksum": "c2d53ea795e813f5abe4377dee0bc8ed7374f845b9acd99584daa1156197fe15",
+    "missingSourceReasonCode": "SOURCE_LOCK_MISSING"
+  },
+  "licenseChecks": {
+    "osmLicense": "ODbL-1.0",
+    "licenseState": "pending",
+    "permissionStatus": "redistribution-unknown",
+    "redistributionApproved": false,
+    "redistributionEvidenceState": "pending",
+    "commercialUseRequiresSeparateReview": true,
+    "hostedTileDeliveryRequiresSeparateReview": true
+  }
+}

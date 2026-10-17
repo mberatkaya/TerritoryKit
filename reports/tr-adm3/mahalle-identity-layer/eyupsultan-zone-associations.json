@@ -1,0 +1,1922 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-zone-associations@1",
+  "generatedAt": "2026-10-17T12:48:26.725Z",
+  "district": "Eyüpsultan",
+  "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+  "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+  "contentChecksum": "fnv1a32:9874c5c0",
+  "boundaryMode": "covers",
+  "associations": [
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-0200d0465d99bdafe32c",
+      "settlementId": "tr:settlement:osm:node:4996879560",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9276515, 41.0848272]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:ab4dafb2",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-0200d0465d99bdafe32c",
+      "settlementId": "tr:settlement:osm:node:4996879558",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9382959, 41.0798955]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:ab4dafb2",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-0200d0465d99bdafe32c",
+      "settlementId": "tr:settlement:osm:node:4996879569",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.934217, 41.0747846]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:ab4dafb2",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-0200d0465d99bdafe32c",
+      "settlementId": "tr:settlement:osm:node:4996879575",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9195063, 41.0785373]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:ab4dafb2",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-07c1dc2d3cf671d02031",
+      "settlementId": "tr:settlement:osm:node:9680915083",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8227504, 41.1634042]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:cba0a1ad",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-07c1dc2d3cf671d02031",
+      "settlementId": "tr:settlement:osm:node:2408296587",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8506496, 41.1632307]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:cba0a1ad",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-07c1dc2d3cf671d02031",
+      "settlementId": "tr:settlement:osm:node:9680920124",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8202478, 41.140705]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:cba0a1ad",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:6814513128",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8753422, 41.2658576]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:12091286753",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8967037, 41.2281522]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:12091286834",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8315046, 41.2015027]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:2131081582",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9078193, 41.2531131]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:10949109368",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8778664, 41.1801736]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:10949109381",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9274725, 41.2610643]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:12091286771",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8377488, 41.2218177]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:8582643103",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8909689, 41.1787211]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:12091286773",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8557625, 41.2299455]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:2291073253",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8266251, 41.2267337]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:10949109375",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8550384, 41.2218233]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:12962159756",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8516971, 41.2064468]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:12091286837",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8580477, 41.1911774]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:10949109372",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8753224, 41.2002899]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:8582643106",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9131384, 41.1588592]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:12091286686",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9055604, 41.1989962]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:2377597049",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8902954, 41.2301033]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:8582643104",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9135587, 41.1604821]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:8582643102",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8538837, 41.2361051]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:12091286774",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8674784, 41.2294997]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:9062385877",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9502621, 41.1665886]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "settlementId": "tr:settlement:osm:node:12091286838",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8622105, 41.1865106]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:528f717a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689766",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8185334, 41.2724283]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:1939786461",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.809507, 41.280502]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689765",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8105619, 41.2734282]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689747",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.7975049, 41.2840469]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689773",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8305175, 41.2525848]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689787",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.79942, 41.2467205]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689781",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.7827957, 41.2732991]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689769",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.821001, 41.2678077]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689782",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.7839007, 41.2697672]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689754",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8221598, 41.2775404]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689778",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.7969792, 41.2703317]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689749",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8193702, 41.2920924]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689800",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.7906599, 41.2424329]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689767",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8309038, 41.2726621]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689751",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8238334, 41.2868686]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:2291073307",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8081807, 41.240585]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689776",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8127935, 41.2510563]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689786",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8013861, 41.2469282]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689801",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.7904346, 41.2456839]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689777",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.7995219, 41.2604043]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689770",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8228035, 41.2645819]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689750",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8194132, 41.2808703]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689772",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.810873, 41.2629206]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689745",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.7876987, 41.2863849]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689746",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.7932992, 41.2861914]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689753",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8336611, 41.2798343]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689742",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.7855315, 41.3001853]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689771",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8123321, 41.2687592]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689748",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8144994, 41.2956393]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689785",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8053799, 41.2455185]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689752",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8334519, 41.2824707]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "settlementId": "tr:settlement:osm:node:11432689768",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8261992, 41.2680939]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:d12fce0c",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-4d7ea5909868e1f3a49a",
+      "settlementId": "tr:settlement:osm:node:4996879562",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.934288, 41.0372014]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:5482cfe1",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-4d7ea5909868e1f3a49a",
+      "settlementId": "tr:settlement:osm:node:4996879563",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9255064, 41.0466275]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:5482cfe1",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-4d7ea5909868e1f3a49a",
+      "settlementId": "tr:settlement:osm:node:4996879572",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9490344, 41.0700073]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:5482cfe1",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-4d7ea5909868e1f3a49a",
+      "settlementId": "tr:settlement:osm:node:4996879571",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9393536, 41.0686652]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:5482cfe1",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-4d7ea5909868e1f3a49a",
+      "settlementId": "tr:settlement:osm:node:251301080",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9327383, 41.0478358]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:5482cfe1",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-4d7ea5909868e1f3a49a",
+      "settlementId": "tr:settlement:osm:node:4996879566",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9531946, 41.0746225]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:5482cfe1",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-4d7ea5909868e1f3a49a",
+      "settlementId": "tr:settlement:osm:node:4996879573",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9314745, 41.0467148]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:5482cfe1",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-4d7ea5909868e1f3a49a",
+      "settlementId": "tr:settlement:osm:node:4996879576",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9356137, 41.0474069]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:5482cfe1",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-4d7ea5909868e1f3a49a",
+      "settlementId": "tr:settlement:osm:node:6325893855",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.936088, 41.0433814]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:5482cfe1",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-4d7ea5909868e1f3a49a",
+      "settlementId": "tr:settlement:osm:node:6326026458",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9207553, 41.0484918]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:5482cfe1",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-4d7ea5909868e1f3a49a",
+      "settlementId": "tr:settlement:osm:node:4996879570",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9216081, 41.0498909]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:5482cfe1",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-4d7ea5909868e1f3a49a",
+      "settlementId": "tr:settlement:osm:node:6326024037",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9175751, 41.0515299]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:5482cfe1",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-4d7ea5909868e1f3a49a",
+      "settlementId": "tr:settlement:osm:node:4996879557",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9405122, 41.0647435]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:5482cfe1",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-4d7ea5909868e1f3a49a",
+      "settlementId": "tr:settlement:osm:node:4996879567",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.940346, 41.0613259]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:5482cfe1",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-4d7ea5909868e1f3a49a",
+      "settlementId": "tr:settlement:osm:node:4996879559",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9254323, 41.0411044]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:5482cfe1",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+      "settlementId": "tr:settlement:osm:node:4996879574",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.946901, 41.077272]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:b7b8da9d",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+      "settlementId": "tr:settlement:osm:node:10948944994",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.922038, 41.1342274]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:b7b8da9d",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+      "settlementId": "tr:settlement:osm:node:10948944979",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8934794, 41.1456338]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:b7b8da9d",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+      "settlementId": "tr:settlement:osm:node:10948944978",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.8905558, 41.1559744]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:b7b8da9d",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-e65532e979e584148b71",
+      "settlementId": "tr:settlement:osm:node:8582643105",
+      "method": "point-containment-covers",
+      "status": "single-candidate",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.9146682, 41.1591155]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:de022d2a",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-ec147a34b682f62ebab2",
+      "settlementId": "tr:settlement:osm:node:9672888612",
+      "method": "point-containment-covers",
+      "status": "single-candidate",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [28.944706, 41.0900567]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:92bdd330",
+      "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+      "reviewDecision": "pending"
+    }
+  ],
+  "zoneSummaries": [
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-0200d0465d99bdafe32c",
+      "zoneName": "Territory 003",
+      "containedSeedCount": 4,
+      "distinctSettlementIds": [
+        "tr:settlement:osm:node:4996879560",
+        "tr:settlement:osm:node:4996879558",
+        "tr:settlement:osm:node:4996879569",
+        "tr:settlement:osm:node:4996879575"
+      ],
+      "distinctNormalizedNames": ["akşemsettin", "çırçır", "karadolap", "yeşilpınar"],
+      "associationStatus": "multiple-candidates",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-07c1dc2d3cf671d02031",
+      "zoneName": "Territory 006",
+      "containedSeedCount": 3,
+      "distinctSettlementIds": [
+        "tr:settlement:osm:node:9680915083",
+        "tr:settlement:osm:node:2408296587",
+        "tr:settlement:osm:node:9680920124"
+      ],
+      "distinctNormalizedNames": ["güntarla", "pirinççi", "şahintepe"],
+      "associationStatus": "multiple-candidates",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-0ae0001904d01e394824",
+      "zoneName": "Territory 010",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-2694d3a8cb3e8361ced5",
+      "zoneName": "Territory 007",
+      "containedSeedCount": 22,
+      "distinctSettlementIds": [
+        "tr:settlement:osm:node:6814513128",
+        "tr:settlement:osm:node:12091286753",
+        "tr:settlement:osm:node:12091286834",
+        "tr:settlement:osm:node:2131081582",
+        "tr:settlement:osm:node:10949109368",
+        "tr:settlement:osm:node:10949109381",
+        "tr:settlement:osm:node:12091286771",
+        "tr:settlement:osm:node:8582643103",
+        "tr:settlement:osm:node:12091286773",
+        "tr:settlement:osm:node:2291073253",
+        "tr:settlement:osm:node:10949109375",
+        "tr:settlement:osm:node:12962159756",
+        "tr:settlement:osm:node:12091286837",
+        "tr:settlement:osm:node:10949109372",
+        "tr:settlement:osm:node:8582643106",
+        "tr:settlement:osm:node:12091286686",
+        "tr:settlement:osm:node:2377597049",
+        "tr:settlement:osm:node:8582643104",
+        "tr:settlement:osm:node:8582643102",
+        "tr:settlement:osm:node:12091286774",
+        "tr:settlement:osm:node:9062385877",
+        "tr:settlement:osm:node:12091286838"
+      ],
+      "distinctNormalizedNames": [
+        "ağaçlı",
+        "beylik koru",
+        "çakıllıkaşan",
+        "çiftalan",
+        "çiftlikaltı",
+        "ergeneçiftliği",
+        "geyikalan sırtı",
+        "göktürk merkez",
+        "güzelcealan mevkii",
+        "ışıklar",
+        "iğrekalan",
+        "kalyon hatıra ormanı",
+        "kapılar",
+        "karabayır",
+        "kemerburgaz",
+        "kocagöl mevkii",
+        "meşeler vadisi",
+        "mithatpaşa",
+        "odayeri",
+        "osmantarla",
+        "papazçayırı",
+        "pirinççi devlet avlağı"
+      ],
+      "associationStatus": "multiple-candidates",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-32399669436e5753784c",
+      "zoneName": "Territory 008",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-3507294575f251c21da0",
+      "zoneName": "Territory 014",
+      "containedSeedCount": 32,
+      "distinctSettlementIds": [
+        "tr:settlement:osm:node:11432689766",
+        "tr:settlement:osm:node:1939786461",
+        "tr:settlement:osm:node:11432689765",
+        "tr:settlement:osm:node:11432689747",
+        "tr:settlement:osm:node:11432689773",
+        "tr:settlement:osm:node:11432689787",
+        "tr:settlement:osm:node:11432689781",
+        "tr:settlement:osm:node:11432689769",
+        "tr:settlement:osm:node:11432689782",
+        "tr:settlement:osm:node:11432689754",
+        "tr:settlement:osm:node:11432689778",
+        "tr:settlement:osm:node:11432689749",
+        "tr:settlement:osm:node:11432689800",
+        "tr:settlement:osm:node:11432689767",
+        "tr:settlement:osm:node:11432689751",
+        "tr:settlement:osm:node:2291073307",
+        "tr:settlement:osm:node:11432689776",
+        "tr:settlement:osm:node:11432689786",
+        "tr:settlement:osm:node:11432689801",
+        "tr:settlement:osm:node:11432689777",
+        "tr:settlement:osm:node:11432689770",
+        "tr:settlement:osm:node:11432689750",
+        "tr:settlement:osm:node:11432689772",
+        "tr:settlement:osm:node:11432689745",
+        "tr:settlement:osm:node:11432689746",
+        "tr:settlement:osm:node:11432689753",
+        "tr:settlement:osm:node:11432689742",
+        "tr:settlement:osm:node:11432689771",
+        "tr:settlement:osm:node:11432689748",
+        "tr:settlement:osm:node:11432689785",
+        "tr:settlement:osm:node:11432689752",
+        "tr:settlement:osm:node:11432689768"
+      ],
+      "distinctNormalizedNames": [
+        "açmalardere",
+        "akpınar",
+        "akpınargölü",
+        "akpınarkumları",
+        "armutalan sırtı",
+        "askermezarı sırtı",
+        "beşiktepe",
+        "çakıllıtorluk",
+        "çatalağaç",
+        "çavuşalantepe",
+        "davulalan",
+        "davutlar",
+        "eriklimekanpınarı",
+        "eskibostandere",
+        "hocatepe",
+        "ihsaniye",
+        "keçiiğreği sırtı",
+        "kestanelik pınarı",
+        "kısrakalan",
+        "kirlişaban",
+        "kocayemiş bayırı",
+        "komakadın",
+        "mercançayırı",
+        "ortamekandere",
+        "paşamandra",
+        "paşamevzi",
+        "piyadeçeşme",
+        "sarpdere",
+        "şeyhköykumluğu",
+        "tokat mekanı",
+        "uzunçayır",
+        "yorgi pınarı"
+      ],
+      "associationStatus": "multiple-candidates",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-44f790b175299bd7face",
+      "zoneName": "Territory 005",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-45c2576c5bf3989a1a91",
+      "zoneName": "Territory 017",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-4d7ea5909868e1f3a49a",
+      "zoneName": "Territory 001",
+      "containedSeedCount": 15,
+      "distinctSettlementIds": [
+        "tr:settlement:osm:node:4996879562",
+        "tr:settlement:osm:node:4996879563",
+        "tr:settlement:osm:node:4996879572",
+        "tr:settlement:osm:node:4996879571",
+        "tr:settlement:osm:node:251301080",
+        "tr:settlement:osm:node:4996879566",
+        "tr:settlement:osm:node:4996879573",
+        "tr:settlement:osm:node:4996879576",
+        "tr:settlement:osm:node:6325893855",
+        "tr:settlement:osm:node:6326026458",
+        "tr:settlement:osm:node:4996879570",
+        "tr:settlement:osm:node:6326024037",
+        "tr:settlement:osm:node:4996879557",
+        "tr:settlement:osm:node:4996879567",
+        "tr:settlement:osm:node:4996879559"
+      ],
+      "distinctNormalizedNames": [
+        "defterdar",
+        "düğmeciler",
+        "emniyettepe",
+        "esentepe",
+        "eyüpsultan",
+        "güzeltepe",
+        "islambey",
+        "merkez",
+        "nişancı",
+        "rami",
+        "rami cuma",
+        "rami yenimahalle",
+        "sakarya",
+        "silahtarağa",
+        "topçular"
+      ],
+      "associationStatus": "multiple-candidates",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-600e3b9388f8b2b2b2ce",
+      "zoneName": "Territory 013",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-6682a8a9f104646c4b10",
+      "zoneName": "Territory 002",
+      "containedSeedCount": 4,
+      "distinctSettlementIds": [
+        "tr:settlement:osm:node:4996879574",
+        "tr:settlement:osm:node:10948944994",
+        "tr:settlement:osm:node:10948944979",
+        "tr:settlement:osm:node:10948944978"
+      ],
+      "distinctNormalizedNames": [
+        "alibeyköy",
+        "keçikaldırımı",
+        "malovamandırası",
+        "taşlıderemandırası"
+      ],
+      "associationStatus": "multiple-candidates",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-7a57dfb675f1b3e5980a",
+      "zoneName": "Territory 011",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-8f8691194e4e401e7c74",
+      "zoneName": "Territory 012",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-c5e08a7b96b8772d962d",
+      "zoneName": "Territory 019",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-e603d12f08888e105819",
+      "zoneName": "Territory 015",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-e65532e979e584148b71",
+      "zoneName": "Mimar Sinan",
+      "containedSeedCount": 1,
+      "distinctSettlementIds": ["tr:settlement:osm:node:8582643105"],
+      "distinctNormalizedNames": ["mimar sinan"],
+      "associationStatus": "single-candidate",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "seed-locality-label"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-ec147a34b682f62ebab2",
+      "zoneName": "5. Levent",
+      "containedSeedCount": 1,
+      "distinctSettlementIds": ["tr:settlement:osm:node:9672888612"],
+      "distinctNormalizedNames": ["5. levent"],
+      "associationStatus": "single-candidate",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "seed-locality-label"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-f94c0a21b6280c34ce78",
+      "zoneName": "Territory 016",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-fddbd89f6c95491fc22b",
+      "zoneName": "Territory 018",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    }
+  ]
+}

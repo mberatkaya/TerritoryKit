@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-consumer-pin@1",
+  "district": "Üsküdar",
+  "parentAdm2Id": "tr:adm2:54988432b79162079631621",
+  "gameplayDatasetId": "territory-kit-tr-v2-playable-adm3-tr-adm2-54988432b79162079631621",
+  "gameplayDatasetVersion": "2.1.0-rc.8",
+  "zoneIdSetSha256": "26b54ce0f2e6bdcdcfc352c47c947a0788943cf461e75ad7f7104836ebcaa1ca",
+  "geometryHashSetSha256": "a768c87393c38e3e6ef6423d6379f10ec84e1544309bcef7fb08237c2ee01dd4",
+  "identityLayerContentChecksum": "fnv1a32:9f3d653a",
+  "associationCounts": {
+    "zoneCount": 40,
+    "settlementCount": 40,
+    "ambiguousZoneCount": 10,
+    "singleCandidateZoneCount": 15,
+    "unseededZoneCount": 15
+  },
+  "sourceExpectations": {
+    "requireSourceLockVerified": false,
+    "missingSourceReasonCode": "SOURCE_LOCK_MISSING",
+    "osmSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-ambiguity@1",
+  "generatedAt": "2026-10-17T12:48:27.132Z",
+  "district": "Üsküdar",
+  "parentAdm2Id": "tr:adm2:54988432b79162079631621",
+  "zoneCount": 40,
+  "ambiguousZoneCount": 10,
+  "singleSeedZoneCount": 15,
+  "unseededZoneCount": 15,
+  "distinctSeedsRepresented": 39,
+  "settlementCount": 40,
+  "associationCount": 40,
+  "ambiguousZones": [
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-19c8d93a070e8dbef137",
+      "zoneName": "Territory 023",
+      "distinctNormalizedNames": ["beylerbeyi", "fıstıkağacı", "sultantepe"],
+      "settlementIds": [
+        "tr:settlement:osm:node:251358465",
+        "tr:settlement:osm:node:9992711267",
+        "tr:settlement:osm:node:4997349331"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-1bfc817f71619b7b98cd",
+      "zoneName": "Territory 020",
+      "distinctNormalizedNames": ["icadiye", "kuzguncuk"],
+      "settlementIds": ["tr:settlement:osm:node:4997348808", "tr:settlement:osm:node:251358397"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-21676a0e5b509c977ffc",
+      "zoneName": "Territory 036",
+      "distinctNormalizedNames": ["çengelköy", "kandilli", "kuleli", "küçüksu"],
+      "settlementIds": [
+        "tr:settlement:osm:node:251358459",
+        "tr:settlement:osm:node:251358441",
+        "tr:settlement:osm:node:4997349330",
+        "tr:settlement:osm:node:4997348812"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-24e728ea01b443b34f3c",
+      "zoneName": "Territory 012",
+      "distinctNormalizedNames": ["ahmediye", "zeynep kamil"],
+      "settlementIds": ["tr:settlement:osm:node:4997348807", "tr:settlement:osm:node:4997348818"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-41b6f0939cd6c72c16b5",
+      "zoneName": "Territory 017",
+      "distinctNormalizedNames": ["ferah", "kısıklı"],
+      "settlementIds": ["tr:settlement:osm:node:4997349322", "tr:settlement:osm:node:4997349323"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-81a1da51790457911fbe",
+      "zoneName": "Territory 003",
+      "distinctNormalizedNames": ["acıbadem", "bulgurlu", "validebağ"],
+      "settlementIds": [
+        "tr:settlement:osm:node:7058084546",
+        "tr:settlement:osm:node:1751591929",
+        "tr:settlement:osm:node:9992694994"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-993f9157e13ed05fdf94",
+      "zoneName": "Territory 028",
+      "distinctNormalizedNames": ["beylerbeyi", "küplüce"],
+      "settlementIds": ["tr:settlement:osm:node:4997349324", "tr:settlement:osm:node:4997348805"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-9f6fa6bddc59e71ee21e",
+      "zoneName": "Territory 014",
+      "distinctNormalizedNames": ["bağlarbaşı", "muratreis", "valide-i atik"],
+      "settlementIds": [
+        "tr:settlement:osm:node:7863069654",
+        "tr:settlement:osm:node:4997348809",
+        "tr:settlement:osm:node:4997348810"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-bc3534e1425944509c8d",
+      "zoneName": "Territory 016",
+      "distinctNormalizedNames": ["mimar sinan", "selami ali"],
+      "settlementIds": ["tr:settlement:osm:node:4997348820", "tr:settlement:osm:node:4997348819"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-ca926e8d182628a3d786",
+      "zoneName": "Territory 004",
+      "distinctNormalizedNames": ["aziz mahmut hüdayi", "üsküdar"],
+      "settlementIds": ["tr:settlement:osm:node:4997349332", "tr:settlement:osm:node:26505047"]
+    }
+  ],
+  "conflictAssociations": [],
+  "altBComparison": null
+}

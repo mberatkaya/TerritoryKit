@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-lookup-smoke@1",
+  "generatedAt": "2026-10-17T12:48:27.640Z",
+  "district": "Çatalca",
+  "parentAdm2Id": "tr:adm2:54988432b71345383711908",
+  "consumerLoadOk": true,
+  "validationIssueCodes": [],
+  "sampleZone": {
+    "zoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-125d31ce7a187e48f801",
+    "associations": [],
+    "settlements": [],
+    "associationStatus": "unseeded",
+    "zoneResolution": "unseeded",
+    "isAmbiguous": false,
+    "autoDisplayNameAllowed": false,
+    "consumerNameSemantics": "none"
+  },
+  "layerVersion": {
+    "identityLayerVersion": "tr-mahalle-identity-catalca-pilot@2026-10-17",
+    "gameplayDatasetVersion": "2.1.0-rc.8",
+    "contentChecksum": "fnv1a32:3e67f8e1",
+    "generatedAt": "2026-10-17T12:48:27.640Z"
+  }
+}
