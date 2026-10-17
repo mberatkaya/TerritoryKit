@@ -12,15 +12,46 @@
       "osmAdministrativePolygons": 0,
       "estimatedCandidatePolygons": 0,
       "gameplayZoneCount": 28,
-      "gameplayGeometryHashSetSha256": "84ef9b66011bf128e72f6a93c2b7b4a4dd508b0b5dc7c2326706517fc65ed125",
-      "gameplayZoneIdSetSha256": "7946199227e0fb33c56512b084244adb5545a89a8ee0099e8755b1739d6b2c3d",
+      "gameplayGeometryHashSetSha256": "79afa84f849c3800bdbe264c990c8868c525501430aeeee2d83af43ec58740ae",
+      "gameplayZoneIdSetSha256": "3af6bb370900c671b5df58e3b9c89b3c8b0eeb9c0703f786b55c1b146b0fd617",
       "geometryQa": {
-        "gameplaySpatialOk": true,
-        "osmSpatialOk": null,
-        "gameplaySliverCount": 0,
-        "osmSliverCount": null,
-        "gameplayOverlapCount": 0,
-        "osmOverlapCount": null
+        "polygonTechnical": {
+          "gameplaySpatialOk": true,
+          "osmSpatialOk": null,
+          "gameplaySliverCount": 0,
+          "osmSliverCount": null,
+          "gameplayOverlapCount": 0,
+          "osmOverlapCount": null,
+          "gameplayParentContainmentNote": null
+        },
+        "districtCoverage": {
+          "gameplay": {
+            "layerLabel": "rc8-gameplay",
+            "zoneCount": 28,
+            "unresolvedRelationEntries": 0,
+            "districtCoverageComplete": true,
+            "administrativeInventoryComplete": true,
+            "parentAreaKm2": 24.932846,
+            "summedZoneAreaKm2": 24.9329,
+            "uncoveredParentAreaKm2": null,
+            "gapCount": 0,
+            "overlapCount": 0,
+            "note": "Pinned rc.8 gameplay shard is the authoritative district inventory for Sprint 2 acceptance."
+          },
+          "osmAdministrative": {
+            "layerLabel": "osm-administrative-research",
+            "zoneCount": 0,
+            "unresolvedRelationEntries": 0,
+            "districtCoverageComplete": false,
+            "administrativeInventoryComplete": false,
+            "parentAreaKm2": 24.932846,
+            "summedZoneAreaKm2": 0,
+            "uncoveredParentAreaKm2": null,
+            "gapCount": null,
+            "overlapCount": null,
+            "note": "Partial OSM extract; gaps/overlaps reflect incomplete relation inventory, not necessarily invalid individual polygons."
+          }
+        }
       },
       "seedMetrics": {
         "status": "ASSESSED",
@@ -29,7 +60,11 @@
         "unseededZoneCount": 9,
         "ambiguousZoneCount": 8
       },
-      "stressFocus": ["dense-urban", "multi-seed-zones", "duplicate-source-identity"],
+      "stressFocus": [
+        "dense-urban",
+        "multi-seed-zones",
+        "duplicate-source-identity"
+      ],
       "mapPreviewPath": "reports/tr-adm3/sprint-2g-geometry-validation/map-preview/kadikoy-geometry-comparison.geojson",
       "overlaySummary": null
     },
@@ -42,15 +77,57 @@
       "osmAdministrativePolygons": 1,
       "estimatedCandidatePolygons": 0,
       "gameplayZoneCount": 30,
-      "gameplayGeometryHashSetSha256": "cefed89ac4a6c7d3459915739e36ff5072d2bbf3c8238edf5ccc2e8536fb5386",
-      "gameplayZoneIdSetSha256": "0b904021dccad91d6ab2b177f58c4b4b91bebf647bae5c4ba005f1e831f859cc",
+      "gameplayGeometryHashSetSha256": "3b4c2dd9214f6aa1023277a3426e100bd9c2902f5c06e4a49b2478e462866645",
+      "gameplayZoneIdSetSha256": "334ba60d9e4bf65c2acfce7d3724e7bf430ec082ad897459a902c19d3660852f",
       "geometryQa": {
-        "gameplaySpatialOk": false,
-        "osmSpatialOk": false,
-        "gameplaySliverCount": 0,
-        "osmSliverCount": 0,
-        "gameplayOverlapCount": 0,
-        "osmOverlapCount": 0
+        "polygonTechnical": {
+          "gameplaySpatialOk": false,
+          "osmSpatialOk": false,
+          "gameplaySliverCount": 0,
+          "osmSliverCount": 0,
+          "gameplayOverlapCount": 0,
+          "osmOverlapCount": 0,
+          "gameplayParentContainmentNote": {
+            "classification": "tolerance-or-precision-review",
+            "defaultToleranceKm2": 0.000001,
+            "errors": [
+              {
+                "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-cbeb5278a71425ce7202",
+                "outsideAreaKm2": 0.000002,
+                "exceedsDefaultTolerance": true
+              }
+            ],
+            "note": "Sub-microscopic outside-parent areas on immutable rc.8 gameplay may reflect floating-point/CRS tolerance; do not mutate geometry without authorized remediation."
+          }
+        },
+        "districtCoverage": {
+          "gameplay": {
+            "layerLabel": "rc8-gameplay",
+            "zoneCount": 30,
+            "unresolvedRelationEntries": 0,
+            "districtCoverageComplete": true,
+            "administrativeInventoryComplete": true,
+            "parentAreaKm2": 16.362351,
+            "summedZoneAreaKm2": 16.3624,
+            "uncoveredParentAreaKm2": null,
+            "gapCount": 0,
+            "overlapCount": 0,
+            "note": "Pinned rc.8 gameplay shard is the authoritative district inventory for Sprint 2 acceptance."
+          },
+          "osmAdministrative": {
+            "layerLabel": "osm-administrative-research",
+            "zoneCount": 1,
+            "unresolvedRelationEntries": 0,
+            "districtCoverageComplete": false,
+            "administrativeInventoryComplete": false,
+            "parentAreaKm2": 16.362351,
+            "summedZoneAreaKm2": 0,
+            "uncoveredParentAreaKm2": 16.362339,
+            "gapCount": 1,
+            "overlapCount": 0,
+            "note": "Partial OSM extract; gaps/overlaps reflect incomplete relation inventory, not necessarily invalid individual polygons."
+          }
+        }
       },
       "seedMetrics": {
         "status": "ASSESSED",
@@ -109,15 +186,57 @@
       "osmAdministrativePolygons": 0,
       "estimatedCandidatePolygons": 0,
       "gameplayZoneCount": 40,
-      "gameplayGeometryHashSetSha256": "43c7ff4a0997e604266b19ed04a10f18bd3e333005e49f089527a1f56c27878b",
-      "gameplayZoneIdSetSha256": "8473af2b55161ff86e704be029f18ed8506d9cafc5ee24817e1d585ba3a71783",
+      "gameplayGeometryHashSetSha256": "a768c87393c38e3e6ef6423d6379f10ec84e1544309bcef7fb08237c2ee01dd4",
+      "gameplayZoneIdSetSha256": "26b54ce0f2e6bdcdcfc352c47c947a0788943cf461e75ad7f7104836ebcaa1ca",
       "geometryQa": {
-        "gameplaySpatialOk": false,
-        "osmSpatialOk": null,
-        "gameplaySliverCount": 0,
-        "osmSliverCount": null,
-        "gameplayOverlapCount": 0,
-        "osmOverlapCount": null
+        "polygonTechnical": {
+          "gameplaySpatialOk": false,
+          "osmSpatialOk": null,
+          "gameplaySliverCount": 0,
+          "osmSliverCount": null,
+          "gameplayOverlapCount": 0,
+          "osmOverlapCount": null,
+          "gameplayParentContainmentNote": {
+            "classification": "tolerance-or-precision-review",
+            "defaultToleranceKm2": 0.000001,
+            "errors": [
+              {
+                "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-8aa5fb8f49dca701e1cc",
+                "outsideAreaKm2": 0.000005,
+                "exceedsDefaultTolerance": true
+              }
+            ],
+            "note": "Sub-microscopic outside-parent areas on immutable rc.8 gameplay may reflect floating-point/CRS tolerance; do not mutate geometry without authorized remediation."
+          }
+        },
+        "districtCoverage": {
+          "gameplay": {
+            "layerLabel": "rc8-gameplay",
+            "zoneCount": 40,
+            "unresolvedRelationEntries": 0,
+            "districtCoverageComplete": true,
+            "administrativeInventoryComplete": true,
+            "parentAreaKm2": 35.465976,
+            "summedZoneAreaKm2": 35.4659,
+            "uncoveredParentAreaKm2": null,
+            "gapCount": 0,
+            "overlapCount": 0,
+            "note": "Pinned rc.8 gameplay shard is the authoritative district inventory for Sprint 2 acceptance."
+          },
+          "osmAdministrative": {
+            "layerLabel": "osm-administrative-research",
+            "zoneCount": 0,
+            "unresolvedRelationEntries": 0,
+            "districtCoverageComplete": false,
+            "administrativeInventoryComplete": false,
+            "parentAreaKm2": 35.465976,
+            "summedZoneAreaKm2": 0,
+            "uncoveredParentAreaKm2": null,
+            "gapCount": null,
+            "overlapCount": null,
+            "note": "Partial OSM extract; gaps/overlaps reflect incomplete relation inventory, not necessarily invalid individual polygons."
+          }
+        }
       },
       "seedMetrics": {
         "status": "ASSESSED",
@@ -139,15 +258,46 @@
       "osmAdministrativePolygons": 3,
       "estimatedCandidatePolygons": 0,
       "gameplayZoneCount": 14,
-      "gameplayGeometryHashSetSha256": "aad0b8a3d49ec70b57aa695e8792404483d9ad11a1dbf40af32df5b474ea50f5",
-      "gameplayZoneIdSetSha256": "7094a3d8080ad79d833cfac19437f3a8e72b2322d04a99068c5461db6dd14e46",
+      "gameplayGeometryHashSetSha256": "81aa0fae99c202edf574472f191e2322277e2ff9d41d4d4ba73caedbbc544906",
+      "gameplayZoneIdSetSha256": "891afbcd52a77407982a11885eef58f2a84abf7483471695248e4cda17c301a1",
       "geometryQa": {
-        "gameplaySpatialOk": true,
-        "osmSpatialOk": false,
-        "gameplaySliverCount": 0,
-        "osmSliverCount": 0,
-        "gameplayOverlapCount": 0,
-        "osmOverlapCount": 0
+        "polygonTechnical": {
+          "gameplaySpatialOk": true,
+          "osmSpatialOk": false,
+          "gameplaySliverCount": 0,
+          "osmSliverCount": 0,
+          "gameplayOverlapCount": 0,
+          "osmOverlapCount": 0,
+          "gameplayParentContainmentNote": null
+        },
+        "districtCoverage": {
+          "gameplay": {
+            "layerLabel": "rc8-gameplay",
+            "zoneCount": 14,
+            "unresolvedRelationEntries": 0,
+            "districtCoverageComplete": true,
+            "administrativeInventoryComplete": true,
+            "parentAreaKm2": 11.426621,
+            "summedZoneAreaKm2": 11.4266,
+            "uncoveredParentAreaKm2": null,
+            "gapCount": 0,
+            "overlapCount": 0,
+            "note": "Pinned rc.8 gameplay shard is the authoritative district inventory for Sprint 2 acceptance."
+          },
+          "osmAdministrative": {
+            "layerLabel": "osm-administrative-research",
+            "zoneCount": 3,
+            "unresolvedRelationEntries": 0,
+            "districtCoverageComplete": false,
+            "administrativeInventoryComplete": false,
+            "parentAreaKm2": 11.426621,
+            "summedZoneAreaKm2": 5.6024,
+            "uncoveredParentAreaKm2": 5.824247,
+            "gapCount": 1,
+            "overlapCount": 0,
+            "note": "Partial OSM extract; gaps/overlaps reflect incomplete relation inventory, not necessarily invalid individual polygons."
+          }
+        }
       },
       "seedMetrics": {
         "status": "ASSESSED",
@@ -156,7 +306,11 @@
         "unseededZoneCount": 8,
         "ambiguousZoneCount": 2
       },
-      "stressFocus": ["island-multipolygon", "coastline-boundary-point", "disconnected-components"],
+      "stressFocus": [
+        "island-multipolygon",
+        "coastline-boundary-point",
+        "disconnected-components"
+      ],
       "mapPreviewPath": "reports/tr-adm3/sprint-2g-geometry-validation/map-preview/adalar-geometry-comparison.geojson",
       "overlaySummary": {
         "gameplayZoneCount": 14,
@@ -173,15 +327,15 @@
         "orphanOsmPolygonIds": [],
         "manyToOneMergeCandidates": [
           {
-            "osmTerritoryId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460393-kinaliada-mahallesi",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460393-kinaliada-mahallesi",
             "gameplayZoneCount": 3
           },
           {
-            "osmTerritoryId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460394-burgazada-mahallesi",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460394-burgazada-mahallesi",
             "gameplayZoneCount": 3
           },
           {
-            "osmTerritoryId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460395-heybeliada-mahallesi",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460395-heybeliada-mahallesi",
             "gameplayZoneCount": 2
           }
         ]
@@ -196,15 +350,46 @@
       "osmAdministrativePolygons": 0,
       "estimatedCandidatePolygons": 0,
       "gameplayZoneCount": 19,
-      "gameplayGeometryHashSetSha256": "98759d2456918dd940af0710a71513155d70a631a3cea0a3ecb474ebf95c59b5",
-      "gameplayZoneIdSetSha256": "bfe17d9ef6795e77174d02c06856122169d39765d6a169063173b6f1756996ba",
+      "gameplayGeometryHashSetSha256": "5bccddf0d22c6eb39dd1db48a95a286a18555dafb6af8a70f54ded455e7ef965",
+      "gameplayZoneIdSetSha256": "484ffba9dcbfd106605b069bbc658c0c4c975856e864d3402fdb3b34c054e0d6",
       "geometryQa": {
-        "gameplaySpatialOk": true,
-        "osmSpatialOk": null,
-        "gameplaySliverCount": 0,
-        "osmSliverCount": null,
-        "gameplayOverlapCount": 0,
-        "osmOverlapCount": null
+        "polygonTechnical": {
+          "gameplaySpatialOk": true,
+          "osmSpatialOk": null,
+          "gameplaySliverCount": 0,
+          "osmSliverCount": null,
+          "gameplayOverlapCount": 0,
+          "osmOverlapCount": null,
+          "gameplayParentContainmentNote": null
+        },
+        "districtCoverage": {
+          "gameplay": {
+            "layerLabel": "rc8-gameplay",
+            "zoneCount": 19,
+            "unresolvedRelationEntries": 0,
+            "districtCoverageComplete": true,
+            "administrativeInventoryComplete": true,
+            "parentAreaKm2": 231.181772,
+            "summedZoneAreaKm2": 231.1818,
+            "uncoveredParentAreaKm2": null,
+            "gapCount": 0,
+            "overlapCount": 0,
+            "note": "Pinned rc.8 gameplay shard is the authoritative district inventory for Sprint 2 acceptance."
+          },
+          "osmAdministrative": {
+            "layerLabel": "osm-administrative-research",
+            "zoneCount": 0,
+            "unresolvedRelationEntries": 0,
+            "districtCoverageComplete": false,
+            "administrativeInventoryComplete": false,
+            "parentAreaKm2": 231.181772,
+            "summedZoneAreaKm2": 0,
+            "uncoveredParentAreaKm2": null,
+            "gapCount": null,
+            "overlapCount": null,
+            "note": "Partial OSM extract; gaps/overlaps reflect incomplete relation inventory, not necessarily invalid individual polygons."
+          }
+        }
       },
       "seedMetrics": {
         "status": "ASSESSED",
@@ -226,15 +411,57 @@
       "osmAdministrativePolygons": 0,
       "estimatedCandidatePolygons": 0,
       "gameplayZoneCount": 19,
-      "gameplayGeometryHashSetSha256": "cf55c5447cc9eb9a4d4483beb46c3848e35483baab971dcdbc497bf4762d342e",
-      "gameplayZoneIdSetSha256": "fc02d82f1cfe0eabe3a48c7ce72c37c49bb6fe756212c03da7a3e1f32183c0db",
+      "gameplayGeometryHashSetSha256": "5e396edb60bef0052cedf7353441272bb08b8c803b687cd53707ed929fc9fea9",
+      "gameplayZoneIdSetSha256": "45d63e7662658be8b1e2ca8506b72ee4e0924dc04a19b6a422a119ef141fdcd8",
       "geometryQa": {
-        "gameplaySpatialOk": false,
-        "osmSpatialOk": null,
-        "gameplaySliverCount": 0,
-        "osmSliverCount": null,
-        "gameplayOverlapCount": 0,
-        "osmOverlapCount": null
+        "polygonTechnical": {
+          "gameplaySpatialOk": false,
+          "osmSpatialOk": null,
+          "gameplaySliverCount": 0,
+          "osmSliverCount": null,
+          "gameplayOverlapCount": 0,
+          "osmOverlapCount": null,
+          "gameplayParentContainmentNote": {
+            "classification": "tolerance-or-precision-review",
+            "defaultToleranceKm2": 0.000001,
+            "errors": [
+              {
+                "zoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-a9269419e42397df8d3e",
+                "outsideAreaKm2": 0.000004,
+                "exceedsDefaultTolerance": true
+              }
+            ],
+            "note": "Sub-microscopic outside-parent areas on immutable rc.8 gameplay may reflect floating-point/CRS tolerance; do not mutate geometry without authorized remediation."
+          }
+        },
+        "districtCoverage": {
+          "gameplay": {
+            "layerLabel": "rc8-gameplay",
+            "zoneCount": 19,
+            "unresolvedRelationEntries": 0,
+            "districtCoverageComplete": true,
+            "administrativeInventoryComplete": true,
+            "parentAreaKm2": 1134.742228,
+            "summedZoneAreaKm2": 1134.7422,
+            "uncoveredParentAreaKm2": null,
+            "gapCount": 0,
+            "overlapCount": 0,
+            "note": "Pinned rc.8 gameplay shard is the authoritative district inventory for Sprint 2 acceptance."
+          },
+          "osmAdministrative": {
+            "layerLabel": "osm-administrative-research",
+            "zoneCount": 0,
+            "unresolvedRelationEntries": 0,
+            "districtCoverageComplete": false,
+            "administrativeInventoryComplete": false,
+            "parentAreaKm2": 1134.742228,
+            "summedZoneAreaKm2": 0,
+            "uncoveredParentAreaKm2": null,
+            "gapCount": null,
+            "overlapCount": null,
+            "note": "Partial OSM extract; gaps/overlaps reflect incomplete relation inventory, not necessarily invalid individual polygons."
+          }
+        }
       },
       "seedMetrics": {
         "status": "ASSESSED",
@@ -256,15 +483,46 @@
       "osmAdministrativePolygons": 0,
       "estimatedCandidatePolygons": 0,
       "gameplayZoneCount": 20,
-      "gameplayGeometryHashSetSha256": "d47b46e296fd915643876799059ea16441656570baba36c00d342ac91424fa69",
-      "gameplayZoneIdSetSha256": "3b756fa9dc3e5cffc9f3bc364967ce12f8109dc2dc4c51ca9dd92b2a71615bb7",
+      "gameplayGeometryHashSetSha256": "e8fe6a95567dd08caac1c52604b130a1b43f515ff80bc3b9d4452917605fcade",
+      "gameplayZoneIdSetSha256": "4d3580fea834d6d6caeeb981e4a39b9acb45fd2efc5be3744e1d9144fc264d6b",
       "geometryQa": {
-        "gameplaySpatialOk": true,
-        "osmSpatialOk": null,
-        "gameplaySliverCount": 0,
-        "osmSliverCount": null,
-        "gameplayOverlapCount": 0,
-        "osmOverlapCount": null
+        "polygonTechnical": {
+          "gameplaySpatialOk": true,
+          "osmSpatialOk": null,
+          "gameplaySliverCount": 0,
+          "osmSliverCount": null,
+          "gameplayOverlapCount": 0,
+          "osmOverlapCount": null,
+          "gameplayParentContainmentNote": null
+        },
+        "districtCoverage": {
+          "gameplay": {
+            "layerLabel": "rc8-gameplay",
+            "zoneCount": 20,
+            "unresolvedRelationEntries": 0,
+            "districtCoverageComplete": true,
+            "administrativeInventoryComplete": true,
+            "parentAreaKm2": 106.077893,
+            "summedZoneAreaKm2": 106.0779,
+            "uncoveredParentAreaKm2": null,
+            "gapCount": 0,
+            "overlapCount": 0,
+            "note": "Pinned rc.8 gameplay shard is the authoritative district inventory for Sprint 2 acceptance."
+          },
+          "osmAdministrative": {
+            "layerLabel": "osm-administrative-research",
+            "zoneCount": 0,
+            "unresolvedRelationEntries": 0,
+            "districtCoverageComplete": false,
+            "administrativeInventoryComplete": false,
+            "parentAreaKm2": 106.077893,
+            "summedZoneAreaKm2": 0,
+            "uncoveredParentAreaKm2": null,
+            "gapCount": null,
+            "overlapCount": null,
+            "note": "Partial OSM extract; gaps/overlaps reflect incomplete relation inventory, not necessarily invalid individual polygons."
+          }
+        }
       },
       "seedMetrics": {
         "status": "ASSESSED",
@@ -286,15 +544,62 @@
       "osmAdministrativePolygons": 0,
       "estimatedCandidatePolygons": 0,
       "gameplayZoneCount": 36,
-      "gameplayGeometryHashSetSha256": "c783487af425f5ae0c1ca7a718caf8512a773a896bd7ddef996d8bae6a4810c0",
-      "gameplayZoneIdSetSha256": "a315a908008dbb77e3322d5ed12b64efc648a70b49b9d67ea02c2285751533e6",
+      "gameplayGeometryHashSetSha256": "08134ba145fc2a2f5e184b72877515cf4375b64cdad87701ec03f9853140454c",
+      "gameplayZoneIdSetSha256": "27479c5393d3a89798c0a87ffe770aed0664f9751f4f1967177d01fcd0920258",
       "geometryQa": {
-        "gameplaySpatialOk": false,
-        "osmSpatialOk": null,
-        "gameplaySliverCount": 0,
-        "osmSliverCount": null,
-        "gameplayOverlapCount": 0,
-        "osmOverlapCount": null
+        "polygonTechnical": {
+          "gameplaySpatialOk": false,
+          "osmSpatialOk": null,
+          "gameplaySliverCount": 0,
+          "osmSliverCount": null,
+          "gameplayOverlapCount": 0,
+          "osmOverlapCount": null,
+          "gameplayParentContainmentNote": {
+            "classification": "tolerance-or-precision-review",
+            "defaultToleranceKm2": 0.000001,
+            "errors": [
+              {
+                "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-de141d8945edc0f729fa",
+                "outsideAreaKm2": 0.000002,
+                "exceedsDefaultTolerance": true
+              },
+              {
+                "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-f9505cbd5b8f0212aafe",
+                "outsideAreaKm2": 0.000002,
+                "exceedsDefaultTolerance": true
+              }
+            ],
+            "note": "Sub-microscopic outside-parent areas on immutable rc.8 gameplay may reflect floating-point/CRS tolerance; do not mutate geometry without authorized remediation."
+          }
+        },
+        "districtCoverage": {
+          "gameplay": {
+            "layerLabel": "rc8-gameplay",
+            "zoneCount": 36,
+            "unresolvedRelationEntries": 0,
+            "districtCoverageComplete": true,
+            "administrativeInventoryComplete": true,
+            "parentAreaKm2": 42.694726,
+            "summedZoneAreaKm2": 42.6947,
+            "uncoveredParentAreaKm2": null,
+            "gapCount": 0,
+            "overlapCount": 0,
+            "note": "Pinned rc.8 gameplay shard is the authoritative district inventory for Sprint 2 acceptance."
+          },
+          "osmAdministrative": {
+            "layerLabel": "osm-administrative-research",
+            "zoneCount": 0,
+            "unresolvedRelationEntries": 0,
+            "districtCoverageComplete": false,
+            "administrativeInventoryComplete": false,
+            "parentAreaKm2": 42.694726,
+            "summedZoneAreaKm2": 0,
+            "uncoveredParentAreaKm2": null,
+            "gapCount": null,
+            "overlapCount": null,
+            "note": "Partial OSM extract; gaps/overlaps reflect incomplete relation inventory, not necessarily invalid individual polygons."
+          }
+        }
       },
       "seedMetrics": {
         "status": "ASSESSED",

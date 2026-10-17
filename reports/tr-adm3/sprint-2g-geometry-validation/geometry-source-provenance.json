@@ -17,22 +17,92 @@
     "estimatedExperimentalCount": 0
   },
   "sourceLocks": {
-    "osmPbf": {
-      "schemaVersion": "territorykit-tr-adm3-osm-source-lock@1",
-      "country": "TR",
-      "generatedAt": "2026-10-17T18:00:00.000Z",
-      "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
-      "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
-      "upstreamTimestamp": null,
-      "sha256": "a03dec91d67f9fd62e5092ff9929eca014a9ca5016e966e93db81ee4b536e6c1",
-      "byteSize": 3266104,
-      "license": "ODbL-1.0",
+    "countryOsmPbf": {
       "attribution": "OpenStreetMap contributors, ODbL 1.0",
-      "parser": {
-        "package": "@osmix/pbf",
-        "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
-      }
+      "cachePath": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf",
+      "contentAddressedSnapshotId": "TR-5ec68ce5e0b2be55",
+      "countryCode": "TR",
+      "downloadedAt": "2026-08-28T17:52:41.477Z",
+      "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
+      "fileSizeBytes": 643317882,
+      "format": "osm-pbf",
+      "license": "ODbL-1.0",
+      "pbfHeader": {
+        "osmosisReplicationBaseUrl": "https://download.geofabrik.de/europe/turkey-updates",
+        "osmosisReplicationSequenceNumber": 4894,
+        "osmosisReplicationTimestamp": "2026-08-27T20:21:06.000Z",
+        "writingProgram": "osmium/1.16.0"
+      },
+      "providerId": "geofabrik-osm-extracts",
+      "providerName": "Geofabrik OpenStreetMap extracts",
+      "schemaVersion": "territorykit-tr-osm-snapshot-source-lock@1",
+      "sha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+      "snapshotDate": "2026-08-27T20:21:06.000Z",
+      "sourceDatasetId": "geofabrik:europe:turkey",
+      "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+      "lockPath": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json",
+      "pbfPath": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf",
+      "onDiskSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+      "byteSize": 643317882
     },
+    "derivedDistrictClips": [
+      {
+        "parentAdm2Id": "tr:adm2:54988432b89638439219394",
+        "slug": "kadikoy",
+        "extractionMode": "bbox-complete_ways",
+        "derivedClipSha256": "b197be4519c648be970b864b85b1f3952a0092e026eba563f91b63c1c1ce16ac",
+        "countryPbfSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+        "slug": "fatih",
+        "extractionMode": "polygon-complete_ways",
+        "derivedClipSha256": "7257afec863eb1abbb210a51b66d78236e9163b6827b6ef27ce89e318cb6fa35",
+        "countryPbfSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b79162079631621",
+        "slug": "uskudar",
+        "extractionMode": "bbox-complete_ways",
+        "derivedClipSha256": "5bd147e9ac5ee52e495335433e96e97be9dcd3cf5c3ef2eed738521061964c64",
+        "countryPbfSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+        "slug": "adalar",
+        "extractionMode": "polygon-complete_ways",
+        "derivedClipSha256": "95804e633a91dbc80d98f52bcda3702433caf614480466724dd8ec9f995260c4",
+        "countryPbfSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+        "slug": "eyupsultan",
+        "extractionMode": "bbox-complete_ways",
+        "derivedClipSha256": "902f35fa812ba85006249952d62121f097e0b4d85aca68560b032f48b290ac18",
+        "countryPbfSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b71345383711908",
+        "slug": "catalca",
+        "extractionMode": "bbox-complete_ways",
+        "derivedClipSha256": "11713c88f3a8647ac998e62eaa0dcd8228b3e3458b3554075ebe39f638f27691",
+        "countryPbfSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b67026781349893",
+        "slug": "basaksehir",
+        "extractionMode": "bbox-complete_ways",
+        "derivedClipSha256": "150441c3c8fb022f3620a7598e7adb2a5ee429e41ad0506dd99ce0fbe5246e8c",
+        "countryPbfSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b2777192469074",
+        "slug": "esenyurt",
+        "extractionMode": "bbox-complete_ways",
+        "derivedClipSha256": "a03dec91d67f9fd62e5092ff9929eca014a9ca5016e966e93db81ee4b536e6c1",
+        "countryPbfSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
+      }
+    ],
     "osmBarrierSnapshot": "reports/tr-adm3/sprint-2e-source-evidence/istanbul-eight-district-source-evidence-matrix.json"
   }
 }

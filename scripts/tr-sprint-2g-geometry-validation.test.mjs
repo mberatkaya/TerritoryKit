@@ -10,8 +10,10 @@ import {
   SPRINT_2G_REPORT_ROOT,
   buildGameplayOverlayReport,
   classifyDistrictOutcome,
+  loadRc8DistrictContext,
   orderedIstanbulPilots
 } from "./lib/tr-sprint-2g-geometry-validation.mjs";
+import { FATIH_REGRESSION_METRICS } from "./lib/tr-mahalle-identity-istanbul-pilots.mjs";
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const REPORT_DIR = join(REPO_ROOT, SPRINT_2G_REPORT_ROOT);
@@ -51,7 +53,23 @@ test("gameplay overlay report stays analysis-only", () => {
     osmZones: []
   });
   assert.equal(report.ownershipMigrationPerformed, false);
+  assert.equal(report.eligibleForMigration, false);
   assert.equal(report.status, "NOT_ASSESSED");
+  assert.doesNotMatch(JSON.stringify(report), /newOfficialTerritoryId/);
+});
+
+test("Fatih rc.8 canonical immutability pins match identity layer helpers", async (t) => {
+  const pilot = orderedIstanbulPilots().find((row) => row.slug === "fatih");
+  assert.ok(pilot);
+  const shard = join(REPO_ROOT, RC8_ROOT, "districts/tr_adm2_54988432b39641834885080/dataset.json");
+  if (!existsSync(shard)) {
+    t.skip("BLOCKED_BY_SOURCE: local rc.8 Fatih shard unavailable");
+    return;
+  }
+  const context = await loadRc8DistrictContext(REPO_ROOT, pilot, RC8_ROOT);
+  assert.equal(context.blocked, false);
+  assert.equal(context.zoneIdSetSha256, FATIH_REGRESSION_METRICS.zoneIdSetSha256);
+  assert.equal(context.geometryHashSetSha256, FATIH_REGRESSION_METRICS.geometryHashSetSha256);
 });
 
 test("Sprint 2G generator outputs decision artifact when local rc.8 + OSM bytes exist", async (t) => {

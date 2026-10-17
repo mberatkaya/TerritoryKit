@@ -21,6 +21,7 @@ import {
   loadOrExtractIstanbulOsmAdministrative,
   loadRc8DistrictContext,
   orderedIstanbulPilots,
+  osmUnresolvedForParent,
   osmZonesForParent,
   probeKadikoyCkanAlternatives
 } from "./lib/tr-sprint-2g-geometry-validation.mjs";
@@ -30,8 +31,7 @@ const GENERATED_AT = process.env.SPRINT_2G_GENERATED_AT ?? new Date().toISOStrin
 const RC8_ROOT =
   process.env.SPRINT_2G_RC8_ROOT ??
   ".territory/national-geometry-remediation/candidate-rc8-impl-rev1";
-const MAIN_BASELINE_SHA =
-  process.env.SPRINT_2G_MAIN_BASELINE_SHA ?? "ba03eedeea27c28dd0562d5744f070e94f6d3247";
+const MAIN_BASELINE_SHA = process.env.SPRINT_2G_MAIN_BASELINE_SHA ?? null;
 
 function gitHead() {
   try {
@@ -80,14 +80,22 @@ async function main() {
         district: pilot.district,
         slug: pilot.slug,
         parentAdm2Id: context.parentAdm2Id,
-        classification: "BLOCKED_BY_SOURCE",
+        classification:
+          context.reasonCode === "GEOMETRY_IMMUTABILITY_PIN_MISMATCH"
+            ? "GEOMETRY_IMMUTABILITY_BLOCKER"
+            : "BLOCKED_BY_SOURCE",
         officialPolygons: 0,
         osmAdministrativePolygons: 0,
         estimatedCandidatePolygons: 0,
         gameplayZoneCount: "NOT_ASSESSED",
         geometryQa: "NOT_ASSESSED",
         stressFocus: pilot.stressFocus ?? [],
-        notes: [context.missingArtifact]
+        notes: [
+          context.missingArtifact,
+          context.reasonCode,
+          context.expectedPins,
+          context.observedPins
+        ].filter(Boolean)
       });
       continue;
     }
@@ -104,9 +112,12 @@ async function main() {
     const geometryQa = assessDistrictGeometryQa({
       parent: context.parent,
       gameplayZones: context.gameplayZones,
-      osmZones
+      osmZones,
+      osmUnresolvedForDistrict: osmExtract.blocked
+        ? []
+        : osmUnresolvedForParent(osmExtract, context.parentAdm2Id)
     });
-    if (geometryQa.osmAdministrative.spatialQuality?.ok) {
+    if (geometryQa.polygonTechnicalQa?.osmAdministrative?.structurallyValid) {
       osmTechnicalPassCount += 1;
     }
 
@@ -153,12 +164,23 @@ async function main() {
       gameplayGeometryHashSetSha256: context.geometryHashSetSha256,
       gameplayZoneIdSetSha256: context.zoneIdSetSha256,
       geometryQa: {
-        gameplaySpatialOk: geometryQa.gameplay.spatialQuality.ok,
-        osmSpatialOk: geometryQa.osmAdministrative.spatialQuality?.ok ?? null,
-        gameplaySliverCount: geometryQa.gameplay.spatialQuality.summary.sliverCount,
-        osmSliverCount: geometryQa.osmAdministrative.spatialQuality?.summary.sliverCount ?? null,
-        gameplayOverlapCount: geometryQa.gameplay.spatialQuality.summary.overlapCount,
-        osmOverlapCount: geometryQa.osmAdministrative.spatialQuality?.summary.overlapCount ?? null
+        polygonTechnical: {
+          gameplaySpatialOk: geometryQa.polygonTechnicalQa.gameplay.structurallyValid,
+          osmSpatialOk: geometryQa.polygonTechnicalQa.osmAdministrative.structurallyValid,
+          gameplaySliverCount:
+            geometryQa.polygonTechnicalQa.gameplay.spatialQuality.summary.sliverCount,
+          osmSliverCount:
+            geometryQa.polygonTechnicalQa.osmAdministrative.spatialQuality?.summary.sliverCount ??
+            null,
+          gameplayOverlapCount:
+            geometryQa.polygonTechnicalQa.gameplay.spatialQuality.summary.overlapCount,
+          osmOverlapCount:
+            geometryQa.polygonTechnicalQa.osmAdministrative.spatialQuality?.summary.overlapCount ??
+            null,
+          gameplayParentContainmentNote:
+            geometryQa.polygonTechnicalQa.gameplay.parentContainmentNote ?? null
+        },
+        districtCoverage: geometryQa.districtCoverageQa
       },
       seedMetrics: identity.blocked
         ? { status: "NOT_ASSESSED" }
@@ -230,10 +252,12 @@ async function main() {
     missingArtifact: osmExtract.missingArtifact ?? null,
     fromCache: osmExtract.fromCache ?? false,
     cachePath: osmExtract.cachePath ?? null,
-    sourceLock: osmExtract.sourceLock ?? null,
+    countryPbfSourceLock: osmExtract.countryPbfSourceLock ?? null,
+    extractionComparisons: osmExtract.extractionComparisons ?? [],
     coverage: osmExtract.coverage ?? null,
     quality: osmExtract.quality ?? null,
     unresolvedCount: osmExtract.unresolved?.length ?? null,
+    unresolvedSummary: osmExtract.coverage?.unresolvedSummary ?? null,
     duplicateCount: osmExtract.duplicates?.length ?? null,
     pilots: districtMatrix.map((row) => ({
       slug: row.slug,
@@ -295,7 +319,14 @@ async function main() {
       estimatedExperimentalCount: 0
     },
     sourceLocks: {
-      osmPbf: osmExtract.sourceLock ?? null,
+      countryOsmPbf: osmExtract.countryPbfSourceLock ?? null,
+      derivedDistrictClips: (osmExtract.perDistrictExtracts ?? []).map((row) => ({
+        parentAdm2Id: row.parentAdm2Id,
+        slug: row.slug,
+        extractionMode: row.extractionMode,
+        derivedClipSha256: row.derivedClip?.sha256,
+        countryPbfSha256: osmExtract.countryPbfSourceLock?.sha256
+      })),
       osmBarrierSnapshot:
         "reports/tr-adm3/sprint-2e-source-evidence/istanbul-eight-district-source-evidence-matrix.json"
     }
@@ -335,7 +366,8 @@ async function main() {
     schemaVersion: "territorykit-tr-sprint-2g-decision@1",
     generatedAt: GENERATED_AT,
     repository: {
-      mainBaselineSha: MAIN_BASELINE_SHA,
+      mainBaselineSha: MAIN_BASELINE_SHA ?? gitHead(),
+      evaluatedCommit: gitHead(),
       branch: "feat/tr-istanbul-mahalle-geometry-validation",
       headSha: gitHead()
     },

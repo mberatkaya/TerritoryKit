@@ -2,9 +2,10 @@
   "schemaVersion": "territorykit-tr-sprint-2g-decision@1",
   "generatedAt": "2026-10-17T18:00:00.000Z",
   "repository": {
-    "mainBaselineSha": "ba03eedeea27c28dd0562d5744f070e94f6d3247",
+    "mainBaselineSha": "9339b0debad1aea320c822ace62c108775351e54",
+    "evaluatedCommit": "9339b0debad1aea320c822ace62c108775351e54",
     "branch": "feat/tr-istanbul-mahalle-geometry-validation",
-    "headSha": "2f51de2c00a290afb99584b336154254393605b8"
+    "headSha": "9339b0debad1aea320c822ace62c108775351e54"
   },
   "counts": {
     "verifiedOfficialPolygons": 0,

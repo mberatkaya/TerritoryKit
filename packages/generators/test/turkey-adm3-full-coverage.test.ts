@@ -9,6 +9,7 @@ import {
   computeTurkeyAdm3GeometryAreaKm2,
   createTurkeyAdm3GeneratedGeometryHash,
   createTurkeyAdm3GeneratedMigrationReport,
+  createTurkeyAdm3OsmResearchSpatialCorrespondenceReport,
   createTurkeyAdm3ProviderHealthReport,
   createTurkeyAdm3Registry,
   filterOsmAdministrativeBoundaryPolygons,
@@ -422,6 +423,26 @@ describe("Turkey ADM3 OSM and generated fallback behavior", () => {
         overlapPercent: 100
       }
     ]);
+  });
+
+  it("emits OSM research correspondence without official migration semantics", () => {
+    const generated = zone("tr:adm3:generated-old", "Generated", square(0, 0, 1, 1));
+    const osmCandidate = zone("tr:adm3:osm-candidate", "OSM", square(0, 0, 1, 1));
+    const report = createTurkeyAdm3OsmResearchSpatialCorrespondenceReport({
+      generatedAt: "2026-08-07T00:00:00.000Z",
+      gameplayZones: [generated],
+      osmCandidateZones: [osmCandidate]
+    });
+
+    expect(report.ownershipMigrationPerformed).toBe(false);
+    expect(report.correspondences[0]).toMatchObject({
+      gameplayZoneId: generated.id,
+      osmCandidateId: osmCandidate.id,
+      eligibleForMigration: false,
+      reviewRequired: true,
+      sourceClass: "osm-administrative-research"
+    });
+    expect(JSON.stringify(report)).not.toContain("newOfficialTerritoryId");
   });
 
   it("supports non-rectangular district clipping", () => {

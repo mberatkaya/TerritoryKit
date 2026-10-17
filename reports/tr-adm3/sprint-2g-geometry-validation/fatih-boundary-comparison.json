@@ -53,10 +53,23 @@
     "selectedForBoundaryResearch": "B-reviewed-osm-administrative"
   },
   "overlay": {
-    "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@1",
+    "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
     "generatedAt": "2026-10-17T18:00:00.000Z",
     "status": "ASSESSED",
-    "migrationSchema": "territorykit-tr-adm3-generated-migration@1",
+    "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1",
+    "correspondences": [
+      {
+        "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-cbeb5278a71425ce7202",
+        "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-2463371-balat-mahallesi",
+        "osmSourceNativeId": "osm:relation:2463371",
+        "intersectionAreaKm2": 0.000012,
+        "overlapRatio": 0.00000685,
+        "relationConfidence": "high",
+        "sourceClass": "osm-administrative-research",
+        "reviewRequired": true,
+        "eligibleForMigration": false
+      }
+    ],
     "correspondence": {
       "gameplayZoneCount": 30,
       "osmPolygonCount": 1,
@@ -95,16 +108,11 @@
       "orphanOsmPolygonIds": [],
       "manyToOneMergeCandidates": []
     },
-    "migrations": [
-      {
-        "oldGeneratedId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-cbeb5278a71425ce7202",
-        "newOfficialTerritoryId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-2463371-balat-mahallesi",
-        "overlapPercent": 0.000685
-      }
-    ],
     "stableIdMappingFeasibility": "REQUIRES_SPLIT_MERGE_MAP",
     "ownershipMigrationPerformed": false,
-    "evidencePath": "createTurkeyAdm3GeneratedMigrationReport"
+    "eligibleForMigration": false,
+    "reviewRequired": true,
+    "evidencePath": "createTurkeyAdm3OsmResearchSpatialCorrespondenceReport"
   },
   "mapPreviewPath": "reports/tr-adm3/sprint-2g-geometry-validation/map-preview/fatih-geometry-comparison.geojson"
 }

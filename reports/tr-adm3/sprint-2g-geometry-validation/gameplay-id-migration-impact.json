@@ -10,11 +10,13 @@
       "slug": "kadikoy",
       "parentAdm2Id": "tr:adm2:54988432b89638439219394",
       "overlay": {
-        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@1",
+        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
         "generatedAt": "2026-10-17T18:00:00.000Z",
         "status": "NOT_ASSESSED",
         "reason": "no-osm-administrative-polygons-for-parent",
-        "ownershipMigrationPerformed": false
+        "ownershipMigrationPerformed": false,
+        "eligibleForMigration": false,
+        "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1"
       },
       "gameplayImmutable": true,
       "ownershipMigrationPerformed": false
@@ -24,10 +26,23 @@
       "slug": "fatih",
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
       "overlay": {
-        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@1",
+        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
         "generatedAt": "2026-10-17T18:00:00.000Z",
         "status": "ASSESSED",
-        "migrationSchema": "territorykit-tr-adm3-generated-migration@1",
+        "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1",
+        "correspondences": [
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-cbeb5278a71425ce7202",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-2463371-balat-mahallesi",
+            "osmSourceNativeId": "osm:relation:2463371",
+            "intersectionAreaKm2": 0.000012,
+            "overlapRatio": 0.00000685,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          }
+        ],
         "correspondence": {
           "gameplayZoneCount": 30,
           "osmPolygonCount": 1,
@@ -66,16 +81,11 @@
           "orphanOsmPolygonIds": [],
           "manyToOneMergeCandidates": []
         },
-        "migrations": [
-          {
-            "oldGeneratedId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-cbeb5278a71425ce7202",
-            "newOfficialTerritoryId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-2463371-balat-mahallesi",
-            "overlapPercent": 0.000685
-          }
-        ],
         "stableIdMappingFeasibility": "REQUIRES_SPLIT_MERGE_MAP",
         "ownershipMigrationPerformed": false,
-        "evidencePath": "createTurkeyAdm3GeneratedMigrationReport"
+        "eligibleForMigration": false,
+        "reviewRequired": true,
+        "evidencePath": "createTurkeyAdm3OsmResearchSpatialCorrespondenceReport"
       },
       "gameplayImmutable": true,
       "ownershipMigrationPerformed": false
@@ -85,11 +95,13 @@
       "slug": "uskudar",
       "parentAdm2Id": "tr:adm2:54988432b79162079631621",
       "overlay": {
-        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@1",
+        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
         "generatedAt": "2026-10-17T18:00:00.000Z",
         "status": "NOT_ASSESSED",
         "reason": "no-osm-administrative-polygons-for-parent",
-        "ownershipMigrationPerformed": false
+        "ownershipMigrationPerformed": false,
+        "eligibleForMigration": false,
+        "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1"
       },
       "gameplayImmutable": true,
       "ownershipMigrationPerformed": false
@@ -99,10 +111,100 @@
       "slug": "adalar",
       "parentAdm2Id": "tr:adm2:54988432b94516152709384",
       "overlay": {
-        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@1",
+        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
         "generatedAt": "2026-10-17T18:00:00.000Z",
         "status": "ASSESSED",
-        "migrationSchema": "territorykit-tr-adm3-generated-migration@1",
+        "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1",
+        "correspondences": [
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-71fb87fbe1fa6a633790",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460393-kinaliada-mahallesi",
+            "osmSourceNativeId": "osm:relation:9460393",
+            "intersectionAreaKm2": 0.64896,
+            "overlapRatio": 0.96686676,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          },
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-96e1fbaea13d9cb6230c",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460394-burgazada-mahallesi",
+            "osmSourceNativeId": "osm:relation:9460394",
+            "intersectionAreaKm2": 0.045463,
+            "overlapRatio": 0.80938223,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          },
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-96ee849e174e02b8360c",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460395-heybeliada-mahallesi",
+            "osmSourceNativeId": "osm:relation:9460395",
+            "intersectionAreaKm2": 1.060196,
+            "overlapRatio": 0.9263949300000001,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          },
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-96f975e3dd7e37b2d009",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460393-kinaliada-mahallesi",
+            "osmSourceNativeId": "osm:relation:9460393",
+            "intersectionAreaKm2": 0.093741,
+            "overlapRatio": 0.88981386,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          },
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-994a54bedcdc60a31060",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460394-burgazada-mahallesi",
+            "osmSourceNativeId": "osm:relation:9460394",
+            "intersectionAreaKm2": 1.421772,
+            "overlapRatio": 0.94381539,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          },
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-9c7cd48baa710591f489",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460394-burgazada-mahallesi",
+            "osmSourceNativeId": "osm:relation:9460394",
+            "intersectionAreaKm2": 0.075054,
+            "overlapRatio": 0.8726296100000001,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          },
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-f4741f736b67e740169d",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460395-heybeliada-mahallesi",
+            "osmSourceNativeId": "osm:relation:9460395",
+            "intersectionAreaKm2": 1.355673,
+            "overlapRatio": 0.9830064199999999,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          },
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-f71829b8b50938358ff0",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460393-kinaliada-mahallesi",
+            "osmSourceNativeId": "osm:relation:9460393",
+            "intersectionAreaKm2": 0.666251,
+            "overlapRatio": 0.97520602,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          }
+        ],
         "correspondence": {
           "gameplayZoneCount": 14,
           "osmPolygonCount": 3,
@@ -118,64 +220,24 @@
           "orphanOsmPolygonIds": [],
           "manyToOneMergeCandidates": [
             {
-              "osmTerritoryId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460393-kinaliada-mahallesi",
+              "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460393-kinaliada-mahallesi",
               "gameplayZoneCount": 3
             },
             {
-              "osmTerritoryId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460394-burgazada-mahallesi",
+              "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460394-burgazada-mahallesi",
               "gameplayZoneCount": 3
             },
             {
-              "osmTerritoryId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460395-heybeliada-mahallesi",
+              "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460395-heybeliada-mahallesi",
               "gameplayZoneCount": 2
             }
           ]
         },
-        "migrations": [
-          {
-            "oldGeneratedId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-71fb87fbe1fa6a633790",
-            "newOfficialTerritoryId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460393-kinaliada-mahallesi",
-            "overlapPercent": 96.686676
-          },
-          {
-            "oldGeneratedId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-96e1fbaea13d9cb6230c",
-            "newOfficialTerritoryId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460394-burgazada-mahallesi",
-            "overlapPercent": 80.938223
-          },
-          {
-            "oldGeneratedId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-96ee849e174e02b8360c",
-            "newOfficialTerritoryId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460395-heybeliada-mahallesi",
-            "overlapPercent": 92.639493
-          },
-          {
-            "oldGeneratedId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-96f975e3dd7e37b2d009",
-            "newOfficialTerritoryId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460393-kinaliada-mahallesi",
-            "overlapPercent": 88.981386
-          },
-          {
-            "oldGeneratedId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-994a54bedcdc60a31060",
-            "newOfficialTerritoryId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460394-burgazada-mahallesi",
-            "overlapPercent": 94.381539
-          },
-          {
-            "oldGeneratedId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-9c7cd48baa710591f489",
-            "newOfficialTerritoryId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460394-burgazada-mahallesi",
-            "overlapPercent": 87.262961
-          },
-          {
-            "oldGeneratedId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-f4741f736b67e740169d",
-            "newOfficialTerritoryId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460395-heybeliada-mahallesi",
-            "overlapPercent": 98.300642
-          },
-          {
-            "oldGeneratedId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-f71829b8b50938358ff0",
-            "newOfficialTerritoryId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460393-kinaliada-mahallesi",
-            "overlapPercent": 97.520602
-          }
-        ],
         "stableIdMappingFeasibility": "REQUIRES_SPLIT_MERGE_MAP",
         "ownershipMigrationPerformed": false,
-        "evidencePath": "createTurkeyAdm3GeneratedMigrationReport"
+        "eligibleForMigration": false,
+        "reviewRequired": true,
+        "evidencePath": "createTurkeyAdm3OsmResearchSpatialCorrespondenceReport"
       },
       "gameplayImmutable": true,
       "ownershipMigrationPerformed": false
@@ -185,11 +247,13 @@
       "slug": "eyupsultan",
       "parentAdm2Id": "tr:adm2:54988432b93840376788897",
       "overlay": {
-        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@1",
+        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
         "generatedAt": "2026-10-17T18:00:00.000Z",
         "status": "NOT_ASSESSED",
         "reason": "no-osm-administrative-polygons-for-parent",
-        "ownershipMigrationPerformed": false
+        "ownershipMigrationPerformed": false,
+        "eligibleForMigration": false,
+        "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1"
       },
       "gameplayImmutable": true,
       "ownershipMigrationPerformed": false
@@ -199,11 +263,13 @@
       "slug": "catalca",
       "parentAdm2Id": "tr:adm2:54988432b71345383711908",
       "overlay": {
-        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@1",
+        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
         "generatedAt": "2026-10-17T18:00:00.000Z",
         "status": "NOT_ASSESSED",
         "reason": "no-osm-administrative-polygons-for-parent",
-        "ownershipMigrationPerformed": false
+        "ownershipMigrationPerformed": false,
+        "eligibleForMigration": false,
+        "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1"
       },
       "gameplayImmutable": true,
       "ownershipMigrationPerformed": false
@@ -213,11 +279,13 @@
       "slug": "basaksehir",
       "parentAdm2Id": "tr:adm2:54988432b67026781349893",
       "overlay": {
-        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@1",
+        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
         "generatedAt": "2026-10-17T18:00:00.000Z",
         "status": "NOT_ASSESSED",
         "reason": "no-osm-administrative-polygons-for-parent",
-        "ownershipMigrationPerformed": false
+        "ownershipMigrationPerformed": false,
+        "eligibleForMigration": false,
+        "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1"
       },
       "gameplayImmutable": true,
       "ownershipMigrationPerformed": false
@@ -227,11 +295,13 @@
       "slug": "esenyurt",
       "parentAdm2Id": "tr:adm2:54988432b2777192469074",
       "overlay": {
-        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@1",
+        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
         "generatedAt": "2026-10-17T18:00:00.000Z",
         "status": "NOT_ASSESSED",
         "reason": "no-osm-administrative-polygons-for-parent",
-        "ownershipMigrationPerformed": false
+        "ownershipMigrationPerformed": false,
+        "eligibleForMigration": false,
+        "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1"
       },
       "gameplayImmutable": true,
       "ownershipMigrationPerformed": false
