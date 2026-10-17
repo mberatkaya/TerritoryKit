@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-coverage@1",
+  "generatedAt": "2026-10-15T21:59:26.873Z",
+  "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+  "gameplayDatasetVersion": "2.1.0-rc.8",
+  "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
+  "contentChecksum": "fnv1a32:c85fa5eb",
+  "associationCoverage": {
+    "seededZoneCount": 25,
+    "unseededZoneCount": 5,
+    "singleCandidateZoneCount": 10,
+    "ambiguousZoneCount": 15,
+    "seedCount": 71,
+    "associationCount": 71
+  },
+  "officialPolygonCoverage": {
+    "settlementCountWithOfficialPolygon": 0,
+    "settlementCountWithOsmAdminPolygon": 0,
+    "settlementCountSeedOnly": 71,
+    "note": "Fatih pilot has no independently verified official mahalle polygons in gameplay or identity layer."
+  },
+  "sourcePrecedence": [
+    "approved-official-polygon",
+    "reviewed-osm-administrative-polygon",
+    "seed-only-semantic-association",
+    "unknown"
+  ],
+  "provenance": {
+    "gameplayShard": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1/districts/tr_adm2_54988432b39641834885080/dataset.json",
+    "rc8Root": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+    "barrierRoot": ".territory/sprint-6/calibration/barriers",
+    "osmSourceLock": null,
+    "osmSourceLockState": "unknown",
+    "barrierManifestChecksum": "c53f668586e639302eb4d51b26000a583cf6f0bb299b6cead73914bc88c9f652",
+    "missingSourceReasonCode": "SOURCE_LOCK_MISSING"
+  },
+  "licenseChecks": {
+    "osmLicense": "ODbL-1.0",
+    "licenseState": "pending",
+    "permissionStatus": "redistribution-unknown",
+    "redistributionApproved": false,
+    "redistributionEvidenceState": "pending",
+    "commercialUseRequiresSeparateReview": true,
+    "hostedTileDeliveryRequiresSeparateReview": true
+  }
+}

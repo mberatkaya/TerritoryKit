@@ -1,0 +1,217 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-ambiguity@1",
+  "generatedAt": "2026-10-15T21:59:26.873Z",
+  "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+  "zoneCount": 30,
+  "ambiguousZoneCount": 15,
+  "singleSeedZoneCount": 10,
+  "unseededZoneCount": 5,
+  "distinctSeedsRepresented": 71,
+  "ambiguousZones": [
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-073b672500565ae4fb3e",
+      "zoneName": "Territory 006",
+      "distinctNormalizedNames": ["koca mustafapaşa", "samatya"],
+      "settlementIds": ["tr:settlement:osm:node:4999339810", "tr:settlement:osm:node:6318171354"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-290699f58ea199c88a63",
+      "zoneName": "Territory 024",
+      "distinctNormalizedNames": ["cibali", "küçükmustafapaşa", "zeyrek"],
+      "settlementIds": [
+        "tr:settlement:osm:node:4999339819",
+        "tr:settlement:osm:node:6320765720",
+        "tr:settlement:osm:node:4947158667"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-2b5978834366688ae645",
+      "zoneName": "Territory 025",
+      "distinctNormalizedNames": ["ali kuşçu", "fatih", "yavuz sultan selim"],
+      "settlementIds": [
+        "tr:settlement:osm:node:4999341428",
+        "tr:settlement:osm:node:26504810",
+        "tr:settlement:osm:node:4999341423"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-59f9cd89af41c5776554",
+      "zoneName": "Territory 009",
+      "distinctNormalizedNames": ["binbirdirek", "küçük ayasofya"],
+      "settlementIds": ["tr:settlement:osm:node:4999341455", "tr:settlement:osm:node:4999341441"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-67991e44ab1c9e28442b",
+      "zoneName": "Territory 013",
+      "distinctNormalizedNames": ["katip kasım", "kemalpaşa", "laleli", "mesihpaşa"],
+      "settlementIds": [
+        "tr:settlement:osm:node:4999339811",
+        "tr:settlement:osm:node:4999341438",
+        "tr:settlement:osm:node:6315581139",
+        "tr:settlement:osm:node:4999339813"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-78efecad6d2ae4ccd2ec",
+      "zoneName": "Territory 016",
+      "distinctNormalizedNames": [
+        "balabanağa",
+        "beyazıt",
+        "cağaloğlu",
+        "eminönü",
+        "hobyar",
+        "mahmutpaşa",
+        "molla fenari",
+        "rüstempaşa",
+        "sirkeci",
+        "sururi",
+        "tahtakale",
+        "taya hatun"
+      ],
+      "settlementIds": [
+        "tr:settlement:osm:node:4999341431",
+        "tr:settlement:osm:node:4999341436",
+        "tr:settlement:osm:node:14067649003",
+        "tr:settlement:osm:node:6310508017",
+        "tr:settlement:osm:node:4999339816",
+        "tr:settlement:osm:node:6311605509",
+        "tr:settlement:osm:node:4999339807",
+        "tr:settlement:osm:node:4996909348",
+        "tr:settlement:osm:node:7863036213",
+        "tr:settlement:osm:node:4999341456",
+        "tr:settlement:osm:node:4947158644",
+        "tr:settlement:osm:node:4947158664"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-88ec65114d7d0e51d713",
+      "zoneName": "Territory 011",
+      "distinctNormalizedNames": [
+        "emin sinan",
+        "mimar hayrettin",
+        "mimar kemalettin",
+        "nişanca",
+        "saraç ishak",
+        "şehsuvar bey"
+      ],
+      "settlementIds": [
+        "tr:settlement:osm:node:4999341434",
+        "tr:settlement:osm:node:4999339806",
+        "tr:settlement:osm:node:4999341442",
+        "tr:settlement:osm:node:4999341445",
+        "tr:settlement:osm:node:4999339812",
+        "tr:settlement:osm:node:4999341443"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-9f83a09e877b09576ca7",
+      "zoneName": "Territory 002",
+      "distinctNormalizedNames": ["silivrikapı", "sümbül efendi"],
+      "settlementIds": ["tr:settlement:osm:node:4999341450", "tr:settlement:osm:node:4947158661"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ae51c43e7a16247111a1",
+      "zoneName": "Territory 008",
+      "distinctNormalizedNames": ["aksaray", "cerrahpaşa", "haseki sultan"],
+      "settlementIds": [
+        "tr:settlement:osm:node:4999339820",
+        "tr:settlement:osm:node:4996909326",
+        "tr:settlement:osm:node:4996909325"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b3e509aaad7fa40c97c0",
+      "zoneName": "Territory 027",
+      "distinctNormalizedNames": ["hırka-i şerif", "karagümrük"],
+      "settlementIds": ["tr:settlement:osm:node:4999339818", "tr:settlement:osm:node:4999341427"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-bf7df56ae203fd5afe33",
+      "zoneName": "Territory 005",
+      "distinctNormalizedNames": ["kumkapı", "muhsine hatun", "sultan ahmet", "yenikapı"],
+      "settlementIds": [
+        "tr:settlement:osm:node:6315573196",
+        "tr:settlement:osm:node:4999341444",
+        "tr:settlement:osm:node:4999339814",
+        "tr:settlement:osm:node:7863036212"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-c760995c457452ed71a1",
+      "zoneName": "Territory 020",
+      "distinctNormalizedNames": [
+        "demirtaş",
+        "hacı kadın",
+        "hoca gıyasettin",
+        "kalenderhane",
+        "mercan",
+        "molla hüsrev",
+        "sarıdemir",
+        "süleymaniye",
+        "unkapanı",
+        "vefa",
+        "yavuz sinan"
+      ],
+      "settlementIds": [
+        "tr:settlement:osm:node:4999341432",
+        "tr:settlement:osm:node:4947158666",
+        "tr:settlement:osm:node:4999339805",
+        "tr:settlement:osm:node:4996909339",
+        "tr:settlement:osm:node:4947158637",
+        "tr:settlement:osm:node:4996909340",
+        "tr:settlement:osm:node:4999339809",
+        "tr:settlement:osm:node:4999341449",
+        "tr:settlement:osm:node:269753710",
+        "tr:settlement:osm:node:6315827801",
+        "tr:settlement:osm:node:4947158640"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-cbeb5278a71425ce7202",
+      "zoneName": "Territory 010",
+      "distinctNormalizedNames": ["alemdar", "cankurtaran", "hocapaşa"],
+      "settlementIds": [
+        "tr:settlement:osm:node:4999341435",
+        "tr:settlement:osm:node:4999339815",
+        "tr:settlement:osm:node:4999339808"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dc4135f5abb73435480a",
+      "zoneName": "Territory 028",
+      "distinctNormalizedNames": ["balat", "fener"],
+      "settlementIds": ["tr:settlement:osm:node:4999341422", "tr:settlement:osm:node:6093191297"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-f24cd8558fe73d01e2b4",
+      "zoneName": "Territory 029",
+      "distinctNormalizedNames": ["ayvansaray", "derviş ali"],
+      "settlementIds": ["tr:settlement:osm:node:4947158624", "tr:settlement:osm:node:4947158665"]
+    }
+  ],
+  "conflictAssociations": [],
+  "altBComparison": {
+    "previewSchema": "territorykit-tr-mahalle-first-alternative-b-semantic@1",
+    "preview": {
+      "ambiguousZoneCount": 15,
+      "singleSeedZoneCount": 10,
+      "unseededZoneCount": 5,
+      "distinctSeedsRepresented": 71,
+      "zoneCount": 30
+    },
+    "identityLayer": {
+      "zoneCount": 30,
+      "ambiguousZoneCount": 15,
+      "singleSeedZoneCount": 10,
+      "unseededZoneCount": 5,
+      "distinctSeedsRepresented": 71
+    },
+    "deltas": {
+      "ambiguousZoneCount": 0,
+      "singleSeedZoneCount": 0,
+      "unseededZoneCount": 0,
+      "distinctSeedsRepresented": 0
+    },
+    "deltaExplanation": "Counts match preview within dedupe/boundary policy."
+  }
+}
