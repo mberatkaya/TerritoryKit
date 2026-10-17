@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2h-source-integrity@1",
+  "status": "GO",
+  "expectedSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+  "lockSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+  "onDiskSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+  "expectedByteSize": 643317882,
+  "onDiskByteSize": 643317882,
+  "snapshotDate": "2026-08-27T20:21:06.000Z",
+  "providerId": "geofabrik-osm-extracts",
+  "pbfPath": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf",
+  "lockPath": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json"
+}

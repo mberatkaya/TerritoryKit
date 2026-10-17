@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2h-relation-completeness-root-cause@1",
+  "generatedAt": "2026-10-17T18:11:17.862Z",
+  "countryPbfPath": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf",
+  "countryPbfPresent": true,
+  "parserImplementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2h-multipolygon-stitch",
+  "summary": {
+    "assessedDistricts": 2,
+    "districtsWithClipDrivenLoss": 1
+  },
+  "districts": [
+    {
+      "slug": "fatih",
+      "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+      "targetRelationIdCount": 63,
+      "polygonClipUnresolved": 15,
+      "relationGetidUnresolved": 6,
+      "unresolvedDeltaAfterCountryGetid": 9,
+      "polygonClipMissingOuter": 14,
+      "relationGetidMissingOuter": 0,
+      "rootCauseHint": "clip-or-assembler-loss"
+    },
+    {
+      "slug": "adalar",
+      "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+      "targetRelationIdCount": 5,
+      "polygonClipUnresolved": 0,
+      "relationGetidUnresolved": 0,
+      "unresolvedDeltaAfterCountryGetid": 0,
+      "polygonClipMissingOuter": 0,
+      "relationGetidMissingOuter": 0,
+      "rootCauseHint": "remaining-source-or-semantic-blockers"
+    }
+  ],
+  "conclusion": "Sprint 2G failures were dominated by open-way multipolygon assembly (parser) and incomplete derived clips; stitched assembly recovers most polygon-complete_ways candidates where member ways are present in the clip."
+}

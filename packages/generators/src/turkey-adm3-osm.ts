@@ -12,6 +12,8 @@ import { readOsmPbf } from "@osmix/pbf";
 import type { OsmPbfBlock, OsmPbfGroup } from "@osmix/pbf";
 import { computeGeometryRepresentativePoint } from "./geometry-repair.js";
 import { createTurkeyAdm3GeometryHash } from "./turkey-adm3-full-coverage.js";
+import { assembleTurkeyOsmMultipolygonGeometry } from "./turkey-osm-barriers.js";
+import type { TurkeyOsmMultipolygonAssemblyResult } from "./turkey-osm-barriers.js";
 import { sha256Hex, serializeJsonStable } from "./sources/utils.js";
 
 export const TURKEY_ADM3_OSM_SOURCE_URL = "https://download.geofabrik.de/europe/turkey.html";
@@ -74,7 +76,7 @@ const textDecoder = new TextDecoder();
 const ACCEPTED_ADMIN_LEVELS = new Set(["8", "9", "10", "11"]);
 
 export const TURKEY_ADM3_OSM_PARSER_IMPLEMENTATION_REVISION =
-  "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata";
+  "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2h-multipolygon-stitch";
 
 const MAHALLE_PLACE_TAGS = new Set(["neighbourhood", "quarter", "suburb", "village"]);
 
@@ -502,10 +504,6 @@ function diagnoseRelationGeometryFailure(
       continue;
     }
 
-    if (way.refs.length < 4 || way.refs[0] !== way.refs[way.refs.length - 1]) {
-      return "open-outer-way-ring";
-    }
-
     if (way.refs.some((ref) => !nodes.has(ref))) {
       return "missing-nodes-on-outer-way";
     }
@@ -519,7 +517,19 @@ function diagnoseRelationGeometryFailure(
     return "missing-inner-way-members";
   }
 
-  return "relation-topology-incomplete";
+  for (const member of innerMembers) {
+    const way = ways.get(member.ref);
+    if (!way) {
+      continue;
+    }
+
+    if (way.refs.some((ref) => !nodes.has(ref))) {
+      return "missing-nodes-on-inner-way";
+    }
+  }
+
+  const assembly = assembleTurkeyAdm3OsmRelationGeometry(relation, ways, nodes);
+  return mapTurkeyAdm3OsmMultipolygonFailureReason(assembly);
 }
 
 export function summarizeTurkeyAdm3OsmUnresolvedEntries(
@@ -589,6 +599,54 @@ function closedWayGeometry(
   };
 }
 
+function assembleTurkeyAdm3OsmRelationGeometry(
+  relation: OsmRelation,
+  ways: ReadonlyMap<number, OsmWay>,
+  nodes: ReadonlyMap<number, OsmNode>
+): TurkeyOsmMultipolygonAssemblyResult {
+  return assembleTurkeyOsmMultipolygonGeometry(relation, ways, nodes);
+}
+
+function mapTurkeyAdm3OsmMultipolygonFailureReason(
+  assembly: TurkeyOsmMultipolygonAssemblyResult
+): string {
+  const blocking = assembly.issues.filter(
+    (issue) => issue.code !== "OSM_MULTIPOLYGON_ORPHAN_INNER"
+  );
+  const first = blocking[0] ?? assembly.issues[0];
+
+  if (!first) {
+    return "relation-topology-incomplete";
+  }
+
+  switch (first.code) {
+    case "OSM_MULTIPOLYGON_UNSUPPORTED_RELATION_TYPE":
+      return "unsupported-relation-type";
+    case "OSM_MULTIPOLYGON_NESTED_RELATION_UNSUPPORTED":
+      return "nested-relation-unsupported";
+    case "OSM_MULTIPOLYGON_INCOMPLETE_INNER":
+      return "missing-inner-way-members";
+    case "OSM_MULTIPOLYGON_INCOMPLETE_OUTER":
+      return relationOuterFailureReason(first.details);
+    default:
+      return "relation-topology-incomplete";
+  }
+}
+
+function relationOuterFailureReason(details?: Record<string, unknown>): string {
+  const memberWayId = details?.memberWayId;
+  if (memberWayId !== undefined) {
+    return "missing-outer-way-members";
+  }
+
+  const memberWayIds = details?.memberWayIds;
+  if (Array.isArray(memberWayIds) && memberWayIds.length > 0) {
+    return "open-outer-way-ring";
+  }
+
+  return "relation-topology-incomplete";
+}
+
 function relationGeometry(
   relation: OsmRelation,
   ways: ReadonlyMap<number, OsmWay>,
@@ -598,26 +656,14 @@ function relationGeometry(
     return undefined;
   }
 
-  const rings = relation.members
-    .filter((member) => member.type === "way" && (member.role === "outer" || member.role === ""))
-    .flatMap((member) => {
-      const way = ways.get(member.ref);
-      const geometry = way ? closedWayGeometry(way, nodes) : undefined;
-      return geometry?.type === "Polygon" ? geometry.coordinates : [];
-    });
+  const assembly = assembleTurkeyAdm3OsmRelationGeometry(relation, ways, nodes);
+  const geometry = assembly.geometry;
 
-  if (rings.length === 0) {
+  if (!geometry || (geometry.type !== "Polygon" && geometry.type !== "MultiPolygon")) {
     return undefined;
   }
 
-  if (rings.length === 1) {
-    return { type: "Polygon", coordinates: [rings[0]!] };
-  }
-
-  return {
-    type: "MultiPolygon",
-    coordinates: rings.map((ring) => [ring])
-  };
+  return geometry as TerritoryGeometry;
 }
 
 function classifyTurkeyAdm3OsmSemanticType(

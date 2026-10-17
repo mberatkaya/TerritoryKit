@@ -1,0 +1,167 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2h-performance-and-memory@1",
+  "generatedAt": "2026-10-17T18:11:17.862Z",
+  "perDistrict": [
+    {
+      "slug": "kadikoy",
+      "parentAdm2Id": "tr:adm2:54988432b89638439219394",
+      "clipRel": ".territory/sprint-2g/osm-clip-bbox-54988432b89638439219394.osm.pbf",
+      "builtPolygonCount": 21,
+      "unresolvedCount": 77,
+      "unresolvedSummary": {
+        "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+        "entryCount": 77,
+        "uniqueUnresolvedRelationIds": 76,
+        "repeatedRelationAttemptCount": 0,
+        "extraUnresolvedOccurrences": 0,
+        "repeatedRelationAttempts": [],
+        "reasonCounts": {
+          "missing-outer-way-members": 23,
+          "parent-unresolved": 54
+        }
+      },
+      "durationMs": 483
+    },
+    {
+      "slug": "fatih",
+      "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+      "clipRel": ".territory/sprint-2g/osm-clip-poly-54988432b39641834885080.osm.pbf",
+      "builtPolygonCount": 48,
+      "unresolvedCount": 15,
+      "unresolvedSummary": {
+        "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+        "entryCount": 15,
+        "uniqueUnresolvedRelationIds": 15,
+        "repeatedRelationAttemptCount": 0,
+        "extraUnresolvedOccurrences": 0,
+        "repeatedRelationAttempts": [],
+        "reasonCounts": {
+          "missing-outer-way-members": 14,
+          "parent-unresolved": 1
+        }
+      },
+      "durationMs": 160
+    },
+    {
+      "slug": "uskudar",
+      "parentAdm2Id": "tr:adm2:54988432b79162079631621",
+      "clipRel": ".territory/sprint-2g/osm-clip-bbox-54988432b71345383711908.osm.pbf",
+      "builtPolygonCount": 0,
+      "unresolvedCount": 117,
+      "unresolvedSummary": {
+        "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+        "entryCount": 117,
+        "uniqueUnresolvedRelationIds": 111,
+        "repeatedRelationAttemptCount": 0,
+        "extraUnresolvedOccurrences": 0,
+        "repeatedRelationAttempts": [],
+        "reasonCounts": {
+          "geometry-unavailable": 6,
+          "missing-outer-way-members": 33,
+          "parent-unresolved": 78
+        }
+      },
+      "durationMs": 14508
+    },
+    {
+      "slug": "adalar",
+      "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+      "clipRel": ".territory/sprint-2g/osm-clip-poly-54988432b94516152709384.osm.pbf",
+      "builtPolygonCount": 5,
+      "unresolvedCount": 0,
+      "unresolvedSummary": {
+        "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+        "entryCount": 0,
+        "uniqueUnresolvedRelationIds": 0,
+        "repeatedRelationAttemptCount": 0,
+        "extraUnresolvedOccurrences": 0,
+        "repeatedRelationAttempts": [],
+        "reasonCounts": {}
+      },
+      "durationMs": 93
+    },
+    {
+      "slug": "eyupsultan",
+      "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+      "clipRel": ".territory/sprint-2g/osm-clip-bbox-54988432b93840376788897.osm.pbf",
+      "builtPolygonCount": 29,
+      "unresolvedCount": 345,
+      "unresolvedSummary": {
+        "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+        "entryCount": 345,
+        "uniqueUnresolvedRelationIds": 318,
+        "repeatedRelationAttemptCount": 0,
+        "extraUnresolvedOccurrences": 0,
+        "repeatedRelationAttempts": [],
+        "reasonCounts": {
+          "geometry-unavailable": 27,
+          "missing-outer-way-members": 51,
+          "parent-unresolved": 267
+        }
+      },
+      "durationMs": 1894
+    },
+    {
+      "slug": "catalca",
+      "parentAdm2Id": "tr:adm2:54988432b71345383711908",
+      "clipRel": ".territory/sprint-2g/osm-clip-bbox-54988432b67026781349893.osm.pbf",
+      "builtPolygonCount": 0,
+      "unresolvedCount": 107,
+      "unresolvedSummary": {
+        "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+        "entryCount": 107,
+        "uniqueUnresolvedRelationIds": 107,
+        "repeatedRelationAttemptCount": 0,
+        "extraUnresolvedOccurrences": 0,
+        "repeatedRelationAttempts": [],
+        "reasonCounts": {
+          "missing-outer-way-members": 48,
+          "parent-unresolved": 59
+        }
+      },
+      "durationMs": 517
+    },
+    {
+      "slug": "basaksehir",
+      "parentAdm2Id": "tr:adm2:54988432b67026781349893",
+      "clipRel": ".territory/sprint-2g/osm-clip-bbox-54988432b79162079631621.osm.pbf",
+      "builtPolygonCount": 0,
+      "unresolvedCount": 175,
+      "unresolvedSummary": {
+        "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+        "entryCount": 175,
+        "uniqueUnresolvedRelationIds": 170,
+        "repeatedRelationAttemptCount": 0,
+        "extraUnresolvedOccurrences": 0,
+        "repeatedRelationAttempts": [],
+        "reasonCounts": {
+          "geometry-unavailable": 4,
+          "missing-outer-way-members": 37,
+          "parent-unresolved": 134
+        }
+      },
+      "durationMs": 696
+    },
+    {
+      "slug": "esenyurt",
+      "parentAdm2Id": "tr:adm2:54988432b2777192469074",
+      "clipRel": ".territory/sprint-2g/osm-clip-bbox-54988432b2777192469074.osm.pbf",
+      "builtPolygonCount": 42,
+      "unresolvedCount": 39,
+      "unresolvedSummary": {
+        "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+        "entryCount": 39,
+        "uniqueUnresolvedRelationIds": 39,
+        "repeatedRelationAttemptCount": 0,
+        "extraUnresolvedOccurrences": 0,
+        "repeatedRelationAttempts": [],
+        "reasonCounts": {
+          "missing-outer-way-members": 20,
+          "parent-unresolved": 19
+        }
+      },
+      "durationMs": 272
+    }
+  ],
+  "note": "Peak heap captured per extraction pass in method comparisons and district rollup."
+}

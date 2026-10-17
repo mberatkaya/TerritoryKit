@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2h-polygon-technical-qa-rollup@1",
+  "generatedAt": "2026-10-17T18:11:17.862Z",
+  "byDistrict": {
+    "kadikoy": {
+      "schemaVersion": "territorykit-tr-sprint-2h-polygon-technical-qa@1",
+      "zoneCount": 21,
+      "structurallyValid": true,
+      "selfIntersectionCount": 0,
+      "overlapCount": 0,
+      "gapCount": 1
+    },
+    "fatih": {
+      "schemaVersion": "territorykit-tr-sprint-2h-polygon-technical-qa@1",
+      "zoneCount": 48,
+      "structurallyValid": true,
+      "selfIntersectionCount": 0,
+      "overlapCount": 1,
+      "gapCount": 1
+    },
+    "uskudar": {
+      "status": "NOT_ASSESSED",
+      "zoneCount": 0
+    },
+    "adalar": {
+      "schemaVersion": "territorykit-tr-sprint-2h-polygon-technical-qa@1",
+      "zoneCount": 5,
+      "structurallyValid": true,
+      "selfIntersectionCount": 0,
+      "overlapCount": 0,
+      "gapCount": 1
+    },
+    "eyupsultan": {
+      "schemaVersion": "territorykit-tr-sprint-2h-polygon-technical-qa@1",
+      "zoneCount": 29,
+      "structurallyValid": true,
+      "selfIntersectionCount": 0,
+      "overlapCount": 0,
+      "gapCount": 1
+    },
+    "catalca": {
+      "status": "NOT_ASSESSED",
+      "zoneCount": 0
+    },
+    "basaksehir": {
+      "status": "NOT_ASSESSED",
+      "zoneCount": 0
+    },
+    "esenyurt": {
+      "schemaVersion": "territorykit-tr-sprint-2h-polygon-technical-qa@1",
+      "zoneCount": 42,
+      "structurallyValid": true,
+      "selfIntersectionCount": 0,
+      "overlapCount": 0,
+      "gapCount": 1
+    }
+  }
+}

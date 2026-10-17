@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2h-extraction-method-comparison@1",
+  "slug": "fatih",
+  "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+  "fixedTargetRelationIdCount": 63,
+  "targetRelationIds": [
+    2463274, 2463371, 2463390, 2464768, 2464918, 2468218, 2468219, 2468242, 6868850, 7648808,
+    7648809, 7648810, 7648811, 7648812, 7648813, 7648814, 7648815, 7648816, 7648817, 7648818,
+    7648819, 7648820, 7648821, 7648822, 7648823, 7648824, 7648825, 7648826, 7648827, 7648828,
+    7648829, 7648830, 7648831, 7648832, 7648833, 7648834, 7648835, 7648836, 7648837, 7648838,
+    7648839, 7648840, 7648841, 7648842, 7648843, 7648845, 7648846, 7648847, 7648848, 7648849,
+    7648850, 7648851, 7648852, 7648853, 7648854, 7648855, 7964540, 7964551, 7964967, 7965519,
+    8111527, 9381516, 9381694
+  ],
+  "methods": {
+    "polygonCompleteWays": {
+      "label": "polygon-complete_ways",
+      "status": "ASSESSED",
+      "clipPath": ".territory/sprint-2g/osm-clip-poly-54988432b39641834885080.osm.pbf",
+      "clipSha256": "7257afec863eb1abbb210a51b66d78236e9163b6827b6ef27ce89e318cb6fa35",
+      "clipByteSize": 2266903,
+      "builtPolygonCount": 48,
+      "unresolvedCount": 15,
+      "uniqueUnresolvedRelationIds": 15,
+      "reasonCounts": {
+        "missing-outer-way-members": 14,
+        "parent-unresolved": 1
+      },
+      "durationMs": 206,
+      "peakHeapUsedBytes": 135407472,
+      "extractionCommand": null
+    },
+    "bboxCompleteWays": {
+      "label": "bbox-complete_ways",
+      "status": "ASSESSED",
+      "clipPath": ".territory/sprint-2g/osm-clip-bbox-54988432b39641834885080.osm.pbf",
+      "clipSha256": "838a276cc6d48874e7363669940d3fbaf52f4b84426fd78ebb3047cf55aca29f",
+      "clipByteSize": 7228398,
+      "builtPolygonCount": 57,
+      "unresolvedCount": 141,
+      "uniqueUnresolvedRelationIds": 137,
+      "reasonCounts": {
+        "geometry-unavailable": 4,
+        "missing-outer-way-members": 32,
+        "parent-unresolved": 105
+      },
+      "durationMs": 593,
+      "peakHeapUsedBytes": 379578720,
+      "extractionCommand": null
+    },
+    "countryRelationGetid": {
+      "label": "relation-getid-country",
+      "status": "ASSESSED",
+      "clipPath": ".territory/sprint-2h/osm-clip-relation-getid-54988432b39641834885080.osm.pbf",
+      "clipSha256": "4a3ef8b0fb4fe1475ff3a22f09bc1d0dc019eb0c2fac2a5da205c4f133696aec",
+      "clipByteSize": 37733,
+      "builtPolygonCount": 57,
+      "unresolvedCount": 6,
+      "uniqueUnresolvedRelationIds": 6,
+      "reasonCounts": {
+        "parent-unresolved": 6
+      },
+      "durationMs": 11,
+      "peakHeapUsedBytes": 337927440,
+      "extractionCommand": "osmium getid -r \"/Users/mbkaya/Repo/TerritoryKit-sprint-2h/.territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf\" r2463274 r2463371 r2463390 r2464768 r2464918 r2468218 r2468219 r2468242 r6868850 r7648808 r7648809 r7648810 r7648811 r7648812 r7648813 r7648814 r7648815 r7648816 r7648817 r7648818 r7648819 r7648820 r7648821 r7648822 r7648823 r7648824 r7648825 r7648826 r7648827 r7648828 r7648829 r7648830 r7648831 r7648832 r7648833 r7648834 r7648835 r7648836 r7648837 r7648838 r7648839 r7648840 r7648841 r7648842 r7648843 r7648845 r7648846 r7648847 r7648848 r7648849 r7648850 r7648851 r7648852 r7648853 r7648854 r7648855 r7964540 r7964551 r7964967 r7965519 r8111527 r9381516 r9381694 -o \"/Users/mbkaya/Repo/TerritoryKit-sprint-2h/.territory/sprint-2h/osm-clip-relation-getid-54988432b39641834885080.osm.pbf\" --overwrite"
+    }
+  },
+  "parserImplementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2h-multipolygon-stitch",
+  "extractImplementationRevision": "territorykit-tr-sprint-2h-osm-extract@1"
+}
