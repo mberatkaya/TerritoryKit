@@ -686,11 +686,7 @@ export function buildAcceptanceGates({
   geographicalGo
 }) {
   const gateB =
-    osmPolygonCount > 0
-      ? osmTechnicalPassCount > 0
-        ? "GO_WITH_REVIEW"
-        : "NO_GO"
-      : "NOT_ASSESSED";
+    osmPolygonCount > 0 ? (osmTechnicalPassCount > 0 ? "GO_WITH_REVIEW" : "NO_GO") : "NOT_ASSESSED";
 
   return {
     gateA_sourceDiscovery:

@@ -29,11 +29,7 @@
         "unseededZoneCount": 9,
         "ambiguousZoneCount": 8
       },
-      "stressFocus": [
-        "dense-urban",
-        "multi-seed-zones",
-        "duplicate-source-identity"
-      ],
+      "stressFocus": ["dense-urban", "multi-seed-zones", "duplicate-source-identity"],
       "mapPreviewPath": "reports/tr-adm3/sprint-2g-geometry-validation/map-preview/kadikoy-geometry-comparison.geojson",
       "overlaySummary": null
     },
@@ -160,11 +156,7 @@
         "unseededZoneCount": 8,
         "ambiguousZoneCount": 2
       },
-      "stressFocus": [
-        "island-multipolygon",
-        "coastline-boundary-point",
-        "disconnected-components"
-      ],
+      "stressFocus": ["island-multipolygon", "coastline-boundary-point", "disconnected-components"],
       "mapPreviewPath": "reports/tr-adm3/sprint-2g-geometry-validation/map-preview/adalar-geometry-comparison.geojson",
       "overlaySummary": {
         "gameplayZoneCount": 14,
