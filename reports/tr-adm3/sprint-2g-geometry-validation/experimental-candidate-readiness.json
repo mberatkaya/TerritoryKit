@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2g-experimental-candidate-readiness@1",
+  "generatedAt": "2026-10-17T18:00:00.000Z",
+  "estimatedCandidates": [],
+  "decision": "NO_GO",
+  "reason": "No measured smart-derived candidate beats rc.8 v1.7 on barrier alignment without unacceptable seed/barrier tradeoffs (Sprint 2B.4 NO-GO preserved).",
+  "fatihHistoricalNoGoPreserved": true
+}

@@ -1036,7 +1036,7 @@ export function filterOsmAdministrativeBoundaryPolygons<
       return false;
     }
 
-    if (!adminLevel || !["9", "10", "11"].includes(adminLevel)) {
+    if (!adminLevel || !["8", "9", "10", "11"].includes(adminLevel)) {
       return false;
     }
 

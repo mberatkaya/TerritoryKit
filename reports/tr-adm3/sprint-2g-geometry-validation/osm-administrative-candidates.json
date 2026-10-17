@@ -1,0 +1,141 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2g-osm-administrative-candidates@1",
+  "generatedAt": "2026-10-17T18:00:00.000Z",
+  "extractBlocked": false,
+  "missingArtifact": null,
+  "fromCache": true,
+  "cachePath": ".territory/sprint-2g/osm-administrative-extract-istanbul-pilots.json",
+  "sourceLock": {
+    "schemaVersion": "territorykit-tr-adm3-osm-source-lock@1",
+    "country": "TR",
+    "generatedAt": "2026-10-17T18:00:00.000Z",
+    "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+    "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
+    "upstreamTimestamp": null,
+    "sha256": "a03dec91d67f9fd62e5092ff9929eca014a9ca5016e966e93db81ee4b536e6c1",
+    "byteSize": 3266104,
+    "license": "ODbL-1.0",
+    "attribution": "OpenStreetMap contributors, ODbL 1.0",
+    "parser": {
+      "package": "@osmix/pbf",
+      "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
+    }
+  },
+  "coverage": {
+    "schemaVersion": "territorykit-tr-adm3-osm-coverage@1",
+    "country": "TR",
+    "generatedAt": "2026-10-17T18:00:00.000Z",
+    "candidateCount": 2934,
+    "builtPolygonCount": 4,
+    "unresolvedCount": 2930,
+    "duplicateCount": 0
+  },
+  "quality": {
+    "schemaVersion": "territorykit-tr-sprint-2g-osm-quality-rollup@1",
+    "generatedAt": "2026-10-17T18:00:00.000Z",
+    "perDistrictExtracts": [
+      {
+        "parentAdm2Id": "tr:adm2:54988432b89638439219394",
+        "clippedPbfPath": ".territory/sprint-2g/osm-clip-54988432b89638439219394.osm.pbf",
+        "builtPolygonCount": 0,
+        "unresolvedCount": 284
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+        "clippedPbfPath": ".territory/sprint-2g/osm-clip-54988432b39641834885080.osm.pbf",
+        "builtPolygonCount": 1,
+        "unresolvedCount": 488
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b79162079631621",
+        "clippedPbfPath": ".territory/sprint-2g/osm-clip-54988432b79162079631621.osm.pbf",
+        "builtPolygonCount": 0,
+        "unresolvedCount": 405
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+        "clippedPbfPath": ".territory/sprint-2g/osm-clip-54988432b94516152709384.osm.pbf",
+        "builtPolygonCount": 3,
+        "unresolvedCount": 57
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+        "clippedPbfPath": ".territory/sprint-2g/osm-clip-54988432b93840376788897.osm.pbf",
+        "builtPolygonCount": 0,
+        "unresolvedCount": 928
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b71345383711908",
+        "clippedPbfPath": ".territory/sprint-2g/osm-clip-54988432b71345383711908.osm.pbf",
+        "builtPolygonCount": 0,
+        "unresolvedCount": 225
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b67026781349893",
+        "clippedPbfPath": ".territory/sprint-2g/osm-clip-54988432b67026781349893.osm.pbf",
+        "builtPolygonCount": 0,
+        "unresolvedCount": 296
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b2777192469074",
+        "clippedPbfPath": ".territory/sprint-2g/osm-clip-54988432b2777192469074.osm.pbf",
+        "builtPolygonCount": 0,
+        "unresolvedCount": 247
+      }
+    ]
+  },
+  "unresolvedCount": 2930,
+  "duplicateCount": 0,
+  "pilots": [
+    {
+      "slug": "kadikoy",
+      "parentAdm2Id": "tr:adm2:54988432b89638439219394",
+      "osmAdministrativePolygonCount": 0,
+      "classification": "BLOCKED_BY_SOURCE"
+    },
+    {
+      "slug": "fatih",
+      "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+      "osmAdministrativePolygonCount": 1,
+      "classification": "VERIFIED_OSM_CANDIDATE"
+    },
+    {
+      "slug": "uskudar",
+      "parentAdm2Id": "tr:adm2:54988432b79162079631621",
+      "osmAdministrativePolygonCount": 0,
+      "classification": "BASELINE_PRESERVED"
+    },
+    {
+      "slug": "adalar",
+      "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+      "osmAdministrativePolygonCount": 3,
+      "classification": "VERIFIED_OSM_CANDIDATE"
+    },
+    {
+      "slug": "eyupsultan",
+      "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+      "osmAdministrativePolygonCount": 0,
+      "classification": "BASELINE_PRESERVED"
+    },
+    {
+      "slug": "catalca",
+      "parentAdm2Id": "tr:adm2:54988432b71345383711908",
+      "osmAdministrativePolygonCount": 0,
+      "classification": "BASELINE_PRESERVED"
+    },
+    {
+      "slug": "basaksehir",
+      "parentAdm2Id": "tr:adm2:54988432b67026781349893",
+      "osmAdministrativePolygonCount": 0,
+      "classification": "BASELINE_PRESERVED"
+    },
+    {
+      "slug": "esenyurt",
+      "parentAdm2Id": "tr:adm2:54988432b2777192469074",
+      "osmAdministrativePolygonCount": 0,
+      "classification": "BASELINE_PRESERVED"
+    }
+  ],
+  "totalVerifiedOsmAdministrativePolygons": 4,
+  "note": "OSM administrative polygons are independent research candidates; not official mahalle boundaries."
+}

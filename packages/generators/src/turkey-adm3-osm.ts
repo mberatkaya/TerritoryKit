@@ -70,7 +70,8 @@ interface OsmCandidate {
 }
 
 const textDecoder = new TextDecoder();
-const ACCEPTED_ADMIN_LEVELS = new Set(["9", "10", "11"]);
+/** Turkey neighbourhood/village boundaries are commonly admin_level 8–11 in OSM (8 in İstanbul). */
+const ACCEPTED_ADMIN_LEVELS = new Set(["8", "9", "10", "11"]);
 
 export async function extractTurkeyAdm3OsmPbf(
   options: TurkeyAdm3OsmExtractOptions
