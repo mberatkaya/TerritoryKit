@@ -285,6 +285,17 @@ export {
   verifyTurkeyOsmSnapshot
 } from "./turkey-osm-barriers.js";
 export {
+  TURKEY_OSM_SOURCE_EVIDENCE_ISSUE_CODES,
+  computeTurkeyOsmSnapshotSourceLockContentHash,
+  detectForgedSourceLockContentHash,
+  evaluateTurkeyOsmSourceEvidence,
+  type EvaluateTurkeyOsmSourceEvidenceOptions,
+  type TurkeyOsmSourceEvidenceEvaluation,
+  type TurkeyOsmSourceEvidenceGates,
+  type TurkeyOsmSourceEvidenceIssue,
+  type TurkeyOsmSourceEvidenceIssueCode
+} from "./turkey-osm-source-evidence.js";
+export {
   TURKEY_V2_HYBRID_ATTRIBUTION_SCHEMA_VERSION,
   TURKEY_V2_HYBRID_BATCH_SCHEMA_VERSION,
   TURKEY_V2_HYBRID_COVERAGE_SCHEMA_VERSION,

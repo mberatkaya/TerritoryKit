@@ -1,10 +1,10 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-zone-associations@1",
-  "generatedAt": "2026-10-17T12:48:26.725Z",
+  "generatedAt": "2026-10-17T13:34:24.677Z",
   "district": "Eyüpsultan",
   "parentAdm2Id": "tr:adm2:54988432b93840376788897",
   "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
-  "contentChecksum": "fnv1a32:9874c5c0",
+  "contentChecksum": "fnv1a32:b4166712",
   "boundaryMode": "covers",
   "associations": [
     {

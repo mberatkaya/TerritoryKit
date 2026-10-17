@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-identity-lookup-smoke@1",
-  "generatedAt": "2026-10-17T12:48:26.284Z",
+  "generatedAt": "2026-10-17T13:34:23.616Z",
   "district": "Fatih",
   "parentAdm2Id": "tr:adm2:54988432b39641834885080",
   "consumerLoadOk": true,
@@ -51,7 +51,7 @@
           "attribution": "OpenStreetMap contributors, ODbL 1.0",
           "licenseState": "pending",
           "permissionStatus": "redistribution-unknown",
-          "sourceLockState": "unknown",
+          "sourceLockState": "verified",
           "redistributionEvidenceState": "pending",
           "sourceNativeId": "osm:node:4996909359"
         },
@@ -74,7 +74,7 @@
   "layerVersion": {
     "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
     "gameplayDatasetVersion": "2.1.0-rc.8",
-    "contentChecksum": "fnv1a32:370eff7d",
-    "generatedAt": "2026-10-17T12:48:26.284Z"
+    "contentChecksum": "fnv1a32:77d8310f",
+    "generatedAt": "2026-10-17T13:34:23.616Z"
   }
 }

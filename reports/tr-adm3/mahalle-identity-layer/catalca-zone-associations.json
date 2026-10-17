@@ -1,10 +1,10 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-zone-associations@1",
-  "generatedAt": "2026-10-17T12:48:27.640Z",
+  "generatedAt": "2026-10-17T13:34:26.681Z",
   "district": "Çatalca",
   "parentAdm2Id": "tr:adm2:54988432b71345383711908",
   "identityLayerVersion": "tr-mahalle-identity-catalca-pilot@2026-10-17",
-  "contentChecksum": "fnv1a32:3e67f8e1",
+  "contentChecksum": "fnv1a32:20a2bf2b",
   "boundaryMode": "covers",
   "associations": [
     {

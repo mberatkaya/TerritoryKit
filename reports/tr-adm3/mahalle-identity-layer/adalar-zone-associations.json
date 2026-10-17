@@ -1,10 +1,10 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-zone-associations@1",
-  "generatedAt": "2026-10-17T12:48:26.435Z",
+  "generatedAt": "2026-10-17T13:34:24.103Z",
   "district": "Adalar",
   "parentAdm2Id": "tr:adm2:54988432b94516152709384",
   "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
-  "contentChecksum": "fnv1a32:253aaa6a",
+  "contentChecksum": "fnv1a32:6e851c4e",
   "boundaryMode": "covers",
   "associations": [
     {

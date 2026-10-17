@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-identity-immutability@1",
-  "generatedAt": "2026-10-17T12:48:26.284Z",
+  "generatedAt": "2026-10-17T13:34:23.616Z",
   "district": "Fatih",
   "parentAdm2Id": "tr:adm2:54988432b39641834885080",
   "gameplayDatasetVersion": "2.1.0-rc.8",
@@ -43,8 +43,8 @@
   "parentAdm2IdVerified": "tr:adm2:54988432b39641834885080",
   "parentAdm2GeometryHash": "fnv1a32:de0bae91",
   "parentAdm2NameVerified": "Fatih",
-  "identityLayerContentChecksum": "fnv1a32:370eff7d",
+  "identityLayerContentChecksum": "fnv1a32:77d8310f",
   "determinismNote": "Identity layer does not modify gameplay dataset bytes; associations are derived read-only metadata.",
-  "replayChecksum": "fnv1a32:370eff7d",
+  "replayChecksum": "fnv1a32:77d8310f",
   "determinismVerified": true
 }

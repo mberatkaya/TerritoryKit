@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-identity-istanbul-matrix@1",
-  "generatedAt": "2026-10-17T12:48:26.139Z",
+  "generatedAt": "2026-10-17T13:34:23.190Z",
   "rc8Root": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
   "districts": [
     {
@@ -21,12 +21,12 @@
       "distinctSeedsRepresented": 71,
       "zoneIdSetSha256": "334ba60d9e4bf65c2acfce7d3724e7bf430ec082ad897459a902c19d3660852f",
       "geometryHashSetSha256": "3b4c2dd9214f6aa1023277a3426e100bd9c2902f5c06e4a49b2478e462866645",
-      "identityLayerContentChecksum": "fnv1a32:370eff7d",
+      "identityLayerContentChecksum": "fnv1a32:77d8310f",
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "determinismVerified": true,
       "consumerLoadOk": true,
-      "osmSourceLockState": "unknown",
-      "missingSourceReasonCode": "SOURCE_LOCK_MISSING",
+      "osmSourceLockState": "verified",
+      "missingSourceReasonCode": null,
       "officialDataPolicy": null
     },
     {
@@ -47,12 +47,12 @@
       "distinctSeedsRepresented": 11,
       "zoneIdSetSha256": "891afbcd52a77407982a11885eef58f2a84abf7483471695248e4cda17c301a1",
       "geometryHashSetSha256": "81aa0fae99c202edf574472f191e2322277e2ff9d41d4d4ba73caedbbc544906",
-      "identityLayerContentChecksum": "fnv1a32:253aaa6a",
+      "identityLayerContentChecksum": "fnv1a32:6e851c4e",
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "determinismVerified": true,
       "consumerLoadOk": true,
-      "osmSourceLockState": "unknown",
-      "missingSourceReasonCode": "SOURCE_LOCK_MISSING",
+      "osmSourceLockState": "verified",
+      "missingSourceReasonCode": null,
       "officialDataPolicy": null
     },
     {
@@ -73,12 +73,12 @@
       "distinctSeedsRepresented": 82,
       "zoneIdSetSha256": "484ffba9dcbfd106605b069bbc658c0c4c975856e864d3402fdb3b34c054e0d6",
       "geometryHashSetSha256": "5bccddf0d22c6eb39dd1db48a95a286a18555dafb6af8a70f54ded455e7ef965",
-      "identityLayerContentChecksum": "fnv1a32:9874c5c0",
+      "identityLayerContentChecksum": "fnv1a32:b4166712",
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "determinismVerified": true,
       "consumerLoadOk": true,
-      "osmSourceLockState": "unknown",
-      "missingSourceReasonCode": "SOURCE_LOCK_MISSING",
+      "osmSourceLockState": "verified",
+      "missingSourceReasonCode": null,
       "officialDataPolicy": null
     },
     {
@@ -99,12 +99,12 @@
       "distinctSeedsRepresented": 35,
       "zoneIdSetSha256": "3af6bb370900c671b5df58e3b9c89b3c8b0eeb9c0703f786b55c1b146b0fd617",
       "geometryHashSetSha256": "79afa84f849c3800bdbe264c990c8868c525501430aeeee2d83af43ec58740ae",
-      "identityLayerContentChecksum": "fnv1a32:76833ca1",
+      "identityLayerContentChecksum": "fnv1a32:02d3ec31",
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "determinismVerified": true,
       "consumerLoadOk": true,
-      "osmSourceLockState": "unknown",
-      "missingSourceReasonCode": "SOURCE_LOCK_MISSING",
+      "osmSourceLockState": "verified",
+      "missingSourceReasonCode": null,
       "officialDataPolicy": {
         "status": "BLOCKED_BY_SOURCE",
         "acquisitionEvidencePath": "reports/tr-adm3/audit/kadikoy-acquisition.json",
@@ -130,12 +130,12 @@
       "distinctSeedsRepresented": 39,
       "zoneIdSetSha256": "26b54ce0f2e6bdcdcfc352c47c947a0788943cf461e75ad7f7104836ebcaa1ca",
       "geometryHashSetSha256": "a768c87393c38e3e6ef6423d6379f10ec84e1544309bcef7fb08237c2ee01dd4",
-      "identityLayerContentChecksum": "fnv1a32:9f3d653a",
+      "identityLayerContentChecksum": "fnv1a32:6042014d",
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "determinismVerified": true,
       "consumerLoadOk": true,
-      "osmSourceLockState": "unknown",
-      "missingSourceReasonCode": "SOURCE_LOCK_MISSING",
+      "osmSourceLockState": "verified",
+      "missingSourceReasonCode": null,
       "officialDataPolicy": null
     },
     {
@@ -156,12 +156,12 @@
       "distinctSeedsRepresented": 245,
       "zoneIdSetSha256": "45d63e7662658be8b1e2ca8506b72ee4e0924dc04a19b6a422a119ef141fdcd8",
       "geometryHashSetSha256": "5e396edb60bef0052cedf7353441272bb08b8c803b687cd53707ed929fc9fea9",
-      "identityLayerContentChecksum": "fnv1a32:3e67f8e1",
+      "identityLayerContentChecksum": "fnv1a32:20a2bf2b",
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "determinismVerified": true,
       "consumerLoadOk": true,
-      "osmSourceLockState": "unknown",
-      "missingSourceReasonCode": "SOURCE_LOCK_MISSING",
+      "osmSourceLockState": "verified",
+      "missingSourceReasonCode": null,
       "officialDataPolicy": null
     },
     {
@@ -182,12 +182,12 @@
       "distinctSeedsRepresented": 32,
       "zoneIdSetSha256": "4d3580fea834d6d6caeeb981e4a39b9acb45fd2efc5be3744e1d9144fc264d6b",
       "geometryHashSetSha256": "e8fe6a95567dd08caac1c52604b130a1b43f515ff80bc3b9d4452917605fcade",
-      "identityLayerContentChecksum": "fnv1a32:eea682cc",
+      "identityLayerContentChecksum": "fnv1a32:7371e166",
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "determinismVerified": true,
       "consumerLoadOk": true,
-      "osmSourceLockState": "unknown",
-      "missingSourceReasonCode": "SOURCE_LOCK_MISSING",
+      "osmSourceLockState": "verified",
+      "missingSourceReasonCode": null,
       "officialDataPolicy": null
     },
     {
@@ -208,12 +208,12 @@
       "distinctSeedsRepresented": 47,
       "zoneIdSetSha256": "27479c5393d3a89798c0a87ffe770aed0664f9751f4f1967177d01fcd0920258",
       "geometryHashSetSha256": "08134ba145fc2a2f5e184b72877515cf4375b64cdad87701ec03f9853140454c",
-      "identityLayerContentChecksum": "fnv1a32:f024361a",
+      "identityLayerContentChecksum": "fnv1a32:dfcbbc7c",
       "gameplayDatasetVersion": "2.1.0-rc.8",
       "determinismVerified": true,
       "consumerLoadOk": true,
-      "osmSourceLockState": "unknown",
-      "missingSourceReasonCode": "SOURCE_LOCK_MISSING",
+      "osmSourceLockState": "verified",
+      "missingSourceReasonCode": null,
       "officialDataPolicy": null
     }
   ]

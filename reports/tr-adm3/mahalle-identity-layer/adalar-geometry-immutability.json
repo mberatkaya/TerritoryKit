@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-identity-immutability@1",
-  "generatedAt": "2026-10-17T12:48:26.435Z",
+  "generatedAt": "2026-10-17T13:34:24.103Z",
   "district": "Adalar",
   "parentAdm2Id": "tr:adm2:54988432b94516152709384",
   "gameplayDatasetVersion": "2.1.0-rc.8",
@@ -27,8 +27,8 @@
   "parentAdm2IdVerified": "tr:adm2:54988432b94516152709384",
   "parentAdm2GeometryHash": "fnv1a32:3b068a5f",
   "parentAdm2NameVerified": "Prince Islands",
-  "identityLayerContentChecksum": "fnv1a32:253aaa6a",
+  "identityLayerContentChecksum": "fnv1a32:6e851c4e",
   "determinismNote": "Identity layer does not modify gameplay dataset bytes; associations are derived read-only metadata.",
-  "replayChecksum": "fnv1a32:253aaa6a",
+  "replayChecksum": "fnv1a32:6e851c4e",
   "determinismVerified": true
 }

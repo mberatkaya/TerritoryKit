@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-identity-immutability@1",
-  "generatedAt": "2026-10-17T12:48:28.332Z",
+  "generatedAt": "2026-10-17T13:34:28.114Z",
   "district": "Esenyurt",
   "parentAdm2Id": "tr:adm2:54988432b2777192469074",
   "gameplayDatasetVersion": "2.1.0-rc.8",
@@ -49,8 +49,8 @@
   "parentAdm2IdVerified": "tr:adm2:54988432b2777192469074",
   "parentAdm2GeometryHash": "fnv1a32:bb5404b3",
   "parentAdm2NameVerified": "Esenyurt",
-  "identityLayerContentChecksum": "fnv1a32:f024361a",
+  "identityLayerContentChecksum": "fnv1a32:dfcbbc7c",
   "determinismNote": "Identity layer does not modify gameplay dataset bytes; associations are derived read-only metadata.",
-  "replayChecksum": "fnv1a32:f024361a",
+  "replayChecksum": "fnv1a32:dfcbbc7c",
   "determinismVerified": true
 }

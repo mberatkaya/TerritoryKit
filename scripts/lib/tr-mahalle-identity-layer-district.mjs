@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import {
   buildSettlementIdentityLayer,
@@ -11,6 +11,7 @@ import {
   loadSettlementIdentityConsumer
 } from "../../packages/core/dist/index.mjs";
 import { readTurkeyOsmAdm2BarrierArtifact } from "../../packages/generators/dist/turkey-adm3.mjs";
+import { evaluateTurkeyOsmSourceEvidence } from "../../packages/generators/dist/index.mjs";
 import { writeReportJson } from "./write-report-json.mjs";
 
 function sha256Hex(input) {
@@ -166,10 +167,19 @@ export async function buildMahalleIdentityDistrictReports(options) {
   );
 
   const artifact = await readTurkeyOsmAdm2BarrierArtifact(barrierArtifactRoot, parentAdm2Id);
-  const sourceLock = await readJson(repoRoot, osmSourceLockPath).catch(() => null);
+  const sourceEvidence = await evaluateTurkeyOsmSourceEvidence({
+    repoRoot,
+    sourceLockPath: osmSourceLockPath,
+    barrierManifest: {
+      adm2Id: artifact.manifest.adm2Id,
+      source: artifact.manifest.source,
+      sourceSnapshotChecksum: artifact.manifest.sourceSnapshotChecksum
+    },
+    expectedAdm2Id: parentAdm2Id
+  });
   const generatedAt = new Date().toISOString();
-  const osmSourceLockState = sourceLock?.contentHash ? "verified" : "unknown";
-  const osmLicenseEvidenceState = artifact.manifest?.source?.license ? "pending" : "unknown";
+  const osmSourceLockState = sourceEvidence.sourceLockState;
+  const osmLicenseEvidenceState = sourceEvidence.gates.licenseIdentified ? "pending" : "unknown";
   const seedProvenanceDefaults = {
     providerId: artifact.manifest?.source?.providerId ?? "openstreetmap",
     providerName: artifact.manifest?.source?.providerName ?? "OpenStreetMap",
@@ -282,18 +292,28 @@ export async function buildMahalleIdentityDistrictReports(options) {
       gameplayShard: baselineShard,
       rc8Root,
       barrierRoot,
-      osmSourceLock: sourceLock?.contentHash ?? null,
+      osmSourceLockPath,
+      osmSourceLockSha256: sourceEvidence.snapshotSha256,
+      osmSourceLockContentHash: sourceEvidence.sourceLockContentHash,
       osmSourceLockState,
+      sourceEvidenceGates: sourceEvidence.gates,
+      sourceEvidenceReasonCodes: sourceEvidence.reasonCodes,
       barrierManifestChecksum: artifact.manifest?.artifactChecksum ?? null,
+      barrierSnapshotSha256: artifact.manifest?.source?.snapshotSha256 ?? null,
       datasetSourceChecksum: baselineDataset.manifest?.geometryHash ?? null,
-      missingSourceReasonCode: sourceLock?.contentHash ? undefined : "SOURCE_LOCK_MISSING"
+      missingSourceReasonCode: sourceEvidence.gates.sourceBytesVerified
+        ? undefined
+        : sourceEvidence.reasonCodes.includes("SOURCE_LOCK_MISSING")
+          ? "SOURCE_LOCK_MISSING"
+          : "SOURCE_VERIFICATION_FAILED"
     },
     licenseChecks: {
       osmLicense: artifact.manifest?.source?.license ?? "ODbL-1.0",
-      licenseState: "pending",
+      licenseState: sourceEvidence.licenseState,
       permissionStatus: "redistribution-unknown",
-      redistributionApproved: false,
+      redistributionApproved: sourceEvidence.gates.redistributionRightsApproved,
       redistributionEvidenceState: osmLicenseEvidenceState,
+      hostedDeliveryApproved: sourceEvidence.gates.productionEligible,
       commercialUseRequiresSeparateReview: true,
       hostedTileDeliveryRequiresSeparateReview: true
     }
@@ -358,8 +378,14 @@ export async function buildMahalleIdentityDistrictReports(options) {
     },
     sourceExpectations: {
       requireSourceLockVerified: false,
-      missingSourceReasonCode: sourceLock?.contentHash ? undefined : "SOURCE_LOCK_MISSING",
-      osmSnapshotChecksum: artifact.manifest?.source?.snapshotSha256 ?? null
+      osmSourceLockState,
+      missingSourceReasonCode: sourceEvidence.gates.sourceBytesVerified
+        ? undefined
+        : sourceEvidence.reasonCodes.includes("SOURCE_LOCK_MISSING")
+          ? "SOURCE_LOCK_MISSING"
+          : "SOURCE_VERIFICATION_FAILED",
+      osmSnapshotChecksum: artifact.manifest?.source?.snapshotSha256 ?? null,
+      sourceEvidenceGates: sourceEvidence.gates
     }
   };
 
@@ -433,11 +459,7 @@ export async function buildMahalleIdentityDistrictReports(options) {
     await mkdir(join(repoRoot, reportRoot), { recursive: true });
     for (const [name, payload] of outputs) {
       const path = join(reportRoot, name);
-      if (name.endsWith(".geojson")) {
-        await writeFile(join(repoRoot, path), `${JSON.stringify(payload, null, 2)}\n`, "utf8");
-      } else {
-        await writeReportJson(path, payload);
-      }
+      await writeReportJson(path, payload);
     }
   }
 
@@ -452,6 +474,7 @@ export async function buildMahalleIdentityDistrictReports(options) {
     immutability,
     consumerPin,
     coverage,
+    sourceEvidence,
     lookupSmoke,
     layer,
     baselineDataset,

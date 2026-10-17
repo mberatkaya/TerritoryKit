@@ -3,6 +3,7 @@
  * Sprint 2D — Istanbul settlement identity pilots (8 districts) on pinned rc.8 gameplay shards.
  */
 import { readFile } from "node:fs/promises";
+import { isAbsolute, join } from "node:path";
 import { writeReportJson, writeReportMarkdown } from "./lib/write-report-json.mjs";
 import { buildMahalleIdentityDistrictReports } from "./lib/tr-mahalle-identity-layer-district.mjs";
 import {
@@ -11,7 +12,13 @@ import {
 } from "./lib/tr-mahalle-identity-istanbul-pilots.mjs";
 
 const REPO_ROOT = process.cwd();
-const REPORT_ROOT = "reports/tr-adm3/mahalle-identity-layer";
+const REPORT_ROOT =
+  process.env.MAHALLE_IDENTITY_REPORT_ROOT ?? "reports/tr-adm3/mahalle-identity-layer";
+
+function reportPath(...segments) {
+  const root = isAbsolute(REPORT_ROOT) ? REPORT_ROOT : join(REPO_ROOT, REPORT_ROOT);
+  return join(root, ...segments);
+}
 
 function parseDistrictFilter(argv) {
   const onlyFlag = argv.find((arg) => arg.startsWith("--only="));
@@ -128,7 +135,7 @@ async function main() {
     (row) => row.result.blocked || technicalDecisionForRow(null, row.result) === "NO_GO"
   );
 
-  const crossDistrict = await buildCrossDistrictEvidence(matrixRows, REPORT_ROOT);
+  const crossDistrict = await buildCrossDistrictEvidence(matrixRows);
 
   const fatihRow = matrixRows.find((row) => row.slug === "fatih");
   const fatihRegressionOk =
@@ -208,14 +215,14 @@ async function main() {
   }
 }
 
-async function buildCrossDistrictEvidence(matrixRows, reportRoot) {
+async function buildCrossDistrictEvidence(matrixRows) {
   const active = matrixRows.filter((row) => row.zoneIdSetSha256 !== "BLOCKED_BY_SOURCE");
   const settlementIdOwners = new Map();
   const normalizedNameOwners = new Map();
 
   for (const row of active) {
     const settlements = JSON.parse(
-      await readFile(`${REPO_ROOT}/${reportRoot}/${row.slug}-settlement-identities.json`, "utf8")
+      await readFile(reportPath(`${row.slug}-settlement-identities.json`), "utf8")
     );
     for (const settlement of settlements.settlements) {
       const owners = settlementIdOwners.get(settlement.settlementId) ?? [];

@@ -7,7 +7,8 @@ import { buildMahalleIdentityDistrictReports } from "./lib/tr-mahalle-identity-l
 import { pilotBySlug } from "./lib/tr-mahalle-identity-istanbul-pilots.mjs";
 
 const REPO_ROOT = process.cwd();
-const REPORT_ROOT = "reports/tr-adm3/mahalle-identity-layer";
+const REPORT_ROOT =
+  process.env.MAHALLE_IDENTITY_REPORT_ROOT ?? "reports/tr-adm3/mahalle-identity-layer";
 
 async function main() {
   const pilot = pilotBySlug("fatih");

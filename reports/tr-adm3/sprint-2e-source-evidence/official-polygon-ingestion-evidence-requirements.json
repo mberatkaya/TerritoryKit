@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "territorykit-tr-official-polygon-ingestion-evidence@1",
+  "generatedAt": "2026-10-17T14:03:02.363Z",
+  "requirements": [
+    "Independent .shp/.shx/.dbf/.prj/.cpg byte streams with distinct SHA-256 per companion",
+    "Valid SHP/SHX/DBF structure and CRS/PRJ metadata",
+    "Mahalle name, stable ID, and parent ilçe fields extractable",
+    "Documented license + redistribution approval for derivative/hosted use",
+    "Human authorization gate before promoting to approved-official-polygon precedence"
+  ],
+  "note": "Satisfying technical bundle validation does not imply legal approval or production eligibility."
+}

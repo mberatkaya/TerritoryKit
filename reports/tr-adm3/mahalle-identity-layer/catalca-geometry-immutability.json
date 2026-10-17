@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-identity-immutability@1",
-  "generatedAt": "2026-10-17T12:48:27.640Z",
+  "generatedAt": "2026-10-17T13:34:26.681Z",
   "district": "Çatalca",
   "parentAdm2Id": "tr:adm2:54988432b71345383711908",
   "gameplayDatasetVersion": "2.1.0-rc.8",
@@ -32,8 +32,8 @@
   "parentAdm2IdVerified": "tr:adm2:54988432b71345383711908",
   "parentAdm2GeometryHash": "fnv1a32:22c5ec0a",
   "parentAdm2NameVerified": "Çatalca",
-  "identityLayerContentChecksum": "fnv1a32:3e67f8e1",
+  "identityLayerContentChecksum": "fnv1a32:20a2bf2b",
   "determinismNote": "Identity layer does not modify gameplay dataset bytes; associations are derived read-only metadata.",
-  "replayChecksum": "fnv1a32:3e67f8e1",
+  "replayChecksum": "fnv1a32:20a2bf2b",
   "determinismVerified": true
 }

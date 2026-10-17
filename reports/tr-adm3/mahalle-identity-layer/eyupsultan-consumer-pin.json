@@ -6,7 +6,7 @@
   "gameplayDatasetVersion": "2.1.0-rc.8",
   "zoneIdSetSha256": "484ffba9dcbfd106605b069bbc658c0c4c975856e864d3402fdb3b34c054e0d6",
   "geometryHashSetSha256": "5bccddf0d22c6eb39dd1db48a95a286a18555dafb6af8a70f54ded455e7ef965",
-  "identityLayerContentChecksum": "fnv1a32:9874c5c0",
+  "identityLayerContentChecksum": "fnv1a32:b4166712",
   "associationCounts": {
     "zoneCount": 19,
     "settlementCount": 82,
@@ -16,7 +16,13 @@
   },
   "sourceExpectations": {
     "requireSourceLockVerified": false,
-    "missingSourceReasonCode": "SOURCE_LOCK_MISSING",
-    "osmSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
+    "osmSourceLockState": "verified",
+    "osmSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+    "sourceEvidenceGates": {
+      "sourceBytesVerified": true,
+      "licenseIdentified": true,
+      "redistributionRightsApproved": false,
+      "productionEligible": false
+    }
   }
 }
