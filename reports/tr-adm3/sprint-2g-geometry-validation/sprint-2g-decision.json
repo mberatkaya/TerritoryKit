@@ -4,7 +4,7 @@
   "repository": {
     "mainBaselineSha": "ba03eedeea27c28dd0562d5744f070e94f6d3247",
     "branch": "feat/tr-istanbul-mahalle-geometry-validation",
-    "headSha": "ba03eedeea27c28dd0562d5744f070e94f6d3247"
+    "headSha": "2f51de2c00a290afb99584b336154254393605b8"
   },
   "counts": {
     "verifiedOfficialPolygons": 0,
@@ -14,7 +14,7 @@
   },
   "gates": {
     "gateA_sourceDiscovery": "GO_WITH_REVIEW",
-    "gateB_technicalPolygonQa": "NOT_ASSESSED",
+    "gateB_technicalPolygonQa": "NO_GO",
     "gateC_geographicalQuality": "NO_GO",
     "gateD_sourceLegalEligibility": "BLOCKED_BY_SOURCE",
     "gateE_gameplayMigrationReadiness": "GO_WITH_REVIEW",

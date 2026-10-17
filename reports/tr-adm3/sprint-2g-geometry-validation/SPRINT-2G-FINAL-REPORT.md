@@ -2,7 +2,7 @@
 
 **Generated:** 2026-10-17T18:00:00.000Z  
 **Main baseline:** `ba03eedeea27c28dd0562d5744f070e94f6d3247`  
-**Branch HEAD:** `ba03eedeea27c28dd0562d5744f070e94f6d3247`
+**Branch HEAD:** `2f51de2c00a290afb99584b336154254393605b8`
 
 ## A. Repository
 
@@ -41,7 +41,7 @@
 | Gate                           | Result            |
 | ------------------------------ | ----------------- |
 | A Source discovery             | GO_WITH_REVIEW    |
-| B Technical polygon QA         | NOT_ASSESSED      |
+| B Technical polygon QA         | NO_GO             |
 | C Geographical quality         | NO_GO             |
 | D Legal eligibility            | BLOCKED_BY_SOURCE |
 | E Gameplay migration readiness | GO_WITH_REVIEW    |

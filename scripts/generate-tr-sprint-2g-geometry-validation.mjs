@@ -324,6 +324,7 @@ async function main() {
     officialVerifiedCount: 0,
     osmVerifiedDistrictCount: districtMatrix.filter((row) => row.osmAdministrativePolygons > 0)
       .length,
+    osmPolygonCount: verifiedOsmPolygonCount,
     osmTechnicalPassCount,
     kadikoyStatus: kadikoyInvestigation.decision?.status ?? "BLOCKED_BY_SOURCE",
     overlayAssessed: overlayAssessedCount > 0,

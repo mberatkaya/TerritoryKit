@@ -679,17 +679,25 @@ export function buildFatihAlternativeMatrix(historical, osmQa, gameplayQa) {
 export function buildAcceptanceGates({
   officialVerifiedCount,
   osmVerifiedDistrictCount,
+  osmPolygonCount,
   osmTechnicalPassCount,
   kadikoyStatus,
   overlayAssessed,
   geographicalGo
 }) {
+  const gateB =
+    osmPolygonCount > 0
+      ? osmTechnicalPassCount > 0
+        ? "GO_WITH_REVIEW"
+        : "NO_GO"
+      : "NOT_ASSESSED";
+
   return {
     gateA_sourceDiscovery:
       osmVerifiedDistrictCount > 0 || kadikoyStatus === "BLOCKED_BY_SOURCE"
         ? "GO_WITH_REVIEW"
         : "NO_GO",
-    gateB_technicalPolygonQa: osmTechnicalPassCount > 0 ? "GO_WITH_REVIEW" : "NOT_ASSESSED",
+    gateB_technicalPolygonQa: gateB,
     gateC_geographicalQuality: geographicalGo ? "GO_WITH_REVIEW" : "NO_GO",
     gateD_sourceLegalEligibility:
       officialVerifiedCount > 0 ? "GO_WITH_REVIEW" : "BLOCKED_BY_SOURCE",
