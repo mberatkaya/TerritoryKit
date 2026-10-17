@@ -67,6 +67,7 @@ export {
   createDefaultGeneratedZoneConfig,
   createTurkeyAdm3GeneratedGeometryHash,
   createTurkeyAdm3GeneratedMigrationReport,
+  createTurkeyAdm3OsmResearchSpatialCorrespondenceReport,
   createTurkeyAdm3GeometryHash,
   computeTurkeyAdm3GeometryAreaKm2,
   createTurkeyAdm3ProviderHealthReport,
@@ -82,7 +83,11 @@ export {
   TURKEY_ADM3_OSM_LICENSE,
   TURKEY_ADM3_OSM_SOURCE_URL,
   createTurkeyAdm3OsmDataset,
-  extractTurkeyAdm3OsmPbf
+  evaluateTurkeyAdm3OsmBoundaryCandidate,
+  extractTurkeyAdm3OsmPbf,
+  hasTurkeyAdm3OsmMahalleContextTags,
+  summarizeTurkeyAdm3OsmUnresolvedEntries,
+  TURKEY_ADM3_OSM_PARSER_IMPLEMENTATION_REVISION
 } from "./turkey-adm3-osm.js";
 export {
   TURKEY_OSM_BARRIER_ALGORITHM_VERSION,

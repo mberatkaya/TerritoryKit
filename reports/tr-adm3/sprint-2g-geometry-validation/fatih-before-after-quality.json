@@ -1,0 +1,254 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2g-fatih-before-after-quality@1",
+  "generatedAt": "2026-10-17T18:00:00.000Z",
+  "district": "Fatih",
+  "historicalReferences": [
+    "reports/tr-adm3/mahalle-first-program/fatih-v1-v2-comparison.json",
+    "reports/tr-adm3/mahalle-first-program/fatih-v2-impl-rev2-comparison.json"
+  ],
+  "historicalMetrics": {
+    "v17Replay": {
+      "algorithmVersion": "smart-derived-v1.7",
+      "deterministicHash": "9845cbb6d3efc94ee1343c7c7814de8b19661ab1bc4b4475e5c0951d9cbb7456",
+      "buildDurationMs": 1457,
+      "memoryDeltaMb": 54.71,
+      "validationOk": true,
+      "qualityOk": true,
+      "adm3ZoneCount": 30,
+      "validMahalleSeedCount": 71,
+      "seedNamedZoneCount": 10,
+      "seedNamedShare": 0.3333,
+      "seedNameMatchCount": 10,
+      "seedCoverageRatio": 0.1408,
+      "quality": {
+        "meanBarrierAlignment": 0.8907,
+        "meanZoneBarrierAlignment": 0.8954,
+        "geographicRealism": true,
+        "gridLikeness": true,
+        "longUnsupportedStraightBoundaryRatio": 0,
+        "longestUnsupportedStraightChainMeters": 0,
+        "barrierFollowingInternalBoundaryRatio": 1,
+        "pathologyFindingCount": 13
+      },
+      "pathologyFindingCount": 13
+    }
+  },
+  "currentRc8GameplayQa": {
+    "spatialQuality": {
+      "schemaVersion": "territorykit-tr-adm3-spatial-quality@1",
+      "ok": false,
+      "summary": {
+        "overlapCount": 0,
+        "gapCount": 0,
+        "sliverCount": 0,
+        "parentContainmentErrors": 1,
+        "duplicateGeometryCount": 0
+      },
+      "overlaps": [],
+      "gaps": [],
+      "slivers": [],
+      "parentContainmentErrors": [
+        {
+          "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-cbeb5278a71425ce7202",
+          "parentId": "tr:adm2:54988432b39641834885080",
+          "outsideAreaKm2": 0.000002
+        }
+      ],
+      "duplicateGeometryHashes": []
+    },
+    "pathology": {
+      "schemaVersion": "territorykit-tr-adm3-generated-pathology@1",
+      "generatedZoneCount": 30,
+      "skippedOfficialZoneCount": 0,
+      "findings": [
+        {
+          "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-290699f58ea199c88a63",
+          "parentId": "tr:adm2:54988432b39641834885080",
+          "code": "SPIKE",
+          "severity": "info",
+          "measurement": {
+            "interiorAngleDegrees": 10.232,
+            "edge1Meters": 26.911,
+            "edge2Meters": 27.891,
+            "vertexIndex": "42"
+          }
+        },
+        {
+          "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-57c6546b8d8c52e3ca2f",
+          "parentId": "tr:adm2:54988432b39641834885080",
+          "code": "SPIKE",
+          "severity": "info",
+          "measurement": {
+            "interiorAngleDegrees": 0,
+            "edge1Meters": 80.834,
+            "edge2Meters": 54.956,
+            "vertexIndex": "1"
+          }
+        },
+        {
+          "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-57c6546b8d8c52e3ca2f",
+          "parentId": "tr:adm2:54988432b39641834885080",
+          "code": "SPIKE",
+          "severity": "info",
+          "measurement": {
+            "interiorAngleDegrees": 0,
+            "edge1Meters": 54.956,
+            "edge2Meters": 118.412,
+            "vertexIndex": "2"
+          }
+        },
+        {
+          "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-57c6546b8d8c52e3ca2f",
+          "parentId": "tr:adm2:54988432b39641834885080",
+          "code": "SPIKE",
+          "severity": "info",
+          "measurement": {
+            "interiorAngleDegrees": 0,
+            "edge1Meters": 1.304,
+            "edge2Meters": 65.159,
+            "vertexIndex": "7"
+          }
+        },
+        {
+          "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-59f9cd89af41c5776554",
+          "parentId": "tr:adm2:54988432b39641834885080",
+          "code": "SPIKE",
+          "severity": "info",
+          "measurement": {
+            "interiorAngleDegrees": 6.285,
+            "edge1Meters": 56.001,
+            "edge2Meters": 6.352,
+            "vertexIndex": "82"
+          }
+        },
+        {
+          "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-701b712ba93c285dfee4",
+          "parentId": "tr:adm2:54988432b39641834885080",
+          "code": "SPIKE",
+          "severity": "info",
+          "measurement": {
+            "interiorAngleDegrees": 7.761,
+            "edge1Meters": 16.724,
+            "edge2Meters": 18.988,
+            "vertexIndex": "39"
+          }
+        },
+        {
+          "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-701b712ba93c285dfee4",
+          "parentId": "tr:adm2:54988432b39641834885080",
+          "code": "SPIKE",
+          "severity": "info",
+          "measurement": {
+            "interiorAngleDegrees": 12.273,
+            "edge1Meters": 23.096,
+            "edge2Meters": 33.171,
+            "vertexIndex": "82"
+          }
+        },
+        {
+          "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ae51c43e7a16247111a1",
+          "parentId": "tr:adm2:54988432b39641834885080",
+          "code": "SPIKE",
+          "severity": "info",
+          "measurement": {
+            "interiorAngleDegrees": 9.997,
+            "edge1Meters": 21.898,
+            "edge2Meters": 24.926,
+            "vertexIndex": "24"
+          }
+        },
+        {
+          "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-bf7df56ae203fd5afe33",
+          "parentId": "tr:adm2:54988432b39641834885080",
+          "code": "SPIKE",
+          "severity": "info",
+          "measurement": {
+            "interiorAngleDegrees": 3.118,
+            "edge1Meters": 8.519,
+            "edge2Meters": 8.555,
+            "vertexIndex": "109"
+          }
+        },
+        {
+          "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-bf7df56ae203fd5afe33",
+          "parentId": "tr:adm2:54988432b39641834885080",
+          "code": "SPIKE",
+          "severity": "info",
+          "measurement": {
+            "interiorAngleDegrees": 12.273,
+            "edge1Meters": 33.171,
+            "edge2Meters": 23.096,
+            "vertexIndex": "376"
+          }
+        },
+        {
+          "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-bf7df56ae203fd5afe33",
+          "parentId": "tr:adm2:54988432b39641834885080",
+          "code": "SPIKE",
+          "severity": "info",
+          "measurement": {
+            "interiorAngleDegrees": 7.761,
+            "edge1Meters": 18.988,
+            "edge2Meters": 16.724,
+            "vertexIndex": "419"
+          }
+        },
+        {
+          "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-c760995c457452ed71a1",
+          "parentId": "tr:adm2:54988432b39641834885080",
+          "code": "SPIKE",
+          "severity": "info",
+          "measurement": {
+            "interiorAngleDegrees": 10.232,
+            "edge1Meters": 27.891,
+            "edge2Meters": 26.911,
+            "vertexIndex": "237"
+          }
+        },
+        {
+          "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-cbeb5278a71425ce7202",
+          "parentId": "tr:adm2:54988432b39641834885080",
+          "code": "THIN_CORRIDOR",
+          "severity": "warning",
+          "measurement": {
+            "bboxApproxMinWidthMeters": 11.510607105249125,
+            "minWidthMeters": 11.510607105249125,
+            "areaKm2": 1.752805,
+            "measurementNote": "Bounding-box width estimate; not a proven minimum corridor width."
+          }
+        }
+      ]
+    },
+    "zoneCount": 30,
+    "evidencePath": "inspectTurkeyAdm3SpatialQuality(gameplay)"
+  },
+  "currentOsmAdministrativeQa": {
+    "spatialQuality": {
+      "schemaVersion": "territorykit-tr-adm3-spatial-quality@1",
+      "ok": false,
+      "summary": {
+        "overlapCount": 0,
+        "gapCount": 1,
+        "sliverCount": 0,
+        "parentContainmentErrors": 0,
+        "duplicateGeometryCount": 0
+      },
+      "overlaps": [],
+      "gaps": [
+        {
+          "districtId": "tr:adm2:54988432b39641834885080",
+          "areaKm2": 16.362339
+        }
+      ],
+      "slivers": [],
+      "parentContainmentErrors": [],
+      "duplicateGeometryHashes": []
+    },
+    "zoneCount": 1,
+    "polygonFeatureCount": 1,
+    "evidencePath": "inspectTurkeyAdm3SpatialQuality(osm-administrative)"
+  },
+  "experimentalCandidateDecision": "NO_GO",
+  "selectedGameplayGeometry": "rc.8-pinned-smart-derived-v1.7",
+  "geographicalProductAcceptance": "NO_GO"
+}

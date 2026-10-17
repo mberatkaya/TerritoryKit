@@ -1,0 +1,118 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2g-fatih-boundary-comparison@1",
+  "generatedAt": "2026-10-17T18:00:00.000Z",
+  "alternatives": {
+    "historicalReferenceOnly": true,
+    "note": "v1.7/v2/hybrid metrics are historical replay artifacts; do not treat as re-measured in Sprint 2G without identical inputs.",
+    "sprint2bDecision": "NO_GO",
+    "alternatives": [
+      {
+        "id": "A-real-administrative-polygon",
+        "label": "Official administrative polygon",
+        "quality": "NOT_AVAILABLE",
+        "sourceEvidence": "NO_VERIFIED_OFFICIAL_PACKAGE",
+        "legalEligibility": "BLOCKED_BY_SOURCE",
+        "migrationImpact": "NOT_ASSESSED",
+        "decision": "BLOCKED_BY_SOURCE"
+      },
+      {
+        "id": "B-reviewed-osm-administrative",
+        "label": "Reviewed OSM administrative polygon",
+        "quality": "TECHNICAL_REVIEW",
+        "sourceEvidence": "osmPolygonCount=1",
+        "geometryDifference": "independent-osm-layer-not-gameplay",
+        "semanticAccuracy": "REVIEW_REQUIRED",
+        "legalEligibility": "ODbL-identified-redistribution-pending",
+        "migrationImpact": "overlay-analysis-required",
+        "decision": "GO_WITH_REVIEW"
+      },
+      {
+        "id": "C-improved-smart-derived",
+        "label": "Improved estimated smart-derived (v2/hybrid)",
+        "quality": "NO_GO",
+        "sourceEvidence": "Sprint-2B.4-historical-NO-GO",
+        "geometryDifference": null,
+        "semanticAccuracy": "seed-association-improved-barrier-alignment-regressed",
+        "legalEligibility": "estimated-internal",
+        "migrationImpact": "high-zone-count-drift",
+        "decision": "NO_GO"
+      },
+      {
+        "id": "D-preserve-rc8",
+        "label": "Preserve rc.8 gameplay + semantic layer",
+        "quality": "BASELINE_WITH_KNOWN_ISSUES",
+        "sourceEvidence": "pinned-rc8",
+        "geometryDifference": "immutable",
+        "semanticAccuracy": "identity-layer-pilot",
+        "legalEligibility": "existing-mixed-rc8",
+        "migrationImpact": "none",
+        "decision": "GO_WITH_REVIEW"
+      }
+    ],
+    "selectedForGameplay": "D-preserve-rc8",
+    "selectedForBoundaryResearch": "B-reviewed-osm-administrative"
+  },
+  "overlay": {
+    "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
+    "generatedAt": "2026-10-17T18:00:00.000Z",
+    "status": "ASSESSED",
+    "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1",
+    "correspondences": [
+      {
+        "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-cbeb5278a71425ce7202",
+        "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-2463371-balat-mahallesi",
+        "osmSourceNativeId": "osm:relation:2463371",
+        "intersectionAreaKm2": 0.000012,
+        "overlapRatio": 0.00000685,
+        "relationConfidence": "high",
+        "sourceClass": "osm-administrative-research",
+        "reviewRequired": true,
+        "eligibleForMigration": false
+      }
+    ],
+    "correspondence": {
+      "gameplayZoneCount": 30,
+      "osmPolygonCount": 1,
+      "mappedGameplayCount": 1,
+      "orphanGameplayZoneIds": [
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-01eda0ae60d28fc3a2c7",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-073b672500565ae4fb3e",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-08c523104fbe1e7feb3d",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-13d94a01ceafb0ce5169",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-290699f58ea199c88a63",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-2b5978834366688ae645",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-34d0c14106436af5f5a6",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-57c6546b8d8c52e3ca2f",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-59f9cd89af41c5776554",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-67991e44ab1c9e28442b",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-701b712ba93c285dfee4",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-78efecad6d2ae4ccd2ec",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-88ec65114d7d0e51d713",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-8eebe5599fbf67d5bc23",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-9f83a09e877b09576ca7",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ae51c43e7a16247111a1",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b0035a2eaa3b83222d33",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b05a48a15e5125cdf298",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b3e509aaad7fa40c97c0",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b5ae85dbcb276cc5da0b",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b699d521a866aa6875c3",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b869ea01a2bad0439ea4",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-bf7df56ae203fd5afe33",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-c760995c457452ed71a1",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ce3a6d0f0ea5c4667c87",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dacb79746e8604409768",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dc4135f5abb73435480a",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-de3555218fb370c42fd2",
+        "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-f24cd8558fe73d01e2b4"
+      ],
+      "orphanOsmPolygonIds": [],
+      "manyToOneMergeCandidates": []
+    },
+    "stableIdMappingFeasibility": "REQUIRES_SPLIT_MERGE_MAP",
+    "ownershipMigrationPerformed": false,
+    "eligibleForMigration": false,
+    "reviewRequired": true,
+    "evidencePath": "createTurkeyAdm3OsmResearchSpatialCorrespondenceReport"
+  },
+  "mapPreviewPath": "reports/tr-adm3/sprint-2g-geometry-validation/map-preview/fatih-geometry-comparison.geojson"
+}

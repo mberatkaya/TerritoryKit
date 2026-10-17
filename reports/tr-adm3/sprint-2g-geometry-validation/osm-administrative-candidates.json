@@ -1,0 +1,4058 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2g-osm-administrative-candidates@1",
+  "generatedAt": "2026-10-17T18:00:00.000Z",
+  "extractBlocked": false,
+  "missingArtifact": null,
+  "fromCache": true,
+  "cachePath": ".territory/sprint-2g/osm-administrative-extract-istanbul-pilots.json",
+  "countryPbfSourceLock": {
+    "attribution": "OpenStreetMap contributors, ODbL 1.0",
+    "cachePath": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf",
+    "contentAddressedSnapshotId": "TR-5ec68ce5e0b2be55",
+    "countryCode": "TR",
+    "downloadedAt": "2026-08-28T17:52:41.477Z",
+    "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
+    "fileSizeBytes": 643317882,
+    "format": "osm-pbf",
+    "license": "ODbL-1.0",
+    "pbfHeader": {
+      "osmosisReplicationBaseUrl": "https://download.geofabrik.de/europe/turkey-updates",
+      "osmosisReplicationSequenceNumber": 4894,
+      "osmosisReplicationTimestamp": "2026-08-27T20:21:06.000Z",
+      "writingProgram": "osmium/1.16.0"
+    },
+    "providerId": "geofabrik-osm-extracts",
+    "providerName": "Geofabrik OpenStreetMap extracts",
+    "schemaVersion": "territorykit-tr-osm-snapshot-source-lock@1",
+    "sha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+    "snapshotDate": "2026-08-27T20:21:06.000Z",
+    "sourceDatasetId": "geofabrik:europe:turkey",
+    "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+    "lockPath": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json",
+    "pbfPath": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf",
+    "onDiskSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+    "byteSize": 643317882
+  },
+  "extractionComparisons": [
+    {
+      "slug": "fatih",
+      "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+      "polygonClip": {
+        "mode": "polygon-complete_ways",
+        "builtPolygonCount": 1,
+        "unresolvedCount": 62,
+        "uniqueUnresolvedRelations": 62
+      },
+      "bboxClip": {
+        "mode": "bbox-complete_ways",
+        "builtPolygonCount": 1,
+        "unresolvedCount": 197,
+        "uniqueUnresolvedRelations": 193
+      }
+    },
+    {
+      "slug": "adalar",
+      "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+      "polygonClip": {
+        "mode": "polygon-complete_ways",
+        "builtPolygonCount": 3,
+        "unresolvedCount": 2,
+        "uniqueUnresolvedRelations": 2
+      },
+      "bboxClip": {
+        "mode": "bbox-complete_ways",
+        "builtPolygonCount": 3,
+        "unresolvedCount": 22,
+        "uniqueUnresolvedRelations": 22
+      }
+    }
+  ],
+  "coverage": {
+    "schemaVersion": "territorykit-tr-adm3-osm-coverage@1",
+    "country": "TR",
+    "generatedAt": "2026-10-17T18:00:00.000Z",
+    "candidateCount": 1020,
+    "builtPolygonCount": 4,
+    "unresolvedCount": 1016,
+    "duplicateCount": 0,
+    "unresolvedSummary": {
+      "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+      "entryCount": 1016,
+      "uniqueUnresolvedRelationIds": 667,
+      "repeatedRelationAttemptCount": 291,
+      "extraUnresolvedOccurrences": 310,
+      "repeatedRelationAttempts": [
+        {
+          "osmId": 2463274,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 2463390,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 2464768,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 2464918,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 2468218,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 2468219,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 2468242,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 3403828,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 3866327,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 3866328,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 3866467,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 3866468,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 6868850,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648808,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648809,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648810,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648811,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648812,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648813,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648814,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648815,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648816,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648817,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648818,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648819,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648820,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648821,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648822,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648823,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648824,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648825,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648826,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648827,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648828,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648829,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648830,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648831,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648832,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648833,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648834,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648835,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648836,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648837,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648838,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648839,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648840,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648841,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648842,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648843,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648845,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648846,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648847,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648848,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648849,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648850,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 7648851,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648852,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648853,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648854,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 7648855,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 7786494,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7786495,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7786496,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7786499,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7786500,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7786501,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7964540,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7964551,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7964967,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7965519,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7968242,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7980975,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7980976,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7982393,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7982394,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7982395,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 7982396,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 7982397,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 7982475,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7982476,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7982477,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7982482,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 8111527,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 8796660,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 8824054,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 8824111,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 8839337,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 8852697,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 8857261,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9286614,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9286639,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9286658,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9289128,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9296001,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9319824,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9319855,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9319943,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9320234,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9320236,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9320291,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9321912,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9321930,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9324375,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9324437,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9324438,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9324445,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9324450,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9324472,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9324473,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9327583,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9327603,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9327605,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9327610,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9327636,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9327651,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9327671,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9335346,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9335349,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9354239,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9362930,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9362961,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9362979,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363036,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363037,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363124,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363127,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363133,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363158,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363201,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363203,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363232,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9381516,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9381694,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9388924,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9389934,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9389950,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9390752,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9390753,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9390800,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9390849,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9390850,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9390851,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9390946,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9391277,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9391290,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9393066,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9397085,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9397114,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9397171,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9397186,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9397189,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9397234,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9397246,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9421907,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9422004,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9422033,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9422081,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9422082,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9422209,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9423100,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9423101,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9423103,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9423121,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9423122,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9423795,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424008,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424009,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424010,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424011,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424012,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424080,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424081,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424082,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424874,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424883,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424884,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424885,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424887,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424888,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9426227,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9441032,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9441078,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9441289,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9441320,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9441339,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9443987,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444034,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444099,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444116,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444828,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444841,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444876,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444892,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444902,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444910,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444927,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444949,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444950,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9446484,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9454000,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9461411,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9461512,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9461575,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9461576,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9461611,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462638,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462650,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462686,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462693,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462770,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462798,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462821,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462845,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462868,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462888,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462890,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462897,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462905,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462915,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463224,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463235,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463238,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463242,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463258,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463276,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463280,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463281,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463285,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463286,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463313,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463333,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463364,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463385,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463387,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463391,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463396,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463397,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463407,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463410,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463414,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463421,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463608,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9463624,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9463636,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9463650,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9464129,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9472571,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9472572,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9472573,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9475439,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9475447,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9475448,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9475457,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9475458,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9620409,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9620429,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9620430,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9620439,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9620447,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9620448,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9623215,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9642513,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642514,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642576,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642577,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642578,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642644,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642645,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642646,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642812,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642813,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642814,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642815,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642816,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642817,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642894,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642964,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642966,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9644504,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9677558,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9677564,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9680204,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9680508,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9680547,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9680567,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9680568,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9680598,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9680605,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9680610,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9680774,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 13276411,
+          "attemptCount": 2
+        }
+      ],
+      "reasonCounts": {
+        "geometry-unavailable": 37,
+        "missing-outer-way-members": 226,
+        "open-outer-way-ring": 747,
+        "parent-unresolved": 6
+      }
+    }
+  },
+  "quality": {
+    "schemaVersion": "territorykit-tr-sprint-2g-osm-quality-rollup@2",
+    "generatedAt": "2026-10-17T18:00:00.000Z",
+    "perDistrictExtracts": [
+      {
+        "parentAdm2Id": "tr:adm2:54988432b89638439219394",
+        "slug": "kadikoy",
+        "extractionMode": "bbox-complete_ways",
+        "extractionCommand": "osmium extract -b 28.989842,40.924966,29.136235,41.037313 \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf\" -o \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b89638439219394.osm.pbf\" --overwrite -s complete_ways",
+        "extractionStrategy": "complete_ways",
+        "parentAdm2GeometryHash": "fnv1a32:cac09e65",
+        "derivedClip": {
+          "path": ".territory/sprint-2g/osm-clip-bbox-54988432b89638439219394.osm.pbf",
+          "sha256": "b197be4519c648be970b864b85b1f3952a0092e026eba563f91b63c1c1ce16ac",
+          "byteSize": 5797566
+        },
+        "derivedInputSourceLock": {
+          "schemaVersion": "territorykit-tr-adm3-osm-derived-input-lock@1",
+          "role": "derived-extract-input",
+          "country": "TR",
+          "generatedAt": "2026-10-17T18:00:00.000Z",
+          "inputPbfPath": "/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b89638439219394.osm.pbf",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
+          "upstreamTimestamp": null,
+          "sha256": "b197be4519c648be970b864b85b1f3952a0092e026eba563f91b63c1c1ce16ac",
+          "byteSize": 5797566,
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "parser": {
+            "package": "@osmix/pbf",
+            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata",
+            "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
+          }
+        },
+        "builtPolygonCount": 0,
+        "unresolvedCount": 98,
+        "unresolvedSummary": {
+          "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+          "entryCount": 98,
+          "uniqueUnresolvedRelationIds": 97,
+          "repeatedRelationAttemptCount": 0,
+          "extraUnresolvedOccurrences": 0,
+          "repeatedRelationAttempts": [],
+          "reasonCounts": {
+            "missing-outer-way-members": 23,
+            "open-outer-way-ring": 73,
+            "parent-unresolved": 2
+          }
+        }
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+        "slug": "fatih",
+        "extractionMode": "polygon-complete_ways",
+        "extractionCommand": "osmium extract -p \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-poly-54988432b39641834885080.geojson\" \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf\" -o \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-poly-54988432b39641834885080.osm.pbf\" --overwrite -s complete_ways",
+        "extractionStrategy": "complete_ways",
+        "parentAdm2GeometryHash": "fnv1a32:de0bae91",
+        "derivedClip": {
+          "path": ".territory/sprint-2g/osm-clip-poly-54988432b39641834885080.osm.pbf",
+          "sha256": "7257afec863eb1abbb210a51b66d78236e9163b6827b6ef27ce89e318cb6fa35",
+          "byteSize": 2266903
+        },
+        "derivedInputSourceLock": {
+          "schemaVersion": "territorykit-tr-adm3-osm-derived-input-lock@1",
+          "role": "derived-extract-input",
+          "country": "TR",
+          "generatedAt": "2026-10-17T18:00:00.000Z",
+          "inputPbfPath": "/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-poly-54988432b39641834885080.osm.pbf",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
+          "upstreamTimestamp": null,
+          "sha256": "7257afec863eb1abbb210a51b66d78236e9163b6827b6ef27ce89e318cb6fa35",
+          "byteSize": 2266903,
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "parser": {
+            "package": "@osmix/pbf",
+            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata",
+            "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
+          }
+        },
+        "builtPolygonCount": 1,
+        "unresolvedCount": 62,
+        "unresolvedSummary": {
+          "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+          "entryCount": 62,
+          "uniqueUnresolvedRelationIds": 62,
+          "repeatedRelationAttemptCount": 0,
+          "extraUnresolvedOccurrences": 0,
+          "repeatedRelationAttempts": [],
+          "reasonCounts": {
+            "missing-outer-way-members": 14,
+            "open-outer-way-ring": 48
+          }
+        }
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b79162079631621",
+        "slug": "uskudar",
+        "extractionMode": "bbox-complete_ways",
+        "extractionCommand": "osmium extract -b 28.981309,40.967444,29.116701,41.102892 \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf\" -o \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b79162079631621.osm.pbf\" --overwrite -s complete_ways",
+        "extractionStrategy": "complete_ways",
+        "parentAdm2GeometryHash": "fnv1a32:17cc497e",
+        "derivedClip": {
+          "path": ".territory/sprint-2g/osm-clip-bbox-54988432b79162079631621.osm.pbf",
+          "sha256": "5bd147e9ac5ee52e495335433e96e97be9dcd3cf5c3ef2eed738521061964c64",
+          "byteSize": 8519154
+        },
+        "derivedInputSourceLock": {
+          "schemaVersion": "territorykit-tr-adm3-osm-derived-input-lock@1",
+          "role": "derived-extract-input",
+          "country": "TR",
+          "generatedAt": "2026-10-17T18:00:00.000Z",
+          "inputPbfPath": "/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b79162079631621.osm.pbf",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
+          "upstreamTimestamp": null,
+          "sha256": "5bd147e9ac5ee52e495335433e96e97be9dcd3cf5c3ef2eed738521061964c64",
+          "byteSize": 8519154,
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "parser": {
+            "package": "@osmix/pbf",
+            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata",
+            "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
+          }
+        },
+        "builtPolygonCount": 0,
+        "unresolvedCount": 175,
+        "unresolvedSummary": {
+          "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+          "entryCount": 175,
+          "uniqueUnresolvedRelationIds": 170,
+          "repeatedRelationAttemptCount": 0,
+          "extraUnresolvedOccurrences": 0,
+          "repeatedRelationAttempts": [],
+          "reasonCounts": {
+            "geometry-unavailable": 4,
+            "missing-outer-way-members": 37,
+            "open-outer-way-ring": 132,
+            "parent-unresolved": 2
+          }
+        }
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+        "slug": "adalar",
+        "extractionMode": "polygon-complete_ways",
+        "extractionCommand": "osmium extract -p \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-poly-54988432b94516152709384.geojson\" \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf\" -o \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-poly-54988432b94516152709384.osm.pbf\" --overwrite -s complete_ways",
+        "extractionStrategy": "complete_ways",
+        "parentAdm2GeometryHash": "fnv1a32:3b068a5f",
+        "derivedClip": {
+          "path": ".territory/sprint-2g/osm-clip-poly-54988432b94516152709384.osm.pbf",
+          "sha256": "95804e633a91dbc80d98f52bcda3702433caf614480466724dd8ec9f995260c4",
+          "byteSize": 425452
+        },
+        "derivedInputSourceLock": {
+          "schemaVersion": "territorykit-tr-adm3-osm-derived-input-lock@1",
+          "role": "derived-extract-input",
+          "country": "TR",
+          "generatedAt": "2026-10-17T18:00:00.000Z",
+          "inputPbfPath": "/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-poly-54988432b94516152709384.osm.pbf",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
+          "upstreamTimestamp": null,
+          "sha256": "95804e633a91dbc80d98f52bcda3702433caf614480466724dd8ec9f995260c4",
+          "byteSize": 425452,
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "parser": {
+            "package": "@osmix/pbf",
+            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata",
+            "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
+          }
+        },
+        "builtPolygonCount": 3,
+        "unresolvedCount": 2,
+        "unresolvedSummary": {
+          "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+          "entryCount": 2,
+          "uniqueUnresolvedRelationIds": 2,
+          "repeatedRelationAttemptCount": 0,
+          "extraUnresolvedOccurrences": 0,
+          "repeatedRelationAttempts": [],
+          "reasonCounts": {
+            "open-outer-way-ring": 1,
+            "parent-unresolved": 1
+          }
+        }
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+        "slug": "eyupsultan",
+        "extractionMode": "bbox-complete_ways",
+        "extractionCommand": "osmium extract -b 28.745023,40.999551,29.001139,41.330995 \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf\" -o \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b93840376788897.osm.pbf\" --overwrite -s complete_ways",
+        "extractionStrategy": "complete_ways",
+        "parentAdm2GeometryHash": "fnv1a32:53826259",
+        "derivedClip": {
+          "path": ".territory/sprint-2g/osm-clip-bbox-54988432b93840376788897.osm.pbf",
+          "sha256": "902f35fa812ba85006249952d62121f097e0b4d85aca68560b032f48b290ac18",
+          "byteSize": 18046789
+        },
+        "derivedInputSourceLock": {
+          "schemaVersion": "territorykit-tr-adm3-osm-derived-input-lock@1",
+          "role": "derived-extract-input",
+          "country": "TR",
+          "generatedAt": "2026-10-17T18:00:00.000Z",
+          "inputPbfPath": "/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b93840376788897.osm.pbf",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
+          "upstreamTimestamp": null,
+          "sha256": "902f35fa812ba85006249952d62121f097e0b4d85aca68560b032f48b290ac18",
+          "byteSize": 18046789,
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "parser": {
+            "package": "@osmix/pbf",
+            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata",
+            "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
+          }
+        },
+        "builtPolygonCount": 0,
+        "unresolvedCount": 374,
+        "unresolvedSummary": {
+          "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+          "entryCount": 374,
+          "uniqueUnresolvedRelationIds": 347,
+          "repeatedRelationAttemptCount": 0,
+          "extraUnresolvedOccurrences": 0,
+          "repeatedRelationAttempts": [],
+          "reasonCounts": {
+            "geometry-unavailable": 27,
+            "missing-outer-way-members": 51,
+            "open-outer-way-ring": 295,
+            "parent-unresolved": 1
+          }
+        }
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b71345383711908",
+        "slug": "catalca",
+        "extractionMode": "bbox-complete_ways",
+        "extractionCommand": "osmium extract -b 28.045288,41.031314,28.620366,41.615591 \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf\" -o \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b71345383711908.osm.pbf\" --overwrite -s complete_ways",
+        "extractionStrategy": "complete_ways",
+        "parentAdm2GeometryHash": "fnv1a32:22c5ec0a",
+        "derivedClip": {
+          "path": ".territory/sprint-2g/osm-clip-bbox-54988432b71345383711908.osm.pbf",
+          "sha256": "11713c88f3a8647ac998e62eaa0dcd8228b3e3458b3554075ebe39f638f27691",
+          "byteSize": 5283826
+        },
+        "derivedInputSourceLock": {
+          "schemaVersion": "territorykit-tr-adm3-osm-derived-input-lock@1",
+          "role": "derived-extract-input",
+          "country": "TR",
+          "generatedAt": "2026-10-17T18:00:00.000Z",
+          "inputPbfPath": "/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b71345383711908.osm.pbf",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
+          "upstreamTimestamp": null,
+          "sha256": "11713c88f3a8647ac998e62eaa0dcd8228b3e3458b3554075ebe39f638f27691",
+          "byteSize": 5283826,
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "parser": {
+            "package": "@osmix/pbf",
+            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata",
+            "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
+          }
+        },
+        "builtPolygonCount": 0,
+        "unresolvedCount": 117,
+        "unresolvedSummary": {
+          "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+          "entryCount": 117,
+          "uniqueUnresolvedRelationIds": 111,
+          "repeatedRelationAttemptCount": 0,
+          "extraUnresolvedOccurrences": 0,
+          "repeatedRelationAttempts": [],
+          "reasonCounts": {
+            "geometry-unavailable": 6,
+            "missing-outer-way-members": 33,
+            "open-outer-way-ring": 78
+          }
+        }
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b67026781349893",
+        "slug": "basaksehir",
+        "extractionMode": "bbox-complete_ways",
+        "extractionCommand": "osmium extract -b 28.614595,41.032797,28.875589,41.173676 \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf\" -o \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b67026781349893.osm.pbf\" --overwrite -s complete_ways",
+        "extractionStrategy": "complete_ways",
+        "parentAdm2GeometryHash": "fnv1a32:a6599b59",
+        "derivedClip": {
+          "path": ".territory/sprint-2g/osm-clip-bbox-54988432b67026781349893.osm.pbf",
+          "sha256": "150441c3c8fb022f3620a7598e7adb2a5ee429e41ad0506dd99ce0fbe5246e8c",
+          "byteSize": 5970509
+        },
+        "derivedInputSourceLock": {
+          "schemaVersion": "territorykit-tr-adm3-osm-derived-input-lock@1",
+          "role": "derived-extract-input",
+          "country": "TR",
+          "generatedAt": "2026-10-17T18:00:00.000Z",
+          "inputPbfPath": "/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b67026781349893.osm.pbf",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
+          "upstreamTimestamp": null,
+          "sha256": "150441c3c8fb022f3620a7598e7adb2a5ee429e41ad0506dd99ce0fbe5246e8c",
+          "byteSize": 5970509,
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "parser": {
+            "package": "@osmix/pbf",
+            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata",
+            "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
+          }
+        },
+        "builtPolygonCount": 0,
+        "unresolvedCount": 107,
+        "unresolvedSummary": {
+          "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+          "entryCount": 107,
+          "uniqueUnresolvedRelationIds": 107,
+          "repeatedRelationAttemptCount": 0,
+          "extraUnresolvedOccurrences": 0,
+          "repeatedRelationAttempts": [],
+          "reasonCounts": {
+            "missing-outer-way-members": 48,
+            "open-outer-way-ring": 59
+          }
+        }
+      },
+      {
+        "parentAdm2Id": "tr:adm2:54988432b2777192469074",
+        "slug": "esenyurt",
+        "extractionMode": "bbox-complete_ways",
+        "extractionCommand": "osmium extract -b 28.595485,40.974828,28.726899,41.123111 \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf\" -o \"/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b2777192469074.osm.pbf\" --overwrite -s complete_ways",
+        "extractionStrategy": "complete_ways",
+        "parentAdm2GeometryHash": "fnv1a32:bb5404b3",
+        "derivedClip": {
+          "path": ".territory/sprint-2g/osm-clip-bbox-54988432b2777192469074.osm.pbf",
+          "sha256": "a03dec91d67f9fd62e5092ff9929eca014a9ca5016e966e93db81ee4b536e6c1",
+          "byteSize": 3266104
+        },
+        "derivedInputSourceLock": {
+          "schemaVersion": "territorykit-tr-adm3-osm-derived-input-lock@1",
+          "role": "derived-extract-input",
+          "country": "TR",
+          "generatedAt": "2026-10-17T18:00:00.000Z",
+          "inputPbfPath": "/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b2777192469074.osm.pbf",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
+          "upstreamTimestamp": null,
+          "sha256": "a03dec91d67f9fd62e5092ff9929eca014a9ca5016e966e93db81ee4b536e6c1",
+          "byteSize": 3266104,
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "parser": {
+            "package": "@osmix/pbf",
+            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata",
+            "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
+          }
+        },
+        "builtPolygonCount": 0,
+        "unresolvedCount": 81,
+        "unresolvedSummary": {
+          "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+          "entryCount": 81,
+          "uniqueUnresolvedRelationIds": 81,
+          "repeatedRelationAttemptCount": 0,
+          "extraUnresolvedOccurrences": 0,
+          "repeatedRelationAttempts": [],
+          "reasonCounts": {
+            "missing-outer-way-members": 20,
+            "open-outer-way-ring": 61
+          }
+        }
+      }
+    ],
+    "unresolvedSummary": {
+      "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+      "entryCount": 1016,
+      "uniqueUnresolvedRelationIds": 667,
+      "repeatedRelationAttemptCount": 291,
+      "extraUnresolvedOccurrences": 310,
+      "repeatedRelationAttempts": [
+        {
+          "osmId": 2463274,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 2463390,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 2464768,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 2464918,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 2468218,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 2468219,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 2468242,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 3403828,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 3866327,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 3866328,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 3866467,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 3866468,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 6868850,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648808,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648809,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648810,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648811,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648812,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648813,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648814,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648815,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648816,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648817,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648818,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648819,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648820,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648821,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648822,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648823,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648824,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648825,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648826,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648827,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648828,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648829,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648830,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648831,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648832,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648833,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648834,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648835,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648836,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648837,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648838,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648839,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648840,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648841,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648842,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648843,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648845,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648846,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648847,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648848,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648849,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648850,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 7648851,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648852,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648853,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7648854,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 7648855,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 7786494,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7786495,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7786496,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7786499,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7786500,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7786501,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7964540,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7964551,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7964967,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7965519,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7968242,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7980975,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7980976,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7982393,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7982394,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7982395,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 7982396,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 7982397,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 7982475,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7982476,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7982477,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 7982482,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 8111527,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 8796660,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 8824054,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 8824111,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 8839337,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 8852697,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 8857261,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9286614,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9286639,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9286658,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9289128,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9296001,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9319824,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9319855,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9319943,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9320234,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9320236,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9320291,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9321912,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9321930,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9324375,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9324437,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9324438,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9324445,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9324450,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9324472,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9324473,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9327583,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9327603,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9327605,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9327610,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9327636,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9327651,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9327671,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9335346,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9335349,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9354239,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9362930,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9362961,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9362979,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363036,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363037,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363124,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363127,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363133,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363158,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363201,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363203,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9363232,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9381516,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9381694,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9388924,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9389934,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9389950,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9390752,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9390753,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9390800,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9390849,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9390850,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9390851,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9390946,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9391277,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9391290,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9393066,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9397085,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9397114,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9397171,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9397186,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9397189,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9397234,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9397246,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9421907,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9422004,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9422033,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9422081,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9422082,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9422209,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9423100,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9423101,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9423103,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9423121,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9423122,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9423795,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424008,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424009,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424010,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424011,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424012,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424080,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424081,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424082,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424874,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424883,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424884,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424885,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424887,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9424888,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9426227,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9441032,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9441078,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9441289,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9441320,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9441339,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9443987,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444034,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444099,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444116,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444828,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444841,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444876,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444892,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444902,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444910,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444927,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444949,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9444950,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9446484,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9454000,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9461411,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9461512,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9461575,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9461576,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9461611,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462638,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462650,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462686,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462693,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462770,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462798,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462821,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462845,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462868,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462888,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462890,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462897,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462905,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9462915,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463224,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463235,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463238,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463242,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463258,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463276,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463280,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463281,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463285,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463286,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463313,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463333,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463364,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463385,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463387,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463391,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463396,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463397,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463407,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463410,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463414,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463421,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9463608,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9463624,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9463636,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9463650,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9464129,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9472571,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9472572,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9472573,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9475439,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9475447,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9475448,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9475457,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9475458,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9620409,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9620429,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9620430,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9620439,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9620447,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9620448,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9623215,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9642513,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642514,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642576,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642577,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642578,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642644,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642645,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642646,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642812,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642813,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642814,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642815,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642816,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642817,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642894,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642964,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9642966,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9644504,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9677558,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9677564,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9680204,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9680508,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9680547,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9680567,
+          "attemptCount": 3
+        },
+        {
+          "osmId": 9680568,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9680598,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9680605,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9680610,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 9680774,
+          "attemptCount": 2
+        },
+        {
+          "osmId": 13276411,
+          "attemptCount": 2
+        }
+      ],
+      "reasonCounts": {
+        "geometry-unavailable": 37,
+        "missing-outer-way-members": 226,
+        "open-outer-way-ring": 747,
+        "parent-unresolved": 6
+      }
+    }
+  },
+  "unresolvedCount": 1016,
+  "unresolvedSummary": {
+    "schemaVersion": "territorykit-tr-adm3-osm-unresolved-summary@1",
+    "entryCount": 1016,
+    "uniqueUnresolvedRelationIds": 667,
+    "repeatedRelationAttemptCount": 291,
+    "extraUnresolvedOccurrences": 310,
+    "repeatedRelationAttempts": [
+      {
+        "osmId": 2463274,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 2463390,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 2464768,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 2464918,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 2468218,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 2468219,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 2468242,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 3403828,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 3866327,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 3866328,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 3866467,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 3866468,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 6868850,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648808,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648809,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648810,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648811,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648812,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648813,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648814,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648815,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648816,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648817,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648818,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648819,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648820,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648821,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648822,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648823,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648824,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648825,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648826,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648827,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648828,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648829,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648830,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648831,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648832,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648833,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648834,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648835,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648836,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648837,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648838,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648839,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648840,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648841,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648842,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648843,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648845,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648846,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648847,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648848,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648849,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648850,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 7648851,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648852,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648853,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7648854,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 7648855,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 7786494,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7786495,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7786496,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7786499,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7786500,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7786501,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7964540,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7964551,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7964967,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7965519,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7968242,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7980975,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7980976,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7982393,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7982394,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7982395,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 7982396,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 7982397,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 7982475,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7982476,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7982477,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 7982482,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 8111527,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 8796660,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 8824054,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 8824111,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 8839337,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 8852697,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 8857261,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9286614,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9286639,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9286658,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9289128,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 9296001,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 9319824,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9319855,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9319943,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9320234,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9320236,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9320291,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9321912,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9321930,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9324375,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9324437,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9324438,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9324445,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9324450,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9324472,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9324473,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9327583,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9327603,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9327605,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9327610,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9327636,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9327651,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9327671,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9335346,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9335349,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9354239,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9362930,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9362961,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9362979,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9363036,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9363037,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9363124,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9363127,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9363133,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9363158,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9363201,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9363203,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9363232,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9381516,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9381694,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9388924,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9389934,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9389950,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9390752,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9390753,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9390800,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9390849,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9390850,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9390851,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9390946,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9391277,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9391290,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9393066,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9397085,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9397114,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9397171,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9397186,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9397189,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9397234,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9397246,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9421907,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9422004,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9422033,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9422081,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9422082,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9422209,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9423100,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9423101,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9423103,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9423121,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9423122,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9423795,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9424008,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9424009,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9424010,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9424011,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9424012,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9424080,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9424081,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9424082,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9424874,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9424883,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9424884,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9424885,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9424887,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9424888,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9426227,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9441032,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9441078,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9441289,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9441320,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9441339,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9443987,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9444034,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9444099,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9444116,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9444828,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9444841,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9444876,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9444892,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9444902,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9444910,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9444927,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9444949,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9444950,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9446484,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 9454000,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9461411,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9461512,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9461575,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9461576,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9461611,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9462638,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9462650,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9462686,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9462693,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9462770,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9462798,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9462821,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9462845,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9462868,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9462888,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9462890,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9462897,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9462905,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9462915,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463224,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463235,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463238,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463242,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463258,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463276,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463280,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463281,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463285,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463286,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463313,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463333,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463364,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463385,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463387,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463391,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463396,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463397,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463407,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463410,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463414,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463421,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9463608,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 9463624,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 9463636,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 9463650,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 9464129,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 9472571,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9472572,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9472573,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9475439,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9475447,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 9475448,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 9475457,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9475458,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9620409,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9620429,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9620430,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9620439,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9620447,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9620448,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9623215,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 9642513,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9642514,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9642576,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9642577,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9642578,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9642644,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9642645,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9642646,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9642812,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9642813,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9642814,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9642815,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9642816,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9642817,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9642894,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9642964,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9642966,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9644504,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9677558,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9677564,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9680204,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9680508,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9680547,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 9680567,
+        "attemptCount": 3
+      },
+      {
+        "osmId": 9680568,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9680598,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9680605,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9680610,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 9680774,
+        "attemptCount": 2
+      },
+      {
+        "osmId": 13276411,
+        "attemptCount": 2
+      }
+    ],
+    "reasonCounts": {
+      "geometry-unavailable": 37,
+      "missing-outer-way-members": 226,
+      "open-outer-way-ring": 747,
+      "parent-unresolved": 6
+    }
+  },
+  "countDefinitions": {
+    "candidateEntryCount": "Ways/relations accepted by evaluateTurkeyAdm3OsmBoundaryCandidate inside the Istanbul ADM2 clip (includes unresolved shells).",
+    "builtPolygonCount": "Emitted OSM research zones with resolvable parent confidence and mahalle/village/locality semantic type (official=false).",
+    "unresolvedEntryCount": "Per-processing unresolved rows (missing geometry, semantic-review-required, parent low/unresolved); not deduplicated by OSM relation ID.",
+    "uniqueUnresolvedRelationIds": "Distinct relation IDs among unresolved entries (ways excluded).",
+    "repeatedRelationIdCount": "Relation IDs appearing in more than one unresolved entry (attemptCount>1); not additive with uniqueUnresolvedRelationIds and not required to sum to unresolvedEntryCount.",
+    "extraUnresolvedOccurrences": "Sum of (attemptCount-1) over repeated relations; captures duplicate processing attempts beyond the first."
+  },
+  "duplicateCount": 0,
+  "pilots": [
+    {
+      "slug": "kadikoy",
+      "parentAdm2Id": "tr:adm2:54988432b89638439219394",
+      "osmAdministrativePolygonCount": 0,
+      "classification": "BLOCKED_BY_SOURCE"
+    },
+    {
+      "slug": "fatih",
+      "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+      "osmAdministrativePolygonCount": 1,
+      "classification": "VERIFIED_OSM_CANDIDATE"
+    },
+    {
+      "slug": "uskudar",
+      "parentAdm2Id": "tr:adm2:54988432b79162079631621",
+      "osmAdministrativePolygonCount": 0,
+      "classification": "BASELINE_PRESERVED"
+    },
+    {
+      "slug": "adalar",
+      "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+      "osmAdministrativePolygonCount": 3,
+      "classification": "VERIFIED_OSM_CANDIDATE"
+    },
+    {
+      "slug": "eyupsultan",
+      "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+      "osmAdministrativePolygonCount": 0,
+      "classification": "BASELINE_PRESERVED"
+    },
+    {
+      "slug": "catalca",
+      "parentAdm2Id": "tr:adm2:54988432b71345383711908",
+      "osmAdministrativePolygonCount": 0,
+      "classification": "BASELINE_PRESERVED"
+    },
+    {
+      "slug": "basaksehir",
+      "parentAdm2Id": "tr:adm2:54988432b67026781349893",
+      "osmAdministrativePolygonCount": 0,
+      "classification": "BASELINE_PRESERVED"
+    },
+    {
+      "slug": "esenyurt",
+      "parentAdm2Id": "tr:adm2:54988432b2777192469074",
+      "osmAdministrativePolygonCount": 0,
+      "classification": "BASELINE_PRESERVED"
+    }
+  ],
+  "totalVerifiedOsmAdministrativePolygons": 4,
+  "note": "OSM administrative polygons are independent research candidates; not official mahalle boundaries."
+}
