@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-lookup-smoke@1",
+  "generatedAt": "2026-10-17T12:48:28.332Z",
+  "district": "Esenyurt",
+  "parentAdm2Id": "tr:adm2:54988432b2777192469074",
+  "consumerLoadOk": true,
+  "validationIssueCodes": [],
+  "sampleZone": {
+    "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-00c2d3857952e7986740",
+    "associations": [],
+    "settlements": [],
+    "associationStatus": "unseeded",
+    "zoneResolution": "unseeded",
+    "isAmbiguous": false,
+    "autoDisplayNameAllowed": false,
+    "consumerNameSemantics": "none"
+  },
+  "layerVersion": {
+    "identityLayerVersion": "tr-mahalle-identity-esenyurt-pilot@2026-10-17",
+    "gameplayDatasetVersion": "2.1.0-rc.8",
+    "contentChecksum": "fnv1a32:f024361a",
+    "generatedAt": "2026-10-17T12:48:28.332Z"
+  }
+}

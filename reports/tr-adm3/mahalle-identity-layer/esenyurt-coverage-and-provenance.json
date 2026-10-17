@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-coverage@1",
+  "generatedAt": "2026-10-17T12:48:28.332Z",
+  "district": "Esenyurt",
+  "parentAdm2Id": "tr:adm2:54988432b2777192469074",
+  "gameplayDatasetVersion": "2.1.0-rc.8",
+  "identityLayerVersion": "tr-mahalle-identity-esenyurt-pilot@2026-10-17",
+  "contentChecksum": "fnv1a32:f024361a",
+  "associationCoverage": {
+    "seededZoneCount": 17,
+    "unseededZoneCount": 19,
+    "singleCandidateZoneCount": 2,
+    "ambiguousZoneCount": 15,
+    "seedCount": 47,
+    "associationCount": 47
+  },
+  "officialPolygonCoverage": {
+    "settlementCountWithOfficialPolygon": 0,
+    "settlementCountWithOsmAdminPolygon": 0,
+    "settlementCountSeedOnly": 47,
+    "note": "Sprint 2D expansion pilot (not in Sprint 2 geometry handoff)."
+  },
+  "sourcePrecedence": [
+    "approved-official-polygon",
+    "reviewed-osm-administrative-polygon",
+    "seed-only-semantic-association",
+    "unknown"
+  ],
+  "provenance": {
+    "gameplayShard": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1/districts/tr_adm2_54988432b2777192469074/dataset.json",
+    "rc8Root": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+    "barrierRoot": ".territory/sprint-6/calibration/barriers",
+    "osmSourceLock": null,
+    "osmSourceLockState": "unknown",
+    "barrierManifestChecksum": "f287a983de62f196085fa7508350ec0b7023037db5db4a1f98665d6ed5092f98",
+    "datasetSourceChecksum": "f973831b306bac2cfdbffc9d56133c2c3301255966347446b509c0d7f80ca72f",
+    "missingSourceReasonCode": "SOURCE_LOCK_MISSING"
+  },
+  "licenseChecks": {
+    "osmLicense": "ODbL-1.0",
+    "licenseState": "pending",
+    "permissionStatus": "redistribution-unknown",
+    "redistributionApproved": false,
+    "redistributionEvidenceState": "pending",
+    "commercialUseRequiresSeparateReview": true,
+    "hostedTileDeliveryRequiresSeparateReview": true
+  }
+}

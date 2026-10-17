@@ -1,12 +1,15 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-identity-ambiguity@1",
-  "generatedAt": "2026-10-15T21:59:26.873Z",
+  "generatedAt": "2026-10-17T12:48:26.284Z",
+  "district": "Fatih",
   "parentAdm2Id": "tr:adm2:54988432b39641834885080",
   "zoneCount": 30,
   "ambiguousZoneCount": 15,
   "singleSeedZoneCount": 10,
   "unseededZoneCount": 5,
   "distinctSeedsRepresented": 71,
+  "settlementCount": 71,
+  "associationCount": 71,
   "ambiguousZones": [
     {
       "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-073b672500565ae4fb3e",
@@ -204,7 +207,9 @@
       "ambiguousZoneCount": 15,
       "singleSeedZoneCount": 10,
       "unseededZoneCount": 5,
-      "distinctSeedsRepresented": 71
+      "distinctSeedsRepresented": 71,
+      "settlementCount": 71,
+      "associationCount": 71
     },
     "deltas": {
       "ambiguousZoneCount": 0,

@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-coverage@1",
+  "generatedAt": "2026-10-17T12:48:26.725Z",
+  "district": "Eyüpsultan",
+  "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+  "gameplayDatasetVersion": "2.1.0-rc.8",
+  "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+  "contentChecksum": "fnv1a32:9874c5c0",
+  "associationCoverage": {
+    "seededZoneCount": 8,
+    "unseededZoneCount": 11,
+    "singleCandidateZoneCount": 2,
+    "ambiguousZoneCount": 6,
+    "seedCount": 82,
+    "associationCount": 82
+  },
+  "officialPolygonCoverage": {
+    "settlementCountWithOfficialPolygon": 0,
+    "settlementCountWithOsmAdminPolygon": 0,
+    "settlementCountSeedOnly": 82,
+    "note": "Sparse OSM locality seeds; expect unseeded gameplay zones."
+  },
+  "sourcePrecedence": [
+    "approved-official-polygon",
+    "reviewed-osm-administrative-polygon",
+    "seed-only-semantic-association",
+    "unknown"
+  ],
+  "provenance": {
+    "gameplayShard": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1/districts/tr_adm2_54988432b93840376788897/dataset.json",
+    "rc8Root": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+    "barrierRoot": ".territory/sprint-6/calibration/barriers",
+    "osmSourceLock": null,
+    "osmSourceLockState": "unknown",
+    "barrierManifestChecksum": "502790fc758f60192ebe197bbd60b9d30064eb5629ace82875f7b839ff0562d3",
+    "datasetSourceChecksum": "9522f0a4e0ef3e23e488864972a4b8399a79114e7ce71688f729d084480c15f2",
+    "missingSourceReasonCode": "SOURCE_LOCK_MISSING"
+  },
+  "licenseChecks": {
+    "osmLicense": "ODbL-1.0",
+    "licenseState": "pending",
+    "permissionStatus": "redistribution-unknown",
+    "redistributionApproved": false,
+    "redistributionEvidenceState": "pending",
+    "commercialUseRequiresSeparateReview": true,
+    "hostedTileDeliveryRequiresSeparateReview": true
+  }
+}

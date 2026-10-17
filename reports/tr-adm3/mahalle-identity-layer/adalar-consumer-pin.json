@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-consumer-pin@1",
+  "district": "Adalar",
+  "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+  "gameplayDatasetId": "territory-kit-tr-v2-playable-adm3-tr-adm2-54988432b94516152709384",
+  "gameplayDatasetVersion": "2.1.0-rc.8",
+  "zoneIdSetSha256": "891afbcd52a77407982a11885eef58f2a84abf7483471695248e4cda17c301a1",
+  "geometryHashSetSha256": "81aa0fae99c202edf574472f191e2322277e2ff9d41d4d4ba73caedbbc544906",
+  "identityLayerContentChecksum": "fnv1a32:253aaa6a",
+  "associationCounts": {
+    "zoneCount": 14,
+    "settlementCount": 11,
+    "ambiguousZoneCount": 2,
+    "singleCandidateZoneCount": 4,
+    "unseededZoneCount": 8
+  },
+  "sourceExpectations": {
+    "requireSourceLockVerified": false,
+    "missingSourceReasonCode": "SOURCE_LOCK_MISSING",
+    "osmSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
+  }
+}

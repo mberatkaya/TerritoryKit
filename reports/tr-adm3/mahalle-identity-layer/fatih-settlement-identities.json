@@ -1,9 +1,10 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-settlement-identities@1",
-  "generatedAt": "2026-10-15T21:59:26.873Z",
+  "generatedAt": "2026-10-17T12:48:26.284Z",
+  "district": "Fatih",
   "parentAdm2Id": "tr:adm2:54988432b39641834885080",
   "identityLayerVersion": "tr-mahalle-identity-fatih-pilot@2026-10-15",
-  "contentChecksum": "fnv1a32:c85fa5eb",
+  "contentChecksum": "fnv1a32:370eff7d",
   "settlements": [
     {
       "settlementId": "tr:settlement:osm:node:6318210483",

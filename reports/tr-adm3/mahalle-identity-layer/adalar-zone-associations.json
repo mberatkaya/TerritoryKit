@@ -1,0 +1,367 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-zone-associations@1",
+  "generatedAt": "2026-10-17T12:48:26.435Z",
+  "district": "Adalar",
+  "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+  "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+  "contentChecksum": "fnv1a32:253aaa6a",
+  "boundaryMode": "covers",
+  "associations": [
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-2c554a5f5c64beb7bddd",
+      "settlementId": "tr:settlement:osm:node:1904383172",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [29.1146, 40.8480322]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:a2612fff",
+      "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-2c554a5f5c64beb7bddd",
+      "settlementId": "tr:settlement:osm:node:14116365738",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [29.1150194, 40.8398409]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:a2612fff",
+      "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-2c554a5f5c64beb7bddd",
+      "settlementId": "tr:settlement:osm:node:677532052",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [29.1200487, 40.8579661]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:a2612fff",
+      "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-2c554a5f5c64beb7bddd",
+      "settlementId": "tr:settlement:osm:node:14113780115",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [29.1197691, 40.8535203]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:a2612fff",
+      "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-6f634fa946042aa72fd5",
+      "settlementId": "tr:settlement:osm:node:14116337883",
+      "method": "point-containment-covers",
+      "status": "single-candidate",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [29.1276339, 40.8634809]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:b1471fdb",
+      "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+      "reviewDecision": "pending"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-7158c3fee86f9a9bd4ca",
+      "settlementId": "tr:settlement:osm:node:965795474",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [29.1293251, 40.8741659]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:463b9e90",
+      "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-7158c3fee86f9a9bd4ca",
+      "settlementId": "tr:settlement:osm:node:4996343980",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [29.1309879, 40.873905]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:463b9e90",
+      "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-7158c3fee86f9a9bd4ca",
+      "settlementId": "tr:settlement:osm:node:4996343982",
+      "method": "point-containment-covers",
+      "status": "review-required",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [29.1284576, 40.8737263]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:463b9e90",
+      "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+      "reviewDecision": "pending",
+      "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-71fb87fbe1fa6a633790",
+      "settlementId": "tr:settlement:osm:node:4996343979",
+      "method": "point-containment-covers",
+      "status": "single-candidate",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [29.0547984, 40.9088914]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:5ca2d550",
+      "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+      "reviewDecision": "pending"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-96ee849e174e02b8360c",
+      "settlementId": "tr:settlement:osm:node:1496720876",
+      "method": "point-containment-covers",
+      "status": "single-candidate",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [29.0992677, 40.8774116]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:ba1b6156",
+      "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+      "reviewDecision": "pending"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-994a54bedcdc60a31060",
+      "settlementId": "tr:settlement:osm:node:4996343981",
+      "method": "point-containment-covers",
+      "status": "single-candidate",
+      "evidence": [
+        {
+          "reasonCode": "POINT_IN_ZONE",
+          "message": "Seed coordinate assigned via point-in-polygon (covers).",
+          "boundaryMode": "covers",
+          "seedCoordinate": [29.0694845, 40.8802771]
+        }
+      ],
+      "gameplayDatasetVersion": "2.1.0-rc.8",
+      "gameplayGeometryHash": "fnv1a32:89bac634",
+      "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
+      "reviewDecision": "pending"
+    }
+  ],
+  "zoneSummaries": [
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-2c554a5f5c64beb7bddd",
+      "zoneName": "Territory 002",
+      "containedSeedCount": 4,
+      "distinctSettlementIds": [
+        "tr:settlement:osm:node:1904383172",
+        "tr:settlement:osm:node:14116365738",
+        "tr:settlement:osm:node:677532052",
+        "tr:settlement:osm:node:14113780115"
+      ],
+      "distinctNormalizedNames": ["eskibağ", "güvercinlik", "lunapark", "orman 177 çeşmesi (2011)"],
+      "associationStatus": "multiple-candidates",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-3d296a3d496146978d33",
+      "zoneName": "Territory 005",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-5de6d2f8b284a93b30c6",
+      "zoneName": "Territory 001",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-6f634fa946042aa72fd5",
+      "zoneName": "Perili Köşk",
+      "containedSeedCount": 1,
+      "distinctSettlementIds": ["tr:settlement:osm:node:14116337883"],
+      "distinctNormalizedNames": ["perili köşk"],
+      "associationStatus": "single-candidate",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "seed-locality-label"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-7158c3fee86f9a9bd4ca",
+      "zoneName": "Territory 003",
+      "containedSeedCount": 3,
+      "distinctSettlementIds": [
+        "tr:settlement:osm:node:965795474",
+        "tr:settlement:osm:node:4996343980",
+        "tr:settlement:osm:node:4996343982"
+      ],
+      "distinctNormalizedNames": ["adalar", "maden", "nizam"],
+      "associationStatus": "multiple-candidates",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "ambiguous-seed-labels"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-71fb87fbe1fa6a633790",
+      "zoneName": "Kınalıada",
+      "containedSeedCount": 1,
+      "distinctSettlementIds": ["tr:settlement:osm:node:4996343979"],
+      "distinctNormalizedNames": ["kınalıada"],
+      "associationStatus": "single-candidate",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "seed-locality-label"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-96e1fbaea13d9cb6230c",
+      "zoneName": "Territory 012",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-96ee849e174e02b8360c",
+      "zoneName": "Heybeliada",
+      "containedSeedCount": 1,
+      "distinctSettlementIds": ["tr:settlement:osm:node:1496720876"],
+      "distinctNormalizedNames": ["heybeliada"],
+      "associationStatus": "single-candidate",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "seed-locality-label"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-96f975e3dd7e37b2d009",
+      "zoneName": "Territory 007",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-994a54bedcdc60a31060",
+      "zoneName": "Burgazada",
+      "containedSeedCount": 1,
+      "distinctSettlementIds": ["tr:settlement:osm:node:4996343981"],
+      "distinctNormalizedNames": ["burgazada"],
+      "associationStatus": "single-candidate",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "seed-locality-label"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-9c7cd48baa710591f489",
+      "zoneName": "Territory 011",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-d836fddfee28922a0473",
+      "zoneName": "Territory 004",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-f4741f736b67e740169d",
+      "zoneName": "Territory 008",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-f71829b8b50938358ff0",
+      "zoneName": "Territory 014",
+      "containedSeedCount": 0,
+      "distinctSettlementIds": [],
+      "distinctNormalizedNames": [],
+      "associationStatus": "unseeded",
+      "autoDisplayNameAllowed": false,
+      "consumerNameSemantics": "none"
+    }
+  ]
+}

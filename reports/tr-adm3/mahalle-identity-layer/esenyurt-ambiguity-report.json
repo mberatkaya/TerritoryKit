@@ -1,0 +1,156 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-ambiguity@1",
+  "generatedAt": "2026-10-17T12:48:28.332Z",
+  "district": "Esenyurt",
+  "parentAdm2Id": "tr:adm2:54988432b2777192469074",
+  "zoneCount": 36,
+  "ambiguousZoneCount": 15,
+  "singleSeedZoneCount": 2,
+  "unseededZoneCount": 19,
+  "distinctSeedsRepresented": 47,
+  "settlementCount": 47,
+  "associationCount": 47,
+  "ambiguousZones": [
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-14d5ef802fb597bc231a",
+      "zoneName": "Territory 011",
+      "distinctNormalizedNames": ["battalgazi", "merkez", "pınar"],
+      "settlementIds": [
+        "tr:settlement:osm:node:6996201736",
+        "tr:settlement:osm:node:6986591000",
+        "tr:settlement:osm:node:2279463083"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-1590d8d188bf58c4f430",
+      "zoneName": "Territory 014",
+      "distinctNormalizedNames": ["fatih", "üçevler"],
+      "settlementIds": ["tr:settlement:osm:node:2279464416", "tr:settlement:osm:node:6986591001"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-2126db33569259762a3b",
+      "zoneName": "Territory 019",
+      "distinctNormalizedNames": ["ardıçlı", "süleymaniye"],
+      "settlementIds": ["tr:settlement:osm:node:2279452770", "tr:settlement:osm:node:6986590998"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-32d36b040f05fb9efb8f",
+      "zoneName": "Territory 003",
+      "distinctNormalizedNames": ["haramidere", "mehmet akif ersoy"],
+      "settlementIds": ["tr:settlement:osm:node:7865255307", "tr:settlement:osm:node:6986541801"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-44dbeed0d2b0301f19a1",
+      "zoneName": "Territory 015",
+      "distinctNormalizedNames": ["esenyurt", "sultaniye", "yenikent"],
+      "settlementIds": [
+        "tr:settlement:osm:node:26505356",
+        "tr:settlement:osm:node:6986590997",
+        "tr:settlement:osm:node:2279451672"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-4d6cee01927bf9790283",
+      "zoneName": "Territory 030",
+      "distinctNormalizedNames": ["hayat park 2", "koza", "orhan gazi"],
+      "settlementIds": [
+        "tr:settlement:osm:node:12331413636",
+        "tr:settlement:osm:node:9688435731",
+        "tr:settlement:osm:node:4996842778"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-5017edab4b37bb9fa6c6",
+      "zoneName": "Territory 005",
+      "distinctNormalizedNames": ["akevler", "talatpaşa"],
+      "settlementIds": ["tr:settlement:osm:node:9688435733", "tr:settlement:osm:node:4996842776"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-6850f86b0225bfb9c0bb",
+      "zoneName": "Territory 004",
+      "distinctNormalizedNames": ["cumhuriyet", "güzelyurt", "mehterçeşme", "mevlana", "yeşilkent"],
+      "settlementIds": [
+        "tr:settlement:osm:node:4996842781",
+        "tr:settlement:osm:node:2277230058",
+        "tr:settlement:osm:node:2278276834",
+        "tr:settlement:osm:node:6986541802",
+        "tr:settlement:osm:node:4996842782"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-77fa52a75347575908d1",
+      "zoneName": "Territory 008",
+      "distinctNormalizedNames": ["barbaros hayrettin paşa", "hürriyet"],
+      "settlementIds": ["tr:settlement:osm:node:6986541797", "tr:settlement:osm:node:6986541799"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-8338feef2d75c1f6a77c",
+      "zoneName": "Territory 013",
+      "distinctNormalizedNames": [
+        "istiklal",
+        "kıraç",
+        "necip fazıl kısakürek",
+        "osmangazi",
+        "piri reis",
+        "şehitler"
+      ],
+      "settlementIds": [
+        "tr:settlement:osm:node:2279455119",
+        "tr:settlement:osm:node:2281959677",
+        "tr:settlement:osm:node:6986541800",
+        "tr:settlement:osm:node:6996201738",
+        "tr:settlement:osm:node:6996201739",
+        "tr:settlement:osm:node:6996201737"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-83641780bfb9017e7005",
+      "zoneName": "Territory 017",
+      "distinctNormalizedNames": ["aşık veysel", "çınar", "esenkent", "örnek"],
+      "settlementIds": [
+        "tr:settlement:osm:node:9688435732",
+        "tr:settlement:osm:node:6986590999",
+        "tr:settlement:osm:node:27456460",
+        "tr:settlement:osm:node:2279454098"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-91e45e0e304840d4ae69",
+      "zoneName": "Territory 007",
+      "distinctNormalizedNames": ["akşemseddin", "incirtepe", "zafer"],
+      "settlementIds": [
+        "tr:settlement:osm:node:6986590994",
+        "tr:settlement:osm:node:2279464996",
+        "tr:settlement:osm:node:6986591002"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-9b35fab459c102f9435a",
+      "zoneName": "Territory 010",
+      "distinctNormalizedNames": ["balıkyolu", "inönü", "yunus emre"],
+      "settlementIds": [
+        "tr:settlement:osm:node:6986590996",
+        "tr:settlement:osm:node:2279464489",
+        "tr:settlement:osm:node:6986590995"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-cecef041aec54bc80bb8",
+      "zoneName": "Territory 002",
+      "distinctNormalizedNames": ["namık kemal", "saadetdere", "turgut özal"],
+      "settlementIds": [
+        "tr:settlement:osm:node:2278277216",
+        "tr:settlement:osm:node:4996842771",
+        "tr:settlement:osm:node:6986591003"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-de141d8945edc0f729fa",
+      "zoneName": "Territory 012",
+      "distinctNormalizedNames": ["atatürk", "gökevler"],
+      "settlementIds": ["tr:settlement:osm:node:2277236745", "tr:settlement:osm:node:6986541798"]
+    }
+  ],
+  "conflictAssociations": [],
+  "altBComparison": null
+}
