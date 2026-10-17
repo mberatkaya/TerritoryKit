@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Istanbul Mahalle Human Review (local)</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+    <style>
+      .review-layout {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 1rem;
+        padding: 1rem;
+        height: calc(100vh - 3rem);
+      }
+      .review-panel {
+        overflow: auto;
+        border: 1px solid #334155;
+        border-radius: 8px;
+        padding: 0.75rem;
+        background: #0f172a;
+      }
+      .review-record {
+        border-bottom: 1px solid #1e293b;
+        padding: 0.5rem 0;
+        cursor: pointer;
+      }
+      .review-record.active {
+        background: #1e293b;
+      }
+      .review-form label {
+        display: block;
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+      }
+      .review-form input,
+      .review-form select,
+      .review-form textarea {
+        width: 100%;
+        margin-top: 0.25rem;
+      }
+      .badge {
+        display: inline-block;
+        margin-right: 0.25rem;
+        padding: 0.1rem 0.35rem;
+        border-radius: 4px;
+        background: #334155;
+        font-size: 0.75rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="toolbar">
+      <strong>Istanbul mahalle human review (local export only)</strong>
+      <span id="status">Loading…</span>
+    </header>
+    <div class="review-layout">
+      <aside class="review-panel">
+        <h3>Filters</h3>
+        <label>
+          District
+          <select id="district-filter"></select>
+        </label>
+        <label>
+          Category
+          <select id="category-filter">
+            <option value="all">All</option>
+            <option value="AMBIGUOUS_MULTI_SEED_ZONE">Ambiguous</option>
+            <option value="UNSEEDED_GAMEPLAY_ZONE">Unseeded</option>
+            <option value="DUPLICATE_NORMALIZED_NAME">Duplicate name</option>
+            <option value="OFFICIAL_POLYGON_UNAVAILABLE">Official source blocked</option>
+          </select>
+        </label>
+        <div id="progress" style="margin-top: 1rem"></div>
+        <div id="record-list" style="margin-top: 1rem"></div>
+      </aside>
+      <main class="review-panel">
+        <div id="record-detail"></div>
+        <form id="decision-form" class="review-form">
+          <h3>Record decision (explicit human action)</h3>
+          <label>
+            Reviewer ID (email or staff id)
+            <input id="reviewer-id" required placeholder="you@organization.example" />
+          </label>
+          <label>
+            Decision
+            <select id="decision-state">
+              <option value="needs-evidence">needs-evidence</option>
+              <option value="approved-semantic-label">approved-semantic-label</option>
+              <option value="rejected">rejected</option>
+              <option value="superseded">superseded</option>
+            </select>
+          </label>
+          <label>
+            Approved semantic label (only for approved-semantic-label)
+            <input id="approved-label" />
+          </label>
+          <label>
+            Rationale
+            <textarea id="rationale" rows="4" required></textarea>
+          </label>
+          <p style="font-size: 0.85rem; color: #94a3b8">
+            Semantic label approval does <strong>not</strong> verify official mahalle boundaries or
+            enable public distribution without redistribution clearance.
+          </p>
+          <button type="submit">Stage decision in local export buffer</button>
+          <button type="button" id="export-decisions">Download decision export JSON</button>
+        </form>
+      </main>
+    </div>
+    <script type="module" src="/src/mahalle-human-review.ts"></script>
+  </body>
+</html>

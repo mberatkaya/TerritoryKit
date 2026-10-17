@@ -30,6 +30,31 @@ export {
   settlementHasLawfulPolygonEvidence
 } from "./settlement-identity.js";
 export {
+  MAHALLE_HUMAN_REVIEW_DECISION_ENTRY_SCHEMA_VERSION,
+  MAHALLE_HUMAN_REVIEW_DECISION_LEDGER_SCHEMA_VERSION,
+  MAHALLE_HUMAN_REVIEW_DECISION_STATES,
+  MAHALLE_HUMAN_REVIEW_QUEUE_SCHEMA_VERSION,
+  MAHALLE_HUMAN_REVIEW_VALIDATION_CODES,
+  appendMahalleHumanReviewDecisionHistory,
+  buildMahalleHumanReviewContextPin,
+  compareMahalleHumanReviewPins,
+  computeMahalleHumanReviewRecordId,
+  countAttributedHumanReviewDecisions,
+  countMahalleHumanReviewDecisionStates,
+  createPendingMahalleHumanReviewDecisionEntry,
+  resolveMahalleReviewAutoDisplayNameAllowed,
+  validateMahalleHumanReviewDecisionLedger,
+  validateMahalleHumanReviewDecisionSubmission,
+  type MahalleHumanReviewContextPin,
+  type MahalleHumanReviewDecisionEntry,
+  type MahalleHumanReviewDecisionHistoryEntry,
+  type MahalleHumanReviewDecisionLedger,
+  type MahalleHumanReviewDecisionState,
+  type MahalleHumanReviewQueueRecord,
+  type MahalleHumanReviewReviewer,
+  type MahalleHumanReviewValidationIssue
+} from "./mahalle-human-review.js";
+export {
   SETTLEMENT_IDENTITY_VALIDATION_CODES,
   collectGameplayAdm3Zones,
   computeSettlementIdentityGeometryHashSetSha256,

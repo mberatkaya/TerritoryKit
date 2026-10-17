@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { computeMahalleHumanReviewRecordId } from "../../packages/dataset/dist/index.mjs";
 import { ISTANBUL_SETTLEMENT_IDENTITY_PILOTS } from "./tr-mahalle-identity-istanbul-pilots.mjs";
 
 const PRIORITY = {
@@ -116,7 +117,7 @@ export async function buildMahalleHumanReviewQueue(options) {
         .map((row) => row.seedCoordinate)
         .filter(Boolean);
 
-      records.push({
+      const queueRecord = {
         stableZoneId: summary.zoneId,
         district: pilot.district,
         parentAdm2Id: associations.parentAdm2Id,
@@ -140,7 +141,9 @@ export async function buildMahalleHumanReviewQueue(options) {
           `${reportRoot}/${prefix}-ambiguity-report.json`,
           coverage.provenance?.osmSourceLockPath ? `${coverage.provenance.osmSourceLockPath}` : null
         ].filter(Boolean)
-      });
+      };
+      queueRecord.reviewRecordId = computeMahalleHumanReviewRecordId(queueRecord);
+      records.push(queueRecord);
     }
 
     for (const association of associations.associations) {
@@ -149,7 +152,7 @@ export async function buildMahalleHumanReviewQueue(options) {
       }
 
       const settlement = settlementById.get(association.settlementId);
-      records.push({
+      const conflictRecord = {
         stableZoneId: association.zoneId,
         district: pilot.district,
         parentAdm2Id: associations.parentAdm2Id,
@@ -169,7 +172,9 @@ export async function buildMahalleHumanReviewQueue(options) {
         reviewDecision: "pending",
         autoDisplayNameAllowed: false,
         evidenceLinks: [`${reportRoot}/${prefix}-zone-associations.json`]
-      });
+      };
+      conflictRecord.reviewRecordId = computeMahalleHumanReviewRecordId(conflictRecord);
+      records.push(conflictRecord);
     }
   }
 
@@ -180,7 +185,7 @@ export async function buildMahalleHumanReviewQueue(options) {
   for (const row of duplicateNormalizedNames) {
     const districts = new Set(row.owners.map((owner) => owner.district));
     if (districts.size === 1 && row.owners.length > 1) {
-      records.push({
+      const duplicateRecord = {
         stableZoneId: null,
         district: row.owners[0].district,
         parentAdm2Id: null,
@@ -196,7 +201,9 @@ export async function buildMahalleHumanReviewQueue(options) {
         reviewDecision: "pending",
         autoDisplayNameAllowed: false,
         evidenceLinks: []
-      });
+      };
+      duplicateRecord.reviewRecordId = computeMahalleHumanReviewRecordId(duplicateRecord);
+      records.push(duplicateRecord);
     }
   }
 
@@ -204,7 +211,7 @@ export async function buildMahalleHumanReviewQueue(options) {
     ([, owners]) => owners.length > 1
   );
   for (const [settlementId, owners] of duplicateSettlementIds) {
-    records.push({
+    const collisionRecord = {
       stableZoneId: null,
       district: owners.map((row) => row.district).join(","),
       parentAdm2Id: owners.map((row) => row.parentAdm2Id).join(","),
@@ -220,7 +227,9 @@ export async function buildMahalleHumanReviewQueue(options) {
       reviewDecision: "pending",
       autoDisplayNameAllowed: false,
       evidenceLinks: crossDistrictQaPath ? [crossDistrictQaPath] : []
-    });
+    };
+    collisionRecord.reviewRecordId = computeMahalleHumanReviewRecordId(collisionRecord);
+    records.push(collisionRecord);
   }
 
   records.sort((left, right) => left.reviewPriority - right.reviewPriority);
