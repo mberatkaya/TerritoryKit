@@ -1,7 +1,7 @@
 {
   "schemaVersion": "territorykit-tr-sprint-2h-decision@1",
-  "generatedAt": "2026-10-17T18:11:17.862Z",
-  "headSha": "e1bf1abf251984efceb46765f5181c5e736f8416",
+  "generatedAt": "2026-10-17T18:20:13.545Z",
+  "headSha": "b62251be16a1a8cb96e7f8095e644907b4986e94",
   "parserImplementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2h-multipolygon-stitch",
   "meaningfulProgress": true,
   "gates": {

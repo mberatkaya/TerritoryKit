@@ -1,10 +1,10 @@
 {
   "schemaVersion": "territorykit-tr-sprint-2h-research-spatial-correspondence@1",
-  "generatedAt": "2026-10-17T18:11:17.862Z",
+  "generatedAt": "2026-10-17T18:20:13.545Z",
   "byDistrict": {
     "kadikoy": {
       "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
-      "generatedAt": "2026-10-17T18:11:17.862Z",
+      "generatedAt": "2026-10-17T18:20:13.545Z",
       "status": "ASSESSED",
       "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1",
       "correspondences": [
@@ -380,7 +380,7 @@
     },
     "fatih": {
       "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
-      "generatedAt": "2026-10-17T18:11:17.862Z",
+      "generatedAt": "2026-10-17T18:20:13.545Z",
       "status": "ASSESSED",
       "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1",
       "correspondences": [
@@ -774,16 +774,517 @@
     },
     "uskudar": {
       "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
-      "generatedAt": "2026-10-17T18:11:17.862Z",
-      "status": "NOT_ASSESSED",
-      "reason": "no-osm-administrative-polygons-for-parent",
+      "generatedAt": "2026-10-17T18:20:13.545Z",
+      "status": "ASSESSED",
+      "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1",
+      "correspondences": [
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-11f1c421c10e9ed20e9d",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463280-barbaros-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463280",
+          "intersectionAreaKm2": 0.504702,
+          "overlapRatio": 0.50226701,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-15a32d3c79c3940d5e66",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463324-kandilli-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463324",
+          "intersectionAreaKm2": 0.04448,
+          "overlapRatio": 1,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-198eb1ef59dea3c67e13",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463396-altunizade-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463396",
+          "intersectionAreaKm2": 0.25841,
+          "overlapRatio": 0.31011855,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-19c8d93a070e8dbef137",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463364-beylerbeyi-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463364",
+          "intersectionAreaKm2": 0.29348,
+          "overlapRatio": 0.33707104,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-1bfc817f71619b7b98cd",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463333-icadiye-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463333",
+          "intersectionAreaKm2": 0.397076,
+          "overlapRatio": 0.58750873,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-21676a0e5b509c977ffc",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463416-kucuksu-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463416",
+          "intersectionAreaKm2": 1.42241,
+          "overlapRatio": 0.45920144999999996,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-24e728ea01b443b34f3c",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463276-zeynep-kamil-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463276",
+          "intersectionAreaKm2": 0.314971,
+          "overlapRatio": 0.5739278,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-283b83d409c2ade9f7fb",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463313-kuzguncuk-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463313",
+          "intersectionAreaKm2": 0.048333,
+          "overlapRatio": 0.95096901,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-2b69dbf07de255d22af7",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463385-kucuk-camlica-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463385",
+          "intersectionAreaKm2": 0.298049,
+          "overlapRatio": 1,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-3a3aa6e5d62308de12c2",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463387-burhaniye-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463387",
+          "intersectionAreaKm2": 0.998667,
+          "overlapRatio": 0.67305779,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-3d7b9d67ad87015c16e9",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463313-kuzguncuk-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463313",
+          "intersectionAreaKm2": 0.372908,
+          "overlapRatio": 0.95880246,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-4025f9265f1785d9dc00",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463410-ferah-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463410",
+          "intersectionAreaKm2": 0.180278,
+          "overlapRatio": 0.99819495,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-41b6f0939cd6c72c16b5",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463410-ferah-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463410",
+          "intersectionAreaKm2": 0.890898,
+          "overlapRatio": 0.46501327000000003,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-4b0652a0b050e811c335",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463420-bahcelievler-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463420",
+          "intersectionAreaKm2": 0.596732,
+          "overlapRatio": 0.74625548,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-4b5c562156c2ddf2b649",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463376-cengelkoy-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463376",
+          "intersectionAreaKm2": 0.463941,
+          "overlapRatio": 0.38848319,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-4e5603dddec1e2d19d37",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463280-barbaros-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463280",
+          "intersectionAreaKm2": 0.057908,
+          "overlapRatio": 1,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-529fe8cf4b65e497c913",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463420-bahcelievler-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463420",
+          "intersectionAreaKm2": 0.91989,
+          "overlapRatio": 0.98362181,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-5dcc5ac511b004f56598",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463385-kucuk-camlica-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463385",
+          "intersectionAreaKm2": 1.213809,
+          "overlapRatio": 0.80290533,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-618dba36b1157dd4b5a8",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-3866468-kisikli-mahallesi",
+          "osmSourceNativeId": "osm:relation:3866468",
+          "intersectionAreaKm2": 0.182921,
+          "overlapRatio": 1,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-7670d3be2ce6b6a2f977",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463387-burhaniye-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463387",
+          "intersectionAreaKm2": 0.309174,
+          "overlapRatio": 0.41651096000000004,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-801533e1369e957676d8",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463280-barbaros-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463280",
+          "intersectionAreaKm2": 0.907946,
+          "overlapRatio": 0.84412272,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-81a1da51790457911fbe",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463396-altunizade-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463396",
+          "intersectionAreaKm2": 0.881553,
+          "overlapRatio": 0.29348004,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-85803860d2086c304546",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463421-yavuzturk-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463421",
+          "intersectionAreaKm2": 1.737974,
+          "overlapRatio": 0.9182487500000001,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-8aa5fb8f49dca701e1cc",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-3866327-cumhuriyet-mahallesi",
+          "osmSourceNativeId": "osm:relation:3866327",
+          "intersectionAreaKm2": 0.413697,
+          "overlapRatio": 0.53617837,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-993f9157e13ed05fdf94",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463397-kupluce-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463397",
+          "intersectionAreaKm2": 0.655738,
+          "overlapRatio": 0.70994515,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-9f6fa6bddc59e71ee21e",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463281-valide-i-atik-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463281",
+          "intersectionAreaKm2": 0.415564,
+          "overlapRatio": 0.55715264,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-b30c316a506d475108c5",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463414-mehmet-akif-ersoy-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463414",
+          "intersectionAreaKm2": 1.049241,
+          "overlapRatio": 0.8207114400000001,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-bc3534e1425944509c8d",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463286-selami-ali-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463286",
+          "intersectionAreaKm2": 0.442276,
+          "overlapRatio": 0.38441668,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-c0bd0759bbeab72851cc",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463391-acibadem-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463391",
+          "intersectionAreaKm2": 0.894058,
+          "overlapRatio": 0.88595681,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-c3ba49b79cf379a5ca39",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463324-kandilli-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463324",
+          "intersectionAreaKm2": 0.201244,
+          "overlapRatio": 0.5522021500000001,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-ca4f2ffc0c0085541e26",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463313-kuzguncuk-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463313",
+          "intersectionAreaKm2": 0.13458,
+          "overlapRatio": 0.53507105,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-ca72cd0090b4177a340f",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463417-guzeltepe-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463417",
+          "intersectionAreaKm2": 0.94389,
+          "overlapRatio": 0.91675408,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-ca926e8d182628a3d786",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9441289-selimiye-mahallesi",
+          "osmSourceNativeId": "osm:relation:9441289",
+          "intersectionAreaKm2": 0.583617,
+          "overlapRatio": 0.5100914,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-cbc8af9561723bbd062f",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463407-kirazlitepe-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463407",
+          "intersectionAreaKm2": 0.057681,
+          "overlapRatio": 1,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-e0644e4288379aa3ab84",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9441289-selimiye-mahallesi",
+          "osmSourceNativeId": "osm:relation:9441289",
+          "intersectionAreaKm2": 0.712442,
+          "overlapRatio": 0.9999270199999999,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-e75baa5dfedf72b4ba27",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463376-cengelkoy-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463376",
+          "intersectionAreaKm2": 0.79996,
+          "overlapRatio": 0.99701379,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-ee4da0f054af6f106be2",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463324-kandilli-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463324",
+          "intersectionAreaKm2": 0.128537,
+          "overlapRatio": 0.97661361,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-f6bee9e9fc6d80176160",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-3866328-unalan-mahallesi",
+          "osmSourceNativeId": "osm:relation:3866328",
+          "intersectionAreaKm2": 1.404442,
+          "overlapRatio": 0.8884622299999999,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-f8be199ffb44dc2369fb",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463224-salacak-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463224",
+          "intersectionAreaKm2": 0.336391,
+          "overlapRatio": 0.59939346,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-fff68c7435db48cfc920",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463313-kuzguncuk-mahallesi",
+          "osmSourceNativeId": "osm:relation:9463313",
+          "intersectionAreaKm2": 0.161301,
+          "overlapRatio": 1,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        }
+      ],
+      "correspondence": {
+        "gameplayZoneCount": 40,
+        "osmPolygonCount": 33,
+        "mappedGameplayCount": 40,
+        "orphanGameplayZoneIds": [],
+        "orphanOsmPolygonIds": [
+          "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-3866467-bulgurlu-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463235-aziz-mahmut-hudayi-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463238-ahmediye-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463242-mimar-sinan-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463258-sultantepe-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463285-muratreis-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463388-kuleli-mahallesi"
+        ],
+        "manyToOneMergeCandidates": [
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463280-barbaros-mahallesi",
+            "gameplayZoneCount": 3
+          },
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463324-kandilli-mahallesi",
+            "gameplayZoneCount": 3
+          },
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463396-altunizade-mahallesi",
+            "gameplayZoneCount": 2
+          },
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463313-kuzguncuk-mahallesi",
+            "gameplayZoneCount": 4
+          },
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463385-kucuk-camlica-mahallesi",
+            "gameplayZoneCount": 2
+          },
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463387-burhaniye-mahallesi",
+            "gameplayZoneCount": 2
+          },
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463410-ferah-mahallesi",
+            "gameplayZoneCount": 2
+          },
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463420-bahcelievler-mahallesi",
+            "gameplayZoneCount": 2
+          },
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463376-cengelkoy-mahallesi",
+            "gameplayZoneCount": 2
+          },
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9441289-selimiye-mahallesi",
+            "gameplayZoneCount": 2
+          }
+        ]
+      },
+      "stableIdMappingFeasibility": "REQUIRES_SPLIT_MERGE_MAP",
       "ownershipMigrationPerformed": false,
       "eligibleForMigration": false,
-      "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1"
+      "reviewRequired": true,
+      "evidencePath": "createTurkeyAdm3OsmResearchSpatialCorrespondenceReport"
     },
     "adalar": {
       "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
-      "generatedAt": "2026-10-17T18:11:17.862Z",
+      "generatedAt": "2026-10-17T18:20:13.545Z",
       "status": "ASSESSED",
       "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1",
       "correspondences": [
@@ -979,7 +1480,7 @@
     },
     "eyupsultan": {
       "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
-      "generatedAt": "2026-10-17T18:11:17.862Z",
+      "generatedAt": "2026-10-17T18:20:13.545Z",
       "status": "ASSESSED",
       "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1",
       "correspondences": [
@@ -1241,25 +1742,531 @@
     },
     "catalca": {
       "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
-      "generatedAt": "2026-10-17T18:11:17.862Z",
-      "status": "NOT_ASSESSED",
-      "reason": "no-osm-administrative-polygons-for-parent",
+      "generatedAt": "2026-10-17T18:20:13.545Z",
+      "status": "ASSESSED",
+      "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1",
+      "correspondences": [
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-125d31ce7a187e48f801",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9467293-bahsayis-mahallesi",
+          "osmSourceNativeId": "osm:relation:9467293",
+          "intersectionAreaKm2": 0.361409,
+          "overlapRatio": 1,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-1cfd8a950ec2e524830a",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9483017-ferhatpasa-mahallesi",
+          "osmSourceNativeId": "osm:relation:9483017",
+          "intersectionAreaKm2": 21.386942,
+          "overlapRatio": 0.14681552,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-36a45f899f55bdf8ebda",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619872-fatih-mahallesi",
+          "osmSourceNativeId": "osm:relation:9619872",
+          "intersectionAreaKm2": 45.788855,
+          "overlapRatio": 0.91224249,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-36f471dc38ec02ed406a",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619873-yalikoy-mahallesi",
+          "osmSourceNativeId": "osm:relation:9619873",
+          "intersectionAreaKm2": 0.355431,
+          "overlapRatio": 1,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-564b581c40ad0e58bfec",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9531481-ovayenice-mahallesi",
+          "osmSourceNativeId": "osm:relation:9531481",
+          "intersectionAreaKm2": 1.472272,
+          "overlapRatio": 1,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-6ecc59518c226f9242eb",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619159-yaylacik-mahallesi",
+          "osmSourceNativeId": "osm:relation:9619159",
+          "intersectionAreaKm2": 4.208314,
+          "overlapRatio": 0.51698668,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-7b7982eeb05133f46f5b",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9483017-ferhatpasa-mahallesi",
+          "osmSourceNativeId": "osm:relation:9483017",
+          "intersectionAreaKm2": 1.640156,
+          "overlapRatio": 0.54649096,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-84eb10b20f37e014b09f",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9536741-dagyenice-mahallesi",
+          "osmSourceNativeId": "osm:relation:9536741",
+          "intersectionAreaKm2": 8.698951,
+          "overlapRatio": 0.7340506600000001,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-9d988349cbb69586ceae",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9471951-nakkas-mahallesi",
+          "osmSourceNativeId": "osm:relation:9471951",
+          "intersectionAreaKm2": 33.888373,
+          "overlapRatio": 0.24837212,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-a81ee63084fd96fefbec",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619874-ataturk-mahallesi",
+          "osmSourceNativeId": "osm:relation:9619874",
+          "intersectionAreaKm2": 2.810283,
+          "overlapRatio": 0.95833569,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-a9269419e42397df8d3e",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619872-fatih-mahallesi",
+          "osmSourceNativeId": "osm:relation:9619872",
+          "intersectionAreaKm2": 123.186534,
+          "overlapRatio": 0.29497871,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-ac176dd7d4c6a367aac8",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9586433-kalfa-mahallesi",
+          "osmSourceNativeId": "osm:relation:9586433",
+          "intersectionAreaKm2": 9.87072,
+          "overlapRatio": 0.6605309800000001,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-b14fc3b9ab29e57537a0",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9531489-elbasan-mahallesi",
+          "osmSourceNativeId": "osm:relation:9531489",
+          "intersectionAreaKm2": 2.17101,
+          "overlapRatio": 0.49505257999999996,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-b64d8abad28dda27800c",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9618065-basak-mahallesi",
+          "osmSourceNativeId": "osm:relation:9618065",
+          "intersectionAreaKm2": 6.527121,
+          "overlapRatio": 0.40181826,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-ca8e4e0768d73dffc9b7",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9531802-incegiz-mahallesi",
+          "osmSourceNativeId": "osm:relation:9531802",
+          "intersectionAreaKm2": 3.716982,
+          "overlapRatio": 0.76634554,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-caeafe27aa91134c45a9",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9483017-ferhatpasa-mahallesi",
+          "osmSourceNativeId": "osm:relation:9483017",
+          "intersectionAreaKm2": 2.944189,
+          "overlapRatio": 0.7804123199999999,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-d5975717b05e9cdb1b78",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9533502-subasi-mahallesi",
+          "osmSourceNativeId": "osm:relation:9533502",
+          "intersectionAreaKm2": 0.803326,
+          "overlapRatio": 1,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-f855fa0e92eb0fd05f1c",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9536586-ihsaniye-mahallesi",
+          "osmSourceNativeId": "osm:relation:9536586",
+          "intersectionAreaKm2": 64.699851,
+          "overlapRatio": 0.20797289,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        }
+      ],
+      "correspondence": {
+        "gameplayZoneCount": 19,
+        "osmPolygonCount": 39,
+        "mappedGameplayCount": 18,
+        "orphanGameplayZoneIds": [
+          "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-6e50d2d80ca1394ad42d"
+        ],
+        "orphanOsmPolygonIds": [
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9460089-muratbey-merkez-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9483212-kaleici-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9483660-izzettin-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9530301-cakil-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9531810-gokceali-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9533391-kabakca-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9533419-akalan-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9533706-oklali-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9533733-kestanelik-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9533881-orcunlu-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9533888-kizilcaali-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9533923-canakca-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9536790-yazlik-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9617957-orencik-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9617980-celepkoy-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9618269-gumuspinar-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9618275-hisarbeyli-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9618395-belgrat-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9618406-ciftlikkoy",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9618646-ormanli-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9618736-karamandere-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619158-aydinlar-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619392-karacakoy-merkez-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619871-hallacli-mahallesi"
+        ],
+        "manyToOneMergeCandidates": [
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9483017-ferhatpasa-mahallesi",
+            "gameplayZoneCount": 3
+          },
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619872-fatih-mahallesi",
+            "gameplayZoneCount": 2
+          }
+        ]
+      },
+      "stableIdMappingFeasibility": "REQUIRES_SPLIT_MERGE_MAP",
       "ownershipMigrationPerformed": false,
       "eligibleForMigration": false,
-      "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1"
+      "reviewRequired": true,
+      "evidencePath": "createTurkeyAdm3OsmResearchSpatialCorrespondenceReport"
     },
     "basaksehir": {
       "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
-      "generatedAt": "2026-10-17T18:11:17.862Z",
-      "status": "NOT_ASSESSED",
-      "reason": "no-osm-administrative-polygons-for-parent",
+      "generatedAt": "2026-10-17T18:20:13.545Z",
+      "status": "ASSESSED",
+      "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1",
+      "correspondences": [
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-0ade70fefd76accd873a",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9475447-kayabasi-mahallesi",
+          "osmSourceNativeId": "osm:relation:9475447",
+          "intersectionAreaKm2": 0.142275,
+          "overlapRatio": 1,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-0e6898240ce35dafc313",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461575-basaksehir-mahallesi",
+          "osmSourceNativeId": "osm:relation:9461575",
+          "intersectionAreaKm2": 0.550823,
+          "overlapRatio": 0.54937759,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-18c376b168fbe95bd4ce",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9475457-bahcesehir-2-kisim-mahallesi",
+          "osmSourceNativeId": "osm:relation:9475457",
+          "intersectionAreaKm2": 8.650725,
+          "overlapRatio": 0.7037723800000001,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-1dceab7def10708524e6",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461575-basaksehir-mahallesi",
+          "osmSourceNativeId": "osm:relation:9461575",
+          "intersectionAreaKm2": 0.082063,
+          "overlapRatio": 1,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-21e9f4197c082948edcb",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9475448-sahintepe-mahallesi",
+          "osmSourceNativeId": "osm:relation:9475448",
+          "intersectionAreaKm2": 0.532202,
+          "overlapRatio": 0.99857026,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-38dab252907e6e702a2b",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461411-basak-mahallesi",
+          "osmSourceNativeId": "osm:relation:9461411",
+          "intersectionAreaKm2": 3.687629,
+          "overlapRatio": 0.99752676,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-52626b5a09e0efc2ed11",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461411-basak-mahallesi",
+          "osmSourceNativeId": "osm:relation:9461411",
+          "intersectionAreaKm2": 15.963766,
+          "overlapRatio": 0.30482686999999997,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-5543d380150e49707c19",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461512-ziya-gokalp-mahallesi",
+          "osmSourceNativeId": "osm:relation:9461512",
+          "intersectionAreaKm2": 1.5993,
+          "overlapRatio": 1,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-69db617e3fa6c5976c89",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461576-guvercintepe-mahallesi",
+          "osmSourceNativeId": "osm:relation:9461576",
+          "intersectionAreaKm2": 2.573423,
+          "overlapRatio": 0.46966367,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-800324db272e48082ad6",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461411-basak-mahallesi",
+          "osmSourceNativeId": "osm:relation:9461411",
+          "intersectionAreaKm2": 2.166642,
+          "overlapRatio": 0.9666256099999999,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-8f23320e6f688df2823d",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461611-ikitelli-osb-mahallesi",
+          "osmSourceNativeId": "osm:relation:9461611",
+          "intersectionAreaKm2": 2.920411,
+          "overlapRatio": 0.68342196,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-91c8ddf74441898ace7d",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461575-basaksehir-mahallesi",
+          "osmSourceNativeId": "osm:relation:9461575",
+          "intersectionAreaKm2": 0.280601,
+          "overlapRatio": 0.61883674,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-9ff55d279b4049ccd089",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461611-ikitelli-osb-mahallesi",
+          "osmSourceNativeId": "osm:relation:9461611",
+          "intersectionAreaKm2": 2.028797,
+          "overlapRatio": 0.75174792,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-a92cf75f1db161782b6d",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461575-basaksehir-mahallesi",
+          "osmSourceNativeId": "osm:relation:9461575",
+          "intersectionAreaKm2": 4.452545,
+          "overlapRatio": 0.95724177,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-ae05b68de9932ed02470",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9475447-kayabasi-mahallesi",
+          "osmSourceNativeId": "osm:relation:9475447",
+          "intersectionAreaKm2": 0.187614,
+          "overlapRatio": 1,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-b8f383f60f134c3840ad",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9446484-samlar-mahallesi",
+          "osmSourceNativeId": "osm:relation:9446484",
+          "intersectionAreaKm2": 1.798865,
+          "overlapRatio": 1,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-bfcab41fe63303a78992",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461576-guvercintepe-mahallesi",
+          "osmSourceNativeId": "osm:relation:9461576",
+          "intersectionAreaKm2": 3.004608,
+          "overlapRatio": 0.83702933,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-e1381a7f1b261a4278df",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461411-basak-mahallesi",
+          "osmSourceNativeId": "osm:relation:9461411",
+          "intersectionAreaKm2": 1.682276,
+          "overlapRatio": 0.49070325,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-e6785ec6845f75f49f2a",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461512-ziya-gokalp-mahallesi",
+          "osmSourceNativeId": "osm:relation:9461512",
+          "intersectionAreaKm2": 0.027215,
+          "overlapRatio": 0.32701689,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        },
+        {
+          "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-eef0cc90e7bcf41f462a",
+          "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9475447-kayabasi-mahallesi",
+          "osmSourceNativeId": "osm:relation:9475447",
+          "intersectionAreaKm2": 5.196027,
+          "overlapRatio": 0.94907203,
+          "relationConfidence": "high",
+          "sourceClass": "osm-administrative-research",
+          "reviewRequired": true,
+          "eligibleForMigration": false
+        }
+      ],
+      "correspondence": {
+        "gameplayZoneCount": 20,
+        "osmPolygonCount": 11,
+        "mappedGameplayCount": 20,
+        "orphanGameplayZoneIds": [],
+        "orphanOsmPolygonIds": [
+          "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9475439-altinsehir-mahallesi",
+          "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9475458-bahcesehir-1-kisim-mahallesi"
+        ],
+        "manyToOneMergeCandidates": [
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9475447-kayabasi-mahallesi",
+            "gameplayZoneCount": 3
+          },
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461575-basaksehir-mahallesi",
+            "gameplayZoneCount": 4
+          },
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461411-basak-mahallesi",
+            "gameplayZoneCount": 4
+          },
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461512-ziya-gokalp-mahallesi",
+            "gameplayZoneCount": 2
+          },
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461576-guvercintepe-mahallesi",
+            "gameplayZoneCount": 2
+          },
+          {
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461611-ikitelli-osb-mahallesi",
+            "gameplayZoneCount": 2
+          }
+        ]
+      },
+      "stableIdMappingFeasibility": "REQUIRES_SPLIT_MERGE_MAP",
       "ownershipMigrationPerformed": false,
       "eligibleForMigration": false,
-      "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1"
+      "reviewRequired": true,
+      "evidencePath": "createTurkeyAdm3OsmResearchSpatialCorrespondenceReport"
     },
     "esenyurt": {
       "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
-      "generatedAt": "2026-10-17T18:11:17.862Z",
+      "generatedAt": "2026-10-17T18:20:13.545Z",
       "status": "ASSESSED",
       "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1",
       "correspondences": [

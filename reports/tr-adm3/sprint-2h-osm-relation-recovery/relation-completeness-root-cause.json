@@ -1,9 +1,11 @@
 {
-  "schemaVersion": "territorykit-tr-sprint-2h-relation-completeness-root-cause@1",
-  "generatedAt": "2026-10-17T18:11:17.862Z",
+  "schemaVersion": "territorykit-tr-sprint-2h-relation-completeness-root-cause@2",
+  "generatedAt": "2026-10-17T18:20:13.545Z",
   "countryPbfPath": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf",
+  "countryPbfSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
   "countryPbfPresent": true,
   "parserImplementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2h-multipolygon-stitch",
+  "extractImplementationRevision": "territorykit-tr-sprint-2h-osm-extract@2",
   "summary": {
     "assessedDistricts": 2,
     "districtsWithClipDrivenLoss": 1
@@ -13,24 +15,140 @@
       "slug": "fatih",
       "parentAdm2Id": "tr:adm2:54988432b39641834885080",
       "targetRelationIdCount": 63,
+      "relationIdSetSha256": "276340186e3c83c05a581b090b8d7877f6fa4a171bcc533c100ae8ecc6289941",
+      "polygonClipBuilt": 48,
+      "bboxClipBuilt": 57,
+      "countryGetidBuilt": 57,
       "polygonClipUnresolved": 15,
+      "bboxClipUnresolved": 141,
       "relationGetidUnresolved": 6,
       "unresolvedDeltaAfterCountryGetid": 9,
       "polygonClipMissingOuter": 14,
       "relationGetidMissingOuter": 0,
-      "rootCauseHint": "clip-or-assembler-loss"
+      "relationIdDiff": {
+        "builtRelationIds": {
+          "polygonClip": [
+            2463274, 2463371, 2464768, 2468218, 2468219, 2468242, 6868850, 7648808, 7648809,
+            7648810, 7648811, 7648812, 7648813, 7648815, 7648816, 7648817, 7648818, 7648820,
+            7648821, 7648822, 7648823, 7648824, 7648825, 7648826, 7648827, 7648828, 7648829,
+            7648830, 7648831, 7648832, 7648833, 7648834, 7648836, 7648837, 7648838, 7648839,
+            7648840, 7648841, 7648842, 7648843, 7648846, 7648847, 7648848, 7648851, 7648852,
+            7648853, 7648854, 8111527
+          ],
+          "bboxClip": [
+            2463274, 2463371, 2463390, 2464768, 2464918, 2468218, 2468219, 2468242, 6868850,
+            7648808, 7648809, 7648810, 7648811, 7648812, 7648813, 7648814, 7648815, 7648816,
+            7648817, 7648818, 7648819, 7648820, 7648821, 7648822, 7648823, 7648824, 7648825,
+            7648826, 7648827, 7648828, 7648829, 7648830, 7648831, 7648832, 7648833, 7648834,
+            7648835, 7648836, 7648837, 7648838, 7648839, 7648840, 7648841, 7648842, 7648843,
+            7648845, 7648846, 7648847, 7648848, 7648849, 7648850, 7648851, 7648852, 7648853,
+            7648854, 7648855, 8111527
+          ],
+          "countryRelationGetid": [
+            2463274, 2463371, 2463390, 2464768, 2464918, 2468218, 2468219, 2468242, 6868850,
+            7648808, 7648809, 7648810, 7648811, 7648812, 7648813, 7648814, 7648815, 7648816,
+            7648817, 7648818, 7648819, 7648820, 7648821, 7648822, 7648823, 7648824, 7648825,
+            7648826, 7648827, 7648828, 7648829, 7648830, 7648831, 7648832, 7648833, 7648834,
+            7648835, 7648836, 7648837, 7648838, 7648839, 7648840, 7648841, 7648842, 7648843,
+            7648845, 7648846, 7648847, 7648848, 7648849, 7648850, 7648851, 7648852, 7648853,
+            7648854, 7648855, 8111527
+          ]
+        },
+        "unresolvedRelationIds": {
+          "polygonClip": [
+            2463390, 2464918, 7648814, 7648819, 7648835, 7648845, 7648849, 7648850, 7648855,
+            7964540, 7964551, 7964967, 7965519, 9381516, 9381694
+          ],
+          "countryRelationGetid": [7964540, 7964551, 7964967, 7965519, 9381516, 9381694]
+        },
+        "onlyBuiltInCountryGetid": [
+          2463390, 2464918, 7648814, 7648819, 7648835, 7648845, 7648849, 7648850, 7648855
+        ],
+        "onlyBuiltInPolygonClip": [],
+        "polygonUnresolvedRecoveredByGetid": [
+          2463390, 2464918, 7648814, 7648819, 7648835, 7648845, 7648849, 7648850, 7648855
+        ],
+        "stillUnresolvedAfterGetid": [7964540, 7964551, 7964967, 7965519, 9381516, 9381694],
+        "polygonUnresolvedMissingMembersInClip": []
+      },
+      "rootCauseHint": "derived-polygon-clip-missing-members-recovered-from-country-pbf"
     },
     {
       "slug": "adalar",
       "parentAdm2Id": "tr:adm2:54988432b94516152709384",
       "targetRelationIdCount": 5,
+      "relationIdSetSha256": "919cfc4964e30b15065f9014ccf2b44732a8e4bc56cd83c3cc2ce4bdf61330ee",
+      "polygonClipBuilt": 5,
+      "bboxClipBuilt": 5,
+      "countryGetidBuilt": 5,
       "polygonClipUnresolved": 0,
+      "bboxClipUnresolved": 20,
       "relationGetidUnresolved": 0,
       "unresolvedDeltaAfterCountryGetid": 0,
       "polygonClipMissingOuter": 0,
       "relationGetidMissingOuter": 0,
+      "relationIdDiff": {
+        "builtRelationIds": {
+          "polygonClip": [9460393, 9460394, 9460395, 9460396, 9460397],
+          "bboxClip": [9460393, 9460394, 9460395, 9460396, 9460397],
+          "countryRelationGetid": [9460393, 9460394, 9460395, 9460396, 9460397]
+        },
+        "unresolvedRelationIds": {
+          "polygonClip": [],
+          "countryRelationGetid": []
+        },
+        "onlyBuiltInCountryGetid": [],
+        "onlyBuiltInPolygonClip": [],
+        "polygonUnresolvedRecoveredByGetid": [],
+        "stillUnresolvedAfterGetid": [],
+        "polygonUnresolvedMissingMembersInClip": []
+      },
       "rootCauseHint": "remaining-source-or-semantic-blockers"
     }
   ],
-  "conclusion": "Sprint 2G failures were dominated by open-way multipolygon assembly (parser) and incomplete derived clips; stitched assembly recovers most polygon-complete_ways candidates where member ways are present in the clip."
+  "fatihRelationIdLevelEvidence": {
+    "fixedTargetRelationIdCount": 63,
+    "builtRelationIds": {
+      "polygonClip": [
+        2463274, 2463371, 2464768, 2468218, 2468219, 2468242, 6868850, 7648808, 7648809, 7648810,
+        7648811, 7648812, 7648813, 7648815, 7648816, 7648817, 7648818, 7648820, 7648821, 7648822,
+        7648823, 7648824, 7648825, 7648826, 7648827, 7648828, 7648829, 7648830, 7648831, 7648832,
+        7648833, 7648834, 7648836, 7648837, 7648838, 7648839, 7648840, 7648841, 7648842, 7648843,
+        7648846, 7648847, 7648848, 7648851, 7648852, 7648853, 7648854, 8111527
+      ],
+      "bboxClip": [
+        2463274, 2463371, 2463390, 2464768, 2464918, 2468218, 2468219, 2468242, 6868850, 7648808,
+        7648809, 7648810, 7648811, 7648812, 7648813, 7648814, 7648815, 7648816, 7648817, 7648818,
+        7648819, 7648820, 7648821, 7648822, 7648823, 7648824, 7648825, 7648826, 7648827, 7648828,
+        7648829, 7648830, 7648831, 7648832, 7648833, 7648834, 7648835, 7648836, 7648837, 7648838,
+        7648839, 7648840, 7648841, 7648842, 7648843, 7648845, 7648846, 7648847, 7648848, 7648849,
+        7648850, 7648851, 7648852, 7648853, 7648854, 7648855, 8111527
+      ],
+      "countryRelationGetid": [
+        2463274, 2463371, 2463390, 2464768, 2464918, 2468218, 2468219, 2468242, 6868850, 7648808,
+        7648809, 7648810, 7648811, 7648812, 7648813, 7648814, 7648815, 7648816, 7648817, 7648818,
+        7648819, 7648820, 7648821, 7648822, 7648823, 7648824, 7648825, 7648826, 7648827, 7648828,
+        7648829, 7648830, 7648831, 7648832, 7648833, 7648834, 7648835, 7648836, 7648837, 7648838,
+        7648839, 7648840, 7648841, 7648842, 7648843, 7648845, 7648846, 7648847, 7648848, 7648849,
+        7648850, 7648851, 7648852, 7648853, 7648854, 7648855, 8111527
+      ]
+    },
+    "unresolvedRelationIds": {
+      "polygonClip": [
+        2463390, 2464918, 7648814, 7648819, 7648835, 7648845, 7648849, 7648850, 7648855, 7964540,
+        7964551, 7964967, 7965519, 9381516, 9381694
+      ],
+      "countryRelationGetid": [7964540, 7964551, 7964967, 7965519, 9381516, 9381694]
+    },
+    "onlyBuiltInCountryGetid": [
+      2463390, 2464918, 7648814, 7648819, 7648835, 7648845, 7648849, 7648850, 7648855
+    ],
+    "onlyBuiltInPolygonClip": [],
+    "polygonUnresolvedRecoveredByGetid": [
+      2463390, 2464918, 7648814, 7648819, 7648835, 7648845, 7648849, 7648850, 7648855
+    ],
+    "stillUnresolvedAfterGetid": [7964540, 7964551, 7964967, 7965519, 9381516, 9381694],
+    "polygonUnresolvedMissingMembersInClip": []
+  },
+  "conclusion": "Open-way multipolygon stitching (Sprint 2H parser) recovers most admin relations whose member ways are present in the derived clip; remaining Fatih gaps are explained at relation-ID granularity by polygon-clip missing outer ways versus country-PBF osmium getid recovery."
 }

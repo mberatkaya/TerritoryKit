@@ -19,8 +19,10 @@ import {
   diagnoseRelationCompleteness,
   extractAllPilotDistricts,
   loadSprint2gBaseline,
+  rollupGeometryQaCounts,
   verifyOriginalSourceIntegrity
 } from "./lib/tr-sprint-2h-osm-relation-recovery.mjs";
+import { pilotBySlug } from "./lib/tr-mahalle-identity-istanbul-pilots.mjs";
 import {
   assessDistrictGeometryQa,
   buildGameplayOverlayReport,
@@ -62,17 +64,21 @@ async function main() {
     RC8_ROOT
   );
 
+  const countrySha = sourceIntegrity.onDiskSha256 ?? sourceIntegrity.expectedSha256 ?? null;
+
   const fatihComparison = fatihContext.blocked
     ? { blocked: true, reasonCode: fatihContext.reasonCode }
-    : await compareDistrictExtractionMethods(REPO_ROOT, "fatih", {
+    : await compareDistrictExtractionMethods(REPO_ROOT, pilotBySlug("fatih"), {
         generatedAt: GENERATED_AT,
-        parent: fatihContext.parent
+        parent: fatihContext.parent,
+        countrySha256: countrySha
       });
   const adalarComparison = adalarContext.blocked
     ? { blocked: true, reasonCode: adalarContext.reasonCode }
-    : await compareDistrictExtractionMethods(REPO_ROOT, "adalar", {
+    : await compareDistrictExtractionMethods(REPO_ROOT, pilotBySlug("adalar"), {
         generatedAt: GENERATED_AT,
-        parent: adalarContext.parent
+        parent: adalarContext.parent,
+        countrySha256: countrySha
       });
 
   const comparisons = [fatihComparison, adalarComparison].filter((row) => !row.blocked);
@@ -82,7 +88,6 @@ async function main() {
   });
 
   const pilotExtract = await extractAllPilotDistricts(REPO_ROOT, GENERATED_AT);
-  const recovered = buildRecoveredPolygonsReport(pilotExtract.zones, GENERATED_AT);
   const districtMatrix = buildDistrictMatrix(pilotExtract.perDistrict, sprint2gBaseline);
 
   const technicalQaByDistrict = {};
@@ -97,7 +102,8 @@ async function main() {
       (zone) => zone.parentId === context.parentAdm2Id
     );
     const unresolved = pilotExtract.unresolved.filter(
-      (entry) => entry.parentId === context.parentAdm2Id
+      (entry) =>
+        entry.parentAdm2Id === context.parentAdm2Id || entry.parentId === context.parentAdm2Id
     );
     technicalQaByDistrict[pilot.slug] = await buildPolygonTechnicalQa(
       context.parent,
@@ -137,6 +143,13 @@ async function main() {
     }
   }
 
+  const geometryQaRollup = rollupGeometryQaCounts(technicalQaByDistrict);
+  const recovered = buildRecoveredPolygonsReport(pilotExtract.zones, {
+    generatedAt: GENERATED_AT,
+    provenanceByZoneId: pilotExtract.provenanceByZoneId,
+    geometryQaRollup
+  });
+
   const performance = {
     schemaVersion: "territorykit-tr-sprint-2h-performance-and-memory@1",
     generatedAt: GENERATED_AT,
@@ -145,7 +158,7 @@ async function main() {
   };
 
   const meaningfulProgress =
-    pilotExtract.zones.length > 4 || rootCause.summary.assessedDistricts > 0;
+    districtMatrix.rollupBuiltPolygonCount > 4 || rootCause.summary.assessedDistricts > 0;
 
   const decision = buildSprint2hDecision({
     generatedAt: GENERATED_AT,
@@ -159,7 +172,7 @@ async function main() {
       D_polygonTechnicalQa: "GO_WITH_REVIEW",
       E_adm3SemanticQuality: "GO_WITH_REVIEW",
       F_districtCoverage: "NO_GO",
-      G_improvementVsSprint2g: pilotExtract.zones.length > 4 ? "GO" : "NO_GO",
+      G_improvementVsSprint2g: districtMatrix.rollupBuiltPolygonCount > 4 ? "GO" : "NO_GO",
       H_runtimeMemory: "GO_WITH_REVIEW",
       I_legalRedistribution: "BLOCKED_BY_SOURCE",
       J_gameplayMigration: "GO_WITH_REVIEW",
@@ -175,8 +188,9 @@ async function main() {
 
 ## Outcome
 
-- Recovered OSM administrative research polygons (eight-district rollup): **${pilotExtract.zones.length}**
+- Recovered OSM administrative research polygons (eight-district rollup): **${districtMatrix.rollupBuiltPolygonCount}** (unique native OSM IDs: ${pilotExtract.zones.length})
 - Sprint 2G baseline constructed polygons: **4**
+- Prior incorrect rollup (swapped clip suffixes): **145** — superseded by corrected district clips
 - Fatih polygon-complete_ways built (2H parser): **${fatihComparison.methods?.polygonCompleteWays?.builtPolygonCount ?? "BLOCKED"}**
 - Adalar polygon-complete_ways built (2H parser): **${adalarComparison.methods?.polygonCompleteWays?.builtPolygonCount ?? "BLOCKED"}**
 
