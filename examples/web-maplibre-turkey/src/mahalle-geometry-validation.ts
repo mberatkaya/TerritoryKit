@@ -1,4 +1,6 @@
-import maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
+import * as maplibregl from "maplibre-gl";
+import type { MapLayerMouseEvent } from "maplibre-gl";
 
 const PREVIEW_BASE = new URL(
   "../../../reports/tr-adm3/sprint-2g-geometry-validation/map-preview/",
@@ -68,11 +70,11 @@ async function loadDistrict(slug: string) {
     }
   }
 
-  const polygons = {
+  const polygons: GeoJSON.FeatureCollection = {
     type: "FeatureCollection",
     features: collection.features.filter((f) => f.geometry.type !== "Point")
   };
-  const seeds = {
+  const seeds: GeoJSON.FeatureCollection = {
     type: "FeatureCollection",
     features: collection.features.filter((f) => f.geometry.type === "Point")
   };
@@ -140,7 +142,9 @@ async function loadDistrict(slug: string) {
   for (const feature of collection.features) {
     if (feature.geometry.type === "Point") {
       const [lng, lat] = feature.geometry.coordinates;
-      bounds.extend([lng, lat]);
+      if (typeof lng === "number" && typeof lat === "number") {
+        bounds.extend([lng, lat]);
+      }
     } else if (feature.geometry.type === "Polygon") {
       for (const ring of feature.geometry.coordinates) {
         for (const coord of ring) {
@@ -193,13 +197,13 @@ function showFeature(feature: maplibregl.MapGeoJSONFeature) {
   `;
 }
 
-map.on("click", "geo-compare-fill", (event) => {
+map.on("click", "geo-compare-fill", (event: MapLayerMouseEvent) => {
   const feature = event.features?.[0];
   if (feature) {
     showFeature(feature);
   }
 });
-map.on("click", "geo-compare-seeds", (event) => {
+map.on("click", "geo-compare-seeds", (event: MapLayerMouseEvent) => {
   const feature = event.features?.[0];
   if (feature) {
     showFeature(feature);
