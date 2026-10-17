@@ -1,11 +1,12 @@
 {
   "schemaVersion": "territorykit-tr-sprint-2g-decision@1",
-  "generatedAt": "2026-10-17T17:17:36.000Z",
+  "generatedAt": "2026-10-17T18:00:00.000Z",
   "repository": {
-    "mainBaselineSha": "f4114015181c240f93ee4e8699058b42c27ee215",
-    "evaluatedCommit": "f4114015181c240f93ee4e8699058b42c27ee215",
+    "mainBaselineSha": "ba03eedeea27c28dd0562d5744f070e94f6d3247",
+    "evaluatedCommit": "7250f058c3750895e8377662678f0887fd050607",
     "branch": "feat/tr-istanbul-mahalle-geometry-validation",
-    "headSha": "f4114015181c240f93ee4e8699058b42c27ee215"
+    "headSha": "7250f058c3750895e8377662678f0887fd050607",
+    "commitFieldNote": "mainBaselineSha is the pinned Sprint 2G main comparison baseline; evaluatedCommit is the git HEAD at report generation time; headSha is the branch tip when the generator finishes (may match evaluatedCommit unless the working tree moved mid-run)."
   },
   "counts": {
     "verifiedOfficialPolygons": 0,

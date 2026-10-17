@@ -6,7 +6,11 @@ import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { writeReportJson, writeReportMarkdown } from "./lib/write-report-json.mjs";
+import {
+  writeReportGeoJson,
+  writeReportJson,
+  writeReportMarkdown
+} from "./lib/write-report-json.mjs";
 import { investigateKadikoyOfficialShapefile } from "./investigate-kadikoy-official-shapefile.mjs";
 import { buildMahalleIdentityDistrictReports } from "./lib/tr-mahalle-identity-layer-district.mjs";
 import {
@@ -31,7 +35,9 @@ const GENERATED_AT = process.env.SPRINT_2G_GENERATED_AT ?? new Date().toISOStrin
 const RC8_ROOT =
   process.env.SPRINT_2G_RC8_ROOT ??
   ".territory/national-geometry-remediation/candidate-rc8-impl-rev1";
-const MAIN_BASELINE_SHA = process.env.SPRINT_2G_MAIN_BASELINE_SHA ?? null;
+const SPRINT_2G_MAIN_BASELINE_SHA_DEFAULT = "ba03eedeea27c28dd0562d5744f070e94f6d3247";
+const MAIN_BASELINE_SHA =
+  process.env.SPRINT_2G_MAIN_BASELINE_SHA ?? SPRINT_2G_MAIN_BASELINE_SHA_DEFAULT;
 
 function gitHead() {
   try {
@@ -42,6 +48,7 @@ function gitHead() {
 }
 
 async function main() {
+  const evaluatedCommit = gitHead();
   const pilots = orderedIstanbulPilots();
   const kadikoyInvestigation = await investigateKadikoyOfficialShapefile({ repoRoot: REPO_ROOT });
   const kadikoyAlternatives = await probeKadikoyCkanAlternatives();
@@ -146,10 +153,9 @@ async function main() {
       osmZones,
       seeds: identity.blocked ? [] : (identity.layer?.settlements ?? [])
     });
-    await writeFile(
+    await writeReportGeoJson(
       join(previewRoot, `${pilot.slug}-geometry-comparison.geojson`),
-      `${JSON.stringify(preview, null, 2)}\n`,
-      "utf8"
+      preview
     );
 
     districtMatrix.push({
@@ -258,6 +264,20 @@ async function main() {
     quality: osmExtract.quality ?? null,
     unresolvedCount: osmExtract.unresolved?.length ?? null,
     unresolvedSummary: osmExtract.coverage?.unresolvedSummary ?? null,
+    countDefinitions: {
+      candidateEntryCount:
+        "Ways/relations accepted by evaluateTurkeyAdm3OsmBoundaryCandidate inside the Istanbul ADM2 clip (includes unresolved shells).",
+      builtPolygonCount:
+        "Emitted OSM research zones with resolvable parent confidence and mahalle/village/locality semantic type (official=false).",
+      unresolvedEntryCount:
+        "Per-processing unresolved rows (missing geometry, semantic-review-required, parent low/unresolved); not deduplicated by OSM relation ID.",
+      uniqueUnresolvedRelationIds:
+        "Distinct relation IDs among unresolved entries (ways excluded).",
+      repeatedRelationIdCount:
+        "Relation IDs appearing in more than one unresolved entry (attemptCount>1); not additive with uniqueUnresolvedRelationIds and not required to sum to unresolvedEntryCount.",
+      extraUnresolvedOccurrences:
+        "Sum of (attemptCount-1) over repeated relations; captures duplicate processing attempts beyond the first."
+    },
     duplicateCount: osmExtract.duplicates?.length ?? null,
     pilots: districtMatrix.map((row) => ({
       slug: row.slug,
@@ -366,10 +386,12 @@ async function main() {
     schemaVersion: "territorykit-tr-sprint-2g-decision@1",
     generatedAt: GENERATED_AT,
     repository: {
-      mainBaselineSha: MAIN_BASELINE_SHA ?? gitHead(),
-      evaluatedCommit: gitHead(),
+      mainBaselineSha: MAIN_BASELINE_SHA,
+      evaluatedCommit,
       branch: "feat/tr-istanbul-mahalle-geometry-validation",
-      headSha: gitHead()
+      headSha: gitHead(),
+      commitFieldNote:
+        "mainBaselineSha is the pinned Sprint 2G main comparison baseline; evaluatedCommit is the git HEAD at report generation time; headSha is the branch tip when the generator finishes (may match evaluatedCommit unless the working tree moved mid-run)."
     },
     counts: {
       verifiedOfficialPolygons: 0,
@@ -389,43 +411,34 @@ async function main() {
 
   await mkdir(reportRootAbs, { recursive: true });
   await writeReportJson(
-    `${SPRINT_2G_REPORT_ROOT}/official-source-acquisition.json`,
+    join(reportRootAbs, "official-source-acquisition.json"),
     officialAcquisition
   );
+  await writeReportJson(join(reportRootAbs, "osm-administrative-candidates.json"), osmCandidates);
+  await writeReportJson(join(reportRootAbs, "fatih-before-after-quality.json"), fatihBeforeAfter);
   await writeReportJson(
-    `${SPRINT_2G_REPORT_ROOT}/osm-administrative-candidates.json`,
-    osmCandidates
-  );
-  await writeReportJson(
-    `${SPRINT_2G_REPORT_ROOT}/fatih-before-after-quality.json`,
-    fatihBeforeAfter
-  );
-  await writeReportJson(
-    `${SPRINT_2G_REPORT_ROOT}/fatih-boundary-comparison.json`,
+    join(reportRootAbs, "fatih-boundary-comparison.json"),
     fatihBoundaryComparison
   );
-  await writeReportJson(`${SPRINT_2G_REPORT_ROOT}/istanbul-eight-district-geometry-matrix.json`, {
+  await writeReportJson(join(reportRootAbs, "istanbul-eight-district-geometry-matrix.json"), {
     schemaVersion: "territorykit-tr-sprint-2g-istanbul-eight-district-geometry-matrix@1",
     generatedAt: GENERATED_AT,
     rc8Root: RC8_ROOT,
     districts: districtMatrix
   });
+  await writeReportJson(join(reportRootAbs, "geometry-source-provenance.json"), geometryProvenance);
   await writeReportJson(
-    `${SPRINT_2G_REPORT_ROOT}/geometry-source-provenance.json`,
-    geometryProvenance
-  );
-  await writeReportJson(
-    `${SPRINT_2G_REPORT_ROOT}/experimental-candidate-readiness.json`,
+    join(reportRootAbs, "experimental-candidate-readiness.json"),
     experimentalReadiness
   );
   await writeReportJson(
-    `${SPRINT_2G_REPORT_ROOT}/gameplay-id-migration-impact.json`,
+    join(reportRootAbs, "gameplay-id-migration-impact.json"),
     gameplayMigrationImpact
   );
-  await writeReportJson(`${SPRINT_2G_REPORT_ROOT}/sprint-2g-decision.json`, sprintDecision);
+  await writeReportJson(join(reportRootAbs, "sprint-2g-decision.json"), sprintDecision);
 
   await writeReportMarkdown(
-    `${SPRINT_2G_REPORT_ROOT}/SPRINT-2G-FINAL-REPORT.md`,
+    join(reportRootAbs, "SPRINT-2G-FINAL-REPORT.md"),
     buildFinalReportMarkdown({
       sprintDecision,
       districtMatrix,
@@ -461,6 +474,7 @@ function buildFinalReportMarkdown({
 
 **Generated:** ${GENERATED_AT}  
 **Main baseline:** \`${sprintDecision.repository.mainBaselineSha}\`  
+**Evaluated commit:** \`${sprintDecision.repository.evaluatedCommit ?? "unknown"}\`  
 **Branch HEAD:** \`${sprintDecision.repository.headSha ?? "unknown"}\`
 
 ## A. Repository

@@ -74,7 +74,7 @@ const textDecoder = new TextDecoder();
 const ACCEPTED_ADMIN_LEVELS = new Set(["8", "9", "10", "11"]);
 
 export const TURKEY_ADM3_OSM_PARSER_IMPLEMENTATION_REVISION =
-  "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g";
+  "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata";
 
 const MAHALLE_PLACE_TAGS = new Set(["neighbourhood", "quarter", "suburb", "village"]);
 
@@ -259,6 +259,7 @@ export async function extractTurkeyAdm3OsmPbf(
         "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
     }
   };
+  const unresolvedSummary = summarizeTurkeyAdm3OsmUnresolvedEntries(unresolved);
   const coverage = {
     schemaVersion: "territorykit-tr-adm3-osm-coverage@1",
     country: "TR",
@@ -266,7 +267,8 @@ export async function extractTurkeyAdm3OsmPbf(
     candidateCount: candidates.length,
     builtPolygonCount: zones.length,
     unresolvedCount: unresolved.length,
-    duplicateCount: duplicates.length
+    duplicateCount: duplicates.length,
+    unresolvedSummary
   };
   const quality = {
     schemaVersion: "territorykit-tr-adm3-osm-quality@1",
@@ -549,11 +551,17 @@ export function summarizeTurkeyAdm3OsmUnresolvedEntries(
     .map(([osmId, count]) => ({ osmId: Number(osmId), attemptCount: count }))
     .sort((left, right) => left.osmId - right.osmId);
 
+  const extraUnresolvedOccurrences = repeatedRelationAttempts.reduce(
+    (sum, row) => sum + (row.attemptCount - 1),
+    0
+  );
+
   return {
     schemaVersion: "territorykit-tr-adm3-osm-unresolved-summary@1",
     entryCount: entries.length,
     uniqueUnresolvedRelationIds: uniqueRelationIds.size,
     repeatedRelationAttemptCount: repeatedRelationAttempts.length,
+    extraUnresolvedOccurrences,
     repeatedRelationAttempts,
     reasonCounts: Object.fromEntries(
       [...reasonCounts.entries()].sort(([left], [right]) => left.localeCompare(right))
@@ -668,6 +676,27 @@ function createOsmZone(input: {
   geometry: TerritoryGeometry;
   generatedAt: string;
 }): TerritoryZone {
+  const mahalleContext = hasTurkeyAdm3OsmMahalleContextTags(input.candidate.tags);
+  const adminLevel8NameOnly =
+    input.candidate.tags.admin_level === "8" &&
+    input.semanticType === "administrative-unit" &&
+    !mahalleContext;
+  const semanticReviewStatus = adminLevel8NameOnly
+    ? "semantic-review-required"
+    : mahalleContext
+      ? "mapping-review-required"
+      : "semantic-review-required";
+  const coverageStatus = "research-candidate";
+  const productionEligible = false;
+  const localTypeName =
+    input.semanticType === "village"
+      ? "Köy (OSM research)"
+      : input.semanticType === "neighbourhood"
+        ? "Mahalle (OSM research)"
+        : adminLevel8NameOnly
+          ? "Administrative unit (research candidate)"
+          : "Administrative unit (OSM research)";
+
   const sourceNativeId = `osm:${input.candidate.osmType}:${input.candidate.osmId}`;
   const localId = [
     input.provinceCode ? `tr-${input.provinceCode}` : "tr",
@@ -704,14 +733,15 @@ function createOsmZone(input: {
         sourceAdminLevel: "ADM3",
         semanticType: input.semanticType,
         localType: input.semanticType,
-        localTypeName: input.semanticType === "village" ? "Köy" : "Mahalle",
+        localTypeName,
         countryCode: "TR",
         ...(input.provinceCode ? { provinceCode: input.provinceCode } : {}),
         ...(input.parentId ? { districtCode: input.parentId.replace(/^tr:adm2:/, "") } : {}),
         hierarchyDepth: 3,
         ...(input.parentId ? { parentId: input.parentId } : {}),
-        coverageStatus: "verified",
-        semanticReviewStatus: "mapping-review-required",
+        coverageStatus,
+        semanticReviewStatus,
+        productionEligible,
         sourceClass: "osm",
         sourceProvider: input.providerId,
         sourceDatasetId: "openstreetmap",

@@ -60,11 +60,7 @@
         "unseededZoneCount": 9,
         "ambiguousZoneCount": 8
       },
-      "stressFocus": [
-        "dense-urban",
-        "multi-seed-zones",
-        "duplicate-source-identity"
-      ],
+      "stressFocus": ["dense-urban", "multi-seed-zones", "duplicate-source-identity"],
       "mapPreviewPath": "reports/tr-adm3/sprint-2g-geometry-validation/map-preview/kadikoy-geometry-comparison.geojson",
       "overlaySummary": null
     },
@@ -88,16 +84,21 @@
           "gameplayOverlapCount": 0,
           "osmOverlapCount": 0,
           "gameplayParentContainmentNote": {
-            "classification": "tolerance-or-precision-review",
+            "classification": "parent-containment-exceeds-default-tolerance",
             "defaultToleranceKm2": 0.000001,
+            "unitNote": "Areas are square kilometres (km²); 0.000001 km² = 1 m².",
+            "structurallyValidParentContainment": false,
             "errors": [
               {
                 "zoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-cbeb5278a71425ce7202",
                 "outsideAreaKm2": 0.000002,
+                "outsideAreaM2": 2,
+                "defaultToleranceKm2": 0.000001,
+                "defaultToleranceM2": 1,
                 "exceedsDefaultTolerance": true
               }
             ],
-            "note": "Sub-microscopic outside-parent areas on immutable rc.8 gameplay may reflect floating-point/CRS tolerance; do not mutate geometry without authorized remediation."
+            "note": "Outside-parent area exceeds the default inspectTurkeyAdm3SpatialQuality tolerance; report as QA failure without mutating pinned rc.8 geometry."
           }
         },
         "districtCoverage": {
@@ -197,16 +198,21 @@
           "gameplayOverlapCount": 0,
           "osmOverlapCount": null,
           "gameplayParentContainmentNote": {
-            "classification": "tolerance-or-precision-review",
+            "classification": "parent-containment-exceeds-default-tolerance",
             "defaultToleranceKm2": 0.000001,
+            "unitNote": "Areas are square kilometres (km²); 0.000001 km² = 1 m².",
+            "structurallyValidParentContainment": false,
             "errors": [
               {
                 "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-8aa5fb8f49dca701e1cc",
                 "outsideAreaKm2": 0.000005,
+                "outsideAreaM2": 5,
+                "defaultToleranceKm2": 0.000001,
+                "defaultToleranceM2": 1,
                 "exceedsDefaultTolerance": true
               }
             ],
-            "note": "Sub-microscopic outside-parent areas on immutable rc.8 gameplay may reflect floating-point/CRS tolerance; do not mutate geometry without authorized remediation."
+            "note": "Outside-parent area exceeds the default inspectTurkeyAdm3SpatialQuality tolerance; report as QA failure without mutating pinned rc.8 geometry."
           }
         },
         "districtCoverage": {
@@ -306,11 +312,7 @@
         "unseededZoneCount": 8,
         "ambiguousZoneCount": 2
       },
-      "stressFocus": [
-        "island-multipolygon",
-        "coastline-boundary-point",
-        "disconnected-components"
-      ],
+      "stressFocus": ["island-multipolygon", "coastline-boundary-point", "disconnected-components"],
       "mapPreviewPath": "reports/tr-adm3/sprint-2g-geometry-validation/map-preview/adalar-geometry-comparison.geojson",
       "overlaySummary": {
         "gameplayZoneCount": 14,
@@ -422,16 +424,21 @@
           "gameplayOverlapCount": 0,
           "osmOverlapCount": null,
           "gameplayParentContainmentNote": {
-            "classification": "tolerance-or-precision-review",
+            "classification": "parent-containment-exceeds-default-tolerance",
             "defaultToleranceKm2": 0.000001,
+            "unitNote": "Areas are square kilometres (km²); 0.000001 km² = 1 m².",
+            "structurallyValidParentContainment": false,
             "errors": [
               {
                 "zoneId": "tr:adm3:tr-il-34-ilce-54988432b71345383711908-generated-smart-derived-v1-7-a9269419e42397df8d3e",
                 "outsideAreaKm2": 0.000004,
+                "outsideAreaM2": 4,
+                "defaultToleranceKm2": 0.000001,
+                "defaultToleranceM2": 1,
                 "exceedsDefaultTolerance": true
               }
             ],
-            "note": "Sub-microscopic outside-parent areas on immutable rc.8 gameplay may reflect floating-point/CRS tolerance; do not mutate geometry without authorized remediation."
+            "note": "Outside-parent area exceeds the default inspectTurkeyAdm3SpatialQuality tolerance; report as QA failure without mutating pinned rc.8 geometry."
           }
         },
         "districtCoverage": {
@@ -555,21 +562,29 @@
           "gameplayOverlapCount": 0,
           "osmOverlapCount": null,
           "gameplayParentContainmentNote": {
-            "classification": "tolerance-or-precision-review",
+            "classification": "parent-containment-exceeds-default-tolerance",
             "defaultToleranceKm2": 0.000001,
+            "unitNote": "Areas are square kilometres (km²); 0.000001 km² = 1 m².",
+            "structurallyValidParentContainment": false,
             "errors": [
               {
                 "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-de141d8945edc0f729fa",
                 "outsideAreaKm2": 0.000002,
+                "outsideAreaM2": 2,
+                "defaultToleranceKm2": 0.000001,
+                "defaultToleranceM2": 1,
                 "exceedsDefaultTolerance": true
               },
               {
                 "zoneId": "tr:adm3:tr-il-34-ilce-54988432b2777192469074-generated-smart-derived-v1-7-f9505cbd5b8f0212aafe",
                 "outsideAreaKm2": 0.000002,
+                "outsideAreaM2": 2,
+                "defaultToleranceKm2": 0.000001,
+                "defaultToleranceM2": 1,
                 "exceedsDefaultTolerance": true
               }
             ],
-            "note": "Sub-microscopic outside-parent areas on immutable rc.8 gameplay may reflect floating-point/CRS tolerance; do not mutate geometry without authorized remediation."
+            "note": "Outside-parent area exceeds the default inspectTurkeyAdm3SpatialQuality tolerance; report as QA failure without mutating pinned rc.8 geometry."
           }
         },
         "districtCoverage": {

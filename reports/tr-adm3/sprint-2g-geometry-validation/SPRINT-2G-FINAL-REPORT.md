@@ -1,8 +1,9 @@
 # Sprint 2G — İstanbul mahalle geometry validation
 
-**Generated:** 2026-10-17T17:17:36.000Z  
-**Main baseline:** `f4114015181c240f93ee4e8699058b42c27ee215`  
-**Branch HEAD:** `f4114015181c240f93ee4e8699058b42c27ee215`
+**Generated:** 2026-10-17T18:00:00.000Z  
+**Main baseline:** `ba03eedeea27c28dd0562d5744f070e94f6d3247`  
+**Evaluated commit:** `7250f058c3750895e8377662678f0887fd050607`  
+**Branch HEAD:** `7250f058c3750895e8377662678f0887fd050607`
 
 ## A. Repository
 

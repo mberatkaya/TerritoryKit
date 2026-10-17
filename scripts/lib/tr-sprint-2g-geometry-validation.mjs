@@ -608,20 +608,37 @@ export function assessDistrictGeometryQa({
     zones: gameplayZones
   });
 
+  const defaultParentOutsideToleranceKm2 = 0.000001;
+  const parentContainmentErrors = gameplayPolygonTechnical.parentContainmentErrors.map((row) => ({
+    zoneId: row.zoneId,
+    outsideAreaKm2: row.outsideAreaKm2,
+    outsideAreaM2: typeof row.outsideAreaKm2 === "number" ? row.outsideAreaKm2 * 1_000_000 : null,
+    defaultToleranceKm2: defaultParentOutsideToleranceKm2,
+    defaultToleranceM2: defaultParentOutsideToleranceKm2 * 1_000_000,
+    exceedsDefaultTolerance:
+      typeof row.outsideAreaKm2 === "number" &&
+      row.outsideAreaKm2 > defaultParentOutsideToleranceKm2
+  }));
+  const parentContainmentExceedsTolerance = parentContainmentErrors.some(
+    (row) => row.exceedsDefaultTolerance
+  );
   const parentContainmentNote =
-    gameplayPolygonTechnical.parentContainmentErrors.length > 0
+    parentContainmentErrors.length > 0
       ? {
-          classification: "tolerance-or-precision-review",
-          defaultToleranceKm2: 0.000001,
-          errors: gameplayPolygonTechnical.parentContainmentErrors.map((row) => ({
-            zoneId: row.zoneId,
-            outsideAreaKm2: row.outsideAreaKm2,
-            exceedsDefaultTolerance:
-              typeof row.outsideAreaKm2 === "number" && row.outsideAreaKm2 > 0.000001
-          })),
-          note: "Sub-microscopic outside-parent areas on immutable rc.8 gameplay may reflect floating-point/CRS tolerance; do not mutate geometry without authorized remediation."
+          classification: parentContainmentExceedsTolerance
+            ? "parent-containment-exceeds-default-tolerance"
+            : "within-default-parent-outside-tolerance",
+          defaultToleranceKm2: defaultParentOutsideToleranceKm2,
+          unitNote: "Areas are square kilometres (km²); 0.000001 km² = 1 m².",
+          structurallyValidParentContainment: !parentContainmentExceedsTolerance,
+          errors: parentContainmentErrors,
+          note: parentContainmentExceedsTolerance
+            ? "Outside-parent area exceeds the default inspectTurkeyAdm3SpatialQuality tolerance; report as QA failure without mutating pinned rc.8 geometry."
+            : "Outside-parent area within default tolerance; may reflect floating-point/CRS precision on immutable rc.8 gameplay."
         }
       : null;
+  const gameplayStructurallyValid =
+    gameplayPolygonTechnical.ok && !parentContainmentExceedsTolerance;
 
   const gameplayCoverage = assessDistrictAdministrativeCoverage({
     parent,
@@ -643,7 +660,7 @@ export function assessDistrictGeometryQa({
         spatialQuality: gameplayPolygonTechnical,
         pathology: gameplayPathology,
         zoneCount: gameplayZones.length,
-        structurallyValid: gameplayPolygonTechnical.ok,
+        structurallyValid: gameplayStructurallyValid,
         parentContainmentNote,
         evidencePath: "inspectTurkeyAdm3SpatialQuality(gameplay)"
       },

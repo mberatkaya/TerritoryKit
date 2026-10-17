@@ -95,6 +95,8 @@ test("Sprint 2G generator outputs decision artifact when local rc.8 + OSM bytes 
   assert.equal(decision.counts.verifiedOfficialPolygons, 0);
   assert.equal(decision.geographicalProductAcceptance, "NO_GO");
   assert.equal(decision.gates.gateF_productionReadiness, "NO_GO");
+  assert.equal(decision.repository.mainBaselineSha, "ba03eedeea27c28dd0562d5744f070e94f6d3247");
+  assert.ok(decision.repository.evaluatedCommit);
   assert.ok(decision.counts.verifiedOsmAdministrativePolygons >= 1);
 
   const matrix = JSON.parse(
@@ -103,4 +105,13 @@ test("Sprint 2G generator outputs decision artifact when local rc.8 + OSM bytes 
   assert.equal(matrix.districts.length, 8);
   const kadikoy = matrix.districts.find((row) => row.slug === "kadikoy");
   assert.equal(kadikoy.classification, "BLOCKED_BY_SOURCE");
+
+  const fatih = matrix.districts.find((row) => row.slug === "fatih");
+  assert.ok(fatih);
+  assert.equal(fatih.gameplayZoneCount, 30);
+  const containment = fatih.geometryQa.polygonTechnical.gameplayParentContainmentNote;
+  assert.ok(containment);
+  assert.equal(containment.classification, "parent-containment-exceeds-default-tolerance");
+  assert.equal(fatih.geometryQa.polygonTechnical.gameplaySpatialOk, false);
+  assert.equal(containment.errors[0].outsideAreaM2, 2);
 });

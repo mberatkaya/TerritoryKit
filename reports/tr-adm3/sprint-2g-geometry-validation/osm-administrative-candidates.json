@@ -70,7 +70,7 @@
   "coverage": {
     "schemaVersion": "territorykit-tr-adm3-osm-coverage@1",
     "country": "TR",
-    "generatedAt": "2026-10-17T17:07:27.000Z",
+    "generatedAt": "2026-10-17T18:00:00.000Z",
     "candidateCount": 1020,
     "builtPolygonCount": 4,
     "unresolvedCount": 1016,
@@ -80,6 +80,7 @@
       "entryCount": 1016,
       "uniqueUnresolvedRelationIds": 667,
       "repeatedRelationAttemptCount": 291,
+      "extraUnresolvedOccurrences": 310,
       "repeatedRelationAttempts": [
         {
           "osmId": 2463274,
@@ -1256,7 +1257,7 @@
   },
   "quality": {
     "schemaVersion": "territorykit-tr-sprint-2g-osm-quality-rollup@2",
-    "generatedAt": "2026-10-17T17:07:27.000Z",
+    "generatedAt": "2026-10-17T18:00:00.000Z",
     "perDistrictExtracts": [
       {
         "parentAdm2Id": "tr:adm2:54988432b89638439219394",
@@ -1274,7 +1275,7 @@
           "schemaVersion": "territorykit-tr-adm3-osm-derived-input-lock@1",
           "role": "derived-extract-input",
           "country": "TR",
-          "generatedAt": "2026-10-17T17:07:27.000Z",
+          "generatedAt": "2026-10-17T18:00:00.000Z",
           "inputPbfPath": "/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b89638439219394.osm.pbf",
           "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
           "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
@@ -1285,7 +1286,7 @@
           "attribution": "OpenStreetMap contributors, ODbL 1.0",
           "parser": {
             "package": "@osmix/pbf",
-            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g",
+            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata",
             "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
           }
         },
@@ -1296,6 +1297,7 @@
           "entryCount": 98,
           "uniqueUnresolvedRelationIds": 97,
           "repeatedRelationAttemptCount": 0,
+          "extraUnresolvedOccurrences": 0,
           "repeatedRelationAttempts": [],
           "reasonCounts": {
             "missing-outer-way-members": 23,
@@ -1320,7 +1322,7 @@
           "schemaVersion": "territorykit-tr-adm3-osm-derived-input-lock@1",
           "role": "derived-extract-input",
           "country": "TR",
-          "generatedAt": "2026-10-17T17:07:27.000Z",
+          "generatedAt": "2026-10-17T18:00:00.000Z",
           "inputPbfPath": "/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-poly-54988432b39641834885080.osm.pbf",
           "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
           "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
@@ -1331,7 +1333,7 @@
           "attribution": "OpenStreetMap contributors, ODbL 1.0",
           "parser": {
             "package": "@osmix/pbf",
-            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g",
+            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata",
             "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
           }
         },
@@ -1342,6 +1344,7 @@
           "entryCount": 62,
           "uniqueUnresolvedRelationIds": 62,
           "repeatedRelationAttemptCount": 0,
+          "extraUnresolvedOccurrences": 0,
           "repeatedRelationAttempts": [],
           "reasonCounts": {
             "missing-outer-way-members": 14,
@@ -1365,7 +1368,7 @@
           "schemaVersion": "territorykit-tr-adm3-osm-derived-input-lock@1",
           "role": "derived-extract-input",
           "country": "TR",
-          "generatedAt": "2026-10-17T17:07:27.000Z",
+          "generatedAt": "2026-10-17T18:00:00.000Z",
           "inputPbfPath": "/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b79162079631621.osm.pbf",
           "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
           "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
@@ -1376,7 +1379,7 @@
           "attribution": "OpenStreetMap contributors, ODbL 1.0",
           "parser": {
             "package": "@osmix/pbf",
-            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g",
+            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata",
             "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
           }
         },
@@ -1387,6 +1390,7 @@
           "entryCount": 175,
           "uniqueUnresolvedRelationIds": 170,
           "repeatedRelationAttemptCount": 0,
+          "extraUnresolvedOccurrences": 0,
           "repeatedRelationAttempts": [],
           "reasonCounts": {
             "geometry-unavailable": 4,
@@ -1412,7 +1416,7 @@
           "schemaVersion": "territorykit-tr-adm3-osm-derived-input-lock@1",
           "role": "derived-extract-input",
           "country": "TR",
-          "generatedAt": "2026-10-17T17:07:27.000Z",
+          "generatedAt": "2026-10-17T18:00:00.000Z",
           "inputPbfPath": "/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-poly-54988432b94516152709384.osm.pbf",
           "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
           "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
@@ -1423,7 +1427,7 @@
           "attribution": "OpenStreetMap contributors, ODbL 1.0",
           "parser": {
             "package": "@osmix/pbf",
-            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g",
+            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata",
             "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
           }
         },
@@ -1434,6 +1438,7 @@
           "entryCount": 2,
           "uniqueUnresolvedRelationIds": 2,
           "repeatedRelationAttemptCount": 0,
+          "extraUnresolvedOccurrences": 0,
           "repeatedRelationAttempts": [],
           "reasonCounts": {
             "open-outer-way-ring": 1,
@@ -1457,7 +1462,7 @@
           "schemaVersion": "territorykit-tr-adm3-osm-derived-input-lock@1",
           "role": "derived-extract-input",
           "country": "TR",
-          "generatedAt": "2026-10-17T17:07:27.000Z",
+          "generatedAt": "2026-10-17T18:00:00.000Z",
           "inputPbfPath": "/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b93840376788897.osm.pbf",
           "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
           "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
@@ -1468,7 +1473,7 @@
           "attribution": "OpenStreetMap contributors, ODbL 1.0",
           "parser": {
             "package": "@osmix/pbf",
-            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g",
+            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata",
             "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
           }
         },
@@ -1479,6 +1484,7 @@
           "entryCount": 374,
           "uniqueUnresolvedRelationIds": 347,
           "repeatedRelationAttemptCount": 0,
+          "extraUnresolvedOccurrences": 0,
           "repeatedRelationAttempts": [],
           "reasonCounts": {
             "geometry-unavailable": 27,
@@ -1504,7 +1510,7 @@
           "schemaVersion": "territorykit-tr-adm3-osm-derived-input-lock@1",
           "role": "derived-extract-input",
           "country": "TR",
-          "generatedAt": "2026-10-17T17:07:27.000Z",
+          "generatedAt": "2026-10-17T18:00:00.000Z",
           "inputPbfPath": "/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b71345383711908.osm.pbf",
           "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
           "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
@@ -1515,7 +1521,7 @@
           "attribution": "OpenStreetMap contributors, ODbL 1.0",
           "parser": {
             "package": "@osmix/pbf",
-            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g",
+            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata",
             "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
           }
         },
@@ -1526,6 +1532,7 @@
           "entryCount": 117,
           "uniqueUnresolvedRelationIds": 111,
           "repeatedRelationAttemptCount": 0,
+          "extraUnresolvedOccurrences": 0,
           "repeatedRelationAttempts": [],
           "reasonCounts": {
             "geometry-unavailable": 6,
@@ -1550,7 +1557,7 @@
           "schemaVersion": "territorykit-tr-adm3-osm-derived-input-lock@1",
           "role": "derived-extract-input",
           "country": "TR",
-          "generatedAt": "2026-10-17T17:07:27.000Z",
+          "generatedAt": "2026-10-17T18:00:00.000Z",
           "inputPbfPath": "/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b67026781349893.osm.pbf",
           "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
           "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
@@ -1561,7 +1568,7 @@
           "attribution": "OpenStreetMap contributors, ODbL 1.0",
           "parser": {
             "package": "@osmix/pbf",
-            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g",
+            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata",
             "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
           }
         },
@@ -1572,6 +1579,7 @@
           "entryCount": 107,
           "uniqueUnresolvedRelationIds": 107,
           "repeatedRelationAttemptCount": 0,
+          "extraUnresolvedOccurrences": 0,
           "repeatedRelationAttempts": [],
           "reasonCounts": {
             "missing-outer-way-members": 48,
@@ -1595,7 +1603,7 @@
           "schemaVersion": "territorykit-tr-adm3-osm-derived-input-lock@1",
           "role": "derived-extract-input",
           "country": "TR",
-          "generatedAt": "2026-10-17T17:07:27.000Z",
+          "generatedAt": "2026-10-17T18:00:00.000Z",
           "inputPbfPath": "/Users/mbkaya/Repo/TerritoryKit-sprint-2g/.territory/sprint-2g/osm-clip-bbox-54988432b2777192469074.osm.pbf",
           "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
           "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
@@ -1606,7 +1614,7 @@
           "attribution": "OpenStreetMap contributors, ODbL 1.0",
           "parser": {
             "package": "@osmix/pbf",
-            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g",
+            "implementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2g-level8-research-metadata",
             "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
           }
         },
@@ -1617,6 +1625,7 @@
           "entryCount": 81,
           "uniqueUnresolvedRelationIds": 81,
           "repeatedRelationAttemptCount": 0,
+          "extraUnresolvedOccurrences": 0,
           "repeatedRelationAttempts": [],
           "reasonCounts": {
             "missing-outer-way-members": 20,
@@ -1630,6 +1639,7 @@
       "entryCount": 1016,
       "uniqueUnresolvedRelationIds": 667,
       "repeatedRelationAttemptCount": 291,
+      "extraUnresolvedOccurrences": 310,
       "repeatedRelationAttempts": [
         {
           "osmId": 2463274,
@@ -2810,6 +2820,7 @@
     "entryCount": 1016,
     "uniqueUnresolvedRelationIds": 667,
     "repeatedRelationAttemptCount": 291,
+    "extraUnresolvedOccurrences": 310,
     "repeatedRelationAttempts": [
       {
         "osmId": 2463274,
@@ -3982,6 +3993,14 @@
       "open-outer-way-ring": 747,
       "parent-unresolved": 6
     }
+  },
+  "countDefinitions": {
+    "candidateEntryCount": "Ways/relations accepted by evaluateTurkeyAdm3OsmBoundaryCandidate inside the Istanbul ADM2 clip (includes unresolved shells).",
+    "builtPolygonCount": "Emitted OSM research zones with resolvable parent confidence and mahalle/village/locality semantic type (official=false).",
+    "unresolvedEntryCount": "Per-processing unresolved rows (missing geometry, semantic-review-required, parent low/unresolved); not deduplicated by OSM relation ID.",
+    "uniqueUnresolvedRelationIds": "Distinct relation IDs among unresolved entries (ways excluded).",
+    "repeatedRelationIdCount": "Relation IDs appearing in more than one unresolved entry (attemptCount>1); not additive with uniqueUnresolvedRelationIds and not required to sum to unresolvedEntryCount.",
+    "extraUnresolvedOccurrences": "Sum of (attemptCount-1) over repeated relations; captures duplicate processing attempts beyond the first."
   },
   "duplicateCount": 0,
   "pilots": [

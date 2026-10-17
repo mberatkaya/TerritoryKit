@@ -12,7 +12,7 @@ import {
 const encoder = new TextEncoder();
 
 describe("Turkey ADM3 OSM PBF extraction", () => {
-  it("rejects admin_level 8 administrative shells without mahalle context or name", () => {
+  it("rejects admin_level 8 without mahalle context or name; name-only stays a research candidate tag", () => {
     expect(
       evaluateTurkeyAdm3OsmBoundaryCandidate({
         boundary: "administrative",
@@ -23,6 +23,14 @@ describe("Turkey ADM3 OSM PBF extraction", () => {
       accepted: false,
       reason: "admin-level-8-without-mahalle-context"
     });
+    expect(
+      evaluateTurkeyAdm3OsmBoundaryCandidate({
+        boundary: "administrative",
+        admin_level: "8",
+        name: "Name Only Mahalle",
+        type: "boundary"
+      }).accepted
+    ).toBe(true);
     expect(
       evaluateTurkeyAdm3OsmBoundaryCandidate({
         boundary: "administrative",
@@ -54,10 +62,14 @@ describe("Turkey ADM3 OSM PBF extraction", () => {
       expect(territory).toMatchObject({
         sourceClass: "osm",
         official: false,
+        productionEligible: false,
+        coverageStatus: "research-candidate",
+        semanticReviewStatus: "mapping-review-required",
         osmType: "way",
         osmId: 10,
         sourceNativeId: "osm:way:10"
       });
+      expect(territory.localTypeName).toBe("Mahalle (OSM research)");
       expect(territory.source).toMatchObject({
         license: "ODbL-1.0",
         attribution: "OpenStreetMap contributors, ODbL 1.0"
