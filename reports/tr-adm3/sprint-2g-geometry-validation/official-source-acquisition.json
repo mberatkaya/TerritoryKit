@@ -1,0 +1,415 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2g-official-source-acquisition@1",
+  "generatedAt": "2026-10-17T18:00:00.000Z",
+  "verifiedOfficialPolygonCount": 0,
+  "kadikoy": {
+    "investigation": {
+      "status": "BLOCKED_BY_SOURCE",
+      "verificationClass": "REMOTE_PROBE_ONLY",
+      "structuralStatus": "NOT_RUN",
+      "productionEligibility": "NOT_ELIGIBLE",
+      "licenseExplicit": false,
+      "redistributionRightsDocumented": false
+    },
+    "ckanAlternativeProbe": {
+      "packageShowApi": "https://acikveri.kadikoy.bel.tr/api/3/action/package_show?id=1f49bf03-cea5-40b9-9604-5f71c6f71e22",
+      "searchApi": "https://acikveri.kadikoy.bel.tr/api/3/action/package_search?q=mahalle&rows=20",
+      "searchResultCount": 19,
+      "probedResourceCount": 12,
+      "distinctMagicLabels": [
+        "ESRI_SHAPEFILE_MAIN",
+        "UNKNOWN_239,187,191,77",
+        "ZIP_ARCHIVE",
+        "UNKNOWN_77,97,104,97",
+        "UNKNOWN_208,207,17,224",
+        "UNKNOWN_239,187,191,97"
+      ],
+      "zipOrGpkgCandidates": [
+        {
+          "packageId": "5b0637d0-0188-428f-a88a-93c04e299749",
+          "packageTitle": "Mahalle Nüfuslarının Cinsiyete Göre Dağılımı",
+          "resourceId": "e53adf50-bc68-40a8-907b-98a00f660f18",
+          "name": "2025_Mahalle Nüfuslarının Cinsiyete Göre Dağılımı",
+          "format": "XLSX",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/e53adf50-bc68-40a8-907b-98a00f660f18/download/mahalle-nufuslarnn-cinsiyete-gore-dalm-2025.xlsx",
+          "probe": {
+            "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/e53adf50-bc68-40a8-907b-98a00f660f18/download/mahalle-nufuslarnn-cinsiyete-gore-dalm-2025.xlsx",
+            "httpStatus": 200,
+            "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "byteSize": 8801,
+            "sha256": "b6f17b91c0b2fa9e089387313ec2e9ab495fc654eb94961b7c2589aeb8144ee1",
+            "magic": "ZIP_ARCHIVE",
+            "ok": true
+          }
+        },
+        {
+          "packageId": "5b0637d0-0188-428f-a88a-93c04e299749",
+          "packageTitle": "Mahalle Nüfuslarının Cinsiyete Göre Dağılımı",
+          "resourceId": "dfe47bc6-f760-46ab-8b4c-a62e86780074",
+          "name": "2024_Mahalle Nüfuslarının Cinsiyete Göre Dağılımı ",
+          "format": "XLSX",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/dfe47bc6-f760-46ab-8b4c-a62e86780074/download/mahalle-nufuslarnn-cinsiyete-gore-dalm-2024.xlsx",
+          "probe": {
+            "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/dfe47bc6-f760-46ab-8b4c-a62e86780074/download/mahalle-nufuslarnn-cinsiyete-gore-dalm-2024.xlsx",
+            "httpStatus": 200,
+            "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "byteSize": 5786,
+            "sha256": "08926b786c7ecabb161d1e060e08c1cc7282b5f3990368252f30805d81a573aa",
+            "magic": "ZIP_ARCHIVE",
+            "ok": true
+          }
+        },
+        {
+          "packageId": "5b0637d0-0188-428f-a88a-93c04e299749",
+          "packageTitle": "Mahalle Nüfuslarının Cinsiyete Göre Dağılımı",
+          "resourceId": "8fe3bb02-fb24-443b-a8ab-8622faab4e4a",
+          "name": "2023_Mahalle Nüfuslarının Cinsiyete Göre Dağılımı",
+          "format": "XLSX",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/8fe3bb02-fb24-443b-a8ab-8622faab4e4a/download/mahalle_nufuslarinin_cinsiyete_gore_dagilimi.xlsx",
+          "probe": {
+            "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/8fe3bb02-fb24-443b-a8ab-8622faab4e4a/download/mahalle_nufuslarinin_cinsiyete_gore_dagilimi.xlsx",
+            "httpStatus": 200,
+            "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "byteSize": 11447,
+            "sha256": "0314f81c24e34af8dc9720a84594d81db6133803bda8a21261d6c1edb6e06a7b",
+            "magic": "ZIP_ARCHIVE",
+            "ok": true
+          }
+        },
+        {
+          "packageId": "da28ac0a-78cf-41cf-89b1-dd8bdf379127",
+          "packageTitle": "65 Yaş Üzeri Nüfusun Mahalle Dağılımları",
+          "resourceId": "94fa37a5-7ea5-49a6-af1b-ccf69026f667",
+          "name": "2024_65 Yaş ve Üzeri Nüfusun Mahalle Dağılımı",
+          "format": "XLSX",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/da28ac0a-78cf-41cf-89b1-dd8bdf379127/resource/94fa37a5-7ea5-49a6-af1b-ccf69026f667/download/65-ya-ve-uzeri-nufusun-mahalle-dalm-2024.xlsx",
+          "probe": {
+            "url": "https://acikveri.kadikoy.bel.tr/dataset/da28ac0a-78cf-41cf-89b1-dd8bdf379127/resource/94fa37a5-7ea5-49a6-af1b-ccf69026f667/download/65-ya-ve-uzeri-nufusun-mahalle-dalm-2024.xlsx",
+            "httpStatus": 200,
+            "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "byteSize": 5627,
+            "sha256": "2e4297fec654c4bd6cc9b641a0a662e829d170eb4505f2700b93467410b83f77",
+            "magic": "ZIP_ARCHIVE",
+            "ok": true
+          }
+        }
+      ],
+      "validShapefileMainCandidates": [
+        {
+          "packageId": "1f49bf03-cea5-40b9-9604-5f71c6f71e22",
+          "packageTitle": "Kadıköy İlçesindeki Mahalle Sınırları",
+          "resourceId": "c7a8a9dc-c78f-417a-9e2c-42ec4d3436e7",
+          "name": "mahalle_sinir.shp",
+          "format": "SHP",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/1f49bf03-cea5-40b9-9604-5f71c6f71e22/resource/c7a8a9dc-c78f-417a-9e2c-42ec4d3436e7/download/mahalle_sinir.shp",
+          "probe": {
+            "url": "https://acikveri.kadikoy.bel.tr/dataset/1f49bf03-cea5-40b9-9604-5f71c6f71e22/resource/c7a8a9dc-c78f-417a-9e2c-42ec4d3436e7/download/mahalle_sinir.shp",
+            "httpStatus": 200,
+            "contentType": "application/x-qgis",
+            "byteSize": 103260,
+            "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+            "magic": "ESRI_SHAPEFILE_MAIN",
+            "ok": true
+          }
+        }
+      ],
+      "identicalPayloadResources": [],
+      "alternatives": [
+        {
+          "packageId": "1f49bf03-cea5-40b9-9604-5f71c6f71e22",
+          "packageTitle": "Kadıköy İlçesindeki Mahalle Sınırları",
+          "resourceId": "c7a8a9dc-c78f-417a-9e2c-42ec4d3436e7",
+          "name": "mahalle_sinir.shp",
+          "format": "SHP",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/1f49bf03-cea5-40b9-9604-5f71c6f71e22/resource/c7a8a9dc-c78f-417a-9e2c-42ec4d3436e7/download/mahalle_sinir.shp",
+          "probe": {
+            "url": "https://acikveri.kadikoy.bel.tr/dataset/1f49bf03-cea5-40b9-9604-5f71c6f71e22/resource/c7a8a9dc-c78f-417a-9e2c-42ec4d3436e7/download/mahalle_sinir.shp",
+            "httpStatus": 200,
+            "contentType": "application/x-qgis",
+            "byteSize": 103260,
+            "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+            "magic": "ESRI_SHAPEFILE_MAIN",
+            "ok": true
+          }
+        },
+        {
+          "packageId": "5b0637d0-0188-428f-a88a-93c04e299749",
+          "packageTitle": "Mahalle Nüfuslarının Cinsiyete Göre Dağılımı",
+          "resourceId": "0f1e8f07-6bdd-4115-8fb0-231657411a27",
+          "name": "2025_Mahalle Nüfuslarının Cinsiyete Göre Dağılımı",
+          "format": "CSV",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/0f1e8f07-6bdd-4115-8fb0-231657411a27/download/mahalle-nufuslarnn-cinsiyete-gore-dalm-2025.csv",
+          "probe": {
+            "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/0f1e8f07-6bdd-4115-8fb0-231657411a27/download/mahalle-nufuslarnn-cinsiyete-gore-dalm-2025.csv",
+            "httpStatus": 200,
+            "contentType": "text/csv",
+            "byteSize": 659,
+            "sha256": "72ea455a6e0e672071348f23dd2dce2beb154c699043ece2d3d1cb5adf9e27cf",
+            "magic": "UNKNOWN_239,187,191,77",
+            "ok": true
+          }
+        },
+        {
+          "packageId": "5b0637d0-0188-428f-a88a-93c04e299749",
+          "packageTitle": "Mahalle Nüfuslarının Cinsiyete Göre Dağılımı",
+          "resourceId": "e53adf50-bc68-40a8-907b-98a00f660f18",
+          "name": "2025_Mahalle Nüfuslarının Cinsiyete Göre Dağılımı",
+          "format": "XLSX",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/e53adf50-bc68-40a8-907b-98a00f660f18/download/mahalle-nufuslarnn-cinsiyete-gore-dalm-2025.xlsx",
+          "probe": {
+            "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/e53adf50-bc68-40a8-907b-98a00f660f18/download/mahalle-nufuslarnn-cinsiyete-gore-dalm-2025.xlsx",
+            "httpStatus": 200,
+            "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "byteSize": 8801,
+            "sha256": "b6f17b91c0b2fa9e089387313ec2e9ab495fc654eb94961b7c2589aeb8144ee1",
+            "magic": "ZIP_ARCHIVE",
+            "ok": true
+          }
+        },
+        {
+          "packageId": "5b0637d0-0188-428f-a88a-93c04e299749",
+          "packageTitle": "Mahalle Nüfuslarının Cinsiyete Göre Dağılımı",
+          "resourceId": "197e6869-b998-4235-ab3f-068aa7273c57",
+          "name": "2024_Mahalle Nüfuslarının Cinsiyete Göre Dağılımı",
+          "format": "CSV",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/197e6869-b998-4235-ab3f-068aa7273c57/download/mahalle-nufuslarnn-cinsiyete-gore-dalm-2024.csv",
+          "probe": {
+            "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/197e6869-b998-4235-ab3f-068aa7273c57/download/mahalle-nufuslarnn-cinsiyete-gore-dalm-2024.csv",
+            "httpStatus": 200,
+            "contentType": "text/csv",
+            "byteSize": 724,
+            "sha256": "70f52b176eb719f789526e71a3eebdd2bfc46e3b935892066bfe9ff83c0c7c19",
+            "magic": "UNKNOWN_77,97,104,97",
+            "ok": true
+          }
+        },
+        {
+          "packageId": "5b0637d0-0188-428f-a88a-93c04e299749",
+          "packageTitle": "Mahalle Nüfuslarının Cinsiyete Göre Dağılımı",
+          "resourceId": "dfe47bc6-f760-46ab-8b4c-a62e86780074",
+          "name": "2024_Mahalle Nüfuslarının Cinsiyete Göre Dağılımı ",
+          "format": "XLSX",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/dfe47bc6-f760-46ab-8b4c-a62e86780074/download/mahalle-nufuslarnn-cinsiyete-gore-dalm-2024.xlsx",
+          "probe": {
+            "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/dfe47bc6-f760-46ab-8b4c-a62e86780074/download/mahalle-nufuslarnn-cinsiyete-gore-dalm-2024.xlsx",
+            "httpStatus": 200,
+            "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "byteSize": 5786,
+            "sha256": "08926b786c7ecabb161d1e060e08c1cc7282b5f3990368252f30805d81a573aa",
+            "magic": "ZIP_ARCHIVE",
+            "ok": true
+          }
+        },
+        {
+          "packageId": "5b0637d0-0188-428f-a88a-93c04e299749",
+          "packageTitle": "Mahalle Nüfuslarının Cinsiyete Göre Dağılımı",
+          "resourceId": "0ba27e70-16fa-46d3-bc1a-098f67c02b22",
+          "name": "2023_Mahalle Nüfuslarının Cinsiyete Göre Dağılımı",
+          "format": "CSV",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/0ba27e70-16fa-46d3-bc1a-098f67c02b22/download/mahalle_nufuslarinin_cinsiyete_gore_dagilimi_2023.csv",
+          "probe": {
+            "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/0ba27e70-16fa-46d3-bc1a-098f67c02b22/download/mahalle_nufuslarinin_cinsiyete_gore_dagilimi_2023.csv",
+            "httpStatus": 200,
+            "contentType": "text/csv",
+            "byteSize": 724,
+            "sha256": "b557e44e03af058600d556dea4bcd02b965c4b2b7efbed54f9bdeb32ef2f72a3",
+            "magic": "UNKNOWN_77,97,104,97",
+            "ok": true
+          }
+        },
+        {
+          "packageId": "5b0637d0-0188-428f-a88a-93c04e299749",
+          "packageTitle": "Mahalle Nüfuslarının Cinsiyete Göre Dağılımı",
+          "resourceId": "8fe3bb02-fb24-443b-a8ab-8622faab4e4a",
+          "name": "2023_Mahalle Nüfuslarının Cinsiyete Göre Dağılımı",
+          "format": "XLSX",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/8fe3bb02-fb24-443b-a8ab-8622faab4e4a/download/mahalle_nufuslarinin_cinsiyete_gore_dagilimi.xlsx",
+          "probe": {
+            "url": "https://acikveri.kadikoy.bel.tr/dataset/5b0637d0-0188-428f-a88a-93c04e299749/resource/8fe3bb02-fb24-443b-a8ab-8622faab4e4a/download/mahalle_nufuslarinin_cinsiyete_gore_dagilimi.xlsx",
+            "httpStatus": 200,
+            "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "byteSize": 11447,
+            "sha256": "0314f81c24e34af8dc9720a84594d81db6133803bda8a21261d6c1edb6e06a7b",
+            "magic": "ZIP_ARCHIVE",
+            "ok": true
+          }
+        },
+        {
+          "packageId": "da28ac0a-78cf-41cf-89b1-dd8bdf379127",
+          "packageTitle": "65 Yaş Üzeri Nüfusun Mahalle Dağılımları",
+          "resourceId": "ec0b1af9-822d-4017-80b0-dcc4ffc2e08f",
+          "name": "2024_65 Yaş ve Üzeri Nüfusun Mahalle Dağılımı",
+          "format": "CSV",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/da28ac0a-78cf-41cf-89b1-dd8bdf379127/resource/ec0b1af9-822d-4017-80b0-dcc4ffc2e08f/download/65-ya-ve-uzeri-nufusun-mahalle-dalm-2024.csv",
+          "probe": {
+            "url": "https://acikveri.kadikoy.bel.tr/dataset/da28ac0a-78cf-41cf-89b1-dd8bdf379127/resource/ec0b1af9-822d-4017-80b0-dcc4ffc2e08f/download/65-ya-ve-uzeri-nufusun-mahalle-dalm-2024.csv",
+            "httpStatus": 200,
+            "contentType": "text/csv",
+            "byteSize": 647,
+            "sha256": "ad9c249ea520e3e80f7613d95016cf16583c272d3d6d1d5247dc11281095681e",
+            "magic": "UNKNOWN_77,97,104,97",
+            "ok": true
+          }
+        },
+        {
+          "packageId": "da28ac0a-78cf-41cf-89b1-dd8bdf379127",
+          "packageTitle": "65 Yaş Üzeri Nüfusun Mahalle Dağılımları",
+          "resourceId": "94fa37a5-7ea5-49a6-af1b-ccf69026f667",
+          "name": "2024_65 Yaş ve Üzeri Nüfusun Mahalle Dağılımı",
+          "format": "XLSX",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/da28ac0a-78cf-41cf-89b1-dd8bdf379127/resource/94fa37a5-7ea5-49a6-af1b-ccf69026f667/download/65-ya-ve-uzeri-nufusun-mahalle-dalm-2024.xlsx",
+          "probe": {
+            "url": "https://acikveri.kadikoy.bel.tr/dataset/da28ac0a-78cf-41cf-89b1-dd8bdf379127/resource/94fa37a5-7ea5-49a6-af1b-ccf69026f667/download/65-ya-ve-uzeri-nufusun-mahalle-dalm-2024.xlsx",
+            "httpStatus": 200,
+            "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "byteSize": 5627,
+            "sha256": "2e4297fec654c4bd6cc9b641a0a662e829d170eb4505f2700b93467410b83f77",
+            "magic": "ZIP_ARCHIVE",
+            "ok": true
+          }
+        },
+        {
+          "packageId": "da28ac0a-78cf-41cf-89b1-dd8bdf379127",
+          "packageTitle": "65 Yaş Üzeri Nüfusun Mahalle Dağılımları",
+          "resourceId": "15e9acaf-1b01-45b9-85c0-8bae146f48a1",
+          "name": "2023_65 Yaş ve Üzeri Nüfusun Mahalle Dağılımı",
+          "format": "CSV",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/da28ac0a-78cf-41cf-89b1-dd8bdf379127/resource/15e9acaf-1b01-45b9-85c0-8bae146f48a1/download/65_uzeri_nufusun_mahallelere_gore_dagilimi_2023.csv",
+          "probe": {
+            "url": "https://acikveri.kadikoy.bel.tr/dataset/da28ac0a-78cf-41cf-89b1-dd8bdf379127/resource/15e9acaf-1b01-45b9-85c0-8bae146f48a1/download/65_uzeri_nufusun_mahallelere_gore_dagilimi_2023.csv",
+            "httpStatus": 200,
+            "contentType": "text/csv",
+            "byteSize": 604,
+            "sha256": "cb7d6e2bcc6f8d8b274704c7a0f4ed702e84e578efea4b81d321bd2c904f37ab",
+            "magic": "UNKNOWN_239,187,191,77",
+            "ok": true
+          }
+        },
+        {
+          "packageId": "da28ac0a-78cf-41cf-89b1-dd8bdf379127",
+          "packageTitle": "65 Yaş Üzeri Nüfusun Mahalle Dağılımları",
+          "resourceId": "a36ade23-1876-42f7-89e1-8fc7c6701c3d",
+          "name": "2023_65 Yaş ve Üzeri Nüfusun Mahalle Dağılımı",
+          "format": "XLS",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/da28ac0a-78cf-41cf-89b1-dd8bdf379127/resource/a36ade23-1876-42f7-89e1-8fc7c6701c3d/download/65_uzeri_nufusun_mahallelere_gore_dagilimi_2023.xls",
+          "probe": {
+            "url": "https://acikveri.kadikoy.bel.tr/dataset/da28ac0a-78cf-41cf-89b1-dd8bdf379127/resource/a36ade23-1876-42f7-89e1-8fc7c6701c3d/download/65_uzeri_nufusun_mahallelere_gore_dagilimi_2023.xls",
+            "httpStatus": 200,
+            "contentType": "application/vnd.ms-excel",
+            "byteSize": 30720,
+            "sha256": "880946a41ca40723e8b9dfed0efc47ce6699686167da3e0eb4d35c8d667b21d9",
+            "magic": "UNKNOWN_208,207,17,224",
+            "ok": true
+          }
+        },
+        {
+          "packageId": "0353ed9d-0c9e-4cb9-8150-881fe2c641c6",
+          "packageTitle": "Kadıköy İlçesi Mahalle ve Sokak Asfalt Çalışması",
+          "resourceId": "4d286f39-156a-4563-a978-c484390a4429",
+          "name": " kadıköy ilçesi asfalt çalışmaları.csv",
+          "format": "CSV",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/0353ed9d-0c9e-4cb9-8150-881fe2c641c6/resource/4d286f39-156a-4563-a978-c484390a4429/download/kadkoy-ilcesi-asfalt-calsmalar.csv",
+          "probe": {
+            "url": "https://acikveri.kadikoy.bel.tr/dataset/0353ed9d-0c9e-4cb9-8150-881fe2c641c6/resource/4d286f39-156a-4563-a978-c484390a4429/download/kadkoy-ilcesi-asfalt-calsmalar.csv",
+            "httpStatus": 200,
+            "contentType": "text/csv",
+            "byteSize": 150,
+            "sha256": "8e9dbdc602fbe8d94509c5c175bb46890d1131da18ee8e1594aca722cb3a27dd",
+            "magic": "UNKNOWN_239,187,191,97",
+            "ok": true
+          }
+        }
+      ]
+    },
+    "status": "BLOCKED_BY_SOURCE",
+    "missingEvidence": [
+      "Independent .shp/.shx/.dbf/.prj/.cpg byte streams with distinct SHA-256 per companion",
+      "Valid SHP/SHX/DBF structure and CRS/PRJ metadata",
+      "Mahalle name, stable ID, and parent ilçe fields extractable",
+      "Documented license + redistribution approval for derivative/hosted use",
+      "Human authorization gate before promoting to approved-official-polygon precedence"
+    ]
+  },
+  "districts": [
+    {
+      "district": "Kadıköy",
+      "slug": "kadikoy",
+      "verifiedOfficialPolygons": 0,
+      "status": "BLOCKED_BY_SOURCE",
+      "evidencePaths": [
+        "reports/tr-adm3/sprint-2f-official-sources/istanbul-pilot-official-source-matrix.json",
+        "reports/tr-adm3/audit/kadikoy-acquisition.json"
+      ]
+    },
+    {
+      "district": "Fatih",
+      "slug": "fatih",
+      "verifiedOfficialPolygons": 0,
+      "status": "NO_VERIFIED_OFFICIAL_PACKAGE",
+      "evidencePaths": [
+        "reports/tr-adm3/sprint-2f-official-sources/istanbul-pilot-official-source-matrix.json",
+        "reports/tr-adm3/mahalle-identity-layer/fatih-coverage-and-provenance.json"
+      ]
+    },
+    {
+      "district": "Üsküdar",
+      "slug": "uskudar",
+      "verifiedOfficialPolygons": 0,
+      "status": "NO_VERIFIED_OFFICIAL_PACKAGE",
+      "evidencePaths": [
+        "reports/tr-adm3/sprint-2f-official-sources/istanbul-pilot-official-source-matrix.json",
+        "reports/tr-adm3/mahalle-identity-layer/uskudar-coverage-and-provenance.json"
+      ]
+    },
+    {
+      "district": "Adalar",
+      "slug": "adalar",
+      "verifiedOfficialPolygons": 0,
+      "status": "NO_VERIFIED_OFFICIAL_PACKAGE",
+      "evidencePaths": [
+        "reports/tr-adm3/sprint-2f-official-sources/istanbul-pilot-official-source-matrix.json",
+        "reports/tr-adm3/mahalle-identity-layer/adalar-coverage-and-provenance.json"
+      ]
+    },
+    {
+      "district": "Eyüpsultan",
+      "slug": "eyupsultan",
+      "verifiedOfficialPolygons": 0,
+      "status": "NO_VERIFIED_OFFICIAL_PACKAGE",
+      "evidencePaths": [
+        "reports/tr-adm3/sprint-2f-official-sources/istanbul-pilot-official-source-matrix.json",
+        "reports/tr-adm3/mahalle-identity-layer/eyupsultan-coverage-and-provenance.json"
+      ]
+    },
+    {
+      "district": "Çatalca",
+      "slug": "catalca",
+      "verifiedOfficialPolygons": 0,
+      "status": "NO_VERIFIED_OFFICIAL_PACKAGE",
+      "evidencePaths": [
+        "reports/tr-adm3/sprint-2f-official-sources/istanbul-pilot-official-source-matrix.json",
+        "reports/tr-adm3/mahalle-identity-layer/catalca-coverage-and-provenance.json"
+      ]
+    },
+    {
+      "district": "Başakşehir",
+      "slug": "basaksehir",
+      "verifiedOfficialPolygons": 0,
+      "status": "NO_VERIFIED_OFFICIAL_PACKAGE",
+      "evidencePaths": [
+        "reports/tr-adm3/sprint-2f-official-sources/istanbul-pilot-official-source-matrix.json",
+        "reports/tr-adm3/mahalle-identity-layer/basaksehir-coverage-and-provenance.json"
+      ]
+    },
+    {
+      "district": "Esenyurt",
+      "slug": "esenyurt",
+      "verifiedOfficialPolygons": 0,
+      "status": "NO_VERIFIED_OFFICIAL_PACKAGE",
+      "evidencePaths": [
+        "reports/tr-adm3/sprint-2f-official-sources/istanbul-pilot-official-source-matrix.json",
+        "reports/tr-adm3/mahalle-identity-layer/esenyurt-coverage-and-provenance.json"
+      ]
+    }
+  ]
+}

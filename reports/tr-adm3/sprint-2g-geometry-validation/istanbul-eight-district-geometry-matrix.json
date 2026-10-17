@@ -1,0 +1,319 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2g-istanbul-eight-district-geometry-matrix@1",
+  "generatedAt": "2026-10-17T18:00:00.000Z",
+  "rc8Root": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+  "districts": [
+    {
+      "district": "Kadıköy",
+      "slug": "kadikoy",
+      "parentAdm2Id": "tr:adm2:54988432b89638439219394",
+      "classification": "BLOCKED_BY_SOURCE",
+      "officialPolygons": 0,
+      "osmAdministrativePolygons": 0,
+      "estimatedCandidatePolygons": 0,
+      "gameplayZoneCount": 28,
+      "gameplayGeometryHashSetSha256": "84ef9b66011bf128e72f6a93c2b7b4a4dd508b0b5dc7c2326706517fc65ed125",
+      "gameplayZoneIdSetSha256": "7946199227e0fb33c56512b084244adb5545a89a8ee0099e8755b1739d6b2c3d",
+      "geometryQa": {
+        "gameplaySpatialOk": true,
+        "osmSpatialOk": null,
+        "gameplaySliverCount": 0,
+        "osmSliverCount": null,
+        "gameplayOverlapCount": 0,
+        "osmOverlapCount": null
+      },
+      "seedMetrics": {
+        "status": "ASSESSED",
+        "zoneCount": 28,
+        "settlementCount": 35,
+        "unseededZoneCount": 9,
+        "ambiguousZoneCount": 8
+      },
+      "stressFocus": [
+        "dense-urban",
+        "multi-seed-zones",
+        "duplicate-source-identity"
+      ],
+      "mapPreviewPath": "reports/tr-adm3/sprint-2g-geometry-validation/map-preview/kadikoy-geometry-comparison.geojson",
+      "overlaySummary": null
+    },
+    {
+      "district": "Fatih",
+      "slug": "fatih",
+      "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+      "classification": "VERIFIED_OSM_CANDIDATE",
+      "officialPolygons": 0,
+      "osmAdministrativePolygons": 1,
+      "estimatedCandidatePolygons": 0,
+      "gameplayZoneCount": 30,
+      "gameplayGeometryHashSetSha256": "cefed89ac4a6c7d3459915739e36ff5072d2bbf3c8238edf5ccc2e8536fb5386",
+      "gameplayZoneIdSetSha256": "0b904021dccad91d6ab2b177f58c4b4b91bebf647bae5c4ba005f1e831f859cc",
+      "geometryQa": {
+        "gameplaySpatialOk": false,
+        "osmSpatialOk": false,
+        "gameplaySliverCount": 0,
+        "osmSliverCount": 0,
+        "gameplayOverlapCount": 0,
+        "osmOverlapCount": 0
+      },
+      "seedMetrics": {
+        "status": "ASSESSED",
+        "zoneCount": 30,
+        "settlementCount": 71,
+        "unseededZoneCount": 5,
+        "ambiguousZoneCount": 15
+      },
+      "stressFocus": [],
+      "mapPreviewPath": "reports/tr-adm3/sprint-2g-geometry-validation/map-preview/fatih-geometry-comparison.geojson",
+      "overlaySummary": {
+        "gameplayZoneCount": 30,
+        "osmPolygonCount": 1,
+        "mappedGameplayCount": 1,
+        "orphanGameplayZoneIds": [
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-01eda0ae60d28fc3a2c7",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-073b672500565ae4fb3e",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-08c523104fbe1e7feb3d",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-13d94a01ceafb0ce5169",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-290699f58ea199c88a63",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-2b5978834366688ae645",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-34d0c14106436af5f5a6",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-57c6546b8d8c52e3ca2f",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-59f9cd89af41c5776554",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-67991e44ab1c9e28442b",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-701b712ba93c285dfee4",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-78efecad6d2ae4ccd2ec",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-88ec65114d7d0e51d713",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-8eebe5599fbf67d5bc23",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-9f83a09e877b09576ca7",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ae51c43e7a16247111a1",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b0035a2eaa3b83222d33",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b05a48a15e5125cdf298",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b3e509aaad7fa40c97c0",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b5ae85dbcb276cc5da0b",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b699d521a866aa6875c3",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b869ea01a2bad0439ea4",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-bf7df56ae203fd5afe33",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-c760995c457452ed71a1",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ce3a6d0f0ea5c4667c87",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dacb79746e8604409768",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dc4135f5abb73435480a",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-de3555218fb370c42fd2",
+          "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-f24cd8558fe73d01e2b4"
+        ],
+        "orphanOsmPolygonIds": [],
+        "manyToOneMergeCandidates": []
+      }
+    },
+    {
+      "district": "Üsküdar",
+      "slug": "uskudar",
+      "parentAdm2Id": "tr:adm2:54988432b79162079631621",
+      "classification": "BASELINE_PRESERVED",
+      "officialPolygons": 0,
+      "osmAdministrativePolygons": 0,
+      "estimatedCandidatePolygons": 0,
+      "gameplayZoneCount": 40,
+      "gameplayGeometryHashSetSha256": "43c7ff4a0997e604266b19ed04a10f18bd3e333005e49f089527a1f56c27878b",
+      "gameplayZoneIdSetSha256": "8473af2b55161ff86e704be029f18ed8506d9cafc5ee24817e1d585ba3a71783",
+      "geometryQa": {
+        "gameplaySpatialOk": false,
+        "osmSpatialOk": null,
+        "gameplaySliverCount": 0,
+        "osmSliverCount": null,
+        "gameplayOverlapCount": 0,
+        "osmOverlapCount": null
+      },
+      "seedMetrics": {
+        "status": "ASSESSED",
+        "zoneCount": 40,
+        "settlementCount": 40,
+        "unseededZoneCount": 15,
+        "ambiguousZoneCount": 10
+      },
+      "stressFocus": [],
+      "mapPreviewPath": "reports/tr-adm3/sprint-2g-geometry-validation/map-preview/uskudar-geometry-comparison.geojson",
+      "overlaySummary": null
+    },
+    {
+      "district": "Adalar",
+      "slug": "adalar",
+      "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+      "classification": "VERIFIED_OSM_CANDIDATE",
+      "officialPolygons": 0,
+      "osmAdministrativePolygons": 3,
+      "estimatedCandidatePolygons": 0,
+      "gameplayZoneCount": 14,
+      "gameplayGeometryHashSetSha256": "aad0b8a3d49ec70b57aa695e8792404483d9ad11a1dbf40af32df5b474ea50f5",
+      "gameplayZoneIdSetSha256": "7094a3d8080ad79d833cfac19437f3a8e72b2322d04a99068c5461db6dd14e46",
+      "geometryQa": {
+        "gameplaySpatialOk": true,
+        "osmSpatialOk": false,
+        "gameplaySliverCount": 0,
+        "osmSliverCount": 0,
+        "gameplayOverlapCount": 0,
+        "osmOverlapCount": 0
+      },
+      "seedMetrics": {
+        "status": "ASSESSED",
+        "zoneCount": 14,
+        "settlementCount": 11,
+        "unseededZoneCount": 8,
+        "ambiguousZoneCount": 2
+      },
+      "stressFocus": [
+        "island-multipolygon",
+        "coastline-boundary-point",
+        "disconnected-components"
+      ],
+      "mapPreviewPath": "reports/tr-adm3/sprint-2g-geometry-validation/map-preview/adalar-geometry-comparison.geojson",
+      "overlaySummary": {
+        "gameplayZoneCount": 14,
+        "osmPolygonCount": 3,
+        "mappedGameplayCount": 8,
+        "orphanGameplayZoneIds": [
+          "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-2c554a5f5c64beb7bddd",
+          "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-3d296a3d496146978d33",
+          "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-5de6d2f8b284a93b30c6",
+          "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-6f634fa946042aa72fd5",
+          "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-7158c3fee86f9a9bd4ca",
+          "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-d836fddfee28922a0473"
+        ],
+        "orphanOsmPolygonIds": [],
+        "manyToOneMergeCandidates": [
+          {
+            "osmTerritoryId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460393-kinaliada-mahallesi",
+            "gameplayZoneCount": 3
+          },
+          {
+            "osmTerritoryId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460394-burgazada-mahallesi",
+            "gameplayZoneCount": 3
+          },
+          {
+            "osmTerritoryId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460395-heybeliada-mahallesi",
+            "gameplayZoneCount": 2
+          }
+        ]
+      }
+    },
+    {
+      "district": "Eyüpsultan",
+      "slug": "eyupsultan",
+      "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+      "classification": "BASELINE_PRESERVED",
+      "officialPolygons": 0,
+      "osmAdministrativePolygons": 0,
+      "estimatedCandidatePolygons": 0,
+      "gameplayZoneCount": 19,
+      "gameplayGeometryHashSetSha256": "98759d2456918dd940af0710a71513155d70a631a3cea0a3ecb474ebf95c59b5",
+      "gameplayZoneIdSetSha256": "bfe17d9ef6795e77174d02c06856122169d39765d6a169063173b6f1756996ba",
+      "geometryQa": {
+        "gameplaySpatialOk": true,
+        "osmSpatialOk": null,
+        "gameplaySliverCount": 0,
+        "osmSliverCount": null,
+        "gameplayOverlapCount": 0,
+        "osmOverlapCount": null
+      },
+      "seedMetrics": {
+        "status": "ASSESSED",
+        "zoneCount": 19,
+        "settlementCount": 82,
+        "unseededZoneCount": 11,
+        "ambiguousZoneCount": 6
+      },
+      "stressFocus": ["sparse-seeds", "low-network-coverage", "unseeded-zones"],
+      "mapPreviewPath": "reports/tr-adm3/sprint-2g-geometry-validation/map-preview/eyupsultan-geometry-comparison.geojson",
+      "overlaySummary": null
+    },
+    {
+      "district": "Çatalca",
+      "slug": "catalca",
+      "parentAdm2Id": "tr:adm2:54988432b71345383711908",
+      "classification": "BASELINE_PRESERVED",
+      "officialPolygons": 0,
+      "osmAdministrativePolygons": 0,
+      "estimatedCandidatePolygons": 0,
+      "gameplayZoneCount": 19,
+      "gameplayGeometryHashSetSha256": "cf55c5447cc9eb9a4d4483beb46c3848e35483baab971dcdbc497bf4762d342e",
+      "gameplayZoneIdSetSha256": "fc02d82f1cfe0eabe3a48c7ce72c37c49bb6fe756212c03da7a3e1f32183c0db",
+      "geometryQa": {
+        "gameplaySpatialOk": false,
+        "osmSpatialOk": null,
+        "gameplaySliverCount": 0,
+        "osmSliverCount": null,
+        "gameplayOverlapCount": 0,
+        "osmOverlapCount": null
+      },
+      "seedMetrics": {
+        "status": "ASSESSED",
+        "zoneCount": 19,
+        "settlementCount": 248,
+        "unseededZoneCount": 6,
+        "ambiguousZoneCount": 12
+      },
+      "stressFocus": [],
+      "mapPreviewPath": "reports/tr-adm3/sprint-2g-geometry-validation/map-preview/catalca-geometry-comparison.geojson",
+      "overlaySummary": null
+    },
+    {
+      "district": "Başakşehir",
+      "slug": "basaksehir",
+      "parentAdm2Id": "tr:adm2:54988432b67026781349893",
+      "classification": "BASELINE_PRESERVED",
+      "officialPolygons": 0,
+      "osmAdministrativePolygons": 0,
+      "estimatedCandidatePolygons": 0,
+      "gameplayZoneCount": 20,
+      "gameplayGeometryHashSetSha256": "d47b46e296fd915643876799059ea16441656570baba36c00d342ac91424fa69",
+      "gameplayZoneIdSetSha256": "3b756fa9dc3e5cffc9f3bc364967ce12f8109dc2dc4c51ca9dd92b2a71615bb7",
+      "geometryQa": {
+        "gameplaySpatialOk": true,
+        "osmSpatialOk": null,
+        "gameplaySliverCount": 0,
+        "osmSliverCount": null,
+        "gameplayOverlapCount": 0,
+        "osmOverlapCount": null
+      },
+      "seedMetrics": {
+        "status": "ASSESSED",
+        "zoneCount": 20,
+        "settlementCount": 33,
+        "unseededZoneCount": 11,
+        "ambiguousZoneCount": 5
+      },
+      "stressFocus": [],
+      "mapPreviewPath": "reports/tr-adm3/sprint-2g-geometry-validation/map-preview/basaksehir-geometry-comparison.geojson",
+      "overlaySummary": null
+    },
+    {
+      "district": "Esenyurt",
+      "slug": "esenyurt",
+      "parentAdm2Id": "tr:adm2:54988432b2777192469074",
+      "classification": "BASELINE_PRESERVED",
+      "officialPolygons": 0,
+      "osmAdministrativePolygons": 0,
+      "estimatedCandidatePolygons": 0,
+      "gameplayZoneCount": 36,
+      "gameplayGeometryHashSetSha256": "c783487af425f5ae0c1ca7a718caf8512a773a896bd7ddef996d8bae6a4810c0",
+      "gameplayZoneIdSetSha256": "a315a908008dbb77e3322d5ed12b64efc648a70b49b9d67ea02c2285751533e6",
+      "geometryQa": {
+        "gameplaySpatialOk": false,
+        "osmSpatialOk": null,
+        "gameplaySliverCount": 0,
+        "osmSliverCount": null,
+        "gameplayOverlapCount": 0,
+        "osmOverlapCount": null
+      },
+      "seedMetrics": {
+        "status": "ASSESSED",
+        "zoneCount": 36,
+        "settlementCount": 47,
+        "unseededZoneCount": 19,
+        "ambiguousZoneCount": 15
+      },
+      "stressFocus": [],
+      "mapPreviewPath": "reports/tr-adm3/sprint-2g-geometry-validation/map-preview/esenyurt-geometry-comparison.geojson",
+      "overlaySummary": null
+    }
+  ]
+}

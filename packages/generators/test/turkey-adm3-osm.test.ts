@@ -69,7 +69,7 @@ async function createMiniOsmPbf(): Promise<Uint8Array> {
       "boundary",
       "administrative",
       "admin_level",
-      "10",
+      "8",
       "name",
       "Fixture Mahalle",
       "place",

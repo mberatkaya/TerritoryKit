@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2g-geometry-source-provenance@1",
+  "generatedAt": "2026-10-17T18:00:00.000Z",
+  "gameplay": {
+    "datasetVersion": "2.1.0-rc.8",
+    "artifactRoot": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+    "immutable": true,
+    "note": "Sprint 2G did not mutate gameplay zone IDs or geometries."
+  },
+  "settlementIdentity": {
+    "layer": "canonical-settlement-identity",
+    "humanApprovedDecisions": 0
+  },
+  "administrativeBoundaryResearch": {
+    "officialVerifiedCount": 0,
+    "osmAdministrativePolygonCount": 4,
+    "estimatedExperimentalCount": 0
+  },
+  "sourceLocks": {
+    "osmPbf": {
+      "schemaVersion": "territorykit-tr-adm3-osm-source-lock@1",
+      "country": "TR",
+      "generatedAt": "2026-10-17T18:00:00.000Z",
+      "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+      "downloadUrl": "https://download.geofabrik.de/europe/turkey-latest.osm.pbf",
+      "upstreamTimestamp": null,
+      "sha256": "a03dec91d67f9fd62e5092ff9929eca014a9ca5016e966e93db81ee4b536e6c1",
+      "byteSize": 3266104,
+      "license": "ODbL-1.0",
+      "attribution": "OpenStreetMap contributors, ODbL 1.0",
+      "parser": {
+        "package": "@osmix/pbf",
+        "reason": "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
+      }
+    },
+    "osmBarrierSnapshot": "reports/tr-adm3/sprint-2e-source-evidence/istanbul-eight-district-source-evidence-matrix.json"
+  }
+}
