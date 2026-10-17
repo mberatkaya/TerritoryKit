@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2f-official-source-blockers@1",
+  "generatedAt": "2026-10-17T14:31:18.319Z",
+  "legalRedistribution": [
+    "No municipal redistribution approval recorded for Istanbul pilot official polygons.",
+    "Public downloadability does not imply hosted/game redistribution rights."
+  ],
+  "technical": [
+    "Kadıköy companion SHP acquisition bytes fail structural validation.",
+    "İstanbul lacks verified official provider entry in tr-adm3-official-providers.json."
+  ],
+  "kadikoyStatus": "BLOCKED_BY_SOURCE"
+}

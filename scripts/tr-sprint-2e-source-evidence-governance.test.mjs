@@ -26,6 +26,7 @@ test("human review queue defaults remain pending without auto display promotion"
   assert.equal(queue.summary.unseededZoneRecords, 84);
   assert.equal(queue.summary.duplicateNormalizedNameRecords, 5);
   assert.equal(queue.summary.officialSourceOnlyRecords, 11);
+  assert.equal(new Set(queue.records.map((row) => row.reviewRecordId)).size, 173);
   assert.doesNotMatch(
     queue.records.find((row) => row.ambiguityReasonCodes.includes("AMBIGUOUS_MULTI_SEED_ZONE"))
       ?.proposedAction ?? "",

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2f-human-review-progress@1",
+  "generatedAt": "2026-10-17T14:31:16.456Z",
+  "progress": {
+    "reviewRecordCount": 173,
+    "attributedHumanDecisions": 0,
+    "pendingRecords": 173,
+    "needsEvidenceRecords": 0,
+    "approvedSemanticLabelRecords": 0,
+    "rejectedRecords": 0,
+    "supersededRecords": 0,
+    "autoDisplayNameAllowedCount": 0,
+    "officialVerifiedPolygonCount": 0
+  },
+  "programBaseline": {
+    "gameplayZones": 206,
+    "settlementRecords": 567,
+    "ambiguousZones": 73,
+    "unseededZones": 84,
+    "officialVerifiedPolygons": 0
+  },
+  "queueSummary": {
+    "districtCount": 8,
+    "gameplayZoneCount": 206,
+    "reviewRecordCount": 173,
+    "ambiguousZoneRecords": 73,
+    "unseededZoneRecords": 84,
+    "conflictRecords": 0,
+    "duplicateNormalizedNameRecords": 5,
+    "sourceIdentityCollisionRecords": 0,
+    "officialSourceOnlyRecords": 11,
+    "officialPolygonVerifiedCount": 0
+  }
+}

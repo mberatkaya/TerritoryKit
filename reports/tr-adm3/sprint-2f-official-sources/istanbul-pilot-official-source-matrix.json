@@ -1,0 +1,219 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2f-official-source-acquisition@1",
+  "generatedAt": "2026-10-17T14:31:18.319Z",
+  "provinceCode": "34",
+  "verifiedOfficialPolygonCount": 0,
+  "candidates": [
+    {
+      "district": "Kadıköy",
+      "slug": "kadikoy",
+      "parentAdm2Id": "tr:adm2:54988432b89638439219394",
+      "priority": 1,
+      "officialProvider": "Kadıköy Belediyesi Açık Veri (CKAN)",
+      "sourceUrl": "https://acikveri.kadikoy.bel.tr/api/3/action/package_show?id=1f49bf03-cea5-40b9-9604-5f71c6f71e22",
+      "rawAccessMethod": "HTTP resource download (companion SHP bundle)",
+      "fileFormat": "claimed-shapefile-companion",
+      "sourceVersionDate": null,
+      "license": "REVIEW_REQUIRED",
+      "attribution": "Kadıköy Belediyesi",
+      "redistributionPermission": "not-approved",
+      "geometryAvailability": "blocked-invalid-bytes",
+      "featureCount": null,
+      "adm2MappingFeasibility": "requires-official-parent-code-crosswalk",
+      "status": "BLOCKED_BY_SOURCE",
+      "blockingReason": "Companion SHP files are structurally invalid / identical erroneous bytes.",
+      "registryReferences": [
+        "tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces"
+      ],
+      "evidencePaths": [
+        "reports/tr-adm3/audit/kadikoy-acquisition.json",
+        "reports/tr-adm3/sprint-2e-source-evidence/kadikoy-official-shapefile-investigation.json"
+      ],
+      "alternativeAccessPaths": [
+        {
+          "kind": "municipal-ckan-api",
+          "url": "https://acikveri.kadikoy.bel.tr/api/3/action/package_search?q=mahalle",
+          "status": "investigate-documented-export-bundles"
+        },
+        {
+          "kind": "ibb-city-map-runtime",
+          "providerId": "tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces",
+          "status": "runtime-only-unverified-redistribution"
+        }
+      ]
+    },
+    {
+      "district": "Fatih",
+      "slug": "fatih",
+      "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+      "priority": 2,
+      "officialProvider": "İstanbul Büyükşehir Belediyesi (province-level research)",
+      "sourceUrl": "datasets/registry/tr-adm3-runtime-providers.json#tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces",
+      "rawAccessMethod": "registry trace / manual authority request",
+      "fileFormat": null,
+      "sourceVersionDate": null,
+      "license": null,
+      "attribution": null,
+      "redistributionPermission": "unknown",
+      "geometryAvailability": "no-verified-vector-download",
+      "featureCount": null,
+      "adm2MappingFeasibility": "requires-official-parent-code-crosswalk",
+      "status": "NO_VERIFIED_OFFICIAL_PACKAGE",
+      "blockingReason": "İstanbul province has no approved official mahalle polygon provider in tr-adm3-official-providers.json.",
+      "registryReferences": [
+        "tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces"
+      ],
+      "evidencePaths": ["reports/tr-adm3/mahalle-identity-layer/fatih-coverage-and-provenance.json"]
+    },
+    {
+      "district": "Üsküdar",
+      "slug": "uskudar",
+      "parentAdm2Id": "tr:adm2:54988432b79162079631621",
+      "priority": 3,
+      "officialProvider": "İstanbul Büyükşehir Belediyesi (province-level research)",
+      "sourceUrl": "datasets/registry/tr-adm3-runtime-providers.json#tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces",
+      "rawAccessMethod": "registry trace / manual authority request",
+      "fileFormat": null,
+      "sourceVersionDate": null,
+      "license": null,
+      "attribution": null,
+      "redistributionPermission": "unknown",
+      "geometryAvailability": "no-verified-vector-download",
+      "featureCount": null,
+      "adm2MappingFeasibility": "requires-official-parent-code-crosswalk",
+      "status": "NO_VERIFIED_OFFICIAL_PACKAGE",
+      "blockingReason": "İstanbul province has no approved official mahalle polygon provider in tr-adm3-official-providers.json.",
+      "registryReferences": [
+        "tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces"
+      ],
+      "evidencePaths": [
+        "reports/tr-adm3/mahalle-identity-layer/uskudar-coverage-and-provenance.json"
+      ]
+    },
+    {
+      "district": "Adalar",
+      "slug": "adalar",
+      "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+      "priority": 4,
+      "officialProvider": "İstanbul Büyükşehir Belediyesi (province-level research)",
+      "sourceUrl": "datasets/registry/tr-adm3-runtime-providers.json#tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces",
+      "rawAccessMethod": "registry trace / manual authority request",
+      "fileFormat": null,
+      "sourceVersionDate": null,
+      "license": null,
+      "attribution": null,
+      "redistributionPermission": "unknown",
+      "geometryAvailability": "no-verified-vector-download",
+      "featureCount": null,
+      "adm2MappingFeasibility": "requires-official-parent-code-crosswalk",
+      "status": "NO_VERIFIED_OFFICIAL_PACKAGE",
+      "blockingReason": "İstanbul province has no approved official mahalle polygon provider in tr-adm3-official-providers.json.",
+      "registryReferences": [
+        "tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces"
+      ],
+      "evidencePaths": [
+        "reports/tr-adm3/mahalle-identity-layer/adalar-coverage-and-provenance.json"
+      ]
+    },
+    {
+      "district": "Eyüpsultan",
+      "slug": "eyupsultan",
+      "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+      "priority": 5,
+      "officialProvider": "İstanbul Büyükşehir Belediyesi (province-level research)",
+      "sourceUrl": "datasets/registry/tr-adm3-runtime-providers.json#tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces",
+      "rawAccessMethod": "registry trace / manual authority request",
+      "fileFormat": null,
+      "sourceVersionDate": null,
+      "license": null,
+      "attribution": null,
+      "redistributionPermission": "unknown",
+      "geometryAvailability": "no-verified-vector-download",
+      "featureCount": null,
+      "adm2MappingFeasibility": "requires-official-parent-code-crosswalk",
+      "status": "NO_VERIFIED_OFFICIAL_PACKAGE",
+      "blockingReason": "İstanbul province has no approved official mahalle polygon provider in tr-adm3-official-providers.json.",
+      "registryReferences": [
+        "tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces"
+      ],
+      "evidencePaths": [
+        "reports/tr-adm3/mahalle-identity-layer/eyupsultan-coverage-and-provenance.json"
+      ]
+    },
+    {
+      "district": "Çatalca",
+      "slug": "catalca",
+      "parentAdm2Id": "tr:adm2:54988432b71345383711908",
+      "priority": 6,
+      "officialProvider": "İstanbul Büyükşehir Belediyesi (province-level research)",
+      "sourceUrl": "datasets/registry/tr-adm3-runtime-providers.json#tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces",
+      "rawAccessMethod": "registry trace / manual authority request",
+      "fileFormat": null,
+      "sourceVersionDate": null,
+      "license": null,
+      "attribution": null,
+      "redistributionPermission": "unknown",
+      "geometryAvailability": "no-verified-vector-download",
+      "featureCount": null,
+      "adm2MappingFeasibility": "requires-official-parent-code-crosswalk",
+      "status": "NO_VERIFIED_OFFICIAL_PACKAGE",
+      "blockingReason": "İstanbul province has no approved official mahalle polygon provider in tr-adm3-official-providers.json.",
+      "registryReferences": [
+        "tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces"
+      ],
+      "evidencePaths": [
+        "reports/tr-adm3/mahalle-identity-layer/catalca-coverage-and-provenance.json"
+      ]
+    },
+    {
+      "district": "Başakşehir",
+      "slug": "basaksehir",
+      "parentAdm2Id": "tr:adm2:54988432b67026781349893",
+      "priority": 7,
+      "officialProvider": "İstanbul Büyükşehir Belediyesi (province-level research)",
+      "sourceUrl": "datasets/registry/tr-adm3-runtime-providers.json#tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces",
+      "rawAccessMethod": "registry trace / manual authority request",
+      "fileFormat": null,
+      "sourceVersionDate": null,
+      "license": null,
+      "attribution": null,
+      "redistributionPermission": "unknown",
+      "geometryAvailability": "no-verified-vector-download",
+      "featureCount": null,
+      "adm2MappingFeasibility": "requires-official-parent-code-crosswalk",
+      "status": "NO_VERIFIED_OFFICIAL_PACKAGE",
+      "blockingReason": "İstanbul province has no approved official mahalle polygon provider in tr-adm3-official-providers.json.",
+      "registryReferences": [
+        "tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces"
+      ],
+      "evidencePaths": [
+        "reports/tr-adm3/mahalle-identity-layer/basaksehir-coverage-and-provenance.json"
+      ]
+    },
+    {
+      "district": "Esenyurt",
+      "slug": "esenyurt",
+      "parentAdm2Id": "tr:adm2:54988432b2777192469074",
+      "priority": 8,
+      "officialProvider": "İstanbul Büyükşehir Belediyesi (province-level research)",
+      "sourceUrl": "datasets/registry/tr-adm3-runtime-providers.json#tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces",
+      "rawAccessMethod": "registry trace / manual authority request",
+      "fileFormat": null,
+      "sourceVersionDate": null,
+      "license": null,
+      "attribution": null,
+      "redistributionPermission": "unknown",
+      "geometryAvailability": "no-verified-vector-download",
+      "featureCount": null,
+      "adm2MappingFeasibility": "requires-official-parent-code-crosswalk",
+      "status": "NO_VERIFIED_OFFICIAL_PACKAGE",
+      "blockingReason": "İstanbul province has no approved official mahalle polygon provider in tr-adm3-official-providers.json.",
+      "registryReferences": [
+        "tr-adm3-runtime-34-istanbul-buyuksehir-belediyesi-sehir-haritasi-non-catalog-arcgis-traces"
+      ],
+      "evidencePaths": [
+        "reports/tr-adm3/mahalle-identity-layer/esenyurt-coverage-and-provenance.json"
+      ]
+    }
+  ]
+}
