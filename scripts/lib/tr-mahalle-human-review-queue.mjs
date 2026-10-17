@@ -18,7 +18,7 @@ function proposedActionFor(reasonCodes) {
     return "resolve-conflicting-associations";
   }
   if (reasonCodes.includes("AMBIGUOUS_MULTI_SEED_ZONE")) {
-    return "pick-primary-seed-or-split-zone";
+    return "review-settlement-label-association";
   }
   if (reasonCodes.includes("UNSEEDED_GAMEPLAY_ZONE")) {
     return "acquire-seeds-or-accept-unlabeled-zone";
@@ -41,6 +41,8 @@ export async function buildMahalleHumanReviewQueue(options) {
   const records = [];
   const settlementIndex = new Map();
   const normalizedNameIndex = new Map();
+  const gameplayZoneIds = new Set();
+  const districtSlugsLoaded = new Set();
 
   for (const pilot of ISTANBUL_SETTLEMENT_IDENTITY_PILOTS) {
     const prefix = pilot.slug;
@@ -57,6 +59,11 @@ export async function buildMahalleHumanReviewQueue(options) {
       coverage = JSON.parse(await readFile(coveragePath, "utf8"));
     } catch {
       continue;
+    }
+
+    districtSlugsLoaded.add(pilot.slug);
+    for (const summary of associations.zoneSummaries) {
+      gameplayZoneIds.add(summary.zoneId);
     }
 
     const settlementById = new Map(identities.settlements.map((row) => [row.settlementId, row]));
@@ -218,17 +225,24 @@ export async function buildMahalleHumanReviewQueue(options) {
 
   records.sort((left, right) => left.reviewPriority - right.reviewPriority);
 
+  const countRecordsWithReason = (reasonCode) =>
+    records.filter((row) => row.ambiguityReasonCodes.includes(reasonCode)).length;
+
   const summary = {
-    gameplayZoneCount: ISTANBUL_SETTLEMENT_IDENTITY_PILOTS.length,
+    districtCount: districtSlugsLoaded.size,
+    gameplayZoneCount: gameplayZoneIds.size,
     reviewRecordCount: records.length,
-    ambiguousZoneRecords: records.filter((row) =>
-      row.ambiguityReasonCodes.includes("AMBIGUOUS_MULTI_SEED_ZONE")
-    ).length,
-    unseededZoneRecords: records.filter((row) =>
-      row.ambiguityReasonCodes.includes("UNSEEDED_GAMEPLAY_ZONE")
-    ).length,
-    conflictRecords: records.filter((row) =>
-      row.ambiguityReasonCodes.includes("ASSOCIATION_CONFLICT")
+    ambiguousZoneRecords: countRecordsWithReason("AMBIGUOUS_MULTI_SEED_ZONE"),
+    unseededZoneRecords: countRecordsWithReason("UNSEEDED_GAMEPLAY_ZONE"),
+    conflictRecords: countRecordsWithReason("ASSOCIATION_CONFLICT"),
+    duplicateNormalizedNameRecords: countRecordsWithReason("DUPLICATE_NORMALIZED_NAME"),
+    sourceIdentityCollisionRecords: countRecordsWithReason("SOURCE_IDENTITY_COLLISION"),
+    officialSourceOnlyRecords: records.filter(
+      (row) =>
+        row.ambiguityReasonCodes.includes("OFFICIAL_POLYGON_UNAVAILABLE") &&
+        !row.ambiguityReasonCodes.includes("AMBIGUOUS_MULTI_SEED_ZONE") &&
+        !row.ambiguityReasonCodes.includes("UNSEEDED_GAMEPLAY_ZONE") &&
+        !row.ambiguityReasonCodes.includes("ASSOCIATION_CONFLICT")
     ).length,
     officialPolygonVerifiedCount: 0
   };

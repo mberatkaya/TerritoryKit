@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-official-polygon-ingestion-evidence@1",
-  "generatedAt": "2026-10-17T13:30:15.941Z",
+  "generatedAt": "2026-10-17T14:03:02.363Z",
   "requirements": [
     "Independent .shp/.shx/.dbf/.prj/.cpg byte streams with distinct SHA-256 per companion",
     "Valid SHP/SHX/DBF structure and CRS/PRJ metadata",

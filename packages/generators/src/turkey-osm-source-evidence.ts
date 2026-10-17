@@ -23,7 +23,10 @@ export const TURKEY_OSM_SOURCE_EVIDENCE_ISSUE_CODES = [
   "BARRIER_ADM2_LINEAGE_MISMATCH",
   "BARRIER_SNAPSHOT_DATE_MISMATCH",
   "LICENSE_NOT_IDENTIFIED",
-  "REDISTRIBUTION_NOT_APPROVED"
+  "REDISTRIBUTION_NOT_APPROVED",
+  "SOURCE_BYTES_VERIFICATION_SKIPPED",
+  "BARRIER_MANIFEST_MISSING",
+  "BARRIER_ADM2_LINEAGE_UNASSERTED"
 ] as const;
 
 export type TurkeyOsmSourceEvidenceIssueCode =
@@ -175,7 +178,9 @@ export async function evaluateTurkeyOsmSourceEvidence(
       snapshotSha256: null,
       sourceLockContentHash: null,
       issues,
-      reasonCodes
+      reasonCodes,
+      snapshotBytesVerified: false,
+      barrierLineageVerified: false
     });
   }
 
@@ -200,10 +205,13 @@ export async function evaluateTurkeyOsmSourceEvidence(
     ? sourceLock.cachePath
     : join(options.repoRoot, sourceLock.cachePath);
 
+  let snapshotBytesVerified = false;
   if (verifySnapshotBytes) {
+    let bytePathErrors = false;
     try {
       const snapshotStat = await stat(snapshotPath);
       if (snapshotStat.size !== sourceLock.fileSizeBytes) {
+        bytePathErrors = true;
         issues.push({
           code: "SOURCE_LOCK_FILE_SIZE_MISMATCH",
           severity: "error",
@@ -213,6 +221,7 @@ export async function evaluateTurkeyOsmSourceEvidence(
         reasonCodes.add("SOURCE_LOCK_FILE_SIZE_MISMATCH");
       }
     } catch {
+      bytePathErrors = true;
       issues.push({
         code: "OSM_SNAPSHOT_NOT_FOUND",
         severity: "error",
@@ -240,9 +249,38 @@ export async function evaluateTurkeyOsmSourceEvidence(
         reasonCodes.add("SOURCE_BYTES_MISSING");
       }
     }
+    snapshotBytesVerified = !bytePathErrors && verification.ok;
+  } else {
+    issues.push({
+      code: "SOURCE_BYTES_VERIFICATION_SKIPPED",
+      severity: "warning",
+      message:
+        "Snapshot byte verification was skipped (metadata-only evaluation). sourceBytesVerified remains false.",
+      path: sourceLock.cachePath
+    });
+    reasonCodes.add("SOURCE_BYTES_VERIFICATION_SKIPPED");
   }
 
   const manifest = options.barrierManifest;
+  let barrierLineageVerified = false;
+  if (!manifest) {
+    issues.push({
+      code: "BARRIER_MANIFEST_MISSING",
+      severity: "error",
+      message: "Barrier manifest required for byte-level source verification and lineage gates.",
+      path: "$.barrierManifest"
+    });
+    reasonCodes.add("BARRIER_LINEAGE_NOT_VERIFIED");
+  } else if (!options.expectedAdm2Id) {
+    issues.push({
+      code: "BARRIER_ADM2_LINEAGE_UNASSERTED",
+      severity: "error",
+      message: "expectedAdm2Id is required to assert barrier ADM2 lineage before VERIFIED status.",
+      path: "$.expectedAdm2Id"
+    });
+    reasonCodes.add("BARRIER_ADM2_LINEAGE_UNASSERTED");
+  }
+
   if (manifest) {
     if (options.expectedAdm2Id && manifest.adm2Id !== options.expectedAdm2Id) {
       issues.push({
@@ -293,6 +331,17 @@ export async function evaluateTurkeyOsmSourceEvidence(
       });
       reasonCodes.add("BARRIER_SNAPSHOT_DATE_MISMATCH");
     }
+
+    const barrierHardErrors = issues.filter(
+      (issue) =>
+        issue.severity === "error" &&
+        (issue.code.startsWith("BARRIER_") || issue.code === "BARRIER_MANIFEST_MISSING")
+    );
+    barrierLineageVerified =
+      Boolean(options.expectedAdm2Id) &&
+      barrierHardErrors.length === 0 &&
+      !reasonCodes.has("BARRIER_LINEAGE_NOT_VERIFIED") &&
+      !reasonCodes.has("BARRIER_ADM2_LINEAGE_UNASSERTED");
   }
 
   const licenseIdentified =
@@ -322,7 +371,9 @@ export async function evaluateTurkeyOsmSourceEvidence(
     sourceLockContentHash: computeTurkeyOsmSnapshotSourceLockContentHash(sourceLock),
     issues,
     reasonCodes,
-    licenseIdentified
+    licenseIdentified,
+    snapshotBytesVerified,
+    barrierLineageVerified
   });
 }
 
@@ -333,9 +384,15 @@ function finalizeEvaluation(input: {
   issues: TurkeyOsmSourceEvidenceIssue[];
   reasonCodes: Set<string>;
   licenseIdentified?: boolean;
+  snapshotBytesVerified: boolean;
+  barrierLineageVerified: boolean;
 }): TurkeyOsmSourceEvidenceEvaluation {
   const hardErrors = input.issues.filter((issue) => issue.severity === "error");
-  const sourceBytesVerified = hardErrors.length === 0 && input.snapshotSha256 !== null;
+  const sourceBytesVerified =
+    input.snapshotBytesVerified &&
+    input.barrierLineageVerified &&
+    hardErrors.length === 0 &&
+    input.snapshotSha256 !== null;
   const licenseIdentified = input.licenseIdentified ?? false;
 
   const gates: TurkeyOsmSourceEvidenceGates = {
@@ -353,6 +410,12 @@ function finalizeEvaluation(input: {
     input.reasonCodes.has("SOURCE_BYTES_MISSING")
   ) {
     sourceLockState = "unknown";
+  } else if (
+    input.reasonCodes.has("SOURCE_BYTES_VERIFICATION_SKIPPED") &&
+    hardErrors.length === 0 &&
+    input.snapshotSha256 !== null
+  ) {
+    sourceLockState = "pending";
   } else if (input.issues.length > 0) {
     sourceLockState = "pending";
   }

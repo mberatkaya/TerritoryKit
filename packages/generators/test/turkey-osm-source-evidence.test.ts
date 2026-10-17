@@ -110,7 +110,8 @@ describe("evaluateTurkeyOsmSourceEvidence", () => {
     const evaluation = await evaluateTurkeyOsmSourceEvidence({
       repoRoot,
       sourceLockPath: "source-lock.json",
-      barrierManifest: barrierManifest(lock.sha256)
+      barrierManifest: barrierManifest(lock.sha256),
+      expectedAdm2Id: "tr:adm2:fixture"
     });
 
     expect(evaluation.ok).toBe(false);
@@ -124,7 +125,8 @@ describe("evaluateTurkeyOsmSourceEvidence", () => {
     const evaluation = await evaluateTurkeyOsmSourceEvidence({
       repoRoot,
       sourceLockPath: "source-lock.json",
-      barrierManifest: barrierManifest("f".repeat(64))
+      barrierManifest: barrierManifest("f".repeat(64)),
+      expectedAdm2Id: "tr:adm2:fixture"
     });
 
     expect(evaluation.ok).toBe(false);
@@ -140,7 +142,8 @@ describe("evaluateTurkeyOsmSourceEvidence", () => {
     const evaluation = await evaluateTurkeyOsmSourceEvidence({
       repoRoot,
       sourceLockPath: "source-lock.json",
-      barrierManifest: manifest
+      barrierManifest: manifest,
+      expectedAdm2Id: "tr:adm2:fixture"
     });
 
     expect(evaluation.ok).toBe(false);
@@ -171,7 +174,8 @@ describe("evaluateTurkeyOsmSourceEvidence", () => {
     const evaluation = await evaluateTurkeyOsmSourceEvidence({
       repoRoot,
       sourceLockPath: "source-lock.json",
-      barrierManifest: barrierManifest(lock.sha256)
+      barrierManifest: barrierManifest(lock.sha256),
+      expectedAdm2Id: "tr:adm2:fixture"
     });
 
     expect(evaluation.ok).toBe(false);
@@ -185,13 +189,93 @@ describe("evaluateTurkeyOsmSourceEvidence", () => {
     const evaluation = await evaluateTurkeyOsmSourceEvidence({
       repoRoot,
       sourceLockPath: "source-lock.json",
-      barrierManifest: barrierManifest(lock.sha256)
+      barrierManifest: barrierManifest(lock.sha256),
+      expectedAdm2Id: "tr:adm2:fixture"
     });
 
     expect(evaluation.gates.sourceBytesVerified).toBe(true);
     expect(evaluation.gates.redistributionRightsApproved).toBe(false);
     expect(evaluation.redistributionApproval).toBe("pending");
     expect(evaluation.reasonCodes).toContain("REDISTRIBUTION_NOT_APPROVED");
+  });
+
+  it("does not mark bytes verified when verifySnapshotBytes is false", async () => {
+    const { repoRoot, lockPath } = await createTempRepo();
+    const lock = JSON.parse(await readFile(lockPath, "utf8")) as { sha256: string };
+
+    const evaluation = await evaluateTurkeyOsmSourceEvidence({
+      repoRoot,
+      sourceLockPath: "source-lock.json",
+      verifySnapshotBytes: false,
+      barrierManifest: barrierManifest(lock.sha256),
+      expectedAdm2Id: "tr:adm2:fixture"
+    });
+
+    expect(evaluation.gates.sourceBytesVerified).toBe(false);
+    expect(evaluation.sourceLockState).not.toBe("verified");
+    expect(evaluation.reasonCodes).toContain("SOURCE_BYTES_VERIFICATION_SKIPPED");
+    expect(evaluation.gates.licenseIdentified).toBe(true);
+    expect(evaluation.gates.redistributionRightsApproved).toBe(false);
+  });
+
+  it("fails closed without barrier manifest even when bytes match", async () => {
+    const { repoRoot } = await createTempRepo();
+
+    const evaluation = await evaluateTurkeyOsmSourceEvidence({
+      repoRoot,
+      sourceLockPath: "source-lock.json",
+      expectedAdm2Id: "tr:adm2:fixture"
+    });
+
+    expect(evaluation.gates.sourceBytesVerified).toBe(false);
+    expect(evaluation.reasonCodes).toContain("BARRIER_LINEAGE_NOT_VERIFIED");
+  });
+
+  it("fails closed without expectedAdm2Id when barrier manifest is present", async () => {
+    const { repoRoot, lockPath } = await createTempRepo();
+    const lock = JSON.parse(await readFile(lockPath, "utf8")) as { sha256: string };
+
+    const evaluation = await evaluateTurkeyOsmSourceEvidence({
+      repoRoot,
+      sourceLockPath: "source-lock.json",
+      barrierManifest: barrierManifest(lock.sha256)
+    });
+
+    expect(evaluation.gates.sourceBytesVerified).toBe(false);
+    expect(evaluation.reasonCodes).toContain("BARRIER_ADM2_LINEAGE_UNASSERTED");
+  });
+
+  it("rejects wrong snapshot bytes (checksum mismatch)", async () => {
+    const { repoRoot, pbfPath, lockPath } = await createTempRepo();
+    const lock = JSON.parse(await readFile(lockPath, "utf8"));
+    await writeFile(pbfPath, Buffer.from("tampered-bytes"));
+
+    const evaluation = await evaluateTurkeyOsmSourceEvidence({
+      repoRoot,
+      sourceLockPath: "source-lock.json",
+      barrierManifest: barrierManifest(lock.sha256),
+      expectedAdm2Id: "tr:adm2:fixture"
+    });
+
+    expect(evaluation.ok).toBe(false);
+    expect(evaluation.reasonCodes).toContain("SOURCE_SNAPSHOT_CHECKSUM_MISMATCH");
+  });
+
+  it("flags barrier snapshot date mismatch without blocking byte verification", async () => {
+    const { repoRoot, lockPath } = await createTempRepo();
+    const lock = JSON.parse(await readFile(lockPath, "utf8")) as { sha256: string };
+    const manifest = barrierManifest(lock.sha256);
+    manifest.source.snapshotDate = "2020-01-01T00:00:00.000Z";
+
+    const evaluation = await evaluateTurkeyOsmSourceEvidence({
+      repoRoot,
+      sourceLockPath: "source-lock.json",
+      barrierManifest: manifest,
+      expectedAdm2Id: "tr:adm2:fixture"
+    });
+
+    expect(evaluation.gates.sourceBytesVerified).toBe(true);
+    expect(evaluation.reasonCodes).toContain("BARRIER_SNAPSHOT_DATE_MISMATCH");
   });
 
   it("computes stable source-lock content hashes", async () => {

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-sprint-2e-district-source-evidence@1",
-  "generatedAt": "2026-10-17T13:30:15.941Z",
+  "generatedAt": "2026-10-17T14:03:02.363Z",
   "rc8Root": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
   "osmSourceLockPath": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json",
   "districts": [

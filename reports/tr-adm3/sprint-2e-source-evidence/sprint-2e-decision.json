@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-sprint-2e-decision@1",
-  "generatedAt": "2026-10-17T13:30:15.941Z",
+  "generatedAt": "2026-10-17T14:03:02.363Z",
   "baselineMain": "a802f427453b700a358de036e3e7934a81b71a83",
   "decisions": {
     "sourceIntegrity": "GO_WITH_REVIEW",
@@ -16,11 +16,15 @@
     "sourceBytesVerifiedDistricts": 8
   },
   "reviewQueueSummary": {
-    "gameplayZoneCount": 8,
+    "districtCount": 8,
+    "gameplayZoneCount": 206,
     "reviewRecordCount": 173,
     "ambiguousZoneRecords": 73,
     "unseededZoneRecords": 84,
     "conflictRecords": 0,
+    "duplicateNormalizedNameRecords": 5,
+    "sourceIdentityCollisionRecords": 0,
+    "officialSourceOnlyRecords": 11,
     "officialPolygonVerifiedCount": 0
   },
   "kadikoyStatus": "BLOCKED_BY_SOURCE",

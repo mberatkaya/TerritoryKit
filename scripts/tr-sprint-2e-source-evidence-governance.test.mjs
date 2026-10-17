@@ -19,6 +19,18 @@ test("human review queue defaults remain pending without auto display promotion"
     assert.equal(record.reviewDecision, "pending");
     assert.equal(record.autoDisplayNameAllowed, false);
   }
+  assert.equal(queue.summary.districtCount, 8);
+  assert.equal(queue.summary.gameplayZoneCount, 206);
+  assert.equal(queue.summary.reviewRecordCount, 173);
+  assert.equal(queue.summary.ambiguousZoneRecords, 73);
+  assert.equal(queue.summary.unseededZoneRecords, 84);
+  assert.equal(queue.summary.duplicateNormalizedNameRecords, 5);
+  assert.equal(queue.summary.officialSourceOnlyRecords, 11);
+  assert.doesNotMatch(
+    queue.records.find((row) => row.ambiguityReasonCodes.includes("AMBIGUOUS_MULTI_SEED_ZONE"))
+      ?.proposedAction ?? "",
+    /split-zone/
+  );
 });
 
 test("Sprint 2E decision artifacts classify Kadıköy official source as blocked", async (t) => {
@@ -36,7 +48,15 @@ test("Sprint 2E decision artifacts classify Kadıköy official source as blocked
   assert.equal(decision.kadikoyStatus, "BLOCKED_BY_SOURCE");
 });
 
-test("OSM source evidence rejects contentHash-only forgeries", async (t) => {
+test("OSM source evidence metadata-only evaluation never marks bytes verified", async (t) => {
+  const lockPath = join(REPO_ROOT, ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json");
+  try {
+    await readFile(lockPath, "utf8");
+  } catch {
+    t.skip("BLOCKED_BY_SOURCE: pinned OSM source lock unavailable in this environment");
+    return;
+  }
+
   const evaluation = await evaluateTurkeyOsmSourceEvidence({
     repoRoot: REPO_ROOT,
     sourceLockPath: ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json",
@@ -55,7 +75,46 @@ test("OSM source evidence rejects contentHash-only forgeries", async (t) => {
         format: "osm-pbf"
       },
       sourceSnapshotChecksum: "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc"
-    }
+    },
+    expectedAdm2Id: "tr:adm2:54988432b39641834885080"
+  });
+
+  assert.equal(evaluation.gates.sourceBytesVerified, false);
+  assert.equal(evaluation.sourceLockState, "pending");
+  assert.ok(evaluation.reasonCodes.includes("SOURCE_BYTES_VERIFICATION_SKIPPED"));
+  assert.equal(evaluation.gates.redistributionRightsApproved, false);
+});
+
+test("OSM source evidence verifies pinned snapshot bytes when present", async (t) => {
+  const lockPath = join(REPO_ROOT, ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json");
+  let lock;
+  try {
+    lock = JSON.parse(await readFile(lockPath, "utf8"));
+  } catch {
+    t.skip("BLOCKED_BY_SOURCE: pinned OSM source lock unavailable in this environment");
+    return;
+  }
+
+  const evaluation = await evaluateTurkeyOsmSourceEvidence({
+    repoRoot: REPO_ROOT,
+    sourceLockPath: ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json",
+    verifySnapshotBytes: true,
+    barrierManifest: {
+      adm2Id: "tr:adm2:54988432b39641834885080",
+      source: {
+        providerId: "geofabrik-osm-extracts",
+        providerName: "Geofabrik OpenStreetMap extracts",
+        sourceUrl: "https://download.geofabrik.de/europe/turkey.html",
+        sourceDatasetId: "geofabrik:europe:turkey",
+        snapshotSha256: lock.sha256,
+        snapshotDate: lock.snapshotDate,
+        license: lock.license,
+        attribution: lock.attribution,
+        format: lock.format
+      },
+      sourceSnapshotChecksum: lock.sha256
+    },
+    expectedAdm2Id: "tr:adm2:54988432b39641834885080"
   });
 
   if (!evaluation.gates.sourceBytesVerified) {
