@@ -1,5 +1,17 @@
 # @territory-kit/generators
 
+## 3.1.1
+
+### Patch Changes
+
+- 2156494: Publish the actual encoded MVT source layer and zoom overrides in render manifests so native clients do not request absent tiles or an incorrect source layer.
+
+  Decode tile content during render validation to reject stale layer/zoom inventories and corrupt tiles. Bind available ADM0–ADM3 render manifests to delivery pins so consumers can use emitted metadata instead of deployment defaults.
+
+- 2156494: Include available ADM0, ADM1 and ADM2 dataset checksums in Turkey delivery manifests so consumers can verify hierarchical viewport and point discovery under one immutable pin. Older artifact inventories remain supported.
+  - @territory-kit/core@3.1.1
+  - @territory-kit/dataset@3.1.1
+
 ## 3.1.0
 
 ### Patch Changes
