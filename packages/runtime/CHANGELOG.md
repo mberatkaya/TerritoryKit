@@ -1,5 +1,14 @@
 # @territory-kit/runtime
 
+## 3.1.1
+
+### Patch Changes
+
+- @territory-kit/adapter-core@3.1.1
+- @territory-kit/core@3.1.1
+- @territory-kit/dataset@3.1.1
+- @territory-kit/registry@3.1.1
+
 ## 3.1.0
 
 ### Patch Changes
