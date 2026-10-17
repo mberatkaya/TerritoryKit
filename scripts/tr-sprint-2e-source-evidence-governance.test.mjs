@@ -36,7 +36,7 @@ test("Sprint 2E decision artifacts classify Kadıköy official source as blocked
   assert.equal(decision.kadikoyStatus, "BLOCKED_BY_SOURCE");
 });
 
-test("OSM source evidence rejects contentHash-only forgeries", async () => {
+test("OSM source evidence rejects contentHash-only forgeries", async (t) => {
   const evaluation = await evaluateTurkeyOsmSourceEvidence({
     repoRoot: REPO_ROOT,
     sourceLockPath: ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json",
