@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-identity-lookup-smoke@1",
-  "generatedAt": "2026-10-17T12:48:26.435Z",
+  "generatedAt": "2026-10-17T13:34:24.103Z",
   "district": "Adalar",
   "parentAdm2Id": "tr:adm2:54988432b94516152709384",
   "consumerLoadOk": true,
@@ -109,7 +109,7 @@
           "attribution": "OpenStreetMap contributors, ODbL 1.0",
           "licenseState": "pending",
           "permissionStatus": "redistribution-unknown",
-          "sourceLockState": "unknown",
+          "sourceLockState": "verified",
           "redistributionEvidenceState": "pending",
           "sourceNativeId": "osm:node:1904383172"
         },
@@ -145,7 +145,7 @@
           "attribution": "OpenStreetMap contributors, ODbL 1.0",
           "licenseState": "pending",
           "permissionStatus": "redistribution-unknown",
-          "sourceLockState": "unknown",
+          "sourceLockState": "verified",
           "redistributionEvidenceState": "pending",
           "sourceNativeId": "osm:node:14116365738"
         },
@@ -181,7 +181,7 @@
           "attribution": "OpenStreetMap contributors, ODbL 1.0",
           "licenseState": "pending",
           "permissionStatus": "redistribution-unknown",
-          "sourceLockState": "unknown",
+          "sourceLockState": "verified",
           "redistributionEvidenceState": "pending",
           "sourceNativeId": "osm:node:677532052"
         },
@@ -217,7 +217,7 @@
           "attribution": "OpenStreetMap contributors, ODbL 1.0",
           "licenseState": "pending",
           "permissionStatus": "redistribution-unknown",
-          "sourceLockState": "unknown",
+          "sourceLockState": "verified",
           "redistributionEvidenceState": "pending",
           "sourceNativeId": "osm:node:14113780115"
         },
@@ -240,7 +240,7 @@
   "layerVersion": {
     "identityLayerVersion": "tr-mahalle-identity-adalar-pilot@2026-10-17",
     "gameplayDatasetVersion": "2.1.0-rc.8",
-    "contentChecksum": "fnv1a32:253aaa6a",
-    "generatedAt": "2026-10-17T12:48:26.435Z"
+    "contentChecksum": "fnv1a32:6e851c4e",
+    "generatedAt": "2026-10-17T13:34:24.103Z"
   }
 }

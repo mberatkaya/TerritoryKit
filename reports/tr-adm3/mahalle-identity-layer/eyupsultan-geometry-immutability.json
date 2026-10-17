@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-identity-immutability@1",
-  "generatedAt": "2026-10-17T12:48:26.725Z",
+  "generatedAt": "2026-10-17T13:34:24.677Z",
   "district": "Eyüpsultan",
   "parentAdm2Id": "tr:adm2:54988432b93840376788897",
   "gameplayDatasetVersion": "2.1.0-rc.8",
@@ -32,8 +32,8 @@
   "parentAdm2IdVerified": "tr:adm2:54988432b93840376788897",
   "parentAdm2GeometryHash": "fnv1a32:53826259",
   "parentAdm2NameVerified": "Eyüpsultan",
-  "identityLayerContentChecksum": "fnv1a32:9874c5c0",
+  "identityLayerContentChecksum": "fnv1a32:b4166712",
   "determinismNote": "Identity layer does not modify gameplay dataset bytes; associations are derived read-only metadata.",
-  "replayChecksum": "fnv1a32:9874c5c0",
+  "replayChecksum": "fnv1a32:b4166712",
   "determinismVerified": true
 }

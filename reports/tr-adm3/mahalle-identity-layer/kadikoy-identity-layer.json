@@ -1,7 +1,7 @@
 {
   "schemaVersion": "territorykit-settlement-identity-layer@1",
   "identityLayerVersion": "tr-mahalle-identity-kadikoy-pilot@2026-10-17",
-  "generatedAt": "2026-10-17T12:48:26.931Z",
+  "generatedAt": "2026-10-17T13:34:25.257Z",
   "parentAdm2Id": "tr:adm2:54988432b89638439219394",
   "gameplayDatasetVersion": "2.1.0-rc.8",
   "gameplayZoneCount": 28,
@@ -30,7 +30,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:2492147542"
       },
@@ -66,7 +66,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4997348814"
       },
@@ -102,7 +102,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:7817068937"
       },
@@ -138,7 +138,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:2491352363"
       },
@@ -174,7 +174,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4997074871"
       },
@@ -210,7 +210,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4997074868"
       },
@@ -246,7 +246,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:2491338600"
       },
@@ -282,7 +282,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:7813655969"
       },
@@ -318,7 +318,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:2492226732"
       },
@@ -354,7 +354,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:2492226733"
       },
@@ -390,7 +390,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:1867128457"
       },
@@ -426,7 +426,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:2437930520"
       },
@@ -462,7 +462,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:2491338601"
       },
@@ -498,7 +498,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:821887960"
       },
@@ -534,7 +534,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:7863169636"
       },
@@ -570,7 +570,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:251355458"
       },
@@ -606,7 +606,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:2492226734"
       },
@@ -642,7 +642,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:2673025441"
       },
@@ -678,7 +678,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:251355454"
       },
@@ -714,7 +714,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:7817068938"
       },
@@ -750,7 +750,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:251355452"
       },
@@ -786,7 +786,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:2492226735"
       },
@@ -822,7 +822,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4997074867"
       },
@@ -858,7 +858,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:2491830887"
       },
@@ -894,7 +894,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:251355449"
       },
@@ -930,7 +930,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4997074866"
       },
@@ -966,7 +966,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4997074870"
       },
@@ -1002,7 +1002,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4997074869"
       },
@@ -1038,7 +1038,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:7814959963"
       },
@@ -1074,7 +1074,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:4997074874"
       },
@@ -1110,7 +1110,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:2491356912"
       },
@@ -1146,7 +1146,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:7817068939"
       },
@@ -1182,7 +1182,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:6857143501"
       },
@@ -1218,7 +1218,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:7863036214"
       },
@@ -1254,7 +1254,7 @@
         "attribution": "OpenStreetMap contributors, ODbL 1.0",
         "licenseState": "pending",
         "permissionStatus": "redistribution-unknown",
-        "sourceLockState": "unknown",
+        "sourceLockState": "verified",
         "redistributionEvidenceState": "pending",
         "sourceNativeId": "osm:node:2492147541"
       },
@@ -2246,5 +2246,5 @@
       "consumerNameSemantics": "seed-locality-label"
     }
   ],
-  "contentChecksum": "fnv1a32:76833ca1"
+  "contentChecksum": "fnv1a32:02d3ec31"
 }

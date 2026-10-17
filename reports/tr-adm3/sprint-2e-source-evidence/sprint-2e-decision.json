@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2e-decision@1",
+  "generatedAt": "2026-10-17T13:30:15.941Z",
+  "baselineMain": "a802f427453b700a358de036e3e7934a81b71a83",
+  "decisions": {
+    "sourceIntegrity": "GO_WITH_REVIEW",
+    "officialMahalleAccuracy": "NO_GO",
+    "productionRelease": "NO_GO",
+    "technicalPilotPreserved": "GO_WITH_REVIEW",
+    "humanReviewQueueReady": "GO"
+  },
+  "totals": {
+    "districtCount": 8,
+    "gameplayZoneCount": 206,
+    "settlementRecordCount": 567,
+    "sourceBytesVerifiedDistricts": 8
+  },
+  "reviewQueueSummary": {
+    "gameplayZoneCount": 8,
+    "reviewRecordCount": 173,
+    "ambiguousZoneRecords": 73,
+    "unseededZoneRecords": 84,
+    "conflictRecords": 0,
+    "officialPolygonVerifiedCount": 0
+  },
+  "kadikoyStatus": "BLOCKED_BY_SOURCE",
+  "missingLegalEvidence": [
+    "Municipal redistribution approval (Kadıköy and other official sources)",
+    "Hosted tile/CDN delivery authorization",
+    "Human review completion for ambiguous associations"
+  ],
+  "paths": {
+    "districtMatrix": "reports/tr-adm3/sprint-2e-source-evidence/istanbul-eight-district-source-evidence-matrix.json",
+    "kadikoyInvestigation": "reports/tr-adm3/sprint-2e-source-evidence/kadikoy-official-shapefile-investigation.json",
+    "humanReviewQueue": "reports/tr-adm3/sprint-2e-source-evidence/human-review-queue.json",
+    "officialPolygonRequirements": "reports/tr-adm3/sprint-2e-source-evidence/official-polygon-ingestion-evidence-requirements.json"
+  }
+}

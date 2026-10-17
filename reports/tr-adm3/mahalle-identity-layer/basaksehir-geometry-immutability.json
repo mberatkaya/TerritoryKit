@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-identity-immutability@1",
-  "generatedAt": "2026-10-17T12:48:28.148Z",
+  "generatedAt": "2026-10-17T13:34:27.549Z",
   "district": "Başakşehir",
   "parentAdm2Id": "tr:adm2:54988432b67026781349893",
   "gameplayDatasetVersion": "2.1.0-rc.8",
@@ -33,8 +33,8 @@
   "parentAdm2IdVerified": "tr:adm2:54988432b67026781349893",
   "parentAdm2GeometryHash": "fnv1a32:a6599b59",
   "parentAdm2NameVerified": "Başakşehir",
-  "identityLayerContentChecksum": "fnv1a32:eea682cc",
+  "identityLayerContentChecksum": "fnv1a32:7371e166",
   "determinismNote": "Identity layer does not modify gameplay dataset bytes; associations are derived read-only metadata.",
-  "replayChecksum": "fnv1a32:eea682cc",
+  "replayChecksum": "fnv1a32:7371e166",
   "determinismVerified": true
 }

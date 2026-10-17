@@ -1,10 +1,10 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-zone-associations@1",
-  "generatedAt": "2026-10-17T12:48:28.148Z",
+  "generatedAt": "2026-10-17T13:34:27.549Z",
   "district": "Başakşehir",
   "parentAdm2Id": "tr:adm2:54988432b67026781349893",
   "identityLayerVersion": "tr-mahalle-identity-basaksehir-pilot@2026-10-17",
-  "contentChecksum": "fnv1a32:eea682cc",
+  "contentChecksum": "fnv1a32:7371e166",
   "boundaryMode": "covers",
   "associations": [
     {

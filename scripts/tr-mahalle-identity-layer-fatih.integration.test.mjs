@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
-import { readFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
@@ -11,7 +12,6 @@ const RC8_SHARD = join(
   REPO_ROOT,
   ".territory/national-geometry-remediation/candidate-rc8-impl-rev1/districts/tr_adm2_54988432b39641834885080/dataset.json"
 );
-const REPORT_DIR = join(REPO_ROOT, "reports/tr-adm3/mahalle-identity-layer");
 
 const EXPECTED = {
   zoneIdSetSha256: "334ba60d9e4bf65c2acfce7d3724e7bf430ec082ad897459a902c19d3660852f",
@@ -32,16 +32,21 @@ test("Fatih mahalle identity integration regenerates pinned rc.8 reports", async
     return;
   }
 
-  execSync("node scripts/tr-mahalle-identity-layer-fatih.mjs", {
-    cwd: REPO_ROOT,
-    stdio: "pipe",
-    env: { ...process.env }
-  });
+  const reportDir = await mkdtemp(join(tmpdir(), "tk-mahalle-fatih-"));
+  try {
+    execSync("node scripts/tr-mahalle-identity-layer-fatih.mjs", {
+      cwd: REPO_ROOT,
+      stdio: "pipe",
+      env: { ...process.env, MAHALLE_IDENTITY_REPORT_ROOT: reportDir }
+    });
 
-  const immutability = JSON.parse(
-    await readFile(join(REPORT_DIR, "fatih-geometry-immutability.json"), "utf8")
-  );
-  assert.equal(immutability.zoneIdSetSha256, EXPECTED.zoneIdSetSha256);
-  assert.equal(immutability.geometryHashSetSha256, EXPECTED.geometryHashSetSha256);
-  assert.equal(immutability.determinismVerified, true);
+    const immutability = JSON.parse(
+      await readFile(join(reportDir, "fatih-geometry-immutability.json"), "utf8")
+    );
+    assert.equal(immutability.zoneIdSetSha256, EXPECTED.zoneIdSetSha256);
+    assert.equal(immutability.geometryHashSetSha256, EXPECTED.geometryHashSetSha256);
+    assert.equal(immutability.determinismVerified, true);
+  } finally {
+    await rm(reportDir, { recursive: true, force: true });
+  }
 });

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-identity-immutability@1",
-  "generatedAt": "2026-10-17T12:48:27.132Z",
+  "generatedAt": "2026-10-17T13:34:25.803Z",
   "district": "Üsküdar",
   "parentAdm2Id": "tr:adm2:54988432b79162079631621",
   "gameplayDatasetVersion": "2.1.0-rc.8",
@@ -53,8 +53,8 @@
   "parentAdm2IdVerified": "tr:adm2:54988432b79162079631621",
   "parentAdm2GeometryHash": "fnv1a32:17cc497e",
   "parentAdm2NameVerified": "Üsküdar",
-  "identityLayerContentChecksum": "fnv1a32:9f3d653a",
+  "identityLayerContentChecksum": "fnv1a32:6042014d",
   "determinismNote": "Identity layer does not modify gameplay dataset bytes; associations are derived read-only metadata.",
-  "replayChecksum": "fnv1a32:9f3d653a",
+  "replayChecksum": "fnv1a32:6042014d",
   "determinismVerified": true
 }

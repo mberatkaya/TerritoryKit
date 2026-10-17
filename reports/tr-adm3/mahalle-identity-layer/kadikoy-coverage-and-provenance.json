@@ -1,11 +1,11 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-identity-coverage@1",
-  "generatedAt": "2026-10-17T12:48:26.931Z",
+  "generatedAt": "2026-10-17T13:34:25.257Z",
   "district": "Kadıköy",
   "parentAdm2Id": "tr:adm2:54988432b89638439219394",
   "gameplayDatasetVersion": "2.1.0-rc.8",
   "identityLayerVersion": "tr-mahalle-identity-kadikoy-pilot@2026-10-17",
-  "contentChecksum": "fnv1a32:76833ca1",
+  "contentChecksum": "fnv1a32:02d3ec31",
   "associationCoverage": {
     "seededZoneCount": 19,
     "unseededZoneCount": 9,
@@ -36,11 +36,20 @@
     "gameplayShard": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1/districts/tr_adm2_54988432b89638439219394/dataset.json",
     "rc8Root": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
     "barrierRoot": ".territory/sprint-6/calibration/barriers",
-    "osmSourceLock": null,
-    "osmSourceLockState": "unknown",
+    "osmSourceLockPath": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json",
+    "osmSourceLockSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+    "osmSourceLockContentHash": "e83f33e86d8aa71d9e42ba48fcc18a045481a74bb0c7c813f4211c311e87327c",
+    "osmSourceLockState": "verified",
+    "sourceEvidenceGates": {
+      "sourceBytesVerified": true,
+      "licenseIdentified": true,
+      "redistributionRightsApproved": false,
+      "productionEligible": false
+    },
+    "sourceEvidenceReasonCodes": ["REDISTRIBUTION_NOT_APPROVED"],
     "barrierManifestChecksum": "0991e329c11c6f98a5407d186afcd48e3e9e656496d6524dd408446cfd1bc919",
-    "datasetSourceChecksum": "aba6add23dd17515bdff2262c9d64968c3e97d21d84cb435ff810d283bc05fac",
-    "missingSourceReasonCode": "SOURCE_LOCK_MISSING"
+    "barrierSnapshotSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+    "datasetSourceChecksum": "aba6add23dd17515bdff2262c9d64968c3e97d21d84cb435ff810d283bc05fac"
   },
   "licenseChecks": {
     "osmLicense": "ODbL-1.0",
@@ -48,6 +57,7 @@
     "permissionStatus": "redistribution-unknown",
     "redistributionApproved": false,
     "redistributionEvidenceState": "pending",
+    "hostedDeliveryApproved": false,
     "commercialUseRequiresSeparateReview": true,
     "hostedTileDeliveryRequiresSeparateReview": true
   }

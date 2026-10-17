@@ -1,0 +1,179 @@
+{
+  "schemaVersion": "territorykit-tr-kadikoy-official-shapefile-investigation@1",
+  "generatedAt": "2026-10-17T13:30:20.273Z",
+  "acquisitionEvidencePath": "reports/tr-adm3/audit/kadikoy-acquisition.json",
+  "historicalAudit": {
+    "companionUrlCount": 5,
+    "uniqueSha256Count": 1,
+    "identicalBytesAcrossCompanions": true,
+    "note": "Historical acquisition returned identical bytes for .shp/.shx/.dbf/.prj/.cpg URLs — not independent companions."
+  },
+  "ckanPackageShow": {
+    "help": "https://acikveri.kadikoy.bel.tr/api/3/action/help_show?name=package_show",
+    "success": true,
+    "result": {
+      "author": "",
+      "author_email": "",
+      "creator_user_id": "16436a3c-d063-4153-b364-f8e583b25103",
+      "id": "1f49bf03-cea5-40b9-9604-5f71c6f71e22",
+      "isopen": true,
+      "license_id": "cc-by-4",
+      "license_title": "Creative Commons Attribution 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "maintainer": "",
+      "maintainer_email": "",
+      "metadata_created": "2025-02-20T07:49:15.481150",
+      "metadata_modified": "2025-02-20T07:51:38.923832",
+      "name": "kadikoy-ilcesindeki-mahalle-sinirlari",
+      "notes": "Kadıköy'de yer alan 21 mahalleye ait sınırları gösteren veridir.",
+      "num_resources": 1,
+      "num_tags": 2,
+      "organization": {
+        "id": "79a49724-e862-4af9-8174-56c3eed2620f",
+        "name": "plan-ve-proje-mudurlugu",
+        "title": "Plan ve Proje Müdürlüğü",
+        "type": "organization",
+        "description": "",
+        "image_url": "2023-02-27-224443.513917kadikoy-belediyesi-logo-small.svg",
+        "created": "2023-02-28T01:44:43.537417",
+        "is_organization": true,
+        "approval_status": "approved",
+        "state": "active"
+      },
+      "owner_org": "79a49724-e862-4af9-8174-56c3eed2620f",
+      "private": false,
+      "state": "active",
+      "title": "Kadıköy İlçesindeki Mahalle Sınırları",
+      "type": "dataset",
+      "url": "",
+      "version": "",
+      "groups": [
+        {
+          "description": "",
+          "display_name": "Demografi",
+          "id": "703f4117-eefb-4cc9-b1d6-8a8c68c22ebb",
+          "image_display_url": "https://acikveri.kadikoy.bel.tr/uploads/group/2023-03-01-145630.047965demografi.svg",
+          "name": "demografi",
+          "title": "Demografi"
+        },
+        {
+          "description": "",
+          "display_name": "Hareketlilik",
+          "id": "8421e943-3d64-4651-8016-f65a4257b046",
+          "image_display_url": "https://acikveri.kadikoy.bel.tr/uploads/group/2023-02-27-140412.587983hareketlilik.svg",
+          "name": "hareketlilik",
+          "title": "Hareketlilik"
+        },
+        {
+          "description": "",
+          "display_name": "Yapılı Çevre",
+          "id": "fca53240-bf7f-41e6-97ec-81b1e13e51e1",
+          "image_display_url": "https://acikveri.kadikoy.bel.tr/uploads/group/2023-03-01-145441.644960yapilicevre.svg",
+          "name": "yapili-cevre",
+          "title": "Yapılı Çevre"
+        }
+      ],
+      "resources": [
+        {
+          "cache_last_updated": null,
+          "cache_url": null,
+          "created": "2025-02-20T07:51:38.434398",
+          "datastore_active": false,
+          "description": "",
+          "format": "SHP",
+          "hash": "",
+          "id": "c7a8a9dc-c78f-417a-9e2c-42ec4d3436e7",
+          "last_modified": "2025-02-20T07:51:38.326369",
+          "metadata_modified": "2025-02-20T07:51:38.708957",
+          "mimetype": "application/x-qgis",
+          "mimetype_inner": null,
+          "name": "mahalle_sinir.shp",
+          "package_id": "1f49bf03-cea5-40b9-9604-5f71c6f71e22",
+          "position": 0,
+          "resource_type": null,
+          "size": 103260,
+          "state": "active",
+          "url": "https://acikveri.kadikoy.bel.tr/dataset/1f49bf03-cea5-40b9-9604-5f71c6f71e22/resource/c7a8a9dc-c78f-417a-9e2c-42ec4d3436e7/download/mahalle_sinir.shp",
+          "url_type": "upload",
+          "tracking_summary": {
+            "total": 0,
+            "recent": 0
+          }
+        }
+      ],
+      "tags": [
+        {
+          "display_name": "mahalle",
+          "id": "c62a297e-941d-45bd-99d1-a30baf6137a5",
+          "name": "mahalle",
+          "state": "active",
+          "vocabulary_id": null
+        },
+        {
+          "display_name": "sınır",
+          "id": "90ff8b90-e034-4c99-b330-4762b37ee858",
+          "name": "sınır",
+          "state": "active",
+          "vocabulary_id": null
+        }
+      ],
+      "extras": [],
+      "relationships_as_subject": [],
+      "relationships_as_object": [],
+      "tracking_summary": {
+        "total": 0,
+        "recent": 0
+      }
+    }
+  },
+  "liveProbes": [
+    {
+      "url": "https://acikveri.kadikoy.bel.tr/dataset/1f49bf03-cea5-40b9-9604-5f71c6f71e22/resource/c7a8a9dc-c78f-417a-9e2c-42ec4d3436e7/download/mahalle_sinir.shp",
+      "httpStatus": 200,
+      "contentType": "application/x-qgis",
+      "byteSize": 103260,
+      "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+      "magic": "ESRI_SHAPEFILE_MAIN",
+      "ok": true
+    },
+    {
+      "url": "https://acikveri.kadikoy.bel.tr/dataset/1f49bf03-cea5-40b9-9604-5f71c6f71e22/resource/c7a8a9dc-c78f-417a-9e2c-42ec4d3436e7/download/mahalle_sinir.shx",
+      "httpStatus": 200,
+      "contentType": "application/x-qgis",
+      "byteSize": 103260,
+      "sha256": "4967957a2801fe70dbc565c030eae24d66e750762f06f247dc2d2fdb9e3c8946",
+      "magic": "ESRI_SHAPEFILE_MAIN",
+      "ok": true
+    }
+  ],
+  "localRawDir": ".territory/source-evidence/kadikoy-official-mahalle/raw",
+  "localCompanionCount": 0,
+  "bundleReport": {
+    "schemaVersion": "territorykit-tr-adm3-municipal-shapefile-bundle@1",
+    "status": "BLOCKED_INCOMPLETE_COMPANIONS",
+    "structuralStatus": "NOT_RUN",
+    "productionEligibility": "NOT_ELIGIBLE",
+    "reasonCodes": ["MISSING_LOCAL_COMPANION_FILES"],
+    "notes": ["No trusted local raw bundle; live probes are informational only."]
+  },
+  "decision": {
+    "status": "BLOCKED_BY_SOURCE",
+    "verificationClass": "REMOTE_PROBE_ONLY",
+    "structuralStatus": "NOT_RUN",
+    "productionEligibility": "NOT_ELIGIBLE",
+    "licenseExplicit": false,
+    "redistributionRightsDocumented": false
+  },
+  "findings": [
+    "Live HTTP probes still return identical payloads for distinct companion URLs.",
+    "No explicit municipal redistribution license captured in acquisition evidence.",
+    "Canonical gameplay/identity datasets were not modified."
+  ],
+  "officialPolygonIngestionEvidenceRequirements": [
+    "Independent .shp/.shx/.dbf/.prj/.cpg byte streams with distinct SHA-256 per companion",
+    "Valid SHP/SHX/DBF structure and CRS/PRJ metadata",
+    "Mahalle name, stable ID, and parent ilçe fields extractable",
+    "Documented license + redistribution approval for derivative/hosted use",
+    "Human authorization gate before promoting to approved-official-polygon precedence"
+  ]
+}

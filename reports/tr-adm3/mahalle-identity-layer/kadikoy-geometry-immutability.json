@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-mahalle-identity-immutability@1",
-  "generatedAt": "2026-10-17T12:48:26.931Z",
+  "generatedAt": "2026-10-17T13:34:25.257Z",
   "district": "Kadıköy",
   "parentAdm2Id": "tr:adm2:54988432b89638439219394",
   "gameplayDatasetVersion": "2.1.0-rc.8",
@@ -41,8 +41,8 @@
   "parentAdm2IdVerified": "tr:adm2:54988432b89638439219394",
   "parentAdm2GeometryHash": "fnv1a32:cac09e65",
   "parentAdm2NameVerified": "Kadıköy",
-  "identityLayerContentChecksum": "fnv1a32:76833ca1",
+  "identityLayerContentChecksum": "fnv1a32:02d3ec31",
   "determinismNote": "Identity layer does not modify gameplay dataset bytes; associations are derived read-only metadata.",
-  "replayChecksum": "fnv1a32:76833ca1",
+  "replayChecksum": "fnv1a32:02d3ec31",
   "determinismVerified": true
 }
