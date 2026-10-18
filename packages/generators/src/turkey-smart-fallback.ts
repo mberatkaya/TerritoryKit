@@ -1742,7 +1742,9 @@ export function buildTurkeySmartFallback(
             corridorCapScale:
               pass === "refine" && sparseRuralOrganic ? 1.45 : sparseRuralOrganic ? 1.15 : 1,
             sortEdgesByLength: true,
-            diagnostics: organicRoutingDiagnostics
+            ...(organicRoutingDiagnostics !== undefined
+              ? { diagnostics: organicRoutingDiagnostics }
+              : {})
           }
         ).map((piece) => ({ ...piece, areaKm2: clippingAreaKm2(piece.geometry) }));
       pieces = runOrganicBoundaryRouting("initial");
