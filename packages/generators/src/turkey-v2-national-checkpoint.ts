@@ -35,9 +35,9 @@ export const TURKEY_V2_NATIONAL_CHECKPOINT_PRODUCTION_BEHAVIOR_DIGESTS: Readonly
   "packages/generators/src/turkey-smart-derived-v2-pilot.ts":
     "e8434f71615f9945c9ec9fbe4471b778ccd1102d456e3855f26a74ca1d0c8c5b",
   "packages/generators/src/turkey-playable-rescue.ts":
-    "88570acafcbb4279883713b8bd27a39e1b51485f49f5ebc8b844edaffd9d2a26",
+    "d382dcc145e519b22810c93fd70eefcbb2126cd07f41f6d3e43f4023a22dff53",
   "packages/generators/src/turkey-v2-hybrid.ts":
-    "7d9f44e058e5312bfe57e30dca424bc18669a253d5f8c25375434dd93e7dbec3",
+    "5ebca5b084dc4d25303c8f8b32e9f1b56807e05031ba02e86cb0d4819c2e6f92",
   "packages/cli/src/turkey-adm3-hybrid.ts":
     "6ff9f43412b8c994ead240e0e8194b6515dd41c5cd7fc1f03886dd5f44a19743",
   "packages/cli/src/turkey-v2-national.ts":

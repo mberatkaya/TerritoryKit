@@ -6,6 +6,7 @@ import {
   buildTurkeySmartFallbackWithAdjacency,
   resolveTurkeySmartFallbackConfiguration,
   type TurkeySmartFallbackBuildResult,
+  type TurkeySmartFallbackIssueCode,
   type TurkeySmartFallbackQualityReport
 } from "./turkey-smart-fallback.js";
 
@@ -123,6 +124,29 @@ export function isTopologySafePlayableRescue(quality: TurkeySmartFallbackQuality
     }
   }
   return quality.geometryValidationErrors.length === 0;
+}
+
+/** Soft smart-fallback quality errors intentionally tolerated after topology-safe playable rescue. */
+const PLAYABLE_RESCUE_TOLERATED_SMART_FALLBACK_ERROR_CODES: ReadonlySet<TurkeySmartFallbackIssueCode> =
+  new Set(["SMART_FALLBACK_PARTITION_DEGENERATE"]);
+
+export function countSmartFallbackGeneratedMetadataErrors(
+  result: TurkeySmartFallbackBuildResult,
+  playableRescueAccepted: boolean
+): number {
+  return result.issues.filter((issue) => {
+    if (issue.severity !== "error") {
+      return false;
+    }
+    if (
+      playableRescueAccepted &&
+      isTopologySafePlayableRescue(result.quality) &&
+      PLAYABLE_RESCUE_TOLERATED_SMART_FALLBACK_ERROR_CODES.has(issue.code)
+    ) {
+      return false;
+    }
+    return true;
+  }).length;
 }
 
 export function rankPlayableRescueCandidate(

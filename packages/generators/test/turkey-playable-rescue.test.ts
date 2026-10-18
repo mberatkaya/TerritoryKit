@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createSquareZone } from "@territory-kit/shared-testkit";
 import {
+  countSmartFallbackGeneratedMetadataErrors,
   isTopologySafePlayableRescue,
   rankPlayableRescueCandidate,
   runTurkeyAdaptivePlayableRescue,
@@ -88,6 +89,34 @@ function fakeResult(input: {
     deterministicHash: "00"
   };
 }
+
+describe("smart fallback generated metadata errors", () => {
+  it("excludes partition degeneracy when topology-safe playable rescue was accepted", () => {
+    const result = fakeResult({ ok: false, territoryCount: 3 });
+    result.quality.gates.partitionAdequacy = false;
+    result.issues.push({
+      code: "SMART_FALLBACK_PARTITION_DEGENERATE",
+      severity: "error",
+      message: "partition degenerate",
+      parentId: "tr:adm2:test"
+    });
+    expect(isTopologySafePlayableRescue(result.quality)).toBe(true);
+    expect(countSmartFallbackGeneratedMetadataErrors(result, false)).toBe(1);
+    expect(countSmartFallbackGeneratedMetadataErrors(result, true)).toBe(0);
+  });
+
+  it("still counts topology-unsafe smart errors after rescue acceptance", () => {
+    const result = fakeResult({ ok: false, territoryCount: 3 });
+    result.quality.gates.gridLikeness = false;
+    result.issues.push({
+      code: "SMART_FALLBACK_GRID_LIKENESS_REJECTED",
+      severity: "error",
+      message: "grid likeness",
+      parentId: "tr:adm2:test"
+    });
+    expect(countSmartFallbackGeneratedMetadataErrors(result, true)).toBe(1);
+  });
+});
 
 describe("playable rescue ranking", () => {
   it("prefers balanced rural partitions over oversized network-first cells", () => {

@@ -34,7 +34,10 @@ import type {
   TurkeyGameZoneFragmentStrategy,
   TurkeyGameZoneProfile
 } from "./turkey-game-zones.js";
-import { runTurkeyAdaptivePlayableRescue } from "./turkey-playable-rescue.js";
+import {
+  countSmartFallbackGeneratedMetadataErrors,
+  runTurkeyAdaptivePlayableRescue
+} from "./turkey-playable-rescue.js";
 import type {
   TurkeySmartFallbackBuildResult,
   TurkeySmartFallbackLocalitySeed,
@@ -680,6 +683,7 @@ export async function buildTurkeyV2HybridDistrict(
   let smartFallbackResult: TurkeySmartFallbackBuildResult | undefined;
   let generatedEffective: TerritoryZone[] = [];
   let generatedSliverAreaKm2 = 0;
+  let playableRescueAccepted = false;
 
   if (
     generatedOptions.enabled &&
@@ -697,7 +701,6 @@ export async function buildTurkeyV2HybridDistrict(
       const generatedStrategy = resolveGeneratedStrategy(generatedOptions);
       let candidateGeneratedZones: TerritoryZone[] = [];
       let configurationHash = "";
-      let playableRescueAccepted = false;
 
       if (generatedStrategy === "smart") {
         const smartInput = {
@@ -1040,6 +1043,7 @@ export async function buildTurkeyV2HybridDistrict(
     parentOutsideToleranceKm2,
     ...(generatedResult ? { generatedResult } : {}),
     ...(smartFallbackResult ? { smartFallbackResult } : {}),
+    playableRescueAccepted,
     deterministicHash: preliminaryHash
   });
   const deterministicHash = sha256Hex(
@@ -2404,6 +2408,7 @@ function createQualityReport(input: {
   parentOutsideToleranceKm2: number;
   generatedResult?: TurkeyGameZoneBuildResult;
   smartFallbackResult?: TurkeySmartFallbackBuildResult;
+  playableRescueAccepted?: boolean;
   deterministicHash: string;
 }): TurkeyV2HybridQualityReport {
   const finalOverlaps = countStrictSiblingGeometryOverlaps(input.zones);
@@ -2459,7 +2464,10 @@ function createQualityReport(input: {
     ).length ?? 0;
   const smartGeneratedQualityErrorCount =
     input.smartFallbackResult && !input.generatedResult
-      ? input.smartFallbackResult.issues.filter((issue) => issue.severity === "error").length
+      ? countSmartFallbackGeneratedMetadataErrors(
+          input.smartFallbackResult,
+          Boolean(input.playableRescueAccepted)
+        )
       : 0;
   const generatedQualityErrorCount =
     legacyGeneratedQualityErrorCount + smartGeneratedQualityErrorCount;

@@ -89,33 +89,65 @@ function readDistrictCode(zone) {
   return String(source).toLowerCase();
 }
 
+function metricOrNull(value) {
+  return value === undefined ? null : value;
+}
+
+function classifyPartitionOutcome(result) {
+  const zoneCount = result.effective.generated.length;
+  if (result.issues.some((issue) => issue.code === "PLAYABLE_RESCUE_SINGLE_PARENT")) {
+    return "emergency-single-parent-fallback";
+  }
+  if (zoneCount <= 0) {
+    return "failed";
+  }
+  if (zoneCount === 1) {
+    return "emergency-single-parent-fallback";
+  }
+  const rescueDecision = result.issues.find(
+    (issue) => issue.code === "PLAYABLE_RESCUE_DECISION"
+  )?.details;
+  if (rescueDecision?.acceptedAsRescue) {
+    return "low-confidence-playable-rescue";
+  }
+  if (result.issues.some((issue) => issue.code === "PLAYABLE_RESCUE_LOW_CONFIDENCE_ACCEPTED")) {
+    return "low-confidence-playable-rescue";
+  }
+  return "neighborhood-partition";
+}
+
 function metricsFromHybrid(result) {
-  const q = result.quality;
+  const q = result.smartFallbackResult?.quality;
   const rescue = result.issues.find((issue) => issue.code === "PLAYABLE_RESCUE_DECISION");
   const rescueDetails = rescue?.details ?? {};
-  const zoneCount = result.effective.generated.length;
-  const singleParent = result.issues.some(
-    (issue) => issue.code === "PLAYABLE_RESCUE_SINGLE_PARENT"
-  );
+  const partitionOutcome = classifyPartitionOutcome(result);
   return {
-    playableZoneCount: zoneCount,
-    oversizedUrbanCellShare: q.largestTerritoryAreaShare ?? null,
-    roadBarrierAlignment: q.barrierFollowingInternalBoundaryRatio ?? null,
-    longestUnsupportedStraightMeters: q.longestUnsupportedStraightChainMeters ?? null,
-    invalidPolygonCount: q.invalidGeometryCount ?? 0,
-    finalCoveragePercent: q.parentCoveragePercent ?? null,
-    qualityOk: q.ok,
-    smartAcceptance: result.coverage.smartAcceptanceStatus ?? null,
+    playableZoneCount: result.effective.generated.length,
+    oversizedUrbanCellShare: metricOrNull(q?.largestTerritoryAreaShare),
+    roadBarrierAlignment: metricOrNull(q?.barrierFollowingInternalBoundaryRatio),
+    longestUnsupportedStraightMeters: metricOrNull(q?.longestUnsupportedStraightChainMeters),
+    invalidPolygonCount: metricOrNull(q?.invalidGeometryCount),
+    finalCoveragePercent: result.coverage.finalCoveragePercent ?? null,
+    qualityOk: result.quality.ok,
+    smartAcceptance: q?.acceptanceStatus ?? null,
     rescueMode: rescueDetails.selectedMode ?? null,
     rescueStage: rescueDetails.selectedStage ?? null,
-    partitionOutcome:
-      singleParent || zoneCount <= 1
-        ? "emergency-single-parent-fallback"
-        : zoneCount <= 0
-          ? "failed"
-          : "neighborhood-partition",
+    partitionOutcome,
     deterministicRebuildHash: result.deterministicHash ?? null
   };
+}
+
+function sampleDistrictStatus(metrics) {
+  if (metrics.partitionOutcome === "failed" || metrics.playableZoneCount <= 0) {
+    return "FAILED";
+  }
+  if (metrics.partitionOutcome === "emergency-single-parent-fallback") {
+    return "EMERGENCY_SINGLE_PARENT";
+  }
+  if (metrics.partitionOutcome === "low-confidence-playable-rescue") {
+    return "LOW_CONFIDENCE";
+  }
+  return "OK";
 }
 
 function bboxFromZones(zones) {
@@ -240,12 +272,7 @@ async function main() {
     );
     rows.push({
       ...spec,
-      status:
-        metrics.playableZoneCount > 0
-          ? metrics.partitionOutcome === "emergency-single-parent-fallback"
-            ? "EMERGENCY_SINGLE_PARENT"
-            : "OK"
-          : "ZERO_PLAYABLE",
+      status: sampleDistrictStatus(metrics),
       metrics
     });
   }

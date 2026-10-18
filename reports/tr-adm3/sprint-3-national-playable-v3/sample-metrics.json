@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-sprint-3-playable-v3-sample@1",
-  "generatedAt": "2026-10-18T17:14:27.062Z",
+  "generatedAt": "2026-10-18T20:52:38.485Z",
   "parentDatasetPath": "datasets/generated/countries/TR/dataset.json",
   "barrierRoot": ".territory/sprint-6/calibration/barriers",
   "mapPreviewRoot": ".territory/sprint-3/playable-v3/map-preview",
@@ -13,17 +13,17 @@
       "status": "OK",
       "metrics": {
         "playableZoneCount": 30,
-        "oversizedUrbanCellShare": null,
-        "roadBarrierAlignment": null,
-        "longestUnsupportedStraightMeters": null,
+        "oversizedUrbanCellShare": 0.107124,
+        "roadBarrierAlignment": 1,
+        "longestUnsupportedStraightMeters": 0,
         "invalidPolygonCount": 0,
-        "finalCoveragePercent": null,
+        "finalCoveragePercent": 100,
         "qualityOk": true,
-        "smartAcceptance": null,
+        "smartAcceptance": "USABLE_HIGH_CONFIDENCE",
         "rescueMode": "network-first",
         "rescueStage": "network-faces",
         "partitionOutcome": "neighborhood-partition",
-        "deterministicRebuildHash": "b7ce7d85c72ab09902e44a35b8a5eae4858649e086de918a1894e2d3658adef3"
+        "deterministicRebuildHash": "d2702bfeef6788aaff314b807db8c1f2897cf87f704d158c670f38ca163f3fce"
       }
     },
     {
@@ -34,17 +34,17 @@
       "status": "OK",
       "metrics": {
         "playableZoneCount": 32,
-        "oversizedUrbanCellShare": null,
-        "roadBarrierAlignment": null,
-        "longestUnsupportedStraightMeters": null,
+        "oversizedUrbanCellShare": 0.058709,
+        "roadBarrierAlignment": 0.364203,
+        "longestUnsupportedStraightMeters": 3851.861363,
         "invalidPolygonCount": 0,
-        "finalCoveragePercent": null,
+        "finalCoveragePercent": 99.999982,
         "qualityOk": true,
-        "smartAcceptance": null,
+        "smartAcceptance": "USABLE_LOW_CONFIDENCE",
         "rescueMode": "organic",
         "rescueStage": "organic-routing-repair",
         "partitionOutcome": "neighborhood-partition",
-        "deterministicRebuildHash": "2bc14a1518f2ebc117a20c14432b6235e731c4be489ed9f3c3b2eee4291b7243"
+        "deterministicRebuildHash": "9b2c5b871b6dfbf76d375786bc7668ce110500ae25d04524b3db262ae5cb79b4"
       }
     },
     {
@@ -55,17 +55,17 @@
       "status": "OK",
       "metrics": {
         "playableZoneCount": 14,
-        "oversizedUrbanCellShare": null,
-        "roadBarrierAlignment": null,
-        "longestUnsupportedStraightMeters": null,
+        "oversizedUrbanCellShare": 0.201181,
+        "roadBarrierAlignment": 1,
+        "longestUnsupportedStraightMeters": 0,
         "invalidPolygonCount": 0,
-        "finalCoveragePercent": null,
+        "finalCoveragePercent": 99.999816,
         "qualityOk": true,
-        "smartAcceptance": null,
+        "smartAcceptance": "USABLE_LOW_CONFIDENCE",
         "rescueMode": "network-first",
         "rescueStage": "network-faces",
         "partitionOutcome": "neighborhood-partition",
-        "deterministicRebuildHash": "bc7e8f95740b3219fe85a68aec245487cca2e23bb3117b7849b3b8b23fa7bdc1"
+        "deterministicRebuildHash": "d49a6b341592956c361cc6e79ac06e0b6d55947e4b5ea128d4b9f4f577aaee1a"
       }
     },
     {
@@ -76,17 +76,17 @@
       "status": "OK",
       "metrics": {
         "playableZoneCount": 36,
-        "oversizedUrbanCellShare": null,
-        "roadBarrierAlignment": null,
-        "longestUnsupportedStraightMeters": null,
+        "oversizedUrbanCellShare": 0.055327,
+        "roadBarrierAlignment": 0.433306,
+        "longestUnsupportedStraightMeters": 4971.778757,
         "invalidPolygonCount": 0,
-        "finalCoveragePercent": null,
+        "finalCoveragePercent": 99.999999,
         "qualityOk": true,
-        "smartAcceptance": null,
+        "smartAcceptance": "USABLE_LOW_CONFIDENCE",
         "rescueMode": "organic",
         "rescueStage": "organic-routing-repair",
         "partitionOutcome": "neighborhood-partition",
-        "deterministicRebuildHash": "390f441cdaf93ecff570c08b6fa6197155eb666df837c4af7b89a6bcf9198ef6"
+        "deterministicRebuildHash": "e82f8be00ed35c84509a477332d92a6cc789fd0125157148cab103d05bbd3542"
       }
     },
     {
@@ -97,17 +97,17 @@
       "status": "OK",
       "metrics": {
         "playableZoneCount": 41,
-        "oversizedUrbanCellShare": null,
-        "roadBarrierAlignment": null,
-        "longestUnsupportedStraightMeters": null,
+        "oversizedUrbanCellShare": 0.104659,
+        "roadBarrierAlignment": 1,
+        "longestUnsupportedStraightMeters": 0,
         "invalidPolygonCount": 0,
-        "finalCoveragePercent": null,
+        "finalCoveragePercent": 99.999926,
         "qualityOk": true,
-        "smartAcceptance": null,
+        "smartAcceptance": "USABLE_HIGH_CONFIDENCE",
         "rescueMode": "network-first",
         "rescueStage": "network-faces",
         "partitionOutcome": "neighborhood-partition",
-        "deterministicRebuildHash": "6386e37ada28c7050b5accf9f3bd6b0c029caaf202ec15a00f366b1d381ee6ec"
+        "deterministicRebuildHash": "3817c6be01d0173d7335e10a21503af92b3ed51ea50c4556d46f1358edcdaa08"
       }
     },
     {
@@ -118,17 +118,17 @@
       "status": "OK",
       "metrics": {
         "playableZoneCount": 28,
-        "oversizedUrbanCellShare": null,
-        "roadBarrierAlignment": null,
-        "longestUnsupportedStraightMeters": null,
+        "oversizedUrbanCellShare": 0.232528,
+        "roadBarrierAlignment": 1,
+        "longestUnsupportedStraightMeters": 0,
         "invalidPolygonCount": 0,
-        "finalCoveragePercent": null,
+        "finalCoveragePercent": 100,
         "qualityOk": true,
-        "smartAcceptance": null,
+        "smartAcceptance": "USABLE_HIGH_CONFIDENCE",
         "rescueMode": "network-first",
         "rescueStage": "network-faces",
         "partitionOutcome": "neighborhood-partition",
-        "deterministicRebuildHash": "afb6680c2cfb091769dc1365610280039e947cf34bd9642a04a94d8ba9647bac"
+        "deterministicRebuildHash": "d9ac5ae523e5138c7215d14269004d39780a5eaf8889f4b53b5cb689428e374b"
       }
     },
     {
@@ -139,17 +139,17 @@
       "status": "OK",
       "metrics": {
         "playableZoneCount": 16,
-        "oversizedUrbanCellShare": null,
-        "roadBarrierAlignment": null,
-        "longestUnsupportedStraightMeters": null,
+        "oversizedUrbanCellShare": 0.12345,
+        "roadBarrierAlignment": 0.433386,
+        "longestUnsupportedStraightMeters": 8849.798511,
         "invalidPolygonCount": 0,
-        "finalCoveragePercent": null,
+        "finalCoveragePercent": 100,
         "qualityOk": true,
-        "smartAcceptance": null,
+        "smartAcceptance": "USABLE_LOW_CONFIDENCE",
         "rescueMode": "organic",
         "rescueStage": "organic-routing-repair",
         "partitionOutcome": "neighborhood-partition",
-        "deterministicRebuildHash": "c1a91ded2ad18d3c23df393d6aacdba4e3a1931df34249f96547352b179ecc35"
+        "deterministicRebuildHash": "f38d06e0d315dd25af9f61f21a883fefac481f7c001c6224ceae1cabff4abecb"
       }
     },
     {
@@ -160,17 +160,17 @@
       "status": "OK",
       "metrics": {
         "playableZoneCount": 12,
-        "oversizedUrbanCellShare": null,
-        "roadBarrierAlignment": null,
-        "longestUnsupportedStraightMeters": null,
+        "oversizedUrbanCellShare": 0.54743,
+        "roadBarrierAlignment": 0.625495,
+        "longestUnsupportedStraightMeters": 16577.973883,
         "invalidPolygonCount": 0,
-        "finalCoveragePercent": null,
+        "finalCoveragePercent": 99.9999,
         "qualityOk": true,
-        "smartAcceptance": null,
+        "smartAcceptance": "USABLE_LOW_CONFIDENCE",
         "rescueMode": "network-first",
         "rescueStage": "network-faces",
         "partitionOutcome": "neighborhood-partition",
-        "deterministicRebuildHash": "da98863e4343e76b44d5ce8e4df4b20815ef6277214a62df89c2108caa725f6d"
+        "deterministicRebuildHash": "62c1a668a8128f06d9f36ccb0c3aab1d5fdcce07181487f1a331be64fa9bcab4"
       }
     },
     {
@@ -181,17 +181,17 @@
       "status": "OK",
       "metrics": {
         "playableZoneCount": 40,
-        "oversizedUrbanCellShare": null,
-        "roadBarrierAlignment": null,
-        "longestUnsupportedStraightMeters": null,
+        "oversizedUrbanCellShare": 0.102432,
+        "roadBarrierAlignment": 0.432444,
+        "longestUnsupportedStraightMeters": 2624.301112,
         "invalidPolygonCount": 0,
-        "finalCoveragePercent": null,
+        "finalCoveragePercent": 99.999996,
         "qualityOk": true,
-        "smartAcceptance": null,
+        "smartAcceptance": "USABLE_LOW_CONFIDENCE",
         "rescueMode": "network-first",
         "rescueStage": "network-faces",
         "partitionOutcome": "neighborhood-partition",
-        "deterministicRebuildHash": "ec2ab8dc0cabe37f0c0a550304d6cb713d87b601fbda62360e1ecfb6700eddd9"
+        "deterministicRebuildHash": "3b69faff681f84a5d19a6b57a4e218fe9c940f1ec6f526d9518d2eb88f305ddf"
       }
     }
   ]
