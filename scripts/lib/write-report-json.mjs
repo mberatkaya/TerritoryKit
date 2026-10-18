@@ -29,3 +29,12 @@ export async function writeReportGeoJson(absolutePath, value) {
   const formatted = await formatReportArtifact(absolutePath, raw);
   await writeFile(absolutePath, formatted, "utf8");
 }
+
+/**
+ * MapLibre HTML previews use the same Prettier pipeline as JSON reports.
+ */
+export async function writeReportHtml(absolutePath, body) {
+  const raw = body.endsWith("\n") ? body : `${body}\n`;
+  const formatted = await formatReportArtifact(absolutePath, raw);
+  await writeFile(absolutePath, formatted, "utf8");
+}

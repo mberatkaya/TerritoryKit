@@ -15,6 +15,7 @@
       "explicitFailureReason": null,
       "metrics": {
         "playableZoneCount": 30,
+        "uncoveredAreaKm2": null,
         "oversizedUrbanCellShare": 0.107124,
         "roadBarrierAlignment": 1,
         "longestUnsupportedStraightMeters": 0,
@@ -24,6 +25,8 @@
         "qualityOk": true,
         "smartAcceptance": "USABLE_HIGH_CONFIDENCE",
         "rescueMode": "network-first",
+        "rescueStage": "network-faces",
+        "partitionOutcome": "neighborhood-partition",
         "deterministicRebuildHash": "401dab5fc5f069c0f21ddd2ec3ebd0ac39d2125cdba8bf94884daf59865c6357"
       }
     },
@@ -35,6 +38,7 @@
       "explicitFailureReason": null,
       "metrics": {
         "playableZoneCount": 14,
+        "uncoveredAreaKm2": null,
         "oversizedUrbanCellShare": 0.201181,
         "roadBarrierAlignment": 1,
         "longestUnsupportedStraightMeters": 0,
@@ -44,6 +48,8 @@
         "qualityOk": true,
         "smartAcceptance": "USABLE_LOW_CONFIDENCE",
         "rescueMode": "network-first",
+        "rescueStage": "network-faces",
+        "partitionOutcome": "neighborhood-partition",
         "deterministicRebuildHash": "f7da12e40e19d4a9ecb8f1da971ac1036696e373adf8ae0727cf3cbc87580eec"
       }
     },
@@ -55,6 +61,7 @@
       "explicitFailureReason": null,
       "metrics": {
         "playableZoneCount": 18,
+        "uncoveredAreaKm2": null,
         "oversizedUrbanCellShare": 0.103685,
         "roadBarrierAlignment": 0.325815,
         "longestUnsupportedStraightMeters": 10101.609798,
@@ -64,6 +71,8 @@
         "qualityOk": true,
         "smartAcceptance": "USABLE_LOW_CONFIDENCE",
         "rescueMode": "organic",
+        "rescueStage": "organic-routing-repair",
+        "partitionOutcome": "neighborhood-partition",
         "deterministicRebuildHash": "841b1f4063f0fca8c69d767406a47253d23acf8498e51e77265b30ef357dfada"
       }
     }

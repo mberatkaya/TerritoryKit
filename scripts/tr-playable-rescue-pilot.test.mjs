@@ -23,9 +23,14 @@ test("playable rescue pilot report is stable and records explicit district statu
   for (const row of json.pilots) {
     assert.ok(row.archetype);
     assert.ok(row.status);
-    if (row.status === "OK") {
+    if (row.status === "OK" || row.status === "EMERGENCY_SINGLE_PARENT") {
       assert.ok(row.metrics.playableZoneCount > 0);
       assert.ok(row.metrics.finalCoveragePercent >= 99.9);
+      assert.ok(row.metrics.partitionOutcome);
+      assert.notEqual(row.metrics.partitionOutcome, "failed");
+      if (row.status === "EMERGENCY_SINGLE_PARENT") {
+        assert.equal(row.metrics.partitionOutcome, "emergency-single-parent-fallback");
+      }
     } else {
       assert.ok(row.explicitFailureReason);
     }

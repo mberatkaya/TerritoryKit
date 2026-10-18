@@ -8,7 +8,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { existsSync } from "node:fs";
-import { writeReportJson } from "./lib/write-report-json.mjs";
+import { writeReportGeoJson, writeReportHtml, writeReportJson } from "./lib/write-report-json.mjs";
 
 function resolveRegressionInputs(repoRoot, fixtureRoot) {
   const localBarrierRoot = path.join(repoRoot, ".territory/sprint-6/calibration/barriers");
@@ -59,22 +59,55 @@ function readDistrictCode(zone) {
   return String(source).toLowerCase();
 }
 
+function metricOrNull(value) {
+  return value === undefined ? null : value;
+}
+
+function classifyPartitionOutcome(result) {
+  const zoneCount = result.effective.generated.length;
+  if (result.issues.some((issue) => issue.code === "PLAYABLE_RESCUE_SINGLE_PARENT")) {
+    return "emergency-single-parent-fallback";
+  }
+  if (zoneCount <= 0) {
+    return "failed";
+  }
+  if (zoneCount === 1) {
+    return "emergency-single-parent-fallback";
+  }
+  const rescueDecision = result.issues.find(
+    (issue) => issue.code === "PLAYABLE_RESCUE_DECISION"
+  )?.details;
+  if (rescueDecision?.acceptedAsRescue) {
+    return "low-confidence-playable-rescue";
+  }
+  if (result.issues.some((issue) => issue.code === "PLAYABLE_RESCUE_LOW_CONFIDENCE_ACCEPTED")) {
+    return "low-confidence-playable-rescue";
+  }
+  return "neighborhood-partition";
+}
+
 function metricsFromHybrid(result) {
   const q = result.smartFallbackResult?.quality;
+  const uncovered =
+    result.coverage.uncoveredAreaKm2 ?? result.coverage.uncoveredInsideParentKm2 ?? null;
   return {
     playableZoneCount: result.effective.generated.length,
-    uncoveredAreaKm2: result.coverage.uncoveredAreaKm2 ?? result.coverage.uncoveredInsideParentKm2,
-    oversizedUrbanCellShare: q?.largestTerritoryAreaShare ?? null,
-    roadBarrierAlignment: q?.barrierFollowingInternalBoundaryRatio ?? null,
-    longestUnsupportedStraightMeters: q?.longestUnsupportedStraightChainMeters ?? null,
-    invalidPolygonCount: q?.invalidGeometryCount ?? 0,
-    overlapAreaKm2: q?.overlapAreaKm2 ?? 0,
+    uncoveredAreaKm2: metricOrNull(uncovered),
+    oversizedUrbanCellShare: metricOrNull(q?.largestTerritoryAreaShare),
+    roadBarrierAlignment: metricOrNull(q?.barrierFollowingInternalBoundaryRatio),
+    longestUnsupportedStraightMeters: metricOrNull(q?.longestUnsupportedStraightChainMeters),
+    invalidPolygonCount: q?.invalidGeometryCount ?? null,
+    overlapAreaKm2: metricOrNull(q?.overlapAreaKm2),
     finalCoveragePercent: result.coverage.finalCoveragePercent,
     qualityOk: result.quality.ok,
     smartAcceptance: q?.acceptanceStatus ?? null,
     rescueMode:
       result.issues.find((issue) => issue.code === "PLAYABLE_RESCUE_DECISION")?.details
         ?.selectedMode ?? null,
+    rescueStage:
+      result.issues.find((issue) => issue.code === "PLAYABLE_RESCUE_DECISION")?.details
+        ?.selectedStage ?? null,
+    partitionOutcome: classifyPartitionOutcome(result),
     deterministicRebuildHash: result.smartFallbackResult?.deterministicHash ?? null
   };
 }
@@ -97,38 +130,40 @@ function bboxFromZones(zones) {
 function buildMapPreviewHtml(input) {
   const [west, south, east, north] = input.bbox;
   const center = [(west + east) / 2, (south + north) / 2];
-  return `<!DOCTYPE html>
+  return `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <title>${input.title}</title>
   <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
   <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
-  <style>html,body,#map{margin:0;height:100%;}</style>
+  <style>
+    html, body, #map { margin: 0; height: 100%; }
+  </style>
 </head>
 <body>
   <div id="map"></div>
   <script>
     const map = new maplibregl.Map({
-      container: 'map',
-      style: 'https://demotiles.maplibre.org/style.json',
+      container: "map",
+      style: "https://demotiles.maplibre.org/style.json",
       center: [${center[0]}, ${center[1]}],
       zoom: ${input.zoom}
     });
     map.fitBounds([[${west}, ${south}], [${east}, ${north}]], { padding: 40, maxZoom: ${input.zoom} });
-    map.on('load', () => {
-      map.addSource('zones', { type: 'geojson', data: '${input.geojsonName}' });
+    map.on("load", () => {
+      map.addSource("zones", { type: "geojson", data: "${input.geojsonName}" });
       map.addLayer({
-        id: 'zones-fill',
-        type: 'fill',
-        source: 'zones',
-        paint: { 'fill-color': '#2563eb', 'fill-opacity': 0.35 }
+        id: "zones-fill",
+        type: "fill",
+        source: "zones",
+        paint: { "fill-color": "#2563eb", "fill-opacity": 0.35 }
       });
       map.addLayer({
-        id: 'zones-line',
-        type: 'line',
-        source: 'zones',
-        paint: { 'line-color': '#1e3a8a', 'line-width': 1.2 }
+        id: "zones-line",
+        type: "line",
+        source: "zones",
+        paint: { "line-color": "#1e3a8a", "line-width": 1.2 }
       });
     });
   </script>
@@ -207,23 +242,28 @@ async function main() {
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "");
     const geojsonName = `${slug}-after.geojson`;
-    await writeReportJson(path.join(OUTPUT_ROOT, "previews", geojsonName), geojson);
+    await writeReportGeoJson(path.join(OUTPUT_ROOT, "previews", geojsonName), geojson);
     const bbox = bboxFromZones(
       result.effective.generated.length ? result.effective.generated : [district]
     );
-    await writeFile(
+    await writeReportHtml(
       path.join(OUTPUT_ROOT, "previews", `${slug}-after.html`),
       buildMapPreviewHtml({
         title: `${pilot.label} playable rescue preview`,
         bbox,
         geojsonName,
         zoom: pilot.archetype === "rural" || pilot.archetype === "rural-town" ? 10 : 12
-      }),
-      "utf8"
+      })
     );
+    const partitionOutcome = metrics.partitionOutcome;
     rows.push({
       ...pilot,
-      status: metrics.playableZoneCount > 0 ? "OK" : "ZERO_PLAYABLE",
+      status:
+        metrics.playableZoneCount > 0
+          ? partitionOutcome === "emergency-single-parent-fallback"
+            ? "EMERGENCY_SINGLE_PARENT"
+            : "OK"
+          : "ZERO_PLAYABLE",
       explicitFailureReason:
         rescueFailure?.details?.failureReason ??
         (metrics.playableZoneCount === 0 ? "ZERO_PLAYABLE_ZONES" : null),
