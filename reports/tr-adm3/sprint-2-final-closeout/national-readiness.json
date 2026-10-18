@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2-final-national-readiness@1",
+  "istanbulPilotEvidence": {
+    "osmResearchCandidates": 228,
+    "ringValidPolygonCount": 228,
+    "spatialConflictFreeCandidateCount": 104,
+    "spatialConflictCount": 124,
+    "identityAmbiguousCount": 3,
+    "semanticIdentityMatchCount": 223,
+    "humanSemanticApprovals": 0,
+    "officialVerifiedPolygons": 0
+  },
+  "technicalReadiness": "PARTIAL",
+  "sprint3NationalCandidateProgram": "NO_GO",
+  "blockers": [
+    "No verified official mahalle polygons",
+    "0 human semantic approvals on OSM research candidates",
+    "ODbL redistribution / hosted delivery not cleared",
+    "124 OSM polygons with spatial conflict flags",
+    "District-level OSM coverage gaps remain"
+  ],
+  "decision": "NO_GO",
+  "generatedAt": "2026-10-18T13:13:27.072Z",
+  "headSha": "45f989f22d3b6b0e4e44b5a414e00b5ab0c63668"
+}

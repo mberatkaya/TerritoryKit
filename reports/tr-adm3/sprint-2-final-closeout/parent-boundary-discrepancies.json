@@ -1,0 +1,237 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2-final-parent-boundary-discrepancies@1",
+  "districts": [
+    {
+      "parentAdm2Id": "tr:adm2:54988432b2777192469074",
+      "sourceA": {
+        "label": "rc8-adm2-parent",
+        "geometryHash": "a572557bdfe331382ec73685be20f6d3c940d104d49a5ebae4391b257b7228e5",
+        "areaKm2": 42.694726
+      },
+      "sourceB": {
+        "label": "osm-research-candidate-union",
+        "polygonCount": 42,
+        "summedZoneAreaKm2": 42.48697
+      },
+      "difference": {
+        "uncoveredParentAreaKm2": 0.707429,
+        "uncoveredParentAreaM2": 707429,
+        "uncoveredParentAreaRatio": 0.016569,
+        "outsideParentPolygonCount": 18,
+        "totalOutsideParentAreaKm2": 0.499662,
+        "siblingOverlapCount": 0
+      },
+      "impactedOsmRelationIds": [
+        8796814, 9472571, 9472572, 9472573, 9620409, 9620429, 9620430, 9620439, 9620447, 9642513,
+        9642514, 9642530, 9642609, 9642610, 9642611, 9642612, 9642748, 9642765
+      ],
+      "evidenceCategory": "ADM2_VS_OSM_BOUNDARY_DISAGREEMENT",
+      "confidence": "medium",
+      "recommendedDisposition": "human-spatial-review-required",
+      "note": "Does not mutate rc.8 ADM2 or clip OSM polygons; disagreement may reflect source date, coastline, or classification differences."
+    },
+    {
+      "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+      "sourceA": {
+        "label": "rc8-adm2-parent",
+        "geometryHash": "cdf83ea755df99890981af268111b5774277d779a542973d8ca9d11b01a684ce",
+        "areaKm2": 16.362351
+      },
+      "sourceB": {
+        "label": "osm-research-candidate-union",
+        "polygonCount": 48,
+        "summedZoneAreaKm2": 12.767659
+      },
+      "difference": {
+        "uncoveredParentAreaKm2": 3.769778,
+        "uncoveredParentAreaM2": 3769778,
+        "uncoveredParentAreaRatio": 0.230393,
+        "outsideParentPolygonCount": 12,
+        "totalOutsideParentAreaKm2": 0.175037,
+        "siblingOverlapCount": 1
+      },
+      "impactedOsmRelationIds": [
+        2463274, 2463371, 2468218, 2468242, 7648811, 7648812, 7648813, 7648822, 7648823, 7648832,
+        7648851, 7648854
+      ],
+      "evidenceCategory": "ADM2_VS_OSM_BOUNDARY_DISAGREEMENT",
+      "confidence": "medium",
+      "recommendedDisposition": "human-spatial-review-required",
+      "note": "Does not mutate rc.8 ADM2 or clip OSM polygons; disagreement may reflect source date, coastline, or classification differences."
+    },
+    {
+      "parentAdm2Id": "tr:adm2:54988432b67026781349893",
+      "sourceA": {
+        "label": "rc8-adm2-parent",
+        "geometryHash": "ffa2b53d2fa234e6d9858b1f6697cf56c99171992c6d0ddded1e55bb7c700f5b",
+        "areaKm2": 106.077893
+      },
+      "sourceB": {
+        "label": "osm-research-candidate-union",
+        "polygonCount": 11,
+        "summedZoneAreaKm2": 106.609325
+      },
+      "difference": {
+        "uncoveredParentAreaKm2": 0.483274,
+        "uncoveredParentAreaM2": 483274,
+        "uncoveredParentAreaRatio": 0.004556,
+        "outsideParentPolygonCount": 8,
+        "totalOutsideParentAreaKm2": 1.014756,
+        "siblingOverlapCount": 0
+      },
+      "impactedOsmRelationIds": [
+        9446484, 9461411, 9461512, 9475439, 9475447, 9475448, 9475457, 9475458
+      ],
+      "evidenceCategory": "ADM2_VS_OSM_BOUNDARY_DISAGREEMENT",
+      "confidence": "medium",
+      "recommendedDisposition": "human-spatial-review-required",
+      "note": "Does not mutate rc.8 ADM2 or clip OSM polygons; disagreement may reflect source date, coastline, or classification differences."
+    },
+    {
+      "parentAdm2Id": "tr:adm2:54988432b71345383711908",
+      "sourceA": {
+        "label": "rc8-adm2-parent",
+        "geometryHash": "1034530390e3e78cd1b20c9cbac90f08b6b4dc7aec8279f4d0c200ba0d001f67",
+        "areaKm2": 1134.742228
+      },
+      "sourceB": {
+        "label": "osm-research-candidate-union",
+        "polygonCount": 39,
+        "summedZoneAreaKm2": 1135.657332
+      },
+      "difference": {
+        "uncoveredParentAreaKm2": 10.155513,
+        "uncoveredParentAreaM2": 10155513,
+        "uncoveredParentAreaRatio": 0.00895,
+        "outsideParentPolygonCount": 24,
+        "totalOutsideParentAreaKm2": 11.06864,
+        "siblingOverlapCount": 0
+      },
+      "impactedOsmRelationIds": [
+        9460089, 9467293, 9471951, 9483017, 9530301, 9531481, 9531489, 9531802, 9533391, 9533888,
+        9533923, 9536586, 9536790, 9617980, 9618269, 9618646, 9618736, 9619158, 9619159, 9619392,
+        9619871, 9619872, 9619873, 9619874
+      ],
+      "evidenceCategory": "ADM2_VS_OSM_BOUNDARY_DISAGREEMENT",
+      "confidence": "medium",
+      "recommendedDisposition": "human-spatial-review-required",
+      "note": "Does not mutate rc.8 ADM2 or clip OSM polygons; disagreement may reflect source date, coastline, or classification differences."
+    },
+    {
+      "parentAdm2Id": "tr:adm2:54988432b79162079631621",
+      "sourceA": {
+        "label": "rc8-adm2-parent",
+        "geometryHash": "1c8666b7e09aa9b41241edf6108d7ce93eec99e5d7d76bf924f2ac78de241d11",
+        "areaKm2": 35.465976
+      },
+      "sourceB": {
+        "label": "osm-research-candidate-union",
+        "polygonCount": 33,
+        "summedZoneAreaKm2": 35.316761
+      },
+      "difference": {
+        "uncoveredParentAreaKm2": 0.532547,
+        "uncoveredParentAreaM2": 532547,
+        "uncoveredParentAreaRatio": 0.015016,
+        "outsideParentPolygonCount": 19,
+        "totalOutsideParentAreaKm2": 0.383318,
+        "siblingOverlapCount": 0
+      },
+      "impactedOsmRelationIds": [
+        3866327, 3866328, 3866467, 3866468, 9441289, 9463224, 9463235, 9463242, 9463258, 9463280,
+        9463313, 9463324, 9463364, 9463376, 9463391, 9463396, 9463416, 9463420, 9463421
+      ],
+      "evidenceCategory": "ADM2_VS_OSM_BOUNDARY_DISAGREEMENT",
+      "confidence": "medium",
+      "recommendedDisposition": "human-spatial-review-required",
+      "note": "Does not mutate rc.8 ADM2 or clip OSM polygons; disagreement may reflect source date, coastline, or classification differences."
+    },
+    {
+      "parentAdm2Id": "tr:adm2:54988432b89638439219394",
+      "sourceA": {
+        "label": "rc8-adm2-parent",
+        "geometryHash": "82cec4996ab3e5fef74efe0a81b2aabe7a4c230175d058bb781acbcaf11c68ed",
+        "areaKm2": 24.932846
+      },
+      "sourceB": {
+        "label": "osm-research-candidate-union",
+        "polygonCount": 21,
+        "summedZoneAreaKm2": 25.086214
+      },
+      "difference": {
+        "uncoveredParentAreaKm2": 0.351114,
+        "uncoveredParentAreaM2": 351114,
+        "uncoveredParentAreaRatio": 0.014082,
+        "outsideParentPolygonCount": 15,
+        "totalOutsideParentAreaKm2": 0.504399,
+        "siblingOverlapCount": 0
+      },
+      "impactedOsmRelationIds": [
+        8852697, 9286607, 9286614, 9286639, 9441032, 9441078, 9441339, 9443987, 9444034, 9444841,
+        9444876, 9444902, 9444910, 9444927, 9444949
+      ],
+      "evidenceCategory": "ADM2_VS_OSM_BOUNDARY_DISAGREEMENT",
+      "confidence": "medium",
+      "recommendedDisposition": "human-spatial-review-required",
+      "note": "Does not mutate rc.8 ADM2 or clip OSM polygons; disagreement may reflect source date, coastline, or classification differences."
+    },
+    {
+      "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+      "sourceA": {
+        "label": "rc8-adm2-parent",
+        "geometryHash": "401ed775e2bf306375f75e7cb97df576e5a96709f3cecb212c85eddc94a60719",
+        "areaKm2": 231.181772
+      },
+      "sourceB": {
+        "label": "osm-research-candidate-union",
+        "polygonCount": 29,
+        "summedZoneAreaKm2": 230.571
+      },
+      "difference": {
+        "uncoveredParentAreaKm2": 2.022401,
+        "uncoveredParentAreaM2": 2022401,
+        "uncoveredParentAreaRatio": 0.008748,
+        "outsideParentPolygonCount": 23,
+        "totalOutsideParentAreaKm2": 1.411661,
+        "siblingOverlapCount": 0
+      },
+      "impactedOsmRelationIds": [
+        9356990, 9357003, 9381516, 9381520, 9381554, 9381555, 9381563, 9381694, 9381765, 9381807,
+        9381849, 9381850, 9381851, 9381869, 9675979, 9677347, 9677564, 9677566, 9677569, 9677586,
+        9677587, 9677588, 13986753
+      ],
+      "evidenceCategory": "ADM2_VS_OSM_BOUNDARY_DISAGREEMENT",
+      "confidence": "medium",
+      "recommendedDisposition": "human-spatial-review-required",
+      "note": "Does not mutate rc.8 ADM2 or clip OSM polygons; disagreement may reflect source date, coastline, or classification differences."
+    },
+    {
+      "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+      "sourceA": {
+        "label": "rc8-adm2-parent",
+        "geometryHash": "4268652df407e641d75972e088c52273ee5e64d83217af93e1c74049634fefc3",
+        "areaKm2": 11.426621
+      },
+      "sourceB": {
+        "label": "osm-research-candidate-union",
+        "polygonCount": 5,
+        "summedZoneAreaKm2": 11.340181
+      },
+      "difference": {
+        "uncoveredParentAreaKm2": 0.500197,
+        "uncoveredParentAreaM2": 500197,
+        "uncoveredParentAreaRatio": 0.043775,
+        "outsideParentPolygonCount": 5,
+        "totalOutsideParentAreaKm2": 0.413764,
+        "siblingOverlapCount": 0
+      },
+      "impactedOsmRelationIds": [9460393, 9460394, 9460395, 9460396, 9460397],
+      "evidenceCategory": "ADM2_VS_OSM_BOUNDARY_DISAGREEMENT",
+      "confidence": "medium",
+      "recommendedDisposition": "human-spatial-review-required",
+      "note": "Does not mutate rc.8 ADM2 or clip OSM polygons; disagreement may reflect source date, coastline, or classification differences."
+    }
+  ],
+  "generatedAt": "2026-10-18T13:13:27.072Z",
+  "headSha": "45f989f22d3b6b0e4e44b5a414e00b5ab0c63668"
+}
