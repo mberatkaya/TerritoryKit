@@ -1700,38 +1700,55 @@ export function buildTurkeySmartFallback(
         routeApplied: 0,
         longestUnroutedMeters: 0
       };
+      const roadDensity = configuration.profileDecision.signals.roadDensityKmPerKm2;
+      const sparseRuralOrganic = roadDensity < 3;
       const realSegments = barriers
         .filter((b) => b.strength > 0)
         .flatMap((b) => lineSegments(b.coordinates));
-      pieces = routeOrganicSharedBoundaries(
-        pieces,
-        barriers,
-        configuration.profileDecision.signals.roadDensityKmPerKm2,
-        (a, b) =>
-          segmentAlignedLengthMeters({ a, b }, realSegments, {
-            toleranceMeters: configuration.alignmentToleranceMeters,
-            parallelSinTolerance: BARRIER_PARALLEL_SIN_TOLERANCE
-          }),
-        (geometry) => {
-          const area = clippingAreaKm2(geometry);
-          try {
-            regularizeTurkeySmartFallbackGeometry(
-              clippingMultiPolygonToTerritoryGeometry(geometry)!
-            );
-          } catch {
-            return false;
-          }
-          return (
-            area + AREA_TOLERANCE_KM2 >= configuration.minAreaKm2 &&
-            area <= configuration.maxAreaKm2 + AREA_TOLERANCE_KM2
-          );
-        },
-        {
-          minChordMeters: 500,
-          maxExistingSupportRatio: 0.5,
-          diagnostics: organicRoutingDiagnostics
+      const acceptOrganicRoutedGeometry = (geometry: ClippingMultiPolygon) => {
+        const area = clippingAreaKm2(geometry);
+        try {
+          regularizeTurkeySmartFallbackGeometry(clippingMultiPolygonToTerritoryGeometry(geometry)!);
+        } catch {
+          return false;
         }
-      ).map((piece) => ({ ...piece, areaKm2: clippingAreaKm2(piece.geometry) }));
+        return (
+          area + AREA_TOLERANCE_KM2 >= configuration.minAreaKm2 &&
+          area <= configuration.maxAreaKm2 + AREA_TOLERANCE_KM2
+        );
+      };
+      const runOrganicBoundaryRouting = (pass: "initial" | "refine"): typeof pieces =>
+        routeOrganicSharedBoundaries(
+          pieces,
+          barriers,
+          roadDensity,
+          (a, b) =>
+            segmentAlignedLengthMeters({ a, b }, realSegments, {
+              toleranceMeters: configuration.alignmentToleranceMeters,
+              parallelSinTolerance: BARRIER_PARALLEL_SIN_TOLERANCE
+            }),
+          acceptOrganicRoutedGeometry,
+          {
+            minChordMeters:
+              pass === "refine" ? (sparseRuralOrganic ? 200 : 350) : sparseRuralOrganic ? 350 : 500,
+            maxExistingSupportRatio:
+              pass === "refine"
+                ? sparseRuralOrganic
+                  ? 0.88
+                  : 0.72
+                : sparseRuralOrganic
+                  ? 0.62
+                  : 0.5,
+            corridorCapScale:
+              pass === "refine" && sparseRuralOrganic ? 1.45 : sparseRuralOrganic ? 1.15 : 1,
+            sortEdgesByLength: true,
+            diagnostics: organicRoutingDiagnostics
+          }
+        ).map((piece) => ({ ...piece, areaKm2: clippingAreaKm2(piece.geometry) }));
+      pieces = runOrganicBoundaryRouting("initial");
+      if (sparseRuralOrganic) {
+        pieces = runOrganicBoundaryRouting("refine");
+      }
     }
   }
 
@@ -2826,7 +2843,8 @@ export async function buildTurkeyOrganicSmartFallbackWithAdjacency(
     ...input,
     options: { ...input.options, organic: true }
   }).configuration.profileDecision.signals;
-  const initialCount = organicSignals.roadDensityKmPerKm2 < 3 ? 16 : 32;
+  const sparseRuralOrganic = organicSignals.roadDensityKmPerKm2 < 3;
+  const initialCount = sparseRuralOrganic ? 16 : 32;
   const organicInput: TurkeySmartFallbackInput = {
     ...input,
     options: {
@@ -2862,6 +2880,9 @@ export async function buildTurkeyOrganicSmartFallbackWithAdjacency(
       });
       if (retry.quality.ok) return retry;
     }
+  }
+  if (input.options?.organicGeographicRefinement && result.quality.ok) {
+    return result;
   }
   if (result.quality.ok || result.quality.gates.maximumArea) return result;
   return buildTurkeySmartFallbackWithAdjacency({

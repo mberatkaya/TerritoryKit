@@ -60,11 +60,11 @@
       "status": "OK",
       "explicitFailureReason": null,
       "metrics": {
-        "playableZoneCount": 18,
+        "playableZoneCount": 16,
         "uncoveredAreaKm2": null,
-        "oversizedUrbanCellShare": 0.103685,
-        "roadBarrierAlignment": 0.325815,
-        "longestUnsupportedStraightMeters": 10101.609798,
+        "oversizedUrbanCellShare": 0.12345,
+        "roadBarrierAlignment": 0.433386,
+        "longestUnsupportedStraightMeters": 8849.798511,
         "invalidPolygonCount": 0,
         "overlapAreaKm2": 0,
         "finalCoveragePercent": 100,
@@ -73,7 +73,76 @@
         "rescueMode": "organic",
         "rescueStage": "organic-routing-repair",
         "partitionOutcome": "neighborhood-partition",
-        "deterministicRebuildHash": "841b1f4063f0fca8c69d767406a47253d23acf8498e51e77265b30ef357dfada"
+        "deterministicRebuildHash": "f8a2f3da0f311cd700eb1803e45a42f38e220f460d05146761c502cf5b021ed9"
+      }
+    },
+    {
+      "label": "Eyüpsultan",
+      "archetype": "mixed-urban-rural",
+      "id": "tr:adm2:54988432b93840376788897",
+      "status": "OK",
+      "explicitFailureReason": null,
+      "metrics": {
+        "playableZoneCount": 19,
+        "uncoveredAreaKm2": null,
+        "oversizedUrbanCellShare": 0.523728,
+        "roadBarrierAlignment": 0.932509,
+        "longestUnsupportedStraightMeters": 3611.46062,
+        "invalidPolygonCount": 0,
+        "overlapAreaKm2": 0,
+        "finalCoveragePercent": 100,
+        "qualityOk": true,
+        "smartAcceptance": "USABLE_LOW_CONFIDENCE",
+        "rescueMode": "network-first",
+        "rescueStage": "network-faces",
+        "partitionOutcome": "neighborhood-partition",
+        "deterministicRebuildHash": "2ba9f4e486d7de24beed42ec53713636a7cc9518070bd0c216a606ccf4c32041"
+      }
+    },
+    {
+      "label": "Kadıköy",
+      "archetype": "dense-urban",
+      "id": "tr:adm2:54988432b89638439219394",
+      "status": "OK",
+      "explicitFailureReason": null,
+      "metrics": {
+        "playableZoneCount": 28,
+        "uncoveredAreaKm2": null,
+        "oversizedUrbanCellShare": 0.192326,
+        "roadBarrierAlignment": 1,
+        "longestUnsupportedStraightMeters": 0,
+        "invalidPolygonCount": 0,
+        "overlapAreaKm2": 0,
+        "finalCoveragePercent": 100,
+        "qualityOk": true,
+        "smartAcceptance": "USABLE_HIGH_CONFIDENCE",
+        "rescueMode": "network-first",
+        "rescueStage": "network-faces",
+        "partitionOutcome": "neighborhood-partition",
+        "deterministicRebuildHash": "49a42b600c146e4e05154c13fe97b4c3bca83893c51c57cfe800bde66c10e040"
+      }
+    },
+    {
+      "label": "Üsküdar",
+      "archetype": "urban-coastal",
+      "id": "tr:adm2:54988432b79162079631621",
+      "status": "OK",
+      "explicitFailureReason": null,
+      "metrics": {
+        "playableZoneCount": 40,
+        "uncoveredAreaKm2": null,
+        "oversizedUrbanCellShare": 0.087339,
+        "roadBarrierAlignment": 1,
+        "longestUnsupportedStraightMeters": 0,
+        "invalidPolygonCount": 0,
+        "overlapAreaKm2": 0,
+        "finalCoveragePercent": 99.99989,
+        "qualityOk": true,
+        "smartAcceptance": "USABLE_HIGH_CONFIDENCE",
+        "rescueMode": "network-first",
+        "rescueStage": "network-faces",
+        "partitionOutcome": "neighborhood-partition",
+        "deterministicRebuildHash": "b82003fbe23f7276939f7ad89cee154c4e46a36af3740739481cf7944d8a928f"
       }
     }
   ]
