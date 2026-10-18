@@ -3,6 +3,9 @@ import type { DemoAdminLevel, DemoConfig, DemoMode, RequestedDemoMode } from "./
 
 export const DEFAULT_DATASET_ID = "territory-kit-tr";
 export const DEFAULT_DATASET_VERSION = "latest-compatible";
+export const LOCAL_PLAYABLE_DATASET_ID = "territory-kit-tr-v2-playable";
+export const LOCAL_PLAYABLE_DATASET_VERSION = "2.1.0-playable-v3";
+export const LOCAL_PLAYABLE_CANDIDATE_MOUNT = "/territory-candidate";
 
 interface DemoEnv {
   VITE_TERRITORY_DEMO_MODE?: string;
@@ -15,6 +18,7 @@ interface DemoEnv {
   VITE_MAP_STYLE_URL?: string;
   VITE_TERRITORY_BASE_PATH?: string;
   VITE_TERRITORY_TELEMETRY_ENABLED?: string;
+  VITE_TERRITORY_LOCAL_CANDIDATE_URL?: string;
   BASE_URL?: string;
 }
 
@@ -37,32 +41,68 @@ export function readDemoConfig(
   const registryUrlError = registryUrl ? validateRegistryUrl(registryUrl) : undefined;
   const deliveryError = deliveryManifestUrl ? validateRegistryUrl(deliveryManifestUrl) : undefined;
   const datasetVersion = trimToUndefined(env.VITE_TERRITORY_DATASET_VERSION);
+  const localCandidateBase = trimToUndefined(env.VITE_TERRITORY_LOCAL_CANDIDATE_URL);
+  const localPlayable = requestedMode === "local-playable" || Boolean(localCandidateBase);
+  const localRegistryUrl = localPlayable
+    ? joinLocalCandidateUrl(localCandidateBase, "registry.json")
+    : undefined;
+  const localDeliveryUrl = localPlayable
+    ? joinLocalCandidateUrl(localCandidateBase, "delivery-manifest.json")
+    : undefined;
+  const localSmartCoverageUrl = localPlayable
+    ? joinLocalCandidateUrl(localCandidateBase, "smart-coverage.json")
+    : undefined;
+  const effectiveRegistryUrl = registryUrl ?? localRegistryUrl;
+  const effectiveDeliveryUrl = deliveryManifestUrl ?? localDeliveryUrl;
+  const effectiveRegistryError = effectiveRegistryUrl
+    ? validateRegistryUrl(effectiveRegistryUrl)
+    : undefined;
+  const effectiveDeliveryError = effectiveDeliveryUrl
+    ? validateRegistryUrl(effectiveDeliveryUrl)
+    : undefined;
   const mode: DemoMode =
     requestedMode === "fixture"
       ? "fixture"
-      : registryUrl && !registryUrlError
-        ? "registry"
-        : "fixture";
+      : localPlayable && effectiveRegistryUrl && !effectiveRegistryError
+        ? "local-playable"
+        : effectiveRegistryUrl && !effectiveRegistryError
+          ? "registry"
+          : "fixture";
   const configError =
     registryUrlError ??
     deliveryError ??
+    effectiveRegistryError ??
+    effectiveDeliveryError ??
     (requestedMode === "registry" && !registryUrl
       ? "VITE_TERRITORY_DEMO_MODE=registry requires VITE_TERRITORY_REGISTRY_URL."
+      : undefined) ??
+    (requestedMode === "local-playable" && !effectiveRegistryUrl
+      ? "local-playable requires bootstrap registry.json under .territory (pnpm data:tr:sprint4:playable-map:bootstrap)."
       : undefined);
+
+  const resolvedDatasetId =
+    trimToUndefined(env.VITE_TERRITORY_DATASET_ID) ??
+    (localPlayable ? LOCAL_PLAYABLE_DATASET_ID : DEFAULT_DATASET_ID);
+  const resolvedDatasetVersion =
+    datasetVersion ?? (localPlayable ? LOCAL_PLAYABLE_DATASET_VERSION : DEFAULT_DATASET_VERSION);
 
   return {
     mode,
     requestedMode,
-    datasetId: trimToUndefined(env.VITE_TERRITORY_DATASET_ID) ?? DEFAULT_DATASET_ID,
-    datasetVersion: datasetVersion ?? DEFAULT_DATASET_VERSION,
-    datasetVersionPinned: Boolean(datasetVersion),
-    allowPrerelease: parseBoolean(env.VITE_TERRITORY_ALLOW_PRERELEASE) ?? false,
+    datasetId: resolvedDatasetId,
+    datasetVersion: resolvedDatasetVersion,
+    datasetVersionPinned: Boolean(datasetVersion) || localPlayable,
+    allowPrerelease: parseBoolean(env.VITE_TERRITORY_ALLOW_PRERELEASE) ?? localPlayable,
     basePath: trimToUndefined(env.VITE_TERRITORY_BASE_PATH) ?? env.BASE_URL ?? "/",
     telemetryEnabled: parseBoolean(env.VITE_TERRITORY_TELEMETRY_ENABLED) ?? false,
-    ...(registryUrl ? { registryUrl } : {}),
-    ...(deliveryManifestUrl ? { deliveryManifestUrl } : {}),
+    ...(effectiveRegistryUrl ? { registryUrl: effectiveRegistryUrl } : {}),
+    ...(effectiveDeliveryUrl ? { deliveryManifestUrl: effectiveDeliveryUrl } : {}),
     ...(deliveryManifestHash ? { deliveryManifestHash } : {}),
     ...(styleUrl ? { styleUrl } : {}),
+    ...(localPlayable
+      ? { localCandidateUrl: localCandidateBase ?? LOCAL_PLAYABLE_CANDIDATE_MOUNT }
+      : {}),
+    ...(localSmartCoverageUrl ? { smartCoverageUrl: localSmartCoverageUrl } : {}),
     ...(configError ? { configError } : {})
   };
 }
@@ -78,7 +118,7 @@ export function readUrlState(
   return {
     ...(territoryId ? { territoryId } : {}),
     ...(isDemoAdminLevel(level) ? { level } : {}),
-    ...(mode === "fixture" || mode === "registry" ? { mode } : {}),
+    ...(mode === "fixture" || mode === "registry" || mode === "local-playable" ? { mode } : {}),
     ...(registryUrl ? { registryUrl } : {})
   };
 }
@@ -127,11 +167,17 @@ export function validateRegistryUrl(value: string): string | undefined {
 }
 
 function readRequestedMode(value: string | undefined | null): RequestedDemoMode {
-  if (value === "fixture" || value === "registry") {
+  if (value === "fixture" || value === "registry" || value === "local-playable") {
     return value;
   }
 
   return "auto";
+}
+
+function joinLocalCandidateUrl(base: string | undefined, relativePath: string): string {
+  const mount = trimToUndefined(base) ?? LOCAL_PLAYABLE_CANDIDATE_MOUNT;
+  const normalized = mount.endsWith("/") ? mount.slice(0, -1) : mount;
+  return `${normalized}/${relativePath}`;
 }
 
 function parseBoolean(value: string | undefined): boolean | undefined {

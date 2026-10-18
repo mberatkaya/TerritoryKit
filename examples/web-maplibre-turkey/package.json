@@ -7,6 +7,7 @@
     "build": "vite build",
     "clean": "rimraf dist .turbo",
     "dev": "vite --host 0.0.0.0",
+    "dev:national-playable": "VITE_TERRITORY_DEMO_MODE=local-playable vite --host 0.0.0.0",
     "perf:budget": "pnpm build && node scripts/performance-budget.mjs",
     "lint": "eslint src --ext .ts",
     "test": "vitest run --passWithNoTests",

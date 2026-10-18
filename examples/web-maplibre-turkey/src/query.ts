@@ -333,7 +333,11 @@ export function createMetadataFromRegistryDataset(input: {
       ADM0: input.dataset.levels.includes("ADM0") ? "verified" : "unknown",
       ADM1: input.dataset.levels.includes("ADM1") ? "verified" : "unknown",
       ADM2: input.dataset.levels.includes("ADM2") ? "verified" : "unknown",
-      ADM3: turkeyNationalCoverage.levels.ADM3.status
+      ADM3:
+        ((input.dataset.coverage as { adm3ZoneCount?: number } | undefined)?.adm3ZoneCount ?? 0) >=
+        20_000
+          ? "verified"
+          : turkeyNationalCoverage.levels.ADM3.status
     },
     ...(input.registryHash ? { registryHash: input.registryHash } : {})
   };

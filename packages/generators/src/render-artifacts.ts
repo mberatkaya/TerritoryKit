@@ -58,6 +58,7 @@ export interface TerritoryRenderPathBuildOptions {
   mvtPolicy?: TerritoryMvtPolicyLimits;
   buildDate?: string;
   force?: boolean;
+  includeQueryFile?: boolean;
 }
 
 export interface TerritoryRenderValidateResult {
@@ -223,7 +224,10 @@ export async function buildTerritoryRenderArtifactPath(
     ...(options.maxZoom !== undefined ? { maxZoom: options.maxZoom } : {}),
     ...(options.policies ? { policies: options.policies } : {}),
     ...(options.mvtPolicy ? { mvtPolicy: options.mvtPolicy } : {}),
-    ...(options.buildDate ? { buildDate: options.buildDate } : {})
+    ...(options.buildDate ? { buildDate: options.buildDate } : {}),
+    ...(options.includeQueryFile !== undefined
+      ? { includeQueryFile: options.includeQueryFile }
+      : {})
   });
 
   await writeRenderFilesAtomically(resolve(options.outputPath), result.files, {
