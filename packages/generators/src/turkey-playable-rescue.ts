@@ -125,21 +125,31 @@ export function rankPlayableRescueCandidate(
   const okBonus = q.ok ? 6 : isTopologySafePlayableRescue(q) ? 2.5 : 0;
   const oversizePenalty =
     q.largestTerritoryAreaShare > 0.35
-      ? (q.largestTerritoryAreaShare - 0.35) * 12
+      ? (q.largestTerritoryAreaShare - 0.35) * (context.sparseRuralLikely ? 16 : 12)
       : q.largestTerritoryAreaShare > 0.25
-        ? (q.largestTerritoryAreaShare - 0.25) * 6
+        ? (q.largestTerritoryAreaShare - 0.25) * (context.sparseRuralLikely ? 9 : 6)
         : 0;
   const unsupportedPenalty =
     (q.longestUnsupportedStraightChainMeters / districtScaleMeters) *
-    (context.coastalOrIslandLikely ? 7 : 4);
-  const alignmentBonus = Math.min(1, q.barrierFollowingInternalBoundaryRatio) * 3;
+    (context.sparseRuralLikely ? 6.5 : context.coastalOrIslandLikely ? 7 : 4);
+  const alignmentBonus = Math.min(1, q.barrierFollowingInternalBoundaryRatio) * 3.5;
   const zoneCountBonus = context.sparseRuralLikely
     ? Math.min(q.territoryCount, 24) / 24
     : Math.min(q.territoryCount, 48) / 48;
   const coastalZeroSeamBonus =
     context.coastalOrIslandLikely && q.longestUnsupportedStraightChainMeters < 25 ? 1.5 : 0;
   const ruralBalanceBonus =
-    context.sparseRuralLikely && q.largestTerritoryAreaShare <= 0.22 ? 1.25 : 0;
+    context.sparseRuralLikely &&
+    q.largestTerritoryAreaShare <= 0.22 &&
+    q.barrierFollowingInternalBoundaryRatio >= 0.22
+      ? 1.25
+      : 0;
+  const fragmentPenalty =
+    context.sparseRuralLikely &&
+    q.meanSyntheticBoundaryRatio > 0.65 &&
+    q.barrierFollowingInternalBoundaryRatio < 0.4
+      ? (q.meanSyntheticBoundaryRatio - 0.65) * 4
+      : 0;
 
   return (
     okBonus +
@@ -148,10 +158,41 @@ export function rankPlayableRescueCandidate(
     coastalZeroSeamBonus +
     ruralBalanceBonus +
     q.meanQualityScore -
-    q.meanSyntheticBoundaryRatio * 2 -
+    q.meanSyntheticBoundaryRatio * (context.sparseRuralLikely ? 2.75 : 2) -
     unsupportedPenalty -
-    oversizePenalty
+    oversizePenalty -
+    fragmentPenalty
   );
+}
+
+export function selectPlayableRescueCandidate(
+  eligible: readonly TurkeyPlayableRescueCandidateRecord[],
+  context: TurkeyPlayableRescueContext
+): TurkeyPlayableRescueCandidateRecord | undefined {
+  if (!eligible.length) return undefined;
+  let selected = [...eligible].sort((left, right) => right.rank - left.rank)[0]!;
+  if (!context.sparseRuralLikely) return selected;
+
+  const organic = eligible.find((row) => row.mode === "organic" && row.result.quality.ok);
+  const network = eligible.find((row) => row.mode === "network-first" && row.result.quality.ok);
+  if (selected.mode === "network-first" && organic && network) {
+    const nq = network.result.quality;
+    const oq = organic.result.quality;
+    const materiallySmallerLargest =
+      oq.largestTerritoryAreaShare < nq.largestTerritoryAreaShare - 0.1;
+    const seamsNotMuchWorse =
+      oq.longestUnsupportedStraightChainMeters <= nq.longestUnsupportedStraightChainMeters * 1.35 &&
+      oq.barrierFollowingInternalBoundaryRatio + 0.12 >= nq.barrierFollowingInternalBoundaryRatio;
+    const balancedOrganicOverOversizedNetwork =
+      nq.largestTerritoryAreaShare > 0.28 &&
+      oq.largestTerritoryAreaShare <= 0.18 &&
+      oq.barrierFollowingInternalBoundaryRatio >= 0.33 &&
+      oq.longestUnsupportedStraightChainMeters <= 11_000;
+    if ((materiallySmallerLargest && seamsNotMuchWorse) || balancedOrganicOverOversizedNetwork) {
+      selected = organic;
+    }
+  }
+  return selected;
 }
 
 export function summarizePlayableRescueFailure(
@@ -308,7 +349,13 @@ export async function runTurkeyAdaptivePlayableRescue(input: {
       });
     }
     try {
-      const organicResult = await buildTurkeyOrganicSmartFallbackWithAdjacency(input.smartInput);
+      const organicResult = await buildTurkeyOrganicSmartFallbackWithAdjacency({
+        ...input.smartInput,
+        options: {
+          ...input.smartInput.options,
+          ...(context.sparseRuralLikely ? { organicGeographicRefinement: true } : {})
+        }
+      });
       built.push({
         stage: stageForMode("organic"),
         mode: "organic",
@@ -364,18 +411,7 @@ export async function runTurkeyAdaptivePlayableRescue(input: {
   const eligible = built.filter(
     (row) => row.accepted || (row.topologySafe && row.result.zones.length > 0)
   );
-  let selected = [...eligible].sort((left, right) => right.rank - left.rank)[0];
-  if (selected && context.sparseRuralLikely && selected.mode === "network-first") {
-    const organic = eligible.find((row) => row.mode === "organic" && row.result.quality.ok);
-    if (
-      organic &&
-      selected.result.quality.largestTerritoryAreaShare > 0.3 &&
-      organic.result.quality.largestTerritoryAreaShare <
-        selected.result.quality.largestTerritoryAreaShare - 0.1
-    ) {
-      selected = organic;
-    }
-  }
+  const selected = selectPlayableRescueCandidate(eligible, context);
   const failureReason = selected ? null : summarizePlayableRescueFailure(built, precisionFailure);
 
   if (failureReason) {

@@ -43,9 +43,13 @@ export function routeOrganicSharedBoundaries<T extends Piece>(
   options: {
     minChordMeters?: number;
     maxExistingSupportRatio?: number;
+    corridorCapScale?: number;
+    sortEdgesByLength?: boolean;
     diagnostics?: TurkeyOrganicRoutingDiagnostics;
   } = {}
 ): T[] {
+  const corridorCapScale = options.corridorCapScale ?? 1;
+  const sortEdgesByLength = options.sortEdgesByLength ?? true;
   const pieces = input.map((p) => ({
     ...p,
     geometry: options.diagnostics
@@ -165,8 +169,24 @@ export function routeOrganicSharedBoundaries<T extends Piece>(
       .filter((edge) => edge.meters >= 2_000)
       .sort((a, b) => b.meters - a.meters || a.owner - b.owner)
       .slice(0, 8);
-  for (const [, owners] of [...shared].sort(([a], [b]) => a.localeCompare(b))) {
-    if (owners.length !== 2 || owners[0]!.owner === owners[1]!.owner) continue;
+  const sharedEdges = [...shared.entries()].filter(
+    ([, owners]) => owners.length === 2 && owners[0]!.owner !== owners[1]!.owner
+  );
+  if (sortEdgesByLength) {
+    sharedEdges.sort(([, leftOwners], [, rightOwners]) => {
+      const left = leftOwners[0]!;
+      const right = rightOwners[0]!;
+      const leftCos = Math.cos((((left.a[1] + left.b[1]) / 2) * Math.PI) / 180);
+      const rightCos = Math.cos((((right.a[1] + right.b[1]) / 2) * Math.PI) / 180);
+      return (
+        length(right.a, right.b, rightCos) - length(left.a, left.b, leftCos) ||
+        leftOwners[0]!.owner - rightOwners[0]!.owner
+      );
+    });
+  } else {
+    sharedEdges.sort(([a], [b]) => a.localeCompare(b));
+  }
+  for (const [, owners] of sharedEdges) {
     const first = owners[0]!,
       second = owners[1]!,
       a = first.a,
@@ -190,10 +210,9 @@ export function routeOrganicSharedBoundaries<T extends Piece>(
     }
     const diagnostics = options.diagnostics;
     if (diagnostics) diagnostics.attemptedLongEdges++;
-    const corridor = Math.min(
-      chord * 0.4,
-      roadDensity >= 15 ? 400 : roadDensity >= 3 ? 2000 : 5000
-    );
+    const corridorCap =
+      (roadDensity >= 15 ? 400 : roadDensity >= 3 ? 2000 : 6500) * corridorCapScale;
+    const corridor = Math.min(chord * 0.4, corridorCap);
     const dx = corridor / (111320 * cos),
       dy = corridor / 111320;
     const candidates = index
@@ -226,14 +245,17 @@ export function routeOrganicSharedBoundaries<T extends Piece>(
     // The shortest graph route may cross another territory or a water hole.
     // Try the piecewise and partial real-barrier routes before retaining the
     // synthetic chord; every candidate still has to preserve the partition.
+    const piecewiseMinChord = roadDensity < 3 ? 750 : 1_000;
+    const interiorMinChord = roadDensity < 3 ? 1_500 : 2_000;
+    const interiorRoadDensityCap = roadDensity < 8 ? 8 : 6;
     const alternatives = [
       () => findOrganicBarrierRoute(a, b, candidates, corridor),
       () =>
-        chord >= 1_000
+        chord >= piecewiseMinChord
           ? findPiecewiseBarrierRoute(a, b, candidates, localJunctions, corridor)
           : undefined,
       () =>
-        chord >= 2_000 && roadDensity < 6
+        chord >= interiorMinChord && roadDensity < interiorRoadDensityCap
           ? findInteriorBarrierRoute(a, b, candidates, localJunctions, corridor)
           : undefined,
       () => findPartialBarrierRoute(a, b, candidates, corridor)

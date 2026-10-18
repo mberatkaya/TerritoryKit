@@ -3,7 +3,8 @@ import { createSquareZone } from "@territory-kit/shared-testkit";
 import {
   isTopologySafePlayableRescue,
   rankPlayableRescueCandidate,
-  runTurkeyAdaptivePlayableRescue
+  runTurkeyAdaptivePlayableRescue,
+  selectPlayableRescueCandidate
 } from "../src/turkey-playable-rescue.js";
 import type { TurkeySmartFallbackBuildResult } from "../src/turkey-smart-fallback.js";
 import { derivePlayableRescueContext } from "../src/turkey-playable-rescue.js";
@@ -139,6 +140,98 @@ describe("playable rescue ranking", () => {
     expect(rankPlayableRescueCandidate(organic, context)).toBeGreaterThan(
       rankPlayableRescueCandidate(network, context)
     );
+  });
+
+  it("does not swap network-first for organic when seams are materially worse", () => {
+    const context = derivePlayableRescueContext({
+      parent: createSquareZone({
+        id: "parent",
+        datasetId: "test",
+        level: 2,
+        west: 28,
+        south: 41,
+        east: 28.8,
+        north: 41.6
+      }),
+      provinceCode: "34",
+      districtCode: "rural",
+      profile: "rural"
+    });
+    const network = {
+      stage: "network-faces" as const,
+      mode: "network-first" as const,
+      result: fakeResult({
+        ok: true,
+        parentAreaKm2: 420,
+        largestTerritoryAreaShare: 0.36,
+        longestUnsupportedStraightChainMeters: 4_000,
+        barrierFollowingInternalBoundaryRatio: 0.82
+      }),
+      rank: 10,
+      accepted: true,
+      topologySafe: true
+    };
+    const organic = {
+      stage: "organic-routing-repair" as const,
+      mode: "organic" as const,
+      result: fakeResult({
+        ok: true,
+        parentAreaKm2: 420,
+        largestTerritoryAreaShare: 0.14,
+        longestUnsupportedStraightChainMeters: 11_000,
+        barrierFollowingInternalBoundaryRatio: 0.28
+      }),
+      rank: 9,
+      accepted: true,
+      topologySafe: true
+    };
+    expect(selectPlayableRescueCandidate([network, organic], context)?.mode).toBe("network-first");
+  });
+
+  it("prefers balanced organic over oversized network-first rural cells", () => {
+    const context = derivePlayableRescueContext({
+      parent: createSquareZone({
+        id: "parent",
+        datasetId: "test",
+        level: 2,
+        west: 28,
+        south: 41,
+        east: 28.8,
+        north: 41.6
+      }),
+      provinceCode: "34",
+      districtCode: "rural",
+      profile: "rural"
+    });
+    const network = {
+      stage: "network-faces" as const,
+      mode: "network-first" as const,
+      result: fakeResult({
+        ok: true,
+        parentAreaKm2: 420,
+        largestTerritoryAreaShare: 0.37,
+        longestUnsupportedStraightChainMeters: 7_800,
+        barrierFollowingInternalBoundaryRatio: 0.8
+      }),
+      rank: 12,
+      accepted: true,
+      topologySafe: true
+    };
+    const organic = {
+      stage: "organic-routing-repair" as const,
+      mode: "organic" as const,
+      result: fakeResult({
+        ok: true,
+        parentAreaKm2: 420,
+        largestTerritoryAreaShare: 0.12,
+        longestUnsupportedStraightChainMeters: 8_850,
+        barrierFollowingInternalBoundaryRatio: 0.43
+      }),
+      rank: 11,
+      accepted: true,
+      topologySafe: true
+    };
+    expect(selectPlayableRescueCandidate([network, organic], context)?.mode).toBe("organic");
   });
 });
 

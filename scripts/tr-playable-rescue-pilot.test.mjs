@@ -19,7 +19,8 @@ test("playable rescue pilot report is stable and records explicit district statu
   });
   const json = JSON.parse(await readFile(path.join(OUTPUT, "pilot-metrics.json"), "utf8"));
   assert.equal(json.schemaVersion, "territorykit-tr-playable-rescue-pilot@1");
-  assert.equal(json.pilots.length, 3);
+  const expectedPilotCount = json.inputRoots.pilotSet === "istanbul-local-calibration" ? 6 : 3;
+  assert.equal(json.pilots.length, expectedPilotCount);
   for (const row of json.pilots) {
     assert.ok(row.archetype);
     assert.ok(row.status);

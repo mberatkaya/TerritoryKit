@@ -34,7 +34,10 @@ const GENERATED_AT = process.env.TR_PLAYABLE_RESCUE_GENERATED_AT ?? new Date().t
 const ISTANBUL_PILOTS = [
   { label: "Fatih", archetype: "dense-urban", id: "tr:adm2:54988432b39641834885080" },
   { label: "Adalar", archetype: "coastal-island", id: "tr:adm2:54988432b94516152709384" },
-  { label: "Çatalca", archetype: "rural", id: "tr:adm2:54988432b71345383711908" }
+  { label: "Çatalca", archetype: "rural", id: "tr:adm2:54988432b71345383711908" },
+  { label: "Eyüpsultan", archetype: "mixed-urban-rural", id: "tr:adm2:54988432b93840376788897" },
+  { label: "Kadıköy", archetype: "dense-urban", id: "tr:adm2:54988432b89638439219394" },
+  { label: "Üsküdar", archetype: "urban-coastal", id: "tr:adm2:54988432b79162079631621" }
 ];
 
 const FIXTURE_PILOTS = [
@@ -252,7 +255,12 @@ async function main() {
         title: `${pilot.label} playable rescue preview`,
         bbox,
         geojsonName,
-        zoom: pilot.archetype === "rural" || pilot.archetype === "rural-town" ? 10 : 12
+        zoom:
+          pilot.archetype === "rural" || pilot.archetype === "rural-town"
+            ? 10
+            : pilot.archetype === "mixed-urban-rural"
+              ? 11
+              : 12
       })
     );
     const partitionOutcome = metrics.partitionOutcome;
