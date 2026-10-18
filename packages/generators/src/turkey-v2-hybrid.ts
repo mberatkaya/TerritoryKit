@@ -34,23 +34,7 @@ import type {
   TurkeyGameZoneFragmentStrategy,
   TurkeyGameZoneProfile
 } from "./turkey-game-zones.js";
-import {
-  buildTurkeySmartFallbackWithAdjacency,
-  buildTurkeyOrganicSmartFallbackWithAdjacency,
-  buildTurkeyNetworkFirstSmartFallbackWithAdjacency,
-  resolveTurkeySmartFallbackConfiguration
-} from "./turkey-smart-fallback.js";
-
-function smartCandidateRank(result: TurkeySmartFallbackBuildResult): number {
-  const q = result.quality;
-  const districtScaleMeters = Math.max(1, Math.sqrt(q.parentAreaKm2) * 1000);
-  return (
-    Math.min(1, q.barrierFollowingInternalBoundaryRatio) * 3 -
-    q.meanSyntheticBoundaryRatio * 2 -
-    (q.longestUnsupportedStraightChainMeters / districtScaleMeters) * 3 +
-    q.meanQualityScore
-  );
-}
+import { runTurkeyAdaptivePlayableRescue } from "./turkey-playable-rescue.js";
 import type {
   TurkeySmartFallbackBuildResult,
   TurkeySmartFallbackLocalitySeed,
@@ -135,6 +119,10 @@ export interface TurkeyV2HybridGeneratedOptions {
   fallbackToLegacyOnSmartFailure?: boolean;
   organicFallback?: boolean;
   legacyGridAllowed?: boolean;
+  /** Accept topology-safe smart candidates that failed soft quality gates (production OSM path). */
+  allowLowConfidencePlayableRescue?: boolean;
+  /** When smart rescue fails, emit one low-confidence parent-filling zone (never a legacy grid). */
+  allowSingleParentPlayableRescue?: boolean;
   smartFallback?: {
     profile?: TurkeySmartFallbackProfile;
     roads?: FeatureCollection;
@@ -709,6 +697,7 @@ export async function buildTurkeyV2HybridDistrict(
       const generatedStrategy = resolveGeneratedStrategy(generatedOptions);
       let candidateGeneratedZones: TerritoryZone[] = [];
       let configurationHash = "";
+      let playableRescueAccepted = false;
 
       if (generatedStrategy === "smart") {
         const smartInput = {
@@ -738,124 +727,40 @@ export async function buildTurkeyV2HybridDistrict(
             : {}),
           options: createSmartFallbackOptions(generatedOptions)
         };
-        let standardPrecisionFailure: string | undefined;
-        try {
-          smartFallbackResult = await buildTurkeySmartFallbackWithAdjacency(smartInput);
-        } catch (error) {
-          // A precision failure in one Standard partition must not prevent the
-          // independent Organic partition from being attempted. Other errors
-          // still propagate to the district's explicit generation failure.
-          if (
-            !(error instanceof Error) ||
-            error.message !== "SMART_FALLBACK_PRECISION_REGULARIZATION_FAILED"
-          )
-            throw error;
-          standardPrecisionFailure = error.message;
-        }
-        const comparedCandidates: Array<{
-          mode: "standard" | "organic" | "network-first";
-          result: TurkeySmartFallbackBuildResult;
-        }> = [];
-        const standardCandidate = smartFallbackResult;
-        if (smartFallbackResult)
-          comparedCandidates.push({ mode: "standard", result: smartFallbackResult });
-        const signals =
-          resolveTurkeySmartFallbackConfiguration(smartInput).configuration.profileDecision.signals;
-        if (signals.roadDensityKmPerKm2 >= 1 || signals.strongBarrierCount >= 20) {
-          try {
-            const networkResult =
-              await buildTurkeyNetworkFirstSmartFallbackWithAdjacency(smartInput);
-            comparedCandidates.push({ mode: "network-first", result: networkResult });
-            if (
-              networkResult.quality.ok &&
-              (!smartFallbackResult?.quality.ok ||
-                smartCandidateRank(networkResult) > smartCandidateRank(smartFallbackResult))
-            )
-              smartFallbackResult = networkResult;
-          } catch (error) {
-            issues.push({
-              code: "SMART_NETWORK_CANDIDATE_REJECTED",
-              severity: "warning",
-              message: "Network-first candidate could not be constructed.",
-              details: { reason: error instanceof Error ? error.message : String(error) }
-            });
+        const rescue = await runTurkeyAdaptivePlayableRescue({
+          smartInput,
+          parentId: options.district.id,
+          options: { organicFallback: generatedOptions.organicFallback ?? true }
+        });
+        issues.push(...rescue.issues);
+        smartFallbackResult = rescue.result;
+        playableRescueAccepted =
+          rescue.acceptedAsRescue && (generatedOptions.allowLowConfidencePlayableRescue ?? false);
+        issues.push({
+          code: "PLAYABLE_RESCUE_DECISION",
+          severity: smartFallbackResult ? "info" : "warning",
+          message: smartFallbackResult
+            ? "Adaptive playable rescue selected a smart-derived candidate."
+            : "Adaptive playable rescue did not yield a topology-safe candidate.",
+          parentId: options.district.id,
+          details: {
+            schemaVersion: rescue.report.schemaVersion,
+            selectedStage: rescue.report.selectedStage,
+            selectedMode: rescue.report.selectedMode,
+            acceptedAsRescue: rescue.report.acceptedAsRescue,
+            failureReason: rescue.report.failureReason,
+            context: rescue.report.context
           }
-        }
-        if (generatedOptions.organicFallback ?? true) {
-          if (!standardCandidate?.quality.ok)
-            issues.push({
-              code: "SMART_STANDARD_QUALITY_REJECTED",
-              severity: "warning",
-              message: "Standard Smart rejected; comparing geographic alternatives.",
-              details: standardCandidate
-                ? {
-                    quality: standardCandidate.quality,
-                    reasonCodes: standardCandidate.reasonCodes
-                  }
-                : { reason: standardPrecisionFailure }
-            });
-          try {
-            const organicResult = await buildTurkeyOrganicSmartFallbackWithAdjacency(smartInput);
-            comparedCandidates.push({ mode: "organic", result: organicResult });
-            issues.push({
-              code: organicResult.quality.ok ? "ORGANIC_SMART_ACCEPTED" : "ORGANIC_SMART_REJECTED",
-              severity: organicResult.quality.ok ? "info" : "warning",
-              message: "Organic smart candidate quality decision.",
-              details: { reasonCodes: organicResult.reasonCodes }
-            });
-            if (
-              organicResult.quality.ok &&
-              (!smartFallbackResult?.quality.ok ||
-                smartCandidateRank(organicResult) > smartCandidateRank(smartFallbackResult))
-            )
-              smartFallbackResult = organicResult;
-            else if (!smartFallbackResult?.quality.ok) smartFallbackResult = organicResult;
-          } catch (error) {
-            issues.push({
-              code: "ORGANIC_SMART_REJECTED",
-              severity: "warning",
-              message: "Organic smart candidate could not be constructed.",
-              details: { reason: error instanceof Error ? error.message : String(error) }
-            });
-          }
-        }
+        });
 
-        if (!smartFallbackResult) throw new Error(standardPrecisionFailure);
-        smartFallbackResult.candidateComparisons = comparedCandidates.map(({ mode, result }) => ({
-          mode,
-          accepted: result.quality.ok,
-          coveragePercent: result.quality.coveragePercent,
-          territoryCount: result.quality.territoryCount,
-          largestTerritoryAreaShare: result.quality.largestTerritoryAreaShare,
-          minimumZoneAreaKm2: result.quality.minAreaKm2,
-          configuredMinimumAreaKm2: result.configuration.minAreaKm2,
-          effectivePartitionCount: result.quality.effectivePartitionCount,
-          minimumUsefulTerritoryCount: result.quality.minimumUsefulTerritoryCount,
-          partitionAdequacy: result.quality.gates.partitionAdequacy,
-          followingRatio: result.quality.barrierFollowingInternalBoundaryRatio,
-          syntheticRatio: result.quality.meanSyntheticBoundaryRatio,
-          axisAlignedInternalBoundaryRatio: result.quality.axisAlignedInternalBoundaryRatio,
-          longUnsupportedStraightBoundaryRatio: result.quality.longUnsupportedStraightBoundaryRatio,
-          unsupportedStraightChainCountAbove500m:
-            result.quality.unsupportedStraightChainCountAbove500m,
-          availableBarrierOpportunityRatio: result.quality.availableBarrierOpportunityRatio,
-          longestUnsupportedMeters: result.quality.longestUnsupportedStraightChainMeters,
-          deterministicHash: result.deterministicHash,
-          rejectionCodes: result.quality.ok ? [] : result.reasonCodes,
-          failedGates: Object.entries(result.quality.gates)
-            .filter(([, passed]) => !passed)
-            .map(([gate]) => gate),
-          geometryValidationErrors: result.quality.geometryValidationErrors,
-          ...(result.quality.networkConstruction
-            ? { networkConstruction: result.quality.networkConstruction }
-            : {})
-        }));
-
-        if (smartFallbackResult.quality.ok) {
+        const acceptLowConfidenceRescue =
+          rescue.acceptedAsRescue && (generatedOptions.allowLowConfidencePlayableRescue ?? false);
+        if (smartFallbackResult && (smartFallbackResult.quality.ok || acceptLowConfidenceRescue)) {
           issues.push(...mapSmartFallbackIssues(smartFallbackResult.issues));
           candidateGeneratedZones = smartFallbackResult.zones;
           configurationHash = smartFallbackResult.manifest.contentHash;
         } else if (
+          smartFallbackResult &&
           (generatedOptions.fallbackToLegacyOnSmartFailure ?? false) &&
           generatedOptions.legacyGridAllowed === true
         ) {
@@ -882,7 +787,7 @@ export async function buildTurkeyV2HybridDistrict(
           });
           candidateGeneratedZones = generatedResult.zones;
           configurationHash = sha256Hex(serializeJsonStable(generatedResult.configuration));
-        } else {
+        } else if (smartFallbackResult) {
           issues.push(...mapSmartFallbackIssues(smartFallbackResult.issues));
         }
       } else if (generatedOptions.legacyGridAllowed !== false) {
@@ -910,13 +815,17 @@ export async function buildTurkeyV2HybridDistrict(
         districtGeometry,
         realMask,
         zones: candidateGeneratedZones,
-        prevalidatedPartition: smartFallbackResult?.quality.ok === true,
+        prevalidatedPartition:
+          smartFallbackResult?.quality.ok === true || playableRescueAccepted === true,
         minimumEffectiveAreaKm2,
         buildDate,
         configurationHash
       });
       generatedEffective = generatedOutput.zones;
       generatedSliverAreaKm2 = generatedOutput.sliverAreaKm2;
+
+      const allowSingleParentPlayableRescue =
+        generatedOptions.allowSingleParentPlayableRescue === true;
 
       if (
         generatedOptions.legacyGridAllowed !== false &&
@@ -935,6 +844,37 @@ export async function buildTurkeyV2HybridDistrict(
           effectiveGeometry: missingGeometry
         });
 
+        generatedEffective = [fallbackZone];
+        generatedResult = undefined;
+        smartFallbackResult = undefined;
+      } else if (
+        allowSingleParentPlayableRescue &&
+        candidateGeneratedZones.length === 0 &&
+        generatedEffective.length === 0 &&
+        missingBeforeGeneratedAreaKm2 >= minimumEffectiveAreaKm2
+      ) {
+        const fallbackZone = createSingleGeneratedFallbackZone({
+          district: options.district,
+          provinceCode: options.provinceCode,
+          districtCode: options.districtCode,
+          geometry: generationGeometry,
+          buildDate,
+          seed: generatedOptions.seed ?? "kaprota-v2",
+          configurationHash:
+            configurationHash || generatedOptions.seed || "kaprota-v2-playable-rescue",
+          effectiveGeometry: missingGeometry
+        });
+        issues.push({
+          code: "PLAYABLE_RESCUE_SINGLE_PARENT",
+          severity: "warning",
+          message:
+            "All smart-derived strategies failed; emitted one low-confidence parent-filling playable zone.",
+          parentId: options.district.id,
+          details: {
+            uncoveredGapAreaKm2: missingBeforeGeneratedAreaKm2,
+            legacyGridAllowed: generatedOptions.legacyGridAllowed ?? true
+          }
+        });
         generatedEffective = [fallbackZone];
         generatedResult = undefined;
         smartFallbackResult = undefined;

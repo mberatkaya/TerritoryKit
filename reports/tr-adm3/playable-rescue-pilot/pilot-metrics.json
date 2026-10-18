@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "territorykit-tr-playable-rescue-pilot@1",
+  "generatedAt": "2026-10-18T12:00:00.000Z",
+  "inputRoots": {
+    "datasetPath": "datasets/generated/countries/TR/dataset.json",
+    "barrierRoot": ".territory/sprint-6/calibration/barriers",
+    "pilotSet": "istanbul-local-calibration"
+  },
+  "pilots": [
+    {
+      "label": "Fatih",
+      "archetype": "dense-urban",
+      "id": "tr:adm2:54988432b39641834885080",
+      "status": "OK",
+      "explicitFailureReason": null,
+      "metrics": {
+        "playableZoneCount": 30,
+        "oversizedUrbanCellShare": 0.107124,
+        "roadBarrierAlignment": 1,
+        "longestUnsupportedStraightMeters": 0,
+        "invalidPolygonCount": 0,
+        "overlapAreaKm2": 0,
+        "finalCoveragePercent": 100,
+        "qualityOk": true,
+        "smartAcceptance": "USABLE_HIGH_CONFIDENCE",
+        "rescueMode": "network-first",
+        "deterministicRebuildHash": "401dab5fc5f069c0f21ddd2ec3ebd0ac39d2125cdba8bf94884daf59865c6357"
+      }
+    },
+    {
+      "label": "Adalar",
+      "archetype": "coastal-island",
+      "id": "tr:adm2:54988432b94516152709384",
+      "status": "OK",
+      "explicitFailureReason": null,
+      "metrics": {
+        "playableZoneCount": 14,
+        "oversizedUrbanCellShare": 0.201181,
+        "roadBarrierAlignment": 1,
+        "longestUnsupportedStraightMeters": 0,
+        "invalidPolygonCount": 0,
+        "overlapAreaKm2": 0,
+        "finalCoveragePercent": 99.999816,
+        "qualityOk": true,
+        "smartAcceptance": "USABLE_LOW_CONFIDENCE",
+        "rescueMode": "network-first",
+        "deterministicRebuildHash": "f7da12e40e19d4a9ecb8f1da971ac1036696e373adf8ae0727cf3cbc87580eec"
+      }
+    },
+    {
+      "label": "Çatalca",
+      "archetype": "rural",
+      "id": "tr:adm2:54988432b71345383711908",
+      "status": "OK",
+      "explicitFailureReason": null,
+      "metrics": {
+        "playableZoneCount": 18,
+        "oversizedUrbanCellShare": 0.103685,
+        "roadBarrierAlignment": 0.325815,
+        "longestUnsupportedStraightMeters": 10101.609798,
+        "invalidPolygonCount": 0,
+        "overlapAreaKm2": 0,
+        "finalCoveragePercent": 100,
+        "qualityOk": true,
+        "smartAcceptance": "USABLE_LOW_CONFIDENCE",
+        "rescueMode": "organic",
+        "deterministicRebuildHash": "841b1f4063f0fca8c69d767406a47253d23acf8498e51e77265b30ef357dfada"
+      }
+    }
+  ]
+}

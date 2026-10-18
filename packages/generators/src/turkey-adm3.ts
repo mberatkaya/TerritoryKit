@@ -118,6 +118,22 @@ export {
   verifyTurkeyOsmSnapshot
 } from "./turkey-osm-barriers.js";
 export {
+  TURKEY_PLAYABLE_RESCUE_SCHEMA_VERSION,
+  derivePlayableRescueContext,
+  isTopologySafePlayableRescue,
+  measurePlayableRescueMetrics,
+  rankPlayableRescueCandidate,
+  runTurkeyAdaptivePlayableRescue,
+  summarizePlayableRescueFailure
+} from "./turkey-playable-rescue.js";
+export type {
+  TurkeyAdaptivePlayableRescueResult,
+  TurkeyPlayableRescueContext,
+  TurkeyPlayableRescueFailureReason,
+  TurkeyPlayableRescueReport,
+  TurkeyPlayableRescueStage
+} from "./turkey-playable-rescue.js";
+export {
   TURKEY_V2_HYBRID_ATTRIBUTION_SCHEMA_VERSION,
   TURKEY_V2_HYBRID_BATCH_SCHEMA_VERSION,
   TURKEY_V2_HYBRID_COVERAGE_SCHEMA_VERSION,

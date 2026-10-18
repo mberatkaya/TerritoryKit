@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Çatalca playable rescue preview</title>
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <style>html,body,#map{margin:0;height:100%;}</style>
+</head>
+<body>
+  <div id="map"></div>
+  <script>
+    const map = new maplibregl.Map({
+      container: 'map',
+      style: 'https://demotiles.maplibre.org/style.json',
+      center: [28.332827, 41.3234525],
+      zoom: 10
+    });
+    map.fitBounds([[28.070288, 41.056314], [28.595366, 41.590591]], { padding: 40, maxZoom: 10 });
+    map.on('load', () => {
+      map.addSource('zones', { type: 'geojson', data: 'catalca-after.geojson' });
+      map.addLayer({
+        id: 'zones-fill',
+        type: 'fill',
+        source: 'zones',
+        paint: { 'fill-color': '#2563eb', 'fill-opacity': 0.35 }
+      });
+      map.addLayer({
+        id: 'zones-line',
+        type: 'line',
+        source: 'zones',
+        paint: { 'line-color': '#1e3a8a', 'line-width': 1.2 }
+      });
+    });
+  </script>
+</body>
+</html>
