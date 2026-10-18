@@ -1,0 +1,198 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-3-playable-v3-sample@1",
+  "generatedAt": "2026-10-18T17:14:27.062Z",
+  "parentDatasetPath": "datasets/generated/countries/TR/dataset.json",
+  "barrierRoot": ".territory/sprint-6/calibration/barriers",
+  "mapPreviewRoot": ".territory/sprint-3/playable-v3/map-preview",
+  "districts": [
+    {
+      "label": "Fatih",
+      "city": "Istanbul",
+      "archetype": "dense-urban",
+      "id": "tr:adm2:54988432b39641834885080",
+      "status": "OK",
+      "metrics": {
+        "playableZoneCount": 30,
+        "oversizedUrbanCellShare": null,
+        "roadBarrierAlignment": null,
+        "longestUnsupportedStraightMeters": null,
+        "invalidPolygonCount": 0,
+        "finalCoveragePercent": null,
+        "qualityOk": true,
+        "smartAcceptance": null,
+        "rescueMode": "network-first",
+        "rescueStage": "network-faces",
+        "partitionOutcome": "neighborhood-partition",
+        "deterministicRebuildHash": "b7ce7d85c72ab09902e44a35b8a5eae4858649e086de918a1894e2d3658adef3"
+      }
+    },
+    {
+      "label": "Eyüpsultan",
+      "city": "Istanbul",
+      "archetype": "mixed-urban-rural",
+      "id": "tr:adm2:54988432b93840376788897",
+      "status": "OK",
+      "metrics": {
+        "playableZoneCount": 32,
+        "oversizedUrbanCellShare": null,
+        "roadBarrierAlignment": null,
+        "longestUnsupportedStraightMeters": null,
+        "invalidPolygonCount": 0,
+        "finalCoveragePercent": null,
+        "qualityOk": true,
+        "smartAcceptance": null,
+        "rescueMode": "organic",
+        "rescueStage": "organic-routing-repair",
+        "partitionOutcome": "neighborhood-partition",
+        "deterministicRebuildHash": "2bc14a1518f2ebc117a20c14432b6235e731c4be489ed9f3c3b2eee4291b7243"
+      }
+    },
+    {
+      "label": "Adalar",
+      "city": "Istanbul",
+      "archetype": "coastal-island",
+      "id": "tr:adm2:54988432b94516152709384",
+      "status": "OK",
+      "metrics": {
+        "playableZoneCount": 14,
+        "oversizedUrbanCellShare": null,
+        "roadBarrierAlignment": null,
+        "longestUnsupportedStraightMeters": null,
+        "invalidPolygonCount": 0,
+        "finalCoveragePercent": null,
+        "qualityOk": true,
+        "smartAcceptance": null,
+        "rescueMode": "network-first",
+        "rescueStage": "network-faces",
+        "partitionOutcome": "neighborhood-partition",
+        "deterministicRebuildHash": "bc7e8f95740b3219fe85a68aec245487cca2e23bb3117b7849b3b8b23fa7bdc1"
+      }
+    },
+    {
+      "label": "Çankaya",
+      "city": "Ankara",
+      "archetype": "dense-urban",
+      "id": "tr:adm2:54988432b72030220276956",
+      "status": "OK",
+      "metrics": {
+        "playableZoneCount": 36,
+        "oversizedUrbanCellShare": null,
+        "roadBarrierAlignment": null,
+        "longestUnsupportedStraightMeters": null,
+        "invalidPolygonCount": 0,
+        "finalCoveragePercent": null,
+        "qualityOk": true,
+        "smartAcceptance": null,
+        "rescueMode": "organic",
+        "rescueStage": "organic-routing-repair",
+        "partitionOutcome": "neighborhood-partition",
+        "deterministicRebuildHash": "390f441cdaf93ecff570c08b6fa6197155eb666df837c4af7b89a6bcf9198ef6"
+      }
+    },
+    {
+      "label": "Konak",
+      "city": "Izmir",
+      "archetype": "dense-urban",
+      "id": "tr:adm2:54988432b43742920895959",
+      "status": "OK",
+      "metrics": {
+        "playableZoneCount": 41,
+        "oversizedUrbanCellShare": null,
+        "roadBarrierAlignment": null,
+        "longestUnsupportedStraightMeters": null,
+        "invalidPolygonCount": 0,
+        "finalCoveragePercent": null,
+        "qualityOk": true,
+        "smartAcceptance": null,
+        "rescueMode": "network-first",
+        "rescueStage": "network-faces",
+        "partitionOutcome": "neighborhood-partition",
+        "deterministicRebuildHash": "6386e37ada28c7050b5accf9f3bd6b0c029caaf202ec15a00f366b1d381ee6ec"
+      }
+    },
+    {
+      "label": "Muratpaşa",
+      "city": "Antalya",
+      "archetype": "coastal-urban",
+      "id": "tr:adm2:54988432b17723605206621",
+      "status": "OK",
+      "metrics": {
+        "playableZoneCount": 28,
+        "oversizedUrbanCellShare": null,
+        "roadBarrierAlignment": null,
+        "longestUnsupportedStraightMeters": null,
+        "invalidPolygonCount": 0,
+        "finalCoveragePercent": null,
+        "qualityOk": true,
+        "smartAcceptance": null,
+        "rescueMode": "network-first",
+        "rescueStage": "network-faces",
+        "partitionOutcome": "neighborhood-partition",
+        "deterministicRebuildHash": "afb6680c2cfb091769dc1365610280039e947cf34bd9642a04a94d8ba9647bac"
+      }
+    },
+    {
+      "label": "Çatalca",
+      "city": "Istanbul",
+      "archetype": "rural",
+      "id": "tr:adm2:54988432b71345383711908",
+      "status": "OK",
+      "metrics": {
+        "playableZoneCount": 16,
+        "oversizedUrbanCellShare": null,
+        "roadBarrierAlignment": null,
+        "longestUnsupportedStraightMeters": null,
+        "invalidPolygonCount": 0,
+        "finalCoveragePercent": null,
+        "qualityOk": true,
+        "smartAcceptance": null,
+        "rescueMode": "organic",
+        "rescueStage": "organic-routing-repair",
+        "partitionOutcome": "neighborhood-partition",
+        "deterministicRebuildHash": "c1a91ded2ad18d3c23df393d6aacdba4e3a1931df34249f96547352b179ecc35"
+      }
+    },
+    {
+      "label": "Ağrı merkez",
+      "city": "Eastern",
+      "archetype": "rural-mountain",
+      "id": "tr:adm2:54988432b81567150601582",
+      "status": "OK",
+      "metrics": {
+        "playableZoneCount": 12,
+        "oversizedUrbanCellShare": null,
+        "roadBarrierAlignment": null,
+        "longestUnsupportedStraightMeters": null,
+        "invalidPolygonCount": 0,
+        "finalCoveragePercent": null,
+        "qualityOk": true,
+        "smartAcceptance": null,
+        "rescueMode": "network-first",
+        "rescueStage": "network-faces",
+        "partitionOutcome": "neighborhood-partition",
+        "deterministicRebuildHash": "da98863e4343e76b44d5ce8e4df4b20815ef6277214a62df89c2108caa725f6d"
+      }
+    },
+    {
+      "label": "İskenderun",
+      "city": "Coastal",
+      "archetype": "coastal-urban",
+      "id": "tr:adm2:54988432b95277821649488",
+      "status": "OK",
+      "metrics": {
+        "playableZoneCount": 40,
+        "oversizedUrbanCellShare": null,
+        "roadBarrierAlignment": null,
+        "longestUnsupportedStraightMeters": null,
+        "invalidPolygonCount": 0,
+        "finalCoveragePercent": null,
+        "qualityOk": true,
+        "smartAcceptance": null,
+        "rescueMode": "network-first",
+        "rescueStage": "network-faces",
+        "partitionOutcome": "neighborhood-partition",
+        "deterministicRebuildHash": "ec2ab8dc0cabe37f0c0a550304d6cb713d87b601fbda62360e1ecfb6700eddd9"
+      }
+    }
+  ]
+}

@@ -36,6 +36,8 @@ export interface TurkeyPlayableRescueContext {
   coastalOrIslandLikely: boolean;
   denseUrbanLikely: boolean;
   sparseRuralLikely: boolean;
+  /** Large districts with moderate road density (e.g. Eyüpsultan): network-faces can dominate oversized cells. */
+  mixedUrbanRuralLikely: boolean;
 }
 
 export interface TurkeyPlayableRescueCandidateRecord {
@@ -92,6 +94,12 @@ export function derivePlayableRescueContext(
   const denseUrbanLikely = signals.roadDensityKmPerKm2 >= 8;
   const sparseRuralLikely =
     signals.roadDensityKmPerKm2 < 1.5 && configuration.targetGeometryAreaKm2 >= 120;
+  const mixedUrbanRuralLikely =
+    !denseUrbanLikely &&
+    !sparseRuralLikely &&
+    configuration.targetGeometryAreaKm2 >= 70 &&
+    signals.roadDensityKmPerKm2 >= 1.8 &&
+    signals.roadDensityKmPerKm2 < 8;
   return {
     roadDensityKmPerKm2: signals.roadDensityKmPerKm2,
     strongBarrierCount: signals.strongBarrierCount,
@@ -100,7 +108,8 @@ export function derivePlayableRescueContext(
     parentComponentCount,
     coastalOrIslandLikely,
     denseUrbanLikely,
-    sparseRuralLikely
+    sparseRuralLikely,
+    mixedUrbanRuralLikely
   };
 }
 
@@ -123,11 +132,13 @@ export function rankPlayableRescueCandidate(
   const q = result.quality;
   const districtScaleMeters = Math.max(1, Math.sqrt(q.parentAreaKm2) * 1000);
   const okBonus = q.ok ? 6 : isTopologySafePlayableRescue(q) ? 2.5 : 0;
+  const oversizeWeight = context.sparseRuralLikely ? 16 : context.mixedUrbanRuralLikely ? 14 : 12;
+  const oversizeMidWeight = context.sparseRuralLikely ? 9 : context.mixedUrbanRuralLikely ? 8 : 6;
   const oversizePenalty =
     q.largestTerritoryAreaShare > 0.35
-      ? (q.largestTerritoryAreaShare - 0.35) * (context.sparseRuralLikely ? 16 : 12)
+      ? (q.largestTerritoryAreaShare - 0.35) * oversizeWeight
       : q.largestTerritoryAreaShare > 0.25
-        ? (q.largestTerritoryAreaShare - 0.25) * (context.sparseRuralLikely ? 9 : 6)
+        ? (q.largestTerritoryAreaShare - 0.25) * oversizeMidWeight
         : 0;
   const unsupportedPenalty =
     (q.longestUnsupportedStraightChainMeters / districtScaleMeters) *
@@ -171,7 +182,9 @@ export function selectPlayableRescueCandidate(
 ): TurkeyPlayableRescueCandidateRecord | undefined {
   if (!eligible.length) return undefined;
   let selected = [...eligible].sort((left, right) => right.rank - left.rank)[0]!;
-  if (!context.sparseRuralLikely) return selected;
+  const balanceOrganicOverOversizedNetwork =
+    context.sparseRuralLikely || context.mixedUrbanRuralLikely;
+  if (!balanceOrganicOverOversizedNetwork) return selected;
 
   const organic = eligible.find((row) => row.mode === "organic" && row.result.quality.ok);
   const network = eligible.find((row) => row.mode === "network-first" && row.result.quality.ok);
@@ -180,15 +193,28 @@ export function selectPlayableRescueCandidate(
     const oq = organic.result.quality;
     const materiallySmallerLargest =
       oq.largestTerritoryAreaShare < nq.largestTerritoryAreaShare - 0.1;
+    const seamLengthFactor = context.mixedUrbanRuralLikely ? 1.55 : 1.35;
+    const seamAlignmentSlack = context.mixedUrbanRuralLikely ? 0.42 : 0.12;
     const seamsNotMuchWorse =
-      oq.longestUnsupportedStraightChainMeters <= nq.longestUnsupportedStraightChainMeters * 1.35 &&
-      oq.barrierFollowingInternalBoundaryRatio + 0.12 >= nq.barrierFollowingInternalBoundaryRatio;
+      oq.longestUnsupportedStraightChainMeters <=
+        nq.longestUnsupportedStraightChainMeters * seamLengthFactor &&
+      oq.barrierFollowingInternalBoundaryRatio + seamAlignmentSlack >=
+        nq.barrierFollowingInternalBoundaryRatio;
     const balancedOrganicOverOversizedNetwork =
       nq.largestTerritoryAreaShare > 0.28 &&
       oq.largestTerritoryAreaShare <= 0.18 &&
       oq.barrierFollowingInternalBoundaryRatio >= 0.33 &&
       oq.longestUnsupportedStraightChainMeters <= 11_000;
-    if ((materiallySmallerLargest && seamsNotMuchWorse) || balancedOrganicOverOversizedNetwork) {
+    const mixedUrbanOversizedNetwork =
+      context.mixedUrbanRuralLikely &&
+      nq.largestTerritoryAreaShare > 0.4 &&
+      materiallySmallerLargest &&
+      oq.longestUnsupportedStraightChainMeters <= nq.longestUnsupportedStraightChainMeters * 1.55;
+    if (
+      (materiallySmallerLargest && seamsNotMuchWorse) ||
+      balancedOrganicOverOversizedNetwork ||
+      mixedUrbanOversizedNetwork
+    ) {
       selected = organic;
     }
   }

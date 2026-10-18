@@ -188,6 +188,57 @@ describe("playable rescue ranking", () => {
     expect(selectPlayableRescueCandidate([network, organic], context)?.mode).toBe("network-first");
   });
 
+  it("prefers balanced organic over oversized network-first mixed urban-rural cells", () => {
+    const context = {
+      ...derivePlayableRescueContext({
+        parent: createSquareZone({
+          id: "parent",
+          datasetId: "test",
+          level: 2,
+          west: 28.9,
+          south: 41.05,
+          east: 29.25,
+          north: 41.35
+        }),
+        provinceCode: "34",
+        districtCode: "mixed",
+        profile: "auto"
+      }),
+      mixedUrbanRuralLikely: true,
+      sparseRuralLikely: false,
+      denseUrbanLikely: false
+    };
+    const network = {
+      stage: "network-faces" as const,
+      mode: "network-first" as const,
+      result: fakeResult({
+        ok: true,
+        parentAreaKm2: 220,
+        largestTerritoryAreaShare: 0.52,
+        longestUnsupportedStraightChainMeters: 3_600,
+        barrierFollowingInternalBoundaryRatio: 0.93
+      }),
+      rank: 12,
+      accepted: true,
+      topologySafe: true
+    };
+    const organic = {
+      stage: "organic-routing-repair" as const,
+      mode: "organic" as const,
+      result: fakeResult({
+        ok: true,
+        parentAreaKm2: 220,
+        largestTerritoryAreaShare: 0.19,
+        longestUnsupportedStraightChainMeters: 4_200,
+        barrierFollowingInternalBoundaryRatio: 0.55
+      }),
+      rank: 11,
+      accepted: true,
+      topologySafe: true
+    };
+    expect(selectPlayableRescueCandidate([network, organic], context)?.mode).toBe("organic");
+  });
+
   it("prefers balanced organic over oversized network-first rural cells", () => {
     const context = derivePlayableRescueContext({
       parent: createSquareZone({

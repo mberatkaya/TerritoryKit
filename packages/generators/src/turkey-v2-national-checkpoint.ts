@@ -17,7 +17,7 @@ export const TURKEY_V2_NATIONAL_DISTRICT_CHECKPOINT_SCHEMA_VERSION =
  * versions are unchanged; old checkpoints must not restore against a newer revision.
  */
 export const TURKEY_V2_NATIONAL_CHECKPOINT_IMPLEMENTATION_REVISION =
-  "national-geographic-realism-v2" as const;
+  "national-playable-v3-rescue-balance-v1" as const;
 
 /**
  * SHA-256 digests of modules that change national district geometry output without a smart-fallback
@@ -35,7 +35,7 @@ export const TURKEY_V2_NATIONAL_CHECKPOINT_PRODUCTION_BEHAVIOR_DIGESTS: Readonly
   "packages/generators/src/turkey-smart-derived-v2-pilot.ts":
     "e8434f71615f9945c9ec9fbe4471b778ccd1102d456e3855f26a74ca1d0c8c5b",
   "packages/generators/src/turkey-playable-rescue.ts":
-    "f7ddb7f3b00a120610b6c82ebab594bbfa9e3c9199f7db5a93f4b2b8a14b5575",
+    "88570acafcbb4279883713b8bd27a39e1b51485f49f5ebc8b844edaffd9d2a26",
   "packages/generators/src/turkey-v2-hybrid.ts":
     "7d9f44e058e5312bfe57e30dca424bc18669a253d5f8c25375434dd93e7dbec3",
   "packages/cli/src/turkey-adm3-hybrid.ts":
