@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-sprint-4-national-playable-map@1",
-  "generatedAt": "2026-10-18T21:18:37.325Z",
+  "generatedAt": "2026-10-18T21:34:41.371Z",
   "candidateRoot": ".territory/sprint-3/playable-v3/candidate",
   "datasetVersion": "2.1.0-playable-v3",
   "geometryHash": "eee14b2bd20788d2028bacb4a6cb7c92a9415f6a7ddd98b4a43695f4a29a7cac",
@@ -12,7 +12,8 @@
   "mvt": {
     "consumerSourceLayerContract": "territory_adm3",
     "encodedProtobufLayer": "territory_adm3",
-    "validationOk": null,
+    "validationOk": true,
+    "validationSkippedBuild": true,
     "metrics": {
       "tileCount": 18858,
       "totalBytes": 73595655,

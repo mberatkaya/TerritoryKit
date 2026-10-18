@@ -54,6 +54,11 @@ interface TurkeyLiveDemoProbe {
   search(query: string): Promise<TerritorySearchResult[]>;
   selectTerritory(territoryId: string, level?: DemoAdminLevel): Promise<string | undefined>;
   setZoom(zoom: number): Promise<{ renderedLevel: DemoAdminLevel; displayedFeatureCount: number }>;
+  flyToCoordinate(
+    lng: number,
+    lat: number,
+    zoom: number
+  ): Promise<{ renderedLevel: DemoAdminLevel; displayedFeatureCount: number }>;
 }
 
 declare global {
@@ -258,7 +263,14 @@ window.addEventListener("beforeunload", () => {
 async function initializeDemo(): Promise<void> {
   elements.mapStatus.textContent = "Loading registry manifest";
 
-  if (
+  if (config.requestedMode === "local-playable") {
+    mode = "local-playable";
+  }
+
+  if (config.requestedMode === "local-playable" && config.configError) {
+    registryStatus = "error";
+    lastError = config.configError;
+  } else if (
     (config.mode === "registry" || config.mode === "local-playable") &&
     config.registryUrl &&
     !config.configError
@@ -312,6 +324,10 @@ async function initializeDemo(): Promise<void> {
     } catch (error) {
       activateFixtureFallback(`Registry unavailable: ${readErrorMessage(error)}`);
     }
+  } else if (config.requestedMode === "local-playable") {
+    mode = "local-playable";
+    registryStatus = "error";
+    lastError = config.configError ?? "local-playable bootstrap unavailable.";
   } else {
     mode = "fixture";
     registryStatus = config.configError ? "error" : "not-configured";
@@ -354,6 +370,16 @@ async function initializeDemo(): Promise<void> {
 }
 
 function activateFixtureFallback(message: string): void {
+  if (config.requestedMode === "local-playable" || config.mode === "local-playable") {
+    mode = "local-playable";
+    registryStatus = "error";
+    lastError = message;
+    renderMetadata();
+    renderRuntime();
+    renderFallbackPanel();
+    return;
+  }
+
   mode = "fixture";
   registryStatus = "error";
   registry = undefined;
@@ -394,6 +420,11 @@ async function renderCurrentLevel(reason: string): Promise<void> {
     await waitForMapIdle();
     updateDisplayedFeatureCount();
   } catch (error) {
+    if (mode === "local-playable") {
+      activateFixtureFallback(`Render error: ${readErrorMessage(error)}`);
+      return;
+    }
+
     if (mode === "registry") {
       activateFixtureFallback(`Render fallback: ${readErrorMessage(error)}`);
       renderer?.dispose();
@@ -561,10 +592,10 @@ async function runSearch(queryText: string): Promise<TerritorySearchResult[]> {
   elements.searchStatus.textContent = "Searching";
 
   try {
-    const levels: readonly DemoAdminLevel[] =
-      currentLevel === "ADM3" ? ["ADM1", "ADM2", "ADM3"] : ["ADM1", "ADM2"];
+    const searchLevels: readonly DemoAdminLevel[] =
+      currentLevel === "ADM3" ? ["ADM1", "ADM2"] : ["ADM1", "ADM2"];
     const results = await query.search(searchValue, {
-      levels,
+      levels: searchLevels,
       limit: 60,
       signal: searchController.signal
     });
@@ -995,7 +1026,7 @@ function createProbe(): TurkeyLiveDemoProbe {
     },
     search(queryText) {
       return query.search(queryText, {
-        levels: currentLevel === "ADM3" ? ["ADM1", "ADM2", "ADM3"] : ["ADM1", "ADM2"],
+        levels: currentLevel === "ADM3" ? ["ADM1", "ADM2"] : ["ADM1", "ADM2"],
         limit: 60
       });
     },
@@ -1005,6 +1036,24 @@ function createProbe(): TurkeyLiveDemoProbe {
     async setZoom(zoom) {
       const idle = waitForMapIdle();
       map.setZoom(zoom);
+      await idle;
+      const nextLevel = demoLevelForZoom(map.getZoom(), currentLevel);
+      if (nextLevel !== currentLevel) {
+        currentLevel = nextLevel;
+        await renderCurrentLevel("probe");
+      }
+      return {
+        renderedLevel: currentLevel,
+        displayedFeatureCount: lastRender?.displayedFeatureCount ?? 0
+      };
+    },
+    async flyToCoordinate(lng, lat, zoom) {
+      const idle = waitForMapIdle();
+      map.flyTo({
+        center: [lng, lat],
+        zoom,
+        duration: reducedMotion() ? 0 : 700
+      });
       await idle;
       const nextLevel = demoLevelForZoom(map.getZoom(), currentLevel);
       if (nextLevel !== currentLevel) {

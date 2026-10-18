@@ -231,7 +231,7 @@ async function fetchVerifiedRegistryDataset(
   signal: AbortSignal | undefined
 ): Promise<TerritoryDataset> {
   const artifact = resolved.artifact;
-  const maxBytes = 16_000_000;
+  const maxBytes = 24_000_000;
   if (
     artifact.format !== "territory-json" ||
     (artifact.compression && artifact.compression !== "none") ||

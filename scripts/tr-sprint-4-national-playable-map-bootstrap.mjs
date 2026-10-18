@@ -246,6 +246,14 @@ async function main() {
     await mergeRenderIntoCandidate(candidateRoot, options.renderOut);
   } else if (!existsSync(path.join(candidateRoot, "render/manifest.json"))) {
     throw new Error("MVT render missing; run without --skip-mvt first.");
+  } else {
+    mvtValidation = await validateTerritoryRenderArtifactPath(candidateRoot);
+    mvtInspection = await inspectTerritoryRenderArtifactPath(candidateRoot);
+    if (!mvtValidation.ok) {
+      throw new Error(
+        `MVT validation failed on existing artifacts: ${JSON.stringify(mvtValidation.issues)}`
+      );
+    }
   }
 
   const geojsonPaths = await writeLevelGeojsonRenders(candidateRoot);
@@ -281,7 +289,8 @@ async function main() {
     mvt: {
       consumerSourceLayerContract: "territory_adm3",
       encodedProtobufLayer: encodedLayer,
-      validationOk: mvtValidation?.ok ?? null,
+      validationOk: mvtValidation?.ok === true,
+      validationSkippedBuild: options.skipMvt,
       metrics: mvtMetrics
     },
     deliveryManifest: {

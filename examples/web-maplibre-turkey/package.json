@@ -6,12 +6,13 @@
   "scripts": {
     "build": "vite build",
     "clean": "rimraf dist .turbo",
-    "dev": "vite --host 0.0.0.0",
-    "dev:national-playable": "VITE_TERRITORY_DEMO_MODE=local-playable vite --host 0.0.0.0",
+    "dev": "vite --host 127.0.0.1",
+    "dev:national-playable": "VITE_TERRITORY_DEMO_MODE=local-playable vite --host 127.0.0.1",
     "perf:budget": "pnpm build && node scripts/performance-budget.mjs",
     "lint": "eslint src --ext .ts",
     "test": "vitest run --passWithNoTests",
     "test:e2e": "playwright test",
+    "test:e2e:local-playable": "PW_LOCAL_PLAYABLE=1 playwright test",
     "test:visual": "playwright test",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },

@@ -25,6 +25,37 @@ function formatArea(zone: TerritoryZone): string {
   return "— (ölçüm yok)";
 }
 
+function resolveProvinceLabel(details: TerritoryDetails): string {
+  const fromProperties = readString(details.zone.properties?.provinceName);
+  if (fromProperties) {
+    return fromProperties;
+  }
+  if (details.zone.level === 1) {
+    return details.zone.name ?? details.zone.id;
+  }
+  if (details.zone.level === 2) {
+    return details.parent?.level === 1 ? (details.parent.name ?? details.parent.id) : "bilinmiyor";
+  }
+  if (details.zone.level === 3) {
+    return "bilinmiyor";
+  }
+  return "bilinmiyor";
+}
+
+function resolveDistrictLabel(details: TerritoryDetails): string {
+  const fromProperties = readString(details.zone.properties?.districtName);
+  if (fromProperties) {
+    return fromProperties;
+  }
+  if (details.zone.level === 2) {
+    return details.zone.name ?? details.zone.id;
+  }
+  if (details.zone.level === 3 && details.parent?.level === 2) {
+    return details.parent.name ?? details.parent.id;
+  }
+  return "—";
+}
+
 export function buildTerritorySelectionRows(
   details: TerritoryDetails
 ): ReadonlyArray<readonly [string, string]> {
@@ -38,8 +69,6 @@ export function buildTerritorySelectionRows(
   const authoritative = territory?.authoritative === true;
   const estimated =
     boundaryKind === "estimated" || sourceClass === "smart-derived" || sourceClass === "generated";
-  const districtName = readString(zone.properties?.districtName);
-  const provinceName = readString(zone.properties?.provinceName);
   const license =
     readString(territory?.license) ??
     readString((territory?.source as Record<string, unknown>)?.license);
@@ -51,11 +80,8 @@ export function buildTerritorySelectionRows(
     ["Ad", zone.localName ?? zone.name ?? String(zone.properties?.name ?? zone.id)],
     ["Kararlı ID", zone.id],
     ["Düzey", `ADM${zone.level}`],
-    ["İl", provinceName ?? details.parent?.name ?? "—"],
-    [
-      "İlçe",
-      districtName ?? (zone.level === 2 ? (zone.name ?? zone.id) : (details.parent?.name ?? "—"))
-    ],
+    ["İl", resolveProvinceLabel(details)],
+    ["İlçe", resolveDistrictLabel(details)],
     ["Alan", formatArea(zone)],
     ["Kaynak sınıfı", sourceClass ?? "—"],
     ["Sınır türü", boundaryKind ?? (estimated ? "estimated" : "—")],
