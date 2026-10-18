@@ -2,9 +2,11 @@
   "schemaVersion": "territorykit-tr-sprint-2-final-national-readiness@1",
   "istanbulPilotEvidence": {
     "osmResearchCandidates": 228,
-    "technicallyValidRingPass": 104,
+    "ringValidPolygonCount": 228,
+    "spatialConflictFreeCandidateCount": 104,
     "spatialConflictCount": 124,
-    "semanticIdentityMatchCount": 1,
+    "identityAmbiguousCount": 3,
+    "semanticIdentityMatchCount": 223,
     "humanSemanticApprovals": 0,
     "officialVerifiedPolygons": 0
   },
@@ -18,6 +20,6 @@
     "District-level OSM coverage gaps remain"
   ],
   "decision": "NO_GO",
-  "generatedAt": "2026-10-18T12:20:58.865Z",
-  "headSha": "a9966dffc01b664600351caad78c2c9ff26539d2"
+  "generatedAt": "2026-10-18T12:55:30.839Z",
+  "headSha": "d3f9577890fdd6ff11fb04b5721d70e1cd4feea7"
 }

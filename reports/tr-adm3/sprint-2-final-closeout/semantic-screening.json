@@ -1,109 +1,21 @@
 {
   "schemaVersion": "territorykit-tr-sprint-2-final-semantic-screening@1",
-  "ambiguousCaseCount": 25,
+  "ambiguousCaseCount": 3,
   "ambiguousCases": [
     {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b89638439219394-osm-relation-9443987-acibadem-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-7648817-aksemsettin-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-7648833-suleymaniye-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-3866327-cumhuriyet-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463242-mimar-sinan-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463391-acibadem-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463414-mehmet-akif-ersoy-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463417-guzeltepe-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9357003-guzeltepe-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9381554-merkez-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9381869-aksemsettin-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9675979-mimar-sinan-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9677569-ihsaniye-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9536586-ihsaniye-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9618065-basak-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
+      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463364-beylerbeyi-mahallesi",
+      "reasonCodes": ["MULTIPLE_SETTLEMENT_IDENTITY_MATCHES"]
     },
     {
       "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9618406-ciftlikkoy",
       "reasonCodes": ["MULTIPLE_SETTLEMENT_IDENTITY_MATCHES"]
     },
     {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619872-fatih-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619874-ataturk-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461411-basak-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9620447-suleymaniye-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9642514-ataturk-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9642749-cumhuriyet-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9642964-merkez-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9642966-fatih-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
-    },
-    {
-      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9642969-mehmet-akif-ersoy-mahallesi",
-      "reasonCodes": ["DUPLICATE_NORMALIZED_NAME"]
+      "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461575-basaksehir-mahallesi",
+      "reasonCodes": ["MULTIPLE_SETTLEMENT_IDENTITY_MATCHES"]
     }
   ],
-  "settlementIdentityMatchCount": 1,
+  "settlementIdentityMatchCount": 223,
   "records": [
     {
       "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b89638439219394-osm-relation-8852697-kozyatagi-mahallesi",
@@ -116,7 +28,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997074867",
+          "displayName": "Kozyatağı",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -143,7 +61,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997074871",
+          "displayName": "Bostancı",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -170,7 +94,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997074874",
+          "displayName": "Suadiye",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -197,7 +127,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997074870",
+          "displayName": "Rasimpaşa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -224,7 +160,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997074866",
+          "displayName": "Osmanağa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -251,7 +193,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2491338600",
+          "displayName": "Caferağa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -278,7 +226,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2492226735",
+          "displayName": "Koşuyolu",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -305,7 +259,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2492226734",
+          "displayName": "Hasanpaşa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -332,9 +292,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997348814",
+          "displayName": "Acıbadem",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -359,7 +325,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2492147541",
+          "displayName": "Zühtüpaşa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -386,7 +358,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2492226733",
+          "displayName": "Eğitim",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -413,7 +391,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:821887960",
+          "displayName": "Fikirtepe",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -440,7 +424,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2491338601",
+          "displayName": "Feneryolu",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -467,7 +457,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2437930520",
+          "displayName": "Fenerbahçe",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -494,7 +490,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2492226732",
+          "displayName": "Dumlupınar",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -521,7 +523,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:251355458",
+          "displayName": "Göztepe",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -548,7 +556,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2491830887",
+          "displayName": "Merdivenköy",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -575,7 +589,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997074868",
+          "displayName": "Caddebostan",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -602,7 +622,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997074869",
+          "displayName": "Sahrayıcedit",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -629,7 +655,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2492147542",
+          "displayName": "19 Mayıs",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -656,7 +688,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1867128457",
+          "displayName": "Erenköy",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -683,7 +721,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4947158624",
+          "displayName": "Ayvansaray",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -710,7 +754,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341422",
+          "displayName": "Balat",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -737,7 +787,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341446",
+          "displayName": "Atikali",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -764,7 +820,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341427",
+          "displayName": "Karagümrük",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -791,7 +853,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999339818",
+          "displayName": "Hırka-i Şerif",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -818,7 +886,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996909359",
+          "displayName": "Topkapı",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -845,7 +919,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4947158668",
+          "displayName": "Şehremini",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -872,7 +952,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341453",
+          "displayName": "Mevlanakapı",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -899,7 +985,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4947158636",
+          "displayName": "Seyyid Ömer",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -926,7 +1018,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341450",
+          "displayName": "Silivrikapı",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -953,7 +1051,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4947158661",
+          "displayName": "Sümbül Efendi",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -980,7 +1084,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999339810",
+          "displayName": "Koca Mustafapaşa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1007,7 +1117,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341452",
+          "displayName": "Yedikule",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1034,7 +1150,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996909325",
+          "displayName": "Haseki Sultan",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1061,7 +1183,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341447",
+          "displayName": "Molla Gürani",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1088,9 +1216,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341426",
+          "displayName": "Akşemsettin",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -1115,7 +1249,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341428",
+          "displayName": "Ali Kuşçu",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1142,7 +1282,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4947158667",
+          "displayName": "Zeyrek",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1169,7 +1315,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4947158632",
+          "displayName": "İskenderpaşa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1196,7 +1348,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999339820",
+          "displayName": "Aksaray",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1223,7 +1381,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999339811",
+          "displayName": "Katip Kasım",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1250,7 +1414,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999339813",
+          "displayName": "Mesihpaşa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1277,7 +1447,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341438",
+          "displayName": "Kemalpaşa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1304,7 +1480,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996909339",
+          "displayName": "Kalenderhane",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1331,7 +1513,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996909340",
+          "displayName": "Molla Hüsrev",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1358,7 +1546,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4947158666",
+          "displayName": "Hacı Kadın",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1385,7 +1579,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999339805",
+          "displayName": "Hoca Gıyasettin",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1412,7 +1612,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4947158640",
+          "displayName": "Yavuz Sinan",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1439,7 +1645,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341432",
+          "displayName": "Demirtaş",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1466,7 +1678,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999339809",
+          "displayName": "Sarıdemir",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1493,9 +1711,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341449",
+          "displayName": "Süleymaniye",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -1520,7 +1744,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341431",
+          "displayName": "Balabanağa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1547,7 +1777,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4947158644",
+          "displayName": "Tahtakale",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1574,7 +1810,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996909348",
+          "displayName": "Rüstempaşa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1601,7 +1843,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4947158637",
+          "displayName": "Mercan",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1628,7 +1876,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4947158664",
+          "displayName": "Taya Hatun",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1655,7 +1909,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341436",
+          "displayName": "Beyazıt",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1682,7 +1942,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341442",
+          "displayName": "Mimar Kemalettin",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1709,7 +1975,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999339812",
+          "displayName": "Saraç İshak",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1736,7 +2008,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999339806",
+          "displayName": "Mimar Hayrettin",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1763,7 +2041,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341443",
+          "displayName": "Şehsuvar Bey",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1790,7 +2074,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341434",
+          "displayName": "Emin Sinan",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1817,7 +2107,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999339807",
+          "displayName": "Molla Fenari",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1844,7 +2140,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341441",
+          "displayName": "Küçük Ayasofya",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1871,7 +2173,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341455",
+          "displayName": "Binbirdirek",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1898,7 +2206,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341435",
+          "displayName": "Alemdar",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1925,7 +2239,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999339808",
+          "displayName": "Hocapaşa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1952,7 +2272,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4999341456",
+          "displayName": "Sururi",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -1979,9 +2305,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997349328",
+          "displayName": "Cumhuriyet",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -2006,7 +2338,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997349329",
+          "displayName": "Ünalan",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2033,7 +2371,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1751591929",
+          "displayName": "Bulgurlu",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2060,7 +2404,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997349323",
+          "displayName": "Kısıklı",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2087,7 +2437,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997349325",
+          "displayName": "Selimiye",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2114,7 +2470,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:251358382",
+          "displayName": "Salacak",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2141,7 +2503,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997349332",
+          "displayName": "Aziz Mahmut Hüdayi",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2168,7 +2536,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997348807",
+          "displayName": "Ahmediye",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2195,9 +2569,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997348820",
+          "displayName": "Mimar Sinan",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -2222,7 +2602,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997349331",
+          "displayName": "Sultantepe",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2249,7 +2635,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997348818",
+          "displayName": "Zeynep Kamil",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2276,7 +2668,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997348803",
+          "displayName": "Barbaros",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2303,7 +2701,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997348810",
+          "displayName": "Valide-i Atik",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2330,7 +2734,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997348809",
+          "displayName": "Muratreis",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2357,7 +2767,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997348819",
+          "displayName": "Selami Ali",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2384,7 +2800,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:251358397",
+          "displayName": "Kuzguncuk",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2411,7 +2833,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:251358441",
+          "displayName": "Kandilli",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2438,7 +2866,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997348808",
+          "displayName": "İcadiye",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2465,9 +2899,20 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:251358465",
+          "displayName": "Beylerbeyi",
+          "matchType": "normalized-name-exact"
+        },
+        {
+          "settlementId": "tr:settlement:osm:node:4997349324",
+          "displayName": "Beylerbeyi",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": false,
+      "identityAmbiguous": true,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -2492,7 +2937,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:251358459",
+          "displayName": "Çengelköy",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2546,7 +2997,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997348813",
+          "displayName": "Burhaniye",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2573,7 +3030,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997349330",
+          "displayName": "Kuleli",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2600,9 +3063,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:7058084546",
+          "displayName": "Acıbadem",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -2627,7 +3096,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997348816",
+          "displayName": "Altunizade",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2654,7 +3129,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997348805",
+          "displayName": "Küplüce",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2681,7 +3162,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997348817",
+          "displayName": "Kirazlıtepe",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2708,7 +3195,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997349322",
+          "displayName": "Ferah",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2735,9 +3228,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997349321",
+          "displayName": "Mehmet Akif Ersoy",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -2762,7 +3261,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997348812",
+          "displayName": "Küçüksu",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2789,9 +3294,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997348804",
+          "displayName": "Güzeltepe",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -2816,7 +3327,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997349326",
+          "displayName": "Bahçelievler",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2843,7 +3360,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4997349327",
+          "displayName": "Yavuztürk",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2870,7 +3393,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996343979",
+          "displayName": "Kınalıada",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2897,7 +3426,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996343981",
+          "displayName": "Burgazada",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2924,7 +3459,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1496720876",
+          "displayName": "Heybeliada",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2951,7 +3492,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996343982",
+          "displayName": "Nizam",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -2978,7 +3525,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996343980",
+          "displayName": "Maden",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3005,7 +3558,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:9672888612",
+          "displayName": "5. Levent",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3032,7 +3591,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996879572",
+          "displayName": "Emniyettepe",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3059,9 +3624,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996879566",
+          "displayName": "Güzeltepe",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -3086,7 +3657,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996879574",
+          "displayName": "Alibeyköy",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3113,7 +3690,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996879562",
+          "displayName": "Defterdar",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3140,7 +3723,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6325893855",
+          "displayName": "Nişancı",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3167,9 +3756,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996879576",
+          "displayName": "Merkez",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -3194,7 +3789,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996879567",
+          "displayName": "Silahtarağa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3221,7 +3822,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996879573",
+          "displayName": "İslambey",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3248,7 +3855,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996879563",
+          "displayName": "Düğmeciler",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3275,7 +3888,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996879570",
+          "displayName": "Rami Cuma",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3302,7 +3921,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996879559",
+          "displayName": "Topçular",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3356,7 +3981,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996879557",
+          "displayName": "Sakarya",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3383,7 +4014,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996879571",
+          "displayName": "Esentepe",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3410,7 +4047,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996879569",
+          "displayName": "Karadolap",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3437,7 +4080,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996879575",
+          "displayName": "Yeşilpınar",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3464,7 +4113,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996879558",
+          "displayName": "Çırçır",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3491,9 +4146,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996879560",
+          "displayName": "Akşemsettin",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -3518,9 +4179,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:8582643105",
+          "displayName": "Mimar Sinan",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -3545,7 +4212,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:8582643104",
+          "displayName": "Mithatpaşa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3572,7 +4245,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:8582643103",
+          "displayName": "Göktürk Merkez",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3599,7 +4278,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2408296587",
+          "displayName": "Pirinççi",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3626,7 +4311,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2291073253",
+          "displayName": "Işıklar",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3653,9 +4344,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2291073307",
+          "displayName": "İhsaniye",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -3680,7 +4377,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:8582643102",
+          "displayName": "Odayeri",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3707,7 +4410,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2131081582",
+          "displayName": "Çiftalan",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3734,7 +4443,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6814513128",
+          "displayName": "Ağaçlı",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3761,7 +4476,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1939786461",
+          "displayName": "Akpınar",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3788,7 +4509,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:9471914527",
+          "displayName": "Muratbey Merkez",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3815,7 +4542,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:8454406077",
+          "displayName": "Bahşayiş",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3842,7 +4575,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832397",
+          "displayName": "Nakkaş",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3869,7 +4608,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:8454406078",
+          "displayName": "Ferhatpaşa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3896,7 +4641,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:8454406079",
+          "displayName": "Kaleiçi",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3923,7 +4674,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503833689",
+          "displayName": "İzzettin",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3950,7 +4707,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2392806819",
+          "displayName": "Çakıl",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -3977,7 +4740,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2392805690",
+          "displayName": "Ovayenice",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4004,7 +4773,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2392805688",
+          "displayName": "Elbasan",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4031,7 +4806,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503833682",
+          "displayName": "İnceğiz",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4058,7 +4839,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832350",
+          "displayName": "Gökçeali",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4085,7 +4872,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:911009373",
+          "displayName": "Kabakça",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4112,7 +4905,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832315",
+          "displayName": "Akalan",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4139,7 +4938,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832404",
+          "displayName": "Subaşı",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4166,7 +4971,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832400",
+          "displayName": "Oklalı",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4193,7 +5004,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832373",
+          "displayName": "Kestanelik",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4220,7 +5037,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503833666",
+          "displayName": "Örcünlü",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4247,7 +5070,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832389",
+          "displayName": "Kızılcaali",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4274,7 +5103,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503833663",
+          "displayName": "Çanakça",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4301,9 +5136,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503833679",
+          "displayName": "İhsaniye",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -4328,7 +5169,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832347",
+          "displayName": "Dağyenice",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4355,7 +5202,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832431",
+          "displayName": "Yazlık",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4382,7 +5235,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832361",
+          "displayName": "Kalfa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4409,7 +5268,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503833674",
+          "displayName": "Örencik",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4463,9 +5328,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832327",
+          "displayName": "Başak",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -4490,7 +5361,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832355",
+          "displayName": "Gümüşpınar",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4517,7 +5394,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832360",
+          "displayName": "Hisarbeyli",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4544,7 +5427,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832335",
+          "displayName": "Belgrat",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4609,7 +5498,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832401",
+          "displayName": "Ormanlı",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4636,7 +5531,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832372",
+          "displayName": "Karamandere",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4663,7 +5564,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832320",
+          "displayName": "Aydınlar",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4690,7 +5597,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:1503832424",
+          "displayName": "Yaylacık",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4744,7 +5657,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4776133109",
+          "displayName": "Hallaçlı",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4771,9 +5690,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:8454406076",
+          "displayName": "Fatih",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -4798,7 +5723,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2241560664",
+          "displayName": "Yalıköy",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4825,9 +5756,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:8454406075",
+          "displayName": "Atatürk",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -4852,7 +5789,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2299386412",
+          "displayName": "Şamlar",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4879,9 +5822,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996507239",
+          "displayName": "Başak",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -4906,7 +5855,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996507244",
+          "displayName": "Ziya Gökalp",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4933,9 +5888,20 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996507243",
+          "displayName": "Başakşehir",
+          "matchType": "normalized-name-exact"
+        },
+        {
+          "settlementId": "tr:settlement:osm:node:965804205",
+          "displayName": "Başakşehir",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": false,
+      "identityAmbiguous": true,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -4960,7 +5926,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4697004874",
+          "displayName": "Güvercintepe",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -4987,7 +5959,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:9665298573",
+          "displayName": "İkitelli OSB",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5014,7 +5992,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4697004873",
+          "displayName": "Altınşehir",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5041,7 +6025,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996507241",
+          "displayName": "Kayabaşı",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5068,7 +6058,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996507242",
+          "displayName": "Şahintepe",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5095,7 +6091,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2279469795",
+          "displayName": "Bahçeşehir 2. Kısım",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5122,7 +6124,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996507240",
+          "displayName": "Bahçeşehir 1. Kısım",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5149,7 +6157,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6986590994",
+          "displayName": "Akşemseddin",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5176,7 +6190,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:9688435732",
+          "displayName": "Aşık Veysel",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5203,7 +6223,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:27456460",
+          "displayName": "Esenkent",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5230,7 +6256,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2279452770",
+          "displayName": "Ardıçlı",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5257,7 +6289,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996842775",
+          "displayName": "Akçaburgaz",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5284,7 +6322,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996842778",
+          "displayName": "Orhan Gazi",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5311,7 +6355,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:9688435731",
+          "displayName": "Koza",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5338,7 +6388,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6996201738",
+          "displayName": "Osmangazi",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5365,9 +6421,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6986590998",
+          "displayName": "Süleymaniye",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -5392,7 +6454,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2279451672",
+          "displayName": "Yenikent",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5419,7 +6487,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6986541798",
+          "displayName": "Gökevler",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5446,9 +6520,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2277236745",
+          "displayName": "Atatürk",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -5473,7 +6553,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6986590995",
+          "displayName": "Yunus Emre",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5500,7 +6586,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2279464996",
+          "displayName": "İncirtepe",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5527,7 +6619,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6986590997",
+          "displayName": "Sultaniye",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5554,7 +6652,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2279464489",
+          "displayName": "İnönü",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5581,7 +6685,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6986591002",
+          "displayName": "Zafer",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5608,7 +6718,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2278277216",
+          "displayName": "Namık Kemal",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5635,7 +6751,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6986591003",
+          "displayName": "Turgut Özal",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5662,7 +6784,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996842771",
+          "displayName": "Saadetdere",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5689,7 +6817,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2279454098",
+          "displayName": "Örnek",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5716,7 +6850,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6986590999",
+          "displayName": "Çınar",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5743,7 +6883,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6996201735",
+          "displayName": "Selahaddin Eyyubi",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5770,7 +6916,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6986541802",
+          "displayName": "Mevlana",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5797,9 +6949,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996842781",
+          "displayName": "Cumhuriyet",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -5824,7 +6982,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6996201739",
+          "displayName": "Piri Reis",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5851,7 +7015,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6986541797",
+          "displayName": "Barbaros Hayrettin Paşa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5878,7 +7048,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2277230058",
+          "displayName": "Güzelyurt",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5905,7 +7081,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2279463083",
+          "displayName": "Pınar",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5932,7 +7114,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6996201736",
+          "displayName": "Battalgazi",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5959,7 +7147,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6996201737",
+          "displayName": "Şehitler",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -5986,7 +7180,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6986541800",
+          "displayName": "Necip Fazıl Kısakürek",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -6013,7 +7213,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6986541799",
+          "displayName": "Hürriyet",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -6040,7 +7246,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2279455119",
+          "displayName": "İstiklal",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -6067,7 +7279,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2278276834",
+          "displayName": "Mehterçeşme",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -6094,7 +7312,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996842782",
+          "displayName": "Yeşilkent",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -6121,9 +7345,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6986591000",
+          "displayName": "Merkez",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -6148,7 +7378,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6986591001",
+          "displayName": "Üçevler",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -6175,9 +7411,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:2279464416",
+          "displayName": "Fatih",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -6202,7 +7444,13 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:4996842776",
+          "displayName": "Talatpaşa",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
       "identityAmbiguous": false,
       "humanApproval": {
@@ -6256,9 +7504,15 @@
         "name:tr": null
       },
       "neighbourhoodClassification": "osm-admin-level-8-neighbourhood-candidate",
-      "settlementIdentityMatches": [],
+      "settlementIdentityMatches": [
+        {
+          "settlementId": "tr:settlement:osm:node:6986541801",
+          "displayName": "Mehmet Akif Ersoy",
+          "matchType": "normalized-name-exact"
+        }
+      ],
       "officialInventoryMatch": null,
-      "identityAmbiguous": true,
+      "identityAmbiguous": false,
       "humanApproval": {
         "status": "unreviewed",
         "semanticApproval": false,
@@ -6273,8 +7527,8 @@
       }
     }
   ],
-  "generatedAt": "2026-10-18T12:20:58.865Z",
-  "headSha": "a9966dffc01b664600351caad78c2c9ff26539d2",
+  "generatedAt": "2026-10-18T12:55:30.839Z",
+  "headSha": "d3f9577890fdd6ff11fb04b5721d70e1cd4feea7",
   "osmCandidateReviewBatch": {
     "note": "Separate from Sprint 2F gameplay human-review ledger; all OSM candidates remain unapproved.",
     "recordCount": 228,

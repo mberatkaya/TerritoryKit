@@ -7,7 +7,14 @@
     "explicit-unavailable-fallback"
   ],
   "osmResearch": {
-    "eligibility": "ODBL_COMPLIANT_RESEARCH_ONLY",
+    "eligibility": "RESEARCH_ONLY_NOT_LEGALLY_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+    "dataLicense": "ODbL-1.0",
+    "attribution": "© OpenStreetMap contributors — data available under the Open Database License (ODbL) 1.0",
+    "sourcePage": "https://www.openstreetmap.org/copyright",
+    "extractSource": "https://download.geofabrik.de/europe/turkey.html",
+    "derivativeDatabaseObligations": "ODbL share-alike and attribution for derivative databases — not verified for this repository artifact",
+    "repositoryCodeLicenseNote": "TerritoryKit source code in this repository is Apache-2.0; OSM geometry is not licensed under Apache-2.0.",
+    "publicGeoJsonInGit": false,
     "redistributionApproved": false,
     "productionEligible": false,
     "sourcePbfSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
@@ -32,6 +39,6 @@
     "evidencePath": "reports/tr-adm3/sprint-2e-source-evidence/geometry-immutability-evidence.json",
     "districtPinCount": 8
   },
-  "generatedAt": "2026-10-18T12:20:58.865Z",
-  "headSha": "a9966dffc01b664600351caad78c2c9ff26539d2"
+  "generatedAt": "2026-10-18T12:55:30.839Z",
+  "headSha": "d3f9577890fdd6ff11fb04b5721d70e1cd4feea7"
 }

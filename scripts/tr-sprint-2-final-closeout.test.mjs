@@ -6,12 +6,45 @@ import { fileURLToPath } from "node:url";
 import test from "node:test";
 import {
   EXPECTED_OSM_RESEARCH_CANDIDATE_COUNT,
+  OSM_RESEARCH_PUBLIC_GEOJSON_DISTRIBUTION_ALLOWED,
   SPRINT_2_FINAL_REPORT_ROOT,
-  classifyPolygonDisposition
+  buildSemanticScreening,
+  classifyPolygonDisposition,
+  normalizeTrName
 } from "./lib/tr-sprint-2-final-closeout.mjs";
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const REPORT_DIR = join(REPO_ROOT, SPRINT_2_FINAL_REPORT_ROOT);
+
+test("normalizeTrName strips Turkish administrative suffixes for matching", () => {
+  assert.equal(normalizeTrName("Balat Mahallesi"), "balat");
+  assert.equal(normalizeTrName("Kınalıada Köyü"), "kınalıada");
+  assert.equal(normalizeTrName("Foo Mah."), "foo");
+  assert.equal(normalizeTrName("  Akşemsettin MAH  "), "akşemsettin");
+});
+
+test("buildSemanticScreening scopes duplicate names to parent ADM2", () => {
+  const zones = [
+    {
+      id: "a",
+      parentId: "parent-1",
+      name: "Merkez Mahallesi",
+      properties: { territory: { osmTags: { admin_level: "8" } } }
+    },
+    {
+      id: "b",
+      parentId: "parent-2",
+      name: "Merkez Mahallesi",
+      properties: { territory: { osmTags: { admin_level: "8" } } }
+    }
+  ];
+  const screening = buildSemanticScreening({
+    zones,
+    provenanceByZoneId: new Map(),
+    settlementIndexByParentAdm2: new Map()
+  });
+  assert.equal(screening.ambiguousCaseCount, 0);
+});
 
 test("disposition never auto-approves spatial or semantic conflicts", () => {
   assert.equal(
@@ -79,4 +112,12 @@ test("Sprint 2 final closeout artifacts validate inventory and QA scope", async 
   const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
   assert.equal(manifest.featureCount, EXPECTED_OSM_RESEARCH_CANDIDATE_COUNT);
   assert.equal(manifest.doesNotOverwriteRc8, true);
+  assert.equal(manifest.dataLicense, "ODbL-1.0");
+  assert.equal(manifest.distribution.publicGitGeoJsonArtifact, false);
+  assert.equal(manifest.distribution.redistributionApproved, false);
+  assert.match(manifest.repositoryCodeLicenseNote, /Apache-2\.0/);
+  assert.match(manifest.repositoryCodeLicenseNote, /not licensed under Apache-2\.0/i);
+  if (!OSM_RESEARCH_PUBLIC_GEOJSON_DISTRIBUTION_ALLOWED) {
+    assert.equal(manifest.geojsonWrittenToRepository, false);
+  }
 });

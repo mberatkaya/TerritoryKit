@@ -1,7 +1,7 @@
 {
   "schemaVersion": "territorykit-tr-sprint-2-final-polygon-qa@1",
-  "generatedAt": "2026-10-18T12:20:58.865Z",
-  "headSha": "a9966dffc01b664600351caad78c2c9ff26539d2",
+  "generatedAt": "2026-10-18T12:55:30.839Z",
+  "headSha": "d3f9577890fdd6ff11fb04b5721d70e1cd4feea7",
   "extractionBlocked": false,
   "sourceIntegrity": {
     "schemaVersion": "territorykit-tr-sprint-2h-source-integrity@1",
@@ -4355,7 +4355,7 @@
       "parentAdm2Id": "tr:adm2:54988432b67026781349893",
       "pilotSlug": "basaksehir",
       "pilotDistrict": "Başakşehir",
-      "disposition": "TECHNICALLY_VALID_REVIEW_REQUIRED",
+      "disposition": "IDENTITY_AMBIGUOUS",
       "humanSemanticApproval": {
         "status": "unreviewed",
         "official": false,
@@ -6077,7 +6077,7 @@
       "parentAdm2Id": "tr:adm2:54988432b71345383711908",
       "pilotSlug": "catalca",
       "pilotDistrict": "Çatalca",
-      "disposition": "TECHNICALLY_VALID_REVIEW_REQUIRED",
+      "disposition": "IDENTITY_AMBIGUOUS",
       "humanSemanticApproval": {
         "status": "unreviewed",
         "official": false,

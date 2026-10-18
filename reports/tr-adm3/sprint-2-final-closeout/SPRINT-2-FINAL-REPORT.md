@@ -1,7 +1,7 @@
 # Sprint 2 final geospatial closeout
 
-**Generated:** 2026-10-18T12:20:58.865Z  
-**HEAD:** a9966dffc01b664600351caad78c2c9ff26539d2  
+**Generated:** 2026-10-18T12:55:30.839Z  
+**HEAD:** d3f9577890fdd6ff11fb04b5721d70e1cd4feea7  
 **Extraction blocked:** no
 
 ## Product decision
@@ -29,7 +29,7 @@
 ## Counts
 
 - OSM research candidates: **228**
-- Dispositions: {"SPATIAL_CONFLICT_REVIEW_REQUIRED":124,"TECHNICALLY_VALID_REVIEW_REQUIRED":104}
+- Dispositions: {"SPATIAL_CONFLICT_REVIEW_REQUIRED":124,"TECHNICALLY_VALID_REVIEW_REQUIRED":102,"IDENTITY_AMBIGUOUS":2}
 - Human semantic approvals: **0**
 - Official verified polygons: **0**
 

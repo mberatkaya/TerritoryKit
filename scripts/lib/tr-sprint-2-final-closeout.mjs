@@ -52,12 +52,31 @@ async function sha256File(path) {
   return hash.digest("hex");
 }
 
-function normalizeTrName(value) {
-  return String(value ?? "")
+const TR_ADMINISTRATIVE_NAME_SUFFIX_PATTERNS = [
+  /\s+mahallesi$/u,
+  /\s+mah\.$/u,
+  /\s+mah$/u,
+  /\s+köyü$/u,
+  /\s+koyu$/u
+];
+
+export function normalizeTrName(value) {
+  let normalized = String(value ?? "")
     .toLocaleLowerCase("tr-TR")
     .normalize("NFKC")
     .trim();
+  for (const pattern of TR_ADMINISTRATIVE_NAME_SUFFIX_PATTERNS) {
+    normalized = normalized.replace(pattern, "").trim();
+  }
+  return normalized;
 }
+
+export const OSM_RESEARCH_DATA_ATTRIBUTION =
+  "© OpenStreetMap contributors — data available under the Open Database License (ODbL) 1.0";
+export const OSM_RESEARCH_DATA_LICENSE = "ODbL-1.0";
+export const OSM_RESEARCH_SOURCE_PAGE = "https://www.openstreetmap.org/copyright";
+export const OSM_RESEARCH_EXTRACT_SOURCE = "https://download.geofabrik.de/europe/turkey.html";
+export const OSM_RESEARCH_PUBLIC_GEOJSON_DISTRIBUTION_ALLOWED = false;
 
 function km2ToM2(km2) {
   return typeof km2 === "number" ? km2 * 1_000_000 : null;
@@ -175,7 +194,8 @@ export function buildPolygonQaResults({
   zones,
   provenanceByZoneId,
   parentsById,
-  districtSpatialByParentId
+  districtSpatialByParentId,
+  semanticByZoneId
 }) {
   const results = [];
   for (const zone of zones) {
@@ -191,13 +211,14 @@ export function buildPolygonQaResults({
     const overlapRows = overlapIndex.get(zone.id) ?? [];
     const containmentRow = containmentIndex.get(zone.id) ?? null;
 
+    const semanticRecord = semanticByZoneId?.get(zone.id);
     const disposition = classifyPolygonDisposition({
       ringAssessed: geometry.ringValidationAssessed,
       ringOk: geometry.ringOk,
       provenanceComplete: provenanceRecordComplete(provenance, zone),
       parentContainmentExceeds: geometry.parentContainmentExceeds,
       involvedInSiblingOverlap: overlapRows.length > 0,
-      identityAmbiguous: false,
+      identityAmbiguous: semanticRecord?.identityAmbiguous ?? false,
       missingName: !zone.name,
       unexpectedAdminLevel: osmTags.admin_level != null && String(osmTags.admin_level) !== "8"
     });
@@ -270,18 +291,19 @@ async function loadSettlementNameIndex(repoRoot) {
       rows.push(settlement);
       byNorm.set(norm, rows);
     }
-    indexByDistrict.set(pilot.slug, byNorm);
+    indexByDistrict.set(payload.parentAdm2Id, byNorm);
   }
   return indexByDistrict;
 }
 
-export function buildSemanticScreening({ zones, provenanceByZoneId, settlementIndexByDistrict }) {
+export function buildSemanticScreening({ zones, provenanceByZoneId, settlementIndexByParentAdm2 }) {
   const duplicateNames = new Map();
   for (const zone of zones) {
     const norm = normalizeTrName(zone.name);
-    const rows = duplicateNames.get(norm) ?? [];
+    const scopeKey = `${zone.parentId}::${norm}`;
+    const rows = duplicateNames.get(scopeKey) ?? [];
     rows.push(zone.id);
-    duplicateNames.set(norm, rows);
+    duplicateNames.set(scopeKey, rows);
   }
 
   const records = [];
@@ -291,10 +313,14 @@ export function buildSemanticScreening({ zones, provenanceByZoneId, settlementIn
     const provenance = provenanceByZoneId.get(zone.id) ?? {};
     const territory = zone.properties?.territory ?? {};
     const osmTags = territory.osmTags ?? {};
-    const slug = provenance.pilotSlug;
     const norm = normalizeTrName(zone.name);
-    const settlementMatches = slug ? (settlementIndexByDistrict.get(slug)?.get(norm) ?? []) : [];
-    const duplicateNameZoneIds = (duplicateNames.get(norm) ?? []).filter((id) => id !== zone.id);
+    const scopeKey = `${zone.parentId}::${norm}`;
+    const settlementMatches = (
+      settlementIndexByParentAdm2.get(zone.parentId)?.get(norm) ?? []
+    ).filter((row) => row.parentAdm2Id === zone.parentId);
+    const duplicateNameZoneIds = (duplicateNames.get(scopeKey) ?? []).filter(
+      (id) => id !== zone.id
+    );
 
     const identityAmbiguous =
       duplicateNameZoneIds.length > 0 || settlementMatches.length > 1 || !zone.name;
@@ -499,7 +525,16 @@ export async function buildSourceAndLicenseStatus(repoRoot) {
       "explicit-unavailable-fallback"
     ],
     osmResearch: {
-      eligibility: "ODBL_COMPLIANT_RESEARCH_ONLY",
+      eligibility: "RESEARCH_ONLY_NOT_LEGALLY_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+      dataLicense: OSM_RESEARCH_DATA_LICENSE,
+      attribution: OSM_RESEARCH_DATA_ATTRIBUTION,
+      sourcePage: OSM_RESEARCH_SOURCE_PAGE,
+      extractSource: OSM_RESEARCH_EXTRACT_SOURCE,
+      derivativeDatabaseObligations:
+        "ODbL share-alike and attribution for derivative databases — not verified for this repository artifact",
+      repositoryCodeLicenseNote:
+        "TerritoryKit source code in this repository is Apache-2.0; OSM geometry is not licensed under Apache-2.0.",
+      publicGeoJsonInGit: OSM_RESEARCH_PUBLIC_GEOJSON_DISTRIBUTION_ALLOWED,
       redistributionApproved: false,
       productionEligible: false,
       sourcePbfSha256: PINNED_SOURCE_PBF_SHA256,
@@ -554,6 +589,14 @@ export function buildResearchCandidateDataset(zones, provenanceByZoneId, generat
     schemaVersion: "territorykit-tr-sprint-2-final-research-candidates@1",
     generatedAt,
     featureCount: features.length,
+    license: "https://opendatacommons.org/licenses/odbl/1-0/",
+    dataLicense: OSM_RESEARCH_DATA_LICENSE,
+    copyright: "© OpenStreetMap contributors",
+    attribution: OSM_RESEARCH_DATA_ATTRIBUTION,
+    source: OSM_RESEARCH_SOURCE_PAGE,
+    extractSource: OSM_RESEARCH_EXTRACT_SOURCE,
+    repositoryCodeLicenseNote:
+      "TerritoryKit repository source code is Apache-2.0; this file contains OpenStreetMap data under ODbL-1.0.",
     features
   };
 
@@ -563,6 +606,20 @@ export function buildResearchCandidateDataset(zones, provenanceByZoneId, generat
     datasetLabel: "istanbul-osm-administrative-research-candidates",
     datasetVersion: "sprint-2-final-closeout@1",
     featureCount: features.length,
+    dataLicense: OSM_RESEARCH_DATA_LICENSE,
+    attribution: OSM_RESEARCH_DATA_ATTRIBUTION,
+    sourcePage: OSM_RESEARCH_SOURCE_PAGE,
+    extractSource: OSM_RESEARCH_EXTRACT_SOURCE,
+    derivativeDatabaseObligations:
+      "ODbL share-alike and attribution for derivative databases — not verified for public git or hosted redistribution",
+    repositoryCodeLicenseNote:
+      "TerritoryKit source code in this repository is Apache-2.0; OSM geometry in this dataset is not licensed under Apache-2.0.",
+    distribution: {
+      publicGitGeoJsonArtifact: OSM_RESEARCH_PUBLIC_GEOJSON_DISTRIBUTION_ALLOWED,
+      redistributionApproved: false,
+      blockedReason:
+        "ODbL derivative-database and redistribution obligations are not legally verified; regenerate locally via pnpm data:tr:sprint2:final-closeout"
+    },
     sourcePbfSha256: PINNED_SOURCE_PBF_SHA256,
     sourceSnapshotDate: PINNED_SOURCE_SNAPSHOT_DATE,
     parserImplementationRevision: TURKEY_ADM3_OSM_PARSER_IMPLEMENTATION_REVISION,
@@ -731,12 +788,17 @@ export function buildNationalReadiness({
   districtMatrix,
   extractionBlocked
 }) {
-  const technicallyValid = polygonQaResults.filter(
-    (row) => row.disposition === "TECHNICALLY_VALID_REVIEW_REQUIRED"
+  const ringValidPolygonCount = polygonQaResults.filter(
+    (row) => row.geometryQa.ringOk === true
   ).length;
   const spatialConflicts = polygonQaResults.filter(
     (row) => row.disposition === "SPATIAL_CONFLICT_REVIEW_REQUIRED"
   ).length;
+  const spatialConflictFreeCandidateCount = polygonQaResults.filter(
+    (row) =>
+      row.geometryQa.ringOk === true && row.disposition !== "SPATIAL_CONFLICT_REVIEW_REQUIRED"
+  ).length;
+  const identityAmbiguousCount = semanticScreening.ambiguousCaseCount;
 
   const blockers = [
     extractionBlocked ? "BLOCKED_BY_SOURCE: OSM PBF or district clips unavailable" : null,
@@ -757,8 +819,10 @@ export function buildNationalReadiness({
     schemaVersion: "territorykit-tr-sprint-2-final-national-readiness@1",
     istanbulPilotEvidence: {
       osmResearchCandidates: polygonQaResults.length,
-      technicallyValidRingPass: technicallyValid,
+      ringValidPolygonCount,
+      spatialConflictFreeCandidateCount,
       spatialConflictCount: spatialConflicts,
+      identityAmbiguousCount,
       semanticIdentityMatchCount: semanticScreening.settlementIdentityMatchCount,
       humanSemanticApprovals: 0,
       officialVerifiedPolygons: 0
@@ -958,13 +1022,24 @@ export async function runSprint2FinalCloseoutAssessment(repoRoot, generatedAt) {
     geometryQaRollup
   });
 
+  const settlementIndex = await loadSettlementNameIndex(repoRoot);
+  const semanticScreening = buildSemanticScreening({
+    zones: pilotExtract.zones,
+    provenanceByZoneId: pilotExtract.provenanceByZoneId,
+    settlementIndexByParentAdm2: settlementIndex
+  });
+  const semanticByZoneId = new Map(
+    semanticScreening.records.map((record) => [record.osmCandidateId, record])
+  );
+
   const polygonQaResults = extractionBlocked
     ? []
     : buildPolygonQaResults({
         zones: pilotExtract.zones,
         provenanceByZoneId: pilotExtract.provenanceByZoneId,
         parentsById,
-        districtSpatialByParentId
+        districtSpatialByParentId,
+        semanticByZoneId
       });
 
   if (
@@ -1008,13 +1083,6 @@ export async function runSprint2FinalCloseoutAssessment(repoRoot, generatedAt) {
       }
     }
   }
-
-  const settlementIndex = await loadSettlementNameIndex(repoRoot);
-  const semanticScreening = buildSemanticScreening({
-    zones: pilotExtract.zones,
-    provenanceByZoneId: pilotExtract.provenanceByZoneId,
-    settlementIndexByDistrict: settlementIndex
-  });
 
   const sourceLicense = await buildSourceAndLicenseStatus(repoRoot);
   const parentBoundaryDiscrepancies = buildParentBoundaryDiscrepancies({
@@ -1102,13 +1170,21 @@ export async function writeResearchDatasetArtifacts(repoRoot, reportRoot, resear
   const datasetDir = join(repoRoot, reportRoot, "research-candidate-dataset");
   const geoPath = join(datasetDir, "osm-administrative-candidates.geojson");
   const manifestPath = join(datasetDir, "manifest.json");
+  const gitignorePath = join(datasetDir, ".gitignore");
   const geoBody = `${JSON.stringify(researchDataset.geojson, null, 2)}\n`;
-  const manifestBody = `${JSON.stringify(researchDataset.manifest, null, 2)}\n`;
   const { writeFile, mkdir } = await import("node:fs/promises");
   await mkdir(datasetDir, { recursive: true });
-  await writeFile(geoPath, geoBody, "utf8");
-  await writeFile(manifestPath, manifestBody, "utf8");
-  const onDiskSha = await sha256File(geoPath);
-  researchDataset.manifest.geojsonSha256 = onDiskSha;
+  await writeFile(
+    gitignorePath,
+    "# OSM ODbL geometry is not cleared for public git redistribution; regenerate locally.\nosm-administrative-candidates.geojson\n",
+    "utf8"
+  );
+  if (OSM_RESEARCH_PUBLIC_GEOJSON_DISTRIBUTION_ALLOWED) {
+    await writeFile(geoPath, geoBody, "utf8");
+    researchDataset.manifest.geojsonSha256 = await sha256File(geoPath);
+  } else {
+    researchDataset.manifest.geojsonSha256 = sha256Hex(geoBody);
+    researchDataset.manifest.geojsonWrittenToRepository = false;
+  }
   await writeFile(manifestPath, `${JSON.stringify(researchDataset.manifest, null, 2)}\n`, "utf8");
 }
