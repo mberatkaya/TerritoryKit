@@ -6,6 +6,13 @@
     "evidence-based-smart-derived",
     "explicit-unavailable-fallback"
   ],
+  "pilotVisualPreviews": {
+    "publicGitGeoJsonOrHtmlArtifacts": false,
+    "representativePilotSlugs": ["kadikoy", "fatih", "adalar"],
+    "osmResearchPolygonCountInLocalPreviews": 74,
+    "historicalGitDistributionEvidencePath": "reports/tr-adm3/sprint-2-final-closeout/osm-geometry-historical-git-distribution.json",
+    "localRegenerationCommand": "pnpm data:tr:sprint2:final-closeout"
+  },
   "osmResearch": {
     "eligibility": "RESEARCH_ONLY_NOT_LEGALLY_CLEARED_FOR_PUBLIC_DISTRIBUTION",
     "dataLicense": "ODbL-1.0",
@@ -39,6 +46,6 @@
     "evidencePath": "reports/tr-adm3/sprint-2e-source-evidence/geometry-immutability-evidence.json",
     "districtPinCount": 8
   },
-  "generatedAt": "2026-10-18T12:55:30.839Z",
-  "headSha": "d3f9577890fdd6ff11fb04b5721d70e1cd4feea7"
+  "generatedAt": "2026-10-18T13:13:27.072Z",
+  "headSha": "45f989f22d3b6b0e4e44b5a414e00b5ab0c63668"
 }

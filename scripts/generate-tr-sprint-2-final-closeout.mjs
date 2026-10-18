@@ -1,18 +1,15 @@
 #!/usr/bin/env node
 import { execSync } from "node:child_process";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import {
   buildPilotMapHtml,
   runSprint2FinalCloseoutAssessment,
   SPRINT_2_FINAL_REPORT_ROOT,
+  writePilotVisualComparisonArtifacts,
   writeResearchDatasetArtifacts
 } from "./lib/tr-sprint-2-final-closeout.mjs";
-import {
-  writeReportGeoJson,
-  writeReportJson,
-  writeReportMarkdown
-} from "./lib/write-report-json.mjs";
+import { writeReportJson, writeReportMarkdown } from "./lib/write-report-json.mjs";
 
 const REPO_ROOT = process.cwd();
 const GENERATED_AT = process.env.SPRINT_2_FINAL_GENERATED_AT ?? new Date().toISOString();
@@ -93,18 +90,14 @@ async function main() {
 
   await writeReportJson(join(reportRoot, "closeout-decision.json"), assessment.closeoutDecision);
 
-  for (const [slug, visual] of Object.entries(assessment.pilotVisuals)) {
-    await writeReportGeoJson(join(previewRoot, `${slug}-comparison.geojson`), visual.geojson);
-    await writeFile(
-      join(previewRoot, `${slug}-comparison.html`),
-      `${buildPilotMapHtml({
-        district: slug,
-        center: visual.center,
-        geojson: visual.geojson
-      })}\n`,
-      "utf8"
-    );
-  }
+  await writePilotVisualComparisonArtifacts(
+    REPO_ROOT,
+    SPRINT_2_FINAL_REPORT_ROOT,
+    assessment.pilotVisuals,
+    {
+      buildHtml: buildPilotMapHtml
+    }
+  );
 
   const disposition = assessment.closeoutDecision.dispositionRollup;
   const report = `# Sprint 2 final geospatial closeout
@@ -143,6 +136,8 @@ async function main() {
 - Official verified polygons: **0**
 
 ## Representative pilots
+
+MapLibre comparison GeoJSON/HTML under \`pilot-visual-comparison/\` are **local-only** (gitignored) until ODbL redistribution is project-approved. Historical git exposure is recorded in \`osm-geometry-historical-git-distribution.json\` (git history is not rewritten).
 
 ### Kadıköy
 - 21 OSM research polygons; Kadıköy CKAN official mahalle SHP remains blocked (see \`source-and-license-status.json\`).

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "territorykit-tr-sprint-2-final-research-dataset-manifest@1",
-  "generatedAt": "2026-10-18T12:55:30.839Z",
+  "generatedAt": "2026-10-18T13:13:27.072Z",
   "datasetLabel": "istanbul-osm-administrative-research-candidates",
   "datasetVersion": "sprint-2-final-closeout@1",
   "featureCount": 228,
@@ -21,6 +21,6 @@
   "extractImplementationRevision": "territorykit-tr-sprint-2h-osm-extract@2",
   "geometryContentSha256": "4aae8bedf8f08ef5be98233a0858797b40d88a56d88b73f11aa29f8ada149765",
   "doesNotOverwriteRc8": true,
-  "geojsonSha256": "36d3fe2a66514762c4abb425f2e041906e84c75dab29de4d340c1d626c145f75",
+  "geojsonSha256": "f13312b1ec54f6655af2d7b3d79374c61cdd4ba8c2e09c32c63c908926760136",
   "geojsonWrittenToRepository": false
 }

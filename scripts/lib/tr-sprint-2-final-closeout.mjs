@@ -35,7 +35,15 @@ export const PINNED_SOURCE_PBF_SHA256 =
 export const PINNED_SOURCE_SNAPSHOT_DATE = "2026-08-27T20:21:06.000Z";
 
 const PARENT_OUTSIDE_TOLERANCE_KM2 = 0.000001;
-const REPRESENTATIVE_PILOT_SLUGS = ["kadikoy", "fatih", "adalar"];
+export const REPRESENTATIVE_PILOT_SLUGS = ["kadikoy", "fatih", "adalar"];
+export const PILOT_PREVIEW_OSM_RESEARCH_POLYGON_COUNTS = {
+  kadikoy: 21,
+  fatih: 48,
+  adalar: 5
+};
+export const PILOT_PREVIEW_OSM_RESEARCH_POLYGON_TOTAL = 74;
+export const OSM_GEOMETRY_HISTORICAL_GIT_DISTRIBUTION_REL =
+  "reports/tr-adm3/sprint-2-final-closeout/osm-geometry-historical-git-distribution.json";
 
 function sha256Hex(input) {
   return createHash("sha256").update(input).digest("hex");
@@ -524,6 +532,13 @@ export async function buildSourceAndLicenseStatus(repoRoot) {
       "evidence-based-smart-derived",
       "explicit-unavailable-fallback"
     ],
+    pilotVisualPreviews: {
+      publicGitGeoJsonOrHtmlArtifacts: OSM_RESEARCH_PUBLIC_GEOJSON_DISTRIBUTION_ALLOWED,
+      representativePilotSlugs: REPRESENTATIVE_PILOT_SLUGS,
+      osmResearchPolygonCountInLocalPreviews: PILOT_PREVIEW_OSM_RESEARCH_POLYGON_TOTAL,
+      historicalGitDistributionEvidencePath: OSM_GEOMETRY_HISTORICAL_GIT_DISTRIBUTION_REL,
+      localRegenerationCommand: "pnpm data:tr:sprint2:final-closeout"
+    },
     osmResearch: {
       eligibility: "RESEARCH_ONLY_NOT_LEGALLY_CLEARED_FOR_PUBLIC_DISTRIBUTION",
       dataLicense: OSM_RESEARCH_DATA_LICENSE,
@@ -1187,4 +1202,34 @@ export async function writeResearchDatasetArtifacts(repoRoot, reportRoot, resear
     researchDataset.manifest.geojsonWrittenToRepository = false;
   }
   await writeFile(manifestPath, `${JSON.stringify(researchDataset.manifest, null, 2)}\n`, "utf8");
+}
+
+export async function writePilotVisualComparisonArtifacts(
+  repoRoot,
+  reportRoot,
+  pilotVisuals,
+  { buildHtml }
+) {
+  const previewRoot = join(repoRoot, reportRoot, "pilot-visual-comparison");
+  const gitignorePath = join(previewRoot, ".gitignore");
+  const { writeFile, mkdir } = await import("node:fs/promises");
+  await mkdir(previewRoot, { recursive: true });
+  await writeFile(
+    gitignorePath,
+    "# ODbL OSM research polygon coordinates — local previews only until redistribution is approved.\n*-comparison.geojson\n*-comparison.html\n",
+    "utf8"
+  );
+
+  for (const [slug, visual] of Object.entries(pilotVisuals)) {
+    const geoPath = join(previewRoot, `${slug}-comparison.geojson`);
+    const htmlPath = join(previewRoot, `${slug}-comparison.html`);
+    const geoBody = `${JSON.stringify(visual.geojson, null, 2)}\n`;
+    const htmlBody = `${buildHtml({
+      district: slug,
+      center: visual.center,
+      geojson: visual.geojson
+    })}\n`;
+    await writeFile(geoPath, geoBody, "utf8");
+    await writeFile(htmlPath, htmlBody, "utf8");
+  }
 }

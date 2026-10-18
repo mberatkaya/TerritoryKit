@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
@@ -7,6 +8,7 @@ import test from "node:test";
 import {
   EXPECTED_OSM_RESEARCH_CANDIDATE_COUNT,
   OSM_RESEARCH_PUBLIC_GEOJSON_DISTRIBUTION_ALLOWED,
+  PILOT_PREVIEW_OSM_RESEARCH_POLYGON_TOTAL,
   SPRINT_2_FINAL_REPORT_ROOT,
   buildSemanticScreening,
   classifyPolygonDisposition,
@@ -44,6 +46,26 @@ test("buildSemanticScreening scopes duplicate names to parent ADM2", () => {
     settlementIndexByParentAdm2: new Map()
   });
   assert.equal(screening.ambiguousCaseCount, 0);
+});
+
+test("git index excludes ODbL OSM geometry preview and research GeoJSON artifacts", () => {
+  const tracked = execSync("git ls-files reports/tr-adm3/sprint-2-final-closeout", {
+    cwd: REPO_ROOT,
+    encoding: "utf8"
+  })
+    .trim()
+    .split("\n")
+    .filter(Boolean);
+  const forbidden = tracked.filter(
+    (path) =>
+      path.endsWith("osm-administrative-candidates.geojson") ||
+      /pilot-visual-comparison\/[^/]+-comparison\.(geojson|html)$/.test(path)
+  );
+  assert.equal(
+    forbidden.length,
+    0,
+    `OSM geometry must not be tracked in git: ${forbidden.join(", ")}`
+  );
 });
 
 test("disposition never auto-approves spatial or semantic conflicts", () => {
@@ -97,9 +119,19 @@ test("Sprint 2 final closeout artifacts validate inventory and QA scope", async 
 
   const semantic = JSON.parse(await readFile(join(REPORT_DIR, "semantic-screening.json"), "utf8"));
   assert.equal(semantic.records.length, EXPECTED_OSM_RESEARCH_CANDIDATE_COUNT);
+  assert.equal(semantic.ambiguousCaseCount, 3);
+  assert.equal(semantic.settlementIdentityMatchCount, 223);
   assert.equal(
     semantic.osmCandidateReviewBatch.pendingCount,
     EXPECTED_OSM_RESEARCH_CANDIDATE_COUNT
+  );
+
+  const historical = JSON.parse(
+    await readFile(join(REPORT_DIR, "osm-geometry-historical-git-distribution.json"), "utf8")
+  );
+  assert.equal(
+    historical.exposures[0].osmResearchPolygonFeatureCountTotal,
+    PILOT_PREVIEW_OSM_RESEARCH_POLYGON_TOTAL
   );
 
   const decision = JSON.parse(await readFile(join(REPORT_DIR, "closeout-decision.json"), "utf8"));

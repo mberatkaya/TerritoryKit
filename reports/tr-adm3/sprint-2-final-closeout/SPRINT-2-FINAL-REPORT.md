@@ -1,7 +1,7 @@
 # Sprint 2 final geospatial closeout
 
-**Generated:** 2026-10-18T12:55:30.839Z  
-**HEAD:** d3f9577890fdd6ff11fb04b5721d70e1cd4feea7  
+**Generated:** 2026-10-18T13:13:27.072Z  
+**HEAD:** 45f989f22d3b6b0e4e44b5a414e00b5ab0c63668  
 **Extraction blocked:** no
 
 ## Product decision
@@ -34,6 +34,8 @@
 - Official verified polygons: **0**
 
 ## Representative pilots
+
+MapLibre comparison GeoJSON/HTML under `pilot-visual-comparison/` are **local-only** (gitignored) until ODbL redistribution is project-approved. Historical git exposure is recorded in `osm-geometry-historical-git-distribution.json` (git history is not rewritten).
 
 ### Kadıköy
 

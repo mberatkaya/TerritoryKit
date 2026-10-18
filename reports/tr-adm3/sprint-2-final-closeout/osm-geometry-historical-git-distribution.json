@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2-final-osm-historical-git-distribution@1",
+  "status": "REQUIRES_LICENSE_REVIEW_HISTORICAL_GIT_EXPOSURE",
+  "note": "Prior public git commits and pull requests may have contained OpenStreetMap (ODbL-1.0) derivative geometry. This record does not rewrite git history and is not legal approval to redistribute.",
+  "repositoryCodeLicense": "Apache-2.0",
+  "osmDataLicense": "ODbL-1.0",
+  "currentPolicy": {
+    "publicGitOsmGeometryArtifacts": false,
+    "redistributionApproved": false,
+    "localRegenerationCommand": "pnpm data:tr:sprint2:final-closeout"
+  },
+  "exposures": [
+    {
+      "category": "pilot-visual-comparison",
+      "description": "Kadıköy/Fatih/Adalar MapLibre preview GeoJSON and embedded HTML coordinates for OSM administrative research polygons",
+      "introducedInCommit": "d3f9577890fdd6ff11fb04b5721d70e1cd4feea7",
+      "introducedInPullRequest": 125,
+      "paths": [
+        "reports/tr-adm3/sprint-2-final-closeout/pilot-visual-comparison/kadikoy-comparison.geojson",
+        "reports/tr-adm3/sprint-2-final-closeout/pilot-visual-comparison/kadikoy-comparison.html",
+        "reports/tr-adm3/sprint-2-final-closeout/pilot-visual-comparison/fatih-comparison.geojson",
+        "reports/tr-adm3/sprint-2-final-closeout/pilot-visual-comparison/fatih-comparison.html",
+        "reports/tr-adm3/sprint-2-final-closeout/pilot-visual-comparison/adalar-comparison.geojson",
+        "reports/tr-adm3/sprint-2-final-closeout/pilot-visual-comparison/adalar-comparison.html"
+      ],
+      "osmResearchPolygonFeatureCountsByPilot": {
+        "kadikoy": 21,
+        "fatih": 48,
+        "adalar": 5
+      },
+      "osmResearchPolygonFeatureCountTotal": 74,
+      "removedFromGitTrackingAfterCommit": "45f989f22d3b6b0e4e44b5a414e00b5ab0c63668",
+      "removedFromGitTrackingPullRequest": 125
+    },
+    {
+      "category": "research-candidate-dataset",
+      "description": "Full Istanbul OSM administrative research candidate FeatureCollection (228 polygons)",
+      "introducedInCommit": "d3f9577890fdd6ff11fb04b5721d70e1cd4feea7",
+      "introducedInPullRequest": 125,
+      "paths": [
+        "reports/tr-adm3/sprint-2-final-closeout/research-candidate-dataset/osm-administrative-candidates.geojson"
+      ],
+      "osmResearchPolygonFeatureCount": 228,
+      "removedFromGitTrackingCommit": "45f989f22d3b6b0e4e44b5a414e00b5ab0c63668"
+    }
+  ]
+}
