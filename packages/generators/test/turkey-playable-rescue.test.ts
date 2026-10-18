@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createSquareZone } from "@territory-kit/shared-testkit";
 import {
+  countSmartFallbackGeneratedMetadataErrors,
   isTopologySafePlayableRescue,
   rankPlayableRescueCandidate,
   runTurkeyAdaptivePlayableRescue,
@@ -88,6 +89,34 @@ function fakeResult(input: {
     deterministicHash: "00"
   };
 }
+
+describe("smart fallback generated metadata errors", () => {
+  it("excludes partition degeneracy when topology-safe playable rescue was accepted", () => {
+    const result = fakeResult({ ok: false, territoryCount: 3 });
+    result.quality.gates.partitionAdequacy = false;
+    result.issues.push({
+      code: "SMART_FALLBACK_PARTITION_DEGENERATE",
+      severity: "error",
+      message: "partition degenerate",
+      parentId: "tr:adm2:test"
+    });
+    expect(isTopologySafePlayableRescue(result.quality)).toBe(true);
+    expect(countSmartFallbackGeneratedMetadataErrors(result, false)).toBe(1);
+    expect(countSmartFallbackGeneratedMetadataErrors(result, true)).toBe(0);
+  });
+
+  it("still counts topology-unsafe smart errors after rescue acceptance", () => {
+    const result = fakeResult({ ok: false, territoryCount: 3 });
+    result.quality.gates.gridLikeness = false;
+    result.issues.push({
+      code: "SMART_FALLBACK_GRID_LIKENESS_REJECTED",
+      severity: "error",
+      message: "grid likeness",
+      parentId: "tr:adm2:test"
+    });
+    expect(countSmartFallbackGeneratedMetadataErrors(result, true)).toBe(1);
+  });
+});
 
 describe("playable rescue ranking", () => {
   it("prefers balanced rural partitions over oversized network-first cells", () => {
@@ -186,6 +215,57 @@ describe("playable rescue ranking", () => {
       topologySafe: true
     };
     expect(selectPlayableRescueCandidate([network, organic], context)?.mode).toBe("network-first");
+  });
+
+  it("prefers balanced organic over oversized network-first mixed urban-rural cells", () => {
+    const context = {
+      ...derivePlayableRescueContext({
+        parent: createSquareZone({
+          id: "parent",
+          datasetId: "test",
+          level: 2,
+          west: 28.9,
+          south: 41.05,
+          east: 29.25,
+          north: 41.35
+        }),
+        provinceCode: "34",
+        districtCode: "mixed",
+        profile: "auto"
+      }),
+      mixedUrbanRuralLikely: true,
+      sparseRuralLikely: false,
+      denseUrbanLikely: false
+    };
+    const network = {
+      stage: "network-faces" as const,
+      mode: "network-first" as const,
+      result: fakeResult({
+        ok: true,
+        parentAreaKm2: 220,
+        largestTerritoryAreaShare: 0.52,
+        longestUnsupportedStraightChainMeters: 3_600,
+        barrierFollowingInternalBoundaryRatio: 0.93
+      }),
+      rank: 12,
+      accepted: true,
+      topologySafe: true
+    };
+    const organic = {
+      stage: "organic-routing-repair" as const,
+      mode: "organic" as const,
+      result: fakeResult({
+        ok: true,
+        parentAreaKm2: 220,
+        largestTerritoryAreaShare: 0.19,
+        longestUnsupportedStraightChainMeters: 4_200,
+        barrierFollowingInternalBoundaryRatio: 0.55
+      }),
+      rank: 11,
+      accepted: true,
+      topologySafe: true
+    };
+    expect(selectPlayableRescueCandidate([network, organic], context)?.mode).toBe("organic");
   });
 
   it("prefers balanced organic over oversized network-first rural cells", () => {
