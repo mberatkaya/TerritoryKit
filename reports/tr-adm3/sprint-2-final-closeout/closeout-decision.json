@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2-final-closeout-decision@1",
+  "generatedAt": "2026-10-18T12:20:58.865Z",
+  "headSha": "a9966dffc01b664600351caad78c2c9ff26539d2",
+  "acceptanceQuestions": {
+    "A_osmPolygonRecovery": {
+      "recoveredCandidates": 228,
+      "reproducible": true,
+      "verdict": "GO"
+    },
+    "B_technicalValidity": {
+      "ringValidCount": 228,
+      "invalidCount": 0,
+      "notAssessedCount": 0,
+      "verdict": "PARTIAL"
+    },
+    "C_geographicAccuracy": {
+      "spatialConflictCount": 124,
+      "verdict": "NO_GO"
+    },
+    "D_semanticMahalleBoundaries": {
+      "humanApprovals": 0,
+      "verdict": "NO_GO"
+    },
+    "E_legalDistribution": {
+      "redistributionApproved": false,
+      "verdict": "BLOCKED"
+    }
+  },
+  "decisions": {
+    "engineeringScopeCompleted": "GO",
+    "osmRecoveryPipeline": "GO",
+    "individualPolygonQa": "PARTIAL",
+    "semanticBoundaryAccuracy": "NO_GO",
+    "sourceLegalEligibility": "BLOCKED",
+    "istanbulGeographicalAcceptance": "NO_GO",
+    "sprint3NationalReadiness": "NO_GO",
+    "sprint4IntegrationReadiness": "NO_GO",
+    "productionReadiness": "NO_GO"
+  },
+  "dispositionRollup": {
+    "SPATIAL_CONFLICT_REVIEW_REQUIRED": 124,
+    "TECHNICALLY_VALID_REVIEW_REQUIRED": 104
+  },
+  "remainingWork": "Remaining blockers are primarily external official data/permission, human semantic validation, and spatial acceptance — not additional Sprint 2 parser infrastructure."
+}
