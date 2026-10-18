@@ -56,7 +56,7 @@ describe("Turkey V2 national district checkpoints", () => {
       expect(actualDigest, relativePath).toBe(expectedDigest);
     }
     expect(TURKEY_V2_NATIONAL_CHECKPOINT_IMPLEMENTATION_REVISION).toBe(
-      "national-hybrid-sibling-gate-v2"
+      "national-playable-rescue-v1"
     );
   });
 

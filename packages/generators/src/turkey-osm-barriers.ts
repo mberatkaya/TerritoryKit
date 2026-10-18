@@ -1151,6 +1151,9 @@ export function createTurkeyOsmSmartFallbackGeneratedOptions(
   return {
     enabled: true,
     strategy: "smart",
+    legacyGridAllowed: false,
+    allowLowConfidencePlayableRescue: true,
+    allowSingleParentPlayableRescue: true,
     fallbackToLegacyOnSmartFailure: options.fallbackToLegacyOnSmartFailure ?? false,
     smartFallback: {
       roads: artifact.roads,
