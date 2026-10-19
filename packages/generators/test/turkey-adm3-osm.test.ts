@@ -4,11 +4,43 @@ import { join } from "node:path";
 import { osmBlockToPbfBlobBytes } from "@osmix/pbf";
 import type { TerritoryGeometry, TerritoryZone } from "@territory-kit/dataset";
 import { describe, expect, it } from "vitest";
-import { extractTurkeyAdm3OsmPbf } from "../src/turkey-adm3.js";
+import {
+  evaluateTurkeyAdm3OsmBoundaryCandidate,
+  extractTurkeyAdm3OsmPbf
+} from "../src/turkey-adm3.js";
 
 const encoder = new TextEncoder();
 
 describe("Turkey ADM3 OSM PBF extraction", () => {
+  it("rejects admin_level 8 without mahalle context or name; name-only stays a research candidate tag", () => {
+    expect(
+      evaluateTurkeyAdm3OsmBoundaryCandidate({
+        boundary: "administrative",
+        admin_level: "8",
+        type: "boundary"
+      })
+    ).toEqual({
+      accepted: false,
+      reason: "admin-level-8-without-mahalle-context"
+    });
+    expect(
+      evaluateTurkeyAdm3OsmBoundaryCandidate({
+        boundary: "administrative",
+        admin_level: "8",
+        name: "Name Only Mahalle",
+        type: "boundary"
+      }).accepted
+    ).toBe(true);
+    expect(
+      evaluateTurkeyAdm3OsmBoundaryCandidate({
+        boundary: "administrative",
+        admin_level: "8",
+        place: "neighbourhood",
+        name: "Fixture Mahalle"
+      }).accepted
+    ).toBe(true);
+  });
+
   it("parses a PBF smoke fixture, rejects broken polygons, and preserves ODbL metadata", async () => {
     const tempDir = await mkdtemp(join(tmpdir(), "territory-tr-adm3-osm-"));
 
@@ -30,21 +62,20 @@ describe("Turkey ADM3 OSM PBF extraction", () => {
       expect(territory).toMatchObject({
         sourceClass: "osm",
         official: false,
+        productionEligible: false,
+        coverageStatus: "research-candidate",
+        semanticReviewStatus: "mapping-review-required",
         osmType: "way",
         osmId: 10,
         sourceNativeId: "osm:way:10"
       });
+      expect(territory.localTypeName).toBe("Mahalle (OSM research)");
       expect(territory.source).toMatchObject({
         license: "ODbL-1.0",
         attribution: "OpenStreetMap contributors, ODbL 1.0"
       });
-      expect(result.unresolved).toEqual([
-        expect.objectContaining({
-          osmType: "relation",
-          osmId: 20,
-          reason: "geometry-unavailable"
-        })
-      ]);
+      expect(result.unresolved).toEqual([]);
+      expect(result.coverage.candidateCount).toBe(1);
       expect(result.duplicates).toEqual([]);
       expect(result.sourceLock).toMatchObject({
         license: "ODbL-1.0",
@@ -69,7 +100,7 @@ async function createMiniOsmPbf(): Promise<Uint8Array> {
       "boundary",
       "administrative",
       "admin_level",
-      "10",
+      "8",
       "name",
       "Fixture Mahalle",
       "place",

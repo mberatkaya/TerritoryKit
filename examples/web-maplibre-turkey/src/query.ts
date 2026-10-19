@@ -14,6 +14,15 @@ import {
 } from "@territory-kit/runtime/turkey-v2-delivery";
 import { createTurkeyAdm3DemoDataset } from "@territory-kit/shared-testkit";
 import { adminLevelDepth, childDemoLevel, parentDemoLevel } from "./levels.js";
+import {
+  buildNationalSearchIndex,
+  displayZoneName,
+  normalizeSearchText,
+  searchAliasesForZone,
+  searchZonesFromNationalIndex,
+  type NationalQueryArtifactPayload,
+  type NationalSearchIndex
+} from "./national-search-index.js";
 import type {
   DemoAdminLevel,
   DemoMetadata,
@@ -55,6 +64,7 @@ export function createRegistryQueryService(input: {
   allowPrerelease: boolean;
   deliveryManifestUrl?: string;
   deliveryManifestHash?: string;
+  smartCoverageUrl?: string;
 }): TerritoryQueryService {
   const datasets: LoadedDatasetByLevel = {};
   const engines: EngineByLevel = {};
@@ -62,6 +72,79 @@ export function createRegistryQueryService(input: {
   let artifactCount = 0;
   const loadedDistricts = new Set<string>();
   let deliveryManifest: TurkeyV2DeliveryIndex | undefined;
+  const nationalSearchState: NationalSearchState = {};
+
+  async function ensureNationalSearchIndex(signal: AbortSignal | undefined): Promise<void> {
+    if (nationalSearchState.index || nationalSearchState.error) {
+      return;
+    }
+
+    assertNotAborted(signal);
+
+    try {
+      const registrySnapshot = await input.registry.loadRegistry();
+      const datasetInfo =
+        registrySnapshot.datasets.find(
+          (entry) =>
+            entry.id === input.datasetId &&
+            (!input.datasetVersionPinned || entry.version === input.datasetVersion)
+        ) ?? (await input.registry.getDatasetInfo(input.datasetId, input.datasetVersion));
+      const artifactMeta = datasetInfo.artifacts.find(
+        (candidate) => candidate.path === "query/query-artifact.json"
+      );
+      if (!artifactMeta) {
+        throw new Error("query/query-artifact.json is not registered for this dataset.");
+      }
+
+      const probe = await input.registry.resolveTerritoryArtifact({
+        country: "TR",
+        level: "ADM1",
+        purpose: "query",
+        fallback: "none",
+        version: input.datasetVersion,
+        allowPrerelease: input.allowPrerelease,
+        formatPreference: ["territory-json"]
+      });
+      const queryUrl = new URL(probe.url);
+      queryUrl.pathname = queryUrl.pathname.replace(
+        /levels\/ADM1\/dataset\.json$/,
+        "query/query-artifact.json"
+      );
+
+      const bytes = await fetchVerifiedArtifactBytes(
+        queryUrl.href,
+        artifactMeta.sha256,
+        artifactMeta.sizeBytes,
+        24_000_000,
+        signal
+      );
+      const payload = JSON.parse(new TextDecoder().decode(bytes)) as NationalQueryArtifactPayload;
+
+      let smartRows: Array<{ adm2Id: string; district?: string; province?: string }> = [];
+      if (input.smartCoverageUrl) {
+        try {
+          const response = await fetch(input.smartCoverageUrl, { ...(signal ? { signal } : {}) });
+          if (response.ok) {
+            const smartPayload = (await response.json()) as {
+              districts?: Array<{ adm2Id: string; district?: string; province?: string }>;
+            };
+            smartRows = smartPayload.districts ?? [];
+          }
+        } catch {
+          // Smart coverage labels are optional for search enrichment.
+        }
+      }
+
+      nationalSearchState.index = buildNationalSearchIndex(payload, smartRows);
+      for (const [zoneId, zone] of nationalSearchState.index.zonesById) {
+        if (!zonesById.has(zoneId)) {
+          zonesById.set(zoneId, zone);
+        }
+      }
+    } catch (error) {
+      nationalSearchState.error = readRegistryQueryError(error);
+    }
+  }
 
   async function ensureDeliveryManifest(
     signal: AbortSignal | undefined
@@ -222,8 +305,17 @@ export function createRegistryQueryService(input: {
     artifactCount: () => artifactCount,
     cachePrefix: "registry memory",
     ensureLevels,
-    ensureDistrict
+    ensureDistrict,
+    nationalSearch: {
+      ensure: ensureNationalSearchIndex,
+      state: nationalSearchState
+    }
   });
+}
+
+interface NationalSearchState {
+  index?: NationalSearchIndex;
+  error?: string;
 }
 
 async function fetchVerifiedRegistryDataset(
@@ -231,7 +323,7 @@ async function fetchVerifiedRegistryDataset(
   signal: AbortSignal | undefined
 ): Promise<TerritoryDataset> {
   const artifact = resolved.artifact;
-  const maxBytes = 16_000_000;
+  const maxBytes = 24_000_000;
   if (
     artifact.format !== "territory-json" ||
     (artifact.compression && artifact.compression !== "none") ||
@@ -241,9 +333,39 @@ async function fetchVerifiedRegistryDataset(
   ) {
     throw new Error("Registry query artifact has invalid size, format, or checksum metadata.");
   }
-  const response = await fetch(resolved.url, { ...(signal ? { signal } : {}) });
-  if (!response.ok || !response.body)
+  const bytes = await fetchVerifiedArtifactBytes(
+    resolved.url,
+    artifact.sha256,
+    artifact.sizeBytes,
+    maxBytes,
+    signal
+  );
+  const dataset = JSON.parse(new TextDecoder().decode(bytes)) as TerritoryDataset;
+  // A scoped level or district shard can legitimately reference parents outside the shard.
+  toEngineDataset(dataset);
+  return dataset;
+}
+
+async function fetchVerifiedArtifactBytes(
+  url: string,
+  expectedSha256: string,
+  expectedSizeBytes: number,
+  maxBytes: number,
+  signal: AbortSignal | undefined
+): Promise<Uint8Array> {
+  if (
+    !/^[a-f0-9]{64}$/.test(expectedSha256) ||
+    expectedSizeBytes > maxBytes ||
+    expectedSizeBytes < 1
+  ) {
+    throw new Error("Registry artifact has invalid size or checksum metadata.");
+  }
+
+  const response = await fetch(url, { ...(signal ? { signal } : {}) });
+  if (!response.ok || !response.body) {
     throw new Error(`Registry query artifact failed: HTTP ${response.status}`);
+  }
+
   const reader = response.body.getReader();
   const chunks: Uint8Array[] = [];
   let total = 0;
@@ -252,31 +374,37 @@ async function fetchVerifiedRegistryDataset(
       const { value, done } = await reader.read();
       if (done) break;
       total += value.byteLength;
-      if (total > artifact.sizeBytes || total > maxBytes)
+      if (total > expectedSizeBytes || total > maxBytes) {
         throw new Error("Registry query artifact exceeds declared size.");
+      }
       chunks.push(value);
     }
   } finally {
     reader.releaseLock();
   }
+
   assertNotAborted(signal);
-  if (total !== artifact.sizeBytes) throw new Error("Registry query artifact size mismatch.");
+  if (total !== expectedSizeBytes) {
+    throw new Error("Registry query artifact size mismatch.");
+  }
+
   const bytes = new Uint8Array(total);
   let offset = 0;
   for (const chunk of chunks) {
     bytes.set(chunk, offset);
     offset += chunk.byteLength;
   }
+
   const digest = await crypto.subtle.digest("SHA-256", bytes);
   const sha256 = Array.from(new Uint8Array(digest), (byte) =>
     byte.toString(16).padStart(2, "0")
   ).join("");
-  if (sha256 !== artifact.sha256) throw new Error("Registry query artifact checksum mismatch.");
+  if (sha256 !== expectedSha256) {
+    throw new Error("Registry query artifact checksum mismatch.");
+  }
+
   assertNotAborted(signal);
-  const dataset = JSON.parse(new TextDecoder().decode(bytes)) as TerritoryDataset;
-  // A scoped level or district shard can legitimately reference parents outside the shard.
-  toEngineDataset(dataset);
-  return dataset;
+  return bytes;
 }
 
 async function fetchBoundedBytes(
@@ -333,7 +461,11 @@ export function createMetadataFromRegistryDataset(input: {
       ADM0: input.dataset.levels.includes("ADM0") ? "verified" : "unknown",
       ADM1: input.dataset.levels.includes("ADM1") ? "verified" : "unknown",
       ADM2: input.dataset.levels.includes("ADM2") ? "verified" : "unknown",
-      ADM3: turkeyNationalCoverage.levels.ADM3.status
+      ADM3:
+        ((input.dataset.coverage as { adm3ZoneCount?: number } | undefined)?.adm3ZoneCount ?? 0) >=
+        20_000
+          ? "verified"
+          : turkeyNationalCoverage.levels.ADM3.status
     },
     ...(input.registryHash ? { registryHash: input.registryHash } : {})
   };
@@ -351,6 +483,10 @@ function createQueryServiceFromStore(input: {
     signal: AbortSignal | undefined
   ) => Promise<void>;
   ensureDistrict?: (parentId: string, signal: AbortSignal | undefined) => Promise<void>;
+  nationalSearch?: {
+    ensure(signal: AbortSignal | undefined): Promise<void>;
+    state: NationalSearchState;
+  };
 }): TerritoryQueryService {
   async function ensureLevels(
     levels: readonly TerritoryAdminLevel[],
@@ -373,13 +509,30 @@ function createQueryServiceFromStore(input: {
       assertNotAborted(options.signal);
 
       const levels = options.levels.length > 0 ? options.levels : (["ADM1", "ADM2"] as const);
-      await ensureLevels(levels, options.signal);
-
       const normalized = normalizeSearchText(query);
 
       if (!normalized) {
         return [];
       }
+
+      const registrySearchLevels = levels.filter((level) => level === "ADM1" || level === "ADM2");
+      if (
+        input.ensureDistrict &&
+        input.nationalSearch &&
+        registrySearchLevels.length === levels.length
+      ) {
+        await input.nationalSearch.ensure(options.signal);
+        const nationalSearchIndex = input.nationalSearch.state.index;
+        if (nationalSearchIndex) {
+          return searchZonesFromNationalIndex(nationalSearchIndex, registrySearchLevels)
+            .filter((zone) => matchesSearch(zone, normalized, nationalSearchIndex))
+            .sort((left, right) => compareSearchRank(left, right, normalized))
+            .slice(0, options.limit)
+            .map(toSearchResult);
+        }
+      }
+
+      await ensureLevels(levels, options.signal);
 
       return levels
         .flatMap((level) =>
@@ -387,7 +540,7 @@ function createQueryServiceFromStore(input: {
             ? [...input.zonesById.values()].filter((zone) => zone.level === 3)
             : (input.datasets[level]?.zones ?? [])
         )
-        .filter((zone) => matchesSearch(zone, normalized))
+        .filter((zone) => matchesSearch(zone, normalized, input.nationalSearch?.state.index))
         .sort((left, right) => compareSearchRank(left, right, normalized))
         .slice(0, options.limit)
         .map(toSearchResult);
@@ -402,9 +555,15 @@ function createQueryServiceFromStore(input: {
         const zones = [...input.zonesById.values()].filter(
           (zone) => zone.level === 3 && zone.parentId === districtId
         );
+        const emptyDataset = createEmptyDataset(input.metadata, "ADM3");
+        const shardDatasetId = zones.find((zone) => zone.datasetId)?.datasetId;
         const engine = createTerritoryEngine({
           dataset: toEngineDataset({
-            ...createEmptyDataset(input.metadata, "ADM3"),
+            ...emptyDataset,
+            manifest: {
+              ...emptyDataset.manifest,
+              ...(shardDatasetId ? { datasetId: shardDatasetId } : {})
+            },
             zones
           })
         });
@@ -503,12 +662,21 @@ function createQueryServiceFromStore(input: {
       const artifactCount =
         typeof input.artifactCount === "function" ? input.artifactCount() : input.artifactCount;
       const zoneCount = [...input.zonesById.values()].length;
+      const searchIndex = input.nationalSearch?.state.index;
+      const searchIndexError = input.nationalSearch?.state.error;
+      const searchIndexLabel = searchIndex
+        ? `search-index ADM1=${searchIndex.report.adm1Indexed} ADM2=${searchIndex.report.adm2Indexed}`
+        : searchIndexError
+          ? `search-index error: ${searchIndexError}`
+          : input.nationalSearch
+            ? "search-index pending"
+            : "search-index n/a";
 
       return {
         loadedLevels,
         zoneCount,
         artifactCount,
-        cacheLabel: `${input.cachePrefix}: ${loadedLevels.length} levels, ${zoneCount} zones`
+        cacheLabel: `${input.cachePrefix}: ${loadedLevels.length} levels, ${zoneCount} zones · ${searchIndexLabel}`
       } satisfies QueryCacheTelemetry;
     }
   };
@@ -650,9 +818,37 @@ function toSearchResult(zone: TerritoryZone): TerritorySearchResult {
   };
 }
 
-function matchesSearch(zone: TerritoryZone, normalizedQuery: string): boolean {
+function matchesSearch(
+  zone: TerritoryZone,
+  normalizedQuery: string,
+  searchIndex?: NationalSearchIndex
+): boolean {
+  const searchText = zone.properties?.searchText;
+  if (typeof searchText === "string" && searchText.trim().length > 0) {
+    return normalizeSearchText(searchText).includes(normalizedQuery);
+  }
+
+  const territory = zone.properties?.territory as Record<string, unknown> | undefined;
+  const territoryNames = territory?.names as Record<string, unknown> | undefined;
+  const aliases = searchAliasesForZone(searchIndex, zone.id);
+  const propertyAliases = Array.isArray(zone.properties?.searchAliases)
+    ? zone.properties.searchAliases
+    : [];
   const haystack = normalizeSearchText(
-    [zone.id, zone.name, zone.localName, zone.properties.name].filter(Boolean).join(" ")
+    [
+      zone.id,
+      zone.name,
+      zone.localName,
+      zone.properties?.name,
+      zone.properties?.smartCoverageDistrict,
+      zone.properties?.smartCoverageProvince,
+      territoryNames?.default,
+      territoryNames?.tr,
+      ...aliases,
+      ...propertyAliases
+    ]
+      .filter(Boolean)
+      .join(" ")
   );
 
   return haystack.includes(normalizedQuery);
@@ -678,22 +874,14 @@ function compareZones(left: TerritoryZone, right: TerritoryZone): number {
   );
 }
 
-function displayZoneName(zone: TerritoryZone): string {
-  return zone.localName ?? zone.name ?? String(zone.properties.name ?? zone.id);
-}
-
-function normalizeSearchText(value: unknown): string {
-  return String(value ?? "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLocaleLowerCase("tr")
-    .trim();
-}
-
 function assertNotAborted(signal: AbortSignal | undefined): void {
   if (signal?.aborted) {
     throw new DOMException("Territory query request was cancelled.", "AbortError");
   }
+}
+
+function readRegistryQueryError(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
 }
 
 export function adm3ParentHint(details: TerritoryDetails | undefined): string | undefined {

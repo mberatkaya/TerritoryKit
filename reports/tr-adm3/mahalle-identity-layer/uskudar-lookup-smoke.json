@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-lookup-smoke@1",
+  "generatedAt": "2026-10-17T13:34:25.803Z",
+  "district": "Üsküdar",
+  "parentAdm2Id": "tr:adm2:54988432b79162079631621",
+  "consumerLoadOk": true,
+  "validationIssueCodes": [],
+  "sampleZone": {
+    "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-11f1c421c10e9ed20e9d",
+    "associations": [
+      {
+        "zoneId": "tr:adm3:tr-il-34-ilce-54988432b79162079631621-generated-smart-derived-v1-7-11f1c421c10e9ed20e9d",
+        "settlementId": "tr:settlement:osm:node:4997348816",
+        "method": "point-containment-covers",
+        "status": "single-candidate",
+        "evidence": [
+          {
+            "reasonCode": "POINT_IN_ZONE",
+            "message": "Seed coordinate assigned via point-in-polygon (covers).",
+            "boundaryMode": "covers",
+            "seedCoordinate": [29.0442444, 41.0183509]
+          }
+        ],
+        "gameplayDatasetVersion": "2.1.0-rc.8",
+        "gameplayGeometryHash": "fnv1a32:10d9a129",
+        "identityLayerVersion": "tr-mahalle-identity-uskudar-pilot@2026-10-17",
+        "reviewDecision": "pending"
+      }
+    ],
+    "settlements": [
+      {
+        "settlementId": "tr:settlement:osm:node:4997348816",
+        "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4997348816",
+        "canonicalIdentityKey": "fnv1a32:83115c85",
+        "displayName": "Altunizade",
+        "normalizedName": "altunizade",
+        "localityType": "suburb",
+        "parentAdm2Id": "tr:adm2:54988432b79162079631621",
+        "parentAdm1Id": "tr:adm1:34",
+        "parentAdm0Id": "tr:adm0:TR",
+        "seedCoordinate": [29.0442444, 41.0183509],
+        "sourceNativeId": "osm:node:4997348816",
+        "provenance": {
+          "providerId": "geofabrik-osm-extracts",
+          "providerName": "Geofabrik OpenStreetMap extracts",
+          "sourceDatasetId": "geofabrik:europe:turkey",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "snapshotDate": "2026-08-27T20:21:06.000Z",
+          "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "licenseState": "pending",
+          "permissionStatus": "redistribution-unknown",
+          "sourceLockState": "verified",
+          "redistributionEvidenceState": "pending",
+          "sourceNativeId": "osm:node:4997348816"
+        },
+        "identityLayerVersion": "tr-mahalle-identity-uskudar-pilot@2026-10-17",
+        "identityChecksum": "fnv1a32:e5baab22",
+        "verificationState": "locality-seed",
+        "administrativeStatus": "unknown",
+        "geometryAvailability": "seed-only",
+        "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+        "polygonEvidenceState": "none",
+        "confidence": 0.58
+      }
+    ],
+    "associationStatus": "single-candidate",
+    "zoneResolution": "associated",
+    "isAmbiguous": false,
+    "autoDisplayNameAllowed": false,
+    "consumerNameSemantics": "seed-locality-label"
+  },
+  "layerVersion": {
+    "identityLayerVersion": "tr-mahalle-identity-uskudar-pilot@2026-10-17",
+    "gameplayDatasetVersion": "2.1.0-rc.8",
+    "contentChecksum": "fnv1a32:6042014d",
+    "generatedAt": "2026-10-17T13:34:25.803Z"
+  }
+}

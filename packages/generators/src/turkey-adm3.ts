@@ -18,11 +18,19 @@ export {
   buildTurkeySmartFallbackWithAdjacency,
   buildTurkeyOrganicSmartFallbackWithAdjacency,
   buildTurkeyNetworkFirstSmartFallbackWithAdjacency,
+  TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION,
+  TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION,
+  TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION_REV4,
   createTurkeySmartFallbackDataset,
   normalizeTurkeySmartFallbackBarriers,
   inspectTurkeySmartBoundaryAlignment,
+  enforceDisjointSmartFallbackZones,
   resolveTurkeySmartFallbackConfiguration
 } from "./turkey-smart-fallback.js";
+export {
+  buildTurkeySmartFallbackV2PilotRev4HybridWithAdjacency,
+  buildTurkeySmartFallbackV2PilotWithAdjacency
+} from "./turkey-smart-derived-v2-pilot.js";
 export {
   DEFAULT_TURKEY_GENERATED_ZONE_PATHOLOGY_THRESHOLDS,
   TURKEY_GENERATED_ZONE_PATHOLOGY_SCHEMA_VERSION,
@@ -59,6 +67,7 @@ export {
   createDefaultGeneratedZoneConfig,
   createTurkeyAdm3GeneratedGeometryHash,
   createTurkeyAdm3GeneratedMigrationReport,
+  createTurkeyAdm3OsmResearchSpatialCorrespondenceReport,
   createTurkeyAdm3GeometryHash,
   computeTurkeyAdm3GeometryAreaKm2,
   createTurkeyAdm3ProviderHealthReport,
@@ -74,7 +83,11 @@ export {
   TURKEY_ADM3_OSM_LICENSE,
   TURKEY_ADM3_OSM_SOURCE_URL,
   createTurkeyAdm3OsmDataset,
-  extractTurkeyAdm3OsmPbf
+  evaluateTurkeyAdm3OsmBoundaryCandidate,
+  extractTurkeyAdm3OsmPbf,
+  hasTurkeyAdm3OsmMahalleContextTags,
+  summarizeTurkeyAdm3OsmUnresolvedEntries,
+  TURKEY_ADM3_OSM_PARSER_IMPLEMENTATION_REVISION
 } from "./turkey-adm3-osm.js";
 export {
   TURKEY_OSM_BARRIER_ALGORITHM_VERSION,
@@ -104,6 +117,22 @@ export {
   readTurkeyOsmAdm2BarrierArtifact,
   verifyTurkeyOsmSnapshot
 } from "./turkey-osm-barriers.js";
+export {
+  TURKEY_PLAYABLE_RESCUE_SCHEMA_VERSION,
+  derivePlayableRescueContext,
+  isTopologySafePlayableRescue,
+  measurePlayableRescueMetrics,
+  rankPlayableRescueCandidate,
+  runTurkeyAdaptivePlayableRescue,
+  summarizePlayableRescueFailure
+} from "./turkey-playable-rescue.js";
+export type {
+  TurkeyAdaptivePlayableRescueResult,
+  TurkeyPlayableRescueContext,
+  TurkeyPlayableRescueFailureReason,
+  TurkeyPlayableRescueReport,
+  TurkeyPlayableRescueStage
+} from "./turkey-playable-rescue.js";
 export {
   TURKEY_V2_HYBRID_ATTRIBUTION_SCHEMA_VERSION,
   TURKEY_V2_HYBRID_BATCH_SCHEMA_VERSION,
@@ -209,6 +238,21 @@ export {
   createTurkeyV2NationalArtifactPayloads,
   createTurkeyV2NationalSourceLock
 } from "./turkey-v2-national.js";
+export {
+  TURKEY_V2_NATIONAL_CHECKPOINT_IMPLEMENTATION_REVISION,
+  TURKEY_V2_NATIONAL_CHECKPOINT_PRODUCTION_BEHAVIOR_DIGESTS,
+  TURKEY_V2_NATIONAL_DISTRICT_CHECKPOINT_SCHEMA_VERSION,
+  createTurkeyV2NationalDistrictCheckpointEnvelope,
+  createTurkeyV2NationalDistrictCheckpointKey,
+  evaluateTurkeyV2NationalDistrictCheckpointRestore,
+  resolveTurkeyV2NationalOfficialNationalPriorityPolicy,
+  stableNationalCheckpointHash
+} from "./turkey-v2-national-checkpoint.js";
+export type {
+  TurkeyV2NationalDistrictCheckpointEnvelope,
+  TurkeyV2NationalDistrictCheckpointKeyInput,
+  TurkeyV2NationalDistrictCheckpointRestoreDecision
+} from "./turkey-v2-national-checkpoint.js";
 export {
   TURKEY_V2_NATIONAL_EXPECTED_COUNTS,
   computeFileSha256,

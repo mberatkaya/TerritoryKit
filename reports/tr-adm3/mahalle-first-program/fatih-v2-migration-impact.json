@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-first-migration-impact@1",
+  "baselineRc8VsV2": {
+    "baselineStableIdCount": 30,
+    "candidateStableIdCount": 44,
+    "retainedStableIdCount": 0,
+    "retainedStableIdShare": 0,
+    "newStableIdCount": 44,
+    "droppedStableIdCount": 30
+  },
+  "v17ReplayVsV2": {
+    "baselineStableIdCount": 30,
+    "candidateStableIdCount": 44,
+    "retainedStableIdCount": 0,
+    "retainedStableIdShare": 0,
+    "newStableIdCount": 44,
+    "droppedStableIdCount": 30
+  }
+}

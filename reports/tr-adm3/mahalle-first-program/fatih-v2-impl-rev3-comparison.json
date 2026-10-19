@@ -1,0 +1,369 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-first-fatih-sprint-2b3-comparison@1",
+  "generatedAt": "2026-10-15T16:44:03.487Z",
+  "district": "Fatih",
+  "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+  "baseline": {
+    "artifactRoot": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+    "datasetVersion": "2.1.0-rc.8",
+    "algorithmVersion": "smart-derived-v1.7",
+    "readOnly": true,
+    "adm3ZoneCount": 30,
+    "validMahalleSeedCount": 71,
+    "seedNamedZoneCount": 10,
+    "seedNamedShare": 0.3333,
+    "seedNameMatchCount": 10,
+    "seedCoverageRatio": 0.1408,
+    "quality": {
+      "meanBarrierAlignment": {
+        "status": "NOT_ASSESSED",
+        "value": null
+      },
+      "meanZoneBarrierAlignment": {
+        "status": "NOT_ASSESSED",
+        "value": null
+      },
+      "weightedInternalBarrierAlignment": {
+        "status": "NOT_ASSESSED",
+        "value": null
+      },
+      "geographicRealism": {
+        "status": "NOT_ASSESSED",
+        "value": null
+      },
+      "longestUnsupportedStraightChainMeters": {
+        "status": "NOT_ASSESSED",
+        "value": null
+      }
+    },
+    "pathologyFindingCount": 13
+  },
+  "v2Rev1Historical": {
+    "implementationRevision": "impl-rev1",
+    "adm3ZoneCount": 44,
+    "seedNamedShare": 0.7727,
+    "quality": {
+      "meanBarrierAlignment": 0.3718,
+      "meanZoneBarrierAlignment": 0.3262,
+      "geographicRealism": true,
+      "gridLikeness": true,
+      "longUnsupportedStraightBoundaryRatio": 0,
+      "longestUnsupportedStraightChainMeters": 0,
+      "barrierFollowingInternalBoundaryRatio": 1,
+      "pathologyFindingCount": 13
+    }
+  },
+  "v2Rev2Historical": {
+    "implementationRevision": "impl-rev2",
+    "adm3ZoneCount": 47,
+    "seedNamedShare": 0.7872,
+    "seedCoverageRatio": 0.5211,
+    "quality": {
+      "meanBarrierAlignment": 0.6562,
+      "meanZoneBarrierAlignment": 0.6671,
+      "weightedInternalBarrierAlignment": 0.6562,
+      "geographicRealism": true,
+      "gridLikeness": true,
+      "longUnsupportedStraightBoundaryRatio": 0,
+      "longestUnsupportedStraightChainMeters": 0,
+      "barrierFollowingInternalBoundaryRatio": 1,
+      "seedCoverageDetail": {
+        "validSeedCount": 71,
+        "distinctMahalleSeedsRepresented": 47,
+        "seedsInOwnPolygonCount": 37,
+        "seedNameCollisionCount": 0,
+        "zonesWithoutSeedCount": 0
+      },
+      "pathologyFindingCount": 23,
+      "qualityGateNotes": {
+        "minMeanBarrierAlignment": 0,
+        "requireBarrierForMultiTerritory": false,
+        "minMeanQualityScore": 0.25,
+        "effect": "v2 pilot relaxes barrier-alignment and barrier-sufficiency gates; geographic realism and geometry gates remain authoritative."
+      }
+    },
+    "weightedInternalBarrierAlignment": 0.6562
+  },
+  "hypothesisEvaluation": {
+    "variants": [
+      {
+        "id": "hypothesis-a-weak-reassignment",
+        "hypothesis": "A",
+        "v2PilotWeakBarrierReassignment": true,
+        "v2PilotMaxAreaGameplayMultiplier": 1,
+        "score": {
+          "weightedInternalBarrierAlignment": 0.752064,
+          "seedCoverageRatio": 0.5352,
+          "seedNamedShare": 0.8085,
+          "adm3ZoneCount": 47,
+          "geographicRealism": true,
+          "seedCoverageOk": true,
+          "validationOk": true,
+          "qualityOk": true
+        },
+        "deterministicHash": "0efdf8b446130cafa5a10c7c04b75a0c306f5fa832d7155d4f9c9a3279fa2f57",
+        "buildDurationMs": 4515
+      },
+      {
+        "id": "hypothesis-b-max-area-1p12",
+        "hypothesis": "B",
+        "v2PilotWeakBarrierReassignment": false,
+        "v2PilotMaxAreaGameplayMultiplier": 1.12,
+        "score": {
+          "weightedInternalBarrierAlignment": 0.656217,
+          "seedCoverageRatio": 0.5211,
+          "seedNamedShare": 0.7872,
+          "adm3ZoneCount": 47,
+          "geographicRealism": true,
+          "seedCoverageOk": true,
+          "validationOk": true,
+          "qualityOk": true
+        },
+        "deterministicHash": "77910a41e5eb10d6363610f8ba513e6b0936e434d2dea2f1258a7b1b3d077afb",
+        "buildDurationMs": 4533
+      },
+      {
+        "id": "impl-rev3-combined",
+        "hypothesis": "A+B",
+        "v2PilotWeakBarrierReassignment": true,
+        "v2PilotMaxAreaGameplayMultiplier": 1.12,
+        "score": {
+          "weightedInternalBarrierAlignment": 0.752064,
+          "seedCoverageRatio": 0.5352,
+          "seedNamedShare": 0.8085,
+          "adm3ZoneCount": 47,
+          "geographicRealism": true,
+          "seedCoverageOk": true,
+          "validationOk": true,
+          "qualityOk": true
+        },
+        "deterministicHash": "712f01d47c8b7d99f3f8aa05c0e576266ae527546bbb779dc9886e4025bf9a25",
+        "buildDurationMs": 4476
+      }
+    ],
+    "selectedVariantId": "hypothesis-a-weak-reassignment",
+    "selectionPolicy": "Among geography/validation-passing variants, maximize weighted internal barrier alignment without material seed-coverage regression vs impl-rev2 (>=97% of 0.5211)."
+  },
+  "acceptanceTargets": {
+    "weightedInternalBarrierAlignmentTarget": 0.8907,
+    "seedCoverageRatioFloor": 0.5211
+  },
+  "rootCauseSummary": {
+    "weightedAlignmentDeltaVsV17Replay": -0.1386,
+    "v17ReplayWeightedInternalBarrierAlignment": 0.8907,
+    "v2WeightedInternalBarrierAlignment": 0.7521,
+    "rev2HistoricalWeighted": 0.6562,
+    "seedSemantics": {
+      "validSeedCount": 71,
+      "distinctRepresentedSeeds": 47,
+      "seedNamedZoneCount": 38,
+      "seedsInOwnPolygonCount": 38,
+      "zonesWithoutSeedCount": 0,
+      "seedNameCollisionCount": 0,
+      "note": "47 distinct represented seeds vs 37 seed-named zones: extra represented seeds can share a name with a primary zone or sit in multi-face watershed components without a dedicated named polygon."
+    },
+    "watershedBarrierAudit": {
+      "watershedBoundaryEdgeCount": 904,
+      "watershedBoundaryLengthMeters": 70682.77148550269,
+      "strongBarrierWatershedLengthMeters": 35953.4268672037,
+      "mediumBarrierWatershedLengthMeters": 15721.773305195095,
+      "weakBarrierWatershedLengthMeters": 19007.571313103817,
+      "unseededFaceCount": 129,
+      "multiFacePerSeedLabelFaceCount": 1947,
+      "distinctLabeledSeedCount": 61,
+      "weakDifferentSeedBoundaryLengthMeters": 19007.571313103817,
+      "strongDifferentSeedBoundaryLengthMeters": 35953.4268672037,
+      "weakBarrierReassignedFaceCount": 177,
+      "weakBarrierReassignmentBlockedBySeedAnchor": 0
+    },
+    "seedFaceSemantics": {
+      "multiFacePerSeedLabelFaceCount": 1947,
+      "distinctLabeledSeedCount": 61,
+      "unseededFaceCount": 129,
+      "weakDifferentSeedBoundaryLengthMeters": 19007.571313103817,
+      "strongDifferentSeedBoundaryLengthMeters": 35953.4268672037,
+      "weakBarrierReassignedFaceCount": 177,
+      "legacyMisnamedMetric": "seedCollisionFaceCount was retired; multi-face-per-seed is normal watershed behavior, not a seed conflict."
+    },
+    "networkResidual": {
+      "networkCoveragePercent": 98.642108,
+      "residualAreaPercent": 1.35813,
+      "areaRejectedGroupCount": 74,
+      "topologyRejectedGroupCount": 71,
+      "maxAreaBlockedMergeCount": 0,
+      "residualGapAttachedCount": 12,
+      "residualUnattachedAreaKm2": 0.000018,
+      "preMergePieceCount": 151,
+      "postMergePieceCount": 47
+    },
+    "pathologyDistribution": {
+      "totalFindings": 25,
+      "byKind": {
+        "SPIKE": 25
+      }
+    },
+    "groundTruthIoU": "NOT_ASSESSED"
+  },
+  "v17Replay": {
+    "algorithmVersion": "smart-derived-v1.7",
+    "deterministicHash": "9845cbb6d3efc94ee1343c7c7814de8b19661ab1bc4b4475e5c0951d9cbb7456",
+    "buildDurationMs": 1496,
+    "memoryDeltaMb": 26.35,
+    "validationOk": true,
+    "qualityOk": true,
+    "adm3ZoneCount": 30,
+    "validMahalleSeedCount": 71,
+    "seedNamedZoneCount": 10,
+    "seedNamedShare": 0.3333,
+    "seedNameMatchCount": 10,
+    "seedCoverageRatio": 0.1408,
+    "quality": {
+      "meanBarrierAlignment": 0.8907,
+      "meanZoneBarrierAlignment": 0.8954,
+      "weightedInternalBarrierAlignment": 0.8907,
+      "geographicRealism": true,
+      "gridLikeness": true,
+      "longUnsupportedStraightBoundaryRatio": 0,
+      "longestUnsupportedStraightChainMeters": 0,
+      "barrierFollowingInternalBoundaryRatio": 1,
+      "seedCoverageDetail": {
+        "validSeedCount": 71,
+        "distinctMahalleSeedsRepresented": 25,
+        "seedsInOwnPolygonCount": 10,
+        "seedNameCollisionCount": 0,
+        "zonesWithoutSeedCount": 5
+      },
+      "pathologyFindingCount": 13,
+      "qualityGateNotes": {
+        "minMeanBarrierAlignment": 0,
+        "requireBarrierForMultiTerritory": false,
+        "minMeanQualityScore": 0.25,
+        "effect": "v2 pilot relaxes barrier-alignment and barrier-sufficiency gates; geographic realism and geometry gates remain authoritative."
+      }
+    },
+    "pathologyFindingCount": 13
+  },
+  "v2Pilot": {
+    "algorithmVersion": "smart-derived-v2.0-pilot",
+    "implementationRevision": "impl-rev3",
+    "deterministicHash": "0efdf8b446130cafa5a10c7c04b75a0c306f5fa832d7155d4f9c9a3279fa2f57",
+    "determinismVerified": true,
+    "buildDurationMs": 4520,
+    "memoryDeltaMb": 24.53,
+    "validationOk": true,
+    "qualityOk": true,
+    "adm3ZoneCount": 47,
+    "validMahalleSeedCount": 71,
+    "seedNamedZoneCount": 38,
+    "seedNamedShare": 0.8085,
+    "seedNameMatchCount": 38,
+    "seedCoverageRatio": 0.5352,
+    "quality": {
+      "meanBarrierAlignment": 0.7521,
+      "meanZoneBarrierAlignment": 0.7464,
+      "weightedInternalBarrierAlignment": 0.7521,
+      "geographicRealism": true,
+      "gridLikeness": true,
+      "longUnsupportedStraightBoundaryRatio": 0,
+      "longestUnsupportedStraightChainMeters": 0,
+      "barrierFollowingInternalBoundaryRatio": 1,
+      "seedCoverageDetail": {
+        "validSeedCount": 71,
+        "distinctMahalleSeedsRepresented": 47,
+        "seedsInOwnPolygonCount": 38,
+        "seedNameCollisionCount": 0,
+        "zonesWithoutSeedCount": 0
+      },
+      "pathologyFindingCount": 25,
+      "qualityGateNotes": {
+        "minMeanBarrierAlignment": 0,
+        "requireBarrierForMultiTerritory": false,
+        "minMeanQualityScore": 0.25,
+        "effect": "v2 pilot relaxes barrier-alignment and barrier-sufficiency gates; geographic realism and geometry gates remain authoritative."
+      }
+    },
+    "pathologyFindingCount": 25,
+    "networkDiagnostics": {
+      "constructionStatus": "constructed",
+      "inputBarrierCount": 3275,
+      "inputSegmentCount": 19075,
+      "weakFilteredSegmentCount": 19075,
+      "mediumFilteredSegmentCount": 9626,
+      "strongFilteredSegmentCount": 5524,
+      "geographicContourFilteredSegmentCount": 7288,
+      "selectedSegmentCount": 19075,
+      "graphComponentCount": 198,
+      "graphComponentBasis": "polygonized",
+      "largestComponentSegments": 16330,
+      "rawFaceCount": 2289,
+      "filteredFaceCount": 2084,
+      "acceptedFaceAreaKm2": 16.140168,
+      "rejectedFaceAreaKm2": 0.046676656300257406,
+      "areaRejectedGroupCount": 74,
+      "invalidGeometryGroupCount": 0,
+      "topologyRejectedGroupCount": 71,
+      "networkCoveragePercent": 98.642108,
+      "residualAreaPercent": 1.35813,
+      "networkTerritoryCount": 47,
+      "peakLocalGraphSize": 16330,
+      "polygonizationDurationMs": 122,
+      "processingMode": "monolithic",
+      "chunkCount": 0,
+      "largestChunkSegments": 0,
+      "largestChunkFaces": 0,
+      "chunkOnlyBoundaryCount": 0,
+      "parentClosedComponentCount": 0,
+      "residualGapAttachedCount": 12,
+      "residualUnattachedAreaKm2": 0.000018,
+      "preMergeCoveragePercent": 100.000153,
+      "postMergeCoveragePercent": 100.000153,
+      "candidateCoveragePercent": 100.000183,
+      "preMergePieceCount": 151,
+      "postMergePieceCount": 47,
+      "candidateCount": 47,
+      "seedWatershedBarrierAudit": {
+        "watershedBoundaryEdgeCount": 904,
+        "watershedBoundaryLengthMeters": 70682.77148550269,
+        "strongBarrierWatershedLengthMeters": 35953.4268672037,
+        "mediumBarrierWatershedLengthMeters": 15721.773305195095,
+        "weakBarrierWatershedLengthMeters": 19007.571313103817,
+        "unseededFaceCount": 129,
+        "multiFacePerSeedLabelFaceCount": 1947,
+        "distinctLabeledSeedCount": 61,
+        "weakDifferentSeedBoundaryLengthMeters": 19007.571313103817,
+        "strongDifferentSeedBoundaryLengthMeters": 35953.4268672037,
+        "weakBarrierReassignedFaceCount": 177,
+        "weakBarrierReassignmentBlockedBySeedAnchor": 0
+      },
+      "maxAreaBlockedMergeCount": 0
+    },
+    "seedWatershedBarrierAudit": {
+      "watershedBoundaryEdgeCount": 904,
+      "watershedBoundaryLengthMeters": 70682.77148550269,
+      "strongBarrierWatershedLengthMeters": 35953.4268672037,
+      "mediumBarrierWatershedLengthMeters": 15721.773305195095,
+      "weakBarrierWatershedLengthMeters": 19007.571313103817,
+      "unseededFaceCount": 129,
+      "multiFacePerSeedLabelFaceCount": 1947,
+      "distinctLabeledSeedCount": 61,
+      "weakDifferentSeedBoundaryLengthMeters": 19007.571313103817,
+      "strongDifferentSeedBoundaryLengthMeters": 35953.4268672037,
+      "weakBarrierReassignedFaceCount": 177,
+      "weakBarrierReassignmentBlockedBySeedAnchor": 0
+    }
+  },
+  "deltas": {
+    "seedNamedShareV2MinusBaseline": 0.4752,
+    "meanZoneBarrierAlignmentV2MinusBaseline": -0.149,
+    "longestUnsupportedChainV2MinusV17Replay": 0,
+    "weightedInternalBarrierAlignmentV2MinusV17Replay": -0.1386,
+    "adm3ZoneCountV2MinusV17Replay": 17,
+    "zoneCountRationale": "Higher ADM3 counts can follow seed-watershed face cardinality and max-area caps; zone count alone is not a success metric."
+  },
+  "decision": {
+    "status": "INCONCLUSIVE",
+    "reason": "Pareto trade-off: seed-named coverage improved vs rc.8/v1.7 replay but barrier alignment has not reached v1.7 replay levels (weighted 0.7521 vs target 0.8907).",
+    "paretoTradeOff": true,
+    "nationalExpansion": "NO-GO"
+  }
+}

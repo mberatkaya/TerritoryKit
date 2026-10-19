@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2h-extraction-method-comparison@2",
+  "slug": "adalar",
+  "pilotDistrict": "Adalar",
+  "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+  "adm2Suffix": "54988432b94516152709384",
+  "clipValidation": {
+    "polygon": {
+      "ok": true,
+      "errors": [],
+      "pilotDistrict": "Adalar",
+      "pilotSlug": "adalar",
+      "adm2Suffix": "54988432b94516152709384",
+      "expectedParentAdm2Id": "tr:adm2:54988432b94516152709384",
+      "clipRel": ".territory/sprint-2g/osm-clip-poly-54988432b94516152709384.osm.pbf"
+    },
+    "bbox": {
+      "ok": true,
+      "errors": [],
+      "pilotDistrict": "Adalar",
+      "pilotSlug": "adalar",
+      "adm2Suffix": "54988432b94516152709384",
+      "expectedParentAdm2Id": "tr:adm2:54988432b94516152709384",
+      "clipRel": ".territory/sprint-2g/osm-clip-bbox-54988432b94516152709384.osm.pbf"
+    }
+  },
+  "fixedTargetRelationIdCount": 5,
+  "targetRelationIds": [9460393, 9460394, 9460395, 9460396, 9460397],
+  "relationIdSetSha256": "919cfc4964e30b15065f9014ccf2b44732a8e4bc56cd83c3cc2ce4bdf61330ee",
+  "relationIdDiff": {
+    "builtRelationIds": {
+      "polygonClip": [9460393, 9460394, 9460395, 9460396, 9460397],
+      "bboxClip": [9460393, 9460394, 9460395, 9460396, 9460397],
+      "countryRelationGetid": [9460393, 9460394, 9460395, 9460396, 9460397]
+    },
+    "unresolvedRelationIds": {
+      "polygonClip": [],
+      "countryRelationGetid": []
+    },
+    "onlyBuiltInCountryGetid": [],
+    "onlyBuiltInPolygonClip": [],
+    "polygonUnresolvedRecoveredByGetid": [],
+    "stillUnresolvedAfterGetid": [],
+    "polygonUnresolvedMissingMembersInClip": []
+  },
+  "methods": {
+    "polygonCompleteWays": {
+      "label": "polygon-complete_ways",
+      "status": "ASSESSED",
+      "clipPath": ".territory/sprint-2g/osm-clip-poly-54988432b94516152709384.osm.pbf",
+      "clipSha256": "95804e633a91dbc80d98f52bcda3702433caf614480466724dd8ec9f995260c4",
+      "clipByteSize": 425452,
+      "builtPolygonCount": 5,
+      "unresolvedCount": 0,
+      "uniqueUnresolvedRelationIds": 0,
+      "reasonCounts": {},
+      "durationMs": 122,
+      "peakHeapUsedBytes": 105740984,
+      "extractionCommand": null
+    },
+    "bboxCompleteWays": {
+      "label": "bbox-complete_ways",
+      "status": "ASSESSED",
+      "clipPath": ".territory/sprint-2g/osm-clip-bbox-54988432b94516152709384.osm.pbf",
+      "clipSha256": "59a9c04a47fddf0b39f360146ca09b0f40c6b7fea7897d6a78bd347faa85561f",
+      "clipByteSize": 1593904,
+      "builtPolygonCount": 5,
+      "unresolvedCount": 20,
+      "uniqueUnresolvedRelationIds": 20,
+      "reasonCounts": {
+        "missing-outer-way-members": 12,
+        "parent-unresolved": 8
+      },
+      "durationMs": 183,
+      "peakHeapUsedBytes": 177067856,
+      "extractionCommand": null
+    },
+    "countryRelationGetid": {
+      "label": "relation-getid-country",
+      "status": "ASSESSED",
+      "clipPath": ".territory/sprint-2h/osm-clip-relation-getid-54988432b94516152709384.osm.pbf",
+      "clipSha256": "cfd92cd8814b6c3b6e3318eacf744703c791c165182016452647dd97bd5d5658",
+      "clipByteSize": 29712,
+      "builtPolygonCount": 5,
+      "unresolvedCount": 0,
+      "uniqueUnresolvedRelationIds": 0,
+      "reasonCounts": {},
+      "durationMs": 9,
+      "peakHeapUsedBytes": 131111440,
+      "extractionCommand": "osmium getid -r \"/Users/mbkaya/Repo/TerritoryKit-sprint-2h/.territory/cache/osm/TR/TR-5ec68ce5e0b2be55/turkey.osm.pbf\" r9460393 r9460394 r9460395 r9460396 r9460397 -o \"/Users/mbkaya/Repo/TerritoryKit-sprint-2h/.territory/sprint-2h/osm-clip-relation-getid-54988432b94516152709384.osm.pbf\" --overwrite"
+    }
+  },
+  "parserImplementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2h-multipolygon-stitch",
+  "extractImplementationRevision": "territorykit-tr-sprint-2h-osm-extract@2"
+}

@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-4-national-playable-map@1",
+  "generatedAt": "2026-10-18T21:34:41.371Z",
+  "candidateRoot": ".territory/sprint-3/playable-v3/candidate",
+  "datasetVersion": "2.1.0-playable-v3",
+  "geometryHash": "eee14b2bd20788d2028bacb4a6cb7c92a9415f6a7ddd98b4a43695f4a29a7cac",
+  "coverage": {
+    "provinceCount": 81,
+    "districtCount": 973,
+    "adm3FinalZoneCount": 21250
+  },
+  "mvt": {
+    "consumerSourceLayerContract": "territory_adm3",
+    "encodedProtobufLayer": "territory_adm3",
+    "validationOk": true,
+    "validationSkippedBuild": true,
+    "metrics": {
+      "tileCount": 18858,
+      "totalBytes": 73595655,
+      "maxTileBytes": 160498,
+      "largestSamples": [
+        {
+          "path": "render/tiles/10/586/388.mvt",
+          "byteSize": 11104
+        },
+        {
+          "path": "render/tiles/10/586/384.mvt",
+          "byteSize": 6835
+        },
+        {
+          "path": "render/tiles/10/586/385.mvt",
+          "byteSize": 6425
+        },
+        {
+          "path": "render/tiles/10/586/387.mvt",
+          "byteSize": 5606
+        },
+        {
+          "path": "render/tiles/10/585/387.mvt",
+          "byteSize": 5538
+        },
+        {
+          "path": "render/tiles/10/586/386.mvt",
+          "byteSize": 4301
+        },
+        {
+          "path": "render/tiles/10/585/386.mvt",
+          "byteSize": 4044
+        },
+        {
+          "path": "render/tiles/10/586/383.mvt",
+          "byteSize": 3147
+        },
+        {
+          "path": "render/tiles/10/585/388.mvt",
+          "byteSize": 3123
+        },
+        {
+          "path": "render/tiles/10/586/381.mvt",
+          "byteSize": 1642
+        }
+      ]
+    }
+  },
+  "deliveryManifest": {
+    "contentHash": "309557696df04e15cef52e0308c5d2dbd6c3a051e2d78de29ebb55f755353e65",
+    "tileCount": 18858,
+    "sourceLayer": "territory_adm3"
+  },
+  "localPreview": {
+    "registryPath": ".territory/sprint-3/playable-v3/candidate/registry.json",
+    "deliveryManifestPath": ".territory/sprint-3/playable-v3/candidate/delivery-manifest.json",
+    "devCommand": "pnpm dev:tr:national-playable-map"
+  },
+  "checksumFilesPatched": 18862
+}

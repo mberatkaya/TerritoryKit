@@ -1,0 +1,30 @@
+{
+  "observed": {
+    "buildMode": "partial",
+    "publishReady": false,
+    "publishReadyGateFailures": ["buildMode", "nationalCompleteness"],
+    "hardGateFailures": [],
+    "successfulDistrictCount": 973,
+    "failedDistrictCount": 0,
+    "adm3FinalZoneCount": 20392
+  },
+  "codeLevelCauses": [
+    {
+      "gate": "buildMode",
+      "reason": "turkey-v2-national sets buildMode to publish-ready only when outputMode===publish-ready and districtLimit is undefined; standard national build uses partial.",
+      "source": "packages/generators/src/turkey-v2-national.ts createNationalBuildArtifacts"
+    },
+    {
+      "gate": "nationalCompleteness",
+      "reason": "validateTurkeyV2NationalCompleteness emits NATIONAL_PARTIAL_BUILD when buildMode is partial (strict publish-ready expected).",
+      "source": "quality-report.json completeness.strictIssues"
+    }
+  ],
+  "notConfusedWith": [
+    "973/973 district hybrid generation success (failedDistrictCount=0)",
+    "release authorization / human governance gates",
+    "parent provenance bypass flags (--allow-parent-provenance-mismatch)"
+  ],
+  "districtProductionComplete": true,
+  "authorizationSeparate": true
+}

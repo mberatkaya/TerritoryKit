@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2-final-source-license@1",
+  "priorityOrder": [
+    "verified-official-administrative",
+    "verified-osm-administrative",
+    "evidence-based-smart-derived",
+    "explicit-unavailable-fallback"
+  ],
+  "pilotVisualPreviews": {
+    "publicGitGeoJsonOrHtmlArtifacts": false,
+    "representativePilotSlugs": ["kadikoy", "fatih", "adalar"],
+    "osmResearchPolygonCountInLocalPreviews": 74,
+    "historicalGitDistributionEvidencePath": "reports/tr-adm3/sprint-2-final-closeout/osm-geometry-historical-git-distribution.json",
+    "localRegenerationCommand": "pnpm data:tr:sprint2:final-closeout"
+  },
+  "osmResearch": {
+    "eligibility": "RESEARCH_ONLY_NOT_LEGALLY_CLEARED_FOR_PUBLIC_DISTRIBUTION",
+    "dataLicense": "ODbL-1.0",
+    "attribution": "© OpenStreetMap contributors — data available under the Open Database License (ODbL) 1.0",
+    "sourcePage": "https://www.openstreetmap.org/copyright",
+    "extractSource": "https://download.geofabrik.de/europe/turkey.html",
+    "derivativeDatabaseObligations": "ODbL share-alike and attribution for derivative databases — not verified for this repository artifact",
+    "repositoryCodeLicenseNote": "TerritoryKit source code in this repository is Apache-2.0; OSM geometry is not licensed under Apache-2.0.",
+    "publicGeoJsonInGit": false,
+    "redistributionApproved": false,
+    "productionEligible": false,
+    "sourcePbfSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+    "snapshotDate": "2026-08-27T20:21:06.000Z",
+    "sourceIntegrityStatus": "GO"
+  },
+  "officialAdministrative": {
+    "verifiedPolygonCount": 0,
+    "kadikoyCkanStatus": "BLOCKED_BY_SOURCE",
+    "blockers": [
+      "No municipal redistribution approval recorded for Istanbul pilot official polygons.",
+      "Public downloadability does not imply hosted/game redistribution rights."
+    ],
+    "technicalBlockers": [
+      "Kadıköy companion SHP acquisition bytes fail structural validation.",
+      "İstanbul lacks verified official provider entry in tr-adm3-official-providers.json."
+    ],
+    "matrixSummary": null
+  },
+  "rc8Gameplay": {
+    "immutable": true,
+    "evidencePath": "reports/tr-adm3/sprint-2e-source-evidence/geometry-immutability-evidence.json",
+    "districtPinCount": 8
+  },
+  "generatedAt": "2026-10-18T13:13:27.072Z",
+  "headSha": "45f989f22d3b6b0e4e44b5a414e00b5ab0c63668"
+}

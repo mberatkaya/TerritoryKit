@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-cross-district-qa@1",
+  "generatedAt": "2026-10-17T13:34:28.231Z",
+  "duplicateCanonicalSettlementIds": [],
+  "sameNormalizedNameAcrossDistricts": [
+    {
+      "normalizedName": "akşemsettin",
+      "districts": ["Fatih", "Eyüpsultan"]
+    },
+    {
+      "normalizedName": "fatih",
+      "districts": ["Fatih", "Çatalca", "Esenyurt"]
+    },
+    {
+      "normalizedName": "süleymaniye",
+      "districts": ["Fatih", "Esenyurt"]
+    },
+    {
+      "normalizedName": "güzeltepe",
+      "districts": ["Eyüpsultan", "Üsküdar"]
+    },
+    {
+      "normalizedName": "ihsaniye",
+      "districts": ["Eyüpsultan", "Çatalca"]
+    },
+    {
+      "normalizedName": "merkez",
+      "districts": ["Eyüpsultan", "Esenyurt"]
+    },
+    {
+      "normalizedName": "mimar sinan",
+      "districts": ["Eyüpsultan", "Üsküdar"]
+    },
+    {
+      "normalizedName": "şahintepe",
+      "districts": ["Eyüpsultan", "Başakşehir"]
+    },
+    {
+      "normalizedName": "uzunçayır",
+      "districts": ["Eyüpsultan", "Başakşehir"]
+    },
+    {
+      "normalizedName": "acıbadem",
+      "districts": ["Kadıköy", "Üsküdar"]
+    },
+    {
+      "normalizedName": "cumhuriyet",
+      "districts": ["Üsküdar", "Esenyurt"]
+    },
+    {
+      "normalizedName": "mehmet akif ersoy",
+      "districts": ["Üsküdar", "Esenyurt"]
+    },
+    {
+      "normalizedName": "atatürk",
+      "districts": ["Çatalca", "Esenyurt"]
+    },
+    {
+      "normalizedName": "başak",
+      "districts": ["Çatalca", "Başakşehir"]
+    },
+    {
+      "normalizedName": "devepınarı mevkii",
+      "districts": ["Çatalca", "Başakşehir"]
+    }
+  ],
+  "duplicateSettlementIdCount": 0,
+  "crossNameCollisionCount": 15,
+  "note": "Same normalized name across districts is expected; duplicate canonical settlement IDs across parents require review evidence."
+}

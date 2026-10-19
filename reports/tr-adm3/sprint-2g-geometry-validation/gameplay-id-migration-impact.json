@@ -1,0 +1,310 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2g-gameplay-id-migration-impact@1",
+  "generatedAt": "2026-10-17T18:00:00.000Z",
+  "rc8Immutable": true,
+  "rushAndClaimDbModified": false,
+  "ownershipTransferPerformed": false,
+  "districts": [
+    {
+      "district": "Kadıköy",
+      "slug": "kadikoy",
+      "parentAdm2Id": "tr:adm2:54988432b89638439219394",
+      "overlay": {
+        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
+        "generatedAt": "2026-10-17T18:00:00.000Z",
+        "status": "NOT_ASSESSED",
+        "reason": "no-osm-administrative-polygons-for-parent",
+        "ownershipMigrationPerformed": false,
+        "eligibleForMigration": false,
+        "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1"
+      },
+      "gameplayImmutable": true,
+      "ownershipMigrationPerformed": false
+    },
+    {
+      "district": "Fatih",
+      "slug": "fatih",
+      "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+      "overlay": {
+        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
+        "generatedAt": "2026-10-17T18:00:00.000Z",
+        "status": "ASSESSED",
+        "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1",
+        "correspondences": [
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-cbeb5278a71425ce7202",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-2463371-balat-mahallesi",
+            "osmSourceNativeId": "osm:relation:2463371",
+            "intersectionAreaKm2": 0.000012,
+            "overlapRatio": 0.00000685,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          }
+        ],
+        "correspondence": {
+          "gameplayZoneCount": 30,
+          "osmPolygonCount": 1,
+          "mappedGameplayCount": 1,
+          "orphanGameplayZoneIds": [
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-01eda0ae60d28fc3a2c7",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-073b672500565ae4fb3e",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-08c523104fbe1e7feb3d",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-13d94a01ceafb0ce5169",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-290699f58ea199c88a63",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-2b5978834366688ae645",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-34d0c14106436af5f5a6",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-57c6546b8d8c52e3ca2f",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-59f9cd89af41c5776554",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-67991e44ab1c9e28442b",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-701b712ba93c285dfee4",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-78efecad6d2ae4ccd2ec",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-88ec65114d7d0e51d713",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-8eebe5599fbf67d5bc23",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-9f83a09e877b09576ca7",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ae51c43e7a16247111a1",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b0035a2eaa3b83222d33",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b05a48a15e5125cdf298",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b3e509aaad7fa40c97c0",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b5ae85dbcb276cc5da0b",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b699d521a866aa6875c3",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-b869ea01a2bad0439ea4",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-bf7df56ae203fd5afe33",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-c760995c457452ed71a1",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-ce3a6d0f0ea5c4667c87",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dacb79746e8604409768",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-dc4135f5abb73435480a",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-de3555218fb370c42fd2",
+            "tr:adm3:tr-il-34-ilce-54988432b39641834885080-generated-smart-derived-v1-7-f24cd8558fe73d01e2b4"
+          ],
+          "orphanOsmPolygonIds": [],
+          "manyToOneMergeCandidates": []
+        },
+        "stableIdMappingFeasibility": "REQUIRES_SPLIT_MERGE_MAP",
+        "ownershipMigrationPerformed": false,
+        "eligibleForMigration": false,
+        "reviewRequired": true,
+        "evidencePath": "createTurkeyAdm3OsmResearchSpatialCorrespondenceReport"
+      },
+      "gameplayImmutable": true,
+      "ownershipMigrationPerformed": false
+    },
+    {
+      "district": "Üsküdar",
+      "slug": "uskudar",
+      "parentAdm2Id": "tr:adm2:54988432b79162079631621",
+      "overlay": {
+        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
+        "generatedAt": "2026-10-17T18:00:00.000Z",
+        "status": "NOT_ASSESSED",
+        "reason": "no-osm-administrative-polygons-for-parent",
+        "ownershipMigrationPerformed": false,
+        "eligibleForMigration": false,
+        "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1"
+      },
+      "gameplayImmutable": true,
+      "ownershipMigrationPerformed": false
+    },
+    {
+      "district": "Adalar",
+      "slug": "adalar",
+      "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+      "overlay": {
+        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
+        "generatedAt": "2026-10-17T18:00:00.000Z",
+        "status": "ASSESSED",
+        "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1",
+        "correspondences": [
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-71fb87fbe1fa6a633790",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460393-kinaliada-mahallesi",
+            "osmSourceNativeId": "osm:relation:9460393",
+            "intersectionAreaKm2": 0.64896,
+            "overlapRatio": 0.96686676,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          },
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-96e1fbaea13d9cb6230c",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460394-burgazada-mahallesi",
+            "osmSourceNativeId": "osm:relation:9460394",
+            "intersectionAreaKm2": 0.045463,
+            "overlapRatio": 0.80938223,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          },
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-96ee849e174e02b8360c",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460395-heybeliada-mahallesi",
+            "osmSourceNativeId": "osm:relation:9460395",
+            "intersectionAreaKm2": 1.060196,
+            "overlapRatio": 0.9263949300000001,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          },
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-96f975e3dd7e37b2d009",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460393-kinaliada-mahallesi",
+            "osmSourceNativeId": "osm:relation:9460393",
+            "intersectionAreaKm2": 0.093741,
+            "overlapRatio": 0.88981386,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          },
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-994a54bedcdc60a31060",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460394-burgazada-mahallesi",
+            "osmSourceNativeId": "osm:relation:9460394",
+            "intersectionAreaKm2": 1.421772,
+            "overlapRatio": 0.94381539,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          },
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-9c7cd48baa710591f489",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460394-burgazada-mahallesi",
+            "osmSourceNativeId": "osm:relation:9460394",
+            "intersectionAreaKm2": 0.075054,
+            "overlapRatio": 0.8726296100000001,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          },
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-f4741f736b67e740169d",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460395-heybeliada-mahallesi",
+            "osmSourceNativeId": "osm:relation:9460395",
+            "intersectionAreaKm2": 1.355673,
+            "overlapRatio": 0.9830064199999999,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          },
+          {
+            "gameplayZoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-f71829b8b50938358ff0",
+            "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460393-kinaliada-mahallesi",
+            "osmSourceNativeId": "osm:relation:9460393",
+            "intersectionAreaKm2": 0.666251,
+            "overlapRatio": 0.97520602,
+            "relationConfidence": "high",
+            "sourceClass": "osm-administrative-research",
+            "reviewRequired": true,
+            "eligibleForMigration": false
+          }
+        ],
+        "correspondence": {
+          "gameplayZoneCount": 14,
+          "osmPolygonCount": 3,
+          "mappedGameplayCount": 8,
+          "orphanGameplayZoneIds": [
+            "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-2c554a5f5c64beb7bddd",
+            "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-3d296a3d496146978d33",
+            "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-5de6d2f8b284a93b30c6",
+            "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-6f634fa946042aa72fd5",
+            "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-7158c3fee86f9a9bd4ca",
+            "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-d836fddfee28922a0473"
+          ],
+          "orphanOsmPolygonIds": [],
+          "manyToOneMergeCandidates": [
+            {
+              "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460393-kinaliada-mahallesi",
+              "gameplayZoneCount": 3
+            },
+            {
+              "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460394-burgazada-mahallesi",
+              "gameplayZoneCount": 3
+            },
+            {
+              "osmCandidateId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460395-heybeliada-mahallesi",
+              "gameplayZoneCount": 2
+            }
+          ]
+        },
+        "stableIdMappingFeasibility": "REQUIRES_SPLIT_MERGE_MAP",
+        "ownershipMigrationPerformed": false,
+        "eligibleForMigration": false,
+        "reviewRequired": true,
+        "evidencePath": "createTurkeyAdm3OsmResearchSpatialCorrespondenceReport"
+      },
+      "gameplayImmutable": true,
+      "ownershipMigrationPerformed": false
+    },
+    {
+      "district": "Eyüpsultan",
+      "slug": "eyupsultan",
+      "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+      "overlay": {
+        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
+        "generatedAt": "2026-10-17T18:00:00.000Z",
+        "status": "NOT_ASSESSED",
+        "reason": "no-osm-administrative-polygons-for-parent",
+        "ownershipMigrationPerformed": false,
+        "eligibleForMigration": false,
+        "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1"
+      },
+      "gameplayImmutable": true,
+      "ownershipMigrationPerformed": false
+    },
+    {
+      "district": "Çatalca",
+      "slug": "catalca",
+      "parentAdm2Id": "tr:adm2:54988432b71345383711908",
+      "overlay": {
+        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
+        "generatedAt": "2026-10-17T18:00:00.000Z",
+        "status": "NOT_ASSESSED",
+        "reason": "no-osm-administrative-polygons-for-parent",
+        "ownershipMigrationPerformed": false,
+        "eligibleForMigration": false,
+        "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1"
+      },
+      "gameplayImmutable": true,
+      "ownershipMigrationPerformed": false
+    },
+    {
+      "district": "Başakşehir",
+      "slug": "basaksehir",
+      "parentAdm2Id": "tr:adm2:54988432b67026781349893",
+      "overlay": {
+        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
+        "generatedAt": "2026-10-17T18:00:00.000Z",
+        "status": "NOT_ASSESSED",
+        "reason": "no-osm-administrative-polygons-for-parent",
+        "ownershipMigrationPerformed": false,
+        "eligibleForMigration": false,
+        "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1"
+      },
+      "gameplayImmutable": true,
+      "ownershipMigrationPerformed": false
+    },
+    {
+      "district": "Esenyurt",
+      "slug": "esenyurt",
+      "parentAdm2Id": "tr:adm2:54988432b2777192469074",
+      "overlay": {
+        "schemaVersion": "territorykit-tr-sprint-2g-gameplay-overlay@2",
+        "generatedAt": "2026-10-17T18:00:00.000Z",
+        "status": "NOT_ASSESSED",
+        "reason": "no-osm-administrative-polygons-for-parent",
+        "ownershipMigrationPerformed": false,
+        "eligibleForMigration": false,
+        "researchCorrespondenceSchema": "territorykit-tr-adm3-osm-research-correspondence@1"
+      },
+      "gameplayImmutable": true,
+      "ownershipMigrationPerformed": false
+    }
+  ]
+}

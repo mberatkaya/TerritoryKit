@@ -1,8 +1,8 @@
 # Project state snapshot
 
-**Observation time (UTC):** 2026-10-14 (Sprint 3.5 — national ADM2–ADM3 quality closeout)  
-**Verified `origin/main` base:** `26d5a746ee235b03c412f134848890bc8577a597` — _feat(tr): validate national rc.7 delivery integrity and consumer contract (#109)_  
-**Active sprint branch:** `feat/tr-national-adm2-adm3-quality-closeout`
+**Observation time (UTC):** 2026-10-14 (national geometry remediation)  
+**Verified `origin/main` base:** `bd2b1e6b0a2092af694603363cba2fb5ee191798` — _feat(tr): close national ADM2–ADM3 geometry quality and delivery gaps (#110)_  
+**Active sprint branch:** `feat/tr-national-geometry-remediation`
 
 > Re-run `git fetch origin main && git log -1 origin/main` before production decisions.
 

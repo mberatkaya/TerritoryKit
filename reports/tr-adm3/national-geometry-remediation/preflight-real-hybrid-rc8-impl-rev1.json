@@ -1,0 +1,394 @@
+{
+  "schemaVersion": "territorykit-tr-national-preflight-three-district@2",
+  "generatedAt": "2026-10-14T13:53:11.862Z",
+  "gitCommit": "c175453f693b39bc5b5ad8a3f05d9206ab65a698",
+  "evidencePath": "territory tr adm3 hybrid build (CLI dist, national-aligned OSM options)",
+  "lock": {
+    "datasetVersion": "2.1.0-rc.8",
+    "buildDate": "2026-10-14T00:00:00.000Z",
+    "implementationRevision": "national-hybrid-sibling-gate-v2",
+    "barrierRoot": ".territory/sprint-6/calibration/barriers",
+    "osmSourceLockPath": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json",
+    "adm0Adm2Dataset": "datasets/generated/countries/TR/dataset.json",
+    "cliEntry": "packages/cli/dist/index.mjs",
+    "sourceLockHash": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+    "sourceLockSchema": "territorykit-tr-osm-snapshot-source-lock@1"
+  },
+  "districts": [
+    {
+      "adm2Id": "tr:adm2:54988432b81567150601582",
+      "districtName": "Ağrı merkez",
+      "outputDir": ".territory/national-geometry-remediation/preflight-rc8-impl-rev1/tr_adm2_54988432b81567150601582",
+      "cliOk": true,
+      "durationMs": 21979,
+      "adm2ParentInDataset": true,
+      "adm3ZoneCount": 12,
+      "generatedZoneCount": 12,
+      "generatedBoundaryClasses": ["smart-derived"],
+      "qualityOk": true,
+      "gates": {
+        "approvedSourcePreservation": true,
+        "coverage": true,
+        "effectiveSiblingOverlap": true,
+        "realGeneratedOverlap": true,
+        "parentContainment": true,
+        "invalidGeometry": true,
+        "emptyFinalGeometry": true,
+        "duplicateStableId": true,
+        "missingRequiredProvenance": true,
+        "generatedMetadata": true,
+        "strictTrV2Validation": true,
+        "adjacencyIntegrity": true
+      },
+      "parentContainmentErrorCount": 0,
+      "siblingOverlapErrors": 0,
+      "siblingOverlapPairs": [],
+      "parentContainmentErrors": 0,
+      "invalidPolygonErrors": 0,
+      "deterministicHash": "d4079696d244261b8691dd6334f893d267053880dbb20a7d1a1103d406ac1bc5",
+      "geometryHashes": [
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b815-generated-smart-derived-v1-7-0533b66180b3e5e964b2",
+          "hash": "48e4dff79fc43f67566d74a49e5155e8b632107d5ee33d78d6ec85982f2e1840"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b815-generated-smart-derived-v1-7-0d8691e7093ca54e1aea",
+          "hash": "cd91b914b18e43e82de7706523c12df774b607a760e07c8905b840a6941e0d99"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b815-generated-smart-derived-v1-7-422efbefdd4032cbcf2a",
+          "hash": "d4774ef9c78cf507975ae102ecc543f52d94f2c7d273ea714665854d6b9cb196"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b815-generated-smart-derived-v1-7-50b1113821a46da462f0",
+          "hash": "3776bb6d9eb556ac4c91217c38db3b1a536bf8e78f3fef826c13270fcd44443d"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b815-generated-smart-derived-v1-7-69b7dc163606e16ceae1",
+          "hash": "d80a10a3c1d97b7c617c27f8e58de2611855bc804050e438abc91b6dbb8939cc"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b815-generated-smart-derived-v1-7-6d9218f4c93cfa20ddc6",
+          "hash": "7032286f6795a56ab67562716d0eae1da4c6ba2dee7761add4427eded0bb8117"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b815-generated-smart-derived-v1-7-945a48629b2eef31b80b",
+          "hash": "560997e6618ab540b231c3429710cd1f05d9a302500a01d4e695c573b864f82d"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b815-generated-smart-derived-v1-7-b3187dc8d583df15b991",
+          "hash": "d4fc75c888c26677f4b9bae2cc0dfd22e8f380b4afd9acdf40b619c97309e9ea"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b815-generated-smart-derived-v1-7-b5c27731dea0433956f7",
+          "hash": "c148723c5b975c8bae661bcc2ecf5936396c16a1f56f9d47d0927602c5195b42"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b815-generated-smart-derived-v1-7-c6e9d8dd9ac8d1f5258d",
+          "hash": "7f933551d28b944833f5cabfb37ddfad05ae347fa5b7e8ba36dc82dd9a5c226d"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b815-generated-smart-derived-v1-7-d1a0a4c21a10c7745c76",
+          "hash": "0d951ce45288231bc7f408e70e2b1975be86ab818c55cd5cdffc9c1a6e3be728"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b815-generated-smart-derived-v1-7-d2c8eab04e53b4ceed88",
+          "hash": "3cbdd0884cc4d421aeb83f01ec1577002a26ecf36c0d802175237a23378d3cf5"
+        }
+      ]
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "districtName": "İskenderun",
+      "outputDir": ".territory/national-geometry-remediation/preflight-rc8-impl-rev1/tr_adm2_54988432b95277821649488",
+      "cliOk": true,
+      "durationMs": 6704,
+      "adm2ParentInDataset": true,
+      "adm3ZoneCount": 40,
+      "generatedZoneCount": 40,
+      "generatedBoundaryClasses": ["smart-derived"],
+      "qualityOk": true,
+      "gates": {
+        "approvedSourcePreservation": true,
+        "coverage": true,
+        "effectiveSiblingOverlap": true,
+        "realGeneratedOverlap": true,
+        "parentContainment": true,
+        "invalidGeometry": true,
+        "emptyFinalGeometry": true,
+        "duplicateStableId": true,
+        "missingRequiredProvenance": true,
+        "generatedMetadata": true,
+        "strictTrV2Validation": true,
+        "adjacencyIntegrity": true
+      },
+      "parentContainmentErrorCount": 0,
+      "siblingOverlapErrors": 0,
+      "siblingOverlapPairs": [],
+      "parentContainmentErrors": 0,
+      "invalidPolygonErrors": 0,
+      "deterministicHash": "a3ea7b282148b4ebcb841bc9fea834b85f78f1c4ec43b5a5fb6c2dff16ede00d",
+      "geometryHashes": [
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-0528bbb25d2560ca4695",
+          "hash": "a0b6872fd981a3bde2af96a2de126d0d32b1b43734bab1120483a13612c937ac"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-08e95a7eb1716b81bd43",
+          "hash": "86ed8103e87c5544c5908a55bc59044ff2fc2c5a548b420686fc3d73ef49fa86"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-160fbcd0669d8f6feee5",
+          "hash": "01495bbcd07bd331572baba56c8fe1cf8f08b6f60bb6d30cb876793c351f74af"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-1df7c177c92116282a02",
+          "hash": "eee0774452fdb572337578fb9be743ebed01c905c31bc4c4317e0ded05fd5f6b"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-26697b591014f5ebe214",
+          "hash": "aaa681b36f65ef630edaed0dff2d9cfd68c90d73647bc883f1f8a56723fc3ee2"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-27601af537005ed73fe5",
+          "hash": "30b5237028b9efbf68b040ded434c87b90a4a85439d868b22c0bdf7e8f35d620"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-37a4a4db451c7d55b16c",
+          "hash": "bd921d809ec54f591b7e74a1b86955ce5ceb42489ec88e957f64fea7017df124"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-380085c34c10d2e066fd",
+          "hash": "c5cb236d1458720df8ff0831cb973d7412808e64607fb2cc812c1666705ffb6c"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-3b320ab591f03fda6870",
+          "hash": "8276e03193c1baf9999eeef2a5dc917baece47f2a8a13ad2de61f5a1cc0ba59f"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-468bcf219410e29f387c",
+          "hash": "43880b1f3a9ed17a58e4ad364b49a46f2f8c64e8d02a8794915f1d155c245321"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-4a8011cfc105d5d99765",
+          "hash": "7864395384474189f25b1a119746eeebad3b09102692cfe4e8026c5a89150319"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-4ef46925be296aa354df",
+          "hash": "1d8550f2ecb926e3d92433dcc21ae355a7ea7d65c5a743025c15d448e183db2a"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-6244246174d86b03d32d",
+          "hash": "c78e6967302c015b28f9c4a3d8fb84d379d0361843b218d30d8a28245529c661"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-65dcebd3e40641e46723",
+          "hash": "a880eef03e3a764dd0f3e20516a6d48e1cb6b0dc9b26526d0a0cf6d8951c5f36"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-68275dd7f9da7b879f3f",
+          "hash": "7c37b3271c31ce02f139cb2caf48b737f62a8e6eb8498b3d193e7321adb988d3"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-6b91e9cea232dbcf1e3a",
+          "hash": "f24a600d1604584c80d0e9f96ae1c3a63a6ffbfb687a9a19b51a2890a45baf18"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-6bcb68fad0e1528af34c",
+          "hash": "4ab6f11ee0a8a2900c94411e2fdbf6be5a6d1aa7db11f9b343f0e71c0abeccb0"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-709c70be8e4ba1017cc8",
+          "hash": "f404dccc8273b52ea3127658244abcb97e73efd8698fe49d3fac7aebd24242fd"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-70e84dcdbfac39525936",
+          "hash": "2e615b214fe1effc5fa33a006c488db1215ae78c515c07ed5c62d74346a45d70"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-789a2215939ed5bc266f",
+          "hash": "a2410b51760ef87dc9e8d1ea8e4b2560fdc4aec071f11b138b671fef631a3b88"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-7e093aeaf8f8a5312ffd",
+          "hash": "90ebdb261cc7a6397e1d9925dabba0bfb8bdc9d9b8f5420a72406519e8acf42f"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-89602a9c9c94ad92eff7",
+          "hash": "44f4ec811d6f7ca7669291562f7b76a9cbc5d0efb6d7849a15aa787b4c53d5ea"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-8b6140ebfa81f2ce1b0d",
+          "hash": "942403db8a9c5510d10b60df31b4a1930c4d7297582b52621a7acfe5d2ca67c2"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-8bfb093e8cc1110e64ae",
+          "hash": "ba597a227a08c7f593bca330126fe6cc4c039a6b91d7753215a09f87bc7b5b29"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-8ce52022a559d006dede",
+          "hash": "7d25241eb3d8122200d3037d3222ad928b68aeb325187b4d3df02270187f7fbd"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-95467cc2a6c62c1aff98",
+          "hash": "b15482de66cf79287a0ae5f7cfaa0cc4ccbba2478ef4a6e39689e7633df2372a"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-9a22a4fdc7ee588e9f51",
+          "hash": "84152ec066b83f052e35ffca92300e8518db8749eb8fd7e2881aa5a8c02bfd02"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-a21324923ac3a14d34df",
+          "hash": "9b2b8b09dbd8ac5b33e716b6465dffe28748b3cc257103aaa8dea5889f1d6425"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-a908270edd1a3bf24634",
+          "hash": "16df0633108128cdaba8f21c10cb7caf11b08f5a9f498ea6012dfef3a9daaa6b"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-ae6bbddd9a3ec2d37ed7",
+          "hash": "7a608a9512b9b42f4bc80d3a845a87a97f97f8d27dac0a5a48bc3ab617428840"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-aff45bb810085d4305d6",
+          "hash": "c354fa19c7b026dec51ee9732cabd03672277f391b233f5c9a29e8adcaaaf4e7"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-b3ca2d3bdae7264a0d15",
+          "hash": "3f7e9522d0fa9801c8671c59fb3a6def78dc3c257502d214c7c806f01f39e148"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-b64d38433ef47bac21bb",
+          "hash": "27c138ec09f0fce9be82f1c416e29826fccaf4ee956e10d0f0d525b6a18c354a"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-c70c5b1c9a1008cef8df",
+          "hash": "6d55cd6fa9555474d437a915b4db57c805925a85972f39573fb8ec12b83fb20e"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-cfc8ed8a8ffc891317d3",
+          "hash": "abe756c8d39ca35f591c717bc58f29c9dd6713d1f6efcccae208582e62d0f43d"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-d76737de3646becb8711",
+          "hash": "b688d26c7b64cb696734862c16134c4ee2c026b1af8456f17a86189e1312c8d5"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-d945594f01c300f49f8a",
+          "hash": "b54df14ad58dc97ee2f0838e30b9e2be6746de512e8db8e2f700021d95a93203"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-e1d9ce18c3726ba12054",
+          "hash": "2f86ebba9ca44ab2daee555dc43c25f84622a7498e21fb42c0a85609a3029bd7"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-eabcd0952f74fa67e22b",
+          "hash": "92c758449b1da91987a63e39a294c80e1156abb999059942f70b5df6cd90a59c"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b952-generated-smart-derived-v1-7-fcfa425e8f3b29e258ce",
+          "hash": "b174d180ccfce20010b06b8e4a029ab28b8c09a6e0c771122296f33af41dc751"
+        }
+      ]
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b28913521474336",
+      "districtName": "Erbaa",
+      "outputDir": ".territory/national-geometry-remediation/preflight-rc8-impl-rev1/tr_adm2_54988432b28913521474336",
+      "cliOk": true,
+      "durationMs": 67057,
+      "adm2ParentInDataset": true,
+      "adm3ZoneCount": 16,
+      "generatedZoneCount": 16,
+      "generatedBoundaryClasses": ["smart-derived"],
+      "qualityOk": true,
+      "gates": {
+        "approvedSourcePreservation": true,
+        "coverage": true,
+        "effectiveSiblingOverlap": true,
+        "realGeneratedOverlap": true,
+        "parentContainment": true,
+        "invalidGeometry": true,
+        "emptyFinalGeometry": true,
+        "duplicateStableId": true,
+        "missingRequiredProvenance": true,
+        "generatedMetadata": true,
+        "strictTrV2Validation": true,
+        "adjacencyIntegrity": true
+      },
+      "parentContainmentErrorCount": 0,
+      "siblingOverlapErrors": 0,
+      "siblingOverlapPairs": [],
+      "parentContainmentErrors": 0,
+      "invalidPolygonErrors": 0,
+      "deterministicHash": "0aa60bbe86f41e99d2cac72f31afc237449febcf1b54a17b4a29468a5c7938e2",
+      "geometryHashes": [
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b289-generated-smart-derived-v1-7-1aeee210d57ead3a34f9",
+          "hash": "27d447c9c0aaad0b99d17077812dddafd33aec3ed0d0d84a1c532f28f08f59ef"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b289-generated-smart-derived-v1-7-30a7f491940d0dff7b87",
+          "hash": "714a19cfca1ba2b70e57fcf9b30a782db65cbfe378b7c1cc21428b68270a111f"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b289-generated-smart-derived-v1-7-359b15eb929bd9ea7383",
+          "hash": "e7a9a983de3e0fd73ff2415fd5d92508a4d2f4b7495664cb105bb52a2912ad56"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b289-generated-smart-derived-v1-7-4cff29e5c57cb9b9ede6",
+          "hash": "1a32d8655cfb6cdc17da6af3fdfffefe13485d80809fcc2ee643fc78d336c833"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b289-generated-smart-derived-v1-7-604e1d110f2134ffc91c",
+          "hash": "98f57ee6dcb2fbb3d2a64ccff3359f71ad7740f30f72158703ff381d9cf62950"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b289-generated-smart-derived-v1-7-7004e130aa8fb2cb4c67",
+          "hash": "6212d697fa33f8ed35f1d215150389e89040a8cfdcfbdcacc6e44c528790b56b"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b289-generated-smart-derived-v1-7-8075acf10b777a78a18d",
+          "hash": "4f091f82f3d903c9bd2e12a58b383c0c959b9054f2a9040434237b8230ea940b"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b289-generated-smart-derived-v1-7-866c549ca779e5b29107",
+          "hash": "670999d235c8793d219f3d809921ac3d864886ff34e0781a8a8e8134d0826929"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b289-generated-smart-derived-v1-7-98b83d079175f140bc70",
+          "hash": "389167e14850672a745b3d6261ab09706a21cbc26bc31aeaeb6f9ca9e51b43d4"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b289-generated-smart-derived-v1-7-9ed1baea89e7a40b3f13",
+          "hash": "f8bea7077cb9da07487674814aa70943ef6ee1a124a92ff9440931826beeef78"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b289-generated-smart-derived-v1-7-9fdfd2c3e8ccafc9f967",
+          "hash": "8f75fe811b9226922c163f5eff1fd198f023468fa6c6ca88485d132a230cba43"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b289-generated-smart-derived-v1-7-a7d8df95889b025c01b5",
+          "hash": "c8d19aa40f3428696199fd968e76f85e2060d61037ee502c66a8ce898d404b54"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b289-generated-smart-derived-v1-7-b37d9aa9524f7fb515f3",
+          "hash": "d326329ac07ead6035218e13a4f95d9daa7bb5785d9df7d2a6106e7047f6135a"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b289-generated-smart-derived-v1-7-bea456747f46667714a1",
+          "hash": "8c276dda803722db6b72f2bb50cdb67efee9249213ee41e6255716f01e28f363"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b289-generated-smart-derived-v1-7-c45f1cfac9676e51c517",
+          "hash": "95af5b1cf078304785a44a1adb326f8f883308c3f9855db6ebfc7c2a0af84cc7"
+        },
+        {
+          "id": "tr:adm3:tr-il-00-ilce-54988432b289-generated-smart-derived-v1-7-d48c66675501d4c92324",
+          "hash": "1e8871d69d89fa2b4c2d1943e351edda883610ae296fc4a0547c1b3e277093b9"
+        }
+      ]
+    }
+  ],
+  "ok": true
+}

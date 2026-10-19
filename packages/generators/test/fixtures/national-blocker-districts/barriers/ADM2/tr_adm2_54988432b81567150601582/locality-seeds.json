@@ -1,0 +1,1705 @@
+[
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9829574,
+      39.6557292
+    ],
+    "id": "osm:node:12454428384",
+    "name": "Kayak Evi",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:12454428384",
+    "type": "locality"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9531741,
+      39.6607016
+    ],
+    "id": "osm:node:12454428386",
+    "name": "Mıstıalinin Sırtı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:12454428386",
+    "type": "locality"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9374885,
+      39.6643521
+    ],
+    "id": "osm:node:12454428394",
+    "name": "Navser Düzü",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:12454428394",
+    "type": "locality"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2116844,
+      39.6101067
+    ],
+    "id": "osm:node:1496516695",
+    "name": "Boztoprak",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:1496516695",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.186024,
+      39.628559
+    ],
+    "id": "osm:node:1496516739",
+    "name": "Doğutepe",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:1496516739",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.267506,
+      39.566029
+    ],
+    "id": "osm:node:1496516751",
+    "name": "Esenköy",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:1496516751",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2356373,
+      39.5923073
+    ],
+    "id": "osm:node:1496517142",
+    "name": "Uzunveli",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:1496517142",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.72,
+    "coordinate": [
+      43.1759782,
+      39.893314
+    ],
+    "id": "osm:node:2133542086",
+    "name": "Kayacık",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2133542086",
+    "type": "neighbourhood"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9532577,
+      39.844799
+    ],
+    "id": "osm:node:2292400008",
+    "name": "Ahmetbey",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400008",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9472687,
+      39.805336
+    ],
+    "id": "osm:node:2292400009",
+    "name": "Akbulgur",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400009",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1703677,
+      39.946518
+    ],
+    "id": "osm:node:2292400012",
+    "name": "Akçay",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400012",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1699287,
+      39.78978
+    ],
+    "id": "osm:node:2292400016",
+    "name": "Altınçayır",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400016",
+    "type": "locality"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9292177,
+      39.7408503
+    ],
+    "id": "osm:node:2292400017",
+    "name": "Anakaya",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400017",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9702787,
+      39.783649
+    ],
+    "id": "osm:node:2292400018",
+    "name": "Arakonak",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400018",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.8776007,
+      39.75259
+    ],
+    "id": "osm:node:2292400020",
+    "name": "Aslangazi",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400020",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9694517,
+      39.690151
+    ],
+    "id": "osm:node:2292400022",
+    "name": "Ağılbaşı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400022",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1723186,
+      39.6101557
+    ],
+    "id": "osm:node:2292400023",
+    "name": "Aşağı Ağadeve",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400023",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1054872,
+      39.8975249
+    ],
+    "id": "osm:node:2292400024",
+    "name": "Aşağı Dürmeli",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400024",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0561286,
+      39.7038185
+    ],
+    "id": "osm:node:2292400029",
+    "name": "Aşağı Küpkıran",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400029",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0962623,
+      39.9331017
+    ],
+    "id": "osm:node:2292400030",
+    "name": "Aşağı Pamuktaş",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400030",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0470573,
+      39.8455697
+    ],
+    "id": "osm:node:2292400031",
+    "name": "Aşağı Saklıca",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400031",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0715017,
+      39.778908
+    ],
+    "id": "osm:node:2292400033",
+    "name": "Aşağıyoldüzü",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400033",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2783307,
+      39.953877
+    ],
+    "id": "osm:node:2292400034",
+    "name": "Aşağıkent",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400034",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.035344,
+      39.7954164
+    ],
+    "id": "osm:node:2292400035",
+    "name": "Aşkale",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400035",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.8871899,
+      39.7078496
+    ],
+    "id": "osm:node:2292400036",
+    "name": "Badıllı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400036",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2508494,
+      39.8126536
+    ],
+    "id": "osm:node:2292400037",
+    "name": "Balkaynak",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400037",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1879417,
+      39.676476
+    ],
+    "id": "osm:node:2292400038",
+    "name": "Ballıbostan",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400038",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0762777,
+      39.734211
+    ],
+    "id": "osm:node:2292400039",
+    "name": "Baloluk",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400039",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.3018118,
+      39.6854294
+    ],
+    "id": "osm:node:2292400040",
+    "name": "Balıksu",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400040",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.3087312,
+      39.6424413
+    ],
+    "id": "osm:node:2292400041",
+    "name": "Bayıraltı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400041",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.3318178,
+      39.9529298
+    ],
+    "id": "osm:node:2292400042",
+    "name": "Başkent",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400042",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1919222,
+      39.8168195
+    ],
+    "id": "osm:node:2292400043",
+    "name": "Başçavuş",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400043",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.166638,
+      39.6398853
+    ],
+    "id": "osm:node:2292400044",
+    "name": "Bezirhane",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400044",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0532033,
+      39.9097977
+    ],
+    "id": "osm:node:2292400045",
+    "name": "Beşbulak",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400045",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.3177474,
+      39.7084312
+    ],
+    "id": "osm:node:2292400046",
+    "name": "Beşiktepe",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400046",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1053693,
+      39.7683994
+    ],
+    "id": "osm:node:2292400047",
+    "name": "Bölükbaşı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400047",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1938839,
+      39.9206823
+    ],
+    "id": "osm:node:2292400049",
+    "name": "Cumaçay",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400049",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9598258,
+      39.8836451
+    ],
+    "id": "osm:node:2292400054",
+    "name": "Dedemaksut",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400054",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0708227,
+      39.9460689
+    ],
+    "id": "osm:node:2292400076",
+    "name": "Dumanlı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400076",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2372108,
+      39.7828321
+    ],
+    "id": "osm:node:2292400079",
+    "name": "Dönerdere",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400079",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1431917,
+      39.736935
+    ],
+    "id": "osm:node:2292400088",
+    "name": "Eliaçık",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400088",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1183632,
+      39.6589889
+    ],
+    "id": "osm:node:2292400091",
+    "name": "Eski Harman",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400091",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9991085,
+      39.6636478
+    ],
+    "id": "osm:node:2292400092",
+    "name": "Eğribelen",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400092",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2835887,
+      39.663116
+    ],
+    "id": "osm:node:2292400094",
+    "name": "Geçitalan",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400094",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.161264,
+      39.8268684
+    ],
+    "id": "osm:node:2292400100",
+    "name": "Gümüşyazı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400100",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.3139292,
+      39.7262233
+    ],
+    "id": "osm:node:2292400102",
+    "name": "Güneysu",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400102",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9232196,
+      39.8908191
+    ],
+    "id": "osm:node:2292400104",
+    "name": "Güvendik",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400104",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0198967,
+      39.887932
+    ],
+    "id": "osm:node:2292400105",
+    "name": "Güvenli",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400105",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0188594,
+      39.781614
+    ],
+    "id": "osm:node:2292400106",
+    "name": "Hacısefer",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400106",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2790922,
+      39.7999157
+    ],
+    "id": "osm:node:2292400107",
+    "name": "Hanoba",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400107",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1745067,
+      39.718868
+    ],
+    "id": "osm:node:2292400112",
+    "name": "Hıdır",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400112",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2116055,
+      39.7229629
+    ],
+    "id": "osm:node:2292400113",
+    "name": "Kalender",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400113",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9235677,
+      39.70993
+    ],
+    "id": "osm:node:2292400119",
+    "name": "Karasu",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400119",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1450402,
+      39.7831608
+    ],
+    "id": "osm:node:2292400121",
+    "name": "Kavacık",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400121",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.284811,
+      39.742303
+    ],
+    "id": "osm:node:2292400122",
+    "name": "Kavakköy",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400122",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9281647,
+      39.813614
+    ],
+    "id": "osm:node:2292400123",
+    "name": "Kayabey",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400123",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2037042,
+      39.6861275
+    ],
+    "id": "osm:node:2292400126",
+    "name": "Kazlı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400126",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2047987,
+      39.801266
+    ],
+    "id": "osm:node:2292400127",
+    "name": "Kocataş",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400127",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9516554,
+      39.7054837
+    ],
+    "id": "osm:node:2292400129",
+    "name": "Konuktepe",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400129",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.296727,
+      39.8306067
+    ],
+    "id": "osm:node:2292400130",
+    "name": "Kovancık",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400130",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.3185135,
+      39.9390198
+    ],
+    "id": "osm:node:2292400131",
+    "name": "Koçbaşı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400131",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0923071,
+      39.7032087
+    ],
+    "id": "osm:node:2292400132",
+    "name": "Kumlugeçit",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400132",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1447844,
+      39.9427897
+    ],
+    "id": "osm:node:2292400138",
+    "name": "Mollaali",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400138",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0652457,
+      39.890549
+    ],
+    "id": "osm:node:2292400141",
+    "name": "Mollaosman",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400141",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.247692,
+      39.6790577
+    ],
+    "id": "osm:node:2292400143",
+    "name": "Murat",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400143",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1249117,
+      39.769764
+    ],
+    "id": "osm:node:2292400144",
+    "name": "Murathan",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400144",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.3205608,
+      39.9577034
+    ],
+    "id": "osm:node:2292400149",
+    "name": "Ortakent",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400149",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.3161396,
+      39.7507303
+    ],
+    "id": "osm:node:2292400150",
+    "name": "Ortayokuş",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400150",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.193726,
+      39.739533
+    ],
+    "id": "osm:node:2292400151",
+    "name": "Otlubayır",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400151",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0671797,
+      39.770218
+    ],
+    "id": "osm:node:2292400152",
+    "name": "Ozanlar",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400152",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0452643,
+      39.9263945
+    ],
+    "id": "osm:node:2292400156",
+    "name": "Sabuncu",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400156",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9159917,
+      39.932411
+    ],
+    "id": "osm:node:2292400160",
+    "name": "Sarıca",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400160",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2283857,
+      39.744797
+    ],
+    "id": "osm:node:2292400161",
+    "name": "Sarıdoğan",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400161",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2666577,
+      39.861683
+    ],
+    "id": "osm:node:2292400162",
+    "name": "Sarıharman",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400162",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9943602,
+      39.8767718
+    ],
+    "id": "osm:node:2292400164",
+    "name": "Sarıtaş",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400164",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2492539,
+      39.9649194
+    ],
+    "id": "osm:node:2292400165",
+    "name": "Sağırtaş",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400165",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.8996629,
+      39.7623697
+    ],
+    "id": "osm:node:2292400169",
+    "name": "Soğan Eleşkirt",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400169",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2400901,
+      39.8402563
+    ],
+    "id": "osm:node:2292400170",
+    "name": "Soğancumaçay",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400170",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0141437,
+      39.709194
+    ],
+    "id": "osm:node:2292400173",
+    "name": "Suçatağı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400173",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9200547,
+      39.913151
+    ],
+    "id": "osm:node:2292400175",
+    "name": "Söğütlü",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400175",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1301377,
+      39.874924
+    ],
+    "id": "osm:node:2292400177",
+    "name": "Taypınar",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400177",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9464787,
+      39.687004
+    ],
+    "id": "osm:node:2292400178",
+    "name": "Taştekne",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400178",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0040127,
+      39.771244
+    ],
+    "id": "osm:node:2292400179",
+    "name": "Tellisırt",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400179",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9766258,
+      39.841623
+    ],
+    "id": "osm:node:2292400180",
+    "name": "Tezeren",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400180",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2676922,
+      39.7793246
+    ],
+    "id": "osm:node:2292400187",
+    "name": "Uçarkaya",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400187",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0744763,
+      39.6658749
+    ],
+    "id": "osm:node:2292400190",
+    "name": "Yakınca",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400190",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.3469203,
+      39.7428867
+    ],
+    "id": "osm:node:2292400191",
+    "name": "Yalnızkonak",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400191",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9023427,
+      39.676464
+    ],
+    "id": "osm:node:2292400195",
+    "name": "Yaylaköy",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400195",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1580457,
+      39.773117
+    ],
+    "id": "osm:node:2292400197",
+    "name": "Yazıcı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400197",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2042744,
+      39.7048354
+    ],
+    "id": "osm:node:2292400198",
+    "name": "Yazılı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400198",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0149594,
+      39.6712226
+    ],
+    "id": "osm:node:2292400204",
+    "name": "Yolluyazı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400204",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1355657,
+      39.7072564
+    ],
+    "id": "osm:node:2292400205",
+    "name": "Yoncalı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400205",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.959514,
+      39.9316216
+    ],
+    "id": "osm:node:2292400206",
+    "name": "Yorgunsöğüt",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400206",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1307956,
+      39.8982036
+    ],
+    "id": "osm:node:2292400209",
+    "name": "Yukarı Dürmeli",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400209",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2564807,
+      39.707638
+    ],
+    "id": "osm:node:2292400212",
+    "name": "Yukarı Küpkıran",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400212",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1210102,
+      39.9403412
+    ],
+    "id": "osm:node:2292400213",
+    "name": "Yukarıpamuktaş",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400213",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0283807,
+      39.856716
+    ],
+    "id": "osm:node:2292400214",
+    "name": "Yukarı Saklıca",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400214",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0999557,
+      39.831245
+    ],
+    "id": "osm:node:2292400216",
+    "name": "Yukarıyoldüzü",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400216",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9701797,
+      39.759152
+    ],
+    "id": "osm:node:2292400217",
+    "name": "Yurtpınar",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400217",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9347694,
+      39.7677543
+    ],
+    "id": "osm:node:2292400220",
+    "name": "Yığıntepe",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400220",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9835697,
+      39.804153
+    ],
+    "id": "osm:node:2292400221",
+    "name": "Ziyaret",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292400221",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2417011,
+      39.6616496
+    ],
+    "id": "osm:node:2292404819",
+    "name": "Çakıroba",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292404819",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0981545,
+      39.736633
+    ],
+    "id": "osm:node:2292404825",
+    "name": "Çamurlu",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292404825",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9379348,
+      39.9523774
+    ],
+    "id": "osm:node:2292404828",
+    "name": "Çatalipaşa",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292404828",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9169157,
+      39.672611
+    ],
+    "id": "osm:node:2292404839",
+    "name": "Çayır",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292404839",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9841797,
+      39.900757
+    ],
+    "id": "osm:node:2292404852",
+    "name": "Çobanbeyi",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292404852",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9864489,
+      39.70698
+    ],
+    "id": "osm:node:2292404855",
+    "name": "Çukurçayır",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292404855",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.2374041,
+      39.6465991
+    ],
+    "id": "osm:node:2292404862",
+    "name": "Özbaşı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292404862",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.171513,
+      39.9280014
+    ],
+    "id": "osm:node:2292404870",
+    "name": "Özveren",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292404870",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.255421,
+      39.610169
+    ],
+    "id": "osm:node:2292497934",
+    "name": "Oğlaklı",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:2292497934",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0403364,
+      39.702337
+    ],
+    "id": "osm:node:3145095028",
+    "name": "100. Yıl",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:3145095028",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      42.9789007,
+      39.731525
+    ],
+    "id": "osm:node:3797132443",
+    "name": "Yolugüzel",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:3797132443",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.1095381,
+      39.7995698
+    ],
+    "id": "osm:node:696640336",
+    "name": "Çukuralan",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:696640336",
+    "type": "village"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0451358,
+      39.7202298
+    ],
+    "id": "osm:node:8205561914",
+    "name": "Abide",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8205561914",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0517236,
+      39.7139033
+    ],
+    "id": "osm:node:8205561915",
+    "name": "Alpaslan",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8205561915",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0504381,
+      39.7267201
+    ],
+    "id": "osm:node:8205561916",
+    "name": "Bahçelievler",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8205561916",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0582052,
+      39.7181348
+    ],
+    "id": "osm:node:8205621617",
+    "name": "Cumhuriyet",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8205621617",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0423305,
+      39.7154449
+    ],
+    "id": "osm:node:8205621618",
+    "name": "Fevzi Çakmak",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8205621618",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0491541,
+      39.7337455
+    ],
+    "id": "osm:node:8205621619",
+    "name": "Fatih",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8205621619",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0459378,
+      39.7257785
+    ],
+    "id": "osm:node:8205621620",
+    "name": "Gazi",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8205621620",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0358047,
+      39.7165977
+    ],
+    "id": "osm:node:8205621621",
+    "name": "Fırat",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8205621621",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0578731,
+      39.7257999
+    ],
+    "id": "osm:node:8205621622",
+    "name": "Hürriyet",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8205621622",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0577496,
+      39.7298449
+    ],
+    "id": "osm:node:8205621623",
+    "name": "Kazım Karabekir",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8205621623",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0481692,
+      39.7120062
+    ],
+    "id": "osm:node:8205621624",
+    "name": "Kurtuluş",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8205621624",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0559335,
+      39.7220105
+    ],
+    "id": "osm:node:8205621625",
+    "name": "Leylek Pınar",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8205621625",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0670901,
+      39.7121528
+    ],
+    "id": "osm:node:8205621626",
+    "name": "Mehmet Akif Ersoy",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8205621626",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0574047,
+      39.711382
+    ],
+    "id": "osm:node:8205621627",
+    "name": "Murat",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8205621627",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0474289,
+      39.7169973
+    ],
+    "id": "osm:node:8205621628",
+    "name": "Sıtkıye",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8205621628",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.58,
+    "coordinate": [
+      43.0509053,
+      39.720758
+    ],
+    "id": "osm:node:8205621629",
+    "name": "Yavuz",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:8205621629",
+    "type": "suburb"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.72,
+    "coordinate": [
+      43.3144784,
+      39.7763362
+    ],
+    "id": "osm:node:9736345325",
+    "name": "Heftreng",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:9736345325",
+    "type": "neighbourhood"
+  },
+  {
+    "authoritative": false,
+    "confidence": 0.72,
+    "coordinate": [
+      43.071599,
+      39.9034485
+    ],
+    "id": "osm:node:9736345329",
+    "name": "mahalle",
+    "source": "openstreetmap",
+    "sourceId": "osm:node:9736345329",
+    "type": "neighbourhood"
+  }
+]

@@ -1,0 +1,252 @@
+{
+  "schemaVersion": "territorykit-tr-stable-id-diff@1",
+  "rc7Root": ".territory/sprint-6/final/candidate",
+  "rc8Root": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+  "rc7CanonicalGeometryHash": "fb19b468c0555dd0e167d5937037b1609f610014d9231c80b4bc9834685dd8f3",
+  "rc8CanonicalGeometryHash": "5aaa8ba0f796cf1692192faa90f77cc0e69c3561bbd2e31892d0837a2cb23a3f",
+  "canonicalGeometryHashChanged": true,
+  "rc7Adm3ZoneCount": 20392,
+  "rc8Adm3ZoneCount": 20392,
+  "zoneIdOnlyInRc7Count": 0,
+  "zoneIdOnlyInRc8Count": 0,
+  "zoneIdOnlyInRc7": [],
+  "zoneIdOnlyInRc8": [],
+  "parentIdChangeCount": 0,
+  "geometryHashChangeCount": 34,
+  "identicalZoneCount": 20358,
+  "parentIdChanges": [],
+  "geometryHashChangesSample": [
+    {
+      "zoneId": "tr:adm3:tr-il-60-ilce-54988432b28913521474336-generated-smart-derived-v1-7-604e1d110f2134ffc91c",
+      "adm2Id": "tr:adm2:54988432b28913521474336",
+      "rc7GeometryHash": "2a9b6f0348b9271e4b7c76f160a937efeda4990fa069eba50fe40d68209a53ae",
+      "rc8GeometryHash": "620059eed0ad48d56f4c0d7290b50052d0c9a3fc51db0f8353b82f6c71281779"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-60-ilce-54988432b28913521474336-generated-smart-derived-v1-7-8075acf10b777a78a18d",
+      "adm2Id": "tr:adm2:54988432b28913521474336",
+      "rc7GeometryHash": "5360de2c35676ccaff289117f2c4630ee2debbd0bac8751b06c5889a8c76757a",
+      "rc8GeometryHash": "f22c049420f2e524626abc078c594af5586c88872b189f1f70e4ba3775f12777"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-60-ilce-54988432b28913521474336-generated-smart-derived-v1-7-9ed1baea89e7a40b3f13",
+      "adm2Id": "tr:adm2:54988432b28913521474336",
+      "rc7GeometryHash": "74148f9f359525977430839b68ceb080ed58d62384f0ff9fce8e332f260d26f3",
+      "rc8GeometryHash": "fd54ee7ce35ec2fb5f3904fe0633e0639cd796e91beb118c36dd794d423c12d0"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-60-ilce-54988432b28913521474336-generated-smart-derived-v1-7-9fdfd2c3e8ccafc9f967",
+      "adm2Id": "tr:adm2:54988432b28913521474336",
+      "rc7GeometryHash": "638ddf7c0f89a32cb4683281a589d6b3aca1bd992cd2cba69f08ee18eabdf897",
+      "rc8GeometryHash": "2a19f350437bab56fa1d0ce3807b4e556a324098be48233920055f57997fa29d"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-60-ilce-54988432b28913521474336-generated-smart-derived-v1-7-b37d9aa9524f7fb515f3",
+      "adm2Id": "tr:adm2:54988432b28913521474336",
+      "rc7GeometryHash": "a9e1e1b97e830d8fb538e2a7959cdc6be42ebcfbfa5358e6a1c33ad1dfbe4d41",
+      "rc8GeometryHash": "f78fce4c8541604ed28242c8b2daf2d6de277903621c9a63ec458731b9a0cb91"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-60-ilce-54988432b28913521474336-generated-smart-derived-v1-7-bea456747f46667714a1",
+      "adm2Id": "tr:adm2:54988432b28913521474336",
+      "rc7GeometryHash": "7d652c3b768d11f2117133483a611bc1a46dba4f2b7ef456c2f7deb26a4ebe34",
+      "rc8GeometryHash": "85dca7f57ffb076a0233efb9539b568585aec4aeb82bb8aaf84e52afbc08faad"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-60-ilce-54988432b28913521474336-generated-smart-derived-v1-7-c45f1cfac9676e51c517",
+      "adm2Id": "tr:adm2:54988432b28913521474336",
+      "rc7GeometryHash": "0445525a124efb20aa9eb0137f05c7854dc554685a2542484b2e1365901630c5",
+      "rc8GeometryHash": "8eece25689a619174325c4ae7a71776f9aabb8b7ab9d0f2dfd48a67ecca22b5e"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-04-ilce-54988432b81567150601582-generated-smart-derived-v1-7-422efbefdd4032cbcf2a",
+      "adm2Id": "tr:adm2:54988432b81567150601582",
+      "rc7GeometryHash": "3fb458e5757e93070a2349901ddd9e7ed976250e20ab90b99619c9d11ff4055c",
+      "rc8GeometryHash": "849b3fc231857d9afa313d1830990cfd16e6546be764159a2a47101232cdd538"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-04-ilce-54988432b81567150601582-generated-smart-derived-v1-7-50b1113821a46da462f0",
+      "adm2Id": "tr:adm2:54988432b81567150601582",
+      "rc7GeometryHash": "c4795d43aa8821af71301f3d53a90066f97c8e35b19a1a901b6e30275da13b50",
+      "rc8GeometryHash": "08772bf77639683425a12a8aee2820e78a79b8a737121fb3dd1ee62d1ddb8fd0"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-04-ilce-54988432b81567150601582-generated-smart-derived-v1-7-6d9218f4c93cfa20ddc6",
+      "adm2Id": "tr:adm2:54988432b81567150601582",
+      "rc7GeometryHash": "baf8f4f439b63fe6ddd039f7494ca2c4e8feabbab1f38368d416fe51c4bc9891",
+      "rc8GeometryHash": "de099ec257d4cee3bb7ef7fa6357f9d7fbb4b18ed6edca984be94e33db8b6b78"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-04-ilce-54988432b81567150601582-generated-smart-derived-v1-7-d2c8eab04e53b4ceed88",
+      "adm2Id": "tr:adm2:54988432b81567150601582",
+      "rc7GeometryHash": "ae5f031eed88ab34ceb40aed5fccda9e035c15ebdf0c0f9559306b38c1df0d88",
+      "rc8GeometryHash": "8137b2cf9f973708207e42026ee8ac1e3357851e006146311a6e94d01ab0c14a"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-0528bbb25d2560ca4695",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "cfb8f6c6401fcc9d10151ede29f654e88281b0cf381c60c35f6afb72b312dd29",
+      "rc8GeometryHash": "2b9eaa63b581e4405e26e3bef765d871e355fffdb62ed5a5045a41208fe79d25"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-08e95a7eb1716b81bd43",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "4325b42baad4204a93340369d4a01fa0a41ba647c4d603e4bbde5f82e3dfeead",
+      "rc8GeometryHash": "ea9c279ab76d84f1c81dc9c513c8103fa74776d94d088df7a5e50d768e6b86db"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-1df7c177c92116282a02",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "bdff8b7e161bb967fcbd190c9209022a8bc73ae1e4def665e2db7420ecb25916",
+      "rc8GeometryHash": "8e0083b708117b615fdcf11b8c89541e365028b31ac91d266250e90debf74149"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-37a4a4db451c7d55b16c",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "a4c5ec0db22f4fe4f542ae34e92070ade2c95da4df75198d8304a239afa0741d",
+      "rc8GeometryHash": "44f4101e2e0e6ce4a7f5077e8a69f7b9ca3d408d3dac230c075d1f29953033f5"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-3b320ab591f03fda6870",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "9f55031a85042e16d85ca5daa9a914a964547e5f2ac95d22a1d6c1597741bc6d",
+      "rc8GeometryHash": "af33471d2a9b5d24a990de22d33008c996f08dae3c651b1f39c9972f08047f38"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-4a8011cfc105d5d99765",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "5d916101bdc56195f36fe68945f8e80d21e63f0d46273e1679d48e559ad33008",
+      "rc8GeometryHash": "256c63bbe678b141ee97320a4a5947b417983ff2c00e9b9d849f261968494971"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-65dcebd3e40641e46723",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "98b96f38265fb7dbb5ce452fa3f476dbc27a98fb6f70285fdcefb3b0ae420825",
+      "rc8GeometryHash": "471d33e9dcdb9eddada86f13c947c8872dc01c200606cc10fc8ea711646e5019"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-6b91e9cea232dbcf1e3a",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "c1f5302b3cdd1daeb6e7eca1614c8e99ee8d28d54b9364d57c9d6630c4765d2e",
+      "rc8GeometryHash": "fb183f2256349114535b0a61638bb5603225e933a20c28c5416d484360465f38"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-6bcb68fad0e1528af34c",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "558099120b355a710495ec92769e5b0c914ea23dd285d23a41250ba2d4838d79",
+      "rc8GeometryHash": "57767f6c5cef99a14f256ac172ebcbad51e271864c752eaf687b7556c0fafb29"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-709c70be8e4ba1017cc8",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "65bca4940b43848c8f292b37cba3a1178e4e30c0bd4051dbc3bfbb5fdff875ba",
+      "rc8GeometryHash": "11b553aad49745eb6ed8fb580a55d83836e90701b82a9099817aa606ba059d07"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-70e84dcdbfac39525936",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "cd82bc59d70ffadaf7dc8a2c30fd937a9c2539b7db48a041220f8428d1993560",
+      "rc8GeometryHash": "a7700375f9785cd9270e473a25d31b376c7bdef74d37b7625ea3488a43b3233f"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-789a2215939ed5bc266f",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "9e9d3e410717dd3171f601e6f85d9a6c62207650a8a45dcbfb65a134bdc3b07e",
+      "rc8GeometryHash": "7f134293c8b14bddd51c6380142ee3a8a77b3a7c220f2beed94bbe59ec5193a7"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-8b6140ebfa81f2ce1b0d",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "a6ee33751136ef542885c437f69d1245119f76baba0d9e5123a2584aad25a400",
+      "rc8GeometryHash": "63b5bea1f592f040e5c3dc2f70442ca00d74d840d7a6014a20f007dae5894e10"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-8bfb093e8cc1110e64ae",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "ece01db456832033e06cea4431514be19726661e135a93e8fdc872158a69ff44",
+      "rc8GeometryHash": "9e7b68aadeb0410f91ff0400b487ceea25be6e0a357122750229e33a05a5bef9"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-95467cc2a6c62c1aff98",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "fdce1cbda077c9c916eef981543d74f2e80a343ef1c282f655a65de39eda6d80",
+      "rc8GeometryHash": "6e4388fc88f477bf0b8534f9fce7f277c0c0a094398fbb2f021f3a750d6e9411"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-a21324923ac3a14d34df",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "dad8ddfbe15733d8445a689a53439830117ed612bb071f4291a17544496f3915",
+      "rc8GeometryHash": "489bbd8d538e4e79048419b581fcba2b9162525a2c8ce5f9c654085b9f8c9f6a"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-a908270edd1a3bf24634",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "328049fecd473ba7956abf682d9c90373138f3368ce3f74d734434b287803a39",
+      "rc8GeometryHash": "c93d290aca6e7ec962ddb5c1f2519121b90c1ac97f942ef7b8487af9fac112f6"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-aff45bb810085d4305d6",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "9980f379e571fccb0b712b154c10ec50ae0d7ce70d75d9c54bc67fd0c4f11bdd",
+      "rc8GeometryHash": "1fd5427880f8a5ae69a826e59c9870bc5cd6ecbf0907680a4329f4e6a29049f8"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-b3ca2d3bdae7264a0d15",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "8b5fdeb8ade71b2404955f38292ebb0ae887bafe0a20a33b95a2c11d873d0090",
+      "rc8GeometryHash": "52280362e0a14bf88705eca7cced19770ce04d4a3340266eb6c84bb2efc31f05"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-b64d38433ef47bac21bb",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "5f656ffe64cb172af045fb7da3d9b92e1f31c0fc9a28b16471cad9e9aa3fc1e8",
+      "rc8GeometryHash": "e153ffd7dd7ed2bc0a19c1e1229043585c723e5c3f4c87625e44eab33f3ee9ca"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-d76737de3646becb8711",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "0b0beae60448dcee9d5772dfc4450268ea5a2b0a2421fa4c238d6b557de64262",
+      "rc8GeometryHash": "cdfd0745d9b38d314bc45bc2502dd01c96dc9f15224582972968c01a2a2a3fa4"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-d945594f01c300f49f8a",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "a1279ad0a5fa9bd8d647e6839311db0de4b86a6e49d39fb5782d03da4bd16a18",
+      "rc8GeometryHash": "58aeaf0165ce3c8879a2d82e54c4bc5208e19d0a9ba68e84754b21cda032a687"
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-31-ilce-54988432b95277821649488-generated-smart-derived-v1-7-e1d9ce18c3726ba12054",
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "rc7GeometryHash": "11c13ba52cc548f7c7a631a793f5b065847555677e11b88f63946821d8f5bfca",
+      "rc8GeometryHash": "3de798d9fb84e750fdc255b2f82235f17f052302355c9754fe071be647207f54"
+    }
+  ],
+  "geometryHashChangesByDistrict": [
+    {
+      "adm2Id": "tr:adm2:54988432b95277821649488",
+      "geometryHashChangeCount": 23
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b28913521474336",
+      "geometryHashChangeCount": 7
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b81567150601582",
+      "geometryHashChangeCount": 4
+    }
+  ],
+  "migrationPlanSummary": {
+    "schemaVersion": "territorykit-tr-v2-hybrid-migration@1",
+    "recordCount": 20392,
+    "changeTypes": {
+      "added": 20392
+    },
+    "alignsWithRc7ToRc8ZoneDiff": "NO — all records classified added (no migration-baseline); not a rc.7→rc.8 ownership map."
+  },
+  "identityPreservation": {
+    "stableIdPreserved": true,
+    "geometryBytesChanged": true,
+    "ownershipMigrationSafe": true,
+    "note": "Ownership migration assumes stable tr:adm3 IDs and parent tr:adm2 linkage; geometry-only edits require gameplay remap review, not ID remap."
+  }
+}

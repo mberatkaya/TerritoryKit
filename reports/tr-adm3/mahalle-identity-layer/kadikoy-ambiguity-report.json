@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-ambiguity@1",
+  "generatedAt": "2026-10-17T13:34:25.257Z",
+  "district": "Kadıköy",
+  "parentAdm2Id": "tr:adm2:54988432b89638439219394",
+  "zoneCount": 28,
+  "ambiguousZoneCount": 8,
+  "singleSeedZoneCount": 11,
+  "unseededZoneCount": 9,
+  "distinctSeedsRepresented": 35,
+  "settlementCount": 35,
+  "associationCount": 35,
+  "ambiguousZones": [
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-5c0b844f181af903d223",
+      "zoneName": "Territory 025",
+      "distinctNormalizedNames": ["rasimpaşa", "yeldeğirmeni"],
+      "settlementIds": ["tr:settlement:osm:node:4997074870", "tr:settlement:osm:node:6857143501"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-79f94365e3c1a63eb5d8",
+      "zoneName": "Territory 003",
+      "distinctNormalizedNames": ["kozyatağı", "şenesenevler"],
+      "settlementIds": ["tr:settlement:osm:node:4997074867", "tr:settlement:osm:node:7817068939"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-a07c5cd6954fd04d47c2",
+      "zoneName": "Territory 006",
+      "distinctNormalizedNames": ["fenerbahçe", "kalamış", "kızıltoprak", "moda"],
+      "settlementIds": [
+        "tr:settlement:osm:node:2437930520",
+        "tr:settlement:osm:node:251355454",
+        "tr:settlement:osm:node:251355452",
+        "tr:settlement:osm:node:251355449"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-c49bff3ad9814c01e671",
+      "zoneName": "Territory 028",
+      "distinctNormalizedNames": ["acıbadem", "koşuyolu"],
+      "settlementIds": ["tr:settlement:osm:node:4997348814", "tr:settlement:osm:node:2492226735"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-ce087f0829ea5f0bb5b5",
+      "zoneName": "Territory 022",
+      "distinctNormalizedNames": ["dumlupınar", "merdivenköy"],
+      "settlementIds": ["tr:settlement:osm:node:2492226732", "tr:settlement:osm:node:2491830887"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-d51af18e6c9d8f5e1138",
+      "zoneName": "Territory 020",
+      "distinctNormalizedNames": ["bahariye", "kadıköy", "osmanağa"],
+      "settlementIds": [
+        "tr:settlement:osm:node:2491352363",
+        "tr:settlement:osm:node:2673025441",
+        "tr:settlement:osm:node:4997074866"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-ecbdb91c554c25de6b7e",
+      "zoneName": "Territory 001",
+      "distinctNormalizedNames": [
+        "erenköy",
+        "göztepe",
+        "selamiçeşme",
+        "suadiye",
+        "şaşkınbakkal",
+        "ziverbey",
+        "zühtüpaşa"
+      ],
+      "settlementIds": [
+        "tr:settlement:osm:node:1867128457",
+        "tr:settlement:osm:node:251355458",
+        "tr:settlement:osm:node:7814959963",
+        "tr:settlement:osm:node:4997074874",
+        "tr:settlement:osm:node:2491356912",
+        "tr:settlement:osm:node:7863036214",
+        "tr:settlement:osm:node:2492147541"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-fbd6e185810e42aa015c",
+      "zoneName": "Territory 021",
+      "distinctNormalizedNames": ["fikirtepe", "gözcübaba"],
+      "settlementIds": ["tr:settlement:osm:node:821887960", "tr:settlement:osm:node:7863169636"]
+    }
+  ],
+  "conflictAssociations": [],
+  "altBComparison": null
+}

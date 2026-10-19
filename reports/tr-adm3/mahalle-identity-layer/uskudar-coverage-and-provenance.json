@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-coverage@1",
+  "generatedAt": "2026-10-17T13:34:25.803Z",
+  "district": "Üsküdar",
+  "parentAdm2Id": "tr:adm2:54988432b79162079631621",
+  "gameplayDatasetVersion": "2.1.0-rc.8",
+  "identityLayerVersion": "tr-mahalle-identity-uskudar-pilot@2026-10-17",
+  "contentChecksum": "fnv1a32:6042014d",
+  "associationCoverage": {
+    "seededZoneCount": 25,
+    "unseededZoneCount": 15,
+    "singleCandidateZoneCount": 15,
+    "ambiguousZoneCount": 10,
+    "seedCount": 40,
+    "associationCount": 40
+  },
+  "officialPolygonCoverage": {
+    "settlementCountWithOfficialPolygon": 0,
+    "settlementCountWithOsmAdminPolygon": 0,
+    "settlementCountSeedOnly": 40,
+    "note": "Seed-only semantics on pinned rc.8 gameplay geometry."
+  },
+  "sourcePrecedence": [
+    "approved-official-polygon",
+    "reviewed-osm-administrative-polygon",
+    "seed-only-semantic-association",
+    "unknown"
+  ],
+  "provenance": {
+    "gameplayShard": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1/districts/tr_adm2_54988432b79162079631621/dataset.json",
+    "rc8Root": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+    "barrierRoot": ".territory/sprint-6/calibration/barriers",
+    "osmSourceLockPath": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json",
+    "osmSourceLockSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+    "osmSourceLockContentHash": "e83f33e86d8aa71d9e42ba48fcc18a045481a74bb0c7c813f4211c311e87327c",
+    "osmSourceLockState": "verified",
+    "sourceEvidenceGates": {
+      "sourceBytesVerified": true,
+      "licenseIdentified": true,
+      "redistributionRightsApproved": false,
+      "productionEligible": false
+    },
+    "sourceEvidenceReasonCodes": ["REDISTRIBUTION_NOT_APPROVED"],
+    "barrierManifestChecksum": "adb687f271efa23c8940a87c9d4a456e7d18191fb6455079b3d92d675262c3f3",
+    "barrierSnapshotSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+    "datasetSourceChecksum": "49036c0c43414a25bd5dce3f454a51aef837fbf4843a9b4107791bddf2035689"
+  },
+  "licenseChecks": {
+    "osmLicense": "ODbL-1.0",
+    "licenseState": "pending",
+    "permissionStatus": "redistribution-unknown",
+    "redistributionApproved": false,
+    "redistributionEvidenceState": "pending",
+    "hostedDeliveryApproved": false,
+    "commercialUseRequiresSeparateReview": true,
+    "hostedTileDeliveryRequiresSeparateReview": true
+  }
+}

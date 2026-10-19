@@ -8,6 +8,14 @@ import {
 import type { TerritoryRegistryClient } from "@territory-kit/registry";
 import { turkeyAdm3NeighbourhoodCoverage, turkeyNationalCoverage } from "@territory-kit/data-tr";
 import { readDemoConfig, readUrlState, writeUrlState } from "./config.js";
+import {
+  applyQaDistrictOverlay,
+  buildAdm2QaGeoJson,
+  formatQaLegendSummary,
+  loadSmartCoverageIndex,
+  summarizeAdm2QaGeoJson
+} from "./qa-mode.js";
+import { buildTerritorySelectionRows } from "./territory-selection.js";
 import { demoLevelForZoom, isDemoAdminLevel, zoomForDemoLevel } from "./levels.js";
 import {
   adm3ParentHint,
@@ -50,8 +58,14 @@ interface TurkeyLiveDemoProbe {
     level?: DemoAdminLevel
   ): Promise<{ x: number; y: number } | undefined>;
   search(query: string): Promise<TerritorySearchResult[]>;
+  getCacheTelemetry(): Promise<QueryCacheTelemetry>;
   selectTerritory(territoryId: string, level?: DemoAdminLevel): Promise<string | undefined>;
   setZoom(zoom: number): Promise<{ renderedLevel: DemoAdminLevel; displayedFeatureCount: number }>;
+  flyToCoordinate(
+    lng: number,
+    lat: number,
+    zoom: number
+  ): Promise<{ renderedLevel: DemoAdminLevel; displayedFeatureCount: number }>;
 }
 
 declare global {
@@ -89,6 +103,11 @@ app.innerHTML = `
           <button class="segment" type="button" data-level="ADM3">Mahalleler</button>
         </div>
         <p id="adm3-warning" class="notice">ADM3 coverage is partial and appears only where reviewed artifacts exist.</p>
+        <label class="qa-toggle" for="qa-mode-toggle">
+          <input id="qa-mode-toggle" type="checkbox" />
+          QA / debug (smart-coverage metrikleri; eksik değer PASS sayılmaz)
+        </label>
+        <p id="qa-legend" class="muted" aria-live="polite"></p>
       </section>
 
       <section class="panel-section">
@@ -168,8 +187,13 @@ const elements = {
   runtimeGrid: requireElement<HTMLElement>("#runtime-grid"),
   fallbackPanel: requireElement<HTMLElement>("#fallback-panel"),
   mapStatus: requireElement<HTMLElement>("#map-status"),
+  qaModeToggle: requireElement<HTMLInputElement>("#qa-mode-toggle"),
+  qaLegend: requireElement<HTMLElement>("#qa-legend"),
   levelButtons: [...document.querySelectorAll<HTMLButtonElement>("[data-level]")]
 };
+
+let qaModeEnabled = false;
+let qaAdm2GeoJson: GeoJSON.FeatureCollection | undefined;
 
 const config = readDemoConfig();
 const initialUrlState = readUrlState();
@@ -248,7 +272,18 @@ window.addEventListener("beforeunload", () => {
 async function initializeDemo(): Promise<void> {
   elements.mapStatus.textContent = "Loading registry manifest";
 
-  if (config.mode === "registry" && config.registryUrl && !config.configError) {
+  if (config.requestedMode === "local-playable") {
+    mode = "local-playable";
+  }
+
+  if (config.requestedMode === "local-playable" && config.configError) {
+    registryStatus = "error";
+    lastError = config.configError;
+  } else if (
+    (config.mode === "registry" || config.mode === "local-playable") &&
+    config.registryUrl &&
+    !config.configError
+  ) {
     registryStatus = "connecting";
     renderRuntime();
 
@@ -259,10 +294,16 @@ async function initializeDemo(): Promise<void> {
         cache: registryCache,
         timeoutMs: 12_000,
         maxArtifactBytes: 24_000_000,
-        maxDecompressedBytes: 48_000_000
+        maxDecompressedBytes: 48_000_000,
+        ...(config.mode === "local-playable" ? { allowHttp: true } : {})
       });
-      await registry.loadRegistry();
-      const dataset = await registry.getDatasetInfo(config.datasetId, config.datasetVersion);
+      const registrySnapshot = await registry.loadRegistry();
+      const dataset =
+        registrySnapshot.datasets.find(
+          (entry) =>
+            entry.id === config.datasetId &&
+            (!config.datasetVersionPinned || entry.version === config.datasetVersion)
+        ) ?? (await registry.getDatasetInfo(config.datasetId, config.datasetVersion));
       metadata = createMetadataFromRegistryDataset({
         dataset,
         datasetVersionPinned: config.datasetVersionPinned
@@ -276,13 +317,36 @@ async function initializeDemo(): Promise<void> {
         ...(config.deliveryManifestUrl ? { deliveryManifestUrl: config.deliveryManifestUrl } : {}),
         ...(config.deliveryManifestHash
           ? { deliveryManifestHash: config.deliveryManifestHash }
-          : {})
+          : {}),
+        ...(config.smartCoverageUrl ? { smartCoverageUrl: config.smartCoverageUrl } : {})
       });
       registryStatus = "connected";
-      mode = "registry";
+      mode = config.mode === "local-playable" ? "local-playable" : "registry";
+      if (config.smartCoverageUrl) {
+        try {
+          const index = await loadSmartCoverageIndex(config.smartCoverageUrl);
+          const adm2Response = await fetch(
+            new URL("./render/levels/ADM2.geojson", config.registryUrl).href
+          );
+          if (adm2Response.ok) {
+            const adm2Dataset = (await adm2Response.json()) as GeoJSON.FeatureCollection;
+            qaAdm2GeoJson = buildAdm2QaGeoJson(adm2Dataset, index);
+            elements.qaLegend.textContent = formatQaLegendSummary(
+              summarizeAdm2QaGeoJson(qaAdm2GeoJson)
+            );
+          }
+        } catch (qaError) {
+          lastError = `QA index unavailable: ${readErrorMessage(qaError)}`;
+          elements.qaLegend.textContent = "QA legend unavailable (smart-coverage yüklenemedi).";
+        }
+      }
     } catch (error) {
       activateFixtureFallback(`Registry unavailable: ${readErrorMessage(error)}`);
     }
+  } else if (config.requestedMode === "local-playable") {
+    mode = "local-playable";
+    registryStatus = "error";
+    lastError = config.configError ?? "local-playable bootstrap unavailable.";
   } else {
     mode = "fixture";
     registryStatus = config.configError ? "error" : "not-configured";
@@ -292,7 +356,7 @@ async function initializeDemo(): Promise<void> {
     map,
     mode,
     query,
-    ...(registry && mode === "registry" ? { registry } : {}),
+    ...(registry && (mode === "registry" || mode === "local-playable") ? { registry } : {}),
     datasetVersion: config.datasetVersion,
     allowPrerelease: config.allowPrerelease
   });
@@ -325,6 +389,16 @@ async function initializeDemo(): Promise<void> {
 }
 
 function activateFixtureFallback(message: string): void {
+  if (config.requestedMode === "local-playable" || config.mode === "local-playable") {
+    mode = "local-playable";
+    registryStatus = "error";
+    lastError = message;
+    renderMetadata();
+    renderRuntime();
+    renderFallbackPanel();
+    return;
+  }
+
   mode = "fixture";
   registryStatus = "error";
   registry = undefined;
@@ -365,6 +439,11 @@ async function renderCurrentLevel(reason: string): Promise<void> {
     await waitForMapIdle();
     updateDisplayedFeatureCount();
   } catch (error) {
+    if (mode === "local-playable") {
+      activateFixtureFallback(`Render error: ${readErrorMessage(error)}`);
+      return;
+    }
+
     if (mode === "registry") {
       activateFixtureFallback(`Render fallback: ${readErrorMessage(error)}`);
       renderer?.dispose();
@@ -497,6 +576,13 @@ function wireControls(): void {
   elements.clearSelection.addEventListener("click", () => {
     clearSelection();
   });
+  elements.qaModeToggle.addEventListener("change", () => {
+    qaModeEnabled = elements.qaModeToggle.checked;
+    renderer?.setAdm3QaHighlight(qaModeEnabled);
+    if (qaAdm2GeoJson) {
+      applyQaDistrictOverlay(map, qaAdm2GeoJson, qaModeEnabled);
+    }
+  });
 }
 
 let searchTimer: number | undefined;
@@ -525,10 +611,10 @@ async function runSearch(queryText: string): Promise<TerritorySearchResult[]> {
   elements.searchStatus.textContent = "Searching";
 
   try {
-    const levels: readonly DemoAdminLevel[] =
-      currentLevel === "ADM3" ? ["ADM1", "ADM2", "ADM3"] : ["ADM1", "ADM2"];
+    const searchLevels: readonly DemoAdminLevel[] =
+      currentLevel === "ADM3" ? ["ADM1", "ADM2"] : ["ADM1", "ADM2"];
     const results = await query.search(searchValue, {
-      levels,
+      levels: searchLevels,
       limit: 60,
       signal: searchController.signal
     });
@@ -625,12 +711,15 @@ function clearSelection(): void {
 }
 
 function renderSelection(details: TerritoryDetails): void {
-  const rows = [
-    ["Name", displayZoneName(details.zone)],
-    ["ID", details.zone.id],
-    ["Level", `ADM${details.zone.level}`],
-    ["Parent", details.parent ? displayZoneName(details.parent) : "None"]
-  ] as const;
+  const rows: ReadonlyArray<readonly [string, string]> =
+    mode === "local-playable"
+      ? buildTerritorySelectionRows(details)
+      : [
+          ["Name", displayZoneName(details.zone)],
+          ["ID", details.zone.id],
+          ["Level", `ADM${details.zone.level}`],
+          ["Parent", details.parent ? displayZoneName(details.parent) : "None"]
+        ];
 
   elements.selectionPanel.className = "selection-panel";
   elements.selectionPanel.replaceChildren(renderDefinitionGrid(rows));
@@ -685,7 +774,13 @@ function renderRelationshipGroup(
 
 function renderMetadata(): void {
   elements.modeBadge.textContent =
-    mode === "registry" ? "Registry" : registryStatus === "error" ? "Fixture fallback" : "Fixture";
+    mode === "local-playable"
+      ? "Playable v3 (local)"
+      : mode === "registry"
+        ? "Registry"
+        : registryStatus === "error"
+          ? "Fixture fallback"
+          : "Fixture";
   elements.modeBadge.dataset.mode = mode;
   elements.metadataGrid.replaceChildren(
     ...definitionRows([
@@ -708,9 +803,11 @@ function renderMetadata(): void {
     ])
   );
   elements.adm3Warning.textContent =
-    currentLevel === "ADM3"
-      ? "ADM3 is partial; uncovered parents fall back to the deepest available artifact."
-      : turkeyNationalCoverage.levels.ADM3.blocker;
+    mode === "local-playable"
+      ? "Ulusal playable-v3: 21.250 ADM3 MVT (territory_adm3). Tahmini zonlar resmî mahalle değildir."
+      : currentLevel === "ADM3"
+        ? "ADM3 is partial; uncovered parents fall back to the deepest available artifact."
+        : turkeyNationalCoverage.levels.ADM3.blocker;
 }
 
 function renderRuntime(): void {
@@ -743,7 +840,10 @@ function renderFallbackPanel(): void {
     mode === "fixture"
       ? "Fixture mode is CI-safe and not a production deployment claim."
       : undefined,
-    currentLevel === "ADM3" ? "ADM3 coverage is partial." : undefined
+    mode === "local-playable"
+      ? "Yerel önizleme — OSM/MVT yeniden dağıtımı onaylanmadan Git'e veya CDN'e koymayın."
+      : undefined,
+    currentLevel === "ADM3" && mode !== "local-playable" ? "ADM3 coverage is partial." : undefined
   ].filter((message): message is string => Boolean(message));
 
   if (messages.length === 0) {
@@ -945,9 +1045,12 @@ function createProbe(): TurkeyLiveDemoProbe {
     },
     search(queryText) {
       return query.search(queryText, {
-        levels: currentLevel === "ADM3" ? ["ADM1", "ADM2", "ADM3"] : ["ADM1", "ADM2"],
+        levels: currentLevel === "ADM3" ? ["ADM1", "ADM2"] : ["ADM1", "ADM2"],
         limit: 60
       });
+    },
+    getCacheTelemetry() {
+      return query.getCacheTelemetry();
     },
     selectTerritory(territoryId, level) {
       return selectTerritory(territoryId, level, { flyTo: true });
@@ -955,6 +1058,24 @@ function createProbe(): TurkeyLiveDemoProbe {
     async setZoom(zoom) {
       const idle = waitForMapIdle();
       map.setZoom(zoom);
+      await idle;
+      const nextLevel = demoLevelForZoom(map.getZoom(), currentLevel);
+      if (nextLevel !== currentLevel) {
+        currentLevel = nextLevel;
+        await renderCurrentLevel("probe");
+      }
+      return {
+        renderedLevel: currentLevel,
+        displayedFeatureCount: lastRender?.displayedFeatureCount ?? 0
+      };
+    },
+    async flyToCoordinate(lng, lat, zoom) {
+      const idle = waitForMapIdle();
+      map.flyTo({
+        center: [lng, lat],
+        zoom,
+        duration: reducedMotion() ? 0 : 700
+      });
       await idle;
       const nextLevel = demoLevelForZoom(map.getZoom(), currentLevel);
       if (nextLevel !== currentLevel) {
