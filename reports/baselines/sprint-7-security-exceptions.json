@@ -20,9 +20,30 @@
       "compensatingControls": "Release check rejects changed dependency paths, versions and documentation dev-server exposure. Package tarball checks exclude VitePress and Vite implementation files. No npm package runtime depends on this Vite 5 path.",
       "owner": "TerritoryKit maintainers",
       "createdOn": "2026-10-01",
-      "reviewOn": "2026-10-15",
+      "reviewOn": "2026-10-19",
       "expiresOn": "2026-10-29",
       "removalCondition": "Remove immediately when stable VitePress supports a patched Vite line, a Vite 5 backport appears, docs deployment changes, or Windows/network-exposed docs development is supported."
+    },
+    {
+      "ghsaId": "GHSA-vfj7-8cjw-p6xm",
+      "package": "braces",
+      "affectedVersion": "3.0.3",
+      "affectedRange": "<=3.0.3",
+      "severity": "high",
+      "dependencyPaths": [
+        "packages__react-native>@maplibre/maplibre-react-native>react-native>@react-native/community-cli-plugin>metro>metro-file-map>micromatch>braces",
+        "packages__react-native>react-native>@react-native/community-cli-plugin>metro>metro-file-map>micromatch>braces"
+      ],
+      "scope": "@territory-kit/react-native Metro bundler toolchain only",
+      "reason": "React Native 0.87.x Metro still resolves braces 3.0.3; npm has no braces >=3.0.4 release yet despite the advisory patch range.",
+      "exploitPreconditions": "An attacker supplies deeply nested brace patterns to Metro/micromatch during bundling.",
+      "absentPreconditions": "Published @territory-kit/react-native does not execute Metro on consumer devices at runtime; npm tarballs exclude Metro sources. CI uses Ubuntu without attacker-controlled bundler inputs.",
+      "compensatingControls": "Release hardening blocks undocumented advisories. Package dry-run excludes Metro implementation files from published tarballs. Override shell-quote to 1.11.0 for adjacent react-native toolchain risk.",
+      "owner": "TerritoryKit maintainers",
+      "createdOn": "2026-10-19",
+      "reviewOn": "2026-10-19",
+      "expiresOn": "2026-11-18",
+      "removalCondition": "Remove when React Native/Metro pulls braces >=3.0.4 or the advisory is withdrawn."
     }
   ]
 }
