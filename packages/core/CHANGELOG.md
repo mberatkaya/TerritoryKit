@@ -1,5 +1,16 @@
 # @territory-kit/core
 
+## 3.2.0
+
+### Minor Changes
+
+- 134687d: Ship Sprint 1–4 Turkey ADM3 improvements: national playable-v3 delivery and render contracts, MapLibre local national map integration, adaptive playable rescue, geometry validation hardening, and hierarchical viewport/query enhancements across core, registry, runtime, maplibre, generators, and CLI surfaces.
+
+### Patch Changes
+
+- @territory-kit/dataset@3.2.0
+- @territory-kit/registry@3.2.0
+
 ## 3.1.0
 
 ### Patch Changes
