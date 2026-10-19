@@ -140,12 +140,14 @@ test("CLI subprocess exits non-zero in strict mode for fixture parent", () => {
 
 test("optional full national audit when local generated parent exists", async (t) => {
   if (process.env.TERRITORYKIT_LOCAL_PARENT_ARTIFACTS !== "1") {
-    t.skip("set TERRITORYKIT_LOCAL_PARENT_ARTIFACTS=1 to run optional gitignored parent audit");
+    return t.skip(
+      "set TERRITORYKIT_LOCAL_PARENT_ARTIFACTS=1 to run optional gitignored parent audit"
+    );
   }
   const parentDatasetPath = path.join(REPO_ROOT, "datasets/generated/countries/TR/dataset.json");
   const sourceLockPath = path.join(REPO_ROOT, "datasets/generated/countries/TR/sources.lock.json");
   if (!existsSync(parentDatasetPath) || !existsSync(sourceLockPath)) {
-    t.skip("gitignored TR parent artifacts not present locally");
+    return t.skip("gitignored TR parent artifacts not present locally");
   }
   const outputDir = await mkdtemp(path.join(os.tmpdir(), "territory-gb-parent-full-"));
   try {
