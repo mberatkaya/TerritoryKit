@@ -1,5 +1,13 @@
 # @territory-kit/game
 
+## 3.2.0
+
+### Patch Changes
+
+- Updated dependencies [134687d]
+  - @territory-kit/core@3.2.0
+  - @territory-kit/dataset@3.2.0
+
 ## 3.1.0
 
 ### Patch Changes
