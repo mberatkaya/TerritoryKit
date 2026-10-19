@@ -4056,6 +4056,7 @@ async function runRender(args: string[]): Promise<number> {
       ...(minZoom !== undefined ? { minZoom } : {}),
       ...(maxZoom !== undefined ? { maxZoom } : {}),
       ...(buildDate ? { buildDate } : {}),
+      ...(flags.has("no-query-file") ? { includeQueryFile: false } : {}),
       ...(flags.has("force") ? { force: true } : {})
     });
 
@@ -6803,6 +6804,7 @@ Options:
   --min-zoom <number>
   --max-zoom <number>
   --build-date <iso-date>
+  --no-query-file              Skip query-artifact.json
   --force
   --json`);
 }

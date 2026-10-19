@@ -5,6 +5,36 @@ body,
   margin: 0;
 }
 
+#app:has(.map) {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr minmax(240px, 320px);
+}
+
+.toolbar {
+  grid-column: 1 / -1;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border-bottom: 1px solid #cfd8d2;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.map {
+  min-height: 0;
+  height: 100%;
+}
+
+.details {
+  padding: 1rem;
+  background: #fff;
+  border-left: 1px solid #cfd8d2;
+  overflow: auto;
+  font-size: 0.85rem;
+}
+
 body {
   background: #eef3ef;
   color: #172033;

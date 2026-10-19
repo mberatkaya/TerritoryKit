@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-lookup-smoke@1",
+  "generatedAt": "2026-10-17T13:34:27.549Z",
+  "district": "Başakşehir",
+  "parentAdm2Id": "tr:adm2:54988432b67026781349893",
+  "consumerLoadOk": true,
+  "validationIssueCodes": [],
+  "sampleZone": {
+    "zoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-0ade70fefd76accd873a",
+    "associations": [
+      {
+        "zoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-0ade70fefd76accd873a",
+        "settlementId": "tr:settlement:osm:node:9665298728",
+        "method": "point-containment-covers",
+        "status": "single-candidate",
+        "evidence": [
+          {
+            "reasonCode": "POINT_IN_ZONE",
+            "message": "Seed coordinate assigned via point-in-polygon (covers).",
+            "boundaryMode": "covers",
+            "seedCoordinate": [28.7677363, 41.1086147]
+          }
+        ],
+        "gameplayDatasetVersion": "2.1.0-rc.8",
+        "gameplayGeometryHash": "fnv1a32:a7ca2a21",
+        "identityLayerVersion": "tr-mahalle-identity-basaksehir-pilot@2026-10-17",
+        "reviewDecision": "pending"
+      }
+    ],
+    "settlements": [
+      {
+        "settlementId": "tr:settlement:osm:node:9665298728",
+        "sourceReferenceId": "geofabrik-osm-extracts:osm:node:9665298728",
+        "canonicalIdentityKey": "fnv1a32:067e4517",
+        "displayName": "Kayaşehir",
+        "normalizedName": "kayaşehir",
+        "localityType": "quarter",
+        "parentAdm2Id": "tr:adm2:54988432b67026781349893",
+        "parentAdm1Id": "tr:adm1:34",
+        "parentAdm0Id": "tr:adm0:TR",
+        "seedCoordinate": [28.7677363, 41.1086147],
+        "sourceNativeId": "osm:node:9665298728",
+        "provenance": {
+          "providerId": "geofabrik-osm-extracts",
+          "providerName": "Geofabrik OpenStreetMap extracts",
+          "sourceDatasetId": "geofabrik:europe:turkey",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "snapshotDate": "2026-08-27T20:21:06.000Z",
+          "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "licenseState": "pending",
+          "permissionStatus": "redistribution-unknown",
+          "sourceLockState": "verified",
+          "redistributionEvidenceState": "pending",
+          "sourceNativeId": "osm:node:9665298728"
+        },
+        "identityLayerVersion": "tr-mahalle-identity-basaksehir-pilot@2026-10-17",
+        "identityChecksum": "fnv1a32:b307ecf3",
+        "verificationState": "locality-seed",
+        "administrativeStatus": "unknown",
+        "geometryAvailability": "seed-only",
+        "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+        "polygonEvidenceState": "none",
+        "confidence": 0.72
+      }
+    ],
+    "associationStatus": "single-candidate",
+    "zoneResolution": "associated",
+    "isAmbiguous": false,
+    "autoDisplayNameAllowed": false,
+    "consumerNameSemantics": "seed-locality-label"
+  },
+  "layerVersion": {
+    "identityLayerVersion": "tr-mahalle-identity-basaksehir-pilot@2026-10-17",
+    "gameplayDatasetVersion": "2.1.0-rc.8",
+    "contentChecksum": "fnv1a32:7371e166",
+    "generatedAt": "2026-10-17T13:34:27.549Z"
+  }
+}

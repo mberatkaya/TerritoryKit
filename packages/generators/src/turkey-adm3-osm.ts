@@ -12,6 +12,8 @@ import { readOsmPbf } from "@osmix/pbf";
 import type { OsmPbfBlock, OsmPbfGroup } from "@osmix/pbf";
 import { computeGeometryRepresentativePoint } from "./geometry-repair.js";
 import { createTurkeyAdm3GeometryHash } from "./turkey-adm3-full-coverage.js";
+import { assembleTurkeyOsmMultipolygonGeometry } from "./turkey-osm-barriers.js";
+import type { TurkeyOsmMultipolygonAssemblyResult } from "./turkey-osm-barriers.js";
 import { sha256Hex, serializeJsonStable } from "./sources/utils.js";
 
 export const TURKEY_ADM3_OSM_SOURCE_URL = "https://download.geofabrik.de/europe/turkey.html";
@@ -70,7 +72,51 @@ interface OsmCandidate {
 }
 
 const textDecoder = new TextDecoder();
-const ACCEPTED_ADMIN_LEVELS = new Set(["9", "10", "11"]);
+/** Turkey neighbourhood/village boundaries are commonly admin_level 8–11 in OSM (8 in İstanbul). */
+const ACCEPTED_ADMIN_LEVELS = new Set(["8", "9", "10", "11"]);
+
+export const TURKEY_ADM3_OSM_PARSER_IMPLEMENTATION_REVISION =
+  "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2h-multipolygon-stitch";
+
+const MAHALLE_PLACE_TAGS = new Set(["neighbourhood", "quarter", "suburb", "village"]);
+
+export function hasTurkeyAdm3OsmMahalleContextTags(tags: Record<string, string>): boolean {
+  const place = tags.place;
+  if (place && MAHALLE_PLACE_TAGS.has(place)) {
+    return true;
+  }
+  if (tags.border_type === "neighbourhood") {
+    return true;
+  }
+  return false;
+}
+
+export function evaluateTurkeyAdm3OsmBoundaryCandidate(tags: Record<string, string>): {
+  accepted: boolean;
+  reason?: string;
+} {
+  if (tags.boundary !== "administrative") {
+    return { accepted: false, reason: "not-administrative-boundary" };
+  }
+
+  const adminLevel = tags.admin_level ?? "";
+  if (!ACCEPTED_ADMIN_LEVELS.has(adminLevel)) {
+    return { accepted: false, reason: "admin-level-out-of-range" };
+  }
+
+  if (adminLevel === "8") {
+    if (hasTurkeyAdm3OsmMahalleContextTags(tags)) {
+      return { accepted: true };
+    }
+    const label = (tags.name ?? tags["name:tr"] ?? "").trim();
+    if (label.length > 0) {
+      return { accepted: true };
+    }
+    return { accepted: false, reason: "admin-level-8-without-mahalle-context" };
+  }
+
+  return { accepted: true };
+}
 
 export async function extractTurkeyAdm3OsmPbf(
   options: TurkeyAdm3OsmExtractOptions
@@ -94,6 +140,8 @@ export async function extractTurkeyAdm3OsmPbf(
     }
   }
 
+  const acceptedAdminStats = countAcceptedAdminCandidates(ways, relations);
+
   const candidates = [
     ...[...ways.values()].map((way): OsmCandidate => {
       const geometry = closedWayGeometry(way, nodes);
@@ -107,12 +155,16 @@ export async function extractTurkeyAdm3OsmPbf(
     }),
     ...relations.map((relation): OsmCandidate => {
       const geometry = relationGeometry(relation, ways, nodes);
+      const rejectionReason = geometry
+        ? undefined
+        : diagnoseRelationGeometryFailure(relation, ways, nodes);
 
       return {
         osmType: "relation",
         osmId: relation.id,
         tags: relation.tags,
-        ...(geometry ? { geometry } : {})
+        ...(geometry ? { geometry } : {}),
+        ...(rejectionReason ? { rejectionReason } : {})
       };
     })
   ].filter(isAdm3BoundaryCandidate);
@@ -188,9 +240,11 @@ export async function extractTurkeyAdm3OsmPbf(
   }
 
   const sourceLock = {
-    schemaVersion: "territorykit-tr-adm3-osm-source-lock@1",
+    schemaVersion: "territorykit-tr-adm3-osm-derived-input-lock@1",
+    role: "derived-extract-input",
     country: "TR",
     generatedAt: options.generatedAt,
+    inputPbfPath: options.pbfPath,
     sourceUrl: TURKEY_ADM3_OSM_SOURCE_URL,
     downloadUrl: TURKEY_ADM3_OSM_DOWNLOAD_URL,
     upstreamTimestamp: header.osmosis_replication_timestamp
@@ -202,10 +256,12 @@ export async function extractTurkeyAdm3OsmPbf(
     attribution: TURKEY_ADM3_OSM_ATTRIBUTION,
     parser: {
       package: "@osmix/pbf",
+      implementationRevision: TURKEY_ADM3_OSM_PARSER_IMPLEMENTATION_REVISION,
       reason:
         "Modern MIT-licensed TypeScript OSM PBF reader with streaming Web Streams support for large extracts."
     }
   };
+  const unresolvedSummary = summarizeTurkeyAdm3OsmUnresolvedEntries(unresolved);
   const coverage = {
     schemaVersion: "territorykit-tr-adm3-osm-coverage@1",
     country: "TR",
@@ -213,7 +269,8 @@ export async function extractTurkeyAdm3OsmPbf(
     candidateCount: candidates.length,
     builtPolygonCount: zones.length,
     unresolvedCount: unresolved.length,
-    duplicateCount: duplicates.length
+    duplicateCount: duplicates.length,
+    unresolvedSummary
   };
   const quality = {
     schemaVersion: "territorykit-tr-adm3-osm-quality@1",
@@ -225,6 +282,8 @@ export async function extractTurkeyAdm3OsmPbf(
       parsedNodeCount: nodes.size,
       parsedWayCount: ways.size,
       parsedRelationCount: relations.length,
+      acceptedAdminCandidateCount: acceptedAdminStats.total,
+      acceptedAdminCandidatesByLevel: acceptedAdminStats.byLevel,
       candidateCount: candidates.length,
       builtPolygonCount: zones.length,
       unresolvedCount: unresolved.length,
@@ -380,15 +439,144 @@ function relationMemberType(value: number): "node" | "way" | "relation" {
 }
 
 function isAdm3BoundaryCandidate(candidate: OsmCandidate): boolean {
-  if (candidate.tags.boundary !== "administrative") {
-    return false;
+  return evaluateTurkeyAdm3OsmBoundaryCandidate(candidate.tags).accepted;
+}
+
+function countAcceptedAdminCandidates(
+  ways: ReadonlyMap<number, OsmWay>,
+  relations: readonly OsmRelation[]
+): { total: number; byLevel: Record<string, number> } {
+  const byLevel: Record<string, number> = {};
+  let total = 0;
+
+  for (const way of ways.values()) {
+    if (!isAdm3BoundaryCandidate({ osmType: "way", osmId: way.id, tags: way.tags })) {
+      continue;
+    }
+    total += 1;
+    const level = way.tags.admin_level ?? "unknown";
+    byLevel[level] = (byLevel[level] ?? 0) + 1;
   }
 
-  if (!ACCEPTED_ADMIN_LEVELS.has(candidate.tags.admin_level ?? "")) {
-    return false;
+  for (const relation of relations) {
+    if (
+      !isAdm3BoundaryCandidate({ osmType: "relation", osmId: relation.id, tags: relation.tags })
+    ) {
+      continue;
+    }
+    total += 1;
+    const level = relation.tags.admin_level ?? "unknown";
+    byLevel[level] = (byLevel[level] ?? 0) + 1;
   }
 
-  return true;
+  return { total, byLevel };
+}
+
+function diagnoseRelationGeometryFailure(
+  relation: OsmRelation,
+  ways: ReadonlyMap<number, OsmWay>,
+  nodes: ReadonlyMap<number, OsmNode>
+): string {
+  if (
+    relation.tags.type &&
+    relation.tags.type !== "boundary" &&
+    relation.tags.type !== "multipolygon"
+  ) {
+    return "unsupported-relation-type";
+  }
+
+  const outerMembers = relation.members.filter(
+    (member) => member.type === "way" && (member.role === "outer" || member.role === "")
+  );
+
+  if (outerMembers.length === 0) {
+    return "missing-outer-ways";
+  }
+
+  const missingOuterWays = outerMembers.filter((member) => !ways.has(member.ref));
+  if (missingOuterWays.length > 0) {
+    return "missing-outer-way-members";
+  }
+
+  for (const member of outerMembers) {
+    const way = ways.get(member.ref);
+    if (!way) {
+      continue;
+    }
+
+    if (way.refs.some((ref) => !nodes.has(ref))) {
+      return "missing-nodes-on-outer-way";
+    }
+  }
+
+  const innerMembers = relation.members.filter(
+    (member) => member.type === "way" && member.role === "inner"
+  );
+  const missingInnerWays = innerMembers.filter((member) => !ways.has(member.ref));
+  if (missingInnerWays.length > 0) {
+    return "missing-inner-way-members";
+  }
+
+  for (const member of innerMembers) {
+    const way = ways.get(member.ref);
+    if (!way) {
+      continue;
+    }
+
+    if (way.refs.some((ref) => !nodes.has(ref))) {
+      return "missing-nodes-on-inner-way";
+    }
+  }
+
+  const assembly = assembleTurkeyAdm3OsmRelationGeometry(relation, ways, nodes);
+  return mapTurkeyAdm3OsmMultipolygonFailureReason(assembly);
+}
+
+export function summarizeTurkeyAdm3OsmUnresolvedEntries(
+  entries: readonly Record<string, unknown>[]
+): Record<string, unknown> {
+  const uniqueRelationIds = new Set<number>();
+  const relationAttemptCounts = new Map<string, number>();
+  const reasonCounts = new Map<string, number>();
+
+  for (const entry of entries) {
+    const reason =
+      (typeof entry.reason === "string" ? entry.reason : undefined) ??
+      (typeof entry.semanticType === "string" && entry.semanticType === "semantic-review-required"
+        ? "semantic-review-required"
+        : typeof entry.parentConfidence === "string"
+          ? `parent-${entry.parentConfidence}`
+          : "unknown");
+    reasonCounts.set(reason, (reasonCounts.get(reason) ?? 0) + 1);
+
+    if (entry.osmType === "relation" && typeof entry.osmId === "number") {
+      uniqueRelationIds.add(entry.osmId);
+      const key = String(entry.osmId);
+      relationAttemptCounts.set(key, (relationAttemptCounts.get(key) ?? 0) + 1);
+    }
+  }
+
+  const repeatedRelationAttempts = [...relationAttemptCounts.entries()]
+    .filter(([, count]) => count > 1)
+    .map(([osmId, count]) => ({ osmId: Number(osmId), attemptCount: count }))
+    .sort((left, right) => left.osmId - right.osmId);
+
+  const extraUnresolvedOccurrences = repeatedRelationAttempts.reduce(
+    (sum, row) => sum + (row.attemptCount - 1),
+    0
+  );
+
+  return {
+    schemaVersion: "territorykit-tr-adm3-osm-unresolved-summary@1",
+    entryCount: entries.length,
+    uniqueUnresolvedRelationIds: uniqueRelationIds.size,
+    repeatedRelationAttemptCount: repeatedRelationAttempts.length,
+    extraUnresolvedOccurrences,
+    repeatedRelationAttempts,
+    reasonCounts: Object.fromEntries(
+      [...reasonCounts.entries()].sort(([left], [right]) => left.localeCompare(right))
+    )
+  };
 }
 
 function closedWayGeometry(
@@ -411,6 +599,54 @@ function closedWayGeometry(
   };
 }
 
+function assembleTurkeyAdm3OsmRelationGeometry(
+  relation: OsmRelation,
+  ways: ReadonlyMap<number, OsmWay>,
+  nodes: ReadonlyMap<number, OsmNode>
+): TurkeyOsmMultipolygonAssemblyResult {
+  return assembleTurkeyOsmMultipolygonGeometry(relation, ways, nodes);
+}
+
+function mapTurkeyAdm3OsmMultipolygonFailureReason(
+  assembly: TurkeyOsmMultipolygonAssemblyResult
+): string {
+  const blocking = assembly.issues.filter(
+    (issue) => issue.code !== "OSM_MULTIPOLYGON_ORPHAN_INNER"
+  );
+  const first = blocking[0] ?? assembly.issues[0];
+
+  if (!first) {
+    return "relation-topology-incomplete";
+  }
+
+  switch (first.code) {
+    case "OSM_MULTIPOLYGON_UNSUPPORTED_RELATION_TYPE":
+      return "unsupported-relation-type";
+    case "OSM_MULTIPOLYGON_NESTED_RELATION_UNSUPPORTED":
+      return "nested-relation-unsupported";
+    case "OSM_MULTIPOLYGON_INCOMPLETE_INNER":
+      return "missing-inner-way-members";
+    case "OSM_MULTIPOLYGON_INCOMPLETE_OUTER":
+      return relationOuterFailureReason(first.details);
+    default:
+      return "relation-topology-incomplete";
+  }
+}
+
+function relationOuterFailureReason(details?: Record<string, unknown>): string {
+  const memberWayId = details?.memberWayId;
+  if (memberWayId !== undefined) {
+    return "missing-outer-way-members";
+  }
+
+  const memberWayIds = details?.memberWayIds;
+  if (Array.isArray(memberWayIds) && memberWayIds.length > 0) {
+    return "open-outer-way-ring";
+  }
+
+  return "relation-topology-incomplete";
+}
+
 function relationGeometry(
   relation: OsmRelation,
   ways: ReadonlyMap<number, OsmWay>,
@@ -420,26 +656,14 @@ function relationGeometry(
     return undefined;
   }
 
-  const rings = relation.members
-    .filter((member) => member.type === "way" && (member.role === "outer" || member.role === ""))
-    .flatMap((member) => {
-      const way = ways.get(member.ref);
-      const geometry = way ? closedWayGeometry(way, nodes) : undefined;
-      return geometry?.type === "Polygon" ? geometry.coordinates : [];
-    });
+  const assembly = assembleTurkeyAdm3OsmRelationGeometry(relation, ways, nodes);
+  const geometry = assembly.geometry;
 
-  if (rings.length === 0) {
+  if (!geometry || (geometry.type !== "Polygon" && geometry.type !== "MultiPolygon")) {
     return undefined;
   }
 
-  if (rings.length === 1) {
-    return { type: "Polygon", coordinates: [rings[0]!] };
-  }
-
-  return {
-    type: "MultiPolygon",
-    coordinates: rings.map((ring) => [ring])
-  };
+  return geometry as TerritoryGeometry;
 }
 
 function classifyTurkeyAdm3OsmSemanticType(
@@ -498,6 +722,27 @@ function createOsmZone(input: {
   geometry: TerritoryGeometry;
   generatedAt: string;
 }): TerritoryZone {
+  const mahalleContext = hasTurkeyAdm3OsmMahalleContextTags(input.candidate.tags);
+  const adminLevel8NameOnly =
+    input.candidate.tags.admin_level === "8" &&
+    input.semanticType === "administrative-unit" &&
+    !mahalleContext;
+  const semanticReviewStatus = adminLevel8NameOnly
+    ? "semantic-review-required"
+    : mahalleContext
+      ? "mapping-review-required"
+      : "semantic-review-required";
+  const coverageStatus = "research-candidate";
+  const productionEligible = false;
+  const localTypeName =
+    input.semanticType === "village"
+      ? "Köy (OSM research)"
+      : input.semanticType === "neighbourhood"
+        ? "Mahalle (OSM research)"
+        : adminLevel8NameOnly
+          ? "Administrative unit (research candidate)"
+          : "Administrative unit (OSM research)";
+
   const sourceNativeId = `osm:${input.candidate.osmType}:${input.candidate.osmId}`;
   const localId = [
     input.provinceCode ? `tr-${input.provinceCode}` : "tr",
@@ -534,14 +779,15 @@ function createOsmZone(input: {
         sourceAdminLevel: "ADM3",
         semanticType: input.semanticType,
         localType: input.semanticType,
-        localTypeName: input.semanticType === "village" ? "Köy" : "Mahalle",
+        localTypeName,
         countryCode: "TR",
         ...(input.provinceCode ? { provinceCode: input.provinceCode } : {}),
         ...(input.parentId ? { districtCode: input.parentId.replace(/^tr:adm2:/, "") } : {}),
         hierarchyDepth: 3,
         ...(input.parentId ? { parentId: input.parentId } : {}),
-        coverageStatus: "verified",
-        semanticReviewStatus: "mapping-review-required",
+        coverageStatus,
+        semanticReviewStatus,
+        productionEligible,
         sourceClass: "osm",
         sourceProvider: input.providerId,
         sourceDatasetId: "openstreetmap",

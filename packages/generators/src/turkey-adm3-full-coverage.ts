@@ -968,6 +968,104 @@ export function inspectTurkeyAdm3SpatialQuality(
   };
 }
 
+export interface TurkeyAdm3OsmResearchSpatialCorrespondenceRow {
+  gameplayZoneId: string;
+  osmCandidateId: string;
+  osmSourceNativeId: string | null;
+  intersectionAreaKm2: number;
+  overlapRatio: number;
+  relationConfidence: "high" | "medium" | "low";
+  sourceClass: "osm-administrative-research";
+  reviewRequired: true;
+  eligibleForMigration: false;
+}
+
+export interface TurkeyAdm3OsmResearchSpatialCorrespondenceReport {
+  schemaVersion: "territorykit-tr-adm3-osm-research-correspondence@1";
+  generatedAt: string;
+  status: "ASSESSED" | "NOT_ASSESSED";
+  ownershipMigrationPerformed: false;
+  correspondences: TurkeyAdm3OsmResearchSpatialCorrespondenceRow[];
+}
+
+export function createTurkeyAdm3OsmResearchSpatialCorrespondenceReport(input: {
+  generatedAt: string;
+  gameplayZones: readonly TerritoryZone[];
+  osmCandidateZones: readonly TerritoryZone[];
+}): TurkeyAdm3OsmResearchSpatialCorrespondenceReport {
+  if (input.osmCandidateZones.length === 0) {
+    return {
+      schemaVersion: "territorykit-tr-adm3-osm-research-correspondence@1",
+      generatedAt: input.generatedAt,
+      status: "NOT_ASSESSED",
+      ownershipMigrationPerformed: false,
+      correspondences: []
+    };
+  }
+
+  const correspondences: TurkeyAdm3OsmResearchSpatialCorrespondenceRow[] = [];
+
+  for (const gameplayZone of input.gameplayZones) {
+    const generatedGeometry = geometryToClippingMultiPolygon(gameplayZone.geometry);
+    const generatedAreaKm2 = clippingAreaKm2(generatedGeometry);
+    if (generatedAreaKm2 <= 0) {
+      continue;
+    }
+
+    const best = input.osmCandidateZones
+      .map((osmZone) => {
+        const osmGeometry = geometryToClippingMultiPolygon(osmZone.geometry);
+        const intersectionAreaKm2 = clippingAreaKm2(
+          intersectClippingGeometries(generatedGeometry, osmGeometry)
+        );
+        const overlapRatio = intersectionAreaKm2 / generatedAreaKm2;
+        const territory = isRecord(osmZone.properties.territory)
+          ? osmZone.properties.territory
+          : {};
+        const confidence = readStringPropertyPath(territory, "parentResolutionConfidence");
+        let relationConfidence: TurkeyAdm3OsmResearchSpatialCorrespondenceRow["relationConfidence"] =
+          "low";
+        if (confidence === "exact" || confidence === "high") {
+          relationConfidence = "high";
+        } else if (confidence === "medium") {
+          relationConfidence = "medium";
+        }
+
+        return { osmZone, intersectionAreaKm2, overlapRatio, relationConfidence };
+      })
+      .sort((left, right) => right.overlapRatio - left.overlapRatio)[0];
+
+    if (!best || best.overlapRatio <= 0) {
+      continue;
+    }
+
+    const territory = isRecord(best.osmZone.properties.territory)
+      ? best.osmZone.properties.territory
+      : {};
+    correspondences.push({
+      gameplayZoneId: gameplayZone.id,
+      osmCandidateId: best.osmZone.id,
+      osmSourceNativeId: readStringPropertyPath(territory, "sourceNativeId") ?? null,
+      intersectionAreaKm2: roundAreaKm2(best.intersectionAreaKm2),
+      overlapRatio: roundPercent(best.overlapRatio * 100) / 100,
+      relationConfidence: best.relationConfidence,
+      sourceClass: "osm-administrative-research",
+      reviewRequired: true,
+      eligibleForMigration: false
+    });
+  }
+
+  return {
+    schemaVersion: "territorykit-tr-adm3-osm-research-correspondence@1",
+    generatedAt: input.generatedAt,
+    status: "ASSESSED",
+    ownershipMigrationPerformed: false,
+    correspondences: correspondences.sort((left, right) =>
+      left.gameplayZoneId.localeCompare(right.gameplayZoneId)
+    )
+  };
+}
+
 export function createTurkeyAdm3GeneratedMigrationReport(input: {
   generatedAt: string;
   oldGeneratedZones: readonly TerritoryZone[];
@@ -1036,8 +1134,22 @@ export function filterOsmAdministrativeBoundaryPolygons<
       return false;
     }
 
-    if (!adminLevel || !["9", "10", "11"].includes(adminLevel)) {
+    if (!adminLevel || !["8", "9", "10", "11"].includes(adminLevel)) {
       return false;
+    }
+
+    if (
+      adminLevel === "8" &&
+      place !== "neighbourhood" &&
+      place !== "quarter" &&
+      place !== "suburb" &&
+      place !== "village"
+    ) {
+      const label =
+        readStringPropertyPath(properties, "name") ?? readStringPropertyPath(properties, "name:tr");
+      if (!label?.trim()) {
+        return false;
+      }
     }
 
     return geometry.type === "Polygon" || geometry.type === "MultiPolygon";

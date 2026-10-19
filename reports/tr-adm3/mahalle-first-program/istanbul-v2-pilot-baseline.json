@@ -1,0 +1,151 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-first-istanbul-v2-pilot@1",
+  "generatedAt": "2026-10-15T16:07:29.328Z",
+  "artifactRoot": ".territory/sprint-6/final/candidate",
+  "artifactPolicy": "READ_ONLY_RC7_BASELINE",
+  "smartDerivedTargetVersion": "smart-derived-v2.0-pilot",
+  "currentNationalAlgorithm": "smart-derived-v1.7",
+  "sprint2PilotDistrictCount": 6,
+  "expandedPilotDistrictCount": 8,
+  "newDistrictsVsSprint2": ["Başakşehir", "Esenyurt"],
+  "districts": [
+    {
+      "district": "Fatih",
+      "parentAdm2Id": "tr:adm2:54988432b39641834885080",
+      "adm3ZoneCount": 30,
+      "boundarySourceClassCounts": {
+        "smart-derived": 30
+      },
+      "smartDerivedZoneCount": 30,
+      "seedNamedZoneCount": 10,
+      "seedNamedShare": 0.3333,
+      "algorithmVersion": "smart-derived-v1.7",
+      "administrativeOfficialCount": 0,
+      "parentName": "Fatih",
+      "shardPath": ".territory/sprint-6/final/candidate/districts/tr_adm2_54988432b39641834885080/dataset.json",
+      "status": "BASELINE_LOADED"
+    },
+    {
+      "district": "Kadıköy",
+      "parentAdm2Id": "tr:adm2:54988432b89638439219394",
+      "adm3ZoneCount": 28,
+      "boundarySourceClassCounts": {
+        "smart-derived": 28
+      },
+      "smartDerivedZoneCount": 28,
+      "seedNamedZoneCount": 11,
+      "seedNamedShare": 0.3929,
+      "algorithmVersion": "smart-derived-v1.7",
+      "administrativeOfficialCount": 0,
+      "parentName": "Kadıköy",
+      "shardPath": ".territory/sprint-6/final/candidate/districts/tr_adm2_54988432b89638439219394/dataset.json",
+      "status": "BASELINE_LOADED"
+    },
+    {
+      "district": "Üsküdar",
+      "parentAdm2Id": "tr:adm2:54988432b79162079631621",
+      "adm3ZoneCount": 40,
+      "boundarySourceClassCounts": {
+        "smart-derived": 40
+      },
+      "smartDerivedZoneCount": 40,
+      "seedNamedZoneCount": 15,
+      "seedNamedShare": 0.375,
+      "algorithmVersion": "smart-derived-v1.7",
+      "administrativeOfficialCount": 0,
+      "parentName": "Üsküdar",
+      "shardPath": ".territory/sprint-6/final/candidate/districts/tr_adm2_54988432b79162079631621/dataset.json",
+      "status": "BASELINE_LOADED"
+    },
+    {
+      "district": "Adalar",
+      "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+      "adm3ZoneCount": 14,
+      "boundarySourceClassCounts": {
+        "smart-derived": 14
+      },
+      "smartDerivedZoneCount": 14,
+      "seedNamedZoneCount": 4,
+      "seedNamedShare": 0.2857,
+      "algorithmVersion": "smart-derived-v1.7",
+      "administrativeOfficialCount": 0,
+      "parentName": "Prince Islands",
+      "shardPath": ".territory/sprint-6/final/candidate/districts/tr_adm2_54988432b94516152709384/dataset.json",
+      "status": "BASELINE_LOADED"
+    },
+    {
+      "district": "Eyüpsultan",
+      "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+      "adm3ZoneCount": 19,
+      "boundarySourceClassCounts": {
+        "smart-derived": 19
+      },
+      "smartDerivedZoneCount": 19,
+      "seedNamedZoneCount": 2,
+      "seedNamedShare": 0.1053,
+      "algorithmVersion": "smart-derived-v1.7",
+      "administrativeOfficialCount": 0,
+      "parentName": "Eyüpsultan",
+      "shardPath": ".territory/sprint-6/final/candidate/districts/tr_adm2_54988432b93840376788897/dataset.json",
+      "status": "BASELINE_LOADED"
+    },
+    {
+      "district": "Çatalca",
+      "parentAdm2Id": "tr:adm2:54988432b71345383711908",
+      "adm3ZoneCount": 19,
+      "boundarySourceClassCounts": {
+        "smart-derived": 19
+      },
+      "smartDerivedZoneCount": 19,
+      "seedNamedZoneCount": 1,
+      "seedNamedShare": 0.0526,
+      "algorithmVersion": "smart-derived-v1.7",
+      "administrativeOfficialCount": 0,
+      "parentName": "Çatalca",
+      "shardPath": ".territory/sprint-6/final/candidate/districts/tr_adm2_54988432b71345383711908/dataset.json",
+      "status": "BASELINE_LOADED"
+    },
+    {
+      "district": "Başakşehir",
+      "parentAdm2Id": "tr:adm2:54988432b67026781349893",
+      "adm3ZoneCount": 20,
+      "boundarySourceClassCounts": {
+        "smart-derived": 20
+      },
+      "smartDerivedZoneCount": 20,
+      "seedNamedZoneCount": 4,
+      "seedNamedShare": 0.2,
+      "algorithmVersion": "smart-derived-v1.7",
+      "administrativeOfficialCount": 0,
+      "parentName": "Başakşehir",
+      "shardPath": ".territory/sprint-6/final/candidate/districts/tr_adm2_54988432b67026781349893/dataset.json",
+      "status": "BASELINE_LOADED"
+    },
+    {
+      "district": "Esenyurt",
+      "parentAdm2Id": "tr:adm2:54988432b2777192469074",
+      "adm3ZoneCount": 36,
+      "boundarySourceClassCounts": {
+        "smart-derived": 36
+      },
+      "smartDerivedZoneCount": 36,
+      "seedNamedZoneCount": 2,
+      "seedNamedShare": 0.0556,
+      "algorithmVersion": "smart-derived-v1.7",
+      "administrativeOfficialCount": 0,
+      "parentName": "Esenyurt",
+      "shardPath": ".territory/sprint-6/final/candidate/districts/tr_adm2_54988432b2777192469074/dataset.json",
+      "status": "BASELINE_LOADED"
+    }
+  ],
+  "comparisonBaseline": {
+    "viewportNote": "MapLibre zoom/viewport karşılaştırması için reports/tr-adm3/national-quality-closeout/map-index.html ve sprint-2 OZET.md kullanılır; bu rapor yalnızca shard metrikleri.",
+    "sprint2SummaryPath": "reports/tr-adm3/sprint-2-istanbul/pilot-summary.json"
+  },
+  "acceptanceGatesForNationalBuild": [
+    "İstanbul 8-pilot smart-derived-v2 seedCoverage ve barrier adherence iyileşmesi",
+    "Eyüpsultan route failure azaltma veya documented low-confidence",
+    "coastline NOT_ASSESSED → assessed veya explicit policy",
+    "pilot kalite regresyonu yok"
+  ]
+}

@@ -1,0 +1,272 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-3-playable-v3-closeout@1",
+  "generatedAt": "2026-10-18T20:58:36.536Z",
+  "inspectedCommit": "3961fd8d71ae8cebcd07096334d0df8171acfe31",
+  "paths": {
+    "candidateRoot": ".territory/sprint-3/playable-v3/candidate",
+    "rc7Root": ".territory/sprint-6/final/candidate",
+    "rc8Root": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1"
+  },
+  "candidate": {
+    "label": "playable-v3",
+    "status": "PRESENT",
+    "datasetVersion": null,
+    "totals": {
+      "adm2ExpectedNational": 973,
+      "adm2Total": 973,
+      "adm2Attempted": 973,
+      "adm2Successful": 973,
+      "adm2Failed": 0,
+      "officialDistricts": 0,
+      "officialContributingDistricts": 61,
+      "osmAdministrativeDistricts": 0,
+      "osmAdministrativeContributingDistricts": 0,
+      "standardSmartDistricts": 695,
+      "organicSmartDistricts": 278,
+      "legacyProductionDistricts": 0,
+      "unavailableDistricts": 0,
+      "gridThresholdViolations": 0,
+      "unsupportedStraightThresholdViolations": 625
+    },
+    "zoneTotals": {
+      "official": 3343,
+      "osmAdministrative": 0,
+      "standardSmart": 12742,
+      "organicSmart": 5165
+    },
+    "uncoveredPercent": 0.000021708046830326566,
+    "derived": {
+      "adm3ZoneCountRollup": 21250,
+      "zeroZoneDistricts": 0,
+      "emergencySingleParentDistricts": 0,
+      "lowConfidenceDistricts": 687,
+      "oversizedCellDistricts": 0,
+      "unsupportedStraightThresholdDistricts": 0
+    }
+  },
+  "baselines": {
+    "rc7": {
+      "label": "rc.7",
+      "status": "PRESENT",
+      "datasetVersion": null,
+      "totals": {
+        "adm2ExpectedNational": 973,
+        "adm2Total": 973,
+        "adm2Attempted": 973,
+        "adm2Successful": 973,
+        "adm2Failed": 0,
+        "officialDistricts": 0,
+        "officialContributingDistricts": 61,
+        "osmAdministrativeDistricts": 0,
+        "osmAdministrativeContributingDistricts": 0,
+        "standardSmartDistricts": 911,
+        "organicSmartDistricts": 62,
+        "legacyProductionDistricts": 0,
+        "unavailableDistricts": 0,
+        "gridThresholdViolations": 0,
+        "unsupportedStraightThresholdViolations": 577
+      },
+      "zoneTotals": {
+        "official": 3343,
+        "osmAdministrative": 0,
+        "standardSmart": 16093,
+        "organicSmart": 956
+      },
+      "uncoveredPercent": 0.000021235610674352756,
+      "derived": {
+        "adm3ZoneCountRollup": 20392,
+        "zeroZoneDistricts": 0,
+        "emergencySingleParentDistricts": 0,
+        "lowConfidenceDistricts": 631,
+        "oversizedCellDistricts": 0,
+        "unsupportedStraightThresholdDistricts": 0
+      }
+    },
+    "rc8": {
+      "label": "rc.8",
+      "status": "PRESENT",
+      "datasetVersion": null,
+      "totals": {
+        "adm2ExpectedNational": 973,
+        "adm2Total": 973,
+        "adm2Attempted": 973,
+        "adm2Successful": 973,
+        "adm2Failed": 0,
+        "officialDistricts": 0,
+        "officialContributingDistricts": 61,
+        "osmAdministrativeDistricts": 0,
+        "osmAdministrativeContributingDistricts": 0,
+        "standardSmartDistricts": 911,
+        "organicSmartDistricts": 62,
+        "legacyProductionDistricts": 0,
+        "unavailableDistricts": 0,
+        "gridThresholdViolations": 0,
+        "unsupportedStraightThresholdViolations": 577
+      },
+      "zoneTotals": {
+        "official": 3343,
+        "osmAdministrative": 0,
+        "standardSmart": 16093,
+        "organicSmart": 956
+      },
+      "uncoveredPercent": 0.000021225089298582134,
+      "derived": {
+        "adm3ZoneCountRollup": 20392,
+        "zeroZoneDistricts": 0,
+        "emergencySingleParentDistricts": 0,
+        "lowConfidenceDistricts": 631,
+        "oversizedCellDistricts": 0,
+        "unsupportedStraightThresholdDistricts": 0
+      }
+    }
+  },
+  "eyupsultan": {
+    "status": "COMPARED",
+    "before": {
+      "zoneCount": 19,
+      "smartMode": "network-first",
+      "confidence": "low",
+      "axisAlignedInternalBoundaryRatio": 0
+    },
+    "after": {
+      "zoneCount": 32,
+      "smartMode": "organic",
+      "confidence": "low",
+      "axisAlignedInternalBoundaryRatio": 0.021082
+    }
+  },
+  "worstRemainingDistricts": [
+    {
+      "adm2Id": "tr:adm2:54988432b48183111476065",
+      "district": "Pervari",
+      "province": "Siirt",
+      "zoneCount": 5,
+      "confidence": "low",
+      "smartMode": "network-first",
+      "largestTerritoryAreaShare": null,
+      "axisAlignedInternalBoundaryRatio": 0.136034,
+      "barrierAlignment": 0.681214,
+      "qualityScore": 0.735866
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b38029735650586",
+      "district": "Keçiborlu",
+      "province": "Isparta",
+      "zoneCount": 17,
+      "confidence": "low",
+      "smartMode": "organic",
+      "largestTerritoryAreaShare": null,
+      "axisAlignedInternalBoundaryRatio": 0.13199,
+      "barrierAlignment": 0.210366,
+      "qualityScore": 0.598139
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b15058920594435",
+      "district": "Karasu",
+      "province": "Sakarya",
+      "zoneCount": 15,
+      "confidence": "low",
+      "smartMode": "organic",
+      "largestTerritoryAreaShare": null,
+      "axisAlignedInternalBoundaryRatio": 0.124328,
+      "barrierAlignment": 0.330009,
+      "qualityScore": 0.611438
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b23049550027928",
+      "district": "Susuz",
+      "province": "Kars",
+      "zoneCount": 8,
+      "confidence": "low",
+      "smartMode": "network-first",
+      "largestTerritoryAreaShare": null,
+      "axisAlignedInternalBoundaryRatio": 0.094253,
+      "barrierAlignment": 0.78413,
+      "qualityScore": 0.71972
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b24762133254880",
+      "district": "Laçin",
+      "province": "Çorum",
+      "zoneCount": 10,
+      "confidence": "low",
+      "smartMode": "network-first",
+      "largestTerritoryAreaShare": null,
+      "axisAlignedInternalBoundaryRatio": 0.087695,
+      "barrierAlignment": 0.544282,
+      "qualityScore": 0.701724
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b41923494384983",
+      "district": "Darende",
+      "province": "Malatya",
+      "zoneCount": 16,
+      "confidence": "low",
+      "smartMode": "organic",
+      "largestTerritoryAreaShare": null,
+      "axisAlignedInternalBoundaryRatio": 0.080473,
+      "barrierAlignment": 0.275716,
+      "qualityScore": 0.555075
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b4112577845530",
+      "district": "Hanönü",
+      "province": "Kastamonu",
+      "zoneCount": 19,
+      "confidence": "low",
+      "smartMode": "organic",
+      "largestTerritoryAreaShare": null,
+      "axisAlignedInternalBoundaryRatio": 0.073295,
+      "barrierAlignment": 0.364425,
+      "qualityScore": 0.572689
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b3164241130289",
+      "district": "Marmaris",
+      "province": "Muğla",
+      "zoneCount": 14,
+      "confidence": "low",
+      "smartMode": "network-first",
+      "largestTerritoryAreaShare": null,
+      "axisAlignedInternalBoundaryRatio": 0.070898,
+      "barrierAlignment": 0.821891,
+      "qualityScore": 0.739758
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b16312548829707",
+      "district": "Çeltik",
+      "province": "Konya",
+      "zoneCount": 4,
+      "confidence": "low",
+      "smartMode": "network-first",
+      "largestTerritoryAreaShare": null,
+      "axisAlignedInternalBoundaryRatio": 0.069621,
+      "barrierAlignment": 0.329872,
+      "qualityScore": 0.646261
+    },
+    {
+      "adm2Id": "tr:adm2:54988432b6759828088489",
+      "district": "Korkut",
+      "province": "Muş",
+      "zoneCount": 15,
+      "confidence": "low",
+      "smartMode": "organic",
+      "largestTerritoryAreaShare": null,
+      "axisAlignedInternalBoundaryRatio": 0.06851,
+      "barrierAlignment": 0.218012,
+      "qualityScore": 0.543723
+    }
+  ],
+  "runtime": {
+    "performanceReportPresent": true,
+    "checkpointDistrictFiles": 973,
+    "durationMs": 491098,
+    "resumedAdm2Count": 965,
+    "newlyBuiltAdm2Count": 8,
+    "p95Adm2Ms": 374
+  },
+  "validation": {
+    "candidateDatasetPresent": true,
+    "nationalValidateCommand": "pnpm --filter @territory-kit/cli build && node packages/cli/dist/index.mjs tr v2 national validate --output .territory/sprint-3/playable-v3/candidate"
+  }
+}

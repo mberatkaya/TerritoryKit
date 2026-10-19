@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-ambiguity@1",
+  "generatedAt": "2026-10-17T13:34:27.549Z",
+  "district": "Başakşehir",
+  "parentAdm2Id": "tr:adm2:54988432b67026781349893",
+  "zoneCount": 20,
+  "ambiguousZoneCount": 5,
+  "singleSeedZoneCount": 4,
+  "unseededZoneCount": 11,
+  "distinctSeedsRepresented": 32,
+  "settlementCount": 33,
+  "associationCount": 33,
+  "ambiguousZones": [
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-0e6898240ce35dafc313",
+      "zoneName": "Territory 012",
+      "distinctNormalizedNames": ["başak", "başakşehir", "metrokent"],
+      "settlementIds": [
+        "tr:settlement:osm:node:4996507239",
+        "tr:settlement:osm:node:4996507243",
+        "tr:settlement:osm:node:965804205",
+        "tr:settlement:osm:node:9004341773"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-18c376b168fbe95bd4ce",
+      "zoneName": "Territory 001",
+      "distinctNormalizedNames": [
+        "bahçeşehir",
+        "bahçeşehir 1. kısım",
+        "bahçeşehir 2. kısım",
+        "boğazköy",
+        "hoşdere"
+      ],
+      "settlementIds": [
+        "tr:settlement:osm:node:2279469098",
+        "tr:settlement:osm:node:4996507240",
+        "tr:settlement:osm:node:2279469795",
+        "tr:settlement:osm:node:26505393",
+        "tr:settlement:osm:node:9689362824"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-52626b5a09e0efc2ed11",
+      "zoneName": "Territory 002",
+      "distinctNormalizedNames": [
+        "akçeşme sırtı",
+        "almanköprüsü",
+        "bağlık sırtı",
+        "eskişamlar",
+        "kadıyakuplu",
+        "karaağaç",
+        "karamatlı",
+        "kayabaşı",
+        "kısırkaldırım",
+        "onurkent",
+        "resneli çiftliği",
+        "şahintepe",
+        "şamlar",
+        "tarabya",
+        "uzunçayır",
+        "yenihan"
+      ],
+      "settlementIds": [
+        "tr:settlement:osm:node:11421905087",
+        "tr:settlement:osm:node:10948888369",
+        "tr:settlement:osm:node:11421905088",
+        "tr:settlement:osm:node:11421905095",
+        "tr:settlement:osm:node:10948888371",
+        "tr:settlement:osm:node:11421905090",
+        "tr:settlement:osm:node:10948888366",
+        "tr:settlement:osm:node:4996507241",
+        "tr:settlement:osm:node:10948945010",
+        "tr:settlement:osm:node:9004341772",
+        "tr:settlement:osm:node:9674882994",
+        "tr:settlement:osm:node:4996507242",
+        "tr:settlement:osm:node:2299386412",
+        "tr:settlement:osm:node:10948945012",
+        "tr:settlement:osm:node:10948888368",
+        "tr:settlement:osm:node:10948888367"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-69db617e3fa6c5976c89",
+      "zoneName": "Territory 004",
+      "distinctNormalizedNames": ["altınşehir", "güvercintepe"],
+      "settlementIds": ["tr:settlement:osm:node:4697004873", "tr:settlement:osm:node:4697004874"]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b67026781349893-generated-smart-derived-v1-7-bfcab41fe63303a78992",
+      "zoneName": "Territory 011",
+      "distinctNormalizedNames": ["devepınarı mevkii", "gölçukuru"],
+      "settlementIds": ["tr:settlement:osm:node:11421905093", "tr:settlement:osm:node:11421905094"]
+    }
+  ],
+  "conflictAssociations": [],
+  "altBComparison": null
+}

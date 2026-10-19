@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-lookup-smoke@1",
+  "generatedAt": "2026-10-17T13:34:25.257Z",
+  "district": "Kadıköy",
+  "parentAdm2Id": "tr:adm2:54988432b89638439219394",
+  "consumerLoadOk": true,
+  "validationIssueCodes": [],
+  "sampleZone": {
+    "zoneId": "tr:adm3:tr-il-34-ilce-54988432b89638439219394-generated-smart-derived-v1-7-07b714855cc20d3bc439",
+    "associations": [],
+    "settlements": [],
+    "associationStatus": "unseeded",
+    "zoneResolution": "unseeded",
+    "isAmbiguous": false,
+    "autoDisplayNameAllowed": false,
+    "consumerNameSemantics": "none"
+  },
+  "layerVersion": {
+    "identityLayerVersion": "tr-mahalle-identity-kadikoy-pilot@2026-10-17",
+    "gameplayDatasetVersion": "2.1.0-rc.8",
+    "contentChecksum": "fnv1a32:02d3ec31",
+    "generatedAt": "2026-10-17T13:34:25.257Z"
+  }
+}

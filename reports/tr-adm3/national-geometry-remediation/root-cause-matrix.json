@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "territorykit-tr-national-geometry-remediation@1",
+  "gitCommit": "bd2b1e6b0a2092af694603363cba2fb5ee191798",
+  "source": "reports/tr-adm3/national-quality-closeout/district-quality-matrix.json",
+  "generatedAt": "2026-10-14T10:36:29.196Z",
+  "groups": [
+    {
+      "rootCauseKey": "GEOGRAPHIC_REALISM_REJECTED|OFFICIAL_SOURCE_UNAVAILABLE|OSM_ADMIN_UNAVAILABLE",
+      "districtCount": 395
+    },
+    {
+      "rootCauseKey": "OFFICIAL_SOURCE_UNAVAILABLE|OSM_ADMIN_UNAVAILABLE",
+      "districtCount": 370
+    },
+    {
+      "rootCauseKey": "GEOGRAPHIC_REALISM_REJECTED|LONG_SYNTHETIC_BOUNDARY|OFFICIAL_SOURCE_UNAVAILABLE|OSM_ADMIN_UNAVAILABLE",
+      "districtCount": 182
+    },
+    {
+      "rootCauseKey": "LONG_SYNTHETIC_BOUNDARY|OFFICIAL_SOURCE_UNAVAILABLE|OSM_ADMIN_UNAVAILABLE",
+      "districtCount": 26
+    }
+  ]
+}

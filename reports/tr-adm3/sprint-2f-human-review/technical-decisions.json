@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2f-technical-decisions@1",
+  "generatedAt": "2026-10-17T14:31:16.456Z",
+  "contracts": {
+    "gameplayTerritory": [
+      "Stable zone IDs and rc.8 geometry are immutable without migration review.",
+      "Human review cannot split gameplay polygons or change adjacency."
+    ],
+    "settlementIdentity": [
+      "Semantic label decisions are versioned and attributable.",
+      "approved-semantic-label does not imply official mahalle boundary accuracy."
+    ],
+    "officialAdministrativeGeometry": [
+      "Verified official polygons require separate evidence bundle and license review.",
+      "Seed points and OSM locality seeds are not official boundaries."
+    ]
+  },
+  "staleProtection": [
+    "zone ID",
+    "per-zone geometry hash",
+    "settlement IDs",
+    "OSM snapshot checksum",
+    "identity layer version/checksum",
+    "gameplay dataset version",
+    "parent ADM2"
+  ],
+  "distributionGates": {
+    "autoDisplayNameAllowed": "hard false until redistribution rights approved",
+    "productionRelease": "NO_GO",
+    "officialPolygonPromotion": "requires verified bytes + legal clearance"
+  }
+}

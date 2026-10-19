@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-ambiguity@1",
+  "generatedAt": "2026-10-17T13:34:24.103Z",
+  "district": "Adalar",
+  "parentAdm2Id": "tr:adm2:54988432b94516152709384",
+  "zoneCount": 14,
+  "ambiguousZoneCount": 2,
+  "singleSeedZoneCount": 4,
+  "unseededZoneCount": 8,
+  "distinctSeedsRepresented": 11,
+  "settlementCount": 11,
+  "associationCount": 11,
+  "ambiguousZones": [
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-2c554a5f5c64beb7bddd",
+      "zoneName": "Territory 002",
+      "distinctNormalizedNames": ["eskibağ", "güvercinlik", "lunapark", "orman 177 çeşmesi (2011)"],
+      "settlementIds": [
+        "tr:settlement:osm:node:1904383172",
+        "tr:settlement:osm:node:14116365738",
+        "tr:settlement:osm:node:677532052",
+        "tr:settlement:osm:node:14113780115"
+      ]
+    },
+    {
+      "zoneId": "tr:adm3:tr-il-34-ilce-54988432b94516152709384-generated-smart-derived-v1-7-7158c3fee86f9a9bd4ca",
+      "zoneName": "Territory 003",
+      "distinctNormalizedNames": ["adalar", "maden", "nizam"],
+      "settlementIds": [
+        "tr:settlement:osm:node:965795474",
+        "tr:settlement:osm:node:4996343980",
+        "tr:settlement:osm:node:4996343982"
+      ]
+    }
+  ],
+  "conflictAssociations": [],
+  "altBComparison": null
+}

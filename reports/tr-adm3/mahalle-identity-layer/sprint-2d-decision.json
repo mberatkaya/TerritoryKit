@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-sprint-2d-decision@1",
+  "generatedAt": "2026-10-17T13:34:23.190Z",
+  "baselinePr": {
+    "number": 119,
+    "mergeCommit": "a716f6fe",
+    "note": "SettlementIdentityLayer canonical API on main"
+  },
+  "decisions": {
+    "technicalPilot": "GO_WITH_REVIEW",
+    "officialMahalleAccuracy": "NO_GO",
+    "productionRelease": "NO_GO"
+  },
+  "stressPhase": {
+    "districts": ["adalar", "eyupsultan", "kadikoy"],
+    "passed": true
+  },
+  "fatihRegressionOk": true,
+  "blockedDistricts": [],
+  "matrixPath": "reports/tr-adm3/mahalle-identity-layer/istanbul-pilot-matrix.json",
+  "crossDistrictQaPath": "reports/tr-adm3/mahalle-identity-layer/istanbul-cross-district-qa.json",
+  "rationale": [
+    "Semantic association only — gameplay rc.8 geometry and zone IDs are read-only inputs.",
+    "OSM locality seeds are not official mahalle polygons; autoDisplayNameAllowed remains false without human review.",
+    "Missing OSM source-lock is recorded explicitly; never marked verified without lock bytes.",
+    "Kadıköy official municipal bundle remains BLOCKED_BY_SOURCE; seed layer does not substitute licensed boundaries."
+  ]
+}

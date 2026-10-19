@@ -1,0 +1,116 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-first-boundary-inventory-qa@1",
+  "method": "Length-weighted internal edges counted once when shared by two zones (segment key rounding); independent of smart-fallback quality gate JSON.",
+  "edgeKeyPrecision": 6,
+  "sharedInternalBoundaryMeters": 26752.39,
+  "v17OnlyInternalBoundaryMeters": 31959.91,
+  "rev3OnlyInternalBoundaryMeters": 41543.23,
+  "v17OnlyShareOfUniqueInternal": 0.3188,
+  "rev3OnlyShareOfUniqueInternal": 0.4144,
+  "sharedShareOfUniqueInternal": 0.2668,
+  "v17OnlySampleEdges": [
+    {
+      "edgeKey": "28.937618,41.001991|28.937823,41.002112",
+      "lengthMeters": 21.87
+    },
+    {
+      "edgeKey": "28.937823,41.002112|28.937887,41.002166",
+      "lengthMeters": 7.98
+    },
+    {
+      "edgeKey": "28.937887,41.002166|28.937895,41.002193",
+      "lengthMeters": 3.17
+    },
+    {
+      "edgeKey": "28.937871,41.002237|28.937895,41.002193",
+      "lengthMeters": 5.22
+    },
+    {
+      "edgeKey": "28.93783,41.002275|28.937871,41.002237",
+      "lengthMeters": 5.45
+    },
+    {
+      "edgeKey": "28.937768,41.00228|28.93783,41.002275",
+      "lengthMeters": 5.21
+    },
+    {
+      "edgeKey": "28.93763,41.002261|28.937768,41.00228",
+      "lengthMeters": 11.76
+    },
+    {
+      "edgeKey": "28.93746,41.002202|28.93763,41.002261",
+      "lengthMeters": 15.7
+    },
+    {
+      "edgeKey": "28.937385,41.002183|28.93746,41.002202",
+      "lengthMeters": 6.67
+    },
+    {
+      "edgeKey": "28.937243,41.002172|28.937385,41.002183",
+      "lengthMeters": 11.96
+    },
+    {
+      "edgeKey": "28.937162,41.002183|28.937243,41.002172",
+      "lengthMeters": 6.95
+    },
+    {
+      "edgeKey": "28.937115,41.002189|28.937162,41.002183",
+      "lengthMeters": 3.95
+    }
+  ],
+  "rev3OnlySampleEdges": [
+    {
+      "edgeKey": "28.939276,41.002776|28.939442,41.00278",
+      "lengthMeters": 13.94
+    },
+    {
+      "edgeKey": "28.938998,41.002739|28.939276,41.002776",
+      "lengthMeters": 23.7
+    },
+    {
+      "edgeKey": "28.938772,41.002711|28.938998,41.002739",
+      "lengthMeters": 19.16
+    },
+    {
+      "edgeKey": "28.938668,41.002706|28.938772,41.002711",
+      "lengthMeters": 8.77
+    },
+    {
+      "edgeKey": "28.938613,41.002708|28.938668,41.002706",
+      "lengthMeters": 4.62
+    },
+    {
+      "edgeKey": "28.938544,41.002712|28.938613,41.002708",
+      "lengthMeters": 5.8
+    },
+    {
+      "edgeKey": "28.938509,41.002714|28.938544,41.002712",
+      "lengthMeters": 2.94
+    },
+    {
+      "edgeKey": "28.938434,41.002712|28.938509,41.002714",
+      "lengthMeters": 6.31
+    },
+    {
+      "edgeKey": "28.938356,41.002708|28.938434,41.002712",
+      "lengthMeters": 6.52
+    },
+    {
+      "edgeKey": "28.938179,41.002672|28.938356,41.002708",
+      "lengthMeters": 15.42
+    },
+    {
+      "edgeKey": "28.93807,41.002637|28.938179,41.002672",
+      "lengthMeters": 9.95
+    },
+    {
+      "edgeKey": "28.937921,41.002594|28.93807,41.002637",
+      "lengthMeters": 13.34
+    }
+  ],
+  "interpretation": {
+    "v17Only": "Barrier-backed v1.7 internal boundaries absent from impl-rev3 (watershed splits / weak-barrier cuts).",
+    "rev3Only": "Additional impl-rev3 internal boundaries not present in v1.7 replay (explains +17 zone cardinality).",
+    "edgeMatchToleranceMeters": 1.5
+  }
+}

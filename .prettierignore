@@ -12,3 +12,4 @@ docs/.vitepress/dist
 pnpm-lock.yaml
 reports/tr-v2-national-smoke
 reports/tr-adm3/national-quality-closeout/map-index.html
+packages/generators/test/fixtures/national-blocker-districts

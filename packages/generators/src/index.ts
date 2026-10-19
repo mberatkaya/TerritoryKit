@@ -191,6 +191,8 @@ export {
 export {
   DEFAULT_TURKEY_SMART_FALLBACK_BARRIER_CONFIG,
   TURKEY_SMART_FALLBACK_ALGORITHM_VERSION,
+  TURKEY_SMART_FALLBACK_V2_PILOT_ALGORITHM_VERSION,
+  TURKEY_SMART_FALLBACK_V2_PILOT_IMPLEMENTATION_REVISION,
   TURKEY_SMART_FALLBACK_CONFIGURATION_SCHEMA_VERSION,
   TURKEY_SMART_FALLBACK_MANIFEST_SCHEMA_VERSION,
   TURKEY_SMART_FALLBACK_QUALITY_SCHEMA_VERSION,
@@ -201,6 +203,10 @@ export {
   normalizeTurkeySmartFallbackBarriers,
   resolveTurkeySmartFallbackConfiguration
 } from "./turkey-smart-fallback.js";
+export {
+  buildTurkeySmartFallbackV2PilotRev4HybridWithAdjacency,
+  buildTurkeySmartFallbackV2PilotWithAdjacency
+} from "./turkey-smart-derived-v2-pilot.js";
 export {
   TURKEY_ADM3_COVERAGE_SCHEMA_VERSION,
   TURKEY_ADM3_IMPORT_REPORT_SCHEMA_VERSION,
@@ -278,6 +284,17 @@ export {
   readTurkeyOsmAdm2BarrierArtifact,
   verifyTurkeyOsmSnapshot
 } from "./turkey-osm-barriers.js";
+export {
+  TURKEY_OSM_SOURCE_EVIDENCE_ISSUE_CODES,
+  computeTurkeyOsmSnapshotSourceLockContentHash,
+  detectForgedSourceLockContentHash,
+  evaluateTurkeyOsmSourceEvidence,
+  type EvaluateTurkeyOsmSourceEvidenceOptions,
+  type TurkeyOsmSourceEvidenceEvaluation,
+  type TurkeyOsmSourceEvidenceGates,
+  type TurkeyOsmSourceEvidenceIssue,
+  type TurkeyOsmSourceEvidenceIssueCode
+} from "./turkey-osm-source-evidence.js";
 export {
   TURKEY_V2_HYBRID_ATTRIBUTION_SCHEMA_VERSION,
   TURKEY_V2_HYBRID_BATCH_SCHEMA_VERSION,

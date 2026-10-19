@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-coverage@1",
+  "generatedAt": "2026-10-17T13:34:27.549Z",
+  "district": "Başakşehir",
+  "parentAdm2Id": "tr:adm2:54988432b67026781349893",
+  "gameplayDatasetVersion": "2.1.0-rc.8",
+  "identityLayerVersion": "tr-mahalle-identity-basaksehir-pilot@2026-10-17",
+  "contentChecksum": "fnv1a32:7371e166",
+  "associationCoverage": {
+    "seededZoneCount": 9,
+    "unseededZoneCount": 11,
+    "singleCandidateZoneCount": 4,
+    "ambiguousZoneCount": 5,
+    "seedCount": 33,
+    "associationCount": 33
+  },
+  "officialPolygonCoverage": {
+    "settlementCountWithOfficialPolygon": 0,
+    "settlementCountWithOsmAdminPolygon": 0,
+    "settlementCountSeedOnly": 33,
+    "note": "Sprint 2D expansion pilot (not in Sprint 2 geometry handoff)."
+  },
+  "sourcePrecedence": [
+    "approved-official-polygon",
+    "reviewed-osm-administrative-polygon",
+    "seed-only-semantic-association",
+    "unknown"
+  ],
+  "provenance": {
+    "gameplayShard": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1/districts/tr_adm2_54988432b67026781349893/dataset.json",
+    "rc8Root": ".territory/national-geometry-remediation/candidate-rc8-impl-rev1",
+    "barrierRoot": ".territory/sprint-6/calibration/barriers",
+    "osmSourceLockPath": ".territory/cache/osm/TR/TR-5ec68ce5e0b2be55/source-lock.json",
+    "osmSourceLockSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+    "osmSourceLockContentHash": "e83f33e86d8aa71d9e42ba48fcc18a045481a74bb0c7c813f4211c311e87327c",
+    "osmSourceLockState": "verified",
+    "sourceEvidenceGates": {
+      "sourceBytesVerified": true,
+      "licenseIdentified": true,
+      "redistributionRightsApproved": false,
+      "productionEligible": false
+    },
+    "sourceEvidenceReasonCodes": ["REDISTRIBUTION_NOT_APPROVED"],
+    "barrierManifestChecksum": "4cb54ba500f987b1cfec70d5848256ead6c72db14dd40a1dd53aaa7d25be187f",
+    "barrierSnapshotSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+    "datasetSourceChecksum": "6ea80809dfc03894bee9b18a2b004c0ddfcee9d3d33489f20d162403132bccdc"
+  },
+  "licenseChecks": {
+    "osmLicense": "ODbL-1.0",
+    "licenseState": "pending",
+    "permissionStatus": "redistribution-unknown",
+    "redistributionApproved": false,
+    "redistributionEvidenceState": "pending",
+    "hostedDeliveryApproved": false,
+    "commercialUseRequiresSeparateReview": true,
+    "hostedTileDeliveryRequiresSeparateReview": true
+  }
+}

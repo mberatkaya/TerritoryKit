@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2-final-research-dataset-manifest@1",
+  "generatedAt": "2026-10-18T13:13:27.072Z",
+  "datasetLabel": "istanbul-osm-administrative-research-candidates",
+  "datasetVersion": "sprint-2-final-closeout@1",
+  "featureCount": 228,
+  "dataLicense": "ODbL-1.0",
+  "attribution": "© OpenStreetMap contributors — data available under the Open Database License (ODbL) 1.0",
+  "sourcePage": "https://www.openstreetmap.org/copyright",
+  "extractSource": "https://download.geofabrik.de/europe/turkey.html",
+  "derivativeDatabaseObligations": "ODbL share-alike and attribution for derivative databases — not verified for public git or hosted redistribution",
+  "repositoryCodeLicenseNote": "TerritoryKit source code in this repository is Apache-2.0; OSM geometry in this dataset is not licensed under Apache-2.0.",
+  "distribution": {
+    "publicGitGeoJsonArtifact": false,
+    "redistributionApproved": false,
+    "blockedReason": "ODbL derivative-database and redistribution obligations are not legally verified; regenerate locally via pnpm data:tr:sprint2:final-closeout"
+  },
+  "sourcePbfSha256": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+  "sourceSnapshotDate": "2026-08-27T20:21:06.000Z",
+  "parserImplementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2h-multipolygon-stitch",
+  "extractImplementationRevision": "territorykit-tr-sprint-2h-osm-extract@2",
+  "geometryContentSha256": "4aae8bedf8f08ef5be98233a0858797b40d88a56d88b73f11aa29f8ada149765",
+  "doesNotOverwriteRc8": true,
+  "geojsonSha256": "f13312b1ec54f6655af2d7b3d79374c61cdd4ba8c2e09c32c63c908926760136",
+  "geojsonWrittenToRepository": false
+}

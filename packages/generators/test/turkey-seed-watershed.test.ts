@@ -1,0 +1,140 @@
+import { describe, expect, it } from "vitest";
+import { assignSeedWatershedFaceLabels } from "../src/turkey-smart-fallback.js";
+import {
+  auditSeedWatershedBarrierAssignments,
+  mergeV17AnchoredWatershedFaceGroups,
+  turkeyBarrierGraphCrossingCostFactor,
+  turkeyBarrierGraphEdgeCrossingCostMeters,
+  turkeyBarrierGraphEdgeCrossingCostMetersImplRev1
+} from "../src/turkey-seed-watershed.js";
+
+describe("turkey seed watershed barrier crossing cost", () => {
+  it("increases crossing cost as barrier strength increases", () => {
+    const lengthMeters = 100;
+    const weak = turkeyBarrierGraphEdgeCrossingCostMeters(lengthMeters, 0.2);
+    const strong = turkeyBarrierGraphEdgeCrossingCostMeters(lengthMeters, 0.85);
+    expect(strong).toBeGreaterThan(weak);
+    expect(turkeyBarrierGraphCrossingCostFactor(0.85)).toBeGreaterThan(
+      turkeyBarrierGraphCrossingCostFactor(0.2)
+    );
+  });
+
+  it("documents impl-rev1 inversion and impl-rev2 correction on equal-length edges", () => {
+    const lengthMeters = 100;
+    expect(turkeyBarrierGraphEdgeCrossingCostMetersImplRev1(lengthMeters, 0.9)).toBeLessThan(
+      turkeyBarrierGraphEdgeCrossingCostMetersImplRev1(lengthMeters, 0.2)
+    );
+    expect(turkeyBarrierGraphEdgeCrossingCostMeters(lengthMeters, 0.9)).toBeGreaterThan(
+      turkeyBarrierGraphEdgeCrossingCostMeters(lengthMeters, 0.2)
+    );
+
+    const viaStrongShortcut =
+      turkeyBarrierGraphEdgeCrossingCostMeters(50, 0.9) +
+      turkeyBarrierGraphEdgeCrossingCostMeters(200, 0.2);
+    const viaWeakDetour =
+      turkeyBarrierGraphEdgeCrossingCostMeters(150, 0.2) +
+      turkeyBarrierGraphEdgeCrossingCostMeters(150, 0.2);
+    expect(viaWeakDetour).toBeLessThan(viaStrongShortcut);
+  });
+});
+
+describe("assignSeedWatershedFaceLabels synthetic graph", () => {
+  it("assigns both seeds on a 2x2 weak-grid graph", () => {
+    const neighbours = new Map<number, Map<number, { strength: number; length: number }>>([
+      [
+        0,
+        new Map([
+          [1, { strength: 0.2, length: 100 }],
+          [2, { strength: 0.2, length: 100 }]
+        ])
+      ],
+      [
+        1,
+        new Map([
+          [0, { strength: 0.2, length: 100 }],
+          [3, { strength: 0.2, length: 100 }]
+        ])
+      ],
+      [
+        2,
+        new Map([
+          [0, { strength: 0.2, length: 100 }],
+          [3, { strength: 0.2, length: 100 }]
+        ])
+      ],
+      [
+        3,
+        new Map([
+          [1, { strength: 0.2, length: 100 }],
+          [2, { strength: 0.2, length: 100 }]
+        ])
+      ]
+    ]);
+    const faces = [0, 1, 2, 3].map((index) => ({
+      geometry: {
+        type: "Polygon" as const,
+        coordinates: [
+          [
+            [29 + (index % 2) * 0.01, 41 + Math.floor(index / 2) * 0.01],
+            [29 + (index % 2) * 0.01 + 0.005, 41 + Math.floor(index / 2) * 0.01],
+            [29 + (index % 2) * 0.01 + 0.005, 41 + Math.floor(index / 2) * 0.01 + 0.005],
+            [29 + (index % 2) * 0.01, 41 + Math.floor(index / 2) * 0.01 + 0.005],
+            [29 + (index % 2) * 0.01, 41 + Math.floor(index / 2) * 0.01]
+          ]
+        ]
+      },
+      areaKm2: 0.01,
+      edges: [],
+      barrierIds: [],
+      barrierClasses: [],
+      realBoundaryLengthMeters: 0,
+      parentBoundaryLengthMeters: 0
+    }));
+    const seeds = [
+      { name: "A", coordinate: [29.0025, 41.0025] as [number, number] },
+      { name: "B", coordinate: [29.0125, 41.0125] as [number, number] }
+    ];
+    const labels = assignSeedWatershedFaceLabels({ faces, neighbours, seeds });
+    expect(labels[0]).toBe(0);
+    expect(labels[3]).toBe(1);
+    const audit = auditSeedWatershedBarrierAssignments({ seedLabels: labels, neighbours });
+    expect(audit.unseededFaceCount).toBe(0);
+    expect(audit.multiFacePerSeedLabelFaceCount).toBeGreaterThan(0);
+    expect(audit.distinctLabeledSeedCount).toBe(2);
+  });
+});
+
+describe("v17-anchored watershed merge (impl-rev4)", () => {
+  it("merges different-seed components when only weak barriers separate them inside a v17 group", () => {
+    const neighbours = new Map<number, Map<number, { strength: number; length: number }>>([
+      [0, new Map([[1, { strength: 0.2, length: 50 }]])],
+      [1, new Map([[0, { strength: 0.2, length: 50 }]])],
+      [2, new Map([[3, { strength: 0.9, length: 50 }]])],
+      [3, new Map([[2, { strength: 0.9, length: 50 }]])]
+    ]);
+    const faceAreaKm2 = [0.1, 0.1, 0.1, 0.1];
+    const leaderV17 = [0, 0, 0, 0];
+    const leader = [0, 1, 2, 3];
+    const seedLabels = [0, 1, 0, 1];
+    const stats = mergeV17AnchoredWatershedFaceGroups({
+      faceCount: 4,
+      seedLabels,
+      neighbours,
+      leaderV17,
+      leader,
+      faceAreaKm2,
+      maxAreaKm2: 1,
+      areaToleranceKm2: 0.001
+    });
+    expect(stats.crossSeedWeakMergeCount).toBeGreaterThan(0);
+    const find = (face: number): number => {
+      let current = face;
+      while (leader[current] !== current) {
+        current = leader[current]!;
+      }
+      return current;
+    };
+    expect(find(0)).toBe(find(1));
+    expect(find(2)).not.toBe(find(3));
+  });
+});

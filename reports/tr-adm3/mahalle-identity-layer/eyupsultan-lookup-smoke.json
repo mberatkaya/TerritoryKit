@@ -1,0 +1,246 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-lookup-smoke@1",
+  "generatedAt": "2026-10-17T13:34:24.677Z",
+  "district": "Eyüpsultan",
+  "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+  "consumerLoadOk": true,
+  "validationIssueCodes": [],
+  "sampleZone": {
+    "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-0200d0465d99bdafe32c",
+    "associations": [
+      {
+        "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-0200d0465d99bdafe32c",
+        "settlementId": "tr:settlement:osm:node:4996879560",
+        "method": "point-containment-covers",
+        "status": "review-required",
+        "evidence": [
+          {
+            "reasonCode": "POINT_IN_ZONE",
+            "message": "Seed coordinate assigned via point-in-polygon (covers).",
+            "boundaryMode": "covers",
+            "seedCoordinate": [28.9276515, 41.0848272]
+          }
+        ],
+        "gameplayDatasetVersion": "2.1.0-rc.8",
+        "gameplayGeometryHash": "fnv1a32:ab4dafb2",
+        "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+        "reviewDecision": "pending",
+        "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+      },
+      {
+        "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-0200d0465d99bdafe32c",
+        "settlementId": "tr:settlement:osm:node:4996879558",
+        "method": "point-containment-covers",
+        "status": "review-required",
+        "evidence": [
+          {
+            "reasonCode": "POINT_IN_ZONE",
+            "message": "Seed coordinate assigned via point-in-polygon (covers).",
+            "boundaryMode": "covers",
+            "seedCoordinate": [28.9382959, 41.0798955]
+          }
+        ],
+        "gameplayDatasetVersion": "2.1.0-rc.8",
+        "gameplayGeometryHash": "fnv1a32:ab4dafb2",
+        "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+        "reviewDecision": "pending",
+        "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+      },
+      {
+        "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-0200d0465d99bdafe32c",
+        "settlementId": "tr:settlement:osm:node:4996879569",
+        "method": "point-containment-covers",
+        "status": "review-required",
+        "evidence": [
+          {
+            "reasonCode": "POINT_IN_ZONE",
+            "message": "Seed coordinate assigned via point-in-polygon (covers).",
+            "boundaryMode": "covers",
+            "seedCoordinate": [28.934217, 41.0747846]
+          }
+        ],
+        "gameplayDatasetVersion": "2.1.0-rc.8",
+        "gameplayGeometryHash": "fnv1a32:ab4dafb2",
+        "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+        "reviewDecision": "pending",
+        "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+      },
+      {
+        "zoneId": "tr:adm3:tr-il-34-ilce-54988432b93840376788897-generated-smart-derived-v1-7-0200d0465d99bdafe32c",
+        "settlementId": "tr:settlement:osm:node:4996879575",
+        "method": "point-containment-covers",
+        "status": "review-required",
+        "evidence": [
+          {
+            "reasonCode": "POINT_IN_ZONE",
+            "message": "Seed coordinate assigned via point-in-polygon (covers).",
+            "boundaryMode": "covers",
+            "seedCoordinate": [28.9195063, 41.0785373]
+          }
+        ],
+        "gameplayDatasetVersion": "2.1.0-rc.8",
+        "gameplayGeometryHash": "fnv1a32:ab4dafb2",
+        "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+        "reviewDecision": "pending",
+        "reviewReasonCode": "AMBIGUOUS_REVIEW_REQUIRED"
+      }
+    ],
+    "settlements": [
+      {
+        "settlementId": "tr:settlement:osm:node:4996879560",
+        "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4996879560",
+        "canonicalIdentityKey": "fnv1a32:85b8a68a",
+        "displayName": "Akşemsettin",
+        "normalizedName": "akşemsettin",
+        "localityType": "suburb",
+        "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+        "parentAdm1Id": "tr:adm1:34",
+        "parentAdm0Id": "tr:adm0:TR",
+        "seedCoordinate": [28.9276515, 41.0848272],
+        "sourceNativeId": "osm:node:4996879560",
+        "provenance": {
+          "providerId": "geofabrik-osm-extracts",
+          "providerName": "Geofabrik OpenStreetMap extracts",
+          "sourceDatasetId": "geofabrik:europe:turkey",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "snapshotDate": "2026-08-27T20:21:06.000Z",
+          "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "licenseState": "pending",
+          "permissionStatus": "redistribution-unknown",
+          "sourceLockState": "verified",
+          "redistributionEvidenceState": "pending",
+          "sourceNativeId": "osm:node:4996879560"
+        },
+        "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+        "identityChecksum": "fnv1a32:c14565e3",
+        "verificationState": "locality-seed",
+        "administrativeStatus": "unknown",
+        "geometryAvailability": "seed-only",
+        "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+        "polygonEvidenceState": "none",
+        "confidence": 0.58
+      },
+      {
+        "settlementId": "tr:settlement:osm:node:4996879558",
+        "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4996879558",
+        "canonicalIdentityKey": "fnv1a32:ef69f9b1",
+        "displayName": "Çırçır",
+        "normalizedName": "çırçır",
+        "localityType": "suburb",
+        "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+        "parentAdm1Id": "tr:adm1:34",
+        "parentAdm0Id": "tr:adm0:TR",
+        "seedCoordinate": [28.9382959, 41.0798955],
+        "sourceNativeId": "osm:node:4996879558",
+        "provenance": {
+          "providerId": "geofabrik-osm-extracts",
+          "providerName": "Geofabrik OpenStreetMap extracts",
+          "sourceDatasetId": "geofabrik:europe:turkey",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "snapshotDate": "2026-08-27T20:21:06.000Z",
+          "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "licenseState": "pending",
+          "permissionStatus": "redistribution-unknown",
+          "sourceLockState": "verified",
+          "redistributionEvidenceState": "pending",
+          "sourceNativeId": "osm:node:4996879558"
+        },
+        "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+        "identityChecksum": "fnv1a32:58c6c9ff",
+        "verificationState": "locality-seed",
+        "administrativeStatus": "unknown",
+        "geometryAvailability": "seed-only",
+        "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+        "polygonEvidenceState": "none",
+        "confidence": 0.58
+      },
+      {
+        "settlementId": "tr:settlement:osm:node:4996879569",
+        "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4996879569",
+        "canonicalIdentityKey": "fnv1a32:801282d9",
+        "displayName": "Karadolap",
+        "normalizedName": "karadolap",
+        "localityType": "suburb",
+        "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+        "parentAdm1Id": "tr:adm1:34",
+        "parentAdm0Id": "tr:adm0:TR",
+        "seedCoordinate": [28.934217, 41.0747846],
+        "sourceNativeId": "osm:node:4996879569",
+        "provenance": {
+          "providerId": "geofabrik-osm-extracts",
+          "providerName": "Geofabrik OpenStreetMap extracts",
+          "sourceDatasetId": "geofabrik:europe:turkey",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "snapshotDate": "2026-08-27T20:21:06.000Z",
+          "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "licenseState": "pending",
+          "permissionStatus": "redistribution-unknown",
+          "sourceLockState": "verified",
+          "redistributionEvidenceState": "pending",
+          "sourceNativeId": "osm:node:4996879569"
+        },
+        "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+        "identityChecksum": "fnv1a32:a811d267",
+        "verificationState": "locality-seed",
+        "administrativeStatus": "unknown",
+        "geometryAvailability": "seed-only",
+        "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+        "polygonEvidenceState": "none",
+        "confidence": 0.58
+      },
+      {
+        "settlementId": "tr:settlement:osm:node:4996879575",
+        "sourceReferenceId": "geofabrik-osm-extracts:osm:node:4996879575",
+        "canonicalIdentityKey": "fnv1a32:b9f1200c",
+        "displayName": "Yeşilpınar",
+        "normalizedName": "yeşilpınar",
+        "localityType": "suburb",
+        "parentAdm2Id": "tr:adm2:54988432b93840376788897",
+        "parentAdm1Id": "tr:adm1:34",
+        "parentAdm0Id": "tr:adm0:TR",
+        "seedCoordinate": [28.9195063, 41.0785373],
+        "sourceNativeId": "osm:node:4996879575",
+        "provenance": {
+          "providerId": "geofabrik-osm-extracts",
+          "providerName": "Geofabrik OpenStreetMap extracts",
+          "sourceDatasetId": "geofabrik:europe:turkey",
+          "sourceUrl": "https://download.geofabrik.de/europe/turkey.html",
+          "snapshotDate": "2026-08-27T20:21:06.000Z",
+          "snapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+          "license": "ODbL-1.0",
+          "attribution": "OpenStreetMap contributors, ODbL 1.0",
+          "licenseState": "pending",
+          "permissionStatus": "redistribution-unknown",
+          "sourceLockState": "verified",
+          "redistributionEvidenceState": "pending",
+          "sourceNativeId": "osm:node:4996879575"
+        },
+        "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+        "identityChecksum": "fnv1a32:7d00498d",
+        "verificationState": "locality-seed",
+        "administrativeStatus": "unknown",
+        "geometryAvailability": "seed-only",
+        "geometryAvailabilityReasonCode": "SEMANTIC_SEED_ONLY_NOT_OFFICIAL_BOUNDARY",
+        "polygonEvidenceState": "none",
+        "confidence": 0.58
+      }
+    ],
+    "associationStatus": "multiple-candidates",
+    "zoneResolution": "associated",
+    "isAmbiguous": true,
+    "autoDisplayNameAllowed": false,
+    "consumerNameSemantics": "ambiguous-seed-labels"
+  },
+  "layerVersion": {
+    "identityLayerVersion": "tr-mahalle-identity-eyupsultan-pilot@2026-10-17",
+    "gameplayDatasetVersion": "2.1.0-rc.8",
+    "contentChecksum": "fnv1a32:b4166712",
+    "generatedAt": "2026-10-17T13:34:24.677Z"
+  }
+}

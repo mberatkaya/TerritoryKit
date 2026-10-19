@@ -1,0 +1,889 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2h-polygon-technical-qa-rollup@1",
+  "generatedAt": "2026-10-17T18:20:13.545Z",
+  "byDistrict": {
+    "kadikoy": {
+      "schemaVersion": "territorykit-tr-sprint-2h-polygon-technical-qa@2",
+      "status": "ASSESSED",
+      "zoneCount": 21,
+      "structurallyValid": false,
+      "structurallyValidPolygonCount": 21,
+      "structurallyInvalidPolygonCount": 0,
+      "ringValidation": {
+        "ok": true,
+        "errorCount": 0,
+        "warningCount": 0,
+        "invalidFeatureCount": 0,
+        "issueCodes": []
+      },
+      "spatialQuality": {
+        "ok": false,
+        "selfIntersectionCount": 0,
+        "overlapCount": 0,
+        "gapCount": 1,
+        "parentContainmentErrors": [
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b89638439219394-osm-relation-8852697-kozyatagi-mahallesi",
+            "parentId": "tr:adm2:54988432b89638439219394",
+            "outsideAreaKm2": 0.048618
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b89638439219394-osm-relation-9286607-bostanci-mahallesi",
+            "parentId": "tr:adm2:54988432b89638439219394",
+            "outsideAreaKm2": 0.039293
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b89638439219394-osm-relation-9286614-suadiye-mahallesi",
+            "parentId": "tr:adm2:54988432b89638439219394",
+            "outsideAreaKm2": 0.024924
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b89638439219394-osm-relation-9286639-rasimpasa-mahallesi",
+            "parentId": "tr:adm2:54988432b89638439219394",
+            "outsideAreaKm2": 0.010317
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b89638439219394-osm-relation-9441032-caferaga-mahallesi",
+            "parentId": "tr:adm2:54988432b89638439219394",
+            "outsideAreaKm2": 0.05118
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b89638439219394-osm-relation-9441078-kosuyolu-mahallesi",
+            "parentId": "tr:adm2:54988432b89638439219394",
+            "outsideAreaKm2": 0.034565
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b89638439219394-osm-relation-9441339-hasanpasa-mahallesi",
+            "parentId": "tr:adm2:54988432b89638439219394",
+            "outsideAreaKm2": 0.038948
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b89638439219394-osm-relation-9443987-acibadem-mahallesi",
+            "parentId": "tr:adm2:54988432b89638439219394",
+            "outsideAreaKm2": 0.02453
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b89638439219394-osm-relation-9444034-zuhtupasa-mahallesi",
+            "parentId": "tr:adm2:54988432b89638439219394",
+            "outsideAreaKm2": 0.001254
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b89638439219394-osm-relation-9444841-fenerbahce-mahallesi",
+            "parentId": "tr:adm2:54988432b89638439219394",
+            "outsideAreaKm2": 0.072338
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b89638439219394-osm-relation-9444876-dumlupinar-mahallesi",
+            "parentId": "tr:adm2:54988432b89638439219394",
+            "outsideAreaKm2": 0.03993
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b89638439219394-osm-relation-9444902-merdivenkoy-mahallesi",
+            "parentId": "tr:adm2:54988432b89638439219394",
+            "outsideAreaKm2": 0.019171
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b89638439219394-osm-relation-9444910-caddebostan-mahallesi",
+            "parentId": "tr:adm2:54988432b89638439219394",
+            "outsideAreaKm2": 0.032064
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b89638439219394-osm-relation-9444927-sahrayicedit-mahallesi",
+            "parentId": "tr:adm2:54988432b89638439219394",
+            "outsideAreaKm2": 0.022732
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b89638439219394-osm-relation-9444949-19-mayis-mahallesi",
+            "parentId": "tr:adm2:54988432b89638439219394",
+            "outsideAreaKm2": 0.044535
+          }
+        ],
+        "overlaps": [],
+        "gaps": [
+          {
+            "districtId": "tr:adm2:54988432b89638439219394",
+            "areaKm2": 0.351114
+          }
+        ]
+      },
+      "districtCoverageComplete": false,
+      "note": "Individual polygon ring validity (validateGeometryDataset) is separate from district administrative coverage (inspectTurkeyAdm3SpatialQuality gaps/overlaps)."
+    },
+    "fatih": {
+      "schemaVersion": "territorykit-tr-sprint-2h-polygon-technical-qa@2",
+      "status": "ASSESSED",
+      "zoneCount": 48,
+      "structurallyValid": false,
+      "structurallyValidPolygonCount": 48,
+      "structurallyInvalidPolygonCount": 0,
+      "ringValidation": {
+        "ok": true,
+        "errorCount": 0,
+        "warningCount": 0,
+        "invalidFeatureCount": 0,
+        "issueCodes": []
+      },
+      "spatialQuality": {
+        "ok": false,
+        "selfIntersectionCount": 0,
+        "overlapCount": 1,
+        "gapCount": 1,
+        "parentContainmentErrors": [
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-2463274-ayvansaray-mahallesi",
+            "parentId": "tr:adm2:54988432b39641834885080",
+            "outsideAreaKm2": 0.042992
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-2463371-balat-mahallesi",
+            "parentId": "tr:adm2:54988432b39641834885080",
+            "outsideAreaKm2": 0.010851
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-2468218-karagumruk-mahallesi",
+            "parentId": "tr:adm2:54988432b39641834885080",
+            "outsideAreaKm2": 0.006735
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-2468242-topkapi-mahallesi",
+            "parentId": "tr:adm2:54988432b39641834885080",
+            "outsideAreaKm2": 0.000675
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-7648811-sumbul-efendi-mahallesi",
+            "parentId": "tr:adm2:54988432b39641834885080",
+            "outsideAreaKm2": 0.00032
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-7648812-koca-mustafapasa-mahallesi",
+            "parentId": "tr:adm2:54988432b39641834885080",
+            "outsideAreaKm2": 0.035448
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-7648813-yedikule-mahallesi",
+            "parentId": "tr:adm2:54988432b39641834885080",
+            "outsideAreaKm2": 0.030046
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-7648822-aksaray-mahallesi",
+            "parentId": "tr:adm2:54988432b39641834885080",
+            "outsideAreaKm2": 0.020295
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-7648823-katip-kasim-mahallesi",
+            "parentId": "tr:adm2:54988432b39641834885080",
+            "outsideAreaKm2": 0.002117
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-7648832-saridemir-mahallesi",
+            "parentId": "tr:adm2:54988432b39641834885080",
+            "outsideAreaKm2": 0.006257
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-7648851-kucuk-ayasofya-mahallesi",
+            "parentId": "tr:adm2:54988432b39641834885080",
+            "outsideAreaKm2": 0.008035
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-7648854-hocapasa-mahallesi",
+            "parentId": "tr:adm2:54988432b39641834885080",
+            "outsideAreaKm2": 0.011266
+          }
+        ],
+        "overlaps": [
+          {
+            "leftZoneId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-2463274-ayvansaray-mahallesi",
+            "rightZoneId": "tr:adm3:tr-34-adm2-54988432b39641834885080-osm-relation-2463371-balat-mahallesi",
+            "parentId": "tr:adm2:54988432b39641834885080",
+            "areaKm2": 0.000012
+          }
+        ],
+        "gaps": [
+          {
+            "districtId": "tr:adm2:54988432b39641834885080",
+            "areaKm2": 3.769778
+          }
+        ]
+      },
+      "districtCoverageComplete": false,
+      "note": "Individual polygon ring validity (validateGeometryDataset) is separate from district administrative coverage (inspectTurkeyAdm3SpatialQuality gaps/overlaps)."
+    },
+    "uskudar": {
+      "schemaVersion": "territorykit-tr-sprint-2h-polygon-technical-qa@2",
+      "status": "ASSESSED",
+      "zoneCount": 33,
+      "structurallyValid": false,
+      "structurallyValidPolygonCount": 33,
+      "structurallyInvalidPolygonCount": 0,
+      "ringValidation": {
+        "ok": true,
+        "errorCount": 0,
+        "warningCount": 0,
+        "invalidFeatureCount": 0,
+        "issueCodes": []
+      },
+      "spatialQuality": {
+        "ok": false,
+        "selfIntersectionCount": 0,
+        "overlapCount": 0,
+        "gapCount": 1,
+        "parentContainmentErrors": [
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-3866327-cumhuriyet-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.027323
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-3866328-unalan-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.053933
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-3866467-bulgurlu-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.024545
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-3866468-kisikli-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.003083
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9441289-selimiye-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.049094
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463224-salacak-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.0075
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463235-aziz-mahmut-hudayi-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.007528
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463242-mimar-sinan-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.013236
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463258-sultantepe-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.029814
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463280-barbaros-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.003408
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463313-kuzguncuk-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.003443
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463324-kandilli-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.021548
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463364-beylerbeyi-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.051057
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463376-cengelkoy-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.023113
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463391-acibadem-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.00976
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463396-altunizade-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.008439
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463416-kucuksu-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.011469
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463420-bahcelievler-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.018364
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b79162079631621-osm-relation-9463421-yavuzturk-mahallesi",
+            "parentId": "tr:adm2:54988432b79162079631621",
+            "outsideAreaKm2": 0.016661
+          }
+        ],
+        "overlaps": [],
+        "gaps": [
+          {
+            "districtId": "tr:adm2:54988432b79162079631621",
+            "areaKm2": 0.532547
+          }
+        ]
+      },
+      "districtCoverageComplete": false,
+      "note": "Individual polygon ring validity (validateGeometryDataset) is separate from district administrative coverage (inspectTurkeyAdm3SpatialQuality gaps/overlaps)."
+    },
+    "adalar": {
+      "schemaVersion": "territorykit-tr-sprint-2h-polygon-technical-qa@2",
+      "status": "ASSESSED",
+      "zoneCount": 5,
+      "structurallyValid": false,
+      "structurallyValidPolygonCount": 5,
+      "structurallyInvalidPolygonCount": 0,
+      "ringValidation": {
+        "ok": true,
+        "errorCount": 0,
+        "warningCount": 0,
+        "invalidFeatureCount": 0,
+        "issueCodes": []
+      },
+      "spatialQuality": {
+        "ok": false,
+        "selfIntersectionCount": 0,
+        "overlapCount": 0,
+        "gapCount": 1,
+        "parentContainmentErrors": [
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460393-kinaliada-mahallesi",
+            "parentId": "tr:adm2:54988432b94516152709384",
+            "outsideAreaKm2": 0.076036
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460394-burgazada-mahallesi",
+            "parentId": "tr:adm2:54988432b94516152709384",
+            "outsideAreaKm2": 0.070517
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460395-heybeliada-mahallesi",
+            "parentId": "tr:adm2:54988432b94516152709384",
+            "outsideAreaKm2": 0.088702
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460396-nizam-mahallesi",
+            "parentId": "tr:adm2:54988432b94516152709384",
+            "outsideAreaKm2": 0.045113
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b94516152709384-osm-relation-9460397-maden-mahallesi",
+            "parentId": "tr:adm2:54988432b94516152709384",
+            "outsideAreaKm2": 0.133396
+          }
+        ],
+        "overlaps": [],
+        "gaps": [
+          {
+            "districtId": "tr:adm2:54988432b94516152709384",
+            "areaKm2": 0.500197
+          }
+        ]
+      },
+      "districtCoverageComplete": false,
+      "note": "Individual polygon ring validity (validateGeometryDataset) is separate from district administrative coverage (inspectTurkeyAdm3SpatialQuality gaps/overlaps)."
+    },
+    "eyupsultan": {
+      "schemaVersion": "territorykit-tr-sprint-2h-polygon-technical-qa@2",
+      "status": "ASSESSED",
+      "zoneCount": 29,
+      "structurallyValid": false,
+      "structurallyValidPolygonCount": 29,
+      "structurallyInvalidPolygonCount": 0,
+      "ringValidation": {
+        "ok": true,
+        "errorCount": 0,
+        "warningCount": 0,
+        "invalidFeatureCount": 0,
+        "issueCodes": []
+      },
+      "spatialQuality": {
+        "ok": false,
+        "selfIntersectionCount": 0,
+        "overlapCount": 0,
+        "gapCount": 1,
+        "parentContainmentErrors": [
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-13986753-5-levent-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.025546
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9356990-emniyettepe-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.00921
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9357003-guzeltepe-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.020798
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9381516-defterdar-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.010068
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9381520-nisanci-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.013308
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9381554-merkez-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.035815
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9381555-silahtaraga-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.007958
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9381563-islambey-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.003541
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9381694-topcular-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.048209
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9381765-rami-yeni-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.019016
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9381807-sakarya-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.002244
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9381849-esentepe-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.000836
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9381850-karadolap-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.003722
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9381851-yesilpinar-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.034074
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9381869-aksemsettin-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.057297
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9675979-mimar-sinan-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.205169
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9677347-mithatpasa-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.191642
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9677564-pirincci-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.183685
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9677566-isiklar-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.031525
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9677569-ihsaniye-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.043275
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9677586-ciftalan-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.058897
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9677587-agacli-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.011727
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b93840376788897-osm-relation-9677588-akpinar-mahallesi",
+            "parentId": "tr:adm2:54988432b93840376788897",
+            "outsideAreaKm2": 0.394099
+          }
+        ],
+        "overlaps": [],
+        "gaps": [
+          {
+            "districtId": "tr:adm2:54988432b93840376788897",
+            "areaKm2": 2.022401
+          }
+        ]
+      },
+      "districtCoverageComplete": false,
+      "note": "Individual polygon ring validity (validateGeometryDataset) is separate from district administrative coverage (inspectTurkeyAdm3SpatialQuality gaps/overlaps)."
+    },
+    "catalca": {
+      "schemaVersion": "territorykit-tr-sprint-2h-polygon-technical-qa@2",
+      "status": "ASSESSED",
+      "zoneCount": 39,
+      "structurallyValid": false,
+      "structurallyValidPolygonCount": 39,
+      "structurallyInvalidPolygonCount": 0,
+      "ringValidation": {
+        "ok": true,
+        "errorCount": 0,
+        "warningCount": 0,
+        "invalidFeatureCount": 0,
+        "issueCodes": []
+      },
+      "spatialQuality": {
+        "ok": false,
+        "selfIntersectionCount": 0,
+        "overlapCount": 0,
+        "gapCount": 1,
+        "parentContainmentErrors": [
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9460089-muratbey-merkez-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.132952
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9467293-bahsayis-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.112799
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9471951-nakkas-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.119281
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9483017-ferhatpasa-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.041493
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9530301-cakil-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.050239
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9531481-ovayenice-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.185543
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9531489-elbasan-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.076633
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9531802-incegiz-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.079899
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9533391-kabakca-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.0961
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9533888-kizilcaali-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.182174
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9533923-canakca-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.002954
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9536586-ihsaniye-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.170988
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9536790-yazlik-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.047383
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9617980-celepkoy-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.000108
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9618269-gumuspinar-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 8.675351
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9618646-ormanli-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.028496
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9618736-karamandere-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.016537
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619158-aydinlar-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.025718
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619159-yaylacik-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.01434
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619392-karacakoy-merkez-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.059878
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619871-hallacli-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.389087
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619872-fatih-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.379726
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619873-yalikoy-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.154455
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b71345383711908-osm-relation-9619874-ataturk-mahallesi",
+            "parentId": "tr:adm2:54988432b71345383711908",
+            "outsideAreaKm2": 0.026506
+          }
+        ],
+        "overlaps": [],
+        "gaps": [
+          {
+            "districtId": "tr:adm2:54988432b71345383711908",
+            "areaKm2": 10.155513
+          }
+        ]
+      },
+      "districtCoverageComplete": false,
+      "note": "Individual polygon ring validity (validateGeometryDataset) is separate from district administrative coverage (inspectTurkeyAdm3SpatialQuality gaps/overlaps)."
+    },
+    "basaksehir": {
+      "schemaVersion": "territorykit-tr-sprint-2h-polygon-technical-qa@2",
+      "status": "ASSESSED",
+      "zoneCount": 11,
+      "structurallyValid": false,
+      "structurallyValidPolygonCount": 11,
+      "structurallyInvalidPolygonCount": 0,
+      "ringValidation": {
+        "ok": true,
+        "errorCount": 0,
+        "warningCount": 0,
+        "invalidFeatureCount": 0,
+        "issueCodes": []
+      },
+      "spatialQuality": {
+        "ok": false,
+        "selfIntersectionCount": 0,
+        "overlapCount": 0,
+        "gapCount": 1,
+        "parentContainmentErrors": [
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9446484-samlar-mahallesi",
+            "parentId": "tr:adm2:54988432b67026781349893",
+            "outsideAreaKm2": 0.196855
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461411-basak-mahallesi",
+            "parentId": "tr:adm2:54988432b67026781349893",
+            "outsideAreaKm2": 0.282979
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9461512-ziya-gokalp-mahallesi",
+            "parentId": "tr:adm2:54988432b67026781349893",
+            "outsideAreaKm2": 0.12936
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9475439-altinsehir-mahallesi",
+            "parentId": "tr:adm2:54988432b67026781349893",
+            "outsideAreaKm2": 0.017415
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9475447-kayabasi-mahallesi",
+            "parentId": "tr:adm2:54988432b67026781349893",
+            "outsideAreaKm2": 0.075704
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9475448-sahintepe-mahallesi",
+            "parentId": "tr:adm2:54988432b67026781349893",
+            "outsideAreaKm2": 0.023334
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9475457-bahcesehir-2-kisim-mahallesi",
+            "parentId": "tr:adm2:54988432b67026781349893",
+            "outsideAreaKm2": 0.11531
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b67026781349893-osm-relation-9475458-bahcesehir-1-kisim-mahallesi",
+            "parentId": "tr:adm2:54988432b67026781349893",
+            "outsideAreaKm2": 0.173799
+          }
+        ],
+        "overlaps": [],
+        "gaps": [
+          {
+            "districtId": "tr:adm2:54988432b67026781349893",
+            "areaKm2": 0.483274
+          }
+        ]
+      },
+      "districtCoverageComplete": false,
+      "note": "Individual polygon ring validity (validateGeometryDataset) is separate from district administrative coverage (inspectTurkeyAdm3SpatialQuality gaps/overlaps)."
+    },
+    "esenyurt": {
+      "schemaVersion": "territorykit-tr-sprint-2h-polygon-technical-qa@2",
+      "status": "ASSESSED",
+      "zoneCount": 42,
+      "structurallyValid": false,
+      "structurallyValidPolygonCount": 42,
+      "structurallyInvalidPolygonCount": 0,
+      "ringValidation": {
+        "ok": true,
+        "errorCount": 0,
+        "warningCount": 0,
+        "invalidFeatureCount": 0,
+        "issueCodes": []
+      },
+      "spatialQuality": {
+        "ok": false,
+        "selfIntersectionCount": 0,
+        "overlapCount": 0,
+        "gapCount": 1,
+        "parentContainmentErrors": [
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-8796814-aksemseddin-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.028738
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9472571-asik-veysel-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.013159
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9472572-esenkent-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.012232
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9472573-ardicli-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.000985
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9620409-akcaburgaz-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.143741
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9620429-orhan-gazi-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.018888
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9620430-koza-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.010153
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9620439-osmangazi-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.000093
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9620447-suleymaniye-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.011883
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9642513-gokevler-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.139857
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9642514-ataturk-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.022762
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9642530-yunus-emre-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.007938
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9642609-zafer-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.000035
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9642610-namik-kemal-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.000047
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9642611-turgut-ozal-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.03899
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9642612-saadetdere-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.015911
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9642748-mevlana-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.000006
+          },
+          {
+            "zoneId": "tr:adm3:tr-34-adm2-54988432b2777192469074-osm-relation-9642765-guzelyurt-mahallesi",
+            "parentId": "tr:adm2:54988432b2777192469074",
+            "outsideAreaKm2": 0.034244
+          }
+        ],
+        "overlaps": [],
+        "gaps": [
+          {
+            "districtId": "tr:adm2:54988432b2777192469074",
+            "areaKm2": 0.707429
+          }
+        ]
+      },
+      "districtCoverageComplete": false,
+      "note": "Individual polygon ring validity (validateGeometryDataset) is separate from district administrative coverage (inspectTurkeyAdm3SpatialQuality gaps/overlaps)."
+    }
+  }
+}

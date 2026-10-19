@@ -29,6 +29,8 @@ export {
   normalizeLongitude
 } from "./geometry.js";
 export { createTerritoryDatasetVersionInfo, createTerritoryIdentity } from "./identity.js";
+export { createSettlementIdentityLookup } from "./settlement-identity-lookup.js";
+export { loadSettlementIdentityConsumer } from "./settlement-identity-loader.js";
 export { defaultZoomLevelStrategy, zoomToDefaultLevel } from "./zoom.js";
 /**
  * @deprecated Import registry APIs from `@territory-kit/registry` or
@@ -111,6 +113,17 @@ export type {
   RouteGeometryIntersectionPoint,
   RouteGeometryIntersectionSegment
 } from "./geometry.js";
+export type {
+  SettlementIdentityLookup,
+  SettlementIdentityLookupOptions,
+  SettlementSeedLookupResult,
+  SettlementZoneLookupResult,
+  SettlementZoneResolution
+} from "./settlement-identity-lookup.js";
+export type {
+  SettlementIdentityConsumerLoadOptions,
+  SettlementIdentityConsumerLoadResult
+} from "./settlement-identity-loader.js";
 export type {
   TerritoryBinarySpatialIndex,
   TerritoryBinarySpatialIndexBBoxRecord,

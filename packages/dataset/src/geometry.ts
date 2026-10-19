@@ -2,7 +2,8 @@ import type { TerritoryBBox, TerritoryGeometry, LngLat } from "./types.js";
 
 export type TerritoryPolygonCoordinates = LngLat[][][];
 
-type BoundaryMode = "covers" | "contains";
+export type TerritoryPointBoundaryMode = "covers" | "contains";
+type BoundaryMode = TerritoryPointBoundaryMode;
 type RingPointRelation = "outside" | "inside" | "boundary";
 
 interface RingSegment {
@@ -313,10 +314,10 @@ function direction(a: LngLat, b: LngLat, c: LngLat): number {
   return (c[0] - a[0]) * (b[1] - a[1]) - (b[0] - a[0]) * (c[1] - a[1]);
 }
 
-function pointIntersectsGeometry(
+export function pointIntersectsGeometry(
   coordinate: LngLat,
   geometry: TerritoryGeometry,
-  boundaryMode: BoundaryMode
+  boundaryMode: BoundaryMode = "covers"
 ): boolean {
   for (const polygon of geometryToPolygons(geometry)) {
     const outerRing = polygon[0];

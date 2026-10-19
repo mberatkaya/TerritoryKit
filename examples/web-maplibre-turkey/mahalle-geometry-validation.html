@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Istanbul Mahalle Geometry Validation (local)</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+    <style>
+      #map {
+        width: 100%;
+        height: calc(100vh - 7rem);
+      }
+      .geo-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        align-items: center;
+        background: #0f172a;
+        border-bottom: 1px solid #334155;
+      }
+      .geo-toolbar label {
+        font-size: 0.85rem;
+        display: flex;
+        gap: 0.35rem;
+        align-items: center;
+      }
+      #feature-panel {
+        position: absolute;
+        right: 12px;
+        top: 120px;
+        width: 320px;
+        max-height: 60vh;
+        overflow: auto;
+        background: rgba(15, 23, 42, 0.92);
+        border: 1px solid #334155;
+        border-radius: 8px;
+        padding: 0.75rem;
+        font-size: 0.8rem;
+        z-index: 2;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="geo-toolbar">
+      <strong>Sprint 2G geometry comparison</strong>
+      <label>
+        District
+        <select id="district-select"></select>
+      </label>
+      <label><input type="checkbox" id="layer-rc8" checked /> rc.8 gameplay</label>
+      <label><input type="checkbox" id="layer-osm" checked /> OSM administrative (research)</label>
+      <label><input type="checkbox" id="layer-seeds" checked /> Settlement seeds</label>
+      <span id="status" class="muted"></span>
+    </div>
+    <div id="map"></div>
+    <div id="feature-panel">Click a polygon or seed for provenance.</div>
+    <script type="module" src="/src/mahalle-geometry-validation.ts"></script>
+  </body>
+</html>

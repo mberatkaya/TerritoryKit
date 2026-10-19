@@ -449,9 +449,42 @@ interface StitchedRelationRing {
   memberWayIds: number[];
 }
 
+export interface TurkeyOsmMultipolygonAssemblyResult {
+  geometry?: Geometry;
+  issues: TurkeyOsmBarrierIssue[];
+}
+
 interface RelationGeometryResult {
   geometry?: Geometry;
   issues: TurkeyOsmBarrierIssue[];
+}
+
+export interface TurkeyOsmMultipolygonAssemblyRelation {
+  id: number;
+  members: Array<{ type: "node" | "way" | "relation"; ref: number; role: string }>;
+  tags: Record<string, string>;
+}
+
+/** Shared multipolygon ring stitching for administrative boundaries and barrier polygons. */
+export function assembleTurkeyOsmMultipolygonGeometry(
+  relation: TurkeyOsmMultipolygonAssemblyRelation,
+  ways: ReadonlyMap<number, OsmWay>,
+  nodes: OsmNodeLookup
+): TurkeyOsmMultipolygonAssemblyResult {
+  const pending: PendingRelation = {
+    osmType: "relation",
+    id: relation.id,
+    members: relation.members,
+    tags: relation.tags,
+    classification: {
+      layer: "parks",
+      geometryKind: "polygon",
+      barrierClass: "park",
+      strength: 0
+    }
+  };
+
+  return relationGeometry(pending, ways, nodes);
 }
 
 class ShardedNumberLookupSet implements NumberLookupSet {
@@ -1118,6 +1151,9 @@ export function createTurkeyOsmSmartFallbackGeneratedOptions(
   return {
     enabled: true,
     strategy: "smart",
+    legacyGridAllowed: false,
+    allowLowConfidencePlayableRescue: true,
+    allowSingleParentPlayableRescue: true,
     fallbackToLegacyOnSmartFailure: options.fallbackToLegacyOnSmartFailure ?? false,
     smartFallback: {
       roads: artifact.roads,

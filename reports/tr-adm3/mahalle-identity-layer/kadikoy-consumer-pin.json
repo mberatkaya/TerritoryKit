@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "territorykit-tr-mahalle-identity-consumer-pin@1",
+  "district": "Kadıköy",
+  "parentAdm2Id": "tr:adm2:54988432b89638439219394",
+  "gameplayDatasetId": "territory-kit-tr-v2-playable-adm3-tr-adm2-54988432b89638439219394",
+  "gameplayDatasetVersion": "2.1.0-rc.8",
+  "zoneIdSetSha256": "3af6bb370900c671b5df58e3b9c89b3c8b0eeb9c0703f786b55c1b146b0fd617",
+  "geometryHashSetSha256": "79afa84f849c3800bdbe264c990c8868c525501430aeeee2d83af43ec58740ae",
+  "identityLayerContentChecksum": "fnv1a32:02d3ec31",
+  "associationCounts": {
+    "zoneCount": 28,
+    "settlementCount": 35,
+    "ambiguousZoneCount": 8,
+    "singleCandidateZoneCount": 11,
+    "unseededZoneCount": 9
+  },
+  "sourceExpectations": {
+    "requireSourceLockVerified": false,
+    "osmSourceLockState": "verified",
+    "osmSnapshotChecksum": "5ec68ce5e0b2be55b2c34ee7cd1ff91b6b3d8db8acab5a6be2fa7beb633eaedc",
+    "sourceEvidenceGates": {
+      "sourceBytesVerified": true,
+      "licenseIdentified": true,
+      "redistributionRightsApproved": false,
+      "productionEligible": false
+    }
+  }
+}

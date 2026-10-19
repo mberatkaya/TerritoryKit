@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "territorykit-tr-sprint-2h-decision@1",
+  "generatedAt": "2026-10-17T18:20:13.545Z",
+  "headSha": "b62251be16a1a8cb96e7f8095e644907b4986e94",
+  "parserImplementationRevision": "territorykit-tr-adm3-osm-parser@2026-10-17-sprint-2h-multipolygon-stitch",
+  "meaningfulProgress": true,
+  "gates": {
+    "A_sourceIntegrity": "GO",
+    "B_relationMemberCompleteness": "GO_WITH_REVIEW",
+    "C_polygonAssembly": "GO",
+    "D_polygonTechnicalQa": "GO_WITH_REVIEW",
+    "E_adm3SemanticQuality": "GO_WITH_REVIEW",
+    "F_districtCoverage": "NO_GO",
+    "G_improvementVsSprint2g": "GO",
+    "H_runtimeMemory": "GO_WITH_REVIEW",
+    "I_legalRedistribution": "BLOCKED_BY_SOURCE",
+    "J_gameplayMigration": "GO_WITH_REVIEW",
+    "K_productionReadiness": "NO_GO"
+  },
+  "technicalMergeRecommendation": "GO_WITH_REVIEW",
+  "geographicalAcceptance": "NO_GO",
+  "nationalExpansion": "NO_GO",
+  "productionReadiness": "NO_GO",
+  "legalRedistribution": "BLOCKED_BY_SOURCE"
+}

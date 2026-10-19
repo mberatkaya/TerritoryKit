@@ -21,6 +21,7 @@ import type {
   RenderRequest,
   RenderTelemetry
 } from "./types.js";
+import { adm3DefaultFillColorExpression, adm3QaFillColorExpression } from "./qa-mode.js";
 
 const SOURCE_ID = "turkey-live-render";
 const FILL_LAYER_ID = "turkey-live-fill";
@@ -68,6 +69,7 @@ export interface TurkeyMapRenderService {
   render(request: RenderRequest): Promise<RenderTelemetry | undefined>;
   setSelected(territoryId: string, selected: boolean): void;
   setHover(territoryId: string, hover: boolean): void;
+  setAdm3QaHighlight(enabled: boolean): void;
   readDisplayedFeatureCount(): number;
   dispose(): void;
 }
@@ -90,7 +92,7 @@ export function createDefaultMapStyle(): StyleSpecification {
 
 export function createTurkeyMapRenderService(input: {
   map: MapLibreMap;
-  mode: "fixture" | "registry";
+  mode: "fixture" | "registry" | "local-playable";
   query: TerritoryQueryService;
   registry?: TerritoryRegistryClient;
   datasetVersion: string;
@@ -102,6 +104,7 @@ export function createTurkeyMapRenderService(input: {
   let callbacks: RenderCallbacks | undefined;
   let interactionBound = false;
   let hoveredTerritoryId: string | undefined;
+  let adm3QaHighlight = false;
 
   const clickListener = (event: MapLayerMouseEvent): void => {
     const feature = event.features?.[0];
@@ -209,7 +212,7 @@ export function createTurkeyMapRenderService(input: {
 
     try {
       const plan =
-        input.mode === "registry" && input.registry
+        (input.mode === "registry" || input.mode === "local-playable") && input.registry
           ? await createRegistryRenderPlan({
               registry: input.registry,
               cache: registryPlanCache,
@@ -223,6 +226,7 @@ export function createTurkeyMapRenderService(input: {
 
       assertNotAborted(signal);
       replaceSource(plan.sourceSpec, plan.sourceLayer);
+      applyAdm3FillPaint();
 
       return {
         ...plan.telemetry,
@@ -255,6 +259,24 @@ export function createTurkeyMapRenderService(input: {
     });
   }
 
+  function applyAdm3FillPaint(): void {
+    if (!input.map.getLayer(FILL_LAYER_ID) || typeof input.map.setPaintProperty !== "function") {
+      return;
+    }
+    if (currentSourceLayer === "territory_adm3" && adm3QaHighlight) {
+      input.map.setPaintProperty(FILL_LAYER_ID, "fill-color", adm3QaFillColorExpression());
+      return;
+    }
+    if (currentSourceLayer === "territory_adm3") {
+      input.map.setPaintProperty(FILL_LAYER_ID, "fill-color", adm3DefaultFillColorExpression());
+    }
+  }
+
+  function setAdm3QaHighlight(enabled: boolean): void {
+    adm3QaHighlight = enabled;
+    applyAdm3FillPaint();
+  }
+
   return {
     sourceId: SOURCE_ID,
     fillLayerId: FILL_LAYER_ID,
@@ -263,6 +285,7 @@ export function createTurkeyMapRenderService(input: {
     render,
     setSelected,
     setHover,
+    setAdm3QaHighlight,
     readDisplayedFeatureCount() {
       if (!input.map.getLayer(FILL_LAYER_ID)) {
         return 0;

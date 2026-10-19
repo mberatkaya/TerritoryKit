@@ -1,0 +1,1673 @@
+{
+  "features": [
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1503514,
+              36.590324
+            ],
+            [
+              36.150823,
+              36.5904168
+            ],
+            [
+              36.1516326,
+              36.5906183
+            ],
+            [
+              36.1528622,
+              36.5909126
+            ],
+            [
+              36.1549246,
+              36.5913912
+            ],
+            [
+              36.155542,
+              36.5917141
+            ],
+            [
+              36.1547609,
+              36.5916598
+            ],
+            [
+              36.1544779,
+              36.5915984
+            ],
+            [
+              36.1538818,
+              36.5913827
+            ],
+            [
+              36.1531469,
+              36.5912155
+            ],
+            [
+              36.152743,
+              36.5910926
+            ],
+            [
+              36.1520312,
+              36.590974
+            ],
+            [
+              36.1510134,
+              36.590614
+            ],
+            [
+              36.150441,
+              36.5904819
+            ],
+            [
+              36.1503514,
+              36.590324
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:1089859567",
+      "properties": {
+        "@id": "osm:way:1089859567",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "1089859567",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1545675,
+              36.591694
+            ],
+            [
+              36.154894,
+              36.5917362
+            ],
+            [
+              36.1555186,
+              36.5917824
+            ],
+            [
+              36.1553569,
+              36.5920299
+            ],
+            [
+              36.1545675,
+              36.591694
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:1089859568",
+      "properties": {
+        "@id": "osm:way:1089859568",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "1089859568",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1554278,
+              36.5677704
+            ],
+            [
+              36.1562595,
+              36.5672758
+            ],
+            [
+              36.1563267,
+              36.5677761
+            ],
+            [
+              36.156348,
+              36.5679864
+            ],
+            [
+              36.1564046,
+              36.5683986
+            ],
+            [
+              36.1564931,
+              36.5687596
+            ],
+            [
+              36.1565639,
+              36.5690353
+            ],
+            [
+              36.1566524,
+              36.5692684
+            ],
+            [
+              36.1565462,
+              36.5692996
+            ],
+            [
+              36.1554278,
+              36.5677704
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:1108944463",
+      "properties": {
+        "@id": "osm:way:1108944463",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "1108944463",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1637255,
+              36.5943886
+            ],
+            [
+              36.1638998,
+              36.5943272
+            ],
+            [
+              36.1639968,
+              36.594506
+            ],
+            [
+              36.163818,
+              36.5945614
+            ],
+            [
+              36.1637255,
+              36.5943886
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:1112311512",
+      "properties": {
+        "@id": "osm:way:1112311512",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "1112311512",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1534132,
+              36.5905422
+            ],
+            [
+              36.1535888,
+              36.5900596
+            ],
+            [
+              36.1538975,
+              36.5901321
+            ],
+            [
+              36.1537219,
+              36.5906146
+            ],
+            [
+              36.1534132,
+              36.5905422
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:1121705834",
+      "properties": {
+        "@id": "osm:way:1121705834",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "1121705834",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1561258,
+              36.5909404
+            ],
+            [
+              36.1567514,
+              36.5913493
+            ],
+            [
+              36.156635,
+              36.5914682
+            ],
+            [
+              36.156184,
+              36.5912261
+            ],
+            [
+              36.1561258,
+              36.5909404
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:1121705854",
+      "properties": {
+        "@id": "osm:way:1121705854",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "1121705854",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.15675,
+              36.5915181
+            ],
+            [
+              36.1568347,
+              36.5914119
+            ],
+            [
+              36.1572897,
+              36.5917518
+            ],
+            [
+              36.1572989,
+              36.5917815
+            ],
+            [
+              36.15675,
+              36.5915181
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:1121705856",
+      "properties": {
+        "@id": "osm:way:1121705856",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "1121705856",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1663902,
+              36.5826766
+            ],
+            [
+              36.1664659,
+              36.5822885
+            ],
+            [
+              36.1664945,
+              36.5822722
+            ],
+            [
+              36.1665591,
+              36.5823989
+            ],
+            [
+              36.1672824,
+              36.5827326
+            ],
+            [
+              36.1665806,
+              36.5827879
+            ],
+            [
+              36.1663902,
+              36.5826766
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:1122001364",
+      "properties": {
+        "@id": "osm:way:1122001364",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "1122001364",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1925957,
+              36.586157
+            ],
+            [
+              36.1928289,
+              36.5859595
+            ],
+            [
+              36.1933106,
+              36.5862496
+            ],
+            [
+              36.1933439,
+              36.5864419
+            ],
+            [
+              36.1931978,
+              36.5865345
+            ],
+            [
+              36.1925957,
+              36.586157
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:1133391212",
+      "properties": {
+        "@id": "osm:way:1133391212",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "1133391212",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1626556,
+              36.5883399
+            ],
+            [
+              36.1637323,
+              36.5873677
+            ],
+            [
+              36.1646112,
+              36.5865741
+            ],
+            [
+              36.164762,
+              36.5865679
+            ],
+            [
+              36.165821,
+              36.588073
+            ],
+            [
+              36.1653108,
+              36.5883182
+            ],
+            [
+              36.1656316,
+              36.5888085
+            ],
+            [
+              36.1635175,
+              36.5897147
+            ],
+            [
+              36.1626556,
+              36.5883399
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:1143687252",
+      "properties": {
+        "@id": "osm:way:1143687252",
+        "addr:city": "Hatay",
+        "addr:district": "İskenderun",
+        "addr:street": "Fener Caddesi",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "name": "İskenderun Millet Parkı",
+        "osm_id": "1143687252",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1690315,
+              36.5901818
+            ],
+            [
+              36.1693509,
+              36.5900325
+            ],
+            [
+              36.1694182,
+              36.5901968
+            ],
+            [
+              36.1690315,
+              36.5901818
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:1364034377",
+      "properties": {
+        "@id": "osm:way:1364034377",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "1364034377",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.2116768,
+              36.6391258
+            ],
+            [
+              36.2124356,
+              36.6389613
+            ],
+            [
+              36.2128793,
+              36.6401079
+            ],
+            [
+              36.2123622,
+              36.6401963
+            ],
+            [
+              36.2116768,
+              36.6391258
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:1455400047",
+      "properties": {
+        "@id": "osm:way:1455400047",
+        "addr:city": "Hatay",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "name": "Şehit Er Veysel Yılmaz Parkı",
+        "osm_id": "1455400047",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1526131,
+              36.5855997
+            ],
+            [
+              36.1534976,
+              36.5850723
+            ],
+            [
+              36.154522,
+              36.5846235
+            ],
+            [
+              36.1557239,
+              36.5840969
+            ],
+            [
+              36.1573873,
+              36.5853774
+            ],
+            [
+              36.1574329,
+              36.5854125
+            ],
+            [
+              36.1557456,
+              36.5860326
+            ],
+            [
+              36.1540537,
+              36.5866544
+            ],
+            [
+              36.1526131,
+              36.5855997
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:1459749210",
+      "properties": {
+        "@id": "osm:way:1459749210",
+        "addr:city": "Hatay",
+        "addr:district": "İskenderun",
+        "addr:neighbourhood": "Pirireis",
+        "addr:street": "Fatih Sultan Mehmet Caddesi",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "name": "İskenderun Millet Parkı",
+        "osm_id": "1459749210",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.152932,
+              36.5714475
+            ],
+            [
+              36.1532297,
+              36.5712321
+            ],
+            [
+              36.1533041,
+              36.5712881
+            ],
+            [
+              36.1533101,
+              36.5713183
+            ],
+            [
+              36.1532961,
+              36.5713527
+            ],
+            [
+              36.1532719,
+              36.5713851
+            ],
+            [
+              36.1530714,
+              36.5715509
+            ],
+            [
+              36.152932,
+              36.5714475
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:265932938",
+      "properties": {
+        "@id": "osm:way:265932938",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "265932938",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1865805,
+              36.5835845
+            ],
+            [
+              36.1866449,
+              36.5834337
+            ],
+            [
+              36.1867844,
+              36.5834725
+            ],
+            [
+              36.1870097,
+              36.5830029
+            ],
+            [
+              36.1868649,
+              36.5829599
+            ],
+            [
+              36.1870365,
+              36.582654
+            ],
+            [
+              36.1871712,
+              36.5827001
+            ],
+            [
+              36.1874335,
+              36.5825076
+            ],
+            [
+              36.1880718,
+              36.5829039
+            ],
+            [
+              36.1876266,
+              36.5838731
+            ],
+            [
+              36.1865805,
+              36.5835845
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:305968724",
+      "properties": {
+        "@id": "osm:way:305968724",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "name": "Maydonoz Parkı",
+        "osm_id": "305968724",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "wheelchair": "yes"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1737404,
+              36.5906039
+            ],
+            [
+              36.1753387,
+              36.5901888
+            ],
+            [
+              36.1753349,
+              36.5906103
+            ],
+            [
+              36.1743332,
+              36.5906076
+            ],
+            [
+              36.1737404,
+              36.5906039
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:305970591",
+      "properties": {
+        "@id": "osm:way:305970591",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "305970591",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1673852,
+              36.5931739
+            ],
+            [
+              36.1679429,
+              36.5929732
+            ],
+            [
+              36.1681331,
+              36.5932768
+            ],
+            [
+              36.1675412,
+              36.5934484
+            ],
+            [
+              36.1673852,
+              36.5931739
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:306110196",
+      "properties": {
+        "@id": "osm:way:306110196",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "306110196",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1681267,
+              36.5929114
+            ],
+            [
+              36.1714963,
+              36.5916642
+            ],
+            [
+              36.1719045,
+              36.592347
+            ],
+            [
+              36.1719088,
+              36.5925022
+            ],
+            [
+              36.1716666,
+              36.5925853
+            ],
+            [
+              36.1711093,
+              36.5922133
+            ],
+            [
+              36.1706464,
+              36.5921355
+            ],
+            [
+              36.1702364,
+              36.592231
+            ],
+            [
+              36.1699907,
+              36.5924846
+            ],
+            [
+              36.1698838,
+              36.5926982
+            ],
+            [
+              36.1698104,
+              36.593083
+            ],
+            [
+              36.1682314,
+              36.5932734
+            ],
+            [
+              36.1681267,
+              36.5929114
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:306110197",
+      "properties": {
+        "@id": "osm:way:306110197",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "306110197",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1911287,
+              36.5804826
+            ],
+            [
+              36.1916155,
+              36.5800835
+            ],
+            [
+              36.1919764,
+              36.5804662
+            ],
+            [
+              36.1916019,
+              36.5808927
+            ],
+            [
+              36.1911287,
+              36.5804826
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:306112428",
+      "properties": {
+        "@id": "osm:way:306112428",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "306112428",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1896273,
+              36.5816336
+            ],
+            [
+              36.189978,
+              36.5814586
+            ],
+            [
+              36.1908734,
+              36.5814941
+            ],
+            [
+              36.1898963,
+              36.5819534
+            ],
+            [
+              36.1896273,
+              36.5816336
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:306112510",
+      "properties": {
+        "@id": "osm:way:306112510",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "306112510",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1924626,
+              36.5741129
+            ],
+            [
+              36.1929835,
+              36.5738504
+            ],
+            [
+              36.1932933,
+              36.5742305
+            ],
+            [
+              36.1932184,
+              36.5743289
+            ],
+            [
+              36.19305,
+              36.574424
+            ],
+            [
+              36.1928027,
+              36.5745229
+            ],
+            [
+              36.1924626,
+              36.5741129
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:306112593",
+      "properties": {
+        "@id": "osm:way:306112593",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "306112593",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1887529,
+              36.5779366
+            ],
+            [
+              36.1892775,
+              36.577658
+            ],
+            [
+              36.1894781,
+              36.5778846
+            ],
+            [
+              36.1890434,
+              36.5782337
+            ],
+            [
+              36.1887529,
+              36.5779366
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:307941384",
+      "properties": {
+        "@id": "osm:way:307941384",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "307941384",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1626556,
+              36.5883399
+            ],
+            [
+              36.1637323,
+              36.5873677
+            ],
+            [
+              36.1646112,
+              36.5865741
+            ],
+            [
+              36.164762,
+              36.5865679
+            ],
+            [
+              36.165821,
+              36.588073
+            ],
+            [
+              36.1653108,
+              36.5883182
+            ],
+            [
+              36.1656316,
+              36.5888085
+            ],
+            [
+              36.1635175,
+              36.5897147
+            ],
+            [
+              36.1626556,
+              36.5883399
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:311750773",
+      "properties": {
+        "@id": "osm:way:311750773",
+        "addr:city": "Hatay",
+        "addr:district": "İskenderun",
+        "addr:neighbourhood": "Hürriyet",
+        "addr:postcode": "31200",
+        "addr:street": "Fener Caddesi",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "name": "İskenderun Millet Parkı",
+        "osm_id": "311750773",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts",
+        "start_date": "2019-03-19",
+        "website": "https://iskenderun.gov.tr/iskenderun-millet-parki"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1606741,
+              36.5943467
+            ],
+            [
+              36.1620457,
+              36.5947121
+            ],
+            [
+              36.1628188,
+              36.5946901
+            ],
+            [
+              36.1660107,
+              36.5935909
+            ],
+            [
+              36.166249,
+              36.5940899
+            ],
+            [
+              36.165725,
+              36.594331
+            ],
+            [
+              36.1655765,
+              36.5944371
+            ],
+            [
+              36.1654794,
+              36.5944824
+            ],
+            [
+              36.1648657,
+              36.5947836
+            ],
+            [
+              36.1645226,
+              36.5950391
+            ],
+            [
+              36.1632991,
+              36.5954594
+            ],
+            [
+              36.1629995,
+              36.5954129
+            ],
+            [
+              36.1623387,
+              36.5953378
+            ],
+            [
+              36.162108,
+              36.5952727
+            ],
+            [
+              36.1606741,
+              36.5943467
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:311756847",
+      "properties": {
+        "@id": "osm:way:311756847",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "311756847",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1701968,
+              36.593038
+            ],
+            [
+              36.1702056,
+              36.5928646
+            ],
+            [
+              36.1702629,
+              36.5926381
+            ],
+            [
+              36.1704568,
+              36.5924965
+            ],
+            [
+              36.1707787,
+              36.5924009
+            ],
+            [
+              36.1710167,
+              36.5924682
+            ],
+            [
+              36.1712592,
+              36.5926027
+            ],
+            [
+              36.1713348,
+              36.5926993
+            ],
+            [
+              36.1706994,
+              36.5929176
+            ],
+            [
+              36.1701968,
+              36.593038
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:311761288",
+      "properties": {
+        "@id": "osm:way:311761288",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "311761288",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1726283,
+              36.5911435
+            ],
+            [
+              36.1737593,
+              36.5907746
+            ],
+            [
+              36.1743602,
+              36.5907214
+            ],
+            [
+              36.1753852,
+              36.5907604
+            ],
+            [
+              36.1754528,
+              36.5907639
+            ],
+            [
+              36.1760081,
+              36.5907923
+            ],
+            [
+              36.1757961,
+              36.591289
+            ],
+            [
+              36.1757582,
+              36.5915153
+            ],
+            [
+              36.1755808,
+              36.5914962
+            ],
+            [
+              36.1754972,
+              36.5919815
+            ],
+            [
+              36.1747823,
+              36.5919397
+            ],
+            [
+              36.1744309,
+              36.5918388
+            ],
+            [
+              36.1740156,
+              36.5916721
+            ],
+            [
+              36.1736047,
+              36.5917962
+            ],
+            [
+              36.1733772,
+              36.5919978
+            ],
+            [
+              36.1732688,
+              36.592035
+            ],
+            [
+              36.173132,
+              36.5920552
+            ],
+            [
+              36.1726283,
+              36.5911435
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:363258447",
+      "properties": {
+        "@id": "osm:way:363258447",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "363258447",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1761318,
+              36.5909662
+            ],
+            [
+              36.1762246,
+              36.5908314
+            ],
+            [
+              36.1768785,
+              36.5908455
+            ],
+            [
+              36.1768785,
+              36.5909874
+            ],
+            [
+              36.177391,
+              36.59103
+            ],
+            [
+              36.1774087,
+              36.5908633
+            ],
+            [
+              36.1779653,
+              36.5909449
+            ],
+            [
+              36.1786192,
+              36.5910619
+            ],
+            [
+              36.1793482,
+              36.5912677
+            ],
+            [
+              36.1792157,
+              36.5915266
+            ],
+            [
+              36.1784116,
+              36.5913493
+            ],
+            [
+              36.1782967,
+              36.591555
+            ],
+            [
+              36.1761584,
+              36.5910052
+            ],
+            [
+              36.1761318,
+              36.5909662
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:363258448",
+      "properties": {
+        "@id": "osm:way:363258448",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "363258448",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.2128944,
+              36.6413935
+            ],
+            [
+              36.2133125,
+              36.6412507
+            ],
+            [
+              36.2137755,
+              36.6422433
+            ],
+            [
+              36.2132486,
+              36.6423487
+            ],
+            [
+              36.2128944,
+              36.6413935
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:515041181",
+      "properties": {
+        "@id": "osm:way:515041181",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "name": "Burhan Mercan Parkı",
+        "osm_id": "515041181",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1870497,
+              36.5769091
+            ],
+            [
+              36.1877283,
+              36.5765591
+            ],
+            [
+              36.1877578,
+              36.5765483
+            ],
+            [
+              36.1879952,
+              36.5767196
+            ],
+            [
+              36.1872603,
+              36.577089
+            ],
+            [
+              36.1870497,
+              36.5769091
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:701325259",
+      "properties": {
+        "@id": "osm:way:701325259",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "701325259",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1998569,
+              36.5809537
+            ],
+            [
+              36.2005338,
+              36.5804876
+            ],
+            [
+              36.2015466,
+              36.5821423
+            ],
+            [
+              36.2008698,
+              36.5826084
+            ],
+            [
+              36.1998569,
+              36.5809537
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:701325281",
+      "properties": {
+        "@id": "osm:way:701325281",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "701325281",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              36.1995069,
+              36.5806105
+            ],
+            [
+              36.2001548,
+              36.5801583
+            ],
+            [
+              36.2005338,
+              36.5804876
+            ],
+            [
+              36.1998569,
+              36.5809537
+            ],
+            [
+              36.1995069,
+              36.5806105
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "id": "osm:way:701325282",
+      "properties": {
+        "@id": "osm:way:701325282",
+        "barrierClass": "park",
+        "barrierLayer": "parks",
+        "barrierStrength": "0.65",
+        "leisure": "park",
+        "osm_id": "701325282",
+        "osm_type": "way",
+        "source": "openstreetmap",
+        "sourceProvider": "geofabrik-osm-extracts"
+      },
+      "type": "Feature"
+    }
+  ],
+  "type": "FeatureCollection"
+}
