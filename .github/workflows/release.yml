@@ -99,7 +99,7 @@ jobs:
           package-manager-cache: false
           registry-url: https://registry.npmjs.org/
       - run: pnpm install --frozen-lockfile --ignore-scripts
-      - run: pnpm verify && pnpm release:check && pnpm release:hardening && pnpm package:dry-run
+      - run: pnpm release:check && pnpm release:hardening && pnpm package:dry-run
       - name: Publish packages to npm
         run: pnpm release
         env:

@@ -344,6 +344,11 @@ async function main() {
   const jsonPath = path.join(REPORT_ROOT, "pilot-summary.json");
   const serialized = `${JSON.stringify(summary, null, 2)}\n`;
   await fs.writeFile(jsonPath, serialized);
+  try {
+    execSync(`pnpm exec prettier --write "${jsonPath}"`, { cwd: REPO_ROOT, stdio: "pipe" });
+  } catch {
+    // Prettier is optional in minimal environments; CI will enforce formatting separately.
+  }
   const mdPath = path.join(REPORT_ROOT, "OZET.md");
   const md = `# Sprint 2 — İstanbul ADM3 pilot özeti
 
@@ -381,7 +386,7 @@ ${summary.limitations.map((item) => `- ${item}`).join("\n")}
   } catch {
     // Prettier is optional in minimal environments; CI will enforce formatting separately.
   }
-  const digest = sha256OfUtf8FileContents(serialized);
+  const digest = sha256OfUtf8FileContents(await fs.readFile(jsonPath, "utf8"));
   await fs.writeFile(
     path.join(REPORT_ROOT, "pilot-summary.sha256"),
     `${digest}  pilot-summary.json\n`
