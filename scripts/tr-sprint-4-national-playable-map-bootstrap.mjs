@@ -24,6 +24,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DEFAULT_CANDIDATE = path.join(ROOT, ".territory/sprint-3/playable-v3/candidate");
 const DEFAULT_RENDER_OUT = path.join(ROOT, ".territory/sprint-4/playable-v3/render");
 const REPORT_DIR = path.join(ROOT, "reports/tr-adm3/sprint-4-national-playable-map");
+const LOCAL_PLAYABLE_CANDIDATE_MOUNT = "/territory-candidate";
 
 function parseArgs(argv) {
   const options = {
@@ -65,6 +66,19 @@ async function walkFiles(dir, prefix = "") {
 
 function serializeJson(value) {
   return `${JSON.stringify(value, null, 2)}\n`;
+}
+
+function normalizeRegistryArtifactUrl(relativePath) {
+  return String(relativePath).replace(/^\.?\//, "");
+}
+
+function localPlayableRegistryBaseUrl() {
+  const origin = (
+    process.env.TERRITORY_PLAYABLE_MAP_DEV_ORIGIN ??
+    process.env.VITE_TERRITORY_LOCAL_DEV_ORIGIN ??
+    "http://127.0.0.1:5173"
+  ).replace(/\/$/, "");
+  return `${origin}${LOCAL_PLAYABLE_CANDIDATE_MOUNT}/`;
 }
 
 async function writeLevelGeojsonRenders(candidateRoot) {
@@ -125,7 +139,7 @@ function renderArtifactsFromEntry(entryDataset, checksums) {
       format: "geojson",
       levels: [level],
       path: rel,
-      url: `./${rel}`,
+      url: normalizeRegistryArtifactUrl(rel),
       sha256: sum.sha256,
       sizeBytes: sum.byteSize,
       compression: "none",
@@ -141,7 +155,7 @@ function renderArtifactsFromEntry(entryDataset, checksums) {
       format: "mvt",
       levels: ["ADM3"],
       path: manifestRel,
-      url: `./${manifestRel}`,
+      url: normalizeRegistryArtifactUrl(manifestRel),
       sha256: manifestSum.sha256,
       sizeBytes: manifestSum.byteSize,
       compression: "none",
@@ -160,10 +174,15 @@ async function writeRegistry(candidateRoot) {
   const entry = JSON.parse(await readFile(entryPath, "utf8"));
   const checksums = JSON.parse(await readFile(path.join(candidateRoot, "checksums.json"), "utf8"));
   const dataset = entry.datasets[0];
-  dataset.artifacts = renderArtifactsFromEntry(dataset, checksums);
+  dataset.artifacts = renderArtifactsFromEntry(dataset, checksums).map((artifact) => ({
+    ...artifact,
+    ...(artifact.url ? { url: normalizeRegistryArtifactUrl(artifact.url) } : {}),
+    ...(artifact.path ? { path: artifact.path.replace(/^\.?\//, "") } : {})
+  }));
   const registry = {
     registryVersion: "1",
     generatedAt: new Date().toISOString(),
+    baseUrl: localPlayableRegistryBaseUrl(),
     datasets: [dataset]
   };
   await writeFile(path.join(candidateRoot, "registry.json"), serializeJson(registry));

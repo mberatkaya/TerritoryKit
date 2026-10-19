@@ -8,7 +8,13 @@ import {
 import type { TerritoryRegistryClient } from "@territory-kit/registry";
 import { turkeyAdm3NeighbourhoodCoverage, turkeyNationalCoverage } from "@territory-kit/data-tr";
 import { readDemoConfig, readUrlState, writeUrlState } from "./config.js";
-import { applyQaDistrictOverlay, buildAdm2QaGeoJson, loadSmartCoverageIndex } from "./qa-mode.js";
+import {
+  applyQaDistrictOverlay,
+  buildAdm2QaGeoJson,
+  formatQaLegendSummary,
+  loadSmartCoverageIndex,
+  summarizeAdm2QaGeoJson
+} from "./qa-mode.js";
 import { buildTerritorySelectionRows } from "./territory-selection.js";
 import { demoLevelForZoom, isDemoAdminLevel, zoomForDemoLevel } from "./levels.js";
 import {
@@ -52,6 +58,7 @@ interface TurkeyLiveDemoProbe {
     level?: DemoAdminLevel
   ): Promise<{ x: number; y: number } | undefined>;
   search(query: string): Promise<TerritorySearchResult[]>;
+  getCacheTelemetry(): Promise<QueryCacheTelemetry>;
   selectTerritory(territoryId: string, level?: DemoAdminLevel): Promise<string | undefined>;
   setZoom(zoom: number): Promise<{ renderedLevel: DemoAdminLevel; displayedFeatureCount: number }>;
   flyToCoordinate(
@@ -98,8 +105,9 @@ app.innerHTML = `
         <p id="adm3-warning" class="notice">ADM3 coverage is partial and appears only where reviewed artifacts exist.</p>
         <label class="qa-toggle" for="qa-mode-toggle">
           <input id="qa-mode-toggle" type="checkbox" />
-          QA / debug (düşük güven, düz sınır, büyük hücre — metrik yoksa sıfır sayılmaz)
+          QA / debug (smart-coverage metrikleri; eksik değer PASS sayılmaz)
         </label>
+        <p id="qa-legend" class="muted" aria-live="polite"></p>
       </section>
 
       <section class="panel-section">
@@ -180,6 +188,7 @@ const elements = {
   fallbackPanel: requireElement<HTMLElement>("#fallback-panel"),
   mapStatus: requireElement<HTMLElement>("#map-status"),
   qaModeToggle: requireElement<HTMLInputElement>("#qa-mode-toggle"),
+  qaLegend: requireElement<HTMLElement>("#qa-legend"),
   levelButtons: [...document.querySelectorAll<HTMLButtonElement>("[data-level]")]
 };
 
@@ -288,8 +297,13 @@ async function initializeDemo(): Promise<void> {
         maxDecompressedBytes: 48_000_000,
         ...(config.mode === "local-playable" ? { allowHttp: true } : {})
       });
-      await registry.loadRegistry();
-      const dataset = await registry.getDatasetInfo(config.datasetId, config.datasetVersion);
+      const registrySnapshot = await registry.loadRegistry();
+      const dataset =
+        registrySnapshot.datasets.find(
+          (entry) =>
+            entry.id === config.datasetId &&
+            (!config.datasetVersionPinned || entry.version === config.datasetVersion)
+        ) ?? (await registry.getDatasetInfo(config.datasetId, config.datasetVersion));
       metadata = createMetadataFromRegistryDataset({
         dataset,
         datasetVersionPinned: config.datasetVersionPinned
@@ -303,7 +317,8 @@ async function initializeDemo(): Promise<void> {
         ...(config.deliveryManifestUrl ? { deliveryManifestUrl: config.deliveryManifestUrl } : {}),
         ...(config.deliveryManifestHash
           ? { deliveryManifestHash: config.deliveryManifestHash }
-          : {})
+          : {}),
+        ...(config.smartCoverageUrl ? { smartCoverageUrl: config.smartCoverageUrl } : {})
       });
       registryStatus = "connected";
       mode = config.mode === "local-playable" ? "local-playable" : "registry";
@@ -316,9 +331,13 @@ async function initializeDemo(): Promise<void> {
           if (adm2Response.ok) {
             const adm2Dataset = (await adm2Response.json()) as GeoJSON.FeatureCollection;
             qaAdm2GeoJson = buildAdm2QaGeoJson(adm2Dataset, index);
+            elements.qaLegend.textContent = formatQaLegendSummary(
+              summarizeAdm2QaGeoJson(qaAdm2GeoJson)
+            );
           }
         } catch (qaError) {
           lastError = `QA index unavailable: ${readErrorMessage(qaError)}`;
+          elements.qaLegend.textContent = "QA legend unavailable (smart-coverage yüklenemedi).";
         }
       }
     } catch (error) {
@@ -1029,6 +1048,9 @@ function createProbe(): TurkeyLiveDemoProbe {
         levels: currentLevel === "ADM3" ? ["ADM1", "ADM2"] : ["ADM1", "ADM2"],
         limit: 60
       });
+    },
+    getCacheTelemetry() {
+      return query.getCacheTelemetry();
     },
     selectTerritory(territoryId, level) {
       return selectTerritory(territoryId, level, { flyTo: true });

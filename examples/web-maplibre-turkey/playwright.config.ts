@@ -12,7 +12,7 @@ export default defineConfig({
   fullyParallel: !localPlayable,
   webServer: {
     command: localPlayable
-      ? `VITE_TERRITORY_DEMO_MODE=local-playable VITE_TERRITORY_LOCAL_DEV_ORIGIN=${origin} pnpm exec vite --host 127.0.0.1 --port ${port}`
+      ? `VITE_TERRITORY_DEMO_MODE=local-playable VITE_TERRITORY_LOCAL_DEV_ORIGIN=${origin} TERRITORY_PLAYABLE_MAP_DEV_ORIGIN=${origin} pnpm exec vite --host 127.0.0.1 --port ${port}`
       : `pnpm dev --host 127.0.0.1 --port ${port}`,
     url: origin,
     reuseExistingServer: true

@@ -214,6 +214,37 @@ test.describe("national local-playable map", () => {
     expect(tileProbe.tileBytes).toBeGreaterThan(0);
   });
 
+  test("searches representative districts by Turkish and ASCII names", async ({ page }) => {
+    const cases = [
+      { query: "fatih", preferId: "tr:adm2:54988432b39641834885080", preferName: "Fatih" },
+      { query: "kadikoy", preferId: "tr:adm2:54988432b89638439219394", preferName: "Kadıköy" },
+      {
+        query: "eyupsultan",
+        preferId: "tr:adm2:54988432b93840376788897",
+        preferName: "Eyüpsultan"
+      },
+      { query: "cankaya", preferId: "tr:adm2:54988432b72030220276956", preferName: "Çankaya" },
+      { query: "konak", preferId: "tr:adm2:54988432b43742920895959", preferName: "Konak" },
+      { query: "muratpasa", preferId: "tr:adm2:54988432b17723605206621", preferName: "Muratpaşa" },
+      { query: "pervari", preferId: "tr:adm2:54988432b48183111476065", preferName: "Pervari" },
+      { query: "keciborlu", preferId: "tr:adm2:54988432b38029735650586", preferName: "Keçiborlu" },
+      { query: "adalar", preferId: "tr:adm2:54988432b94516152709384", preferName: "Prince Islands" }
+    ] as const;
+
+    for (const caseEntry of cases) {
+      const territoryId = await selectFromSearch(page, caseEntry.query, {
+        preferId: caseEntry.preferId,
+        preferName: caseEntry.preferName,
+        level: "ADM2"
+      });
+      expect(territoryId).toBe(caseEntry.preferId);
+      await page.evaluate(async () => {
+        await (window as WindowWithTurkeyDemo).__territoryKitTurkeyDemo?.setZoom(11.5);
+      });
+      await page.waitForTimeout(400);
+    }
+  });
+
   test("selects district and ADM3 with metadata", async ({ page }) => {
     await selectFromSearch(page, "fatih", { preferName: "Fatih", level: "ADM2" });
     await expect(page.locator("#selection-panel")).toContainText("tr:adm2:", { timeout: 30_000 });
@@ -229,6 +260,23 @@ test.describe("national local-playable map", () => {
     });
     expect(adm3Id).toMatch(/^tr:adm3:/);
     await expect(page.locator("#selection-panel")).toContainText("Kararlı ID");
+  });
+
+  test("shows geographic realism QA totals separate from axis-aligned warnings", async ({
+    page
+  }) => {
+    await page.locator("#qa-mode-toggle").check();
+    const legend = await page.locator("#qa-legend").textContent();
+    expect(legend).toMatch(/coğrafi gerçekçilik kapısı \d+/);
+    expect(legend).toMatch(/eksen-hizalı uyarı/);
+    const consoleErrors: string[] = [];
+    page.on("console", (message) => {
+      if (message.type() === "error") {
+        consoleErrors.push(message.text());
+      }
+    });
+    await page.waitForTimeout(500);
+    expect(consoleErrors).toEqual([]);
   });
 
   test("keeps map interaction with QA mode enabled", async ({ page }) => {

@@ -12,4 +12,6 @@ test("sprint 4 playable map bootstrap script is present", async () => {
   assert.match(source, /territorykit-tr-sprint-4-national-playable-map@1/);
   assert.match(source, /territory_adm3/);
   assert.match(source, /includeQueryFile: false/);
+  assert.match(source, /normalizeRegistryArtifactUrl/);
+  assert.match(source, /localPlayableRegistryBaseUrl/);
 });
