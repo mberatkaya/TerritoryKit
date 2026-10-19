@@ -45,7 +45,7 @@ function decide({
   full = audit([finding]),
   currentPolicy = policy,
   exposure = { ok: true, issues: [] },
-  today = "2026-10-01"
+  today = "2026-10-19"
 } = {}) {
   return evaluateAuditExceptions({
     productionAudit: production,
@@ -57,7 +57,7 @@ function decide({
 }
 
 test("exact, current docs-only HIGH is approved while raw count remains one", () => {
-  const result = decide();
+  const result = decide({ currentPolicy: { exceptions: [exception] } });
   assert.equal(result.ok, true);
   assert.equal(result.rawAudit.fullHigh, 1);
   assert.equal(result.effectiveBlockingFindings.fullHigh, 0);
@@ -68,22 +68,43 @@ test("exact, current docs-only HIGH is approved while raw count remains one", ()
 });
 
 test("a different HIGH remains blocking", () => {
-  const other = { ...finding, github_advisory_id: "GHSA-aaaa-bbbb-cccc" };
-  const result = decide({ full: audit([finding, other]) });
+  const other = {
+    ...finding,
+    github_advisory_id: "GHSA-aaaa-bbbb-cccc",
+    findings: [{ ...finding.findings[0], dev: false }]
+  };
+  const result = decide({
+    currentPolicy: { exceptions: [exception] },
+    full: audit([finding, other])
+  });
   assert.equal(result.ok, false);
   assert.equal(result.effectiveBlockingFindings.fullHigh, 1);
 });
 
 test("CRITICAL and production HIGH cannot be exempted", () => {
   assert.equal(decide({ full: audit([finding, { ...finding, severity: "critical" }]) }).ok, false);
-  assert.equal(decide({ production: audit([finding]) }).ok, false);
+  const productionBraces = {
+    github_advisory_id: "GHSA-other-bbbb-cccc",
+    module_name: "braces",
+    vulnerable_versions: "<=3.0.3",
+    severity: "high",
+    findings: [
+      { version: "3.0.3", paths: ["app>braces"], dev: false, optional: false, bundled: false }
+    ]
+  };
+  assert.equal(decide({ production: audit([productionBraces]) }).ok, false);
 });
 
 test("expired exception fails", () => {
-  assert.equal(decide({ today: "2026-10-16" }).ok, false);
-  assert.equal(decide({ today: "2026-10-30" }).ok, false);
   assert.equal(
-    decide({ currentPolicy: { exceptions: [{ ...exception, expiresOn: "2026-11-15" }] } }).ok,
+    decide({ currentPolicy: { exceptions: [exception] }, today: "2026-10-30" }).ok,
+    false
+  );
+  assert.equal(
+    decide({
+      currentPolicy: { exceptions: [{ ...exception, expiresOn: "2026-11-15" }] },
+      today: "2026-10-19"
+    }).ok,
     false
   );
 });

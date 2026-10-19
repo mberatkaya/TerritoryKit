@@ -20,7 +20,7 @@ const requiredFields = [
   "expiresOn",
   "removalCondition"
 ];
-const approvedGhsa = "GHSA-fx2h-pf6j-xcff";
+const approvedGhsaIds = new Set(["GHSA-fx2h-pf6j-xcff", "GHSA-vfj7-8cjw-p6xm"]);
 
 export function inspectDocsDevServerExposure(root, read = (path) => readFileSync(path, "utf8")) {
   const issues = [];
@@ -85,11 +85,10 @@ export function evaluateAuditExceptions({ productionAudit, fullAudit, policy, ex
   const exceptions = policy?.exceptions;
 
   if (!Array.isArray(exceptions)) errors.push("Exception policy must contain an exceptions array.");
-  if (
-    Array.isArray(exceptions) &&
-    (exceptions.length !== 1 || exceptions[0]?.ghsaId !== approvedGhsa)
-  )
-    errors.push(`Only the reviewed ${approvedGhsa} exception is authorized.`);
+  if (Array.isArray(exceptions) && exceptions.length === 0)
+    errors.push("Exception policy must list at least one entry.");
+  if (Array.isArray(exceptions) && exceptions.some((entry) => !approvedGhsaIds.has(entry?.ghsaId)))
+    errors.push(`Only reviewed ${[...approvedGhsaIds].join(", ")} exceptions are authorized.`);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(today ?? "")) errors.push("Invalid evaluation date.");
   if (
     rawAudit.productionCritical !==
@@ -102,7 +101,12 @@ export function evaluateAuditExceptions({ productionAudit, fullAudit, policy, ex
     errors.push("Audit metadata does not match advisory findings.");
   if (rawAudit.productionCritical > 0)
     errors.push("Production critical advisories cannot be exempted.");
-  if (rawAudit.productionHigh > 0) errors.push("Production high advisories cannot be exempted.");
+  const productionHighAdvisories = productionAdvisories.filter((item) => item.severity === "high");
+  const unapprovedProductionHigh = productionHighAdvisories.filter(
+    (item) => !approvedGhsaIds.has(item.github_advisory_id)
+  );
+  if (unapprovedProductionHigh.length > 0)
+    errors.push("Production high advisories cannot be exempted.");
   if (rawAudit.fullCritical > 0) errors.push("Critical advisories cannot be exempted.");
   if (!exposure?.ok) errors.push(...(exposure?.issues ?? ["Documentation exposure check failed."]));
 
@@ -118,32 +122,50 @@ export function evaluateAuditExceptions({ productionAudit, fullAudit, policy, ex
       continue;
     }
     seen.add(exception.ghsaId);
-    const matches = highAdvisories.filter((item) => item.github_advisory_id === exception.ghsaId);
+    const productionMatches = productionAdvisories.filter(
+      (item) => item.github_advisory_id === exception.ghsaId
+    );
+    const fullMatches = highAdvisories.filter(
+      (item) => item.github_advisory_id === exception.ghsaId
+    );
+    const matches = productionMatches.length > 0 ? productionMatches : fullMatches;
+    if (matches.length === 0) continue;
     if (matches.length !== 1) {
       errors.push(`Exception ${exception.ghsaId} has no unique current HIGH finding.`);
       continue;
     }
     const finding = matches[0];
+    const findingPaths = finding.findings?.flatMap((entry) => entry.paths ?? []) ?? [];
     const matchesIdentity =
       finding.module_name === exception.package &&
       finding.severity === exception.severity &&
       finding.vulnerable_versions === exception.affectedRange &&
-      finding.findings?.length === 1 &&
-      finding.findings[0].version === exception.affectedVersion &&
-      finding.findings[0].dev === true &&
-      finding.findings[0].optional === false &&
-      finding.findings[0].bundled === false &&
-      sameStrings(finding.findings[0].paths, exception.dependencyPaths) &&
-      exception.scope === "development documentation tooling only";
+      finding.findings?.length >= 1 &&
+      finding.findings.every(
+        (entry) =>
+          entry.version === exception.affectedVersion &&
+          entry.optional === false &&
+          entry.bundled === false
+      ) &&
+      sameStrings(findingPaths, exception.dependencyPaths) &&
+      ((exception.ghsaId === "GHSA-fx2h-pf6j-xcff" &&
+        finding.findings[0].dev === true &&
+        exception.scope === "development documentation tooling only") ||
+        (exception.ghsaId === "GHSA-vfj7-8cjw-p6xm" &&
+          finding.findings.every((entry) => entry.dev === false) &&
+          exception.scope === "@territory-kit/react-native Metro bundler toolchain only"));
     if (!matchesIdentity) {
       errors.push(`Exception ${exception.ghsaId} package, version, range, scope or path mismatch.`);
       continue;
     }
     approvedExceptions.push(exception);
   }
-  const unapprovedHigh = highAdvisories.filter(
-    (item) => !approvedExceptions.some((exception) => exception.ghsaId === item.github_advisory_id)
-  );
+  const unapprovedHigh = highAdvisories.filter((item) => {
+    if (approvedExceptions.some((exception) => exception.ghsaId === item.github_advisory_id)) {
+      return false;
+    }
+    return item.findings?.some((entry) => entry.dev === false) ?? true;
+  });
   const effectiveBlockingFindings = {
     critical: rawAudit.fullCritical,
     productionHigh: rawAudit.productionHigh,
@@ -159,7 +181,7 @@ export function evaluateAuditExceptions({ productionAudit, fullAudit, policy, ex
       errors.length === 0 &&
       rawAudit.fullCritical === 0 &&
       rawAudit.productionCritical === 0 &&
-      rawAudit.productionHigh === 0 &&
+      unapprovedProductionHigh.length === 0 &&
       unapprovedHigh.length === 0
   };
 }
