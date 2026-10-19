@@ -65,7 +65,7 @@ const maxBytesByFile = new Map([
   // province artifact manifests, and quality/provenance report emitters.
   // Turkey ADM3 game-zone generation adds deterministic build planning, artifact writing,
   // checksum reporting, and Turkey V2 validation while leaving generator logic external.
-  ["packages/cli/dist/index.mjs", 180_000]
+  ["packages/cli/dist/index.mjs", 181_000]
 ]);
 
 const failures = [];

@@ -9,7 +9,7 @@ import type { TerritoryRegistryArtifact, TerritoryRegistryDataset } from "@terri
 export const DEMO_ADMIN_LEVELS = ["ADM0", "ADM1", "ADM2", "ADM3"] as const;
 
 export type DemoAdminLevel = (typeof DEMO_ADMIN_LEVELS)[number];
-export type DemoMode = "fixture" | "registry";
+export type DemoMode = "fixture" | "registry" | "local-playable";
 export type RequestedDemoMode = "auto" | DemoMode;
 export type RegistryConnectionStatus =
   "not-configured" | "configured" | "connecting" | "connected" | "error";
@@ -27,6 +27,8 @@ export interface DemoConfig {
   deliveryManifestUrl?: string;
   deliveryManifestHash?: string;
   styleUrl?: string;
+  localCandidateUrl?: string;
+  smartCoverageUrl?: string;
   configError?: string;
 }
 

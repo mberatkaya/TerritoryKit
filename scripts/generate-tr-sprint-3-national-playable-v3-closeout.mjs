@@ -84,7 +84,7 @@ function summarizeSmartCoverage(smartCoverage, label) {
 
 function worstDistricts(smartCoverage, limit = 10) {
   const districts = smartCoverage?.districts ?? [];
-  return districts
+  const ranked = districts
     .map((d) => ({
       adm2Id: d.adm2Id,
       district: d.district,
@@ -95,17 +95,34 @@ function worstDistricts(smartCoverage, limit = 10) {
       largestTerritoryAreaShare: d.largestTerritoryAreaShare ?? null,
       axisAlignedInternalBoundaryRatio: d.axisAlignedInternalBoundaryRatio ?? null,
       barrierAlignment: d.barrierAlignment ?? null,
-      qualityScore: d.quality ?? null
+      qualityScore: d.quality ?? null,
+      rankingEvidence:
+        typeof d.largestTerritoryAreaShare === "number" ||
+        typeof d.axisAlignedInternalBoundaryRatio === "number" ||
+        d.confidence === "low" ||
+        (d.zoneCount ?? 0) <= 0 ||
+        d.zoneCount === 1
     }))
+    .filter((row) => row.rankingEvidence)
     .sort((a, b) => {
       const impact = (row) =>
         (row.zoneCount <= 0 ? 1_000_000 : 0) +
         (row.zoneCount === 1 ? 500_000 : 0) +
-        (row.largestTerritoryAreaShare ?? 0) * 10_000 +
-        (row.axisAlignedInternalBoundaryRatio ?? 0) * 5_000;
+        (row.confidence === "low" ? 250_000 : 0) +
+        (typeof row.largestTerritoryAreaShare === "number" ? row.largestTerritoryAreaShare : 0) *
+          10_000 +
+        (typeof row.axisAlignedInternalBoundaryRatio === "number"
+          ? row.axisAlignedInternalBoundaryRatio
+          : 0) *
+          5_000;
       return impact(b) - impact(a);
     })
     .slice(0, limit);
+  return {
+    disclaimer:
+      "Sıralama yalnızca ölçüm veya güven kanıtı olan ilçeleri içerir; null metrikler sıfır veya PASS sayılmaz.",
+    districts: ranked
+  };
 }
 
 function eyupsultanDelta(baseline, candidate) {
