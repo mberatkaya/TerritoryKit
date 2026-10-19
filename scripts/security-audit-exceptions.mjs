@@ -87,10 +87,7 @@ export function evaluateAuditExceptions({ productionAudit, fullAudit, policy, ex
   if (!Array.isArray(exceptions)) errors.push("Exception policy must contain an exceptions array.");
   if (Array.isArray(exceptions) && exceptions.length === 0)
     errors.push("Exception policy must list at least one entry.");
-  if (
-    Array.isArray(exceptions) &&
-    exceptions.some((entry) => !approvedGhsaIds.has(entry?.ghsaId))
-  )
+  if (Array.isArray(exceptions) && exceptions.some((entry) => !approvedGhsaIds.has(entry?.ghsaId)))
     errors.push(`Only reviewed ${[...approvedGhsaIds].join(", ")} exceptions are authorized.`);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(today ?? "")) errors.push("Invalid evaluation date.");
   if (
@@ -128,7 +125,9 @@ export function evaluateAuditExceptions({ productionAudit, fullAudit, policy, ex
     const productionMatches = productionAdvisories.filter(
       (item) => item.github_advisory_id === exception.ghsaId
     );
-    const fullMatches = highAdvisories.filter((item) => item.github_advisory_id === exception.ghsaId);
+    const fullMatches = highAdvisories.filter(
+      (item) => item.github_advisory_id === exception.ghsaId
+    );
     const matches = productionMatches.length > 0 ? productionMatches : fullMatches;
     if (matches.length === 0) continue;
     if (matches.length !== 1) {

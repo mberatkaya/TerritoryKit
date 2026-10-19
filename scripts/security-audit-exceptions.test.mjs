@@ -88,7 +88,9 @@ test("CRITICAL and production HIGH cannot be exempted", () => {
     module_name: "braces",
     vulnerable_versions: "<=3.0.3",
     severity: "high",
-    findings: [{ version: "3.0.3", paths: ["app>braces"], dev: false, optional: false, bundled: false }]
+    findings: [
+      { version: "3.0.3", paths: ["app>braces"], dev: false, optional: false, bundled: false }
+    ]
   };
   assert.equal(decide({ production: audit([productionBraces]) }).ok, false);
 });
